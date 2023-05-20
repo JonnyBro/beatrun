@@ -1,0 +1,9 @@
+VertexLitGeneric
+{
+	"$basetexture"	"medge/plain/red"
+	"$surfaceprop" "plaster"
+ 	"$envmap" "env_cubemap"
+	"$envmaptint" 0.5
+	"$envmapcontrast" "1"
+	"$normalmapalphaenvmapmask" "1"
+}

@@ -1,0 +1,20 @@
+"LightmappedGeneric"
+{
+	"$basetexture" "Glass/blackglass01_ivy"
+	"$envmap" "env_cubemap"
+	"$surfaceprop" "glass"
+	"%keywords" "c17industrial"
+	"$envmapmask" "glass/blackglass01_mask_ivy"
+	"$translucent" 1
+	"$multipass" 1
+	"$nocull" 1
+	"$crackmaterial" "glass/blackglass02_ivy"
+
+	"LightmappedGeneric_dx6"
+	{
+		// This takes into account the alpha channel of the basetexture
+		// which we can't modulate against under dx7 since envmap
+		// happens in a separate pass
+		"$envmaptint" "[0.5 0.5 0.5]"
+	}
+}
