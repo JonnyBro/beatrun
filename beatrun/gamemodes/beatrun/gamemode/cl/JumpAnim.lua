@@ -12,6 +12,7 @@ local animtable = {
 	BodyLimitY = 180,
 	usefullbody = 2
 }
+
 fbanims = {
 	ladderexittoplefthand = true,
 	runfwdstart = true,
@@ -111,6 +112,7 @@ fbanims = {
 	swingjumpoff = true,
 	snatchscar = true
 }
+
 local jumpanims = {
 	jumpwrleft = true,
 	jumpfast = true,
@@ -122,11 +124,13 @@ local jumpanims = {
 	jumpcoil = true,
 	jumpzipline = true
 }
+
 local jumpanims2 = {
 	jumpfast = true,
 	jumpslow = true,
 	jumpstill = true
 }
+
 local runanims = {
 	crouchfwd = true,
 	crouchbwd = true,
@@ -138,6 +142,7 @@ local runanims = {
 	sprintfwd = true,
 	runbwd = true
 }
+
 local events = {
 	ladderenter = true,
 	divestart = true,
@@ -199,6 +204,7 @@ local events = {
 	meleeairstill = true,
 	vaultontohigh = true
 }
+
 local eventslut = {
 	ladderenter = "ladderenterbottom",
 	divestart = "divestart",
@@ -261,6 +267,7 @@ local eventslut = {
 	meleeairstill = "meleeairstill",
 	vaultontohigh = "vaultontohigh"
 }
+
 local armfollowanims = {
 	stand = true,
 	diveslideidle = true,
@@ -270,6 +277,7 @@ local armfollowanims = {
 	vaultoverhigh = true,
 	walkfwd = true
 }
+
 local armlock = {
 	meleeairhit = true,
 	bargein = true,
@@ -289,6 +297,7 @@ local armlock = {
 	vaultontohigh = true,
 	snatchscar = true
 }
+
 local stillanims = {
 	jumpturnlandstandgun = true,
 	meslideloop = true,
@@ -305,12 +314,14 @@ local stillanims = {
 	meleeslide = true,
 	snatchscar = true
 }
+
 local arminterrupts = {
 	punchright = true,
 	doorbash = true,
 	punchmid = true,
 	punchleft = true
 }
+
 local transitionanims = {
 	hanghardstart = "hang",
 	divestart = "diveidle",
@@ -364,6 +375,7 @@ local transitionanims = {
 	vaultontohigh = "runfwd",
 	snatchscar = "stand"
 }
+
 local nospinebend = {
 	ladderclimbuplefthand = true,
 	divestart = true,
@@ -397,6 +409,7 @@ local nospinebend = {
 	vaultontohigh = true,
 	snatchscar = true
 }
+
 local worldarm = {
 	ladderclimbuplefthand = true,
 	ladderclimbuplefthandstill = true,
@@ -425,6 +438,7 @@ local worldarm = {
 	ladderclimbhangstart = true,
 	snatchscar = true
 }
+
 local ignorezarm = {
 	wallrunvertical = true,
 	hangfoldedstart = true,
@@ -434,19 +448,23 @@ local ignorezarm = {
 	diestandlong = true,
 	vaultontohigh = true
 }
+
 local nocyclereset = {
 	jumpwrright = true,
 	jumpwrleft = true,
 	meslidestart = true
 }
+
 local ignorebac = {
 	evaderoll = true,
 	meroll = true
 }
+
 local customspeed = {
 	vaultonto = 1.15,
 	vaultontohigh = 1
 }
+
 local vaultoverhighcam1 = Vector(0, 0, -7.5)
 local vaultoverhighcam2 = Vector(0, 0, 0)
 local vaultoverhigharm1 = Vector(4, -4, 13.5)
@@ -457,6 +475,7 @@ local vaultontohigharm1 = Vector(5, -10, 3.5)
 local vaultontohigharm2 = Vector(10, 0, 0)
 local snatchscarcam1 = Vector(0, 0, 0)
 local snatchscarcam2 = Vector(10, 0, 5)
+
 local customarmoffset = {
 	meslidestart = Vector(2, 5, 9.5),
 	meslideloop = Vector(2, 5, 9.5),
@@ -490,6 +509,7 @@ local customarmoffset = {
 	stand = Vector(10, 0, -10),
 	walktostandleft = Vector(10, 0, -10)
 }
+
 local customcamoffset = {
 	jumpturnfly = Vector(0, 0, 7.5),
 	jumpturnflyidle = Vector(0, 0, 7.5),
@@ -510,25 +530,22 @@ local customcamoffset = {
 	crouchfwd = Vector(10, 0, -17.5),
 	crouchbwd = Vector(20, 0, -10)
 }
+
 local transitionchecks = {
-	meleeairstill = function (ply)
-		if BodyAnimCycle >= 1 or ply:OnGround() then
-			return true
-		end
+	meleeairstill = function(ply)
+		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
 	end,
-	swingjumpoff = function (ply)
+	swingjumpoff = function(ply)
 		if BodyAnimCycle >= 0.15 or ply:OnGround() then
 			BodyAnimCycle = 0
 
 			return true
 		end
 	end,
-	jumpcoilend = function (ply)
-		if ply:GetVelocity():Length() < 10 and BodyAnimCycle > 0.5 or BodyAnimCycle > 0.9 then
-			return true
-		end
+	jumpcoilend = function(ply)
+		if ply:GetVelocity():Length() < 10 and BodyAnimCycle > 0.5 or BodyAnimCycle > 0.9 then return true end
 	end,
-	vaultover = function (ply)
+	vaultover = function(ply)
 		if BodyAnimCycle >= 1 or ply:OnGround() and ply:GetMantle() == 0 then
 			BodyLimitX = 90
 			BodyLimitY = 180
@@ -536,7 +553,7 @@ local transitionchecks = {
 			return true
 		end
 	end,
-	vaultkong = function (ply)
+	vaultkong = function(ply)
 		if BodyAnimCycle >= 1 or ply:OnGround() and ply:GetMantle() == 0 then
 			BodyLimitX = 90
 			BodyLimitY = 180
@@ -544,7 +561,7 @@ local transitionchecks = {
 			return true
 		end
 	end,
-	vaultoverhigh = function (ply)
+	vaultoverhigh = function(ply)
 		if BodyAnimCycle < 0.45 then
 			customarmoffset.vaultoverhigh = vaultoverhigharm1
 			customcamoffset.vaultoverhigh = vaultoverhighcam1
@@ -563,7 +580,7 @@ local transitionchecks = {
 			BodyLimitY = 40
 		end
 	end,
-	vaultontohigh = function (ply)
+	vaultontohigh = function(ply)
 		if BodyAnimCycle < 0.45 then
 			customarmoffset.vaultontohigh = vaultontohigharm1
 		else
@@ -596,29 +613,25 @@ local transitionchecks = {
 			BodyAnim:SetAngles(eyeang)
 		end
 	end,
-	zipline = function (ply)
+	zipline = function(ply)
 		if not IsValid(ply:GetZipline()) then
 			BodyAnimCycle = 0
 
 			return true
 		end
 	end,
-	jumpzipline = function (ply)
+	jumpzipline = function(ply)
 		lockang = false
 		BodyLimitX = 90
 		BodyLimitY = 180
 	end,
-	stepuprightleg = function (ply)
-		if BodyAnimCycle >= 1 then
-			return true
-		end
+	stepuprightleg = function(ply)
+		if BodyAnimCycle >= 1 then return true end
 	end,
-	springboardleftleg = function (ply)
-		if BodyAnimCycle >= 0.75 or ply:OnGround() then
-			return true
-		end
+	springboardleftleg = function(ply)
+		if BodyAnimCycle >= 0.75 or ply:OnGround() then return true end
 	end,
-	jumpturnlandstand = function (ply)
+	jumpturnlandstand = function(ply)
 		if BodyAnimCycle >= 0.85 then
 			BodyLimitX = 90
 			BodyLimitY = 180
@@ -626,7 +639,7 @@ local transitionchecks = {
 			return true
 		end
 	end,
-	jumpturnlandstandgun = function (ply)
+	jumpturnlandstandgun = function(ply)
 		if BodyAnimCycle >= 0.85 then
 			BodyLimitX = 90
 			BodyLimitY = 180
@@ -634,73 +647,57 @@ local transitionchecks = {
 			return true
 		end
 	end,
-	fallinguncontrolled = function (ply)
-		if not ply.FallStatic then
-			return true
-		end
+	fallinguncontrolled = function(ply)
+		if not ply.FallStatic then return true end
 	end,
-	ladderclimbuplefthand = function (ply)
-		if BodyAnimCycle >= 0.75 then
-			return true
-		end
+	ladderclimbuplefthand = function(ply)
+		if BodyAnimCycle >= 0.75 then return true end
 	end,
-	ladderclimbuprighthand = function (ply)
-		if BodyAnimCycle >= 0.75 then
-			return true
-		end
+	ladderclimbuprighthand = function(ply)
+		if BodyAnimCycle >= 0.75 then return true end
 	end,
-	ladderenterbottom = function (ply)
-		if BodyAnimCycle >= 0.35 then
-			return true
-		end
+	ladderenterbottom = function(ply)
+		if BodyAnimCycle >= 0.35 then return true end
 	end,
-	ladderexittoplefthand = function (ply)
+	ladderexittoplefthand = function(ply)
 		if BodyAnimCycle < 0.25 then
 			customarmoffset.ladderexittoplefthand = ladderexitarm1
 		else
 			customarmoffset.ladderexittoplefthand = ladderexitarm2
 		end
 
-		if BodyAnimCycle >= 1 or ply:OnGround() then
-			return true
-		end
+		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
 	end,
-	ladderexittoprighthand = function (ply)
+	ladderexittoprighthand = function(ply)
 		if BodyAnimCycle < 0.25 then
 			customarmoffset.ladderexittoprighthand = ladderexitarm1
 		else
 			customarmoffset.ladderexittoprighthand = ladderexitarm2
 		end
 
-		if BodyAnimCycle >= 1 or ply:OnGround() then
-			return true
-		end
+		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
 	end,
-	wallrunverticalturn = function (ply)
-		if ply:GetWallrun() ~= 4 then
-			return true
-		end
+	wallrunverticalturn = function(ply)
+		if ply:GetWallrun() ~= 4 then return true end
 	end,
-	hangfoldedheaveup = function (ply)
-		if BodyAnimCycle >= 0.65 then
-			return true
-		end
+	hangfoldedheaveup = function(ply)
+		if BodyAnimCycle >= 0.65 then return true end
 	end,
-	hanghardstart = function (ply)
+	hanghardstart = function(ply)
 		if BodyAnimCycle >= 1 then
 			ply.hangyaw = 0
 
 			return true
 		end
 	end,
-	hanghardstart2 = function (ply)
+	hanghardstart2 = function(ply)
 		if BodyAnimCycle >= 0.75 then
 			ply.hangyaw = 0
 
 			return true
 		end
 	end,
-	snatchscar = function (ply)
+	snatchscar = function(ply)
 		lockang = true
 
 		if BodyAnimCycle < 0.35 or BodyAnimCycle > 0.8 then
@@ -715,7 +712,7 @@ local transitionchecks = {
 			return true
 		end
 	end,
-	snatchsniper = function (ply)
+	snatchsniper = function(ply)
 		lockang = true
 
 		if BodyAnimCycle >= 1 then
@@ -724,12 +721,10 @@ local transitionchecks = {
 			return true
 		end
 	end,
-	ziplinestart = function (ply)
-		if BodyAnimCycle >= 0.75 then
-			return true
-		end
+	ziplinestart = function(ply)
+		if BodyAnimCycle >= 0.75 then return true end
 	end,
-	walkbalancefalloffleft = function (ply)
+	walkbalancefalloffleft = function(ply)
 		lockang = true
 
 		if BodyAnimCycle >= 1 then
@@ -738,7 +733,7 @@ local transitionchecks = {
 			return true
 		end
 	end,
-	walkbalancefalloffright = function (ply)
+	walkbalancefalloffright = function(ply)
 		lockang = true
 
 		if BodyAnimCycle >= 1 then
@@ -748,14 +743,13 @@ local transitionchecks = {
 		end
 	end
 }
+
 fbfunctions = {
-	vaultontohigh = function (ply)
-		return true
-	end,
-	swingstraight = function (ply)
+	vaultontohigh = function(ply) return true end,
+	swingstraight = function(ply)
 		BodyAnim:SetPoseParameter("swing", (ply:GetSBOffset() / 45 - 1) * 100)
 	end,
-	ziplinestart = function (ply)
+	ziplinestart = function(ply)
 		if IsValid(ply:GetZipline()) then
 			lockang = true
 			CamIgnoreAng = false
@@ -768,7 +762,7 @@ fbfunctions = {
 
 		return true
 	end,
-	zipline = function (ply)
+	zipline = function(ply)
 		lockang = true
 		CamIgnoreAng = false
 		BodyLimitX = 30
@@ -779,7 +773,7 @@ fbfunctions = {
 
 		return true
 	end,
-	hang = function (ply)
+	hang = function(ply)
 		CamIgnoreAng = false
 		local ang = ply.OrigEyeAng
 		local eyeang = ply:EyeAngles()
@@ -792,6 +786,7 @@ fbfunctions = {
 		mul = math.Clamp(mul, 0.4, 1)
 		BodyLimitX = 80 * mul
 		BodyLimitY = 175
+
 		local a = math.Clamp(math.AngleDifference(ang.y, eyeang.y), -179, 179)
 
 		if not ply.hangyaw then
@@ -817,23 +812,22 @@ fbfunctions = {
 
 		if BodyLimitX <= eyeangx then
 			eyeang.x = BodyLimitX - 0.1
-
 			ply:SetEyeAngles(eyeang)
 		end
 
 		return true
 	end,
-	hangstrafeleft = function (ply)
+	hangstrafeleft = function(ply)
 		BodyLimitY = 40
 
 		return true
 	end,
-	hangstraferight = function (ply)
+	hangstraferight = function(ply)
 		BodyLimitY = 40
 
 		return true
 	end,
-	hanghardstartvertical = function (ply)
+	hanghardstartvertical = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 120
 		local ang = ply.OrigEyeAng
@@ -842,7 +836,7 @@ fbfunctions = {
 
 		return true
 	end,
-	hanghardstart = function (ply)
+	hanghardstart = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 120
 		local ang = ply.OrigEyeAng
@@ -851,7 +845,7 @@ fbfunctions = {
 
 		return true
 	end,
-	hanghardstart2 = function (ply)
+	hanghardstart2 = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 120
 		local ang = ply.OrigEyeAng
@@ -860,7 +854,7 @@ fbfunctions = {
 
 		return true
 	end,
-	hangheaveup = function (ply)
+	hangheaveup = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 90
 		local ang = ply.OrigEyeAng
@@ -869,7 +863,7 @@ fbfunctions = {
 
 		return true
 	end,
-	hangfoldedstart = function (ply)
+	hangfoldedstart = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 90
 		local ang = ply.OrigEyeAng
@@ -878,18 +872,17 @@ fbfunctions = {
 
 		return true
 	end,
-	hangfoldedendhang = function (ply)
+	hangfoldedendhang = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 90
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
-
 		ply.hangyaw = 0
 
 		return true
 	end,
-	hangfoldedheaveup = function (ply)
+	hangfoldedheaveup = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 90
 		local ang = ply.OrigEyeAng
@@ -898,41 +891,25 @@ fbfunctions = {
 
 		return true
 	end,
-	dodgejumpleft = function (ply)
+	dodgejumpleft = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 180
 	end,
-	dodgejumpright = function (ply)
+	dodgejumpright = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 180
 	end,
-	ladderclimbdownfast = function (ply)
+	ladderclimbdownfast = function(ply)
 		lockang = true
 	end
 }
+
 local defaultcamoffset = Vector()
-local playermodelbones = {
-	"ValveBiped.Bip01_L_UpperArm",
-	"ValveBiped.Bip01_R_UpperArm"
-}
-local fingers = {
-	"ValveBiped.Bip01_L_Finger4",
-	"ValveBiped.Bip01_L_Finger41",
-	"ValveBiped.Bip01_L_Finger3",
-	"ValveBiped.Bip01_L_Finger31",
-	"ValveBiped.Bip01_L_Finger2",
-	"ValveBiped.Bip01_L_Finger21",
-	"ValveBiped.Bip01_L_Finger1",
-	"ValveBiped.Bip01_L_Finger11",
-	"ValveBiped.Bip01_R_Finger4",
-	"ValveBiped.Bip01_R_Finger41",
-	"ValveBiped.Bip01_R_Finger3",
-	"ValveBiped.Bip01_R_Finger31",
-	"ValveBiped.Bip01_R_Finger2",
-	"ValveBiped.Bip01_R_Finger21",
-	"ValveBiped.Bip01_R_Finger1",
-	"ValveBiped.Bip01_R_Finger11"
-}
+
+local playermodelbones = {"ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_R_UpperArm"}
+
+local fingers = {"ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11"}
+
 local fingerscustom = {
 	["ValveBiped.Bip01_L_Finger4"] = Angle(-10, 10, 0),
 	["ValveBiped.Bip01_L_Finger3"] = Angle(-10, 20, 0),
@@ -942,6 +919,7 @@ local fingerscustom = {
 	["ValveBiped.Bip01_R_Finger3"] = Angle(20, 20, 0),
 	["ValveBiped.Bip01_R_Finger2"] = Angle(10, 20, 0)
 }
+
 eventsounds = {
 	hangfoldedendhang = {
 		[0.42] = "Handsteps.ConcreteHard",
@@ -1024,6 +1002,7 @@ eventsounds = {
 		[0.3] = "me_body_roll.wav"
 	}
 }
+
 local CharaName = "Faith"
 local CharaLen = #CharaName
 
@@ -1042,7 +1021,7 @@ local function BodyEventSounds(anim)
 				func = ply.EmitSound
 			end
 
-			timer.Simple(k, function ()
+			timer.Simple(k, function()
 				func(ply, v)
 			end)
 		end
@@ -1052,9 +1031,9 @@ end
 camint = 1
 campos = Vector()
 camang = Angle()
-local customoffset = Vector()
+-- local customoffset = Vector()
+-- local movedback = false
 local customoffsetlerp = Vector()
-local movedback = false
 
 local function JumpCalcView(view)
 	if not fbanims[BodyAnimString] then
@@ -1067,13 +1046,13 @@ local function JumpCalcView(view)
 		end
 	end
 
-	local eyepos = LocalPlayer():EyePos()
-	local vieworigin = view.origin
+	-- local eyepos = LocalPlayer():EyePos()
+	-- local vieworigin = view.origin
 
 	BodyAnim:SetupBones()
 
 	local m = BodyAnim:GetBoneMatrix(68)
-	local pos, ang = nil
+	local ang = nil -- local pos, ang = nil
 
 	if m then
 		ang = m:GetAngles()
@@ -1134,7 +1113,7 @@ local function CreateBodyAnimArmCopy()
 	return BodyAnimArmCopy
 end
 
-hook.Add("BodyAnimRemove", "BodyAnimArmRemove", function ()
+hook.Add("BodyAnimRemove", "BodyAnimArmRemove", function()
 	if IsValid(BodyAnimArmCopy) then
 		BodyAnimArmCopy:Remove()
 	end
@@ -1143,9 +1122,7 @@ end)
 local function JumpArmThink()
 	local bac = CreateBodyAnimArmCopy()
 
-	if IsValid(bac) then
-		return true
-	end
+	if IsValid(bac) then return true end
 end
 
 function ArmInterrupting(bac)
@@ -1155,7 +1132,7 @@ end
 local defaultarmoffset = Vector()
 local armoffset = Vector()
 local armoffsetlerp = Vector()
-local drawnorigin = false
+-- local drawnorigin = false
 local drawnskytime = 0
 
 local function JumpArmDraw(a, b, c)
@@ -1174,26 +1151,22 @@ local function JumpArmDraw(a, b, c)
 
 		cam.IgnoreZ(true)
 
-		local camposoff = campos - ply:EyePos()
+		-- local camposoff = campos - ply:EyePos()
 		local attachId = bac:LookupAttachment("eyes")
 		local offset = bac:GetAttachment(attachId)
 
-		if not offset then
-			return
-		end
+		if not offset then return end
 
 		local arminterrupting = ArmInterrupting(bac)
 		local arminterruptboost = arminterrupting and 4 or 1
-		armoffsetlerp = LerpVector(math.min(10 * FrameTime() * arminterruptboost, 1), armoffsetlerp, not arminterrupting and customarmoffset[BodyAnimString] or defaultarmoffset)
 
+		armoffsetlerp = LerpVector(math.min(10 * FrameTime() * arminterruptboost, 1), armoffsetlerp, not arminterrupting and customarmoffset[BodyAnimString] or defaultarmoffset)
 		armoffset:Set(armoffsetlerp)
 
 		local pos = offset.Pos
 		local ang = offset.Ang
 
-		if not IsValid(BodyAnimMDLarm) then
-			return
-		end
+		if not IsValid(BodyAnimMDLarm) then return end
 
 		BodyAnimMDLarm:SetNoDraw(true)
 		bac:SetParent(nil)
@@ -1236,9 +1209,11 @@ local function JumpArmDraw(a, b, c)
 			if not worldarm[BodyAnimString] then
 				cam.Start3D(pos, ang)
 				cam.IgnoreZ(ignorezarm[BodyAnimString] or false)
+
 				BodyAnimMDLarm:SetPos(pos)
 				bac:SetupBones()
 				BodyAnimMDLarm:DrawModel()
+
 				cam.End3D()
 			else
 				local armoff = LocalToWorld(armoffset, angle_zero, vector_origin, BodyAnim:GetAngles())
@@ -1247,6 +1222,7 @@ local function JumpArmDraw(a, b, c)
 				bac:SetAngles(BodyAnim:GetAngles())
 				bac:SetPos(BodyAnim:GetPos() + armoff)
 				bac:SetRenderOrigin(nil)
+
 				BodyAnimMDLarm:SetPos(BodyAnim:GetPos() + armoff)
 				bac:SetupBones()
 				BodyAnimMDLarm:DrawModel()
@@ -1295,15 +1271,17 @@ local function JumpArmDraw(a, b, c)
 	end
 end
 
-hook.Add("PreRender", "JumpArmOriginVar", function ()
+hook.Add("PreRender", "JumpArmOriginVar", function()
 	drawnorigin = false
 end)
-hook.Add("PostDrawSkyBox", "JumpArm3DSky", function ()
+
+hook.Add("PostDrawSkyBox", "JumpArm3DSky", function()
 	skybox3d = true
 
 	hook.Remove("PostDrawSkyBox", "JumpArm3DSky")
 end)
-hook.Add("CalcViewModelView", "lol", function (wep, vm, oldpos, oldang, pos, ang)
+
+hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 	pos:Sub(oldpos)
 	pos:Add(campos)
 	ang:Sub(oldang)
@@ -1317,6 +1295,7 @@ hook.Add("CalcViewModelView", "lol", function (wep, vm, oldpos, oldang, pos, ang
 
 		pos:Add(cpos)
 		ang:Add(cang)
+
 		wep.m_ViewModel:SetRenderOrigin(pos)
 		wep.m_ViewModel:SetAngles(ang)
 	end
@@ -1357,9 +1336,7 @@ local function JumpAnim(event, ply)
 		if not wasjumpanim then
 			StartBodyAnim(animtable)
 
-			if not IsValid(BodyAnim) then
-				return
-			end
+			if not IsValid(BodyAnim) then return end
 
 			CreateBodyAnimArmCopy()
 
@@ -1413,7 +1390,7 @@ end
 
 local lastwr = 0
 
-hook.Add("Think", "FBAnimHandler", function ()
+hook.Add("Think", "FBAnimHandler", function()
 	local ply = LocalPlayer()
 
 	if not IsValid(BodyAnim) and ply:Alive() then
@@ -1456,13 +1433,14 @@ local function JumpThink()
 
 			if jumpanims[BodyAnimString] and (ply:OnGround() or ply:GetWallrun() ~= 0 or ply:GetMantle() ~= 0) then
 				BodyAnim:SetSequence(BodyAnim:LookupSequence("runfwd"))
-
 				BodyAnimCycle = 0
 			end
 
 			local ang = ply:EyeAngles()
 			ang[1] = 0
+
 			animtr.start = ply:GetPos()
+
 			local angold = ang
 			local lerpspeed = 10
 			local vel = LocalPlayer():GetVelocity()
@@ -1692,9 +1670,7 @@ local function JumpThink()
 			local func = fbfunctions[BodyAnimString]
 			func = func and func(ply)
 
-			if func == true then
-				return
-			end
+			if func == true then return end
 
 			if ply:GetMantle() == 4 then
 				BodyAnim:SetSequence("vaultoverhigh")
@@ -1734,7 +1710,8 @@ local function JumpThink()
 
 					BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
 					ply:EmitSound("Release." .. stepmat)
-					timer.Simple(0.15, function ()
+
+					timer.Simple(0.15, function()
 						ply:EmitSound("Footsteps." .. stepmat)
 					end)
 				end

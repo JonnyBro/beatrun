@@ -1,20 +1,18 @@
-
 AddCSLuaFile()
-DEFINE_BASECLASS( "player_default" )
 
-if ( CLIENT ) then
+DEFINE_BASECLASS("player_default")
 
-	CreateConVar( "cl_playercolor", "0.24 0.34 0.41", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The value is a Vector - so between 0-1 - not between 0-255" )
-	CreateConVar( "cl_weaponcolor", "0.30 1.80 2.10", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The value is a Vector - so between 0-1 - not between 0-255" )
-	CreateConVar( "cl_playerskin", "0", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The skin to use, if the model has any" )
-	CreateConVar( "cl_playerbodygroups", "0", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The bodygroups to use, if the model has any" )
-
+if CLIENT then
+	CreateConVar("cl_playercolor", "0.24 0.34 0.41", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The value is a Vector - so between 0-1 - not between 0-255")
+	CreateConVar("cl_weaponcolor", "0.30 1.80 2.10", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The value is a Vector - so between 0-1 - not between 0-255")
+	CreateConVar("cl_playerskin", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The skin to use, if the model has any")
+	CreateConVar("cl_playerbodygroups", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The bodygroups to use, if the model has any")
 end
 
 local PLAYER = {}
 
-PLAYER.DuckSpeed			= 0.01		-- How fast to go from not ducking, to ducking
-PLAYER.UnDuckSpeed			= 0.01		-- How fast to go from ducking, to not ducking
+PLAYER.DuckSpeed = 0.01		-- How fast to go from not ducking, to ducking
+PLAYER.UnDuckSpeed = 0.01	-- How fast to go from ducking, to not ducking
 
 --
 -- Creates a Taunt Camera
@@ -24,158 +22,155 @@ PLAYER.TauntCam = TauntCamera()
 --
 -- See gamemodes/base/player_class/player_default.lua for all overridable variables
 --
-PLAYER.WalkSpeed 			= 200
-PLAYER.RunSpeed				= 400
+PLAYER.WalkSpeed = 200
+PLAYER.RunSpeed = 400
 
 --
 -- Set up the network table accessors
 --
 function PLAYER:SetupDataTables()
+	BaseClass.SetupDataTables(self)
+	self.Player:NetworkVar("Float", 0, "MEMoveLimit")
+	self.Player:NetworkVar("Float", 1, "MESprintDelay")
+	self.Player:NetworkVar("Float", 2, "MEAng")
 
-	BaseClass.SetupDataTables( self )
-	self.Player:NetworkVar( "Float", 0, "MEMoveLimit" )
-	self.Player:NetworkVar( "Float", 1, "MESprintDelay" )
-	self.Player:NetworkVar( "Float", 2, "MEAng" )
-	
-	self.Player:NetworkVar( "Int", 0, "Climbing" )
-	self.Player:NetworkVar( "Float", 3, "ClimbingTime" )
-	self.Player:NetworkVar( "Vector", 0, "ClimbingStart" )
-	self.Player:NetworkVar( "Vector", 1, "ClimbingEnd" )
-	self.Player:NetworkVar( "Vector", 7, "ClimbingEndOld" )
-	self.Player:NetworkVar( "Float", 24, "ClimbingDelay" )
-	self.Player:NetworkVar( "Angle", 3, "ClimbingAngle" )
-	
-	self.Player:NetworkVar( "Int", 1, "Wallrun")
-	self.Player:NetworkVar( "Float", 4, "WallrunTime")
-	self.Player:NetworkVar( "Float", 5, "WallrunSoundTime")
-	self.Player:NetworkVar( "Vector", 2, "WallrunDir")
-	self.Player:NetworkVar( "Vector", 8, "WallrunOrigVel")
-	self.Player:NetworkVar( "Int", 4, "WallrunCount")
-	
-	self.Player:NetworkVar( "Bool", 0, "Sliding" )
-	self.Player:NetworkVar( "Float", 6, "SlidingTime" )
-	self.Player:NetworkVar( "Float", 7, "SlidingDelay" )
-	self.Player:NetworkVar( "Vector", 4, "SlidingLastPos" )
-	self.Player:NetworkVar( "Float", 18, "SlidingVel" )
-	self.Player:NetworkVar( "Float", 19, "SlidingStrafe" )
-	self.Player:NetworkVar( "Bool", 9, "SlidingSlippery" )
-	self.Player:NetworkVar( "Float", 20, "SlidingSlipperyUpdate" )
-	self.Player:NetworkVar( "Angle", 2, "SlidingAngle" )
-	
-	self.Player:NetworkVar( "Bool", 1, "StepRight" )
-	self.Player:NetworkVar( "Float", 8, "StepRelease" )
-	
-	self.Player:NetworkVar( "Bool", 2, "Grappling" )
-	self.Player:NetworkVar( "Vector", 3, "GrapplePos" )
-	self.Player:NetworkVar( "Float", 29, "GrappleLength")
-	
-	self.Player:NetworkVar( "Entity", 0, "Swingbar" )
-	
-	self.Player:NetworkVar( "Bool", 3, "CrouchJump" )
-	self.Player:NetworkVar( "Float", 9, "CrouchJumpTime" )
-	self.Player:NetworkVar( "Bool", 12, "CrouchJumpBlocked" )
-	
-	self.Player:NetworkVar( "Float", 9, "SafetyRollKeyTime" )
-	self.Player:NetworkVar( "Float", 10, "SafetyRollTime" )
-	self.Player:NetworkVar( "Angle", 0, "SafetyRollAng" )
-	
-	self.Player:NetworkVar( "Bool", 4, "Quickturn" )
-	self.Player:NetworkVar( "Float", 10, "QuickturnTime" )
-	self.Player:NetworkVar( "Angle", 1, "QuickturnAng" )
-	
-	self.Player:NetworkVar( "Bool", 5, "WallrunElevated" )
-	
+	self.Player:NetworkVar("Int", 0, "Climbing")
+	self.Player:NetworkVar("Float", 3, "ClimbingTime")
+	self.Player:NetworkVar("Vector", 0, "ClimbingStart")
+	self.Player:NetworkVar("Vector", 1, "ClimbingEnd")
+	self.Player:NetworkVar("Vector", 7, "ClimbingEndOld")
+	self.Player:NetworkVar("Float", 24, "ClimbingDelay")
+	self.Player:NetworkVar("Angle", 3, "ClimbingAngle")
+
+	self.Player:NetworkVar("Int", 1, "Wallrun")
+	self.Player:NetworkVar("Float", 4, "WallrunTime")
+	self.Player:NetworkVar("Float", 5, "WallrunSoundTime")
+	self.Player:NetworkVar("Vector", 2, "WallrunDir")
+	self.Player:NetworkVar("Vector", 8, "WallrunOrigVel")
+	self.Player:NetworkVar("Int", 4, "WallrunCount")
+
+	self.Player:NetworkVar("Bool", 0, "Sliding")
+	self.Player:NetworkVar("Float", 6, "SlidingTime")
+	self.Player:NetworkVar("Float", 7, "SlidingDelay")
+	self.Player:NetworkVar("Vector", 4, "SlidingLastPos")
+	self.Player:NetworkVar("Float", 18, "SlidingVel")
+	self.Player:NetworkVar("Float", 19, "SlidingStrafe")
+	self.Player:NetworkVar("Bool", 9, "SlidingSlippery")
+	self.Player:NetworkVar("Float", 20, "SlidingSlipperyUpdate")
+	self.Player:NetworkVar("Angle", 2, "SlidingAngle")
+
+	self.Player:NetworkVar("Bool", 1, "StepRight")
+	self.Player:NetworkVar("Float", 8, "StepRelease")
+
+	self.Player:NetworkVar("Bool", 2, "Grappling")
+	self.Player:NetworkVar("Vector", 3, "GrapplePos")
+	self.Player:NetworkVar("Float", 29, "GrappleLength")
+
+	self.Player:NetworkVar("Entity", 0, "Swingbar")
+
+	self.Player:NetworkVar("Bool", 3, "CrouchJump")
+	self.Player:NetworkVar("Float", 9, "CrouchJumpTime")
+	self.Player:NetworkVar("Bool", 12, "CrouchJumpBlocked")
+
+	self.Player:NetworkVar("Float", 9, "SafetyRollKeyTime")
+	self.Player:NetworkVar("Float", 10, "SafetyRollTime")
+	self.Player:NetworkVar("Angle", 0, "SafetyRollAng")
+
+	self.Player:NetworkVar("Bool", 4, "Quickturn")
+	self.Player:NetworkVar("Float", 10, "QuickturnTime")
+	self.Player:NetworkVar("Angle", 1, "QuickturnAng")
+
+	self.Player:NetworkVar("Bool", 5, "WallrunElevated")
 
 	--We have to store this info on the player as multiple people can use one swingbar
-	self.Player:NetworkVar( "Float", 11, "SBOffset" )
-	self.Player:NetworkVar( "Float", 12, "SBOffsetSpeed" )
-	self.Player:NetworkVar( "Float", 13, "SBStartLerp" )
-	self.Player:NetworkVar( "Float", 14, "SBDelay" )
-	self.Player:NetworkVar( "Int", 2, "SBPeak" )
-	self.Player:NetworkVar( "Bool",6, "SBDir" )
-	self.Player:NetworkVar( "Entity",1, "SwingbarLast" )
-	
-	self.Player:NetworkVar( "Entity", 2, "Swingpipe" )
-	self.Player:NetworkVar( "Entity", 3, "Rabbit" )
-	self.Player:NetworkVar( "Int", 3, "RabbitSeat" )
-	
-	
-	self.Player:NetworkVar( "Float", 15, "OverdriveCharge" )
-	self.Player:NetworkVar( "Float", 16, "OverdriveMult" )
-	
-	
-	self.Player:NetworkVar( "Bool", 7, "JumpTurn" )
-	self.Player:NetworkVar( "Float", 17, "JumpTurnRecovery" )
-	
-	self.Player:NetworkVar( "Bool", 8, "WasOnGround" )
-	
-	self.Player:NetworkVar( "Entity", 4, "Ladder" )
-	self.Player:NetworkVar( "Float", 21, "LadderDelay" )
-	self.Player:NetworkVar( "Float", 22, "LadderHeight" )
-	self.Player:NetworkVar( "Bool", 10, "LadderEntering" )
-	self.Player:NetworkVar( "Bool", 11, "LadderHand" )
-	self.Player:NetworkVar( "Vector", 5, "LadderStartPos" )
-	self.Player:NetworkVar( "Vector", 6, "LadderEndPos" )
-	self.Player:NetworkVar( "Float", 23, "LadderLerp" )
-	
-	self.Player:NetworkVar( "Entity", 5, "Zipline" )
-	self.Player:NetworkVar( "Float", 21, "ZiplineStart" )
-	self.Player:NetworkVar( "Float", 22, "ZiplineFraction" )
-	self.Player:NetworkVar( "Float", 23, "ZiplineSpeed" )
-	self.Player:NetworkVar( "Float", 25, "ZiplineDelay" )
-	
-	self.Player:NetworkVar( "Int", 5, "MeleeDamage")
-	self.Player:NetworkVar( "Float", 26, "MeleeTime")
-	self.Player:NetworkVar( "Float", 27, "MeleeDelay")
-	self.Player:NetworkVar( "Int", 6, "Melee")
-	
-	self.Player:NetworkVar( "Float", 28, "Balance")
-	self.Player:NetworkVar( "Entity", 6, "BalanceEntity")
-	
-	self.Player:NetworkVar( "Bool", 13, "Dive" )
+	self.Player:NetworkVar("Float", 11, "SBOffset")
+	self.Player:NetworkVar("Float", 12, "SBOffsetSpeed")
+	self.Player:NetworkVar("Float", 13, "SBStartLerp")
+	self.Player:NetworkVar("Float", 14, "SBDelay")
+	self.Player:NetworkVar("Int", 2, "SBPeak")
+	self.Player:NetworkVar("Bool", 6, "SBDir")
+	self.Player:NetworkVar("Entity", 1, "SwingbarLast")
 
+	self.Player:NetworkVar("Entity", 2, "Swingpipe")
+	self.Player:NetworkVar("Entity", 3, "Rabbit")
+	self.Player:NetworkVar("Int", 3, "RabbitSeat")
+
+	self.Player:NetworkVar("Float", 15, "OverdriveCharge")
+	self.Player:NetworkVar("Float", 16, "OverdriveMult")
+
+	self.Player:NetworkVar("Bool", 7, "JumpTurn")
+	self.Player:NetworkVar("Float", 17, "JumpTurnRecovery")
+
+	self.Player:NetworkVar("Bool", 8, "WasOnGround")
+
+	self.Player:NetworkVar("Entity", 4, "Ladder")
+	self.Player:NetworkVar("Float", 21, "LadderDelay")
+	self.Player:NetworkVar("Float", 22, "LadderHeight")
+	self.Player:NetworkVar("Bool", 10, "LadderEntering")
+	self.Player:NetworkVar("Bool", 11, "LadderHand")
+	self.Player:NetworkVar("Vector", 5, "LadderStartPos")
+	self.Player:NetworkVar("Vector", 6, "LadderEndPos")
+	self.Player:NetworkVar("Float", 23, "LadderLerp")
+
+	self.Player:NetworkVar("Entity", 5, "Zipline")
+	self.Player:NetworkVar("Float", 21, "ZiplineStart")
+	self.Player:NetworkVar("Float", 22, "ZiplineFraction")
+	self.Player:NetworkVar("Float", 23, "ZiplineSpeed")
+	self.Player:NetworkVar("Float", 25, "ZiplineDelay")
+
+	self.Player:NetworkVar("Int", 5, "MeleeDamage")
+	self.Player:NetworkVar("Float", 26, "MeleeTime")
+	self.Player:NetworkVar("Float", 27, "MeleeDelay")
+	self.Player:NetworkVar("Int", 6, "Melee")
+
+	self.Player:NetworkVar("Float", 28, "Balance")
+	self.Player:NetworkVar("Entity", 6, "BalanceEntity")
+
+	self.Player:NetworkVar("Bool", 13, "Dive")
 end
 
-
 function PLAYER:Loadout()
-
 	if GetGlobalBool(GM_DATATHEFT) then
-		for k,v in ipairs(DATATHEFT_LOADOUTS[ math.random( #DATATHEFT_LOADOUTS ) ]) do
+		for k, v in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
 			local wep = self.Player:Give(v)
 			self.Player:GiveAmmo(300, wep:GetPrimaryAmmoType())
 		end
 	else
 		self.Player:RemoveAllAmmo()
 	end
-	self.Player:Give( "runnerhands" )
 
+	self.Player:Give("runnerhands")
 	self.Player:SelectWeapon("runnerhands")
 	self.Player:SetJumpPower(230)
-	self.Player:SetCrouchedWalkSpeed( 0.5 )
+	self.Player:SetCrouchedWalkSpeed(0.5)
 	self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 120))
 	self.Player:SetCanZoom(false)
-
 end
 
 hook.Add("PlayerSwitchWeapon", "ResetFOV", function(ply)
 	local fovmult = (ply:InOverdrive() and 1.1) or 1
-	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120)*fovmult)
+
+	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120) * fovmult)
 end)
 
 function PLAYER:SetModel()
+	BaseClass.SetModel(self)
 
-	BaseClass.SetModel( self )
+	local skin = self.Player:GetInfoNum("cl_playerskin", 0)
 
-	local skin = self.Player:GetInfoNum( "cl_playerskin", 0 )
-	self.Player:SetSkin( skin )
+	self.Player:SetSkin(skin)
 
-	local groups = self.Player:GetInfo( "cl_playerbodygroups" )
-	if ( groups == nil ) then groups = "" end
-	local groups = string.Explode( " ", groups )
-	for k = 0, self.Player:GetNumBodyGroups() - 1 do
-		self.Player:SetBodygroup( k, tonumber( groups[ k + 1 ] ) or 0 )
+	local groups = self.Player:GetInfo("cl_playerbodygroups")
+
+	if groups == nil then
+		groups = ""
 	end
 
+	local groups = string.Explode(" ", groups)
+
+	for k = 0, self.Player:GetNumBodyGroups() - 1 do
+		self.Player:SetBodygroup(k, tonumber(groups[k + 1]) or 0)
+	end
 end
 
 --
@@ -186,55 +181,68 @@ if SERVER then
 end
 
 function PLAYER:Spawn()
-
-	BaseClass.Spawn( self )
+	BaseClass.Spawn(self)
 
 	local ply = self.Player
-	local col = ply:GetInfo( "cl_playercolor" )
-	ply:SetPlayerColor( Vector( col ) )
-	local faststartmult = (ply:GetInfoNum("Beatrun_FastStart", 0) > 0 and 0.5) or 1
+	local col = ply:GetInfo("cl_playercolor")
 
-	local col = Vector( ply:GetInfo( "cl_weaponcolor" ) )
-	if ( col:Length() < 0.001 ) then
-		col = Vector( 0.001, 0.001, 0.001 )
+	ply:SetPlayerColor(Vector(col))
+
+	local faststartmult = (ply:GetInfoNum("Beatrun_FastStart", 0) > 0 and 0.5) or 1
+	local col = Vector(ply:GetInfo("cl_weaponcolor"))
+
+	if col:Length() < 0.001 then
+		col = Vector(0.001, 0.001, 0.001)
 	end
-	ply:SetWeaponColor( col )
-	
+
+	ply:SetWeaponColor(col)
+
 	local CPSave = false
-	if Course_Name != "" and Course_StartPos != vector_origin then
-		if ply:GetInfoNum("Beatrun_CPSave", 0) >= 1 and ply:GetNW2Float("CPNum", 1) > 1 and ply.CPSavePos and ply.LastSpawnTime+0.6 < CurTime() then
+
+	if Course_Name ~= "" and Course_StartPos ~= vector_origin then
+		if ply:GetInfoNum("Beatrun_CPSave", 0) >= 1 and ply:GetNW2Float("CPNum", 1) > 1 and ply.CPSavePos and ply.LastSpawnTime + 0.6 < CurTime() then
 			ply:SetPos(ply.CPSavePos)
 			ply:SetEyeAngles(ply.CPSaveAng)
 			ply:SetLocalVelocity(ply.CPSaveVel)
 			ply:LoadParkourState()
+
 			CPSave = true
 		else
 			ply.CPSavePos = nil
 			ply.CPsaveAng = nil
 			ply.CPsaveVel = nil
+
 			ply:SetPos(Course_StartPos)
-			ply:SetEyeAngles(Angle(0,Course_StartAng,0))
+			ply:SetEyeAngles(Angle(0, Course_StartAng, 0))
 			ply:SetLocalVelocity(vector_origin)
-			timer.Simple(0.1, function() ply:SetLocalVelocity(vector_origin) ply:SetPos(Course_StartPos) end) --Failsafe
+
+			--Failsafe
+			timer.Simple(0.1, function()
+				ply:SetLocalVelocity(vector_origin)
+				ply:SetPos(Course_StartPos)
+			end)
+
 			ReplayStop(ply)
 			ReplayStart(ply)
 		end
 	end
-	
-	if !ply.InReplay and !CPSave then
+
+	if not ply.InReplay and not CPSave then
 		ply:SetNW2Float("CPNum", 1)
 	end
-	if !CPSave then
-		ply.Course_StartTime = CurTime() + (2*faststartmult)
+
+	if not CPSave then
+		ply.Course_StartTime = CurTime() + (2 * faststartmult)
+
 		net.Start("BeatrunSpawn")
 		net.WriteFloat(CurTime())
 		net.WriteBool(ply.InReplay)
 		net.Send(ply)
-		
-		ply.SpawnFreezeTime = CurTime() + (1.75*faststartmult)
+
+		ply.SpawnFreezeTime = CurTime() + (1.75 * faststartmult)
 	end
-	
-	if !GetGlobalBool(GM_DATATHEFT) then
+
+	if not GetGlobalBool(GM_DATATHEFT) then
 		ply:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 		ply:SetCustomCollisionCheck(true)
 	else
@@ -242,119 +250,109 @@ function PLAYER:Spawn()
 		ply:SetCustomCollisionCheck(false)
 		ply:DataTheft_Bank()
 	end
+
 	ply:SetAvoidPlayers(false)
-	
-	ply:SetLaggedMovementValue( 0 ) --otherwise they drift off
-	timer.Simple(0.1, function() ply:SetLaggedMovementValue( 1 ) end)
+	ply:SetLaggedMovementValue(0) --otherwise they drift off
+
+	timer.Simple(0.1, function()
+		ply:SetLaggedMovementValue(1)
+	end)
+
 	if ply.SlideLoopSound and ply.SlideLoopSound.Stop then
 		ply.SlideLoopSound:Stop()
 	end
-	
+
 	ply:ResetParkourState()
-	
 	ply:SetOverdriveCharge(0)
 	ply:SetOverdriveMult(1)
-
 	ply.LastSpawnTime = CurTime()
 end
 
-hook.Add( "IsSpawnpointSuitable", "CheckSpawnPoint", function( ply, spawnpointent, bMakeSuitable )
-	if !GetGlobalBool(GM_DATATHEFT) then return end
+hook.Add("IsSpawnpointSuitable", "CheckSpawnPoint", function(ply, spawnpointent, bMakeSuitable)
+	if not GetGlobalBool(GM_DATATHEFT) then return end
+
 	local pos = spawnpointent:GetPos()
 
 	-- Note that we're searching the default hull size here for a player in the way of our spawning.
 	-- This seems pretty rough, seeing as our player's hull could be different.. but it should do the job.
 	-- (HL2DM kills everything within a 128 unit radius)
-	local ents = ents.FindInBox( pos + Vector( -16, -16, 0 ), pos + Vector( 16, 16, 72 ) )
-
+	local ents = ents.FindInBox(pos + Vector(-16, -16, 0), pos + Vector(16, 16, 72))
 	local Blockers = 0
 
-	for _, v in ipairs( ents ) do
-		if ( v:IsPlayer() and v:Alive() ) then
+	for _, v in ipairs(ents) do
+		if v:IsPlayer() and v:Alive() then
 			Blockers = Blockers + 1
 
-			if ( bMakeSuitable ) then
+			if bMakeSuitable then
 				v:Kill()
 			end
 		end
 	end
 
-	if ( bMakeSuitable ) then return true end
-	if ( Blockers > 0 ) then return false end
+	if bMakeSuitable then return true end
+	if Blockers > 0 then return false end
 
 	return true
 end)
 
 hook.Add("SetupMove", "SpawnFreeze", function(ply, mv, cmd)
-	if ply.SpawnFreezeTime and Course_Name != "" and Course_StartPos != vector_origin then
+	if ply.SpawnFreezeTime and Course_Name ~= "" and Course_StartPos ~= vector_origin then
 		if Course_StartPos and ply.SpawnFreezeTime > CurTime() then
 			mv:SetOrigin(Course_StartPos)
 		end
 	end
 end)
 
-hook.Add( "ShouldCollide", "NoPlayerCollisions", function( ent1, ent2 )
-    if ( ent1:IsPlayer() and (ent2:IsPlayer() or ent2.NoPlayerCollisions) ) then
+hook.Add("ShouldCollide", "NoPlayerCollisions", function(ent1, ent2)
+	if ent1:IsPlayer() and (ent2:IsPlayer() or ent2.NoPlayerCollisions) then
 		if ent2.BRCollisionFunc then
 			return ent2:BRCollisionFunc(ent1)
 		else
 			return false
 		end
 	end
-	
-	if ( ent2:IsPlayer() and ent1:IsNPC() ) then
-		return true
-	end
 
-end )
+	if ent2:IsPlayer() and ent1:IsNPC() then return true end
+end)
 
-hook.Add( "PhysgunPickup", "AllowPlayerPickup", function( ply, ent )
-	if ( ply:IsSuperAdmin() and ent:IsPlayer() ) then
-		return true
-	end
-end )
+hook.Add("PhysgunPickup", "AllowPlayerPickup", function(ply, ent)
+	if ply:IsSuperAdmin() and ent:IsPlayer() then return true end
+end)
 
 function PLAYER:ShouldDrawLocal()
-
-	if ( self.TauntCam:ShouldDrawLocalPlayer( self.Player, self.Player:IsPlayingTaunt() ) ) then return true end
-
+	if self.TauntCam:ShouldDrawLocalPlayer(self.Player, self.Player:IsPlayingTaunt()) then return true end
 end
 
-function PLAYER:CreateMove( cmd )
-
-	if ( self.TauntCam:CreateMove( cmd, self.Player, self.Player:IsPlayingTaunt() ) ) then return true end
-
+function PLAYER:CreateMove(cmd)
+	if self.TauntCam:CreateMove(cmd, self.Player, self.Player:IsPlayingTaunt()) then return true end
 end
 
-function PLAYER:CalcView( view )
-
-	if ( self.TauntCam:CalcView( view, self.Player, self.Player:IsPlayingTaunt() ) ) then return true end
-
+function PLAYER:CalcView(view)
+	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
 end
 
 function PLAYER:GetHandsModel()
+	local cl_playermodel = self.Player:GetInfo("cl_playermodel")
 
-	local cl_playermodel = self.Player:GetInfo( "cl_playermodel" )
-	return player_manager.TranslatePlayerHands( cl_playermodel )
-
+	return player_manager.TranslatePlayerHands(cl_playermodel)
 end
 
-function PLAYER:StartMove( move )
-
+function PLAYER:StartMove(move)
 end
 
-function PLAYER:FinishMove( move )
-
+function PLAYER:FinishMove(move)
 end
 
 hook.Add("FinishMove", "BeatrunRHVelocity", function(ply, mv)
 	local activewep = ply:GetActiveWeapon()
-	if IsValid(activewep) and activewep:GetClass()=="runnerhands" and activewep.SetOwnerVelocity then
+
+	if IsValid(activewep) and activewep:GetClass() == "runnerhands" and activewep.SetOwnerVelocity then
 		activewep:SetOwnerVelocity(math.Round(mv:GetVelocity():Length()))
 	end
 end)
 
 local meta = FindMetaTable("Player")
+
 function meta:ResetParkourState()
 	self:SetSliding(false)
 	self:SetCrouchJump(false)
@@ -382,13 +380,13 @@ function meta:ResetParkourState()
 	self:SetMeleeDelay(0)
 	self:SetJumpTurn(false)
 	self:SetDive(false)
-	self:SetViewOffsetDucked(Vector(0,0,32))
-	
+	self:SetViewOffsetDucked(Vector(0, 0, 32))
+
 	self.Swingrope = nil
 	self.DiveSliding = false
-	
+
 	ParkourEvent("jump", self)
-	
+
 	self:StopSound("ZiplineLoop")
 end
 
@@ -423,8 +421,8 @@ end
 
 function meta:LoadParkourState()
 	local save = self.ParkourSave
-	if !save then return end
-	
+	if not save then return end
+
 	self:SetSliding(save[1])
 	self:SetCrouchJump(save[2])
 	self:SetQuickturn(save[3])
@@ -464,8 +462,9 @@ function meta:ResetParkourTimes()
 end
 
 function meta:InOverdrive()
-	if !self.GetOverdriveMult then return false end
-	return self:GetOverdriveMult() != 1
+	if not self.GetOverdriveMult then return false end
+
+	return self:GetOverdriveMult() ~= 1
 end
 
 function meta:GetRolling()
@@ -484,4 +483,4 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 	end)
 end)
 
-player_manager.RegisterClass( "player_beatrun", PLAYER, "player_default" )
+player_manager.RegisterClass("player_beatrun", PLAYER, "player_default")

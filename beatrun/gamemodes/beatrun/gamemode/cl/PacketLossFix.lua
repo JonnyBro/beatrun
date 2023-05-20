@@ -1,8 +1,10 @@
-local checktimer = 0
+-- local checktimer = 0
 local errorc = Color(255, 25, 25)
+
 local whitelist = {
 	c_ladderanim = true
 }
+
 local whitelistanims = fbanims
 
 local function BodyAnimAntiStuck()

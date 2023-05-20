@@ -5,8 +5,8 @@ local SScaleY_cached = {}
 
 function SScaleX(sizex)
 	-- local iswide = AEUI.ScrW / AEUI.ScrH > 1.6
-
 	if SScaleX_cached[sizex] then return SScaleX_cached[sizex] end
+
 	SScaleX_cached[sizex] = math.ceil(sizex / (1920 / AEUI.ScrW))
 
 	return SScaleX_cached[sizex]
@@ -42,6 +42,7 @@ function AEUIFonts()
 		weight = 500,
 		size = ScreenScale(7)
 	})
+
 	surface.CreateFont("AEUILarge", {
 		shadow = false,
 		blursize = 0,
@@ -59,6 +60,7 @@ function AEUIFonts()
 		weight = 500,
 		size = ScreenScale(12)
 	})
+
 	surface.CreateFont("AEUIVeryLarge", {
 		shadow = false,
 		blursize = 0,
@@ -231,6 +233,7 @@ local function AEUIDraw()
 		if e.hover then
 			local mx = AEUI.MX + SScaleX(20)
 			local my = AEUI.MY + SScaleY(20)
+
 			surface.SetTextColor(255, 255, 255)
 			surface.SetFont("AEUIDefault")
 
@@ -251,6 +254,7 @@ local function AEUIDraw()
 end
 
 hook.Add("HUDPaint", "AEUIDraw", AEUIDraw)
+
 hook.Add("StartCommand", "AEUI_StartCommand", function(ply, cmd)
 	local mx = gui.MouseX()
 	local my = gui.MouseY()
@@ -266,7 +270,6 @@ hook.Add("StartCommand", "AEUI_StartCommand", function(ply, cmd)
 
 		if x < mx and mx < x + w and y < my and my < y + h then
 			AEUI.HoveredPanel = panel
-
 			break
 		else
 			AEUI.HoveredPanel = nil
@@ -319,7 +322,6 @@ end)
 hook.Add("OnScreenSizeChanged", "AEUI_ScreenSize", function()
 	AEUI.ScrH = ScrH()
 	AEUI.ScrW = ScrW()
-
 	table.Empty(SScaleX_cached)
 	table.Empty(SScaleY_cached)
 	AEUIFonts()
@@ -338,7 +340,6 @@ function AEUI.Elements.Text(panel, data)
 
 	if isgreyed then
 		local colr, colg, colb = data.color:Unpack()
-
 		surface.SetDrawColor(colr, colg, colb, 50)
 		surface.SetTextColor(colr, colg, colb, 50)
 	else

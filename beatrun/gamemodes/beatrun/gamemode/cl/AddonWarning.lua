@@ -1,8 +1,12 @@
+if not game.SinglePlayer() then return end
+
 local bigboy = false
+
 local welcome = {
 	w = 700,
 	h = 400
 }
+
 welcome.x = 960 - welcome.w * 0.5
 welcome.y = 540 - welcome.h * 0.5
 welcome.bgcolor = Color(32, 32, 32)
@@ -10,12 +14,12 @@ welcome.outlinecolor = Color(54, 55, 56)
 welcome.alpha = 0.9
 welcome.elements = {}
 
-/*
+--[[
 local function closebutton(self)
 	LocalPlayer():EmitSound("holygrenade.mp3")
 	AEUI:Clear()
 end
-*/
+]]
 
 local function warnclosebutton(self)
 	LocalPlayer():EmitSound("holygrenade.mp3")
@@ -24,10 +28,9 @@ local function warnclosebutton(self)
 	bigboy = true
 end
 
-if not game.SinglePlayer() then return end
-
 local addons = 0
 local warning = Material("vgui/warning.png")
+
 local shit = {
 	["378401390"] = true,
 	["2027577882"] = true,
@@ -48,16 +51,19 @@ local shit = {
 	["142911907"] = true,
 	["2316713217"] = true
 }
+
 local warnpanel = {
 	w = 500,
 	h = 350
 }
+
 warnpanel.x = 960 - warnpanel.w * 0.5
 warnpanel.y = 540 - warnpanel.h * 0.5
 warnpanel.bgcolor = Color(32, 32, 32)
 warnpanel.outlinecolor = Color(54, 55, 56)
 warnpanel.alpha = 0.9
 warnpanel.elements = {}
+
 local conflictpanel = {
 	w = 400,
 	h = 150,
@@ -68,6 +74,7 @@ local conflictpanel = {
 	alpha = 1,
 	elements = {}
 }
+
 local warntext = {
 	type = "Text",
 	font = "AEUIDefault",
@@ -88,10 +95,11 @@ local quitbutton = {
 	centered = true,
 	color = color_white,
 	string = "Return to Main Menu",
-	onclick = function (self)
+	onclick = function(self)
 		surface.PlaySound("garrysmod/ui_click.wav")
 		MsgC(Color(255, 100, 100), "Quitting Beatrun due to conflicting addons!")
-		timer.Simple(0.5, function ()
+
+		timer.Simple(0.5, function()
 			RunConsoleCommand("killserver")
 		end)
 
@@ -146,6 +154,7 @@ local function Seal()
 	local eyeang = EyeAngles()
 
 	LocalPlayer():DrawViewModel(false)
+
 	render.RenderView({
 		y = 0,
 		x = 0,
@@ -154,6 +163,7 @@ local function Seal()
 		w = w,
 		h = h
 	})
+
 	render.SetScissorRect(0, 0, w, h, true)
 
 	local light = render.GetLightColor(eyepos)
@@ -171,11 +181,14 @@ local function Seal()
 	surface.SetDrawColor(math.min(colx, 255), math.min(coly, 255), math.min(colz, 255), 255)
 	surface.SetMaterial(sealplead)
 	surface.DrawTexturedRectRotated(x + w * 0.5, y + h * 0.5, w + x, h + y + math.abs(math.sin(CurTime()) * 10), eyeang.z)
+
 	render.SetScissorRect(0, 0, 0, 0, false)
+
 	surface.SetFont("BeatrunHUD")
 	surface.SetTextPos(2, 0)
 	surface.SetTextColor(220, 20, 20, math.abs(math.sin(CurTime() * 2) * 255))
 	surface.DrawText(REC .. " LIVE PLAYER CAM")
+
 	LocalPlayer():DrawViewModel(true)
 end
 
@@ -202,7 +215,7 @@ else
 end
 
 if conflictlist.string ~= "" then
-	timer.Simple(0, function ()
+	timer.Simple(0, function()
 		AEUI:AddPanel(warnpanel)
 		AEUI:AddPanel(conflictpanel)
 	end)

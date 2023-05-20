@@ -31,9 +31,10 @@ end
 
 function syn:Play(file, events)
 	self:Reset()
-	sound.PlayFile(file, "noblock", function (a)
+
+	sound.PlayFile(file, "noblock", function(a)
 		if IsValid(a) then
-			timer.Simple(0, function ()
+			timer.Simple(0, function()
 				a:EnableLooping(true)
 			end)
 
@@ -116,6 +117,7 @@ local testcolor = Color(151, 166, 182)
 
 local function test_beat()
 	testfov = testfovconvar:GetFloat()
+
 	BlindGetColor().r = colbeatr
 	BlindGetColor().g = colbeatg
 	BlindGetColor().b = colbeatb
@@ -194,6 +196,7 @@ local function test_think()
 	BlindGetColor().r = math.Approach(BlindGetColor().r, colr, FrameTime() * 100)
 	BlindGetColor().g = math.Approach(BlindGetColor().g, colg, FrameTime() * 100)
 	BlindGetColor().b = math.Approach(BlindGetColor().b, colb, FrameTime() * 100)
+
 	vanishrandx = math.Approach(vanishrandx, 0.5, FrameTime() * 50)
 	vanishrandy = math.Approach(vanishrandy, 0.5, FrameTime() * 50)
 	vanishrandz = math.Approach(vanishrandz, 0.5, FrameTime() * 50)
@@ -207,11 +210,13 @@ local function test_think()
 
 	if testbuildup then
 		GlitchIntensity = math.Approach(GlitchIntensity, 0.65, FrameTime() * 0.1)
+
 		blindrandx = math.Approach(blindrandx, 1.5, FrameTime() * 0.1)
 		blindrandy = math.Approach(blindrandy, 1.5, FrameTime() * 0.1)
 		blindrandz = math.Approach(blindrandz, 1.5, FrameTime() * 0.1)
 	else
 		GlitchIntensity = math.Approach(GlitchIntensity, 0.1, FrameTime() * 4)
+
 		blindrandx = math.Approach(blindrandx, 0.5, FrameTime() * 10)
 		blindrandy = math.Approach(blindrandy, 0.5, FrameTime() * 10)
 		blindrandz = math.Approach(blindrandz, 0.5, FrameTime() * 10)
@@ -219,190 +224,52 @@ local function test_think()
 end
 
 local testevents = {
-	{
-		0,
-		test_color1
-	},
-	{
-		0,
-		test_endbuildup
-	},
-	{
-		0,
-		test_beat
-	},
-	{
-		0.75,
-		test_pullback
-	},
-	{
-		1.1,
-		test_pullback
-	},
-	{
-		1.9,
-		test_pullback
-	},
-	{
-		3.25,
-		test_beat
-	},
-	{
-		6.75,
-		test_beat
-	},
-	{
-		7.6,
-		test_pullback
-	},
-	{
-		8,
-		test_pullback
-	},
-	{
-		8.85,
-		test_pullback
-	},
-	{
-		9,
-		test_pullback
-	},
-	{
-		9.02,
-		test_pullback
-	},
-	{
-		10.25,
-		test_beat
-	},
-	{
-		13.675,
-		test_beat
-	},
-	{
-		14.5,
-		test_pullback
-	},
-	{
-		15,
-		test_pullback
-	},
-	{
-		15,
-		test_startbuildup
-	},
-	{
-		15.8,
-		test_pullback
-	},
-	{
-		15.9,
-		test_pullback
-	},
-	{
-		16,
-		test_pullback
-	},
-	{
-		17.065,
-		test_beat
-	},
-	{
-		20.5,
-		test_beat
-	},
-	{
-		21.3,
-		test_pullback
-	},
-	{
-		21.7,
-		test_pullback
-	},
-	{
-		22.5,
-		test_pullback
-	},
-	{
-		22.8,
-		test_pullback
-	},
-	{
-		22.82,
-		test_pullback
-	},
-	{
-		24,
-		test_beat
-	},
-	{
-		27.375,
-		test_beathard
-	},
-	{
-		27.375,
-		test_color2
-	},
-	{
-		30.75,
-		test_beat
-	},
-	{
-		34.25,
-		test_beathard
-	},
-	{
-		37.65,
-		test_beat
-	},
-	{
-		41,
-		test_endbuildup
-	},
-	{
-		41.1,
-		test_beat
-	},
-	{
-		44,
-		test_startbuildup
-	},
-	{
-		44.5,
-		test_beat
-	},
-	{
-		48,
-		test_beathard
-	},
-	{
-		51.4,
-		test_beat
-	},
-	{
-		54.8,
-		test_beat
-	},
-	{
-		54.8,
-		test_endbuildup
-	},
-	{
-		58.25,
-		test_beat
-	},
-	{
-		59,
-		test_startbuildup
-	},
-	{
-		61.65,
-		test_beathard
-	},
-	{
-		65,
-		test_beat
-	}
+	{0, test_color1},
+	{0, test_endbuildup},
+	{0, test_beat},
+	{0.75, test_pullback},
+	{1.1, test_pullback},
+	{1.9, test_pullback},
+	{3.25, test_beat},
+	{6.75, test_beat},
+	{7.6, test_pullback},
+	{8, test_pullback},
+	{8.85, test_pullback},
+	{9, test_pullback},
+	{9.02, test_pullback},
+	{10.25, test_beat},
+	{13.675, test_beat},
+	{14.5, test_pullback},
+	{15, test_pullback},
+	{15, test_startbuildup},
+	{15.8, test_pullback},
+	{15.9, test_pullback},
+	{16, test_pullback},
+	{17.065, test_beat},
+	{20.5, test_beat},
+	{21.3, test_pullback},
+	{21.7, test_pullback},
+	{22.5, test_pullback},
+	{22.8, test_pullback},
+	{22.82, test_pullback},
+	{24, test_beat},
+	{27.375, test_beathard},
+	{27.375, test_color2},
+	{30.75, test_beat},
+	{34.25, test_beathard},
+	{37.65, test_beat},
+	{41, test_endbuildup},
+	{41.1, test_beat},
+	{44, test_startbuildup},
+	{44.5, test_beat},
+	{48, test_beathard},
+	{51.4, test_beat},
+	{54.8, test_beat},
+	{54.8, test_endbuildup},
+	{58.25, test_beat},
+	{59, test_startbuildup},
+	{61.65, test_beathard},
+	{65, test_beat}
 }
 
 function test_syn(a)

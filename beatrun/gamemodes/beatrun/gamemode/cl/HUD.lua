@@ -6,17 +6,17 @@ local reticle = CreateClientConVar("Beatrun_HUDReticle", "1", true, false, "Disp
 local packetloss = Material("vgui/packetloss.png")
 local lastloss = 0
 local MELogo = Material("vgui/MELogo.png", "mips smooth")
+
 local hide = {
 	CHudBattery = true,
 	CHudHealth = true,
 	CHudDamageIndicator = true
 }
+
 local inf = math.huge
 
-hook.Add("HUDShouldDraw", "BeatrunHUDHide", function (name)
-	if hide[name] then
-		return false
-	end
+hook.Add("HUDShouldDraw", "BeatrunHUDHide", function(name)
+	if hide[name] then return false end
 end)
 
 local color = 1
@@ -291,15 +291,13 @@ local function sortleaderboard(a, b)
 end
 
 function BeatrunLeaderboard(forced)
-	if not forced and Course_Name == "" and not GetGlobalBool(GM_INFECTION) and not GetGlobalBool(GM_DATATHEFT) then
-		return
-	end
+	if not forced and Course_Name == "" and not GetGlobalBool(GM_INFECTION) and not GetGlobalBool(GM_DATATHEFT) then return end
 
 	local isinfection = GetGlobalBool(GM_INFECTION)
 	local isdatatheft = GetGlobalBool(GM_DATATHEFT)
 	local ply = LocalPlayer()
 	local vp = ply:GetViewPunchAngles()
-	local scrw = ScrW()
+	-- local scrw = ScrW()
 	local scrh = ScrH()
 
 	if not sway:GetBool() then
@@ -312,7 +310,6 @@ function BeatrunLeaderboard(forced)
 	if allplytimer < CurTime() then
 		allply = player.GetAll()
 		allplytimer = CurTime() + 5
-
 		table.sort(allply, sortleaderboard)
 	end
 
@@ -320,7 +317,9 @@ function BeatrunLeaderboard(forced)
 
 	surface.SetDrawColor(20, 20, 20, math.max(150 - hidealpha, 50))
 	surface.DrawRect(-20 + vp.z, scrh * 0.2 + vp.x, 40, SScaleY(30 * allplycount))
+
 	DrawBlurRect(20 + vp.z, scrh * 0.2 + vp.x, SScaleX(400), SScaleY(30 * allplycount), math.max(255 - hidealpha, 2))
+
 	surface.SetDrawColor(20, 20, 20, math.max(100 - hidealpha, 50))
 	surface.DrawOutlinedRect(20 + vp.z, scrh * 0.2 + vp.x, SScaleX(400), SScaleY(30 * allplycount))
 	surface.SetFont("BeatrunHUD")
@@ -331,13 +330,13 @@ function BeatrunLeaderboard(forced)
 	for k, v in ipairs(allply) do
 		if IsValid(v) then
 			i = i + 1
+
 			local pbtimenum = v:GetNW2Float("PBTime")
 			local pbtime = niltime
 
 			if isdatatheft then
 				pbtimenum = v:GetNW2Int("DataBanked", 0)
 				pbtime = pbtimenum
-
 				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
 			else
 				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
@@ -371,10 +370,9 @@ hook.Add("HUDPaint", "BeatrunLeaderboard", BeatrunLeaderboard)
 
 local lastchatply = nil
 
-hook.Add("OnPlayerChat", "BeatrunChatSound", function (ply, text, teamChat, isDead)
+hook.Add("OnPlayerChat", "BeatrunChatSound", function(ply, text, teamChat, isDead)
 	if lastchatply ~= ply then
 		LocalPlayer():EmitSound("friends/message.wav")
-
 		lastchatply = ply
 	end
 end)
@@ -391,10 +389,8 @@ local pp = {
 	["$pp_colour_mulr"] = 0
 }
 
-hook.Add("RenderScreenspaceEffects", "FilterPP", function ()
-	if render.GetDXLevel() < 90 then
-		return
-	end
+hook.Add("RenderScreenspaceEffects", "FilterPP", function()
+	if render.GetDXLevel() < 90 then return end
 
 	if not blinded or not blindinverted then
 		DrawColorModify(pp)
@@ -403,15 +399,13 @@ end)
 
 local maxentries = SScaleX(375)
 speedrecord = {}
-local lastx = 0
-local lasty = 0
+-- local lastx = 0
+-- local lasty = 0
 local sgoffsetx = 0.75
 local sgoffsety = 0.75
 
 local function DrawSpeedGraph()
-	if not speedrecord or not LocalPlayer().InReplay then
-		return
-	end
+	if not speedrecord or not LocalPlayer().InReplay then return end
 
 	local offsetx = ScrW() * sgoffsetx
 	local offsety = ScrH() * sgoffsety
@@ -419,9 +413,11 @@ local function DrawSpeedGraph()
 	local boxscaledy = SScaleY(200)
 
 	render.SetScissorRect(offsetx, offsety, offsetx + boxscaledx, offsety + boxscaledy, true)
+
 	surface.SetDrawColor(25, 25, 25, 100)
 	surface.DrawRect(offsetx, offsety, boxscaledx, boxscaledy)
 	surface.SetFont("DebugFixedSmall")
+
 	render.PushFilterMag(TEXFILTER.POINT)
 	render.PushFilterMin(TEXFILTER.POINT)
 
@@ -457,9 +453,7 @@ local smoothvel = true
 local lastvel = 0
 
 local function RecordSpeedGraph()
-	if not LocalPlayer().InReplay then
-		return
-	end
+	if not LocalPlayer().InReplay then return end
 
 	local lenrecord = #speedrecord
 	local vel = LocalPlayer():GetVelocity()
@@ -495,19 +489,15 @@ hook.Add("Tick", "SpeedGraph", RecordSpeedGraph)
 
 local crosshair_unarmed = Material("vgui/hud/crosshair_unarmed")
 local crosshair_standard = Material("vgui/hud/crosshair_standard")
-local crosshair_weapon = Material("vgui/hud/crosshair_weapon")
-local crosshair_reaction = Material("vgui/hud/crosshair_reaction")
+-- local crosshair_weapon = Material("vgui/hud/crosshair_weapon")
+-- local crosshair_reaction = Material("vgui/hud/crosshair_reaction")
 
 local function BeatrunReticle()
-	if not reticle:GetBool() then
-		return
-	end
+	if not reticle:GetBool() then return end
 
 	local wep = LocalPlayer():GetActiveWeapon()
 
-	if not IsValid(wep) or wep:GetClass() ~= "runnerhands" then
-		return
-	end
+	if not IsValid(wep) or wep:GetClass() ~= "runnerhands" then return end
 
 	surface.SetDrawColor(255, 255, 255)
 	surface.SetMaterial(crosshair_standard)

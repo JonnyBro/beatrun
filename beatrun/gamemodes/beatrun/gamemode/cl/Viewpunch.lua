@@ -6,7 +6,7 @@ local viewbob_intensity = CreateClientConVar("Beatrun_ViewbobIntensity", "20", t
 local viewbob_stabilized = CreateClientConVar("Beatrun_ViewbobStabilized", "0", true, true, "Turn on to reduce motion sickness by making viewbobbing keep the player's look position centered", 0, 1)
 
 local function lensqr(ang)
-	return ang[1]^2 + ang[2]^2 + ang[3]^2
+	return ang[1] ^ 2 + ang[2] ^ 2 + ang[3] ^ 2
 end
 
 function metavec:Approach(x, y, z, speed)
@@ -111,7 +111,9 @@ local function CLViewPunchCalc(ply, pos, ang)
 	punchlocal.z = math.max(math.abs(PunchPos.y) * math.abs(runfwd - 1) * 2, -0.5) * crouchmul
 
 	punchlocal:Mul(0.66)
+
 	pos:Add(punchlocal)
+
 	punchlocal:Mul(1.5151515151515151)
 
 	runangmul = math.Approach(runangmul, grounded and 0.5 or 0, FrameTime() * (grounded and 5 or 15))
@@ -131,6 +133,7 @@ function meta:CLViewPunch(angle)
 	ang[1] = math.Clamp(ang[1], -180, 180)
 	ang[2] = math.Clamp(ang[2], -180, 180)
 	ang[3] = math.Clamp(ang[3], -180, 180)
+
 	self.ViewPunchDone = false
 end
 

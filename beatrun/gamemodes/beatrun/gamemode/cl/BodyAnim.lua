@@ -1,45 +1,5 @@
-local playermodelbones = {
-	"ValveBiped.Bip01_R_Clavicle",
-	"ValveBiped.Bip01_R_UpperArm",
-	"ValveBiped.Bip01_R_Forearm",
-	"ValveBiped.Bip01_R_Hand",
-	"ValveBiped.Bip01_L_Clavicle",
-	"ValveBiped.Bip01_L_UpperArm",
-	"ValveBiped.Bip01_L_Forearm",
-	"ValveBiped.Bip01_L_Hand",
-	"ValveBiped.Bip01_L_Wrist",
-	"ValveBiped.Bip01_R_Wrist",
-	"ValveBiped.Bip01_L_Finger4",
-	"ValveBiped.Bip01_L_Finger41",
-	"ValveBiped.Bip01_L_Finger42",
-	"ValveBiped.Bip01_L_Finger3",
-	"ValveBiped.Bip01_L_Finger31",
-	"ValveBiped.Bip01_L_Finger32",
-	"ValveBiped.Bip01_L_Finger2",
-	"ValveBiped.Bip01_L_Finger21",
-	"ValveBiped.Bip01_L_Finger22",
-	"ValveBiped.Bip01_L_Finger1",
-	"ValveBiped.Bip01_L_Finger11",
-	"ValveBiped.Bip01_L_Finger12",
-	"ValveBiped.Bip01_L_Finger0",
-	"ValveBiped.Bip01_L_Finger01",
-	"ValveBiped.Bip01_L_Finger02",
-	"ValveBiped.Bip01_R_Finger4",
-	"ValveBiped.Bip01_R_Finger41",
-	"ValveBiped.Bip01_R_Finger42",
-	"ValveBiped.Bip01_R_Finger3",
-	"ValveBiped.Bip01_R_Finger31",
-	"ValveBiped.Bip01_R_Finger32",
-	"ValveBiped.Bip01_R_Finger2",
-	"ValveBiped.Bip01_R_Finger21",
-	"ValveBiped.Bip01_R_Finger22",
-	"ValveBiped.Bip01_R_Finger1",
-	"ValveBiped.Bip01_R_Finger11",
-	"ValveBiped.Bip01_R_Finger12",
-	"ValveBiped.Bip01_R_Finger0",
-	"ValveBiped.Bip01_R_Finger01",
-	"ValveBiped.Bip01_R_Finger02"
-}
+local playermodelbones = {"ValveBiped.Bip01_R_Clavicle", "ValveBiped.Bip01_R_UpperArm", "ValveBiped.Bip01_R_Forearm", "ValveBiped.Bip01_R_Hand", "ValveBiped.Bip01_L_Clavicle", "ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_L_Forearm", "ValveBiped.Bip01_L_Hand", "ValveBiped.Bip01_L_Wrist", "ValveBiped.Bip01_R_Wrist", "ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger42", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger32", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger22", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_L_Finger12", "ValveBiped.Bip01_L_Finger0", "ValveBiped.Bip01_L_Finger01", "ValveBiped.Bip01_L_Finger02", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger42", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger32", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger22", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11", "ValveBiped.Bip01_R_Finger12", "ValveBiped.Bip01_R_Finger0", "ValveBiped.Bip01_R_Finger01", "ValveBiped.Bip01_R_Finger02"}
+
 BodyAnim = BodyAnim or nil
 BodyAnimMDL = BodyAnimMDL or nil
 BodyAnimMDLarm = BodyAnimMDLarm or nil
@@ -172,6 +132,7 @@ local transition = false
 local matrixto = {}
 local scalevec = Vector(1, 1, 1)
 local matrixfrompos = Vector()
+
 armbones = {
 	["ValveBiped.Bip01_L_Finger0"] = true,
 	["ValveBiped.Bip01_L_Finger02"] = true,
@@ -269,6 +230,7 @@ function CacheLerpBodyAnim()
 
 				local bonematrix = self:GetBoneMatrix(bone)
 				bonematrix:SetTranslation(bonematrix:GetTranslation() - pos)
+
 				to[bone] = bonematrix:FastToTable(to[bone])
 
 				for i = 1, 3 do
@@ -288,8 +250,8 @@ function CacheLerpBodyAnim()
 					local bt1 = bt[1]
 					local bt2 = bt[2]
 					local bt3 = bt[3]
-
 					slot15 = bt[4]
+
 					self.m:SetUnpacked(bt1[1], bt1[2], bt1[3], bt1[4], bt2[1], bt2[2], bt2[3], bt2[4], bt3[1], bt3[2], bt3[3], bt3[4], 0, 0, 0, 1)
 				end
 
@@ -309,10 +271,12 @@ function StartBodyAnim(animtable)
 	local prestart = hook.Run("BodyAnimPreStart", animtable)
 
 	if prestart then return end
+
 	if IsValid(BodyAnim) and not justremoved then return end
 
 	justremoved = false
 	local ply = LocalPlayer()
+
 	if ply:InVehicle() then return end
 
 	animmodelstring = animtable.animmodelstring
@@ -361,6 +325,7 @@ function StartBodyAnim(animtable)
 	BodyAnim:SetAngles(Angle(0, ply:EyeAngles().y, 0))
 	BodyAnim:SetPos(ply:GetPos())
 	BodyAnim:SetNoDraw(false)
+
 	BodyAnimStartPos:Set(BodyAnim:GetPos())
 
 	if not IsValid(ply:GetHands()) then return end
@@ -529,7 +494,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				if BodyAnimPosEaseLerp < 1 then
 					local easedpos = LerpVector(BodyAnimPosEaseLerp, BodyAnimPosEase, pos)
 					BodyAnimPosEaseLerp = math.Approach(BodyAnimPosEaseLerp, 1, FrameTime() * 5)
-
 					BodyAnim:SetPos(easedpos)
 					BodyAnim:SetRenderOrigin(easedpos)
 				else
@@ -634,6 +598,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 			lasteyeang:Set(ply:EyeAngles())
 
 			local vm = ply:GetViewModel()
+
 			BodyAnimEyeAng = attach.Ang
 			BodyAnimPos = attach.Pos
 			lastattachpos = attach.Pos
@@ -668,13 +633,16 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 				local MEAng = math.Truncate(ang.y, 2)
 				local target = not lockang and MEAng or ply.OrigEyeAng.y
+
 				viewtiltlerp.y = math.ApproachAngle(viewtiltlerp.y, target, FT * (1 + math.abs(math.AngleDifference(viewtiltlerp.y, target)) * 5))
 
 				local MEAngDiff = math.AngleDifference(viewtiltlerp.y, not lockang and lastangy or ply.OrigEyeAng.y) * 0.15
-				ViewTiltAngle = Angle(0, 0, MEAngDiff + viewtiltlerp.z)
 
+				ViewTiltAngle = Angle(0, 0, MEAngDiff + viewtiltlerp.z)
 				view.angles:Add(ViewTiltAngle)
+
 				ply:SetNoDraw(false)
+
 				view.angles:Add(ply:GetViewPunchAngles() + ply:GetCLViewPunchAngles())
 
 				hook.Run("BodyAnimCalcView", view)
@@ -754,6 +722,7 @@ hook.Add("CreateMove", "BodyAnim_Mouse", function(cmd)
 		local oang = ply.OrigEyeAng
 		local limitx = BodyLimitX or 30
 		local limity = BodyLimitY or 50
+
 		pastlimitx = limitx < math.AngleDifference(nang.x, oang.x)
 		pastlimity = limity < math.abs(math.AngleDifference(nang.y, oang.y))
 

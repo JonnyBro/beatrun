@@ -8,7 +8,6 @@ sound.Add({
 })
 
 local zoom = Material("vgui/zoom.vtf")
-
 local nextbeat = 0
 local beatvol = 0.3
 local blurpass = 0

@@ -19,26 +19,15 @@ surface.CreateFont("BeatrunDebug", {
 local color_red = Color(220, 20, 20)
 local startx = 0.2
 local starty = 0.75
-local debugdata = {
-	"BodyAnim",
-	"BodyAnimCycle",
-	"BodyAnimString",
-	"campos",
-	"camang"
-}
-local debugdata2 = {
-	"BodyAnimArmCopy",
-	"TraceCount"
-}
-local debugoffset = {
-	0,
-	0,
-	0
-}
-local debuglist = {
-	debugdata,
-	debugdata2
-}
+
+local debugdata = {"BodyAnim", "BodyAnimCycle", "BodyAnimString", "campos", "camang"}
+
+local debugdata2 = {"BodyAnimArmCopy", "TraceCount"}
+
+local debugoffset = {0, 0, 0}
+
+local debuglist = {debugdata, debugdata2}
+
 TraceLine_o = TraceLine_o or util.TraceLine
 local TraceLine_o = TraceLine_o
 local traces = {}

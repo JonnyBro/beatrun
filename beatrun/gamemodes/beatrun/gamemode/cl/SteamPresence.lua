@@ -1,26 +1,15 @@
-if not system.IsWindows() or not file.Exists("lua/bin/gmcl_steamfriends_win64.dll", "GAME") then
-	return
-end
-
+if not system.IsWindows() or not file.Exists("lua/bin/gmcl_steamfriends_win64.dll", "GAME") then return end
 local richtext = ""
 local nextupdate = 0
 
 local function UpdateRichPresence()
-	if CurTime() < nextupdate then
-		return
-	end
+	if CurTime() < nextupdate then return end
 
 	local rp = steamworks.SetRichPresence
-
-	if not rp then
-		return
-	end
+	if not rp then return end
 
 	local ply = LocalPlayer()
-
-	if not ply.GetLevel then
-		return
-	end
+	if not ply.GetLevel then return end
 
 	local map = game.GetMap()
 	local level = LocalPlayer():GetLevel()
@@ -48,7 +37,7 @@ local function LoadRichPresenceDLL()
 	require("steamfriends")
 end
 
-hook.Add("OnGamemodeLoaded", "LoadDLL", function ()
+hook.Add("OnGamemodeLoaded", "LoadDLL", function()
 	local dllfound = pcall(LoadRichPresenceDLL)
 	LoadRichPresenceDLL = nil
 

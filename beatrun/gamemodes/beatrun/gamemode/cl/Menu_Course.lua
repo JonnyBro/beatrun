@@ -2,6 +2,7 @@ local coursepanel = {
 	w = 1200,
 	h = 650
 }
+
 coursepanel.x = 960 - coursepanel.w * 0.5
 coursepanel.y = 540 - coursepanel.h * 0.5
 coursepanel.bgcolor = Color(32, 32, 32)
@@ -27,6 +28,7 @@ AEUI:AddButton(coursepanel, "  X  ", closebutton, "AEUILarge", coursepanel.w - 4
 
 local stopbutton = AEUI:AddButton(coursepanel, "Return to Freeplay", stopbutton, "AEUILarge", coursepanel.w - 295, coursepanel.h - 50)
 stopbutton.greyed = sacheck
+
 local courselist = {
 	w = 800,
 	h = 450,
@@ -68,8 +70,9 @@ function OpenCourseMenu(ply)
 	end
 end
 
-hook.Add("InitPostEntity", "CourseMenuCommand", function ()
+hook.Add("InitPostEntity", "CourseMenuCommand", function()
 	concommand.Add("Beatrun_CourseMenu", OpenCourseMenu)
 	hook.Remove("InitPostEntity", "CourseMenuCommand")
 end)
+
 concommand.Add("Beatrun_CourseMenu", OpenCourseMenu)

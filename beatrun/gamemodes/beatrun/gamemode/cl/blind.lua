@@ -145,6 +145,7 @@ local white = Color(210, 159, 110, 255)
 local green = Color(0, 255, 0)
 local circle = Material("circle.png", "nocull")
 whiteg = white
+
 customcolors = {
 	Color(210, 159, 110, 255),
 	Color(203, 145, 65, 255),
@@ -155,6 +156,7 @@ customcolors = {
 	Color(250, 20, 40, 255),
 	Color(10, 255, 20, 255)
 }
+
 local forcelines = false
 
 function BlindSetColor(newcol)
@@ -174,11 +176,9 @@ local camvector = Vector()
 local camang = Angle()
 local camlerp = 0
 local lerp, sound, bgm = nil
-blindcolor = {
-	0,
-	0,
-	0
-}
+
+blindcolor = {0, 0, 0}
+
 local colors = {
 	[MAT_DEFAULT] = blue,
 	[MAT_GLASS] = glass,
@@ -187,12 +187,9 @@ local colors = {
 	[MAT_GRASS] = grass,
 	[MAT_FLESH] = red
 }
-local colorslist = {
-	green,
-	grass,
-	sand,
-	glass
-}
+
+local colorslist = {green, grass, sand, glass}
+
 blindrandrendermin = 0.9
 blindinverted = false
 blindpopulate = false
@@ -200,12 +197,12 @@ blindpopulatespeed = 1000
 blindfakepopulate = false
 customglitch = false
 blindcustomlerp = 0
-blindcustompoints = {
-	Vector()
-}
-local blindcustompoints = blindcustompoints
--- local sizemult = 1
 
+blindcustompoints = {Vector()}
+
+local blindcustompoints = blindcustompoints
+
+-- local sizemult = 1
 function InvertColors()
 	for k, v in ipairs(colorslist) do
 		v.r = 255 - v.r
@@ -244,6 +241,7 @@ local colorsclass = {
 	func_door_rotating = green,
 	func_door = green
 }
+
 local blindedsounds = {
 	["bad.wav"] = true,
 	["music/locloop_unk.wav"] = true,
@@ -262,9 +260,11 @@ local blindedsounds = {
 	["lidar/burst3.wav"] = true,
 	["lidar/scanstop.wav"] = true
 }
+
 local trw = {
 	collisiongroup = COLLISION_GROUP_WORLD
 }
+
 local trwr = {}
 
 local function IsInWorld(pos)
@@ -329,9 +329,8 @@ LOCEntities = LOCEntities or {}
 meshtbl = meshtbl or new()
 local meshtbl = meshtbl
 pausescan = false
-local mathrandom = math.random
 
-/*
+--[[
 local function OptimizeMeshes()
 	local i = 0
 	-- local vertexcount = 0
@@ -343,7 +342,7 @@ local function OptimizeMeshes()
 		i = i + 1
 	end
 end
-*/
+]]
 
 glob_blindangles = Angle()
 glob_blindorigin = Vector()
@@ -357,8 +356,10 @@ local function Blindness(origin, angles)
 	local eyeang = angles
 	local FT = FrameTime()
 	local quality = quality:GetBool()
+
 	glob_blindorigin:Set(origin)
 	glob_blindangles:Set(angles)
+
 	local hitpointscount = nil
 	-- local vel_l = ply:GetVelocity():Length()
 	-- local vel = 2.5
@@ -371,6 +372,7 @@ local function Blindness(origin, angles)
 	end
 
 	local randrender = math.Rand(blindrandrendermin, 1)
+
 	render.Clear(blindcolor[1] * randrender, blindcolor[2] * randrender, blindcolor[3] * randrender, 0)
 	render.ClearDepth()
 	render.ClearStencil()
@@ -382,15 +384,18 @@ local function Blindness(origin, angles)
 
 				if trace.Hit then
 					hitpoints:push_right(trace.HitPos)
-					local invert = mathrandom()
+
+					local invert = math.random()
 
 					if invert < 0.05 then
 						trace.HitNormal:Mul(-1)
 					end
 
 					hitnormal:push_right(trace.HitNormal)
+
 					local hcol = colors[trace.MatType]
 					local hcolclass = colorsclass[trace.Entity:GetClass()]
+
 					hitcolor:push_right(hcol or hcolclass or white)
 
 					if limit < hitpoints:length() then
@@ -432,11 +437,11 @@ local function Blindness(origin, angles)
 		end
 	end
 
-	-- local lastpos = hitpoints[hitpoints.tail]
 	local f = eyeang:Forward()
 	local eyediff = Vector()
 	local k = limit
 	local k2 = 0
+	-- local lastpos = hitpoints[hitpoints.tail]
 	-- local vanishlimit = vanishlimit
 	-- local vanishrandx = vanishrandx
 	-- local vanishrandy = vanishrandy
@@ -460,6 +465,7 @@ local function Blindness(origin, angles)
 	local ed = eyedot
 	local anggg = ply:EyeAngles()
 	anggg.x = 0
+
 	local eyep = ply:EyePos() + anggg:Forward() * 200
 	local hitindex = 1
 	local drawcount = #blindcustompoints
@@ -569,8 +575,9 @@ local function BlindnessPreUI()
 	end
 end
 
--- local te = "te/metamorphosis/"
-/*
+--[[
+local te = "te/metamorphosis/"
+
 local jingles = {
 	land = te .. "3-linedrop",
 	jump = te .. "1-linemove",
@@ -593,7 +600,7 @@ local function BlindnessJingles(event)
 		LocalPlayer():EmitSound(jingles[event] .. math.random(1, jinglescount[event]) .. ".wav")
 	end
 end
-*/
+]]
 
 function ToggleBlindness(toggle)
 	blinded = toggle
@@ -616,6 +623,7 @@ function ToggleBlindness(toggle)
 
 		local milestone = ply:GetLevel() >= 100
 		local bgmstring = milestone and "music/locloop.wav" or "music/locloop_unk.wav"
+
 		forcelines = not milestone
 
 		BlindSetColor(milestone and customcolors[1] or customcolors[3])
@@ -666,6 +674,7 @@ function cool()
 
 	for v in hitpoints:iter_right() do
 		mesh.QuadEasy(v, hitnormal[hitnormal.tail - k2], 2, 2, hitcolor[hitcolor.tail - k2] or white)
+
 		k = k - 1
 		k2 = k2 + 1
 	end

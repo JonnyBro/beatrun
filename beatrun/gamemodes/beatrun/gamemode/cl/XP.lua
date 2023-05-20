@@ -1,10 +1,10 @@
 local meta = FindMetaTable("Player")
-local XP_max = 2000000
+-- local XP_max = 2000000
 local XP_ratiocache = nil
 local parkourevent_lastpos = Vector()
 
 function XP_nextlevel(level)
-	return math.Round(0.25 * level^3 + 0.8 * level^2 + 2 * level)
+	return math.Round(0.25 * level ^ 3 + 0.8 * level ^ 2 + 2 * level)
 end
 
 local ParkourXP = {
@@ -20,23 +20,24 @@ local ParkourXP = {
 	swingbar = 4,
 	step = 1
 }
+
 local ParkourXP_RNG = {
 	sidestep = 0.1
 }
+
 local ParkourXP_PosCheck = {
 	climb = true,
 	vault = true,
 	wallrunh = true,
 	wallrunv = true
 }
+
 XP_floatingxp = {}
 
-hook.Add("OnParkour", "ParkourXP", function (event)
+hook.Add("OnParkour", "ParkourXP", function(event)
 	local ply = LocalPlayer()
 
-	if ply.InReplay then
-		return
-	end
+	if ply.InReplay then return end
 
 	local pos = ply:GetPos()
 
@@ -74,10 +75,7 @@ function meta:LevelUp()
 		self:SetLevel(self:GetLevel() + 1)
 
 		i = i + 1
-
-		if i > 1000 then
-			break
-		end
+		if i > 1000 then break end
 	end
 
 	if i > 0 then
@@ -91,6 +89,7 @@ end
 
 function meta:SetXP(xp)
 	self.XP = math.Round(xp)
+
 	XP_ratiocache = nil
 
 	self:LevelUp()
@@ -98,6 +97,7 @@ end
 
 function meta:AddXP(xp)
 	self.XP = math.Round((self.XP or 0) + xp)
+
 	XP_ratiocache = nil
 
 	self:LevelUp()
@@ -110,18 +110,13 @@ function meta:AddXP(xp)
 end
 
 local function SaveXP()
-	local xp = util.TableToJSON({
-		LocalPlayer().XP or 0,
-		LocalPlayer().Level or 1
-	})
+	local xp = util.TableToJSON({LocalPlayer().XP or 0, LocalPlayer().Level or 1})
+
 	local xpold = file.Read("beatrun/local/xp.txt", "DATA")
 
 	if xpold then
 		xpold = util.Decompress(xpold)
-
-		if LocalPlayer().XP < util.JSONToTable(xpold)[1] then
-			return
-		end
+		if LocalPlayer().XP < util.JSONToTable(xpold)[1] then return end
 	end
 
 	local xp = util.Compress(xp)

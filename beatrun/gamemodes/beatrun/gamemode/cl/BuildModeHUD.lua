@@ -1,40 +1,48 @@
 local rtcache = {}
 local rtmatcache = {}
+
 local propspanel = {
 	w = 384,
 	h = 400
 }
+
 propspanel.x = 1632 - propspanel.w * 0.5
 propspanel.y = 702 - propspanel.h * 0.5
 propspanel.bgcolor = Color(32, 32, 32)
 propspanel.outlinecolor = Color(55, 55, 55)
 propspanel.alpha = 0.9
 propspanel.elements = {}
+
 local elementstogglepanel = {
 	w = 384,
 	h = 40
 }
+
 elementstogglepanel.x = 1632 - elementstogglepanel.w * 0.5
 elementstogglepanel.y = 459
 elementstogglepanel.bgcolor = Color(32, 32, 32)
 elementstogglepanel.outlinecolor = Color(55, 55, 55)
 elementstogglepanel.alpha = 0.9
 elementstogglepanel.elements = {}
+
 local bmbuttons = {
 	w = 190,
 	h = 100,
 	x = 1632 - propspanel.w * 0.5
 }
+
 bmbuttons.y = 972 - bmbuttons.h * 0.5
 bmbuttons.bgcolor = Color(32, 32, 32)
 bmbuttons.outlinecolor = Color(55, 55, 55)
 bmbuttons.alpha = 0.45
 bmbuttons.elements = {}
+
 local bminfo = {
 	w = 190,
 	h = 100,
 	x = 1634
 }
+
 bminfo.y = 972 - bminfo.h * 0.5
 bminfo.bgcolor = Color(32, 32, 32)
 bminfo.outlinecolor = Color(55, 55, 55)

@@ -35,7 +35,6 @@ hook.Add("Tick", "BreathingLogic", function()
 
 	if nextbreath < CT then
 		ply:FaithVO("Faith.Breath." .. breathstring .. breathstringdur .. breathtype)
-
 		nextbreath = CT + (vel > 200 and 0.5 or 1.25 + math.random(0, 0.1)) + extradur
 		breathin = not breathin
 	end
