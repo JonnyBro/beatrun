@@ -4,13 +4,14 @@ function BRProtectedEntity(class, pos, ang)
 	a:SetAngles(ang)
 	a:Spawn()
 	a:SetNW2Bool("BRProtected", true)
-	
+
 	return a
 end
 
-if file.Exists("beatrun/gamemode/Maps/"..game.GetMap().."_cl.lua", "LUA") then
-	AddCSLuaFile("beatrun/gamemode/Maps/"..game.GetMap().."_cl.lua")
+if file.Exists("beatrun/gamemode/Maps/" .. game.GetMap() .. "_cl.lua", "LUA") then
+	AddCSLuaFile("beatrun/gamemode/Maps/" .. game.GetMap() .. "_cl.lua")
 end
-if file.Exists("beatrun/gamemode/Maps/"..game.GetMap()..".lua", "LUA") then
-	include("beatrun/gamemode/Maps/"..game.GetMap()..".lua")
+
+if file.Exists("beatrun/gamemode/Maps/" .. game.GetMap() .. ".lua", "LUA") then
+	include("beatrun/gamemode/Maps/" .. game.GetMap() .. ".lua")
 end
