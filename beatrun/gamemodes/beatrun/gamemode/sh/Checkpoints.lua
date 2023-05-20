@@ -129,7 +129,7 @@ if CLIENT then
 
 			LocalPlayer():EmitSound("A_TT_Finish_Positive.wav")
 			SaveCheckpointTime()
-			SaveReplayData()
+			-- SaveReplayData()
 		else
 			timetext = "+" .. string.FormattedTime(math.abs(timestr), "%02i:%02i:%02i")
 			timecolor = color_negative
@@ -300,13 +300,13 @@ function LoadCheckpointTime()
 end
 
 function SaveReplayData()
-	local replay = util.TableToJSON(LocalPlayer().ReplayTicks)
+	local replay = util.Compress(util.TableToJSON(LocalPlayer().ReplayTicks))
 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
 
 	if not replay then return end
 
 	file.CreateDir(dir)
-	file.Write(dir .. Course_ID .. ".txt", util.Compress(replay))
+	file.Write(dir .. Course_ID .. ".txt", replay)
 end
 
 function LoadReplayData()

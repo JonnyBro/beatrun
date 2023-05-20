@@ -1,6 +1,6 @@
 local quakejump = CreateConVar("Beatrun_QuakeJump", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
-
 local sidestep = CreateConVar("Beatrun_SideStep", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+local max_speed = CreateConVar("Beatrun_MaxSpeed", 325, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 
 local function Hardland(jt)
 	local ply = LocalPlayer()
@@ -230,8 +230,8 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 		ply.FootstepLand = true
 	end
 
-	if ply:GetRunSpeed() ~= 325 * ply:GetOverdriveMult() then
-		ply:SetRunSpeed(325 * ply:GetOverdriveMult())
+	if ply:GetRunSpeed() ~= max_speed:GetInt() * ply:GetOverdriveMult() then
+		ply:SetRunSpeed(max_speed:GetInt() * ply:GetOverdriveMult())
 	end
 
 	if not ply:GetMEMoveLimit() then
@@ -275,9 +275,9 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			mult = mult * ply:GetMEMoveLimit() / 1000
 		end
 
-		ply:SetMEMoveLimit(math.Clamp(ply:GetMEMoveLimit() + mult * ply:GetOverdriveMult() * 2, 0, 325 * ply:GetOverdriveMult()))
+		ply:SetMEMoveLimit(math.Clamp(ply:GetMEMoveLimit() + mult * ply:GetOverdriveMult() * 2, 0, max_speed:GetInt() * ply:GetOverdriveMult()))
 	elseif not ismoving and (not ply:Crouching() or ply:GetCrouchJump()) or CurTime() < ply:GetMESprintDelay() and ply:OnGround() then
-		ply:SetMEMoveLimit(math.Clamp(ply:GetMEMoveLimit() - 40, weaponspeed, 325 * ply:GetOverdriveMult()))
+		ply:SetMEMoveLimit(math.Clamp(ply:GetMEMoveLimit() - 40, weaponspeed, max_speed:GetInt() * ply:GetOverdriveMult()))
 	end
 
 	if MEAngDiff > 1.25 and ply:GetWallrun() == 0 then

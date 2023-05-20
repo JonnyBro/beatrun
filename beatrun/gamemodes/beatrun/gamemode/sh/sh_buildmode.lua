@@ -936,6 +936,7 @@ if CLIENT then
 		local jsonsave = util.TableToJSON(save)
 		local crc = util.CRC(jsonsave)
 		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
+		compress = compress or true
 
 		file.CreateDir(dir)
 
@@ -1620,7 +1621,7 @@ if CLIENT then
 
 			gui.EnableScreenClicker(false)
 
-			LocalPlayer():SetFOV(LocalPlayer():GetInfoNum("Beatrun_FOV"))
+			LocalPlayer():SetFOV(0)
 
 			CheckpointNumber = 1
 

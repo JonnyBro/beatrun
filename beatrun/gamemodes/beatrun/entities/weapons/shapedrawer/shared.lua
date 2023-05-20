@@ -1,4 +1,4 @@
-SWEP.PrintName        = "X"			
+SWEP.PrintName        = "X"
 SWEP.Slot		= 0
 SWEP.SlotPos		= 1
 SWEP.DrawAmmo		= false
@@ -14,13 +14,13 @@ SWEP.BounceWeaponIcon = false
 SWEP.DrawWeaponInfoBox = false
 
 SWEP.HoldType = "crossbow"
- 
+
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= true
 SWEP.Category = "Beatrun"
- 
-SWEP.UseHands = true 
- 
+
+SWEP.UseHands = true
+
 SWEP.ViewModel			= "models/weapons/c_pistol.mdl"
 SWEP.WorldModel		= "models/weapons/w_crossbow.mdl"
 
@@ -30,7 +30,7 @@ SWEP.Primary.ClipSize		= -1
 SWEP.Primary.DefaultClip	= -1
 SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo		= "none"
- 
+
 SWEP.Secondary.ClipSize	= -1
 SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
@@ -74,7 +74,7 @@ function SWEP:PrimaryAttack()
 		table.insert(self.points, ply:EyePos()+ply:EyeAngles():Forward()*50)
 	end
 end
- 
+
 
 function SWEP:SecondaryAttack()
 	self:CallOnClient("SecondaryAttack")
@@ -84,7 +84,7 @@ end
 
 hook.Add("PostDrawTranslucentRenderables","ShapeGun",function()
 	local ply = Entity(1)
-	local wep = ply:GetActiveWeapon()
+	local wep = ply:GetActiveWeapon() or nil
 	if IsValid(wep) and wep:GetClass()=="shapedrawer" then
 		for k,v in ipairs(wep.points) do
 			render.DrawWireframeBox(v,angle_zero,Vector(-1,-1,-1),Vector(1,1,1))

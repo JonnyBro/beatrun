@@ -673,6 +673,7 @@ hook.Add("StartCommand", "qslidespeed", function(ply, cmd)
 		end
 
 		cmd:ClearMovement()
+
 		local slidetime = math.max(0.1, qslide_duration)
 
 		if (ply:GetSlidingTime() - CurTime()) / slidetime > 0.8 and (ply.SlidingInitTime > CurTime() - 0.25 or ply:GetSlidingSlippery()) then

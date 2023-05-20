@@ -1,46 +1,45 @@
-SWEP.PrintName        = "Zipline Gun"			
-SWEP.Slot		= 0
-SWEP.SlotPos		= 1
-SWEP.DrawAmmo		= false
-SWEP.DrawCrosshair	= true
+SWEP.PrintName = "Zipline Gun"
+SWEP.Slot = 0
+SWEP.SlotPos = 1
+SWEP.DrawAmmo = false
+SWEP.DrawCrosshair = true
 
-
-SWEP.Author			= ""
-SWEP.Contact			= ""
-SWEP.Purpose			= ""
-SWEP.Instructions		= ""
+SWEP.Author = ""
+SWEP.Contact = ""
+SWEP.Purpose = ""
+SWEP.Instructions = ""
 
 SWEP.BounceWeaponIcon = false
 SWEP.DrawWeaponInfoBox = false
 
 SWEP.HoldType = "crossbow"
- 
-SWEP.Spawnable			= true
-SWEP.AdminSpawnable		= true
+
+SWEP.Spawnable = true
+SWEP.AdminSpawnable = true
 SWEP.Category = "Beatrun"
- 
-SWEP.UseHands = true 
- 
-SWEP.ViewModel			= "models/weapons/c_crossbow.mdl"
-SWEP.WorldModel		= "models/weapons/w_crossbow.mdl"
 
-SWEP.ViewModelFOV=75 --65 75
+SWEP.UseHands = true
 
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo		= "none"
- 
-SWEP.Secondary.ClipSize	= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.Ammo		= "none"
+SWEP.ViewModel = "models/weapons/c_crossbow.mdl"
+SWEP.WorldModel = "models/weapons/w_crossbow.mdl"
+
+SWEP.ViewModelFOV = 75 -- 65
+
+SWEP.Primary.ClipSize = -1
+SWEP.Primary.DefaultClip = -1
+SWEP.Primary.Automatic = false
+SWEP.Primary.Ammo = "none"
+
+SWEP.Secondary.ClipSize = -1
+SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.Automatic = false
+SWEP.Secondary.Ammo = "none"
 
 function SWEP:SetupDataTables()
 end
 
 function SWEP:Deploy()
-	self:SetHoldType( self.HoldType )
+	self:SetHoldType(self.HoldType)
 	self:SendWeaponAnim(ACT_VM_DRAW)
 end
 
@@ -48,9 +47,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:Think()
-
 end
-
 
 function SWEP:Holster()
 	return true
@@ -63,13 +60,15 @@ function SWEP:Reload()
 end
 
 function SWEP:PrimaryAttack()
-	local ply = self.Owner
+	local ply = self:GetOwner()
+
 	if SERVER then
 		CreateZipline(ply:EyePos(), ply:GetEyeTrace().HitPos)
 	end
 end
- 
 
 function SWEP:SecondaryAttack()
-
+	-- for k, v in pairs(ziplines) do
+	-- 	v:Remove()
+	-- end
 end
