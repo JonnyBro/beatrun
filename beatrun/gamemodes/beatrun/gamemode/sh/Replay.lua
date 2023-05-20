@@ -3,13 +3,8 @@ if SERVER then
 end
 
 function ReplayCmd(ply, cmd)
-	if not ply.ReplayRecording then
-		return
-	end
-
-	if cmd:TickCount() == 0 then
-		return
-	end
+	if not ply.ReplayRecording then return end
+	if cmd:TickCount() == 0 then return end
 
 	if not ply.ReplayFirstTick and cmd:TickCount() ~= 0 then
 		ply.ReplayFirstTick = cmd:TickCount()
@@ -26,19 +21,9 @@ function ReplayCmd(ply, cmd)
 	local curtick = cmd:TickCount() - ply.ReplayFirstTick + 1
 
 	if ang == 0 then
-		ply.ReplayTicks[curtick] = {
-			cmd:GetButtons(),
-			cmd:GetForwardMove(),
-			cmd:GetSideMove()
-		}
+		ply.ReplayTicks[curtick] = {cmd:GetButtons(), cmd:GetForwardMove(), cmd:GetSideMove()}
 	else
-		ply.ReplayTicks[curtick] = {
-			cmd:GetButtons(),
-			ang.x,
-			ang.y,
-			cmd:GetForwardMove(),
-			cmd:GetSideMove()
-		}
+		ply.ReplayTicks[curtick] = {cmd:GetButtons(), ang.x, ang.y, cmd:GetForwardMove(), cmd:GetSideMove()}
 	end
 
 	if curtick > 23760 then
@@ -51,13 +36,8 @@ end
 hook.Add("StartCommand", "ReplayStart", ReplayCmd)
 
 function ReplayStart(ply)
-	if not game.SinglePlayer() then
-		return
-	end
-
-	if ply.InReplay then
-		return
-	end
+	if not game.SinglePlayer() then return end
+	if ply.InReplay then return end
 
 	print("Starting Replay")
 
@@ -69,26 +49,17 @@ function ReplayStart(ply)
 end
 
 function ReplayStop(ply, debugdump)
-	if not game.SinglePlayer() then
-		return
-	end
-
-	if not ply.ReplayTicks then
-		return
-	end
-
-	if ply.InReplay then
-		return
-	end
+	if not game.SinglePlayer() then return end
+	if not ply.ReplayTicks then return end
+	if ply.InReplay then return end
 
 	print("Ending Replay (" .. #ply.ReplayTicks .. "ticks)")
 
 	ply.InReplay = false
 	ply.ReplayRecording = false
-	local debugdata = {
-		ply.ReplayStartPos,
-		ply.ReplayTicks
-	}
+
+	local debugdata = {ply.ReplayStartPos, ply.ReplayTicks}
+
 	local replay = util.Compress(util.TableToJSON(debugdata))
 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
 
@@ -99,15 +70,11 @@ end
 local RFF = true
 
 function ReplayPlayback(ply, cmd)
-	if not ply.InReplay or not ply.ReplayTicks then
-		return
-	end
+	if not ply.InReplay or not ply.ReplayTicks then return end
 
 	local cmdtc = cmd:TickCount()
 
-	if cmdtc == 0 then
-		return
-	end
+	if cmdtc == 0 then return end
 
 	if not ply.ReplayFirstTick then
 		ply.ReplayFirstTick = cmdtc
@@ -164,31 +131,31 @@ function ReplayPlayback(ply, cmd)
 
 		if TUTORIALMODE then
 			net.Start("ReplayTutorialPos")
-			net.WriteVector(ply.ReplayStartPos)
+				net.WriteVector(ply.ReplayStartPos)
 			net.SendToServer()
+
 			TutorialClearEvents()
 		end
 	end
 end
 
 function ReplaySendToClient(ply)
-	if not game.SinglePlayer() then
-		return
-	end
+	if not game.SinglePlayer() then return end
 
 	local replaydata = util.JSONToTable(util.Decompress(file.Read("beatrun/replays/" .. game.GetMap() .. "/replaydump.txt", "DATA")))
+
 	ply.ReplayFirstTick = false
 	ply.ReplayStartPos = replaydata[1]
 	ply.ReplayTicks = replaydata[2]
-
 	ply:SetNWBool("InReplay", true)
+
 	net.Start("ReplaySendToClient")
 	net.Send(ply)
 
 	ply.InReplay = true
-
 	ply:SetPos(ply.ReplayStartPos)
 	ply:SetVelocity(vector_origin)
+
 	hook.Add("StartCommand", "ReplayPlay", ReplayPlayback)
 end
 
@@ -220,23 +187,25 @@ if CLIENT then
 			surface.SetTextPos(5, ScrH() * 0.975)
 
 			local text = TUTORIALMODE and "" or "*Clientside replay: may not be accurate "
-
 			surface.DrawText(text .. tickcount .. "/" .. #LocalPlayer().ReplayTicks)
 		end
 	end
 
 	function ReplayBegin()
 		LocalPlayer().InReplay = true
+
 		RFF = CurTime() + 1
 
 		hook.Add("StartCommand", "ReplayPlay", ReplayPlayback)
 		hook.Add("RenderScreenspaceEffects", "BeatrunReplayVision", BeatrunReplayVision)
 		hook.Add("HUDPaint", "BeatrunReplayHUD", BeatrunReplayHUD)
+
 		surface.PlaySound("friends/friend_join.wav")
 	end
 
 	net.Receive("ReplayRequest", ReplayBegin)
-	net.Receive("ReplaySendToClient", function (length)
+
+	net.Receive("ReplaySendToClient", function(length)
 		if length < 100 then
 			LocalPlayer().ReplayTicks = util.JSONToTable(util.Decompress(file.Read("beatrun/replays/" .. game.GetMap() .. "/replaydump.txt", "DATA")))[2]
 		else
@@ -244,7 +213,6 @@ if CLIENT then
 		end
 
 		LocalPlayer().ReplayFirstTick = false
-
 		ReplayBegin()
 	end)
 end
@@ -258,6 +226,6 @@ function ReplayCancel(ply)
 	ply.ReplayFirstTick = false
 
 	net.Start("ReplayRequest")
-	net.WriteBool(true)
+		net.WriteBool(true)
 	net.SendToServer()
 end

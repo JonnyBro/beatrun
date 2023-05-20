@@ -1,38 +1,30 @@
 if SERVER then
 	util.AddNetworkString("DBNO")
 else
-	net.Receive("DBNO", function ()
+	net.Receive("DBNO", function()
 		DoJumpTurn()
 	end)
 end
 
-hook.Add("ScalePlayerDamage", "MissedMe", function (ply, hitgroup, dmginfo)
-	if IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():IsPlayer() then
-		return
-	end
+hook.Add("ScalePlayerDamage", "MissedMe", function(ply, hitgroup, dmginfo)
+	if IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():IsPlayer() then return end
 
 	local vel = ply:GetVelocity()
 	local vel_len = vel:Length()
 
-	if vel_len > 310 or ply:GetSliding() and vel_len > 100 or ply:GetWallrun() > 0 and vel_len > 200 or ply:GetJumpTurn() and not ply:OnGround() then
-		return true
-	end
+	if vel_len > 310 or ply:GetSliding() and vel_len > 100 or ply:GetWallrun() > 0 and vel_len > 200 or ply:GetJumpTurn() and not ply:OnGround() then return true end
 end)
-hook.Add("EntityTakeDamage", "MissedMe", function (victim, dmginfo)
-	if not victim:IsPlayer() then
-		return
-	end
+
+hook.Add("EntityTakeDamage", "MissedMe", function(victim, dmginfo)
+	if not victim:IsPlayer() then return end
 
 	local dmgtype = dmginfo:GetDamageType()
 
-	if victim:GetSliding() and (dmgtype == DMG_SLASH or dmgtype == DMG_CLUB) then
-		return true
-	end
+	if victim:GetSliding() and (dmgtype == DMG_SLASH or dmgtype == DMG_CLUB) then return true end
 end)
-hook.Add("PlayerShouldTakeDamage", "DBNO", function (ply, attacker)
-	if not IsValid(attacker) then
-		return
-	end
+
+hook.Add("PlayerShouldTakeDamage", "DBNO", function(ply, attacker)
+	if not IsValid(attacker) then return end
 
 	local class = attacker:GetClass()
 
@@ -48,7 +40,7 @@ hook.Add("PlayerShouldTakeDamage", "DBNO", function (ply, attacker)
 		ply:SetLocalVelocity(atteyeang:Forward() * 100 + Vector(0, 0, 100))
 
 		if game.SinglePlayer() then
-			timer.Simple(0, function ()
+			timer.Simple(0, function()
 				net.Start("DBNO")
 				net.Send(ply)
 			end)
@@ -58,24 +50,21 @@ hook.Add("PlayerShouldTakeDamage", "DBNO", function (ply, attacker)
 		end
 	end
 
-	if ply:GetJumpTurn() and not ply:OnGround() and attacker:IsNPC() then
-		return false
-	end
+	if ply:GetJumpTurn() and not ply:OnGround() and attacker:IsNPC() then return false end
 end)
 
 if CLIENT then
 	local radial = Material("radial.png")
 	local dmgalpha = 0
 
-	hook.Add("HUDPaint", "NTScreenEffects", function ()
+	hook.Add("HUDPaint", "NTScreenEffects", function()
 		local ply = LocalPlayer()
 
-		if not ply:Alive() then
-			return
-		end
+		if not ply:Alive() then return end
 
 		local w = ScrW()
 		local h = ScrH()
+
 		dmgalpha = math.min(300 * math.abs(ply:Health() / ply:GetMaxHealth() - 1), 255)
 
 		surface.SetMaterial(radial)
@@ -88,7 +77,7 @@ if CLIENT then
 end
 
 if SERVER then
-	hook.Add("PlayerPostThink", "HealthRegen", function (ply)
+	hook.Add("PlayerPostThink", "HealthRegen", function(ply)
 		if not ply.LastHP then
 			ply.LastHP = ply:Health()
 			ply.RegenTime = 0
@@ -102,7 +91,6 @@ if SERVER then
 
 		if ply:Alive() and ply.RegenTime < CurTime() and ply:Health() < ply:GetMaxHealth() then
 			ply:SetHealth(math.Approach(ply:Health(), ply:GetMaxHealth(), 1))
-
 			ply.RegenTime = CurTime() + 0.05
 		end
 

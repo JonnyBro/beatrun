@@ -50,7 +50,7 @@ function LoadCheckpoints()
 	end
 
 	if CLIENT then
-		timer.Simple(1, function ()
+		timer.Simple(1, function()
 			for k, v in pairs(ents.FindByClass("tt_cp")) do
 				if IsValid(v) and v.GetCPNum then
 					Checkpoints[v:GetCPNum()] = v
@@ -65,9 +65,9 @@ function LoadCheckpoints()
 end
 
 if CLIENT then
-	local FastStart = CreateClientConVar("Beatrun_FastStart", "0", true, true, "Faster start countdown")
+	CreateClientConVar("Beatrun_FastStart", "0", true, true, "Faster start countdown")
 
-	net.Receive("Checkpoint_Hit", function ()
+	net.Receive("Checkpoint_Hit", function()
 		local timetaken = CurTime() - lastcptime
 		local vspb = nil
 
@@ -107,7 +107,8 @@ if CLIENT then
 
 		print(timetaken, vspb)
 	end)
-	net.Receive("Checkpoint_Finish", function ()
+
+	net.Receive("Checkpoint_Finish", function()
 		table.insert(cptimes, CurTime() - lastcptime)
 
 		local totaltime = CurTime() - Course_StartTime
@@ -145,7 +146,7 @@ if CLIENT then
 end
 
 if SERVER then
-	net.Receive("Checkpoint_Finish", function (len, ply)
+	net.Receive("Checkpoint_Finish", function(len, ply)
 		local pb = net.ReadFloat() or 0
 		local svtime = CurTime() - ply.Course_StartTime
 
@@ -165,10 +166,13 @@ function FinishCourse(ply)
 	ply:ScreenFade(SCREENFADE.IN, finishcolor, 0, 4)
 	ply:SetLaggedMovementValue(0.1)
 	ply:DrawViewModel(false)
+
 	net.Start("Checkpoint_Finish")
 	net.Send(ply)
+
 	ply:SetNW2Int("CPNum", -1)
-	timer.Simple(4, function ()
+
+	timer.Simple(4, function()
 		ply:SetLaggedMovementValue(1)
 		ply:DrawViewModel(true)
 	end)
@@ -176,11 +180,8 @@ end
 
 local countdown = 0
 local countdownalpha = 255
-local countdowntext = {
-	"Ready",
-	"Set",
-	"Go!!"
-}
+
+local countdowntext = {"Ready", "Set", "Go!!"}
 
 local function StartCountdown()
 	local CT = CurTime()
@@ -206,7 +207,7 @@ local function StartCountdownHUD()
 	surface.SetFont("DermaLarge")
 	surface.SetTextColor(255, 255, 255, countdownalpha)
 
-	local w, h = surface.GetTextSize(text)
+	local w, _ = surface.GetTextSize(text)
 
 	surface.SetTextPos(ScrW() * 0.5 - w * 0.5, ScrH() * 0.3)
 	surface.DrawText(text)
@@ -234,8 +235,7 @@ function CourseHUD()
 
 	if incourse then
 		local text = string.FormattedTime(totaltime, "%02i:%02i:%02i")
-		local w, h = surface.GetTextSize(text)
-
+		local w, _ = surface.GetTextSize(text)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.075 + vpz)
 		surface.DrawText(text)
 	end
@@ -248,8 +248,7 @@ function CourseHUD()
 		end
 
 		text = speed .. " km/h"
-		w, h = surface.GetTextSize(text)
-
+		w, _ = surface.GetTextSize(text)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.85 + vpz)
 		surface.DrawText(text)
 	end
@@ -264,7 +263,8 @@ function CourseHUD()
 	end
 
 	if timealpha > 0 then
-		local w, h = surface.GetTextSize(timetext)
+		local w, _ = surface.GetTextSize(timetext)
+
 		timealpha = math.max(0, timealpha - FrameTime() * 250)
 		timecolor.a = math.min(255, timealpha)
 
@@ -303,9 +303,7 @@ function SaveReplayData()
 	local replay = util.TableToJSON(LocalPlayer().ReplayTicks)
 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
 
-	if not replay then
-		return
-	end
+	if not replay then return end
 
 	file.CreateDir(dir)
 	file.Write(dir .. Course_ID .. ".txt", util.Compress(replay))
@@ -351,7 +349,7 @@ function StartCourse(spawntime)
 	end
 end
 
-net.Receive("BeatrunSpawn", function ()
+net.Receive("BeatrunSpawn", function()
 	local spawntime = net.ReadFloat()
 	local replay = net.ReadBool()
 

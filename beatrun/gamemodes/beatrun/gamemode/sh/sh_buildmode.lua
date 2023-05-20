@@ -5,21 +5,18 @@ buildmode_props = {}
 local propmatsblacklist = {}
 local blocksdir = "models/hunter/blocks/"
 local blocksdir_s = blocksdir .. "*.mdl"
-
 for k, v in ipairs(file.Find(blocksdir_s, "GAME")) do
 	table.insert(buildmode_props, blocksdir .. v:lower())
 end
 
 local blocksdir = "models/hunter/triangles/"
 local blocksdir_s = blocksdir .. "*.mdl"
-
 for k, v in ipairs(file.Find(blocksdir_s, "GAME")) do
 	table.insert(buildmode_props, blocksdir .. v:lower())
 end
 
 local blocksdir = "models/props_phx/construct/glass/"
 local blocksdir_s = blocksdir .. "*.mdl"
-
 for k, v in ipairs(file.Find(blocksdir_s, "GAME")) do
 	local key = table.insert(buildmode_props, blocksdir .. v:lower())
 	propmatsblacklist[key] = true
@@ -36,56 +33,8 @@ buildmode_entmodels = {
 	tt_cp = "models/props_phx/construct/windows/window_angle360.mdl",
 	br_swingbar = "models/hunter/plates/plate2.mdl"
 }
-local misc = {
-	"models/hunter/misc/lift2x2.mdl",
-	"models/hunter/misc/stair1x1.mdl",
-	"models/hunter/misc/stair1x1inside.mdl",
-	"models/hunter/misc/stair1x1outside.mdl",
-	"models/props_combine/combine_barricade_short02a.mdl",
-	"models/props_combine/combine_bridge_b.mdl",
-	"models/props_docks/channelmarker_gib02.mdl",
-	"models/props_docks/channelmarker_gib04.mdl",
-	"models/props_docks/channelmarker_gib03.mdl",
-	"models/props_lab/blastdoor001a.mdl",
-	"models/props_lab/blastdoor001c.mdl",
-	"models/props_wasteland/cargo_container01.mdl",
-	"models/props_wasteland/cargo_container01b.mdl",
-	"models/props_wasteland/cargo_container01c.mdl",
-	"models/props_wasteland/horizontalcoolingtank04.mdl",
-	"models/props_wasteland/laundry_washer001a.mdl",
-	"models/props_wasteland/laundry_washer003.mdl",
-	"models/props_junk/TrashDumpster01a.mdl",
-	"models/props_junk/TrashDumpster02.mdl",
-	"models/props_junk/wood_crate001a.mdl",
-	"models/props_junk/wood_crate002a.mdl",
-	"models/props_junk/wood_pallet001a.mdl",
-	"models/props_c17/fence01a.mdl",
-	"models/props_c17/fence01b.mdl",
-	"models/props_c17/fence02a.mdl",
-	"models/props_c17/fence03a.mdl",
-	"models/props_c17/fence04a.mdl",
-	"models/props_wasteland/interior_fence001g.mdl",
-	"models/props_wasteland/interior_fence002d.mdl",
-	"models/props_wasteland/interior_fence002e.mdl",
-	"models/props_building_details/Storefront_Template001a_Bars.mdl",
-	"models/props_wasteland/wood_fence01a.mdl",
-	"models/props_wasteland/wood_fence02a.mdl",
-	"models/props_c17/concrete_barrier001a.mdl",
-	"models/props_wasteland/medbridge_base01.mdl",
-	"models/props_wasteland/medbridge_post01.mdl",
-	"models/props_wasteland/medbridge_strut01.mdl",
-	"models/props_c17/column02a.mdl",
-	"models/props_junk/iBeam01a_cluster01.mdl",
-	"models/props_junk/iBeam01a.mdl",
-	"models/props_canal/canal_cap001.mdl",
-	"models/props_canal/canal_bridge04.mdl",
-	"models/Mechanics/gears2/pinion_80t3.mdl",
-	"models/props_phx/gears/rack36.mdl",
-	"models/props_phx/gears/rack70.mdl",
-	"models/cranes/crane_frame.mdl",
-	"models/cranes/crane_docks.mdl",
-	"models/props_wasteland/cranemagnet01a.mdl"
-}
+
+local misc = {"models/hunter/misc/lift2x2.mdl", "models/hunter/misc/stair1x1.mdl", "models/hunter/misc/stair1x1inside.mdl", "models/hunter/misc/stair1x1outside.mdl", "models/props_combine/combine_barricade_short02a.mdl", "models/props_combine/combine_bridge_b.mdl", "models/props_docks/channelmarker_gib02.mdl", "models/props_docks/channelmarker_gib04.mdl", "models/props_docks/channelmarker_gib03.mdl", "models/props_lab/blastdoor001a.mdl", "models/props_lab/blastdoor001c.mdl", "models/props_wasteland/cargo_container01.mdl", "models/props_wasteland/cargo_container01b.mdl", "models/props_wasteland/cargo_container01c.mdl", "models/props_wasteland/horizontalcoolingtank04.mdl", "models/props_wasteland/laundry_washer001a.mdl", "models/props_wasteland/laundry_washer003.mdl", "models/props_junk/TrashDumpster01a.mdl", "models/props_junk/TrashDumpster02.mdl", "models/props_junk/wood_crate001a.mdl", "models/props_junk/wood_crate002a.mdl", "models/props_junk/wood_pallet001a.mdl", "models/props_c17/fence01a.mdl", "models/props_c17/fence01b.mdl", "models/props_c17/fence02a.mdl", "models/props_c17/fence03a.mdl", "models/props_c17/fence04a.mdl", "models/props_wasteland/interior_fence001g.mdl", "models/props_wasteland/interior_fence002d.mdl", "models/props_wasteland/interior_fence002e.mdl", "models/props_building_details/Storefront_Template001a_Bars.mdl", "models/props_wasteland/wood_fence01a.mdl", "models/props_wasteland/wood_fence02a.mdl", "models/props_c17/concrete_barrier001a.mdl", "models/props_wasteland/medbridge_base01.mdl", "models/props_wasteland/medbridge_post01.mdl", "models/props_wasteland/medbridge_strut01.mdl", "models/props_c17/column02a.mdl", "models/props_junk/iBeam01a_cluster01.mdl", "models/props_junk/iBeam01a.mdl", "models/props_canal/canal_cap001.mdl", "models/props_canal/canal_bridge04.mdl", "models/Mechanics/gears2/pinion_80t3.mdl", "models/props_phx/gears/rack36.mdl", "models/props_phx/gears/rack70.mdl", "models/cranes/crane_frame.mdl", "models/cranes/crane_docks.mdl", "models/props_wasteland/cranemagnet01a.mdl"}
 
 for k, v in ipairs(misc) do
 	local key = table.insert(buildmode_props, v:lower())
@@ -93,6 +42,7 @@ for k, v in ipairs(misc) do
 end
 
 misc = nil
+
 buildmode_ents = {
 	br_swingpipe = true,
 	br_swingrope = true,
@@ -104,38 +54,42 @@ buildmode_ents = {
 	tt_cp = true,
 	br_swingbar = true
 }
+
 PlaceStartPos = nil
 PlaceEndPos = nil
 local PlaceMaxs = Vector()
 local PlaceMins = Vector()
 PlaceAxisLock = 0
+
 entplacefunc_prespawn = {
 	br_zipline = true,
 	br_swingrope = true
 }
+
 entplacefunc = {
-	br_ladder = function (self, vecextra)
+	br_ladder = function(self, vecextra)
 		self:SetPos(self:GetPos() + self:GetAngles():Forward() * 10)
 		vecextra:Set(vecextra + self:GetAngles():Forward() * 10)
 		self:LadderHeightExact(vecextra:Distance(self:GetPos()) - 75)
 	end,
-	br_balance = function (self, vecextra)
+	br_balance = function(self, vecextra)
 		self:BalanceLengthExact(vecextra:Distance(self:GetPos()))
 	end,
-	br_zipline = function (self, vecextra, vec)
+	br_zipline = function(self, vecextra, vec)
 		self:SetPos(vec)
 		self:SetStartPos(vec)
 		self:SetEndPos(vecextra)
 		self:SetTwoWay(net.ReadBool())
 	end,
-	br_swingrope = function (self, vecextra, vec)
+	br_swingrope = function(self, vecextra, vec)
 		self:SetPos(vec)
 		self:SetStartPos(vec)
 		self:SetEndPos(vecextra)
 	end
 }
+
 entplacefunc_cl = {
-	tt_cp = function ()
+	tt_cp = function()
 		local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
 		local start = LocalPlayer():EyePos()
 
@@ -145,11 +99,12 @@ entplacefunc_cl = {
 		local pos = tr.HitPos
 
 		net.Start("BuildMode_Checkpoint")
-		net.WriteFloat(pos.x)
-		net.WriteFloat(pos.y)
-		net.WriteFloat(pos.z)
+			net.WriteFloat(pos.x)
+			net.WriteFloat(pos.y)
+			net.WriteFloat(pos.z)
 		net.SendToServer()
-		timer.Simple(0.1, function ()
+
+		timer.Simple(0.1, function()
 			LoadCheckpoints()
 		end)
 
@@ -157,7 +112,7 @@ entplacefunc_cl = {
 
 		return true
 	end,
-	br_ladder = function ()
+	br_ladder = function()
 		if not PlaceStartPos then
 			PlaceAxisLock = 3
 			PlaceStartPos = Vector(BuildModePos)
@@ -167,14 +122,15 @@ entplacefunc_cl = {
 		end
 
 		net.Start("BuildMode_Place")
-		net.WriteUInt(65535, 16)
-		net.WriteString(BuildModeIndex)
-		net.WriteFloat(PlaceStartPos.x)
-		net.WriteFloat(PlaceStartPos.y)
-		net.WriteFloat(PlaceStartPos.z)
-		net.WriteAngle(BuildModeAngle)
-		net.WriteVector(BuildModePos)
+			net.WriteUInt(65535, 16)
+			net.WriteString(BuildModeIndex)
+			net.WriteFloat(PlaceStartPos.x)
+			net.WriteFloat(PlaceStartPos.y)
+			net.WriteFloat(PlaceStartPos.z)
+			net.WriteAngle(BuildModeAngle)
+			net.WriteVector(BuildModePos)
 		net.SendToServer()
+
 		LocalPlayer():EmitSound("buttonclick.wav")
 
 		BuildModePlaceDelay = CurTime() + 0.05
@@ -184,7 +140,7 @@ entplacefunc_cl = {
 
 		return true
 	end,
-	br_zipline = function ()
+	br_zipline = function()
 		if not PlaceStartPos then
 			PlaceAxisLock = 0
 			PlaceStartPos = Vector(BuildModePos)
@@ -194,15 +150,16 @@ entplacefunc_cl = {
 		end
 
 		net.Start("BuildMode_Place")
-		net.WriteUInt(65535, 16)
-		net.WriteString(BuildModeIndex)
-		net.WriteFloat(PlaceStartPos.x)
-		net.WriteFloat(PlaceStartPos.y)
-		net.WriteFloat(PlaceStartPos.z)
-		net.WriteAngle(BuildModeAngle)
-		net.WriteVector(BuildModePos)
-		net.WriteBool(input.IsKeyDown(KEY_LSHIFT))
+			net.WriteUInt(65535, 16)
+			net.WriteString(BuildModeIndex)
+			net.WriteFloat(PlaceStartPos.x)
+			net.WriteFloat(PlaceStartPos.y)
+			net.WriteFloat(PlaceStartPos.z)
+			net.WriteAngle(BuildModeAngle)
+			net.WriteVector(BuildModePos)
+			net.WriteBool(input.IsKeyDown(KEY_LSHIFT))
 		net.SendToServer()
+
 		LocalPlayer():EmitSound("buttonclick.wav")
 
 		BuildModePlaceDelay = CurTime() + 0.05
@@ -212,7 +169,7 @@ entplacefunc_cl = {
 
 		return true
 	end,
-	br_swingrope = function ()
+	br_swingrope = function()
 		if not PlaceStartPos then
 			PlaceAxisLock = -3
 			PlaceStartPos = Vector(BuildModePos)
@@ -222,14 +179,15 @@ entplacefunc_cl = {
 		end
 
 		net.Start("BuildMode_Place")
-		net.WriteUInt(65535, 16)
-		net.WriteString(BuildModeIndex)
-		net.WriteFloat(PlaceStartPos.x)
-		net.WriteFloat(PlaceStartPos.y)
-		net.WriteFloat(PlaceStartPos.z)
-		net.WriteAngle(BuildModeAngle)
-		net.WriteVector(BuildModePos)
+			net.WriteUInt(65535, 16)
+			net.WriteString(BuildModeIndex)
+			net.WriteFloat(PlaceStartPos.x)
+			net.WriteFloat(PlaceStartPos.y)
+			net.WriteFloat(PlaceStartPos.z)
+			net.WriteAngle(BuildModeAngle)
+			net.WriteVector(BuildModePos)
 		net.SendToServer()
+
 		LocalPlayer():EmitSound("buttonclick.wav")
 
 		BuildModePlaceDelay = CurTime() + 0.05
@@ -239,7 +197,7 @@ entplacefunc_cl = {
 
 		return true
 	end,
-	br_balance = function ()
+	br_balance = function()
 		if not PlaceStartPos then
 			PlaceAxisLock = 1
 			PlaceStartPos = Vector(BuildModePos)
@@ -249,14 +207,15 @@ entplacefunc_cl = {
 		end
 
 		net.Start("BuildMode_Place")
-		net.WriteUInt(65535, 16)
-		net.WriteString(BuildModeIndex)
-		net.WriteFloat(PlaceStartPos.x)
-		net.WriteFloat(PlaceStartPos.y)
-		net.WriteFloat(PlaceStartPos.z)
-		net.WriteAngle(BuildModeAngle)
-		net.WriteVector(BuildModePos)
+			net.WriteUInt(65535, 16)
+			net.WriteString(BuildModeIndex)
+			net.WriteFloat(PlaceStartPos.x)
+			net.WriteFloat(PlaceStartPos.y)
+			net.WriteFloat(PlaceStartPos.z)
+			net.WriteAngle(BuildModeAngle)
+			net.WriteVector(BuildModePos)
 		net.SendToServer()
+
 		LocalPlayer():EmitSound("buttonclick.wav")
 
 		BuildModePlaceDelay = CurTime() + 0.05
@@ -267,25 +226,27 @@ entplacefunc_cl = {
 		return true
 	end
 }
+
 entsavefunc = {
-	br_zipline = function (self, tbl)
+	br_zipline = function(self, tbl)
 		tbl.StartPos = self:GetStartPos()
 		tbl.EndPos = self:GetEndPos()
 		tbl.TwoWay = self:GetTwoWay()
 	end,
-	br_ladder = function (self, tbl)
+	br_ladder = function(self, tbl)
 		tbl.LadderHeight = self:GetLadderHeight()
 	end,
-	br_balance = function (self, tbl)
+	br_balance = function(self, tbl)
 		tbl.BalanceLength = self:GetBalanceLength()
 	end,
-	br_swingrope = function (self, tbl)
+	br_swingrope = function(self, tbl)
 		tbl.StartPos = self:GetStartPos()
 		tbl.EndPos = self:GetEndPos()
 	end
 }
+
 entreadfunc = {
-	br_zipline = function (self, tbl)
+	br_zipline = function(self, tbl)
 		self:SetPos(tbl.StartPos)
 		self:SetStartPos(tbl.StartPos)
 		self:SetEndPos(tbl.EndPos)
@@ -293,29 +254,31 @@ entreadfunc = {
 
 		return true
 	end,
-	br_ladder = function (self, tbl)
-		timer.Simple(0, function ()
+	br_ladder = function(self, tbl)
+		timer.Simple(0, function()
 			if IsValid(self) and self.LadderHeightExact then
 				self:LadderHeightExact(tbl.LadderHeight)
 			end
 		end)
+
 		self:SetPos(tbl.pos + tbl.ang:Forward() * 10)
 		self:SetAngles(tbl.ang)
 
 		return true
 	end,
-	br_balance = function (self, tbl)
-		timer.Simple(0, function ()
+	br_balance = function(self, tbl)
+		timer.Simple(0, function()
 			if IsValid(self) and self.BalanceLengthExact then
 				self:BalanceLengthExact(tbl.BalanceLength)
 			end
 		end)
+
 		self:SetPos(tbl.pos + tbl.ang:Forward() * 10)
 		self:SetAngles(tbl.ang)
 
 		return true
 	end,
-	br_swingrope = function (self, tbl)
+	br_swingrope = function(self, tbl)
 		self:SetPos(tbl.StartPos)
 		self:SetStartPos(tbl.StartPos)
 		self:SetEndPos(tbl.EndPos)
@@ -323,6 +286,7 @@ entreadfunc = {
 		return true
 	end
 }
+
 local buildmode_props_index = {}
 
 for k, v in pairs(buildmode_props) do
@@ -330,9 +294,7 @@ for k, v in pairs(buildmode_props) do
 end
 
 local function CustomPropMat(prop)
-	if propmatsblacklist[buildmode_props_index[prop:GetModel()]] then
-		return
-	end
+	if propmatsblacklist[buildmode_props_index[prop:GetModel()]] then return end
 
 	if prop.hr then
 		prop:SetMaterial("medge/redplainplastervertex")
@@ -366,19 +328,17 @@ if SERVER then
 
 	function Course_Sync()
 		net.Start("BuildMode_Sync")
-		net.WriteFloat(Course_StartPos.x)
-		net.WriteFloat(Course_StartPos.y)
-		net.WriteFloat(Course_StartPos.z)
-		net.WriteFloat(Course_StartAng)
-		net.WriteString(Course_Name)
-		net.WriteString(Course_ID)
+			net.WriteFloat(Course_StartPos.x)
+			net.WriteFloat(Course_StartPos.y)
+			net.WriteFloat(Course_StartPos.z)
+			net.WriteFloat(Course_StartAng)
+			net.WriteString(Course_Name)
+			net.WriteString(Course_ID)
 		net.Broadcast()
 	end
 
 	function Course_Stop(len, ply)
-		if ply and not ply:IsSuperAdmin() then
-			return
-		end
+		if ply and not ply:IsSuperAdmin() then return end
 
 		Course_Name = ""
 		Course_ID = ""
@@ -392,9 +352,7 @@ if SERVER then
 	buildmode_placed = buildmode_placed or {}
 
 	function BuildMode_Toggle(ply)
-		if not ply.BuildMode and not ply:IsSuperAdmin() and not ply.BuildModePerm then
-			return
-		end
+		if not ply.BuildMode and not ply:IsSuperAdmin() and not ply.BuildModePerm then return end
 
 		ply.BuildMode = not ply.BuildMode
 
@@ -402,22 +360,20 @@ if SERVER then
 			ply:SetMoveType(MOVETYPE_NOCLIP)
 		else
 			ply:SetMoveType(MOVETYPE_WALK)
-
 			CheckpointNumber = 1
 		end
 
 		net.Start("BuildMode")
-		net.WriteBool(ply.BuildMode)
+			net.WriteBool(ply.BuildMode)
 		net.Send(ply)
 	end
 
-	concommand.Add("buildmode", function (ply, cmd, args)
+	concommand.Add("buildmode", function(ply, cmd, args)
 		BuildMode_Toggle(ply)
 	end)
-	net.Receive("BuildMode_Place", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_Place", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local prop = net.ReadUInt(16)
 
@@ -434,17 +390,18 @@ if SERVER then
 
 		if not isstring(prop) then
 			local a = ents.Create("prop_physics")
-
 			a:SetModel(buildmode_props[prop])
+
 			CustomPropMat(a)
+
 			a:SetPos(vec)
 			a:SetAngles(ang)
 			a:Spawn()
 
 			local phys = a:GetPhysicsObject()
-
 			phys:EnableMotion(false)
 			phys:Sleep()
+
 			a:PhysicsDestroy()
 			a:SetHealth(inf)
 		else
@@ -471,31 +428,30 @@ if SERVER then
 
 		table.insert(buildmodelogs, bmlog)
 	end)
-	net.Receive("BuildMode_Duplicate", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_Duplicate", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local selected = net.ReadTable()
 		local selectedents = net.ReadTable()
 
 		for k, v in pairs(selected) do
 			local a = ents.Create("prop_physics")
-
 			a:SetModel(v:GetModel())
+
 			CustomPropMat(a)
+
 			a:SetPos(v:GetPos())
 			a:SetAngles(v:GetAngles())
 			a:Spawn()
-
 			a.hr = v.hr
 
 			CustomPropMat(a)
 
 			local phys = a:GetPhysicsObject()
-
 			phys:EnableMotion(false)
 			phys:Sleep()
+
 			a:PhysicsDestroy()
 			a:SetHealth(inf)
 		end
@@ -512,10 +468,9 @@ if SERVER then
 
 		table.insert(buildmodelogs, bmlog)
 	end)
-	net.Receive("BuildMode_Delete", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_Delete", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local selected = net.ReadTable()
 
@@ -529,10 +484,9 @@ if SERVER then
 
 		table.insert(buildmodelogs, bmlog)
 	end)
-	net.Receive("BuildMode_Highlight", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_Highlight", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local selected = net.ReadTable()
 
@@ -542,71 +496,68 @@ if SERVER then
 			CustomPropMat(v)
 		end
 	end)
-	net.Receive("BuildMode_Remove", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_Remove", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local ent = net.ReadEntity()
 
 		SafeRemoveEntity(ent)
 	end)
-	net.Receive("BuildMode_ReadSave", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_ReadSave", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local a = util.Decompress(net.ReadData(len))
 		local props = util.JSONToTable(a)
 
 		for k, v in pairs(props) do
 			local a = ents.Create("prop_physics")
-
 			print(buildmode_props[v.model], v.model)
 			a:SetModel(buildmode_props[v.model])
+
 			CustomPropMat(a)
+
 			a:SetPos(v.pos + ply:EyePos())
 			a:SetAngles(v.ang)
 			a:Spawn()
 
 			local phys = a:GetPhysicsObject()
-
 			phys:EnableMotion(false)
 			phys:Sleep()
+
 			a:PhysicsDestroy()
 			a:SetHealth(inf)
 		end
 	end)
-	net.Receive("BuildMode_Checkpoint", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_Checkpoint", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local x = net.ReadFloat()
 		local y = net.ReadFloat()
 		local z = net.ReadFloat()
 
 		LoadCheckpoints()
+
 		PrintTable(Checkpoints)
 
 		local a = ents.Create("tt_cp")
-
 		a:SetPos(Vector(x, y, z))
 		a:SetCPNum(table.Count(Checkpoints) + 1)
 		a:Spawn()
+
 		LoadCheckpoints()
 	end)
-	net.Receive("BuildMode_Entity", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_Entity", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local ent = net.ReadString()
 		local x = net.ReadFloat()
 		local y = net.ReadFloat()
 		local z = net.ReadFloat()
 		local a = ents.Create(ent)
-
 		a:SetPos(Vector(x, y, z))
 
 		if entplacefunc[ent] then
@@ -615,10 +566,9 @@ if SERVER then
 
 		a:Spawn()
 	end)
-	net.Receive("BuildMode_SetSpawn", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_SetSpawn", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local x = net.ReadFloat()
 		local y = net.ReadFloat()
@@ -626,14 +576,11 @@ if SERVER then
 		local ang = net.ReadFloat()
 
 		Course_StartPos:SetUnpacked(x, y, z)
-
 		Course_StartAng = ang
 	end)
 
 	function Beatrun_ReadCourseNet(len, ply)
-		if not ply:IsSuperAdmin() then
-			return
-		end
+		if not ply:IsSuperAdmin() then return end
 
 		Beatrun_ReadCourse(net.ReadData(len))
 	end
@@ -649,7 +596,6 @@ if SERVER then
 		end
 
 		Course_ID = id
-
 		Beatrun_ReadCourse(save)
 	end
 
@@ -672,17 +618,17 @@ if SERVER then
 		for k, v in pairs(props) do
 			local a = ents.Create("prop_physics")
 			a.hr = v.hr
-
 			a:SetModel(buildmode_props[v.model])
 			CustomPropMat(a)
+
 			a:SetPos(v.pos)
 			a:SetAngles(v.ang)
 			a:Spawn()
 
 			local phys = a:GetPhysicsObject()
-
 			phys:EnableMotion(false)
 			phys:Sleep()
+
 			a:PhysicsDestroy()
 			a:SetHealth(inf)
 		end
@@ -691,11 +637,12 @@ if SERVER then
 			LoadCheckpoints()
 
 			local a = ents.Create("tt_cp")
-
 			a:SetPos(v)
 			a:SetCPNum(table.Count(Checkpoints) + 1)
 			a:Spawn()
+
 			LoadCheckpoints()
+
 			print(k, v, a)
 		end
 
@@ -734,10 +681,9 @@ if SERVER then
 	end
 
 	net.Receive("BuildMode_ReadCourse", Beatrun_ReadCourseNet)
-	net.Receive("BuildMode_Drag", function (len, ply)
-		if not ply.BuildMode then
-			return
-		end
+
+	net.Receive("BuildMode_Drag", function(len, ply)
+		if not ply.BuildMode then return end
 
 		local selected = net.ReadTable()
 
@@ -758,47 +704,42 @@ if CLIENT then
 	local GhostColor = Color(255, 255, 255, 200)
 	BuildModeAngle = Angle()
 	BuildModePos = Vector()
-	local BuildModeDist = 500
+	-- local BuildModeDist = 500
 	local usedown = false
 	local mousedown = false
 	local axislock = 0
-	local axislist = {
-		"x",
-		"y",
-		"z"
-	}
-	local axiscolors = {
-		Color(255, 0, 0),
-		Color(0, 255, 0),
-		Color(0, 0, 255)
-	}
+
+	local axislist = {"x", "y", "z"}
+
+	local axiscolors = {Color(255, 0, 0), Color(0, 255, 0), Color(0, 0, 255)}
+
 	local axisdisplay1 = Vector()
 	local axisdisplay2 = Vector()
 	mousey = 0
 	mousex = 0
-	local mousemoved = false
+	-- local mousemoved = false
 	local camcontrol = false
 	local scrw = ScrW()
 	local scrh = ScrH()
-	local nscrw = ScrW()
-	local nscrh = ScrH()
+	-- local nscrw = ScrW()
+	-- local nscrh = ScrH()
 	local aimvector = Vector()
 	local dragstartx = 0
 	local dragstarty = 0
-	local dragstartvec = Vector()
+	-- local dragstartvec = Vector()
 	local dragging = false
 	local dragoffset = Vector()
-	local hulltr = {}
-	local hulltrout = {}
+	-- local hulltr = {}
+	-- local hulltrout = {}
 	buildmode_placed = buildmode_placed or {}
 	buildmode_selected = {}
 	local keytime = 0
-	playerstart = IsValid(playerstart) and playerstart or ClientsideModel("models/editor/playerstart.mdl")
 
+	playerstart = IsValid(playerstart) and playerstart or ClientsideModel("models/editor/playerstart.mdl")
 	playerstart:SetNoDraw(true)
 
 	local playerstartang = Angle()
-	local ZiplineStart, ZiplineEnd = nil
+	local ZiplineStart, _ = nil
 	local ziplinemins = Vector(-8, -8, -8)
 	local ziplinemaxs = Vector(8, 8, 8)
 
@@ -822,6 +763,7 @@ if CLIENT then
 
 	local blur = Material("pp/blurscreen")
 
+	--[[
 	local function DrawBlurRect(x, y, w, h)
 		local X = 0
 		local Y = 0
@@ -832,12 +774,16 @@ if CLIENT then
 		for i = 1, 5 do
 			blur:SetFloat("$blur", i / 3 * 5)
 			blur:Recompute()
+
 			render.UpdateScreenEffectTexture()
 			render.SetScissorRect(x, y, x + w, y + h, true)
+
 			surface.DrawTexturedRect(X * -1, Y * -1, scrw, scrh)
+
 			render.SetScissorRect(0, 0, 0, 0, false)
 		end
 	end
+	]]
 
 	function BuildModeCreateGhost()
 		if not IsValid(GhostModel) then
@@ -853,25 +799,21 @@ if CLIENT then
 		GhostModel:SetColor(GhostColor)
 		GhostModel:SetRenderMode(RENDERMODE_TRANSCOLOR)
 		GhostModel:SetNoDraw(true)
+
 		CustomPropMat(GhostModel)
 	end
 
 	local trace = {}
 	local tracer = {}
-	local flatn = Angle(0, 0, 1)
+	-- local flatn = Angle(0, 0, 1)
 
 	function BuildModeGhost()
 		if ZiplineStart then
 			render.DrawWireframeBox(ZiplineStart, angle_zero, ziplinemins, ziplinemaxs, color_white, true)
 		end
 
-		if BuildModeIndex == 0 then
-			return
-		end
-
-		if AEUI.HoveredPanel then
-			return
-		end
+		if BuildModeIndex == 0 then return end
+		if AEUI.HoveredPanel then return end
 
 		BuildModeCreateGhost()
 
@@ -879,7 +821,9 @@ if CLIENT then
 		local eyepos = ply:EyePos()
 		local eyeang = ply:EyeAngles()
 		local mins, maxs = GhostModel:GetRenderBounds()
+
 		aimvector = util.AimVector(eyeang, 133, mousex, mousey, ScrW(), ScrH())
+
 		trace.start = eyepos
 		trace.endpos = eyepos + aimvector * (not PlaceStartPos and 100000 or PlaceStartPos:Distance(ply:GetPos()))
 		trace.filter = ply
@@ -911,6 +855,7 @@ if CLIENT then
 		GhostModel:SetPos(BuildModePos)
 		GhostModel:SetAngles(BuildModeAngle)
 		GhostModel:DrawModel()
+
 		render.DrawWireframeBox(BuildModePos, BuildModeAngle, mins, maxs, color_white, true)
 
 		if PlaceStartPos then
@@ -924,7 +869,6 @@ if CLIENT then
 			axisdisplay1[axislist[axislock]] = num + 200
 
 			axisdisplay2:Set(BuildModePos)
-
 			axisdisplay2[axislist[axislock]] = num - 200
 
 			render.DrawLine(axisdisplay2, axisdisplay1, axiscolors[axislock])
@@ -944,19 +888,13 @@ if CLIENT then
 	end
 
 	function CourseData(name)
-		local save = {
-			{},
-			{},
-			Course_StartPos,
-			Course_StartAng,
-			name or "Unnamed",
-			{}
-		}
+		local save = {{}, {}, Course_StartPos, Course_StartAng, name or "Unnamed", {}}
 
 		for k, v in pairs(buildmode_placed) do
 			if not IsValid(v) then
-				-- Nothing
+				return
 			elseif v:GetNW2Bool("BRProtected") then
+				-- Nothing
 				print("ignoring protected ent")
 			else
 				local class = v:GetClass()
@@ -1010,11 +948,12 @@ if CLIENT then
 		print("Save created:", crc)
 	end
 
-	concommand.Add("Beatrun_SaveCourse", function (ply, cmd, args, argstr)
+	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)
 		local name = args[1] or "Unnamed"
 		local compress = not args[2]
 
 		print(compress)
+
 		SaveCourse(name, compress)
 	end)
 
@@ -1029,14 +968,15 @@ if CLIENT then
 		end
 
 		net.Start("BuildMode_ReadCourse")
-		net.WriteData(save)
+			net.WriteData(save)
 		net.SendToServer()
+
 		LoadCheckpoints()
 
 		Course_ID = id
 	end
 
-	concommand.Add("Beatrun_LoadCourse", function (ply, cmd, args, argstr)
+	concommand.Add("Beatrun_LoadCourse", function(ply, cmd, args, argstr)
 		local id = args[1] or "Unnamed"
 
 		LoadCourse(id)
@@ -1050,20 +990,22 @@ if CLIENT then
 		end
 
 		net.Start("BuildMode_ReadCourse")
-		net.WriteData(data)
+			net.WriteData(data)
 		net.SendToServer()
+
 		LoadCheckpoints()
 
 		Course_ID = id
 	end
 
-	concommand.Add("Beatrun_PrintCourse", function (ply, cmd, args, argstr)
+	concommand.Add("Beatrun_PrintCourse", function(ply, cmd, args, argstr)
 		local dir = "beatrun/courses/" .. game.GetMap() .. "/*.txt"
 		local files = file.Find(dir, "DATA", "datedesc")
 
 		PrintTable(files)
 	end)
-	net.Receive("BuildMode_Sync", function ()
+
+	net.Receive("BuildMode_Sync", function()
 		local x = net.ReadFloat()
 		local y = net.ReadFloat()
 		local z = net.ReadFloat()
@@ -1079,7 +1021,7 @@ if CLIENT then
 	end)
 
 	buildmodeinputs = {
-		[KEY_R] = function ()
+		[KEY_R] = function()
 			if not dragging then
 				BuildModeAngle:Set(angle_zero)
 
@@ -1092,80 +1034,81 @@ if CLIENT then
 				axislock = 0
 			end
 		end,
-		[KEY_X] = function ()
+		[KEY_X] = function()
 			local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
 
 			BuildModeAngle:RotateAroundAxis(Vector(1, 0, 0), 15 * mult)
+
 			LocalPlayer():EmitSound("buttonrollover.wav")
 		end,
-		[KEY_C] = function ()
+		[KEY_C] = function()
 			local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
 
 			BuildModeAngle:RotateAroundAxis(Vector(1, 0, 0), -15 * mult)
+
 			LocalPlayer():EmitSound("buttonrollover.wav")
 		end,
-		[KEY_V] = function ()
+		[KEY_V] = function()
 			local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
 
 			BuildModeAngle:RotateAroundAxis(Vector(0, 1, 0), 15 * mult)
+
 			LocalPlayer():EmitSound("buttonrollover.wav")
 		end,
-		[KEY_B] = function ()
+		[KEY_B] = function()
 			local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
 
 			BuildModeAngle:RotateAroundAxis(Vector(0, 1, 0), -15 * mult)
+
 			LocalPlayer():EmitSound("buttonrollover.wav")
 		end,
-		[KEY_F] = function ()
-			if CurTime() < BuildModePlaceDelay then
-				return
-			end
+		[KEY_F] = function()
+			if CurTime() < BuildModePlaceDelay then return end
 
 			local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
-			local start = LocalPlayer():EyePos()
-
 			svec:Mul(100000)
 
+			local start = LocalPlayer():EyePos()
 			local tr = util.QuickTrace(start, svec, LocalPlayer())
 			local pos = tr.HitPos
 
 			net.Start("BuildMode_Checkpoint")
-			net.WriteFloat(pos.x)
-			net.WriteFloat(pos.y)
-			net.WriteFloat(pos.z)
+				net.WriteFloat(pos.x)
+				net.WriteFloat(pos.y)
+				net.WriteFloat(pos.z)
 			net.SendToServer()
-			timer.Simple(0.1, function ()
+
+			timer.Simple(0.1, function()
 				LoadCheckpoints()
 			end)
 
 			BuildModePlaceDelay = CurTime() + 0.05
 		end,
-		[KEY_S] = function ()
-			if camcontrol then
-				return
-			end
+		[KEY_S] = function()
+			if camcontrol then return end
 
 			local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
-			local start = LocalPlayer():EyePos()
-
 			svec:Mul(100000)
 
+			local start = LocalPlayer():EyePos()
 			local tr = util.QuickTrace(start, svec, LocalPlayer())
 			local pos = tr.HitPos
 			local ang = LocalPlayer():EyeAngles().y
 
 			Course_StartPos:Set(pos)
+
 			net.Start("BuildMode_SetSpawn")
-			net.WriteFloat(pos.x)
-			net.WriteFloat(pos.y)
-			net.WriteFloat(pos.z)
-			net.WriteFloat(ang)
+				net.WriteFloat(pos.x)
+				net.WriteFloat(pos.y)
+				net.WriteFloat(pos.z)
+				net.WriteFloat(ang)
 			net.SendToServer()
+
 			Course_StartPos:Set(pos)
 
 			Course_StartAng = ang
 		end,
-		[KEY_D] = function (ignorecombo)
+		[KEY_D] = function(ignorecombo)
 			if (input.IsKeyDown(KEY_LSHIFT) or ignorecombo) and not camcontrol then
 				local props = {}
 				local ents = {}
@@ -1179,46 +1122,43 @@ if CLIENT then
 				end
 
 				net.Start("BuildMode_Duplicate")
-				net.WriteTable(props)
-				net.WriteTable(ents)
+					net.WriteTable(props)
+					net.WriteTable(ents)
 				net.SendToServer()
 
 				dragging = false
-
 				buildmodeinputs[KEY_G]()
 			end
 		end,
-		[KEY_DELETE] = function ()
+		[KEY_DELETE] = function()
 			if not dragging then
 				local props = {}
 
 				for k, v in pairs(buildmode_selected) do
 					table.insert(props, k)
-
 					buildmode_selected[k] = nil
 				end
 
 				net.Start("BuildMode_Delete")
-				net.WriteTable(props)
+					net.WriteTable(props)
 				net.SendToServer()
 			end
 		end,
-		[KEY_BACKSPACE] = function ()
+		[KEY_BACKSPACE] = function()
 			if not dragging then
 				local props = {}
 
 				for k, v in pairs(buildmode_selected) do
 					table.insert(props, k)
-
 					buildmode_selected[k] = nil
 				end
 
 				net.Start("BuildMode_Delete")
-				net.WriteTable(props)
+					net.WriteTable(props)
 				net.SendToServer()
 			end
 		end,
-		[KEY_T] = function ()
+		[KEY_T] = function()
 			if not dragging then
 				local props = {}
 
@@ -1230,15 +1170,13 @@ if CLIENT then
 
 				if #props > 0 then
 					net.Start("BuildMode_Highlight")
-					net.WriteTable(props)
+						net.WriteTable(props)
 					net.SendToServer()
 				end
 			end
 		end,
-		[KEY_G] = function ()
-			if BuildModeIndex ~= 0 then
-				return
-			end
+		[KEY_G] = function()
+			if BuildModeIndex ~= 0 then return end
 
 			BuildModeAngle:Set(angle_zero)
 
@@ -1248,6 +1186,7 @@ if CLIENT then
 				dragging = true
 
 				dragoffset:Set(vector_origin)
+
 				buildmodeinputsmouse[MOUSE_RIGHT]()
 			else
 				local f = nil
@@ -1260,18 +1199,15 @@ if CLIENT then
 
 				if IsValid(f) then
 					cam.Start3D()
+						local w2s = f:GetPos():ToScreen()
 
-					local w2s = f:GetPos():ToScreen()
-
-					input.SetCursorPos(w2s.x, w2s.y)
+						input.SetCursorPos(w2s.x, w2s.y)
 					cam.End3D()
 				end
 			end
 		end,
-		[KEY_ENTER] = function ()
-			if table.Count(buildmode_selected) == 0 then
-				return
-			end
+		[KEY_ENTER] = function()
+			if table.Count(buildmode_selected) == 0 then return end
 
 			local save = {}
 			local startpos = nil
@@ -1295,16 +1231,17 @@ if CLIENT then
 			file.CreateDir("beatrun/savedbuilds")
 			file.Write("beatrun/savedbuilds/save.txt", util.Compress(jsonsave))
 		end,
-		[KEY_PAD_PLUS] = function ()
+		[KEY_PAD_PLUS] = function()
 			local save = file.Read("beatrun/savedbuilds/save.txt", "DATA")
 
 			net.Start("BuildMode_ReadSave")
-			net.WriteData(save)
+				net.WriteData(save)
 			net.SendToServer()
 		end
 	}
+
 	buildmodeinputsmouse = {
-		[MOUSE_LEFT] = function ()
+		[MOUSE_LEFT] = function()
 			if isstring(BuildModeIndex) then
 				local noplace = false
 
@@ -1314,29 +1251,29 @@ if CLIENT then
 
 				if not noplace then
 					net.Start("BuildMode_Place")
-					net.WriteUInt(65535, 16)
-					net.WriteString(BuildModeIndex)
-					net.WriteFloat(BuildModePos.x)
-					net.WriteFloat(BuildModePos.y)
-					net.WriteFloat(BuildModePos.z)
-					net.WriteAngle(BuildModeAngle)
+						net.WriteUInt(65535, 16)
+						net.WriteString(BuildModeIndex)
+						net.WriteFloat(BuildModePos.x)
+						net.WriteFloat(BuildModePos.y)
+						net.WriteFloat(BuildModePos.z)
+						net.WriteAngle(BuildModeAngle)
 					net.SendToServer()
+
 					LocalPlayer():EmitSound("buttonclick.wav")
 
 					BuildModePlaceDelay = CurTime() + 0.05
 				end
 			elseif BuildModeIndex > 0 then
-				if CurTime() < BuildModePlaceDelay then
-					return
-				end
+				if CurTime() < BuildModePlaceDelay then return end
 
 				net.Start("BuildMode_Place")
-				net.WriteUInt(BuildModeIndex, 16)
-				net.WriteFloat(BuildModePos.x)
-				net.WriteFloat(BuildModePos.y)
-				net.WriteFloat(BuildModePos.z)
-				net.WriteAngle(BuildModeAngle)
+					net.WriteUInt(BuildModeIndex, 16)
+					net.WriteFloat(BuildModePos.x)
+					net.WriteFloat(BuildModePos.y)
+					net.WriteFloat(BuildModePos.z)
+					net.WriteAngle(BuildModeAngle)
 				net.SendToServer()
+
 				LocalPlayer():EmitSound("buttonclick.wav")
 
 				BuildModePlaceDelay = CurTime() + 0.05
@@ -1344,6 +1281,7 @@ if CLIENT then
 
 			if dragging then
 				local selected = {}
+
 				dragging = false
 
 				if table.Count(buildmode_selected) > 0 then
@@ -1360,7 +1298,7 @@ if CLIENT then
 					end
 
 					net.Start("BuildMode_Drag")
-					net.WriteTable(selected)
+						net.WriteTable(selected)
 					net.SendToServer()
 				end
 
@@ -1373,10 +1311,9 @@ if CLIENT then
 
 			if BuildModeIndex == 0 then
 				local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
-				local start = LocalPlayer():EyePos()
-
 				svec:Mul(100000)
 
+				local start = LocalPlayer():EyePos()
 				local tr = util.QuickTrace(start, svec, LocalPlayer())
 
 				if not input.IsKeyDown(KEY_LSHIFT) then
@@ -1395,7 +1332,7 @@ if CLIENT then
 				end
 			end
 		end,
-		[MOUSE_RIGHT] = function ()
+		[MOUSE_RIGHT] = function()
 			if dragging and table.Count(buildmode_selected) > 0 then
 				for k, v in pairs(buildmode_selected) do
 					if IsValid(k) then
@@ -1410,11 +1347,12 @@ if CLIENT then
 				axislock = 0
 			end
 		end,
-		[MOUSE_WHEEL_DOWN] = function ()
+		[MOUSE_WHEEL_DOWN] = function()
 			if not usedown then
 				local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
 
 				BuildModeAngle:RotateAroundAxis(Vector(0, 0, 1), -15 * mult)
+
 				LocalPlayer():EmitSound("buttonrollover.wav")
 			else
 				BuildModeIndex = BuildModeIndex - 1
@@ -1430,14 +1368,16 @@ if CLIENT then
 				end
 
 				BuildModeCreateGhost()
+
 				GhostModel:SetModel(buildmode_props[BuildModeIndex] or buildmode_entmodels[BuildModeIndex])
 			end
 		end,
-		[MOUSE_WHEEL_UP] = function ()
+		[MOUSE_WHEEL_UP] = function()
 			if not usedown then
 				local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
 
 				BuildModeAngle:RotateAroundAxis(Vector(0, 0, 1), 15 * mult)
+
 				LocalPlayer():EmitSound("buttonrollover.wav")
 			else
 				BuildModeIndex = BuildModeIndex + 1
@@ -1453,18 +1393,17 @@ if CLIENT then
 				end
 
 				BuildModeCreateGhost()
+
 				GhostModel:SetModel(buildmode_props[BuildModeIndex] or buildmode_entmodels[BuildModeIndex])
 			end
 		end
 	}
 
 	function BuildModeInput(ply, bind, pressed, code)
-		if bind ~= "buildmode" and not camcontrol then
-			return true
-		end
+		if bind ~= "buildmode" and not camcontrol then return true end
 	end
 
-	hook.Add("OnEntityCreated", "BuildModeProps", function (ent)
+	hook.Add("OnEntityCreated", "BuildModeProps", function(ent)
 		if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] then
 			table.insert(buildmode_placed, ent)
 		end
@@ -1501,22 +1440,23 @@ if CLIENT then
 			surface.SetDrawColor(125, 125, 125, 125)
 			surface.DrawOutlinedRect(x, y, w, h)
 			surface.SetDrawColor(0, 200, 0, 255)
+
 			cam.Start3D()
 
-			for k, v in ipairs(buildmode_placed) do
-				if IsValid(v) and not v:GetNW2Bool("BRProtected") then
-					local pos = v:GetRenderOrigin() or v:GetPos()
-					local w2s = pos:ToScreen()
-					local xcheck = flipx and x < w2s.x and w2s.x < w + x or not flipx and x < w2s.x and w2s.x < mousex
-					local ycheck = flipy and y < w2s.y and w2s.y < h + y or not flipy and y < w2s.y and w2s.y < mousey
+				for k, v in ipairs(buildmode_placed) do
+					if IsValid(v) and not v:GetNW2Bool("BRProtected") then
+						local pos = v:GetRenderOrigin() or v:GetPos()
+						local w2s = pos:ToScreen()
+						local xcheck = flipx and x < w2s.x and w2s.x < w + x or not flipx and x < w2s.x and w2s.x < mousex
+						local ycheck = flipy and y < w2s.y and w2s.y < h + y or not flipy and y < w2s.y and w2s.y < mousey
 
-					if xcheck and ycheck then
-						buildmode_selected[v] = true
-					elseif not input.IsKeyDown(KEY_LSHIFT) then
-						buildmode_selected[v] = nil
+						if xcheck and ycheck then
+							buildmode_selected[v] = true
+						elseif not input.IsKeyDown(KEY_LSHIFT) then
+							buildmode_selected[v] = nil
+						end
 					end
 				end
-			end
 
 			cam.End3D()
 
@@ -1536,7 +1476,6 @@ if CLIENT then
 	function BuildModeSelect()
 		if dragging then
 			local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
-
 			dragoffset:Set(svec)
 
 			if not dragorigin then
@@ -1560,7 +1499,6 @@ if CLIENT then
 						local a = offset[axislist[axislock]]
 
 						offset:Set(k.dragorigpos)
-
 						offset[axislist[axislock]] = a
 					end
 
@@ -1569,7 +1507,6 @@ if CLIENT then
 				end
 
 				local mins, maxs = k:GetRenderBounds()
-
 				render.DrawWireframeBox(k:GetRenderOrigin() or k:GetPos(), k:GetAngles(), mins, maxs, color_white, true)
 			end
 		end
@@ -1622,11 +1559,10 @@ if CLIENT then
 	function BuildModeCommand(ply, ucmd)
 		LocalPlayer():SetFOV(120)
 
-		if gui.IsGameUIVisible() then
-			return
-		end
+		if gui.IsGameUIVisible() then return end
 
 		camcontrol = input.IsMouseDown(MOUSE_RIGHT)
+
 		local newx, newy = input.GetCursorPos()
 		mousemoved = mousex ~= newx or mousey ~= newy
 		mousey = newy
@@ -1637,13 +1573,8 @@ if CLIENT then
 		usedown = input.IsKeyDown(KEY_E)
 		mousedown = input.IsMouseDown(MOUSE_LEFT)
 
-		if AEUI.HoveredPanel then
-			return
-		end
-
-		if keytime == CurTime() then
-			return
-		end
+		if AEUI.HoveredPanel then return end
+		if keytime == CurTime() then return end
 
 		for k, v in pairs(buildmodeinputs) do
 			if input.WasKeyPressed(k) then
@@ -1660,7 +1591,7 @@ if CLIENT then
 		keytime = CurTime()
 	end
 
-	net.Receive("BuildMode", function ()
+	net.Receive("BuildMode", function()
 		BuildMode = net.ReadBool()
 
 		if BuildMode then
@@ -1670,8 +1601,10 @@ if CLIENT then
 			hook.Add("PlayerBindPress", "BuildModeInput", BuildModeInput)
 			hook.Add("StartCommand", "BuildModeCommand", BuildModeCommand)
 			hook.Add("HUDPaint", "BuildModeHUDPaint", BuildModeHUDPaint)
+
 			LocalPlayer():DrawViewModel(false)
 			LocalPlayer():SetFOV(120)
+
 			hook.Run("BuildModeState", true)
 		else
 			hook.Remove("PostDrawTranslucentRenderables", "BuildModeGhost")
@@ -1680,10 +1613,14 @@ if CLIENT then
 			hook.Remove("PlayerBindPress", "BuildModeInput")
 			hook.Remove("StartCommand", "BuildModeCommand")
 			hook.Remove("HUDPaint", "BuildModeHUDPaint")
+
 			SafeRemoveEntity(GhostModel)
+
 			LocalPlayer():DrawViewModel(true)
+
 			gui.EnableScreenClicker(false)
-			LocalPlayer():SetFOV(0)
+
+			LocalPlayer():SetFOV(LocalPlayer():GetInfoNum("Beatrun_FOV"))
 
 			CheckpointNumber = 1
 

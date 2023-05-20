@@ -1,9 +1,7 @@
 local dircache = nil
 
-hook.Add("PlayerFootstepME", "Balance", function (ply, pos, foot, sound, volume, filter, skipcheck)
-	if IsValid(ply:GetBalanceEntity()) then
-		return
-	end
+hook.Add("PlayerFootstepME", "Balance", function(ply, pos, foot, sound, volume, filter, skipcheck)
+	if IsValid(ply:GetBalanceEntity()) then return end
 
 	if not ply.BalanceTrace then
 		ply.BalanceTrace = {}
@@ -16,6 +14,7 @@ hook.Add("PlayerFootstepME", "Balance", function (ply, pos, foot, sound, volume,
 
 	local tr = ply.BalanceTrace
 	local trout = ply.BalanceTraceOut
+
 	tr.filter = ply
 	tr.start = pos
 	tr.endpos = pos - Vector(0, 0, 25)
@@ -25,7 +24,8 @@ hook.Add("PlayerFootstepME", "Balance", function (ply, pos, foot, sound, volume,
 	if trout.Entity.Balance then
 		ply:SetBalance(0.1)
 		ply:SetBalanceEntity(trout.Entity)
-		timer.Simple(0, function ()
+
+		timer.Simple(0, function()
 			ParkourEvent("walkbalancefwd", ply)
 		end)
 
@@ -37,18 +37,21 @@ hook.Add("PlayerFootstepME", "Balance", function (ply, pos, foot, sound, volume,
 		end
 	end
 end)
-hook.Add("SetupMove", "Balance", function (ply, mv, cmd)
+
+hook.Add("SetupMove", "Balance", function(ply, mv, cmd)
 	if IsValid(ply:GetBalanceEntity()) then
 		local balance = ply:GetBalanceEntity()
 
 		mv:SetForwardSpeed(math.max(mv:GetForwardSpeed() * 0.01, 0))
 
-		local dist, nearest, distlen = util.DistanceToLine(balance:GetPos(), balance:GetPos() + balance:GetAngles():Up() * balance:GetBalanceLength(), mv:GetOrigin())
+		local _, nearest, distlen = util.DistanceToLine(balance:GetPos(), balance:GetPos() + balance:GetAngles():Up() * balance:GetBalanceLength(), mv:GetOrigin())
 		local distend = balance:GetPos():Distance(balance:GetPos() + balance:GetAngles():Up() * balance:GetBalanceLength())
+
 		nearest.z = mv:GetOrigin().z
 
 		mv:SetOrigin(nearest)
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
+
 		cmd:RemoveKey(IN_JUMP)
 
 		local tr = ply.BalanceTrace
@@ -111,6 +114,7 @@ hook.Add("SetupMove", "Balance", function (ply, mv, cmd)
 
 				if ang:Forward():Dot(bang:Up()) > 0.5 then
 					local fallpos = mv:GetOrigin() + ply:GetBalanceEntity():GetAngles():Right() * 0.75 * ply:GetBalance()
+
 					tr.start = fallpos
 					tr.endpos = fallpos
 
@@ -123,6 +127,7 @@ hook.Add("SetupMove", "Balance", function (ply, mv, cmd)
 					end
 				else
 					local fallpos = mv:GetOrigin() + ply:GetBalanceEntity():GetAngles():Right() * -0.75 * ply:GetBalance()
+
 					tr.start = fallpos
 					tr.endpos = fallpos
 
@@ -147,7 +152,7 @@ end)
 local angy = 0
 local attack2 = false
 
-hook.Add("CreateMove", "Balance", function (cmd)
+hook.Add("CreateMove", "Balance", function(cmd)
 	local ply = LocalPlayer()
 
 	if IsValid(ply:GetBalanceEntity()) and IsValid(BodyAnim) then
@@ -179,6 +184,7 @@ hook.Add("CreateMove", "Balance", function (cmd)
 		ang.y = angy
 
 		cmd:SetViewAngles(ang)
+
 		BodyAnim:SetPoseParameter("lean_roll", math.Clamp(ply:GetBalance(), -60, 60))
 
 		if IsValid(BodyAnimArmCopy) then

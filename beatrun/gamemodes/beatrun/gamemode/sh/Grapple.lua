@@ -1,26 +1,16 @@
 if CLIENT then
 	local circle = Material("circlesmooth.png", "nocull smooth")
 
-	hook.Add("HUDPaint", "grappleicon", function ()
+	hook.Add("HUDPaint", "grappleicon", function()
 		local ply = LocalPlayer()
 
-		if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then
-			return
-		end
-
-		if not ply:Alive() or Course_Name ~= "" then
-			return
-		end
+		if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
+		if not ply:Alive() or Course_Name ~= "" then return end
 
 		local activewep = ply:GetActiveWeapon()
 
-		if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
-			return
-		end
-
-		if GetGlobalBool(GM_INFECTION) then
-			return
-		end
+		if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then return end
+		if GetGlobalBool(GM_INFECTION) then return end
 
 		if not ply.GrappleHUD_tr then
 			ply.GrappleHUD_tr = {}
@@ -35,6 +25,7 @@ if CLIENT then
 			local w2s = ply:GetGrapplePos():ToScreen()
 
 			cam.End3D()
+
 			surface.SetDrawColor(255, 255, 255)
 			surface.SetMaterial(circle)
 			surface.DrawTexturedRect(w2s.x - SScaleX(4), w2s.y - SScaleY(4), SScaleX(8), SScaleY(8))
@@ -42,9 +33,7 @@ if CLIENT then
 			return
 		end
 
-		if ply:EyeAngles().x > -15 or ply:GetWallrun() ~= 0 then
-			return
-		end
+		if ply:EyeAngles().x > -15 or ply:GetWallrun() ~= 0 then return end
 
 		local trout = ply:GetEyeTrace()
 		local dist = trout.HitPos:DistToSqr(ply:GetPos())
@@ -55,6 +44,7 @@ if CLIENT then
 			local w2s = trout.HitPos:ToScreen()
 
 			cam.End3D()
+
 			surface.SetDrawColor(255, 255, 255)
 			surface.SetMaterial(circle)
 			surface.DrawTexturedRect(w2s.x - SScaleX(4), w2s.y - SScaleY(4), SScaleX(8), SScaleY(8))
@@ -64,18 +54,10 @@ end
 
 local zpunchstart = Angle(2, 0, 0)
 
-hook.Add("SetupMove", "Grapple", function (ply, mv, cmd)
-	if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then
-		return
-	end
-
-	if not ply:Alive() or Course_Name ~= "" then
-		return
-	end
-
-	if GetGlobalBool(GM_INFECTION) and not ply:GetNW2Entity("Swingrope") then
-		return
-	end
+hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
+	if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
+	if not ply:Alive() or Course_Name ~= "" then return end
+	if GetGlobalBool(GM_INFECTION) and not ply:GetNW2Entity("Swingrope") then return end
 
 	local activewep = ply:GetActiveWeapon()
 	local usingrh = IsValid(activewep) and activewep:GetClass() == "runnerhands"
@@ -98,6 +80,7 @@ hook.Add("SetupMove", "Grapple", function (ply, mv, cmd)
 			vel.z = -math.abs(vel.z)
 
 			mv:SetVelocity(vel)
+
 			ply:SetGrapplePos(trout.HitPos)
 			ply:SetGrappling(true)
 			ply:SetGrappleLength(mv:GetOrigin():Distance(trout.HitPos))
@@ -112,6 +95,7 @@ hook.Add("SetupMove", "Grapple", function (ply, mv, cmd)
 			ply:ViewPunch(zpunchstart)
 
 			grappled = true
+
 			ply.GrappleLengthOld = ply:GetGrappleLength()
 		end
 	end
@@ -119,7 +103,7 @@ hook.Add("SetupMove", "Grapple", function (ply, mv, cmd)
 	if ply:GetGrappling() then
 		local startshrink = (ply.GrappleLengthOld or 0) - ply:GetGrappleLength() < 200
 		local shmovemul = startshrink and 4 or 1
-		local gpos = ply:GetGrapplePos()
+		-- local gpos = ply:GetGrapplePos()
 		local pos = mv:GetOrigin()
 		local eyepos = mv:GetOrigin()
 		eyepos.z = eyepos.z + 64
@@ -135,16 +119,16 @@ hook.Add("SetupMove", "Grapple", function (ply, mv, cmd)
 				local ang = cmd:GetViewAngles()
 				ang.x = 0
 				ang = ang:Forward()
-
 				ang:Mul(200)
-
 				ang.z = 200
 
 				mv:SetVelocity(mv:GetVelocity() * 0.5 + ang)
+
 				ply:SetNW2Entity("Swingrope", nil)
 			end
 
 			ParkourEvent("jump", ply)
+
 			table.Empty(ply.ZiplineTraceOut)
 
 			return
@@ -160,14 +144,16 @@ hook.Add("SetupMove", "Grapple", function (ply, mv, cmd)
 			ply:SetGrappleLength(ply:GetGrappleLength() - FrameTime() * 250)
 		end
 
-		local vel = mv:GetVelocity()
+		-- local vel = mv:GetVelocity()
 		local ang = cmd:GetViewAngles()
 		ang.x = 0
+
 		local fmove = ang:Forward() * mv:GetForwardSpeed() * 6e-05 * shmovemul
 		local smove = ang:Right() * mv:GetSideSpeed() * 2.5e-05 * shmovemul
 		local newvel = fmove + smove
 		local gposd = ply:GetGrapplePos()
 		local posd = mv:GetOrigin()
+
 		gposd.z = 0
 		posd.z = 0
 		newvel.z = gposd:Distance(posd) / ply:GetGrappleLength() * 5
@@ -177,10 +163,12 @@ hook.Add("SetupMove", "Grapple", function (ply, mv, cmd)
 		if ply:GetGrappleLength() < ply:GetGrapplePos():Distance(pos) and not ply:OnGround() then
 			local tr = ply.Grapple_tr
 			local trout = ply.Grapple_trout
-			tr.start = mv:GetOrigin()
-			tr.endpos = mv:GetOrigin()
-			local mins, maxs = ply:GetHull()
 
+			tr.start = mv:GetOrigin()
+
+			tr.endpos = mv:GetOrigin()
+
+			local mins, maxs = ply:GetHull()
 			mins:Mul(1.01)
 			maxs:Mul(1.01)
 
@@ -192,7 +180,6 @@ hook.Add("SetupMove", "Grapple", function (ply, mv, cmd)
 			util.TraceHull(tr)
 
 			local vel = pos - ply:GetGrapplePos()
-
 			vel:Normalize()
 
 			if not trout.Hit then
@@ -219,7 +206,7 @@ local ropetop = Vector()
 local ropelerp = 0
 local ropedown = Vector(0, 0, 20)
 
-hook.Add("PostDrawTranslucentRenderables", "GrappleBeam", function ()
+hook.Add("PostDrawTranslucentRenderables", "GrappleBeam", function()
 	local ply = LocalPlayer()
 
 	if ply:GetGrappling() then
@@ -229,39 +216,35 @@ hook.Add("PostDrawTranslucentRenderables", "GrappleBeam", function ()
 			BA = BodyAnim
 		end
 
-		if not IsValid(BA) then
-			return
-		end
+		if not IsValid(BA) then return end
 
 		BA:SetupBones()
 
 		local rhand = BA:LookupBone("ValveBiped.Bip01_R_Finger41")
 		local lhand = BA:LookupBone("ValveBiped.Bip01_L_Finger21")
 
-		if BA:GetBoneMatrix(rhand) == nil then
-			return
-		end
+		if BA:GetBoneMatrix(rhand) == nil then return end
 
 		local rhandpos = BA:GetBoneMatrix(rhand):GetTranslation()
-
-		if not rhandpos then
-			return
-		end
+		if not rhandpos then return end
 
 		rhandpos:Sub(BA:GetRight() * 2.5)
 
 		local lhandpos = BA:GetBoneMatrix(lhand):GetTranslation()
 
 		ropetop:Set(lhandpos)
+
 		render.SetMaterial(cablemat)
 		render.StartBeam(2)
 
 		local up = (rhandpos - lhandpos):Angle():Forward()
-
 		up:Mul(20)
+
 		rhandpos:Add(up)
+
 		render.DrawBeam(LerpVector(ropelerp, lhandpos - ropedown, rhandpos), lhandpos, 1.5, 0, 1)
 		render.DrawBeam(ropetop, ply:GetGrapplePos(), 1.5, 0, 1)
+
 		BodyAnim:SetSequence("grapplecenter")
 
 		ropelerp = math.Approach(ropelerp, 1, FrameTime() * 2)
@@ -283,9 +266,7 @@ function CreateSwingrope(startpos, length)
 end
 
 local function Swingrope(ply, mv, cmd)
-	if not ply.ZiplineTrace then
-		return
-	end
+	if not ply.ZiplineTrace then return end
 
 	if not IsValid(ply:GetZipline()) and not ply:GetGrappling() and not ply:Crouching() and not ply:OnGround() and ply:GetZiplineDelay() < CurTime() then
 		local trout = ply.ZiplineTraceOut
@@ -296,9 +277,11 @@ local function Swingrope(ply, mv, cmd)
 			local startpos = trentity:GetStartPos()
 			local endpos = trentity:GetEndPos()
 			local bestpos = endpos.z < startpos.z and startpos or endpos
+
 			vel.z = -math.abs(vel.z)
 
 			mv:SetVelocity(vel)
+
 			ply:SetGrapplePos(bestpos)
 			ply:SetGrappling(true)
 			ply:SetGrappleLength(mv:GetOrigin():Distance(bestpos))
@@ -312,6 +295,7 @@ local function Swingrope(ply, mv, cmd)
 			ply:SetNW2Entity("Swingrope", trentity)
 
 			local eyeang = cmd:GetViewAngles()
+
 			vel.z = 0
 			eyeang.x = 0
 

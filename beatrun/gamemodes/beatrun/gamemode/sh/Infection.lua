@@ -48,28 +48,26 @@ if SERVER then
 			for k, v in pairs(player.GetAll()) do
 				if not didgun and not ended and v:Alive() and not v:GetNW2Bool("Infected") then
 					hook.Run("Infection_LastManGun", v)
-
 					didgun = true
-
 					break
 				end
 			end
 		end
 	end
 
-	net.Receive("Infection_Touch", function (len, ply)
+	net.Receive("Infection_Touch", function(len, ply)
 		local victim = net.ReadEntity()
 
-		if ended or not ply:Alive() or not ply:GetNW2Bool("Infected") or victim:GetNW2Bool("Infected") then
-			return
-		end
+		if ended or not ply:Alive() or not ply:GetNW2Bool("Infected") or victim:GetNW2Bool("Infected") then return end
 
 		if IsValid(victim) and victim:IsPlayer() and ply:GetPos():Distance(victim:GetPos()) < 300 then
 			victim:SetNW2Bool("Infected", true)
+
 			net.Start("Infection_Announce")
-			net.WriteEntity(ply)
-			net.WriteEntity(victim)
+				net.WriteEntity(ply)
+				net.WriteEntity(victim)
 			net.Broadcast()
+
 			victim:SetNW2Float("PBTime", CurTime() - Infection_StartTime)
 
 			local humancount = HumanCount()
@@ -79,13 +77,14 @@ if SERVER then
 
 			if humancount < 1 then
 				victim:EmitSound("blackout_hit_0" .. rand(1, 3) .. ".wav")
+
 				net.Start("Infection_End")
-				net.WriteFloat(CurTime())
+					net.WriteFloat(CurTime())
 				net.Broadcast()
 
 				ended = true
 
-				timer.Simple(15, function ()
+				timer.Simple(15, function()
 					if ended and GetGlobalBool(GM_INFECTION) then
 						Beatrun_StartInfection()
 					end
@@ -99,8 +98,8 @@ if SERVER then
 	local function InfectionSync(ply)
 		if GetGlobalBool(GM_INFECTION) and not ply.InfectionSynced then
 			net.Start("Infection_Sync")
-			net.WriteFloat(Infection_StartTime)
-			net.WriteFloat(Infection_EndTime)
+				net.WriteFloat(Infection_StartTime)
+				net.WriteFloat(Infection_EndTime)
 			net.Send(ply)
 
 			ply.InfectionSynced = true
@@ -137,27 +136,26 @@ if SERVER then
 
 		if numinfected == 1 then
 			local infected = players[rand(#players)]
-
 			infected:SetNW2Bool("Infected", true)
+
 			net.Start("Infection_XPReward")
-			net.WriteBool(false)
+				net.WriteBool(false)
 			net.Send(infected)
 		else
 			table.Shuffle(players)
 
 			for i = 1, numinfected do
 				players[i]:SetNW2Bool("Infected", true)
+
 				net.Start("Infection_XPReward")
-				net.WriteBool(false)
+					net.WriteBool(false)
 				net.Send(players[i])
 			end
 		end
 	end
 
 	local function InfectionTimer()
-		if not GetGlobalBool(GM_INFECTION) then
-			return
-		end
+		if not GetGlobalBool(GM_INFECTION) then return end
 
 		if player.GetCount() <= 1 then
 			Beatrun_StopInfection()
@@ -174,7 +172,7 @@ if SERVER then
 		local timeremaining = Infection_EndTime - CurTime()
 
 		if not didmusic and revealed and timeremaining <= 60 and timeremaining >= 50 and player.GetCount() >= 5 and cachedhumancount == 1 then
-			timer.Simple(0.1, function ()
+			timer.Simple(0.1, function()
 				for k, v in ipairs(player.GetAll()) do
 					if v:Alive() and not v:GetNW2Bool("Infected") then
 						net.Start("Infection_LastMan")
@@ -196,12 +194,12 @@ if SERVER then
 			end
 
 			net.Start("Infection_End")
-			net.WriteFloat(CurTime())
+				net.WriteFloat(CurTime())
 			net.Broadcast()
 
 			ended = true
 
-			timer.Simple(15, function ()
+			timer.Simple(15, function()
 				if ended and GetGlobalBool(GM_INFECTION) then
 					Beatrun_StartInfection()
 				end
@@ -210,21 +208,14 @@ if SERVER then
 	end
 
 	function Beatrun_StartInfection()
-		if GetGlobalBool(GM_INFECTION) and not ended then
-			return
-		end
-
-		if Course_Name ~= "" then
-			return
-		end
-
-		if player.GetCount() < 2 then
-			return
-		end
+		if GetGlobalBool(GM_INFECTION) and not ended then return end
+		if Course_Name ~= "" then return end
+		if player.GetCount() < 2 then return end
 
 		net.Start("Infection_Start")
-		net.WriteFloat(CurTime())
+			net.WriteFloat(CurTime())
 		net.Broadcast()
+
 		SetGlobalBool(GM_INFECTION, true)
 
 		revealed = false
@@ -232,6 +223,7 @@ if SERVER then
 		didmusic = false
 		didgun = false
 		cachedhumancount = 0
+
 		local players = player.GetAll()
 
 		for k, v in ipairs(players) do
@@ -256,9 +248,7 @@ if SERVER then
 	end
 
 	function InfectionDeath(ply)
-		if not GetGlobalBool(GM_INFECTION) then
-			return
-		end
+		if not GetGlobalBool(GM_INFECTION) then return end
 
 		if revealed and Infection_StartTime < CurTime() and not ply:GetNW2Bool("Infected") then
 			if ply.InfectionWuzHere then
@@ -266,9 +256,10 @@ if SERVER then
 			end
 
 			ply:SetNW2Bool("Infected", true)
+
 			net.Start("Infection_Announce")
-			net.WriteEntity(ply)
-			net.WriteEntity(ply)
+				net.WriteEntity(ply)
+				net.WriteEntity(ply)
 			net.Broadcast()
 
 			local humancount = HumanCount()
@@ -278,12 +269,12 @@ if SERVER then
 
 			if humancount < 1 then
 				net.Start("Infection_End")
-				net.WriteFloat(CurTime())
+					net.WriteFloat(CurTime())
 				net.Broadcast()
 
 				ended = true
 
-				timer.Simple(15, function ()
+				timer.Simple(15, function()
 					if ended and GetGlobalBool(GM_INFECTION) then
 						Beatrun_StartInfection()
 					end
@@ -293,7 +284,7 @@ if SERVER then
 			local timeremaining = Infection_EndTime - CurTime()
 
 			if timeremaining <= 70 and timeremaining >= 50 and player.GetCount() > 6 and humancount == 1 then
-				timer.Simple(0.1, function ()
+				timer.Simple(0.1, function()
 					for k, v in ipairs(player.GetAll()) do
 						if v:Alive() and not v:GetNW2Bool("Infected") then
 							net.Start("Infection_LastMan")
@@ -339,8 +330,10 @@ if CLIENT then
 				ang.x = 0
 				ang.z = 0
 				ang.y = ang.y + 180
+
 				view.origin = pos
 				view.angles = ang
+
 				lookingbehind = true
 
 				LocalPlayer():DrawViewModel(false)
@@ -373,26 +366,28 @@ if CLIENT then
 
 	local chatcolor = Color(200, 200, 200)
 
-	net.Receive("Infection_Start", function ()
+	net.Receive("Infection_Start", function()
 		local start = net.ReadFloat()
 		local noclipbind = input.LookupBinding("noclip") or "n"
 		noclipkey = input.GetKeyCode(noclipbind)
 		endtime = 0
+
 		Infection_StartTime = start + 10
 		Infection_EndTime = start + 190
 
 		hook.Add("BeatrunHUDCourse", "InfectionHUDName", InfectionHUDName)
 		hook.Add("CalcView", "InfectionCalcView", InfectionCalcView)
+
 		chat.AddText(chatcolor, "Infection! Touch other players to infect them\n", math.max(math.floor(player.GetCount() / 4), 1) .. " player(s) will become infected in 10s")
 	end)
 
 	local music = nil
 
-	net.Receive("Infection_End", function ()
+	net.Receive("Infection_End", function()
 		local survivors = ""
 		endtime = net.ReadFloat()
 
-		timer.Simple(0.5, function ()
+		timer.Simple(0.5, function()
 			for k, v in ipairs(player.GetAll()) do
 				if not v:GetNW2Bool("Infected") then
 					survivors = survivors .. v:Nick() .. ", "
@@ -418,8 +413,9 @@ if CLIENT then
 			music:Stop()
 		end
 	end)
-	net.Receive("Infection_LastMan", function ()
-		sound.PlayFile("sound/music/infection_countdown.mp3", "", function (station, errCode, errStr)
+
+	net.Receive("Infection_LastMan", function()
+		sound.PlayFile("sound/music/infection_countdown.mp3", "", function(station, errCode, errStr)
 			if IsValid(station) then
 				station:SetVolume(0.5)
 				station:Play()
@@ -432,7 +428,7 @@ if CLIENT then
 	local red = Color(255, 25, 25)
 	local yellow = Color(255, 255, 100)
 
-	net.Receive("Infection_Announce", function ()
+	net.Receive("Infection_Announce", function()
 		local attacker = net.ReadEntity()
 		local victim = net.ReadEntity()
 
@@ -440,7 +436,7 @@ if CLIENT then
 			if attacker == victim then
 				chat.AddText(attacker, red, " died!")
 			else
-				chat.AddText(attacker, red, " has infected ", victim, "!")
+				chat.AddText(attacker, red, " has infected ", yellow, victim, "!")
 			end
 
 			attacker.InfectionTouchDelay = CurTime() + 3
@@ -452,9 +448,7 @@ if CLIENT then
 	end)
 
 	local function InfectionHUD()
-		if not GetGlobalBool(GM_INFECTION) then
-			return
-		end
+		if not GetGlobalBool(GM_INFECTION) then return end
 
 		surface.SetTextColor(color_white)
 		surface.SetFont("BeatrunHUD")
@@ -466,8 +460,9 @@ if CLIENT then
 		end
 
 		remainingtime = math.max(remainingtime, 0)
+
 		local timer = string.FormattedTime(remainingtime, "%02i:%02i:%02i")
-		local tw, th = surface.GetTextSize(timer)
+		local tw, _ = surface.GetTextSize(timer)
 
 		surface.SetTextPos(ScrW() * 0.5 - tw * 0.5, ScrH() * 0.25)
 		surface.DrawText(timer)
@@ -485,36 +480,36 @@ if CLIENT then
 		["$pp_colour_mulr"] = 0
 	}
 
-	hook.Add("BeatrunSpawn", "InfectionSpawnDelay", function ()
+	hook.Add("BeatrunSpawn", "InfectionSpawnDelay", function()
 		LocalPlayer().InfectionTouchDelay = CurTime() + 6
 	end)
 
 	local function BeatrunInfectedVision()
 		if GetGlobalBool(GM_INFECTION) and LocalPlayer():GetNW2Bool("Infected") then
 			tab["$pp_colour_colour"] = CurTime() > (LocalPlayer().InfectionTouchDelay or 0) and 0.91 or 0.1
-
 			DrawColorModify(tab)
 		end
 	end
 
 	hook.Add("HUDPaint", "InfectionHUD", InfectionHUD)
 	hook.Add("RenderScreenspaceEffects", "BeatrunInfectedVision", BeatrunInfectedVision)
-	net.Receive("Infection_XPReward", function ()
+
+	net.Receive("Infection_XPReward", function()
 		local humanwin = net.ReadBool()
 
 		if humanwin then
-			chat.AddText(chatcolor, "You were awarded 200 XP for surviving")
 			LocalPlayer():AddXP(200)
+			chat.AddText(chatcolor, "You were awarded 200 XP for surviving")
 		else
-			chat.AddText(chatcolor, "You were awarded 100 XP for spawning as an infected")
 			LocalPlayer():AddXP(100)
+			chat.AddText(chatcolor, "You were awarded 100 XP for spawning as an infected")
 		end
 	end)
-	net.Receive("Infection_Sync", function ()
+
+	net.Receive("Infection_Sync", function()
 		endtime = 0
 		Infection_StartTime = net.ReadFloat()
 		Infection_EndTime = net.ReadFloat()
-
 		hook.Add("BeatrunHUDCourse", "InfectionHUDName", InfectionHUDName)
 	end)
 end

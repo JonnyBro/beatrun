@@ -1,17 +1,14 @@
-local ClimbingTimes = {
-	5,
-	1.25,
-	1,
-	1,
-	nil,
-	2
-}
+local ClimbingTimes = {5, 1.25, 1, 1, nil, 2}
+
+--[[
 local CLIMB_HANG = 1
 local CLIMB_HEAVEUP = 2
 local CLIMB_STRAFELEFT = 3
 local CLIMB_STRAFERIGHT = 4
 local CLIMB_FOLDEDSTART = 5
 local CLIMB_FOLDEDHEAVEUP = 6
+
+
 local climb1 = {
 	followplayer = false,
 	animmodelstring = "climbanim",
@@ -21,15 +18,14 @@ local climb1 = {
 	smoothend = true,
 	AnimString = "climb1"
 }
-local climbstrings = {
-	"climb1",
-	"climb2"
-}
+
+local climbstrings = {"climb1", "climb2"}
+]]
 
 if game.SinglePlayer() and SERVER then
 	util.AddNetworkString("Climb_SPFix")
 elseif game.SinglePlayer() and CLIENT then
-	net.Receive("Climb_SPFix", function ()
+	net.Receive("Climb_SPFix", function()
 		local lock = net.ReadBool()
 		local neweyeang = net.ReadBool()
 		local ang = net.ReadAngle()
@@ -54,11 +50,13 @@ local function ClimbingEnd(ply, mv, cmd)
 	local tr = {
 		filter = ply
 	}
+
 	tr.mins, tr.maxs = ply:GetHull()
 	tr.start = mv:GetOrigin()
 	tr.endpos = tr.start
 	tr.mask = MASK_PLAYERSOLID
 	tr.collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+
 	local trout = util.TraceHull(tr)
 
 	if trout.Hit then
@@ -90,10 +88,10 @@ local function ClimbingEnd(ply, mv, cmd)
 
 	if game.SinglePlayer() then
 		net.Start("Climb_SPFix")
-		net.WriteBool(false)
-		net.WriteBool(false)
-		net.WriteAngle(angle_zero)
-		net.WriteBool(false)
+			net.WriteBool(false)
+			net.WriteBool(false)
+			net.WriteAngle(angle_zero)
+			net.WriteBool(false)
 		net.Send(ply)
 	end
 end
@@ -102,10 +100,12 @@ local function ClimbingThink(ply, mv, cmd)
 	if ply:GetClimbing() == 5 then
 		if mv:KeyPressed(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() + 0.65 or mv:KeyDown(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() then
 			ParkourEvent("hangfoldedheaveup", ply)
+
 			ply:SetClimbing(6)
 			ply:SetClimbingTime(0)
 		elseif ply:GetClimbingDelay() < CurTime() then
 			ParkourEvent("hangfoldedendhang", ply)
+
 			ply:SetClimbing(1)
 			ply:SetClimbingDelay(CurTime() + 1.35)
 		end
@@ -124,6 +124,7 @@ local function ClimbingThink(ply, mv, cmd)
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
 		mv:SetUpSpeed(0)
+
 		ClimbingEnd(ply, mv, cmd)
 
 		return
@@ -138,20 +139,24 @@ local function ClimbingThink(ply, mv, cmd)
 
 			if game.SinglePlayer() then
 				net.Start("Climb_SPFix")
-				net.WriteBool(false)
-				net.WriteBool(false)
-				net.WriteAngle(angle_zero)
-				net.WriteBool(false)
+					net.WriteBool(false)
+					net.WriteBool(false)
+					net.WriteAngle(angle_zero)
+					net.WriteBool(false)
 				net.Send(ply)
 			end
 		end
 
 		if mv:KeyDown(IN_DUCK) then
 			mv:SetOrigin(ply:GetClimbingStart() - ply:GetClimbingAngle():Forward() * 5)
+
 			ply:SetMoveType(MOVETYPE_WALK)
+
 			mv:SetButtons(0)
+
 			ply:SetClimbing(0)
 			ply:SetCrouchJumpBlocked(true)
+
 			ParkourEvent("hangend", ply)
 
 			if CLIENT_IFTP() then
@@ -182,10 +187,10 @@ local function ClimbingThink(ply, mv, cmd)
 				lockang = false
 				BodyLimitX = 90
 				BodyLimitY = 180
+
 				local ang = ply:EyeAngles()
 				ang.x = 0
 				ang.z = 0
-
 				BodyAnim:SetAngles(ang)
 			elseif game.SinglePlayer() then
 				ply:SendLua("lockang2=false lockang=false BodyLimitX=90 BodyLimitY=180 local ang=LocalPlayer():EyeAngles() ang.x=0 ang.z=0 BodyAnim:SetAngles(ang)")
@@ -194,9 +199,7 @@ local function ClimbingThink(ply, mv, cmd)
 			local ang = cmd:GetViewAngles()
 			ang.x = math.min(ang.x, 0)
 			ang = ang:Forward()
-
 			ang:Mul(350)
-
 			ang.z = 250
 
 			mv:SetVelocity(ang)
@@ -209,6 +212,7 @@ local function ClimbingThink(ply, mv, cmd)
 			local trout = ply.ClimbingTraceSafetyOut
 			local mins, maxs = ply:GetHull()
 			mins.z = maxs.z * 0.25
+
 			tr.start = ply:GetClimbingEnd()
 			tr.endpos = tr.start
 			tr.maxs = maxs
@@ -241,33 +245,36 @@ local function ClimbingThink(ply, mv, cmd)
 
 			local tr = ply.ClimbingTraceEnd
 			local trout = ply.ClimbingTraceEndOut
-			local oldstart = tr.start
-			local oldend = tr.endpos
+			-- local oldstart = tr.start
+			-- local oldend = tr.endpos
 			local start = mv:GetOrigin() + wallang:Forward() * 20 + Vector(0, 0, 100) + dir
+
 			tr.start = start
 			tr.endpos = start - Vector(0, 0, 80)
 
 			util.TraceLine(tr)
 
-			if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then
-				return false
-			end
+			if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
 			local fail = trout.Fraction < 0.25 or trout.Fraction > 0.5
 
 			if not fail then
 				local ostart = tr.start
 				local oendpos = tr.endpos
+
 				tr.start = ply:GetClimbingEnd() + dir
 				tr.endpos = tr.start - Vector(0, 0, 100)
 
 				util.TraceLine(tr)
 
 				dir.z = trout.HitPos.z - mv:GetOrigin().z - 77
+
 				tr.endpos = oendpos
 				tr.start = ostart
 				tr = ply.ClimbingTraceSafety
+
 				trout = ply.ClimbingTraceSafetyOut
+
 				tr.start = mv:GetOrigin() + dir - wallang:Forward() * 0.533
 				tr.endpos = tr.start
 
@@ -307,9 +314,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 		util.TraceLine(tr)
 
-		if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then
-			return false
-		end
+		if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
 		local fail = trout.Fraction < 0.25 or trout.Fraction == 1
 
@@ -319,7 +324,9 @@ local function ClimbingThink(ply, mv, cmd)
 			local poslerp = LerpVector(lerp, ply:GetClimbingStart(), ply:GetClimbingEnd())
 
 			ply:SetClimbingEndOld(trout.HitPos)
+
 			mv:SetOrigin(poslerp)
+
 			ply:SetClimbingTime(ply:GetClimbingTime() + FrameTime() * lerprate)
 		end
 
@@ -334,10 +341,10 @@ local function ClimbingThink(ply, mv, cmd)
 	if ply:GetClimbing() == 2 or ply:GetClimbing() == 6 then
 		if game.SinglePlayer() then
 			net.Start("Climb_SPFix")
-			net.WriteBool(false)
-			net.WriteBool(false)
-			net.WriteAngle(angle_zero)
-			net.WriteBool(false)
+				net.WriteBool(false)
+				net.WriteBool(false)
+				net.WriteAngle(angle_zero)
+				net.WriteBool(false)
 			net.Send(ply)
 		end
 
@@ -351,6 +358,7 @@ local function ClimbingThink(ply, mv, cmd)
 		local poslerp = LerpVector(lerp, ply:GetClimbingStart(), ply:GetClimbingEnd())
 
 		mv:SetOrigin(poslerp)
+
 		ply:SetClimbingTime(lerp + FrameTime() * lerprate)
 	end
 
@@ -385,10 +393,14 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	local eyeang = ply:EyeAngles()
 	local oldpos = mv:GetOrigin()
+
 	eyeang.x = 0
+
 	local tr = ply.ClimbingTrace
 	local trout = ply.ClimbingTraceOut
+
 	mins.z = 45
+
 	tr.start = mv:GetOrigin()
 
 	if ply:GetDive() then
@@ -405,24 +417,14 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	mins.z = 0
 
-	if not trout.Hit then
-		return
-	end
+	if not trout.Hit then return end
 
 	local wallang = trout.HitNormal:Angle()
 	wallang.y = wallang.y - 180
 
-	if wallang.x ~= 0 then
-		return
-	end
-
-	if math.abs(math.AngleDifference(wallang.y, eyeang.y)) > 50 then
-		return
-	end
-
-	if IsValid(trout.Entity) and trout.Entity.NoClimbing then
-		return
-	end
+	if wallang.x ~= 0 then return end
+	if math.abs(math.AngleDifference(wallang.y, eyeang.y)) > 50 then return end
+	if IsValid(trout.Entity) and trout.Entity.NoClimbing then return end
 
 	ply:SetClimbingAngle(wallang)
 
@@ -430,6 +432,7 @@ local function ClimbingCheck(ply, mv, cmd)
 	local trout = ply.ClimbingTraceEndOut
 	local upvalue = ply:GetWallrun() == 1 and Vector(0, 0, 90) or Vector(0, 0, 65)
 	local plymins, plymaxs = ply:GetHull()
+
 	tr.start = mv:GetOrigin() + wallang:Forward() * 45 + upvalue
 	tr.endpos = tr.start - Vector(0, 0, 90)
 	tr.maxs = plymaxs
@@ -439,11 +442,9 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	util.TraceLine(tr)
 
-	if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then
-		return false
-	end
+	if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
-	local fraction = trout.Fraction
+	-- local fraction = trout.Fraction
 	local detectionlen = 60
 
 	if trout.Fraction <= 0 or trout.Fraction >= 0.5 then
@@ -452,18 +453,15 @@ local function ClimbingCheck(ply, mv, cmd)
 
 		util.TraceLine(tr)
 
-		if trout.Fraction <= 0 or trout.Fraction >= 0.5 then
-			return
-		end
+		if trout.Fraction <= 0 or trout.Fraction >= 0.5 then return end
 
 		detectionlen = 25
 	end
 
 	local endpos = trout.HitPos
-	local height = trout.Fraction
+	-- local height = trout.Fraction
 	local startpos = ply.ClimbingTraceOut.HitPos
 	startpos.z = trout.HitPos.z - 77
-
 	startpos:Add(wallang:Forward() * 0.533)
 
 	if ply:GetDive() then
@@ -495,48 +493,43 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	local tr = ply.ClimbingTraceSafety
 	local trout = ply.ClimbingTraceSafetyOut
+
 	tr.filter = ply
 	tr.start = endpos
 	tr.endpos = tr.start - wallang:Forward() * detectionlen
 
 	util.TraceLine(tr)
 
-	if trout.Hit then
-		return
-	end
+	if trout.Hit then return end
 
 	tr.start = startpos + Vector(0, 0, 77)
 	tr.endpos = tr.start + wallang:Forward() * detectionlen * 0.5
 
 	util.TraceLine(tr)
 
-	if trout.Hit then
-		return
-	end
+	if trout.Hit then return end
 
-	local steep = trout.HitNormal:Distance(Vector(0, 0, 1)) > 0.01
+	-- local steep = trout.HitNormal:Distance(Vector(0, 0, 1)) > 0.01
 	local tr = ply.ClimbingTraceSafety
 	local trout = ply.ClimbingTraceSafetyOut
+
 	tr.start = mv:GetOrigin()
 	tr.endpos = tr.start + Vector(0, 0, 75)
 
 	util.TraceLine(tr)
 
-	if trout.Hit then
-		return
-	end
+	if trout.Hit then return end
 
 	local origin = mv:GetOrigin()
 	local tr = ply.ClimbingTraceSafety
 	local trout = ply.ClimbingTraceSafetyOut
+
 	tr.start = startpos
 	tr.endpos = startpos
 
 	util.TraceLine(tr)
 
-	if trout.Hit then
-		return
-	end
+	if trout.Hit then return end
 
 	startpos.z = startpos.z
 	ply.ClimbingStartPosCache = startpos
@@ -551,7 +544,6 @@ local function ClimbingCheck(ply, mv, cmd)
 
 		if ply:GetWallrun() ~= 1 then
 			startpos.z = startpos.z + 17
-
 			mv:SetOrigin(startpos)
 		end
 
@@ -610,8 +602,8 @@ local function ClimbingCheck(ply, mv, cmd)
 	end
 
 	local wr = ply:GetWallrun()
-	local wrtime = ply:GetWallrunTime() - CurTime()
-	local vel = mv:GetVelocity()
+	-- local wrtime = ply:GetWallrunTime() - CurTime()
+	-- local vel = mv:GetVelocity()
 
 	if wr ~= 0 then
 		ply:SetWallrun(0)
@@ -649,6 +641,7 @@ local function ClimbingCheck(ply, mv, cmd)
 		local trout = ply.ClimbingTraceSafetyOut
 		local mins, maxs = ply:GetCollisionBounds()
 		mins.z = maxs.z * 0.25
+
 		tr.start = ply:GetClimbingEnd()
 		tr.endpos = tr.start
 		tr.maxs = maxs
@@ -672,6 +665,7 @@ local function ClimbingCheck(ply, mv, cmd)
 	if folded then
 		ply:SetClimbing(5)
 		ply:SetClimbingDelay(CurTime() + 0.8)
+
 		ParkourEvent("hangfoldedstart", ply)
 	else
 		local event = "climbhard"
@@ -690,7 +684,7 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	if IsFirstTimePredicted() then
 		if CLIENT or game.SinglePlayer() then
-			timer.Simple(0.05, function ()
+			timer.Simple(0.05, function()
 				ply:EmitSound("Bump.Concrete")
 			end)
 		end
@@ -704,7 +698,6 @@ local function ClimbingCheck(ply, mv, cmd)
 
 			if folded then
 				DoImpactBlur(8)
-
 				lockang2 = false
 				lockang = true
 			end
@@ -712,9 +705,9 @@ local function ClimbingCheck(ply, mv, cmd)
 
 		if game.SinglePlayer() then
 			net.Start("Climb_SPFix")
-			net.WriteBool(false)
-			net.WriteBool(true)
-			net.WriteAngle(wallang)
+				net.WriteBool(false)
+				net.WriteBool(true)
+				net.WriteAngle(wallang)
 
 			if folded then
 				ply:SendLua("DoImpactBlur(8)")
@@ -726,12 +719,12 @@ local function ClimbingCheck(ply, mv, cmd)
 	end
 
 	if CLIENT and IsFirstTimePredicted() then
-		timer.Simple(0, function ()
+		timer.Simple(0, function()
 			BodyLimitX = 80
 			BodyLimitY = 170
 		end)
 	elseif game.SinglePlayer() then
-		timer.Simple(0, function ()
+		timer.Simple(0, function()
 			ply:SendLua("BodyLimitX=80 BodyLimitY=170")
 		end)
 	end
@@ -746,14 +739,13 @@ local function ClimbingCheck(ply, mv, cmd)
 	mv:SetUpSpeed(0)
 end
 
-hook.Add("SetupMove", "Climbing", function (ply, mv, cmd)
+
+hook.Add("SetupMove", "Climbing", function(ply, mv, cmd)
 	if ply:GetClimbing() == nil or not ply:Alive() then
 		ply:SetClimbing(0)
 	end
 
-	if IsValid(ply:GetSwingbar()) then
-		return
-	end
+	if IsValid(ply:GetSwingbar()) then return end
 
 	if (not ply:GetCrouchJump() or ply:GetDive()) and not ply:GetJumpTurn() and (mv:KeyDown(IN_FORWARD) or mv:GetVelocity().z < -50 or ply:GetWallrun() == 1) and ply:GetClimbing() == 0 and ply:GetWallrun() ~= 4 and not ply:OnGround() and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:GetMoveType() ~= MOVETYPE_LADDER then
 		ClimbingCheck(ply, mv, cmd)

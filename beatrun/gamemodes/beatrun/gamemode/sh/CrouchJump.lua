@@ -6,15 +6,17 @@ local punchthink = Angle()
 if SERVER then
 	util.AddNetworkString("CrouchJumpSP")
 elseif CLIENT and game.SinglePlayer() then
-	net.Receive("CrouchJumpSP", function ()
+	net.Receive("CrouchJumpSP", function()
 		local ply = LocalPlayer()
 
 		if BodyAnimArmCopy then
 			BodyAnimCycle = 0
 			BodyAnimCrouchLerp = 0
 			BodyAnimCrouchLerpZ = ply:GetPos().z - 32
+
 			local ang = ply:EyeAngles()
 			ang.x = 0
+
 			ply.OrigEyeAng = ang
 			BodyLimitX = 40
 
@@ -23,7 +25,7 @@ elseif CLIENT and game.SinglePlayer() then
 	end)
 end
 
-hook.Add("SetupMove", "CrouchJump", function (ply, mv, cmd)
+hook.Add("SetupMove", "CrouchJump", function(ply, mv, cmd)
 	if ply:OnGround() and ply:GetCrouchJumpBlocked() then
 		ply:SetCrouchJumpBlocked(false)
 	end
@@ -55,12 +57,14 @@ hook.Add("SetupMove", "CrouchJump", function (ply, mv, cmd)
 
 		if game.SinglePlayer() then
 			net.Start("CrouchJumpSP")
-			net.WriteBool(true)
+				net.WriteBool(true)
 			net.Send(ply)
+
 			ply:SetNW2Float("BodyAnimCrouchLerpZ", ply:GetPos().z - 32)
 		end
 
 		ParkourEvent("coil", ply)
+
 		ply:SetCrouchJump(true)
 		ply:SetCrouchJumpTime(CurTime() + 1)
 		ply:ViewPunch(punch)
@@ -78,7 +82,7 @@ hook.Add("SetupMove", "CrouchJump", function (ply, mv, cmd)
 
 		if game.SinglePlayer() then
 			net.Start("CrouchJumpSP")
-			net.WriteBool(false)
+				net.WriteBool(false)
 			net.Send(ply)
 		end
 
@@ -122,7 +126,8 @@ hook.Add("SetupMove", "CrouchJump", function (ply, mv, cmd)
 		end
 	end
 end)
-hook.Add("CreateMove", "VManipCrouchJumpDuck", function (cmd)
+
+hook.Add("CreateMove", "VManipCrouchJumpDuck", function(cmd)
 	local ply = LocalPlayer()
 
 	if ply:GetCrouchJump() and ply:GetMoveType() == MOVETYPE_WALK and not ply:OnGround() and not ply:GetDive() then

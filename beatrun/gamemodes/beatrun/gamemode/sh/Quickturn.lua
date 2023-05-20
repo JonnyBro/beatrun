@@ -3,13 +3,11 @@ if CLIENT then
 end
 
 function DoJumpTurn(lookbehind)
-	if not LocalPlayer():Alive() then
-		return
-	end
+	if not LocalPlayer():Alive() then return end
 
 	VMLegs:Remove()
-	BodyAnim:SetSequence("jumpturnfly")
 
+	BodyAnim:SetSequence("jumpturnfly")
 	BodyAnimCycle = 0
 	BodyAnimSpeed = 1
 	BodyLimitX = 40
@@ -17,13 +15,12 @@ function DoJumpTurn(lookbehind)
 
 	if lookbehind then
 		local vel = LocalPlayer():GetVelocity()
-
 		vel:Normalize()
-
 		vel.z = 0
-		local ang = vel:Angle()
 
+		local ang = vel:Angle()
 		ang:RotateAroundAxis(Vector(0, 0, 1), 180)
+
 		BodyAnim:SetAngles(ang)
 
 		LocalPlayer().OrigEyeAng = ang
@@ -31,9 +28,7 @@ function DoJumpTurn(lookbehind)
 end
 
 function DoJumpTurnStand()
-	if not LocalPlayer():Alive() then
-		return
-	end
+	if not LocalPlayer():Alive() then return end
 
 	VMLegs:Remove()
 
@@ -43,6 +38,7 @@ function DoJumpTurnStand()
 		BodyAnim:SetSequence("jumpturnlandstandgun")
 	else
 		BodyAnim:SetSequence("jumpturnlandstand")
+
 		ParkourEvent("jumpturnlandstand", LocalPlayer(), game.SinglePlayer())
 	end
 
@@ -67,11 +63,13 @@ local function Quickturn(ply, mv, cmd)
 
 		if mv:KeyPressed(IN_JUMP) and (mv:KeyDown(IN_MOVELEFT) or mv:KeyDown(IN_MOVERIGHT)) then
 			keypressed = true
+
 			ply.vwrturn = mv:KeyDown(IN_MOVERIGHT) and 1 or -1
+
 			local eyeang = cmd:GetViewAngles()
 			eyeang.x = 0
-			ply.vwrdot = -ply:GetWallrunDir():Dot(eyeang:Forward())
 
+			ply.vwrdot = -ply:GetWallrunDir():Dot(eyeang:Forward())
 			ply:SetWallrunTime(CurTime())
 			ply:SetQuickturn(true)
 			ply:SetQuickturnTime(CurTime())
@@ -84,8 +82,10 @@ local function Quickturn(ply, mv, cmd)
 			local eyedir = cmd:GetViewAngles()
 			eyedir.x = 0
 			eyedir = eyedir:Forward()
+
 			local vel = mv:GetVelocity()
 			vel.z = 0
+
 			local lookahead = vel:GetNormalized():Dot(eyedir) >= 0.85
 			local lookbehind = vel:GetNormalized():Dot(eyedir) < -0.5
 
@@ -100,9 +100,7 @@ local function Quickturn(ply, mv, cmd)
 
 				ply:SetJumpTurn(true)
 
-				if lookbehind then
-					return
-				end
+				if lookbehind then return end
 
 				ply:ViewPunch(Angle(2.5, 0, 5))
 			end
@@ -121,9 +119,7 @@ local function Quickturn(ply, mv, cmd)
 			usingrh = activewep:GetClass() == "runnerhands"
 		end
 
-		if not usingrh and ply:GetWallrun() >= 2 then
-			return
-		end
+		if not usingrh and ply:GetWallrun() >= 2 then return end
 
 		ply:SetQuickturn(true)
 		ply:SetQuickturnTime(CurTime())
@@ -138,7 +134,6 @@ local function Quickturn(ply, mv, cmd)
 				BodyLimitY = 180
 				BodyAnimCycle = 0
 				BodyAnimSpeed = 2
-
 				BodyAnim:SetSequence("wallrunverticalturn")
 			elseif game.SinglePlayer() then
 				ply:SendLua("BodyLimitX=90 BodyLimitY=180 BodyAnimCycle=0 BodyAnim:SetSequence(\"wallrunverticalturn\")")
@@ -195,6 +190,7 @@ local function Quickturn(ply, mv, cmd)
 		mv:SetSideSpeed(0)
 		mv:SetUpSpeed(0)
 		mv:SetButtons(0)
+
 		cmd:ClearMovement()
 
 		if not ply:OnGround() and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:WaterLevel() < 3 then
@@ -233,6 +229,7 @@ local function Quickturn(ply, mv, cmd)
 		local diff = CurTime() - ply:GetQuickturnTime()
 		local lerptime = diff * 6.5
 		local lerp = Lerp(math.min(lerptime, 1), ply:GetQuickturnAng().y, target.y)
+
 		target.y = lerp
 
 		if CLIENT_IFTP() or game.SinglePlayer() then

@@ -4,8 +4,10 @@ local function SwingpipeCheck(ply, mv, cmd)
 	mins.x = mins.x * 2
 	maxs.y = maxs.y * 2
 	mins.y = mins.y * 2
+
 	local tr = ply.Monkey_tr
 	local trout = ply.Monkey_trout
+
 	tr.start = mv:GetOrigin()
 	tr.endpos = tr.start
 	tr.maxs = maxs
@@ -19,7 +21,7 @@ local function SwingpipeCheck(ply, mv, cmd)
 
 	if IsValid(trout.Entity) and trout.Entity:GetClass() == "br_swingpipe" and (ply:GetSwingbarLast() ~= trout.Entity or ply:GetSBDelay() < CurTime()) then
 		local swingpipe = trout.Entity
-		local dot = cmd:GetViewAngles():Forward():Dot(swingpipe:GetAngles():Forward())
+		-- local dot = cmd:GetViewAngles():Forward():Dot(swingpipe:GetAngles():Forward())
 
 		if CLIENT then
 			swingpipe:SetPredictable(true)
@@ -27,8 +29,10 @@ local function SwingpipeCheck(ply, mv, cmd)
 
 		local pos = swingpipe:GetPos()
 		pos.z = mv:GetOrigin().z
+
 		local entvector = pos - ply:GetShootPos()
 		entvector.z = pos.z
+
 		local entdot = entvector:Dot(mv:GetAngles():Right())
 		local dir = entdot < 0
 		local trwall = util.QuickTrace(mv:GetOrigin(), mv:GetAngles():Right() * 100 * (dir and -1 or 1), ply)
@@ -40,7 +44,6 @@ local function SwingpipeCheck(ply, mv, cmd)
 		end
 
 		ply.SwingHullCheck = false
-
 		ply:SetSwingpipe(swingpipe)
 		ply:SetWallrunTime(0)
 		ply:SetSBDir(dir)
@@ -57,8 +60,8 @@ local function SwingpipeCheck(ply, mv, cmd)
 	end
 end
 
+-- local red = Color(255, 0, 0, 200)
 local radius = 40
-local red = Color(255, 0, 0, 200)
 local circlepos = Vector()
 local axis = Vector(0, 1, 0)
 
@@ -88,7 +91,6 @@ local function SwingpipeThink(ply, mv, cmd)
 	ang:RotateAroundAxis(axis, 90)
 
 	local angle = math.NormalizeAngle(ply:GetSBOffset() - ply.swingbarang) * math.pi * 2 / 360
-
 	circlepos:SetUnpacked(0, math.cos(angle) * radius * -1, -math.sin(angle) * radius)
 	circlepos:Rotate(ang)
 
@@ -110,10 +112,7 @@ local function SwingpipeThink(ply, mv, cmd)
 		if util.TraceHull({
 			start = spendpos,
 			endpos = spendpos,
-			filter = {
-				ply:GetSwingpipe(),
-				ply
-			},
+			filter = {ply:GetSwingpipe(), ply},
 			mins = minhull,
 			maxs = maxhull
 		}).Hit then
@@ -149,9 +148,11 @@ local function SwingpipeThink(ply, mv, cmd)
 
 	if ply:GetSBDir() then
 		ply:SetSBOffset(math.max(ply:GetSBOffset() - 250 * FrameTime() * math.min(startlerp + 0.5 - math.min(math.max(math.abs(ply:GetSBOffset()) - 65, 0) / 30, 0.6), 1.15), -90))
+
 		origin:Add(mv:GetAngles():Right() * 17 * startlerp)
 	else
 		ply:SetSBOffset(math.min(ply:GetSBOffset() + 250 * FrameTime() * math.min(startlerp + 0.5 - math.min(math.max(math.abs(ply:GetSBOffset()) - 65, 0) / 30, 0.6), 1.15), 90))
+
 		origin:Sub(mv:GetAngles():Right() * 17 * startlerp)
 	end
 
@@ -176,7 +177,9 @@ local function SwingpipeThink(ply, mv, cmd)
 		ply:SetSwingbarLast(ply:GetSwingpipe())
 		ply:SetSwingpipe(nil)
 		ply:SetSBDelay(CurTime() + 0.5)
+
 		mv:SetVelocity(cmd:GetViewAngles():Forward() * 260 + Vector(0, 0, 150))
+
 		ParkourEvent("jumpfar", ply)
 	end
 end

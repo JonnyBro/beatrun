@@ -5,57 +5,20 @@ function CLIENT_IFTP()
 	return CLIENT and IsFirstTimePredicted()
 end
 
+--[[
 local matrixdatatmp = {
-	{
-		0,
-		0,
-		0,
-		0
-	},
-	{
-		0,
-		0,
-		0,
-		0
-	},
-	{
-		0,
-		0,
-		0,
-		0
-	},
-	{
-		0,
-		0,
-		0,
-		1
-	}
+	{0, 0, 0, 0},
+	{0, 0, 0, 0},
+	{0, 0, 0, 0},
+	{0, 0, 0, 1}
 }
+]]
+
 local mtmp = {
-	{
-		0,
-		0,
-		0,
-		0
-	},
-	{
-		0,
-		0,
-		0,
-		0
-	},
-	{
-		0,
-		0,
-		0,
-		0
-	},
-	{
-		0,
-		0,
-		0,
-		1
-	}
+	{0, 0, 0, 0},
+	{0, 0, 0, 0},
+	{0, 0, 0, 0},
+	{0, 0, 0, 1}
 }
 
 function vmatrixmeta:FastToTable(tbl)
@@ -115,12 +78,6 @@ function playermeta:SetWallrunData(wr, wrtime, dir)
 end
 
 function playermeta:UsingRH(wep)
-	local usingrh = false
 	local activewep = wep or self:GetActiveWeapon()
-
-	if IsValid(activewep) then
-		usingrh = activewep:GetClass() == "runnerhands"
-	end
-
-	return usingrh
+	if IsValid(activewep) then return activewep:GetClass() == "runnerhands" end
 end

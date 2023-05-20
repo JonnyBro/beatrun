@@ -1,13 +1,11 @@
 if SERVER and game.SinglePlayer() then
 	util.AddNetworkString("Zipline_SPFix")
 elseif CLIENT and game.SinglePlayer() then
-	net.Receive("Zipline_SPFix", function ()
+	net.Receive("Zipline_SPFix", function()
 		local ply = LocalPlayer()
 		local zipline = ply:GetZipline()
 
-		if not IsValid(zipline) then
-			return
-		end
+		if not IsValid(zipline) then return end
 
 		local startpos = zipline:GetStartPos()
 		local endpos = zipline:GetEndPos()
@@ -30,12 +28,13 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 		local startp = startpos
 		startpos = endpos
 		endpos = startp
+
 		ply.ZiplineTwoWay = true
 	else
 		ply.ZiplineTwoWay = false
 	end
 
-	local dist, near = util.DistanceToLine(startpos, endpos, mv:GetOrigin())
+	local _, near = util.DistanceToLine(startpos, endpos, mv:GetOrigin())
 	local neardist = near:Distance(endpos)
 	local totaldist = startpos:Distance(endpos)
 	local start = math.abs(neardist / totaldist - 1)
@@ -45,6 +44,7 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 		local trout = ply.ZiplineTraceOut
 		local omins = tr.mins
 		local omaxs = tr.maxs
+
 		tr.start = LerpVector(start, startpos, endpos)
 		tr.endpos = tr.start
 		tr.mins, tr.maxs = ply:GetHull()
@@ -59,12 +59,10 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 				start = start + 25 / div
 				tr.start = LerpVector(start, startpos, endpos)
 				tr.endpos = tr.start
-
 				util.TraceHull(tr)
 
 				if not trout.Hit or trout.Entity == zipline and start < 1 then
 					fail = false
-
 					break
 				end
 			end
@@ -81,6 +79,7 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 
 		tr.maxs = omaxs
 		tr.mins = omins
+
 		local origin = mv:GetOrigin()
 
 		if CLIENT then
@@ -106,11 +105,11 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 		ply:SetCrouchJumpBlocked(false)
 
 		if CLIENT_IFTP() then
-			local zipline = ply:GetZipline()
+			-- local zipline = ply:GetZipline()
 			ply.OrigEyeAng = (endpos - startpos):Angle()
 		elseif game.SinglePlayer() then
 			net.Start("Zipline_SPFix")
-			net.WriteBool(ply.ZiplineTwoWay)
+				net.WriteBool(ply.ZiplineTwoWay)
 			net.Send(ply)
 		end
 
@@ -123,7 +122,7 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 	end
 end
 
-local zipvec = Vector(0, 0, 85)
+-- local zipvec = Vector(0, 0, 85)
 
 local function ZiplineThink(ply, mv, cmd, zipline)
 	local fraction = ply:GetZiplineFraction()
@@ -144,8 +143,10 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 		ply:SetZipline(nil)
 		ply:SetMoveType(MOVETYPE_WALK)
 		ply:SetCrouchJumpBlocked(true)
+
 		mv:SetVelocity(dir * speed * 0.75)
 		mv:SetButtons(0)
+
 		ply:SetZiplineDelay(CurTime() + 0.75)
 
 		if CLIENT_IFTP() or game.SinglePlayer() then
@@ -167,13 +168,13 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 	ply:SetZiplineFraction(newfraction)
 
 	local ziplerp = LerpVector(newfraction, startpos, endpos)
-
 	ziplerp:Sub(zipline:GetUp() * 75)
 
 	local tr = ply.ZiplineTrace
 	local trout = ply.ZiplineTraceOut
 	local omins = tr.mins
 	local omaxs = tr.maxs
+
 	tr.start = ziplerp
 	tr.endpos = ziplerp
 	tr.mins, tr.maxs = ply:GetHull()
@@ -183,7 +184,9 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 	if trout.Hit and trout.Entity ~= zipline and newfraction > 0.1 then
 		ply:SetZipline(nil)
 		ply:SetMoveType(MOVETYPE_WALK)
+
 		mv:SetVelocity(dir * speed * 0.75)
+
 		ply:SetZiplineDelay(CurTime() + 0.75)
 
 		if CLIENT_IFTP() or game.SinglePlayer() then
@@ -207,7 +210,9 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 	tr.mins = omins
 
 	mv:SetOrigin(ziplerp)
+
 	ply:SetZiplineSpeed(math.Approach(speed, 750, FrameTime() * 250))
+
 	mv:SetVelocity(dir * speed)
 	mv:SetButtons(0)
 	mv:SetForwardSpeed(0)
@@ -219,16 +224,17 @@ local function Zipline(ply, mv, cmd)
 	if not ply.ZiplineTrace then
 		ply.ZiplineTrace = {}
 		ply.ZiplineTraceOut = {}
+
 		local tr = ply.ZiplineTrace
 		local mins, maxs = ply:GetHull()
+
 		mins.z = maxs.z * 0.8
 		maxs.z = maxs.z * 2
-
 		mins:Mul(2)
 		maxs:Mul(2)
-
 		mins.z = mins.z * 0.5
 		maxs.z = maxs.z * 0.5
+
 		tr.maxs = maxs
 		tr.mins = mins
 		ply.ZiplineTrace.mask = MASK_PLAYERSOLID
@@ -238,13 +244,13 @@ local function Zipline(ply, mv, cmd)
 	if not IsValid(ply:GetZipline()) and not ply:GetGrappling() and (not ply:Crouching() or ply:GetDive()) and not ply:OnGround() and ply:GetZiplineDelay() < CurTime() then
 		local tr = ply.ZiplineTrace
 		local trout = ply.ZiplineTraceOut
+
 		tr.output = trout
 		tr.start = mv:GetOrigin()
 		tr.endpos = tr.start
 		tr.filter = ply
 
 		util.TraceHull(tr)
-
 		local trentity = trout.Entity
 
 		if IsValid(trentity) and trentity:GetClass() == "br_zipline" and ply:GetMoveType() == MOVETYPE_WALK then

@@ -1,7 +1,7 @@
 if SERVER and game.SinglePlayer() then
 	util.AddNetworkString("Ladder_SPFix")
 elseif CLIENT and game.SinglePlayer() then
-	net.Receive("Ladder_SPFix", function ()
+	net.Receive("Ladder_SPFix", function()
 		local ply = LocalPlayer()
 		local ang = ply:EyeAngles()
 		ang.y = ply:GetLadder():GetAngles().y - 180
@@ -17,16 +17,16 @@ end
 local function LadderCheck(ply, mv, cmd, ladder)
 	local ladderang = ladder:GetAngles()
 
-	if math.abs(math.AngleDifference(cmd:GetViewAngles().y, ladderang.y - 180)) > 30 then
-		return false
-	end
+	if math.abs(math.AngleDifference(cmd:GetViewAngles().y, ladderang.y - 180)) > 30 then return false end
 
 	local zlevel = mv:GetOrigin().z
 	local newpos = ladder:GetPos() + ladderang:Forward() * 19
 	newpos.z = zlevel
+
 	ladderang.z = 0
 	ladderang.x = 0
 	ladderang.y = ladderang.y - 180
+
 	local origin = mv:GetOrigin()
 
 	if CLIENT then
@@ -56,13 +56,15 @@ local function LadderCheck(ply, mv, cmd, ladder)
 	local event = ply:OnGround() and "ladderenter" or "ladderenterhang"
 
 	ParkourEvent(event, ply)
+
 	ply:SetLadderStartPos(mv:GetOrigin())
 	ply:SetLadderEndPos(newpos)
+
 	mv:SetOrigin(newpos)
+
 	ply:SetLadderEntering(true)
 	ply:SetLadderHand(true)
 	ply:SetMoveType(MOVETYPE_NOCLIP)
-
 	ply.LadderEnd = false
 	ply.LadderHardStart = not ply:OnGround()
 
@@ -78,6 +80,7 @@ end
 local function LadderThink(ply, mv, cmd, ladder)
 	mv:SetForwardSpeed(0)
 	mv:SetSideSpeed(0)
+
 	cmd:ClearMovement()
 
 	if ply:GetLadderEntering() then
@@ -152,6 +155,7 @@ local function LadderThink(ply, mv, cmd, ladder)
 	if ladder:GetLadderHeight() <= ply:GetLadderHeight() and not ply.LadderEnd then
 		if not ply.LadderTrace then
 			ply.LadderTraceOut = {}
+
 			ply.LadderTrace = {
 				mask = MASK_SHOT_HULL,
 				collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT,
@@ -163,6 +167,7 @@ local function LadderThink(ply, mv, cmd, ladder)
 
 		local tr = ply.LadderTrace
 		local trout = ply.LadderTraceOut
+
 		ply.LadderTrace.start = mv:GetOrigin() + Vector(0, 0, 100) + ladder:GetAngles():Forward() * -35
 		ply.LadderTrace.endpos = ply.LadderTrace.start - Vector(0, 0, 150)
 		ply.LadderTrace.filter = ply
@@ -174,8 +179,8 @@ local function LadderThink(ply, mv, cmd, ladder)
 			ply:SetLadderLerp(0)
 			ply:SetLadderStartPos(mv:GetOrigin())
 			ply:SetLadderEndPos(trout.HitPos)
-
 			ply.LadderEnd = true
+
 			local event = ply:GetLadderHand() and "ladderexittoplefthand" or "ladderexittoprighthand"
 
 			ParkourEvent(event, ply)
@@ -261,18 +266,18 @@ function CreateLadder(pos, angy, mul)
 		ladderang[2] = angy
 
 		if not mul then
-			local ledgedetect = nil
+			-- local ledgedetect = nil
 			maxheight = util.QuickTrace(pos, laddertraceup).HitPos
-
 			maxheight:Sub(ladderang:Forward() * 10)
-
 			maxheight = util.QuickTrace(maxheight, laddertracedown).HitPos.z
+
 			mul = (maxheight - pos.z) / 125 + 0.1
 		end
 
 		local ladder = ents.Create("br_ladder")
 
 		pos:Add(ladderang:Forward() * 10)
+
 		ladder:SetPos(pos)
 		ladder:SetAngles(ladderang)
 		ladder:Spawn()

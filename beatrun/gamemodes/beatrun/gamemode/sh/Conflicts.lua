@@ -1,7 +1,5 @@
 local problematichooks = {
-	SetupMove = {
-		"vmanip_vault"
-	}
+	SetupMove = {"vmanip_vault"}
 }
 
 local function RemoveConflicting()

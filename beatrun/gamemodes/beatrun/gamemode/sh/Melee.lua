@@ -1,7 +1,5 @@
-local kickglitch = CreateConVar("Beatrun_KickGlitch", 1, {
-	FCVAR_REPLICATED,
-	FCVAR_ARCHIVE
-})
+local kickglitch = CreateConVar("Beatrun_KickGlitch", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+
 local tr = {}
 local tr_result = {}
 MELEE_WRRIGHT = 6
@@ -10,66 +8,48 @@ MELEE_DROPKICK = 4
 MELEE_AIRKICK = 3
 MELEE_SLIDEKICK = 2
 MELEE_PUNCH = 1
+
 local meleedata = {
 	{
-		"meleeslide",
-		0.15,
-		1,
-		function (ply, mv, cmd)
+		"meleeslide", 0.15, 1, function(ply, mv, cmd)
 			ply:CLViewPunch(Angle(2, 0, 0))
 		end,
-		angle_zero,
-		20
+		angle_zero, 20
 	},
 	{
-		"meleeslide",
-		0.175,
-		0.6,
-		function (ply, mv, cmd)
+		"meleeslide", 0.175, 0.6, function(ply, mv, cmd)
 			if CLIENT_IFTP() then
 				ply:CLViewPunch(Angle(0.05, 0, -1))
 			elseif game.SinglePlayer() then
 				ply:ViewPunch(Angle(0.1, 0, -1.5))
 			end
 		end,
-		Angle(-4, 0, 0),
-		50,
-		true
+		Angle(-4, 0, 0), 50, true
 	},
 	{
-		"meleeairstill",
-		0.1,
-		1,
-		function (ply, mv, cmd)
+		"meleeairstill", 0.1, 1, function(ply, mv, cmd)
 			if CLIENT_IFTP() then
 				ply:CLViewPunch(Angle(0.5, 0, -0.1))
 			elseif game.SinglePlayer() then
 				ply:ViewPunch(Angle(1, 0, -0.25))
 			end
 		end,
-		Angle(-15, 0, -5),
-		50
+		Angle(-15, 0, -5), 50
 	},
 	{
-		"meleeair",
-		0.15,
-		1,
-		function (ply, mv, cmd)
+		"meleeair", 0.15, 1, function(ply, mv, cmd)
 			if CLIENT_IFTP() then
 				ply:CLViewPunch(Angle(0.05, 0, -1))
 			elseif game.SinglePlayer() then
 				ply:ViewPunch(Angle(0.1, 0, -1.5))
 			end
 		end,
-		Angle(-5, 0, -2.5),
-		50
+		Angle(-5, 0, -2.5), 50
 	}
 }
+
 meleedata[5] = {
-	"meleewrleft",
-	0.2,
-	0.75,
-	function (ply, mv, cmd)
+	"meleewrleft", 0.2, 0.75, function(ply, mv, cmd)
 		if CLIENT_IFTP() then
 			ply:CLViewPunch(Angle(0.075, 0, 1))
 		elseif game.SinglePlayer() then
@@ -90,14 +70,11 @@ meleedata[5] = {
 			ply:SetEyeAngles(ang)
 		end
 	end,
-	Angle(-5, 0, 2.5),
-	80
+	Angle(-5, 0, 2.5), 80
 }
+
 meleedata[6] = {
-	"meleewrright",
-	0.2,
-	0.75,
-	function (ply, mv, cmd)
+	"meleewrright", 0.2, 0.75, function(ply, mv, cmd)
 		if CLIENT_IFTP() then
 			ply:CLViewPunch(Angle(0.075, 0, -1))
 		elseif game.SinglePlayer() then
@@ -118,9 +95,9 @@ meleedata[6] = {
 			ply:SetEyeAngles(ang)
 		end
 	end,
-	Angle(-5, 0, -2.5),
-	80
+	Angle(-5, 0, -2.5), 80
 }
+
 local doors = {
 	prop_door_rotating = true,
 	func_door_rotating = true
@@ -131,14 +108,10 @@ local function KeyMelee(ply, mv)
 end
 
 local function MeleeType(ply, mv, cmd)
-	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder()) then
-		return 0
-	end
+	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder()) then return 0 end
 
 	if ply:GetWallrun() ~= 0 then
-		if ply:GetWallrun() == 1 then
-			return ply:GetMelee()
-		end
+		if ply:GetWallrun() == 1 then return ply:GetMelee() end
 
 		ply:SetMelee(ply:GetWallrun() == 3 and MELEE_WRLEFT or MELEE_WRRIGHT)
 	elseif not ply:OnGround() then
@@ -156,17 +129,15 @@ end
 local function MeleeCheck(ply, mv, cmd)
 	local melee = MeleeType(ply, mv, cmd)
 
-	if melee == 0 then
-		return
-	end
+	if melee == 0 then return end
 
 	ParkourEvent(meleedata[melee][1], ply)
+
 	ply:SetMeleeTime(CurTime() + meleedata[melee][2])
 	ply:SetMeleeDelay(CurTime() + meleedata[melee][3])
 
 	ply.MeleeDir = mv:GetVelocity()
 	ply.MeleeDir.z = 0
-
 	ply.MeleeDir:Normalize()
 
 	if ply.MeleeDir:Length() < 1 then
@@ -193,13 +164,15 @@ local function MeleeThink(ply, mv, cmd)
 
 		ply:LagCompensation(true)
 		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
+
 		util.TraceHull(tr)
+
 		ply:LagCompensation(false)
 
 		if ply:GetMelee() >= 5 then
 			local vel = mv:GetVelocity()
-
 			vel:Add(ply:GetWallrunDir() * 0.5 * vel:Length())
+
 			mv:SetVelocity(vel)
 		end
 
@@ -216,20 +189,20 @@ local function MeleeThink(ply, mv, cmd)
 
 			if SERVER and IsValid(ent) and (not ent:IsPlayer() or Course_Name == "" and not GetGlobalBool(GM_INFECTION) and GetConVar("sbox_playershurtplayers"):GetBool()) then
 				local d = DamageInfo()
-
 				d:SetDamage(meleedata[ply:GetMelee()][6])
 				d:SetAttacker(ply)
 				d:SetInflictor(ply)
 				d:SetDamageType(DMG_CLUB)
 				d:SetDamagePosition(tr.start)
 				d:SetDamageForce(ply:EyeAngles():Forward() * 7000)
+
 				ent:TakeDamageInfo(d)
 
 				if SERVER and ent:GetClass() == "func_breakable_surf" then
 					ent:Input("Shatter", nil, nil, Vector(0, 0, 250))
-					timer.Simple(0, function ()
-						local BLEH = ents.Create("prop_physics")
 
+					timer.Simple(0, function()
+						local BLEH = ents.Create("prop_physics")
 						BLEH:SetPos(tr_result.HitPos)
 						BLEH:SetAngles(Angle(0, 0, 0))
 						BLEH:SetModel("models/props_junk/wood_crate001a.mdl")
@@ -237,7 +210,8 @@ local function MeleeThink(ply, mv, cmd)
 						BLEH:SetCollisionGroup(COLLISION_GROUP_WORLD)
 						BLEH:Spawn()
 						BLEH:Activate()
-						timer.Simple(0.01, function ()
+
+						timer.Simple(0.01, function()
 							if BLEH and IsValid(BLEH) then
 								BLEH:Remove()
 							end
@@ -250,9 +224,7 @@ local function MeleeThink(ply, mv, cmd)
 				end
 
 				if doors[ent:GetClass()] then
-					if ent:GetInternalVariable("m_bLocked") then
-						return
-					end
+					if ent:GetInternalVariable("m_bLocked") then return end
 
 					local speed = ent:GetInternalVariable("speed")
 
@@ -263,17 +235,17 @@ local function MeleeThink(ply, mv, cmd)
 
 					ent:SetSaveValue("speed", ent.oldspeed * 4)
 					ent:Use(ply)
-
 					ent.bashdelay = CurTime() + 1
-
 					ent:SetCycle(1)
 					ent:Fire("Lock")
-					timer.Simple(1, function ()
+
+					timer.Simple(1, function()
 						if IsValid(ent) then
 							ent:SetSaveValue("speed", ent.oldspeed)
 							ent:Fire("Unlock")
 						end
 					end)
+
 					ent:EmitSound("Door.Barge")
 
 					return false
@@ -289,7 +261,7 @@ local function MeleeThink(ply, mv, cmd)
 	end
 end
 
-hook.Add("SetupMove", "Melee", function (ply, mv, cmd)
+hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 	if not ply:Alive() then
 		ply:SetMeleeTime(0)
 		ply:SetMelee(0)
@@ -300,12 +272,10 @@ hook.Add("SetupMove", "Melee", function (ply, mv, cmd)
 	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 then
 		if kickglitch:GetBool() and ply:GetMelee() >= 5 and mv:KeyDown(IN_JUMP) and not ply:OnGround() then
 			local vel = mv:GetVelocity()
-
 			vel:Mul(1.25)
-
 			vel.z = 300
-
 			mv:SetVelocity(vel)
+
 			ParkourEvent("jumpslow", ply)
 		end
 

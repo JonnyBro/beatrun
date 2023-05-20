@@ -6,8 +6,10 @@ local function SwingbarCheck(ply, mv, cmd)
 	mins.x = mins.x * 1.5
 	maxs.y = maxs.y * 1.5
 	mins.y = mins.y * 1.5
+
 	local tr = ply.Monkey_tr
 	local trout = ply.Monkey_trout
+
 	tr.start = mv:GetOrigin()
 	tr.endpos = tr.start
 	tr.maxs = maxs
@@ -22,9 +24,7 @@ local function SwingbarCheck(ply, mv, cmd)
 		local dot = cmd:GetViewAngles():Forward():Dot(swingbar:GetAngles():Forward())
 		local dir = dot > 0 and true or false
 
-		if math.abs(dot) < 0.7 then
-			return
-		end
+		if math.abs(dot) < 0.7 then return end
 
 		if CLIENT then
 			swingbar:SetPredictable(true)
@@ -39,7 +39,9 @@ local function SwingbarCheck(ply, mv, cmd)
 		ply:SetSBPeak(0)
 		ply:SetDive(false)
 		ply:SetCrouchJump(false)
+
 		ParkourEvent("swingbar", ply)
+
 		mv:SetVelocity(vector_origin)
 
 		if mv:KeyDown(IN_FORWARD) or mv:GetVelocity():Length() > 150 then
@@ -55,7 +57,7 @@ local function SwingbarCheck(ply, mv, cmd)
 end
 
 local radius = 30
-local red = Color(255, 0, 0, 200)
+-- local red = Color(255, 0, 0, 200)
 local circlepos = Vector()
 local axis = Vector(0, 0, 1)
 local dummyvec = Vector(1000, 1000, 1000)
@@ -95,6 +97,7 @@ local function SwingbarThink(ply, mv, cmd)
 	circlepos:Rotate(ang)
 
 	pos = pos + circlepos
+
 	local origin = startlerp < 1 and LerpVector(startlerp, mv:GetOrigin(), pos) or pos
 
 	ply:SetSBStartLerp(math.min(startlerp + 10 * FrameTime(), 1))
@@ -122,7 +125,6 @@ local function SwingbarThink(ply, mv, cmd)
 		ply:SetSBOffsetSpeed(math.Approach(math.min(ply:GetSBOffsetSpeed(), 0), -1, math.abs(ply:GetSBOffset() / 100 - 1) * 5 * FrameTime()))
 	else
 		local a = (ply:GetSBOffset() - 50) / 50
-
 		ply:SetSBOffsetSpeed(math.Approach(ply:GetSBOffsetSpeed(), 0, a * 5 * FrameTime()))
 	end
 
@@ -143,6 +145,7 @@ local function SwingbarThink(ply, mv, cmd)
 
 		local ang = cmd:GetViewAngles()
 		ang.x = 0
+
 		local vel = ang:Forward() * 125 * ply:GetSBOffsetSpeed()
 		vel.z = ply:GetSBOffset() * 2
 
@@ -150,7 +153,9 @@ local function SwingbarThink(ply, mv, cmd)
 		ply:SetSwingbarLast(ply:GetSwingbar())
 		ply:SetSwingbar(nil)
 		ply:SetWallrunDir(dummyvec)
+
 		mv:SetVelocity(vel)
+
 		ply:SetSBDelay(CurTime() + 1)
 
 		if CLIENT_IFTP() or game.SinglePlayer() then

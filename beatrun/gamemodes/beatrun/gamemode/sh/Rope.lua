@@ -1,7 +1,7 @@
 local yaw = 0
 local pitch = 0
 
-hook.Add("CreateMove", "Rope", function (cmd)
+hook.Add("CreateMove", "Rope", function(cmd)
 	local ply = LocalPlayer()
 	local vtl = viewtiltlerp
 
@@ -15,16 +15,22 @@ hook.Add("CreateMove", "Rope", function (cmd)
 
 	local ang = LocalPlayer():EyeAngles()
 	ang.x = 0
+
 	local grapplepos = LocalPlayer():GetGrapplePos()
 	local vel = LocalPlayer():GetVelocity()
 	vel.z = 0
+
 	velf = vel:Dot(ang:Forward()) * 80
 	velr = vel:Dot(ang:Right()) * 80
+
 	grapplepos.z = 0
+
 	local mul = (grapplepos - LocalPlayer():EyePos()):Dot(ang:Forward()) > 0 and 1 or -1
 	grapplepos = vel * mul
+
 	local y = math.Clamp(-grapplepos:Dot(ang:Forward()), -90, 90)
 	local p = math.Clamp(-grapplepos:Dot(ang:Right()), -90, 90)
+
 	pitch = Lerp(FrameTime() * 1.5, pitch, p)
 	yaw = Lerp(FrameTime() * 1.5, yaw, y)
 

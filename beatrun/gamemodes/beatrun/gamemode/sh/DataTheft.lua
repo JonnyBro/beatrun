@@ -1,9 +1,7 @@
 GM_DATATHEFT = 1
+
 DATATHEFT_LOADOUTS = {
-	{
-		"weapon_ss2_colt",
-		"weapon_ss2_circularsaw"
-	}
+	{"weapon_ss2_colt", "weapon_ss2_circularsaw"}
 }
 
 if SERVER then
@@ -12,6 +10,7 @@ if SERVER then
 
 	function Beatrun_StartDataTheft()
 		SetGlobalBool(GM_DATATHEFT, true)
+
 		net.Start("DataTheft_Start")
 		net.Broadcast()
 
@@ -28,7 +27,6 @@ if SERVER then
 			else
 				for l, b in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
 					local wep = v:Give(b)
-
 					v:GiveAmmo(300, wep:GetPrimaryAmmoType())
 				end
 			end
@@ -42,8 +40,8 @@ if SERVER then
 	local function DataTheftSync(ply)
 		if GetGlobalBool(GM_DATATHEFT) and not ply.DataTheftSynced then
 			net.Start("Infection_Sync")
-			net.WriteFloat(Infection_StartTime)
-			net.WriteFloat(Infection_EndTime)
+				net.WriteFloat(Infection_StartTime)
+				net.WriteFloat(Infection_EndTime)
 			net.Send(ply)
 
 			ply.DataTheftSynced = true
@@ -91,13 +89,13 @@ if CLIENT then
 		end
 	end
 
-	net.Receive("DataTheft_Sync", function ()
+	net.Receive("DataTheft_Sync", function()
 		hook.Add("BeatrunHUDCourse", "DataTheftHUDName", DataTheftHUDName)
 	end)
 
 	local chatcolor = Color(200, 200, 200)
 
-	net.Receive("DataTheft_Start", function ()
+	net.Receive("DataTheft_Start", function()
 		hook.Add("BeatrunHUDCourse", "DataTheftHUDName", DataTheftHUDName)
 		chat.AddText(chatcolor, "Data Theft! Kill players to collect data, deposit data in banks")
 	end)

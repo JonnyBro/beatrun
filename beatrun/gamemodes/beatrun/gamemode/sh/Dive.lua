@@ -1,35 +1,30 @@
-local totsugeki = CreateConVar("Beatrun_Totsugeki", 1, {
-	FCVAR_REPLICATED,
-	FCVAR_ARCHIVE
-}, "Oh no...", 0, 1)
-local totsugekispam = CreateConVar("Beatrun_TotsugekiSpam", 0, {
-	FCVAR_REPLICATED,
-	FCVAR_ARCHIVE
-}, "OH NO...", 0, 1)
-local totsugekiheading = CreateConVar("Beatrun_TotsugekiHeading", 0, {
-	FCVAR_REPLICATED,
-	FCVAR_ARCHIVE
-}, "Can we dive on the x axis?", 0, 1)
-local totsugekidir = CreateConVar("Beatrun_TotsugekiDir", 0, {
-	FCVAR_REPLICATED,
-	FCVAR_ARCHIVE
-}, "Can we dive into another dir?", 0, 1)
+local totsugeki = CreateConVar("Beatrun_Totsugeki", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Oh no...", 0, 1)
+local totsugekispam = CreateConVar("Beatrun_TotsugekiSpam", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "OH NO...", 0, 1)
+local totsugekiheading = CreateConVar("Beatrun_TotsugekiHeading", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Can we dive on the x axis?", 0, 1)
+local totsugekidir = CreateConVar("Beatrun_TotsugekiDir", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Can we dive into another dir?", 0, 1)
 
 local function Dive(ply, mv, cmd)
 	if (not ply:GetDive() or ply:GetDive() and ply.QuakeJumping and totsugeki:GetBool() and totsugekispam:GetBool()) and ply:GetCrouchJump() and mv:KeyPressed(IN_ATTACK2) then
 		local vel = mv:GetVelocity()
 		local vel2 = Vector(vel)
 		vel2.z = 0
+
 		local vel2len = vel2:Length()
 		local ang = cmd:GetViewAngles()
 		ang.x = 0
+
 		local velmul = 15 / (math.max(vel2len - 100, 40) * 0.003)
 
 		vel:Add(ang:Forward() * velmul)
 		vel:Add(Vector(0, 0, 70))
+
 		mv:SetVelocity(vel)
+
 		ply:SetCrouchJumpTime(CurTime() + 1.65)
 		ply:SetDive(true)
+
+		ply:ViewPunch(Angle(-6,0,0))
+
 		ParkourEvent("divestart", ply)
 
 		if ply:UsingRH() and ply:GetActiveWeapon():GetQuakeJumping() and totsugeki:GetBool() then
@@ -40,12 +35,14 @@ local function Dive(ply, mv, cmd)
 				local effectdata = EffectData()
 
 				effectdata:SetOrigin(vPoint)
+
 				util.Effect("WaterSurfaceExplosion", effectdata)
 			elseif CLIENT_IFTP() then
 				local vPoint = mv:GetOrigin()
 				local effectdata = EffectData()
 
 				effectdata:SetOrigin(vPoint)
+
 				util.Effect("WaterSurfaceExplosion", effectdata)
 			end
 
@@ -73,7 +70,6 @@ local function Dive(ply, mv, cmd)
 		if ply:GetMoveType() == MOVETYPE_NOCLIP or ply:WaterLevel() >= 3 or not ply:Alive() then
 			ply:SetDive(false)
 			ply:SetCrouchJump(false)
-
 			ply.DiveSliding = false
 
 			ParkourEvent("diveslideend", ply)
@@ -89,7 +85,6 @@ local function Dive(ply, mv, cmd)
 
 		if ply:OnGround() and ply:GetSafetyRollKeyTime() <= CurTime() then
 			ply.DiveSliding = true
-
 			ply:SetDive(false)
 		elseif ply:OnGround() and mv:KeyDown(IN_BULLRUSH) then
 			mv:SetButtons(0)

@@ -9,11 +9,13 @@ local function SafetyRollThink(ply, mv, cmd)
 
 	if speed <= -350 and not ply:OnGround() and not ply:GetWasOnGround() and (mv:KeyPressed(IN_SPEED) or mv:KeyPressed(IN_DUCK) or mv:KeyPressed(IN_BULLRUSH)) then
 		ply:SetSafetyRollKeyTime(CurTime() + 0.5)
+
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
 	end
 
 	if CurTime() < ply:GetSafetyRollTime() then
 		ply.FootstepLand = false
+
 		local ang = ply:GetSafetyRollAng()
 
 		mv:SetSideSpeed(0)
@@ -25,6 +27,7 @@ local function SafetyRollThink(ply, mv, cmd)
 			vel.y = 0
 
 			mv:SetVelocity(ply:GetSafetyRollAng():Forward() * 200 + vel)
+
 			ply:SetMEMoveLimit(400)
 		else
 			mv:SetVelocity(vector_origin)
@@ -45,7 +48,7 @@ local roll = {
 	AnimString = "rollanim"
 }
 
-net.Receive("RollAnimSP", function ()
+net.Receive("RollAnimSP", function()
 	if net.ReadBool() then
 		roll.AnimString = "land"
 		roll.animmodelstring = "mirroranim"
@@ -64,7 +67,8 @@ net.Receive("RollAnimSP", function ()
 	RemoveBodyAnim()
 	StartBodyAnim(roll)
 end)
-hook.Add("SetupMove", "EvadeRoll", function (ply, mv, cmd)
+
+hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
 		local ang = cmd:GetViewAngles()
 
@@ -96,18 +100,20 @@ hook.Add("SetupMove", "EvadeRoll", function (ply, mv, cmd)
 			StartBodyAnim(roll)
 		elseif game.SinglePlayer() then
 			net.Start("RollAnimSP")
-			net.WriteBool(false)
-			net.WriteBool(true)
+				net.WriteBool(false)
+				net.WriteBool(true)
 			net.Send(ply)
 		end
 	end
 end)
-hook.Add("OnPlayerHitGround", "SafetyRoll", function (ply, water, floater, speed)
+
+hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 	local tr = {
 		filter = ply,
 		start = ply:GetPos()
 	}
 	tr.endpos = tr.start - Vector(0, 0, 150)
+
 	local out = util.TraceLine(tr)
 	local normal = out.HitNormal
 	local sang = normal:Angle()
@@ -115,6 +121,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function (ply, water, floater, speed
 	if sang.x <= 314 and not ply:InOverdrive() and (speed >= 350 or ply:GetDive()) and speed < 800 and (CurTime() < ply:GetSafetyRollKeyTime() and not ply:GetDive() or ply:GetDive() and not ply:KeyDown(IN_DUCK)) and not ply:GetJumpTurn() and (not ply:Crouching() or ply:GetDive()) then
 		ply:SetCrouchJump(false)
 		ply:SetDive(false)
+
 		ParkourEvent("roll", ply)
 
 		local ang = ply:EyeAngles()
@@ -157,8 +164,8 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function (ply, water, floater, speed
 			StartBodyAnim(roll)
 		elseif game.SinglePlayer() then
 			net.Start("RollAnimSP")
-			net.WriteBool(land)
-			net.WriteBool(false)
+				net.WriteBool(land)
+				net.WriteBool(false)
 			net.Send(ply)
 		end
 	end
@@ -169,7 +176,7 @@ if SERVER then
 		br_mat = true
 	}
 
-	hook.Add("GetFallDamage", "SafetyRoll", function (ply, speed)
+	hook.Add("GetFallDamage", "SafetyRoll", function(ply, speed)
 		local groundent = ply:GetGroundEntity()
 
 		if IsValid(groundent) and safelandents[groundent:GetClass()] then

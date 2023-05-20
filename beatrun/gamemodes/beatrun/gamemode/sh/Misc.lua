@@ -3,37 +3,20 @@ if SERVER then
 
 	util.AddNetworkString("SPParkourEvent")
 
-	local spawn = {
-		"PlayerGiveSWEP",
-		"PlayerSpawnEffect",
-		"PlayerSpawnNPC",
-		"PlayerSpawnObject",
-		"PlayerSpawnProp",
-		"PlayerSpawnRagdoll",
-		"PlayerSpawnSENT",
-		"PlayerSpawnSWEP",
-		"PlayerSpawnVehicle"
-	}
+	local spawn = {"PlayerGiveSWEP", "PlayerSpawnEffect", "PlayerSpawnNPC", "PlayerSpawnObject", "PlayerSpawnProp", "PlayerSpawnRagdoll", "PlayerSpawnSENT", "PlayerSpawnSWEP", "PlayerSpawnVehicle"}
 
 	local function BlockSpawn(ply)
-		if not ply:IsSuperAdmin() then
-			return false
-		end
+		if not ply:IsSuperAdmin() then return false end
 	end
 
 	for k, v in ipairs(spawn) do
 		hook.Add(v, "BlockSpawn", BlockSpawn)
 	end
 
-	hook.Add("IsSpawnpointSuitable", "NoSpawnFrag", function (ply)
-		return true
-	end)
-	hook.Add("AllowPlayerPickup", "AllowAdminsPickUp", function (ply, ent)
-		local sa = ply:IsSuperAdmin()
+	hook.Add("IsSpawnpointSuitable", "NoSpawnFrag", function(ply) return true end)
 
-		if not sa then
-			return false
-		end
+	hook.Add("AllowPlayerPickup", "AllowAdminsPickUp", function(ply, ent)
+		if not ply:IsSuperAdmin() then return false end
 	end)
 
 	function meta:GTAB(minutes)
@@ -43,7 +26,7 @@ if SERVER then
 			v:EmitSound("gtab.mp3", 0, 100, 1)
 		end
 
-		timer.Simple(7.5, function ()
+		timer.Simple(7.5, function()
 			if IsValid(self) and self:SteamID64() == ID then
 				self:Ban(minutes, "GTAB")
 
@@ -60,20 +43,18 @@ if CLIENT then
 	CreateClientConVar("Beatrun_CPSave", 1, true, true, "Respawning during a course will go back to the last hit checkpoint", 0, 1)
 end
 
-hook.Add("PlayerNoClip", "BlockNoClip", function (ply, enabled)
+hook.Add("PlayerNoClip", "BlockNoClip", function(ply, enabled)
 	if enabled and Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 then
 		ply:SetNW2Int("CPNum", -1)
 
 		if CLIENT_IFTP() then
 			notification.AddLegacy("Noclip Enabled: Respawn to run the course", NOTIFY_ERROR, 2)
 		elseif SERVER and game.SinglePlayer() then
-			ply:SendLua("notification.AddLegacy( \"Noclip Enabled: Respawn to run the course\", NOTIFY_ERROR, 2 )")
+			ply:SendLua("notification.AddLegacy(\"Noclip Enabled: Respawn to run the course\", NOTIFY_ERROR, 2)")
 		end
 	end
 
-	if enabled and (GetGlobalBool(GM_INFECTION) or GetGlobalBool(GM_DATATHEFT)) then
-		return false
-	end
+	if enabled and (GetGlobalBool(GM_INFECTION) or GetGlobalBool(GM_DATATHEFT)) then return false end
 end)
 
 function ParkourEvent(event, ply, ignorepred)
@@ -82,13 +63,13 @@ function ParkourEvent(event, ply, ignorepred)
 
 		if game.SinglePlayer() and SERVER then
 			net.Start("SPParkourEvent")
-			net.WriteString(event)
+				net.WriteString(event)
 			net.Broadcast()
 		end
 	end
 end
 
-hook.Add("SetupMove", "JumpDetect", function (ply, mv, cmd)
+hook.Add("SetupMove", "JumpDetect", function(ply, mv, cmd)
 	if ply:OnGround() and not ply:GetWasOnGround() and mv:GetVelocity():Length() > 50 and ply:GetMEMoveLimit() < 375 then
 		local vel = mv:GetVelocity()
 		vel.z = 0
@@ -141,19 +122,17 @@ hook.Add("SetupMove", "JumpDetect", function (ply, mv, cmd)
 
 	ply:SetWasOnGround(ply:OnGround())
 end)
-hook.Add("CanProperty", "BlockProperty", function (ply)
-	if not ply:IsSuperAdmin() then
-		return false
-	end
+
+hook.Add("CanProperty", "BlockProperty", function(ply)
+	if not ply:IsSuperAdmin() then return false end
 end)
-hook.Add("CanDrive", "BlockDrive", function (ply)
-	if not ply:IsSuperAdmin() then
-		return false
-	end
+
+hook.Add("CanDrive", "BlockDrive", function(ply)
+	if not ply:IsSuperAdmin() then return false end
 end)
 
 if CLIENT and game.SinglePlayer() then
-	net.Receive("SPParkourEvent", function ()
+	net.Receive("SPParkourEvent", function()
 		local event = net.ReadString()
 
 		hook.Run("OnParkour", event, LocalPlayer())
@@ -161,7 +140,7 @@ if CLIENT and game.SinglePlayer() then
 end
 
 if SERVER then
-	hook.Add("OnEntityCreated", "RemoveMirrors", function (ent)
+	hook.Add("OnEntityCreated", "RemoveMirrors", function(ent)
 		if IsValid(ent) and ent:GetClass() == "func_reflective_glass" then
 			SafeRemoveEntityDelayed(ent, 0.1)
 		end
@@ -172,9 +151,7 @@ if CLIENT then
 	local blur = Material("pp/blurscreen")
 
 	function draw_blur(a, d)
-		if render.GetDXLevel() < 90 then
-			return
-		end
+		if render.GetDXLevel() < 90 then return end
 
 		surface.SetDrawColor(255, 255, 255)
 		surface.SetMaterial(blur)
@@ -189,12 +166,11 @@ if CLIENT then
 
 	local draw_blur = draw_blur
 	local impactblurlerp = 0
-	local lastintensity = 0
+	-- local lastintensity = 0
 
-	hook.Add("HUDPaint", "DrawImpactBlur", function ()
+	hook.Add("HUDPaint", "DrawImpactBlur", function()
 		if impactblurlerp > 0 then
 			impactblurlerp = math.Approach(impactblurlerp, 0, 25 * FrameTime())
-
 			draw_blur(math.min(impactblurlerp, 10), 4)
 		end
 	end)

@@ -349,10 +349,13 @@ end
 
 local tr = {}
 local tr_result = {}
+
+local allow_overdrive = CreateClientConVar("Beatrun_AllowOvedriveInMultiplayer", "0", false, false, "Allow ovedrive on servers")
+
 function SWEP:PrimaryAttack()
 	local ply = self.Owner
 
-	if ply:KeyDown(IN_USE) and game.SinglePlayer() then
+	if ply:KeyDown(IN_USE) and (game.SinglePlayer() or allow_overdrive:GetBool()) then
 		local mult = (ply:InOverdrive() and 1) or 1.25
 		local fovmult = (mult == 1 and 1) or 1.1
 		ply:SetMEMoveLimit(ply:GetMEMoveLimit()*0.75)

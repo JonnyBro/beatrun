@@ -1,11 +1,6 @@
-local quakejump = CreateConVar("Beatrun_QuakeJump", 1, {
-	FCVAR_REPLICATED,
-	FCVAR_ARCHIVE
-})
-local sidestep = CreateConVar("Beatrun_SideStep", 1, {
-	FCVAR_REPLICATED,
-	FCVAR_ARCHIVE
-})
+local quakejump = CreateConVar("Beatrun_QuakeJump", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+
+local sidestep = CreateConVar("Beatrun_SideStep", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 
 local function Hardland(jt)
 	local ply = LocalPlayer()
@@ -34,12 +29,12 @@ if game.SinglePlayer() and SERVER then
 end
 
 if game.SinglePlayer() and CLIENT then
-	net.Receive("Beatrun_HardLand", function ()
+	net.Receive("Beatrun_HardLand", function()
 		Hardland(net.ReadBool())
 	end)
 end
 
-hook.Add("PlayerStepSoundTime", "MEStepTime", function (ply, step, walking)
+hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 	local activewep = ply:GetActiveWeapon()
 	local sprint = ply:GetMEMoveLimit() < 300
 	local stepmod = ply:GetStepRight() and 1 or -1
@@ -51,6 +46,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function (ply, step, walking)
 	end
 
 	stepvel = stepvel - math.abs(ply:GetMEMoveLimit() / 100 - 1) * 0.33
+
 	local stepmod2 = 1
 	local stepmod3 = 1
 
@@ -65,11 +61,13 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function (ply, step, walking)
 	if not ply:Crouching() and not ply:KeyDown(IN_WALK) then
 		if game.SinglePlayer() then
 			local intensity = ply:GetInfoNum("Beatrun_ViewbobIntensity", 20) / 20
+
 			intensity = sprint and intensity * 0.5 or intensity * 0.25
 
 			ply:ViewPunch(Angle(0.45 * stepmod2 * stepvel2, 0, 0.5 * stepmod * stepvel * stepmod3) * intensity)
 		elseif CLIENT and IsFirstTimePredicted() then
 			local intensity = ply:GetInfoNum("Beatrun_ViewbobIntensity", 20) / 20
+
 			intensity = sprint and intensity * 0.25 or intensity * 0.1
 
 			ply:CLViewPunch(Angle(0.45 * stepmod2 * stepvel2, 0, 0.5 * stepmod * stepvel * stepmod3) * intensity)
@@ -90,25 +88,20 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function (ply, step, walking)
 
 	return steptime
 end)
-hook.Add("PlayerFootstep", "MEStepSound", function (ply, pos, foot, sound, volume, filter, skipcheck)
+
+hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume, filter, skipcheck)
 	ply:SetStepRight(not ply:GetStepRight())
 
-	if (ply:GetSliding() or CurTime() < ply:GetSafetyRollTime() - 0.5) and not skipcheck then
-		return true
-	end
-
-	if ply:GetMEMoveLimit() < 155 and ply:KeyDown(IN_FORWARD) and not ply.FootstepLand and not IsValid(ply:GetBalanceEntity()) then
-		return true
-	end
+	if (ply:GetSliding() or CurTime() < ply:GetSafetyRollTime() - 0.5) and not skipcheck then return true end
+	if ply:GetMEMoveLimit() < 155 and ply:KeyDown(IN_FORWARD) and not ply.FootstepLand and not IsValid(ply:GetBalanceEntity()) then return true end
 
 	local mat = sound:sub(0, -6)
 	local newsound = FOOTSTEPS_LUT[mat]
 
-	if mat == "player/footsteps/ladder" then
-		return
-	end
+	if mat == "player/footsteps/ladder" then return end
 
 	newsound = newsound or "Concrete"
+
 	ply.LastStepMat = newsound
 
 	if game.SinglePlayer() then
@@ -148,9 +141,11 @@ hook.Add("PlayerFootstep", "MEStepSound", function (ply, pos, foot, sound, volum
 
 	return true
 end)
-hook.Add("OnPlayerHitGround", "MELandSound", function (ply, water, floater, speed)
+
+hook.Add("OnPlayerHitGround", "MELandSound", function(ply, water, floater, speed)
 	local vel = ply:GetVelocity()
 	vel.z = 0
+
 	ply.FootstepLand = true
 	ply.LastLandTime = CurTime()
 
@@ -181,6 +176,7 @@ hook.Add("OnPlayerHitGround", "MELandSound", function (ply, water, floater, spee
 		local eyedir = ply:EyeAngles()
 		eyedir.x = 0
 		eyedir = eyedir:Forward()
+
 		local vel = ply:GetVelocity()
 		vel.z = 0
 
@@ -194,7 +190,7 @@ hook.Add("OnPlayerHitGround", "MELandSound", function (ply, water, floater, spee
 			Hardland(jt)
 		elseif SERVER and game.SinglePlayer() then
 			net.Start("Beatrun_HardLand")
-			net.WriteBool(jt)
+				net.WriteBool(jt)
 			net.Send(ply)
 		end
 	end
@@ -208,11 +204,13 @@ hook.Add("OnPlayerHitGround", "MELandSound", function (ply, water, floater, spee
 			info:SetDamageType(DMG_FALL)
 			info:SetAttacker(game.GetWorld())
 			info:SetInflictor(game.GetWorld())
+
 			ply:TakeDamageInfo(info)
 		end
 	end
 end)
-hook.Add("SetupMove", "MESetupMove", function (ply, mv, cmd)
+
+hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	local activewep = ply:GetActiveWeapon()
 	local usingrh = IsValid(activewep) and activewep:GetClass() == "runnerhands"
 	local ismoving = (mv:KeyDown(IN_FORWARD) or not ply:OnGround() or ply:Crouching()) and not mv:KeyDown(IN_BACK) and ply:Alive() and (mv:GetVelocity():Length() > 50 or ply:GetMantle() ~= 0 or ply:Crouching())
@@ -225,7 +223,6 @@ hook.Add("SetupMove", "MESetupMove", function (ply, mv, cmd)
 		end
 
 		ply:EmitSound("Release." .. newsound)
-
 		ply.FootstepReleaseLand = false
 	end
 
@@ -246,15 +243,18 @@ hook.Add("SetupMove", "MESetupMove", function (ply, mv, cmd)
 	if ply:KeyDown(IN_WALK) then
 		mv:SetForwardSpeed(mv:GetForwardSpeed() * 0.0065)
 		mv:SetSideSpeed(mv:GetSideSpeed() * 0.0065)
+
 		ply:SetMEMoveLimit(150)
 		ply:SetMESprintDelay(0)
 		ply:SetMEAng(0)
+
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
 	end
 
 	local ang = mv:GetAngles()
 	ang[1] = 0
 	ang[3] = 0
+
 	local MEAng = math.Truncate(ang:Forward().x, 2)
 	local MEAngDiff = math.abs((MEAng - ply:GetMEAng()) * 100)
 	local weaponspeed = 150
@@ -282,7 +282,6 @@ hook.Add("SetupMove", "MESetupMove", function (ply, mv, cmd)
 
 	if MEAngDiff > 1.25 and ply:GetWallrun() == 0 then
 		local slow = MEAngDiff * 0.75
-
 		ply:SetMEMoveLimit(math.max(ply:GetMEMoveLimit() - slow, 160))
 	end
 
@@ -304,14 +303,18 @@ hook.Add("SetupMove", "MESetupMove", function (ply, mv, cmd)
 	end
 
 	mv:SetMaxClientSpeed(ply:GetMEMoveLimit())
+
 	ply:SetMEAng(MEAng)
 
 	if sidestep:GetBool() and usingrh and activewep.GetSideStep and not activewep:GetSideStep() and CurTime() > ply:GetSlidingDelay() - 0.2 and ply:GetClimbing() == 0 and ply:OnGround() and not ply:Crouching() and not cmd:KeyDown(IN_FORWARD) and not cmd:KeyDown(IN_JUMP) and cmd:KeyDown(IN_ATTACK2) then
 		if mv:KeyDown(IN_MOVELEFT) then
 			activewep:SendWeaponAnim(ACT_TURNLEFT45)
 			activewep:SetSideStep(true)
+
 			mv:SetVelocity(cmd:GetViewAngles():Right() * -600)
+
 			ply:ViewPunch(Angle(-3, 0, -4.5))
+
 			ParkourEvent("sidestepleft", ply)
 
 			activewep.SideStepDir = ang:Forward()
@@ -322,8 +325,11 @@ hook.Add("SetupMove", "MESetupMove", function (ply, mv, cmd)
 		elseif mv:KeyDown(IN_MOVERIGHT) then
 			activewep:SendWeaponAnim(ACT_TURNRIGHT45)
 			activewep:SetSideStep(true)
+
 			mv:SetVelocity(cmd:GetViewAngles():Right() * 600)
+
 			ply:ViewPunch(Angle(-3, 0, 4.5))
+
 			ParkourEvent("sidestepright", ply)
 
 			activewep.SideStepDir = ang:Forward()
@@ -350,24 +356,20 @@ hook.Add("SetupMove", "MESetupMove", function (ply, mv, cmd)
 
 		if mv:KeyPressed(IN_JUMP) and not quakejump:GetBool() and activewep:GetWasOnGround() and not ply:GetJumpTurn() and ply:GetViewModel():GetCycle() < 0.25 then
 			local vel = mv:GetVelocity()
-
 			vel:Mul(0.75)
-
 			vel.z = -300
 
 			mv:SetVelocity(vel)
+
 			activewep:SetWasOnGround(false)
 		end
 	end
 end)
 
 if CLIENT then
-	local jumpseq = {
-		ACT_VM_HAULBACK,
-		ACT_VM_SWINGHARD
-	}
+	-- local jumpseq = {ACT_VM_HAULBACK, ACT_VM_SWINGHARD}
 
-	hook.Add("CreateMove", "MECreateMove", function (cmd)
+	hook.Add("CreateMove", "MECreateMove", function(cmd)
 		local ply = LocalPlayer()
 		local usingrh = ply:UsingRH()
 		local hardland = CurTime() < (ply.hardlandtime or 0)
@@ -382,7 +384,8 @@ if CLIENT then
 			cmd:SetButtons(cmd:GetButtons() + IN_SPEED)
 		end
 	end)
-	hook.Add("GetMotionBlurValues", "MEBlur", function (h, v, f, r)
+
+	hook.Add("GetMotionBlurValues", "MEBlur", function(h, v, f, r)
 		local ply = LocalPlayer()
 		local vel = LocalPlayer():GetVelocity()
 
@@ -407,9 +410,10 @@ end
 MMY = 0
 MMX = 0
 
-hook.Add("InputMouseApply", "MouseMovement", function (cmd, x, y)
+hook.Add("InputMouseApply", "MouseMovement", function(cmd, x, y)
 	MMY = y
 	MMX = x
+
 	local ply = LocalPlayer()
 	local activewep = ply:GetActiveWeapon()
 	local usingrh = ply:UsingRH(activewep)
@@ -420,7 +424,7 @@ hook.Add("InputMouseApply", "MouseMovement", function (cmd, x, y)
 end)
 
 if CLIENT then
-	net.Receive("DoorBashAnim", function ()
+	net.Receive("DoorBashAnim", function()
 		ArmInterrupt("doorbash")
 		LocalPlayer():CLViewPunch(Angle(1.5, -0.75, 0))
 	end)

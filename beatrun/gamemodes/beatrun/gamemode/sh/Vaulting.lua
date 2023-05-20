@@ -73,6 +73,7 @@ end
 
 local function Vault1(ply, mv, ang, t, h)
 	local mins, maxs = ply:GetHull()
+
 	t.start = mv:GetOrigin() + eyevec + ang:Forward() * 25
 	t.endpos = t.start - neckvec
 	t.filter = ply
@@ -81,17 +82,9 @@ local function Vault1(ply, mv, ang, t, h)
 
 	t = util.TraceLine(t)
 
-	if t.Entity and t.Entity.NoPlayerCollisions then
-		return false
-	end
-
-	if t.Entity and t.Entity.IsNPC and t.Entity:IsPlayer() then
-		return false
-	end
-
-	if IsValid(t.Entity) and t.Entity:GetClass() == "br_swingbar" then
-		return false
-	end
+	if t.Entity and t.Entity.NoPlayerCollisions then return false end
+	if t.Entity and t.Entity.IsNPC and t.Entity:IsPlayer() then return false end
+	if IsValid(t.Entity) and t.Entity:GetClass() == "br_swingbar" then return false end
 
 	if t.Hit and t.Fraction > 0.3 then
 		local stepup = t.Fraction > 0.65
@@ -105,17 +98,12 @@ local function Vault1(ply, mv, ang, t, h)
 
 		tsafetyout = util.TraceLine(tsafety)
 
-		if tsafetyout.Hit then
-			return false
-		end
+		if tsafetyout.Hit then return false end
 
 		TraceSetData(tsafety, t.HitPos, t.HitPos, mins, maxs, ply)
 
 		tsafetyout = util.TraceHull(tsafety)
-
-		if tsafetyout.Hit then
-			return false
-		end
+		if tsafetyout.Hit then return false end
 
 		TraceParkourMask(h)
 		TraceSetData(h, vaultend, vaultend, mins, maxs, ply)
@@ -144,29 +132,25 @@ local function Vault1(ply, mv, ang, t, h)
 			TraceSetData(t, start, vaultendcheck, ply)
 
 			t = util.TraceLine(t)
-
-			if t.Hit then
-				return
-			end
+			if t.Hit then return end
 
 			ply:SetMantleStartPos(mv:GetOrigin())
 			ply:SetMantleEndPos(vaultend)
 			ply:SetMantleLerp(0)
 			ply:SetMantle(1)
 			ply:SetWallrunTime(0)
-			PlayVaultAnim(ply)
-			ply:ViewPunch(vpunch1)
 
+			PlayVaultAnim(ply)
+
+			ply:ViewPunch(vpunch1)
 			ply.MantleInitVel = mv:GetVelocity()
 			ply.MantleMatType = mat
 
 			if stepup then
 				ParkourEvent("stepup", ply)
-
 				ply.VaultStepUp = true
 			else
 				ParkourEvent("vaultonto", ply)
-
 				ply.VaultStepUp = false
 			end
 
@@ -199,25 +183,19 @@ local function Vault2(ply, mv, ang, t, h)
 
 	local mins, maxs = ply:GetHull()
 	maxs.z = maxs.z * 0.5
+
 	local start = mv:GetOrigin() + chestvec + ang:Forward() * 35
 
 	TraceSetData(t, start, start, mins, maxs, ply)
 	TraceParkourMask(t)
 
 	local vaultpos = t.endpos + ang:Forward() * 35
+
 	t = util.TraceHull(t)
 
-	if t.Entity and t.Entity.NoPlayerCollisions then
-		return false
-	end
-
-	if t.Entity and t.Entity.IsNPC and t.Entity:IsPlayer() then
-		return false
-	end
-
-	if IsValid(t.Entity) and t.Entity:GetClass() == "br_swingbar" then
-		return false
-	end
+	if t.Entity and t.Entity.NoPlayerCollisions then return false end
+	if t.Entity and t.Entity.IsNPC and t.Entity:IsPlayer() then return false end
+	if IsValid(t.Entity) and t.Entity:GetClass() == "br_swingbar" then return false end
 
 	if t.Hit then
 		local tsafety = {}
@@ -225,32 +203,27 @@ local function Vault2(ply, mv, ang, t, h)
 		local start = nil
 
 		TraceParkourMask(tsafety)
-
 		tsafety.output = tsafetyout
 		start = mv:GetOrigin() + eyevec
-
 		TraceSetData(tsafety, start, start + ang:Forward() * 100, mins, maxs, ply)
+
 		util.TraceLine(tsafety)
 
-		if tsafetyout.Hit then
-			return false
-		end
-
+		if tsafetyout.Hit then return false end
 		start = start + ang:Forward() * 100
-
 		TraceSetData(tsafety, start, start - thoraxvec)
+
 		util.TraceLine(tsafety)
 
-		if tsafetyout.Hit then
-			return false
-		end
+		if tsafetyout.Hit then return false end
 
 		start = t.StartPos + chestvec
-
 		TraceSetData(h, start, start, mins, maxs, ply)
+
 		TraceParkourMask(h)
 
 		local hulltr = util.TraceHull(h)
+
 		mins, maxs = ply:GetHull()
 
 		TraceSetData(h, vaultpos, vaultpos, mins, maxs, ply)
@@ -264,9 +237,10 @@ local function Vault2(ply, mv, ang, t, h)
 
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 2)
 			ply:SetWallrunTime(0)
-			PlayVaultAnim(ply, 1)
-			ply:ViewPunch(vpunch2)
 
+			PlayVaultAnim(ply, 1)
+
+			ply:ViewPunch(vpunch2)
 			ply.MantleInitVel = mv:GetVelocity()
 			ply.MantleInitVel.z = 0
 			ply.MantleMatType = t.MatType
@@ -274,10 +248,11 @@ local function Vault2(ply, mv, ang, t, h)
 			ParkourEvent("vault", ply)
 
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-				timer.Simple(0.1, function ()
+				timer.Simple(0.1, function()
 					ply:EmitSound("Cloth.VaultSwish")
 					ply:FaithVO("Faith.StrainSoft")
 				end)
+
 				ply:EmitSound("Handsteps.ConcreteHard")
 			end
 
@@ -291,28 +266,22 @@ end
 local function Vault3(ply, mv, ang, t, h)
 	local mins, maxs = ply:GetHull()
 	maxs.z = maxs.z * 0.5
+
 	t.start = mv:GetOrigin() + chestvec + ang:Forward() * 35
 	t.endpos = t.start
 	t.filter = ply
 
 	TraceParkourMask(t)
-
 	t.maxs = maxs
 	t.mins = mins
+
 	local vaultpos = t.endpos + ang:Forward() * 60
+
 	t = util.TraceHull(t)
 
-	if t.Entity and t.Entity.NoPlayerCollisions then
-		return false
-	end
-
-	if t.Entity and t.Entity.IsNPC and (t.Entity:IsNPC() or t.Entity:IsPlayer()) then
-		return false
-	end
-
-	if IsValid(t.Entity) and t.Entity:GetClass() == "br_swingbar" then
-		return false
-	end
+	if t.Entity and t.Entity.NoPlayerCollisions then return false end
+	if t.Entity and t.Entity.IsNPC and (t.Entity:IsNPC() or t.Entity:IsPlayer()) then return false end
+	if IsValid(t.Entity) and t.Entity:GetClass() == "br_swingbar" then return false end
 
 	if t.Hit then
 		local tsafety = {}
@@ -320,34 +289,27 @@ local function Vault3(ply, mv, ang, t, h)
 		local start = nil
 
 		TraceParkourMask(tsafety)
-
 		tsafety.output = tsafetyout
 		start = mv:GetOrigin() + eyevec
-
 		TraceSetData(tsafety, start, start + ang:Forward() * 150, ply)
+
 		util.TraceLine(tsafety)
 
-		if tsafetyout.Hit then
-			return false
-		end
+		if tsafetyout.Hit then return false end
 
 		start = mv:GetOrigin() + eyevec + ang:Forward() * 150
-
 		TraceSetData(tsafety, start, start - thoraxvec)
+
 		util.TraceLine(tsafety)
 
-		if tsafetyout.Hit then
-			return false
-		end
+		if tsafetyout.Hit then return false end
 
 		start = mv:GetOrigin() + eyevec + ang:Forward() * 150
-
 		TraceSetData(tsafety, start, start - aircheck)
+
 		util.TraceLine(tsafety)
 
-		if not tsafetyout.Hit then
-			return false
-		end
+		if not tsafetyout.Hit then return false end
 
 		mins.z = mins.z * 1
 		h.start = t.StartPos + chestvec
@@ -357,14 +319,15 @@ local function Vault3(ply, mv, ang, t, h)
 		h.mins = mins
 
 		TraceParkourMask(h)
-
 		local hulltr = util.TraceHull(h)
 		local mins, maxs = ply:GetHull()
+
 		h.start = vaultpos
 		h.endpos = h.start
 		h.filter = ply
 		h.maxs = maxs
 		h.mins = mins
+
 		local hulltr2 = util.TraceHull(h)
 
 		if not hulltr.Hit and not hulltr2.Hit then
@@ -374,9 +337,10 @@ local function Vault3(ply, mv, ang, t, h)
 
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 3)
 			ply:SetWallrunTime(0)
-			PlayVaultAnim(ply, 2)
-			ply:ViewPunch(vpunch3)
 
+			PlayVaultAnim(ply, 2)
+
+			ply:ViewPunch(vpunch3)
 			ply.MantleInitVel = mv:GetVelocity()
 			ply.MantleInitVel.z = 0
 			ply.MantleMatType = t.MatType
@@ -384,10 +348,11 @@ local function Vault3(ply, mv, ang, t, h)
 			ParkourEvent("vaultkong", ply)
 
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-				timer.Simple(0.1, function ()
+				timer.Simple(0.1, function()
 					ply:EmitSound("Cloth.VaultSwish")
 					ply:FaithVO("Faith.StrainSoft")
 				end)
+
 				ply:EmitSound("Handsteps.ConcreteHard")
 			end
 
@@ -400,36 +365,36 @@ end
 
 function Vault4(ply, mv, ang, t, h)
 	local mins, maxs = ply:GetHull()
+
 	t.StartPos = mv:GetOrigin() + eyevec + ang:Forward() * 50
+
 	local vaultpos = mv:GetOrigin() + ang:Forward() * 65 + vault1vec
+
 	local tsafety = {
 		start = mv:GetOrigin() + hairvec
 	}
+
 	tsafety.endpos = tsafety.start + ang:Forward() * 75
 	tsafety.filter = ply
 	tsafety.mask = MASK_PLAYERSOLID
 	tsafety.collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+
 	local tsafetyout = util.TraceLine(tsafety)
 
-	if tsafetyout.Hit then
-		return false
-	end
+	if tsafetyout.Hit then return false end
 
 	tsafety.start = mv:GetOrigin() + aircheck + ang:Forward() * 40
 	tsafety.endpos = tsafety.start - hairvec
+
 	local tsafetyout = util.TraceLine(tsafety)
 
-	if tsafetyout.Hit then
-		return false
-	end
-
+	if tsafetyout.Hit then return false end
 	tsafety.start = mv:GetOrigin() + chestvec
 	tsafety.endpos = tsafety.start + ang:Forward() * 150
+
 	local tsafetyout = util.TraceLine(tsafety)
 
-	if not tsafetyout.Hit then
-		return false
-	end
+	if not tsafetyout.Hit then return false end
 
 	mins.z = mins.z * 1
 	h.start = vaultpos
@@ -439,19 +404,19 @@ function Vault4(ply, mv, ang, t, h)
 	h.collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
 	h.maxs = maxs
 	h.mins = mins
+
 	local hsafetyout = util.TraceHull(h)
 
-	if hsafetyout.Hit then
-		return false
-	end
+	if hsafetyout.Hit then return false end
 
 	local startpos = ply:GetWallrun() ~= 1 and mv:GetOrigin() or mv:GetOrigin() + Vector(0, 0, 20) - ang:Forward() * 5
 
 	ply:SetMantleData(startpos, vaultpos, 0, 4)
 	ply:SetWallrunTime(0)
-	PlayVaultAnim(ply, 1)
-	ply:ViewPunch(Angle(2.5, 0, 0))
 
+	PlayVaultAnim(ply, 1)
+
+	ply:ViewPunch(Angle(2.5, 0, 0))
 	ply.MantleInitVel = mv:GetVelocity()
 	ply.MantleInitVel.z = 0
 	ply.MantleMatType = t.MatType
@@ -465,21 +430,24 @@ function Vault4(ply, mv, ang, t, h)
 	end
 
 	if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-		timer.Simple(0.1, function ()
+		timer.Simple(0.1, function()
 			ply:EmitSound("Cloth.VaultSwish")
 			ply:FaithVO("Faith.StrainSoft")
 		end)
+
 		ply:EmitSound("Handsteps.ConcreteHard")
 	end
 
 	if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 		tsafety.start = ply:EyePos()
 		tsafety.endpos = tsafety.start + ang:Forward() * 100
+
 		local tsafetyout = util.TraceLine(tsafety)
 
 		if tsafetyout.MatType == MAT_GRATE then
 			ply:EmitSound("FenceClimb")
-			timer.Simple(0.45, function ()
+
+			timer.Simple(0.45, function()
 				ply:EmitSound("FenceClimbEnd")
 			end)
 		end
@@ -489,16 +457,12 @@ function Vault4(ply, mv, ang, t, h)
 end
 
 function Vault5(ply, mv, ang, t, h)
-	if ply:GetWallrun() == 1 and ply:GetWallrunTime() - CurTime() < 0.75 then
-		return false
-	end
-
-	if mv:GetVelocity().z < (not ply:GetDive() and -100 or -1000) then
-		return false
-	end
+	if ply:GetWallrun() == 1 and ply:GetWallrunTime() - CurTime() < 0.75 then return false end
+	if mv:GetVelocity().z < (not ply:GetDive() and -100 or -1000) then return false end
 
 	local eyevec = not ply:Crouching() and eyevec or eyevecduck
 	local neckvec = not ply:Crouching() and neckvec or neckvecduck
+
 	t.start = mv:GetOrigin() + eyevec + ang:Forward() * 70
 	t.endpos = t.start - neckvec
 	t.filter = ply
@@ -506,15 +470,11 @@ function Vault5(ply, mv, ang, t, h)
 	t.collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
 	t = util.TraceLine(t)
 
-	if not t.Hit then
-		return false
-	end
-
-	if t.Entity and t.Entity.NoPlayerCollisions then
-		return false
-	end
+	if not t.Hit then return false end
+	if t.Entity and t.Entity.NoPlayerCollisions then return false end
 
 	local vaultend = t.HitPos + mantlevec
+
 	local tsafety = {
 		start = t.StartPos - ang:Forward() * 70,
 		endpos = t.StartPos,
@@ -522,19 +482,17 @@ function Vault5(ply, mv, ang, t, h)
 		mask = MASK_PLAYERSOLID,
 		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
 	}
+
 	tsafety = util.TraceLine(tsafety)
 
-	if tsafety.Hit then
-		return false
-	end
+	if tsafety.Hit then return false end
 
 	tsafety.start = mv:GetOrigin() + hairvec
 	tsafety.endpos = tsafety.start + ang:Forward() * 60
+
 	local tsafetyout = util.TraceLine(tsafety)
 
-	if tsafetyout.Hit then
-		return false
-	end
+	if tsafetyout.Hit then return false end
 
 	h.start = vaultend
 	h.endpos = h.start
@@ -542,6 +500,7 @@ function Vault5(ply, mv, ang, t, h)
 	h.mask = MASK_PLAYERSOLID
 	h.collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
 	h.mins, h.maxs = ply:GetHull()
+
 	local hulltr = util.TraceHull(h)
 
 	if not hulltr.Hit then
@@ -554,9 +513,10 @@ function Vault5(ply, mv, ang, t, h)
 		ply:SetMantleLerp(0)
 		ply:SetMantle(5)
 		ply:SetWallrunTime(0)
-		PlayVaultAnim(ply, false, ang)
-		ply:ViewPunch(vpunch1)
 
+		PlayVaultAnim(ply, false, ang)
+
+		ply:ViewPunch(vpunch1)
 		ply.MantleInitVel = mv:GetVelocity()
 		ply.MantleMatType = t.MatType
 
@@ -572,10 +532,8 @@ function Vault5(ply, mv, ang, t, h)
 	return false
 end
 
-hook.Add("SetupMove", "BeatrunVaulting", function (ply, mv, cmd)
-	if ply.MantleDisabled or IsValid(ply:GetSwingbar()) or ply:GetClimbing() ~= 0 or ply:GetMelee() ~= 0 then
-		return
-	end
+hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
+	if ply.MantleDisabled or IsValid(ply:GetSwingbar()) or ply:GetClimbing() ~= 0 or ply:GetMelee() ~= 0 then return end
 
 	if not ply:Alive() then
 		if ply:GetMantle() ~= 0 then
@@ -588,13 +546,12 @@ hook.Add("SetupMove", "BeatrunVaulting", function (ply, mv, cmd)
 	if ply:GetMantle() == 0 then
 		local mvtype = ply:GetMoveType()
 
-		if ply:OnGround() or mv:GetVelocity().z < -350 or mvtype == MOVETYPE_NOCLIP or mvtype == MOVETYPE_LADDER then
-			return
-		end
+		if ply:OnGround() or mv:GetVelocity().z < -350 or mvtype == MOVETYPE_NOCLIP or mvtype == MOVETYPE_LADDER then return end
 	end
 
 	ply.mantletr = ply.mantletr or {}
 	ply.mantlehull = ply.mantlehull or {}
+
 	local t = ply.mantletr
 	local h = ply.mantlehull
 
@@ -618,8 +575,11 @@ hook.Add("SetupMove", "BeatrunVaulting", function (ply, mv, cmd)
 		mv:SetSideSpeed(0)
 		mv:SetUpSpeed(0)
 		mv:SetForwardSpeed(0)
+
 		cmd:ClearMovement()
+
 		mv:SetVelocity(vector_origin)
+
 		ply:SetMoveType(MOVETYPE_NOCLIP)
 
 		local mantletype = ply:GetMantle()
@@ -653,6 +613,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function (ply, mv, cmd)
 			if mlerp < 0.25 then
 				if mlerp > 0.1 then
 					local mult = math.max(0.5, 0.5 + ply.MantleInitVel:Length() / 375 * 0.3 - 0.2)
+
 					mlerprate = mlerprate * mult
 				end
 
@@ -686,6 +647,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function (ply, mv, cmd)
 			end
 
 			local mult = math.max(0.75, 0.75 + ply.MantleInitVel:Length() / 350 * 0.3 - 0.2)
+
 			mlerprate = mlerprate * mult
 
 			ply:SetMantleLerp(math.Approach(mlerp, 1, mlerprate))
@@ -740,11 +702,13 @@ hook.Add("SetupMove", "BeatrunVaulting", function (ply, mv, cmd)
 		end
 
 		mlerp = ply:GetMantleLerp()
+
 		h.start = mvec
 		h.endpos = h.start
 		h.filter = ply
 		h.mask = MASK_PLAYERSOLID
 		h.mins, h.maxs = ply:GetHull()
+
 		local hulltr = util.TraceHull(h)
 
 		if mlerpend <= mlerp or not hulltr.Hit and (mantletype == 1 and mlerp > 0.4 or mantletype == 2 and mlerp > 0.5 or mantletype == 5 and mlerp > 0.75) then
@@ -793,9 +757,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function (ply, mv, cmd)
 				end
 
 				local springboardvel = ang:Forward() * math.Clamp((ply.MantleInitVel or vector_origin):Length() * 0.75, 200, 300) + Vector(0, 0, 350)
-
 				springboardvel:Mul(ply:GetOverdriveMult())
-
 				springboardvel[3] = springboardvel[3] / ply:GetOverdriveMult()
 
 				mv:SetVelocity(springboardvel)

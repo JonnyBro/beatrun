@@ -72,7 +72,7 @@ concommand.Add("blindplayer", function(ply, cmd, args)
 	end
 
 	net.Start("BlindPlayers")
-	net.WriteBool(blinded)
+		net.WriteBool(blinded)
 	net.Send(mply)
 end)
 

@@ -1,6 +1,4 @@
-if not game.SinglePlayer() then
-	return
-end
+if not game.SinglePlayer() then return end
 
 local slow = false
 local slowlerp = 1
@@ -9,7 +7,8 @@ local slowspeed = 2
 
 if SERVER then
 	util.AddNetworkString("SlowSounds")
-	hook.Add("Think", "TimeSlow", function ()
+
+	hook.Add("Think", "TimeSlow", function()
 		if slow and slowlerp ~= slowtarget then
 			slowlerp = math.Approach(slowlerp, slowtarget, slowspeed * FrameTime())
 
@@ -36,7 +35,7 @@ local function TimeSlowSounds(t)
 	end
 end
 
-net.Receive("SlowSounds", function ()
+net.Receive("SlowSounds", function()
 	local slowed = net.ReadBool()
 
 	if slowed then
@@ -45,11 +44,12 @@ net.Receive("SlowSounds", function ()
 		hook.Remove("EntityEmitSound", "TimeSlow")
 	end
 end)
-concommand.Add("ToggleTimeSlow", function (ply)
+
+concommand.Add("ToggleTimeSlow", function(ply)
 	slow = not slow
 
 	net.Start("SlowSounds")
-	net.WriteBool(slow)
+		net.WriteBool(slow)
 	net.Send(ply)
 
 	if slow then
