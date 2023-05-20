@@ -7,6 +7,10 @@ local packetloss = Material("vgui/packetloss.png")
 local lastloss = 0
 local MELogo = Material("vgui/MELogo.png", "mips smooth")
 
+CreateClientConVar("Beatrun_HUDTextColor", "255 255 255 255", true, true, "HUD Text Color\nDefault: 255 255 255 255")
+CreateClientConVar("Beatrun_HUDCornerColor", "20 20 20 100", true, true, "HUD Left Corner Color\nDefault: 20 20 20 100")
+CreateClientConVar("Beatrun_HUDFloatingXPColor", "255 255 255 255", true, true, "HUD Floating XP Color\nDefault: 255 255 255 255")
+
 local hide = {
 	CHudBattery = true,
 	CHudHealth = true,
@@ -106,9 +110,12 @@ local function DrawBlurRect(x, y, w, h, a)
 	for i = 1, 2 do
 		blur:SetFloat("$blur", i / 3 * 5)
 		blur:Recompute()
+
 		render.UpdateScreenEffectTexture()
 		render.SetScissorRect(x, y, x + w, y + h, true)
+
 		surface.DrawTexturedRect(X * -1, Y * -1, ScrW(), ScrH())
+
 		render.SetScissorRect(0, 0, 0, 0, false)
 	end
 end
@@ -174,8 +181,11 @@ local function BeatrunHUD()
 	end
 
 	surface.SetFont("BeatrunHUDSmall")
+
 	local nickw, nickh = surface.GetTextSize(nicktext)
+
 	surface.SetFont("BeatrunHUD")
+
 	local coursew, _ = surface.GetTextSize(coursename)
 	local bgpadw = nickw
 	-- local bgpadh = nickh
@@ -193,15 +203,25 @@ local function BeatrunHUD()
 			hidealpha = 0
 		end
 
-		surface.SetDrawColor(20, 20, 20, math.max(150 - hidealpha, 50))
+		local corner_color_c = string.ToColor(LocalPlayer():GetInfo("Beatrun_HUDCornerColor"))
+		corner_color_c.a = math.Clamp(corner_color_c.a + 50, 0, 255)
+		corner_color_c.a = dynamic:GetBool() and math.max(150 - hidealpha, 50) or corner_color_c.a
+
+		surface.SetDrawColor(corner_color_c)
 		surface.DrawRect(-20 + vp.z, scrh * 0.895 + vp.x, 40, SScaleY(85))
 
 		DrawBlurRect(20 + vp.z, scrh * 0.895 + vp.x, SScaleX(bgpadding), SScaleY(85), math.max(255 - hidealpha, 2))
 
-		surface.SetDrawColor(20, 20, 20, math.max(100 - hidealpha, 50))
+		local corner_color = string.ToColor(LocalPlayer():GetInfo("Beatrun_HUDCornerColor"))
+		corner_color.a = dynamic:GetBool() and math.max(100 - hidealpha, 50) or corner_color.a
+
+		local text_color = string.ToColor(LocalPlayer():GetInfo("Beatrun_HUDTextColor"))
+		text_color.a = dynamic:GetBool() and math.max(255 - hidealpha, 2) or text_color.a
+
+		surface.SetDrawColor(corner_color)
 		surface.DrawOutlinedRect(20 + vp.z, scrh * 0.895 + vp.x, SScaleX(bgpadding), SScaleY(85))
 		surface.SetFont("BeatrunHUD")
-		surface.SetTextColor(255, 255, 255, math.max(255 - hidealpha, 2))
+		surface.SetTextColor(text_color)
 		surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.9 + vp.x)
 		surface.DrawText("Lv." .. ply:GetLevel())
 
@@ -219,12 +239,15 @@ local function BeatrunHUD()
 		surface.DrawText(nicktext)
 		surface.SetDrawColor(25, 25, 25, math.max(255 - hidealpha, 2))
 		surface.DrawRect(scrw * 0.015 + vp.z, scrh * 0.94 + 1 + vp.x, SScaleX(150), SScaleY(4))
-		surface.SetDrawColor(255, 255, 255, math.max(255 - hidealpha, 2))
+		surface.SetDrawColor(string.ToColor(LocalPlayer():GetInfo("Beatrun_HUDTextColor")), math.max(255 - hidealpha, 2))
 		surface.DrawRect(scrw * 0.015 + vp.z, scrh * 0.94 + vp.x, SScaleX(150 * math.min(ply:GetLevelRatio(), 1)), SScaleY(5))
 
 		for k, v in pairs(XP_floatingxp) do
+			local floating_color = string.ToColor(LocalPlayer():GetInfo("Beatrun_HUDFloatingXPColor"))
+			floating_color.a = math.Clamp(1000 * math.abs(CurTime() - k) / 5 - hidealpha, 0, 255)
+
 			surface.SetFont("BeatrunHUD")
-			surface.SetTextColor(255, 255, 255, math.Clamp(1000 * math.abs(CurTime() - k) / 5 - hidealpha, 0, 255))
+			surface.SetTextColor(floating_color)
 			surface.SetTextPos(scrw * 0.015 + vp.z + nickw + 3, scrh * 0.92 + vp.x + nickh - 42 + 50 * math.abs(CurTime() - k) / 5)
 			surface.DrawText(v)
 
@@ -234,8 +257,12 @@ local function BeatrunHUD()
 		end
 	end
 
+	local text_color_c = string.ToColor(LocalPlayer():GetInfo("Beatrun_HUDTextColor"))
+	text_color_c.a = text_color_c.a - 55
+	text_color_c.a = dynamic:GetBool() and math.max(200 - hidealpha, 2) or text_color_c.a
+
 	surface.SetFont("BeatrunHUD")
-	surface.SetTextColor(255, 255, 255, math.max(200 - hidealpha, 2))
+	surface.SetTextColor(text_color_c)
 	surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.95 + vp.x)
 	surface.DrawText(coursename)
 end

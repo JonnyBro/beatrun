@@ -138,7 +138,7 @@ if CLIENT then
 		end
 
 		net.Start("Checkpoint_Finish")
-		net.WriteFloat(totaltime)
+			net.WriteFloat(totaltime)
 		net.SendToServer()
 
 		timealpha = 1000
@@ -227,10 +227,6 @@ function CourseHUD()
 	local vpx = vp.x
 	local vpz = vp.z
 	local incourse = Course_Name ~= ""
-
-	surface.SetFont("DermaLarge")
-	surface.SetTextColor(255, 255, 255, 255)
-
 	local totaltime = CheckpointNumber ~= -1 and math.max(0, CurTime() - Course_StartTime) or Course_EndTime
 
 	if incourse then
@@ -249,6 +245,10 @@ function CourseHUD()
 
 		text = speed .. " km/h"
 		w, _ = surface.GetTextSize(text)
+
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetFont("BeatrunHUD")
+		surface.SetTextColor(255, 255, 255, 255)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.85 + vpz)
 		surface.DrawText(text)
 	end

@@ -13,7 +13,7 @@ concommand.Add("toggleblindness", function(ply)
 	blinded = not blinded
 
 	net.Start("BlindPlayers")
-	net.WriteBool(blinded)
+		net.WriteBool(blinded)
 	net.Broadcast()
 
 	if blinded then

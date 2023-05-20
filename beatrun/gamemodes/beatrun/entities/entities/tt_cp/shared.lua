@@ -36,7 +36,7 @@ function ENT:Initialize()
 	else
 		self:SetTrigger(true)
 	end
-	
+
 	self:SetPos(self:GetPos() + Vector(-0, -0, 0))
 end
 
@@ -53,7 +53,7 @@ function ENT:StartTouch(ent)
 			ent.CPSaveVel = ent:GetVelocity()
 			ent:SaveParkourState()
 			net.Start("Checkpoint_Hit")
-			net.WriteUInt(ent:GetNW2Int("CPNum", 1), 8)
+				net.WriteUInt(ent:GetNW2Int("CPNum", 1), 8)
 			net.Send(ent)
 		end
 		ent:ScreenFade(SCREENFADE.IN, screencolor, 0.25, 0)

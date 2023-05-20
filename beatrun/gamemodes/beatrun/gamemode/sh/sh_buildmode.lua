@@ -719,8 +719,8 @@ if CLIENT then
 	mousex = 0
 	-- local mousemoved = false
 	local camcontrol = false
-	local scrw = ScrW()
-	local scrh = ScrH()
+	-- local scrw = ScrW()
+	-- local scrh = ScrH()
 	-- local nscrw = ScrW()
 	-- local nscrh = ScrH()
 	local aimvector = Vector()
@@ -761,7 +761,7 @@ if CLIENT then
 		size = ScreenScale(10)
 	})
 
-	local blur = Material("pp/blurscreen")
+	-- local blur = Material("pp/blurscreen")
 
 	--[[
 	local function DrawBlurRect(x, y, w, h)

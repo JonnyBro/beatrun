@@ -172,39 +172,38 @@ function DrawDeletionText()
 
 	local _, th = surface.GetTextSize(deletionstringc)
 	cam.Start2D()
+		local num = 0
+		local ply = LocalPlayer()
+		local vp = ply:GetViewPunchAngles()
+		local vpcl = ply.ViewPunchAngle or angle_zero
 
-	local num = 0
-	local ply = LocalPlayer()
-	local vp = ply:GetViewPunchAngles()
-	local vpcl = ply.ViewPunchAngle or angle_zero
+		vp:Add(vpcl)
 
-	vp:Add(vpcl)
+		local GlitchIntensity = incredits and 2 or GlitchIntensity
+		surface.SetTextColor(255, 255, 255, 2.5 * (num + 1) * GlitchIntensity)
 
-	local GlitchIntensity = incredits and 2 or GlitchIntensity
-	surface.SetTextColor(255, 255, 255, 2.5 * (num + 1) * GlitchIntensity)
+		for k, v in ipairs(deletiontable) do
+			surface.SetTextColor(255, 255, 255, 2.5 * k * GlitchIntensity)
+			local text = v
 
-	for k, v in ipairs(deletiontable) do
-		surface.SetTextColor(255, 255, 255, 2.5 * k * GlitchIntensity)
-		local text = v
+			for i = 1, 4 do
+				local index = math.random(1, #text)
 
-		for i = 1, 4 do
-			local index = math.random(1, #text)
-
-			if text[index] ~= " " then
-				text = text:SetChar(index, garble[math.random(1, garblelen)])
+				if text[index] ~= " " then
+					text = text:SetChar(index, garble[math.random(1, garblelen)])
+				end
 			end
+
+			surface.SetTextPos(ScrW() * 0.01 + vp.x, ScrH() * 0.05 + (k - 1) * th + vp.y)
+			surface.DrawText(text)
+			num = k
 		end
 
-		surface.SetTextPos(ScrW() * 0.01 + vp.x, ScrH() * 0.05 + (k - 1) * th + vp.y)
-		surface.DrawText(text)
-		num = k
-	end
-
-	if deletiontype > 0 then
-		surface.SetTextPos(ScrW() * 0.01 + vp.x, ScrH() * 0.05 + num * th + vp.y)
-		surface.DrawText(deletionstringc)
-	end
-
+		if deletiontype > 0 then
+			surface.SetTextPos(ScrW() * 0.01 + vp.x, ScrH() * 0.05 + num * th + vp.y)
+			surface.DrawText(deletionstringc)
+		end
 	cam.End2D()
+
 	GlitchIntensity = oldgi
 end

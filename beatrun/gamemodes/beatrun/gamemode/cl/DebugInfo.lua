@@ -72,13 +72,13 @@ end
 
 local function RenderTraces()
 	cam.Start3D()
-
-	for k, v in ipairs(traces) do
-		render.DrawLine(v[1], v[2], v[3], true)
-	end
-
+		for k, v in ipairs(traces) do
+			render.DrawLine(v[1], v[2], v[3], true)
+		end
 	cam.End3D()
+
 	TraceCount = #traces
+
 	table.Empty(traces)
 end
 

@@ -47,7 +47,6 @@ function DiscordUpdate()
 	rpc_data["largeImageKey"] = image
 	rpc_data["largeImageText"] = course
 
-	print("UPDATING DISCORD RPC")
 	DiscordUpdateRPC(rpc_data)
 end
 

@@ -191,12 +191,10 @@ local function TutorialMarker()
 		markerup[3] = markerup[3] + 50 + math.sin(CurTime() * 4) * 5
 
 		cam.Start3D2D(markerup - ang:Right() * 13, ang, 1)
-
-		surface.SetFont("BeatrunHUD")
-		surface.SetTextPos(0, 0)
-		surface.SetTextColor(markercol)
-		surface.DrawText("←")
-
+			surface.SetFont("BeatrunHUD")
+			surface.SetTextPos(0, 0)
+			surface.SetTextColor(markercol)
+			surface.DrawText("←")
 		cam.End3D2D()
 	end
 end
@@ -222,32 +220,30 @@ local function CreditsThink()
 	if gui.IsGameUIVisible() then return end
 
 	cam.Start2D()
+		local data = creditslist[curcredit]
 
-	local data = creditslist[curcredit]
+		surface.SetDrawColor(0, 0, 0)
+		surface.DrawRect(0, 0, ScrW(), ScrH())
+		surface.SetFont("BeatrunHUD")
 
-	surface.SetDrawColor(0, 0, 0)
-	surface.DrawRect(0, 0, ScrW(), ScrH())
-	surface.SetFont("BeatrunHUD")
+		local text = data[2]
+		text = string.format(text, LocalPlayer():Nick())
 
-	local text = data[2]
-	text = string.format(text, LocalPlayer():Nick())
+		local tw, th = surface.GetTextSize(text)
 
-	local tw, th = surface.GetTextSize(text)
+		surface.SetTextColor(220, 220, 220, 255)
+		surface.SetTextPos(ScrW() / 2 - (tw * 0.5), ScrH() / 2 - (th * 0.5))
+		surface.DrawText(text)
 
-	surface.SetTextColor(220, 220, 220, 255)
-	surface.SetTextPos(ScrW() / 2 - (tw * 0.5), ScrH() / 2 - (th * 0.5))
-	surface.DrawText(text)
+		if CurTime() > creditstime + data[1] then
+			creditstime = CurTime()
+			curcredit = curcredit + 1
 
-	if CurTime() > creditstime + data[1] then
-		creditstime = CurTime()
-		curcredit = curcredit + 1
-
-		if not creditslist[curcredit] then
-			hook.Remove("PreRender", "Credits")
-			RunConsoleCommand("disconnect")
+			if not creditslist[curcredit] then
+				hook.Remove("PreRender", "Credits")
+				RunConsoleCommand("disconnect")
+			end
 		end
-	end
-
 	cam.End2D()
 
 	return true

@@ -557,7 +557,7 @@ local function Blindness(origin, angles)
 
 	if AEUIDraw then
 		cam.Start2D()
-		AEUIDraw()
+			AEUIDraw()
 		cam.End2D()
 	end
 
@@ -569,8 +569,10 @@ blinded = false
 local function BlindnessPreUI()
 	if blinded then
 		cam.Start3D()
-		render.Clear(10, 10, 10, 0)
+			render.Clear(10, 10, 10, 0)
+
 		cam.End3D()
+
 		draw.NoTexture()
 	end
 end

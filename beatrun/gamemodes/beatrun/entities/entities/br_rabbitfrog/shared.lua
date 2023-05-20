@@ -20,7 +20,7 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Entity", 1, "Passenger2" )
 	self:NetworkVar( "Entity", 2, "Passenger3" )
 	self:NetworkVar( "Entity", 3, "Passenger4" )
-	
+
 	self:NetworkVar( "Vector", 0, "DestinationPos" )
 	self:NetworkVar( "Angle", 1, "DestinationAngle" )
 end
@@ -58,14 +58,14 @@ local function draw_blur( a, d )
 	surface.SetDrawColor( 255, 255, 255 )
 	surface.SetMaterial( blur )
 	for i = 1, d do
-	
+
 		blur:SetFloat( "$blur", (i / d ) * ( a ) )
 		blur:Recompute()
 		render.UpdateScreenEffectTexture()
 		surface.DrawTexturedRect( 0, 0, ScrW(), ScrH() )
-		
+
 	end
-	
+
 end
 local blurint = 4
 local rabbitpos, rabbitang = Vector(), Angle()
@@ -79,7 +79,7 @@ local angoffset = Angle(0,90,90)
 
 local lastpos = Vector()
 local lastang = Angle()
-local endlerp = 0 
+local endlerp = 0
 local endlerppos = Vector()
 local neweye = false
 
@@ -95,7 +95,7 @@ local function LandingHUDPaint()
 	introalpha = introalpha-(FrameTime()*50)
 	surface.SetDrawColor(0,0,0,introalpha)
 	surface.DrawRect(0,0,ScrW(),ScrH())
-	
+
 	if introalpha <= 0 then
 		hook.Remove("HUDPaint", "LandingHUDPaint")
 	end
@@ -149,10 +149,10 @@ function ENT:Draw()
 	render.PushFilterMin( TEXFILTER.ANISOTROPIC )
 	self:DrawModel()
 	cam.Start2D(vector_origin,angle_zero)
-	draw_blur(math.max(blurint*-diff,0),5)
-	-- DrawBokehDOF(5,0.99,8)
-	render.PopFilterMag()
-	render.PopFilterMin()
+		draw_blur(math.max(blurint*-diff,0),5)
+		-- DrawBokehDOF(5,0.99,8)
+		render.PopFilterMag()
+		render.PopFilterMin()
 	cam.End2D()
 	-- end
 
@@ -179,18 +179,18 @@ local function RabbitCalcView(ply, origin, ang)
 		ang.x = oldangx
 		angles.z = angles.z * absdiff
 		-- angles.x = angles.x * absdiff
-		
+
 		-- angles.x = angles.x*ang:Forward():Dot(ang:Forward())
 		-- angles.z = angles.z*math.abs(ang:Forward():Dot(ang:Forward()))
-		
-		pos:Set(npos)  
+
+		pos:Set(npos)
 		origin:Set(pos)
 		ang:Add(angles)
 		lastpos:Set(origin)
 		lastang:Set(ang)
 	elseif endlerp < 1 then
 		if !neweye then
-			lastang.z = 0 
+			lastang.z = 0
 			ang:Set(lastang)
 			ply:SetEyeAngles(lastang)
 			neweye = true
@@ -210,7 +210,7 @@ local function RabbitVM(wep, vm, oldpos, oldang, pos, ang)
 	if IsValid(rabbit) and rabbit:GetCycle() < 1 and IsLanding(rabbit) then
 		pos:Set(lastpos)
 		ang:Set(lastang)
-		
+
 		pos:Sub(diffpos)
 		ang:Sub(diffang)
 	elseif endlerp < 1 then

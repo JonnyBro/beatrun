@@ -350,7 +350,7 @@ end
 local tr = {}
 local tr_result = {}
 
-local allow_overdrive = CreateClientConVar("Beatrun_AllowOvedriveInMultiplayer", "0", false, false, "Allow ovedrive on servers")
+local allow_overdrive = CreateConVar("Beatrun_AllowOvedriveInMultiplayer", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 
 function SWEP:PrimaryAttack()
 	local ply = self.Owner

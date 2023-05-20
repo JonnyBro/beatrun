@@ -1208,12 +1208,11 @@ local function JumpArmDraw(a, b, c)
 		if IsValid(activewep) and activewep:GetClass() == "runnerhands" then
 			if not worldarm[BodyAnimString] then
 				cam.Start3D(pos, ang)
-				cam.IgnoreZ(ignorezarm[BodyAnimString] or false)
+					cam.IgnoreZ(ignorezarm[BodyAnimString] or false)
 
-				BodyAnimMDLarm:SetPos(pos)
-				bac:SetupBones()
-				BodyAnimMDLarm:DrawModel()
-
+					BodyAnimMDLarm:SetPos(pos)
+					bac:SetupBones()
+					BodyAnimMDLarm:DrawModel()
 				cam.End3D()
 			else
 				local armoff = LocalToWorld(armoffset, angle_zero, vector_origin, BodyAnim:GetAngles())

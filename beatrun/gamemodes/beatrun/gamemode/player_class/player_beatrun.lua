@@ -235,8 +235,8 @@ function PLAYER:Spawn()
 		ply.Course_StartTime = CurTime() + (2 * faststartmult)
 
 		net.Start("BeatrunSpawn")
-		net.WriteFloat(CurTime())
-		net.WriteBool(ply.InReplay)
+			net.WriteFloat(CurTime())
+			net.WriteBool(ply.InReplay)
 		net.Send(ply)
 
 		ply.SpawnFreezeTime = CurTime() + (1.75 * faststartmult)

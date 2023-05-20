@@ -21,9 +21,7 @@ if CLIENT then
 
 		if ply:GetGrappling() then
 			cam.Start3D()
-
-			local w2s = ply:GetGrapplePos():ToScreen()
-
+				local w2s = ply:GetGrapplePos():ToScreen()
 			cam.End3D()
 
 			surface.SetDrawColor(255, 255, 255)
@@ -40,9 +38,7 @@ if CLIENT then
 
 		if trout.Fraction > 0 and dist < 2750000 and dist > 90000 then
 			cam.Start3D()
-
-			local w2s = trout.HitPos:ToScreen()
-
+				local w2s = trout.HitPos:ToScreen()
 			cam.End3D()
 
 			surface.SetDrawColor(255, 255, 255)
@@ -57,7 +53,7 @@ local zpunchstart = Angle(2, 0, 0)
 hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
 	if not ply:Alive() or Course_Name ~= "" then return end
-	if GetGlobalBool(GM_INFECTION) and not ply:GetNW2Entity("Swingrope") then return end
+	if GetGlobalBool(GM_INFECTION) --[[and not ply:GetNW2Entity("Swingrope")]] then return end
 
 	local activewep = ply:GetActiveWeapon()
 	local usingrh = IsValid(activewep) and activewep:GetClass() == "runnerhands"

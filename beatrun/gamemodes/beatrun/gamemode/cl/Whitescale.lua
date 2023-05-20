@@ -44,7 +44,7 @@ local function World_Whitescale()
 	whitescale = true
 
 	net.Start("ToggleWhitescale")
-	net.WriteBool(whitescale)
+		net.WriteBool(whitescale)
 	net.SendToServer()
 end
 

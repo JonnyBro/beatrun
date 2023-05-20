@@ -162,7 +162,7 @@ hook.Add("OnPlayerHitGround", "MELandSound", function(ply, water, floater, speed
 			Hardland(false)
 		elseif SERVER and game.SinglePlayer() then
 			net.Start("Beatrun_HardLand")
-			net.WriteBool(false)
+				net.WriteBool(false)
 			net.Send(ply)
 		end
 	end

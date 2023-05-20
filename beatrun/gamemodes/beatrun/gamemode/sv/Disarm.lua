@@ -7,7 +7,7 @@ local function Disarm_Init(ply, victim)
 	victim:DropWeapon()
 
 	net.Start("DisarmStart")
-	net.WriteEntity(victim)
+		net.WriteEntity(victim)
 	net.Send(ply)
 
 	timer.Simple(1.35, function()
