@@ -78,9 +78,7 @@ valvebiped = {
 local scalevec = Vector(1, 1, 1)
 
 local function Disarm_Render(self)
-	if not IsValid(self) or not IsValid(self.ModelBM) or not IsValid(self.Victim) then
-		return
-	end
+	if not IsValid(self) or not IsValid(self.ModelBM) or not IsValid(self.Victim) then return end
 
 	local owner = self.Victim
 
@@ -112,6 +110,7 @@ local function Disarm_Render(self)
 					for i = 1, 3 do
 						local from = self.bonematrixtablefrom[lookbone][i]
 						local v = self.bonematrixtableto[lookbone][i]
+
 						v[1] = LerpL(blerpvalue, v[1], from[1])
 						v[2] = LerpL(blerpvalue, v[2], from[2])
 						v[3] = LerpL(blerpvalue, v[3], from[3])
@@ -186,12 +185,9 @@ function Disarm_BlockMove(cmd)
 end
 
 function Disarm_Init(victim)
-	if not IsValid(victim) then
-		return
-	end
+	if not IsValid(victim) then return end
 
 	local ply = LocalPlayer()
-
 	Disarm_CleanUp()
 
 	local eyeang = ply:EyeAngles()
@@ -201,19 +197,19 @@ function Disarm_Init(victim)
 	ParkourEvent("disarmscar", ply, true)
 
 	ply.OrigEyeAng = eyeang
-
 	BodyAnim:SetAngles(eyeang)
 
 	victim.InDisarm = true
+
 	ply.DisarmForcedEnd = CurTime() + 4
 	ply.DisarmVictim = ClientsideModel("models/disarmvictim.mdl")
 	ply.DisarmVictimMDL = ClientsideModel(victim:GetModel())
+
 	local victimanim = ply.DisarmVictim
 	local victimMDL = ply.DisarmVictimMDL
+
 	victimanim.bonelerpvalue = 0
-
 	victimanim:SetSequence("snatchscar")
-
 	victimanim.ModelBM = victimMDL
 	victimanim.bonematrixtablefrom = {}
 	victimanim.bonematrixtableto = {}
@@ -232,20 +228,19 @@ function Disarm_Init(victim)
 
 	hook.Add("Think", "Disarm_Think", Disarm_Think)
 	hook.Add("CreateMove", "Disarm_BlockMove", Disarm_BlockMove)
-
 	victimanim.RenderOverride = Disarm_Render
 
-	timer.Simple(0.001, function ()
+	timer.Simple(0.001, function()
 		victim.DisarmNoDraw = true
-
 		victim:SetNoDraw(true)
 	end)
 end
 
-net.Receive("DisarmStart", function ()
+net.Receive("DisarmStart", function()
 	Disarm_Init(net.ReadEntity())
 end)
-hook.Add("CreateClientsideRagdoll", "Disarm_Ragdoll", function (ent, oldrag)
+
+hook.Add("CreateClientsideRagdoll", "Disarm_Ragdoll", function(ent, oldrag)
 	if ent.InDisarm then
 		local ply = LocalPlayer()
 		local victimanim = ply.DisarmVictim
@@ -259,11 +254,10 @@ hook.Add("CreateClientsideRagdoll", "Disarm_Ragdoll", function (ent, oldrag)
 
 		for i = 0, rag:GetNumBodyGroups() do
 			local bodyg = oldrag:GetBodygroup(i)
-
 			rag:SetBodygroup(i, bodyg)
 		end
 
-		local vel = Vector()
+		-- local vel = Vector()
 		local num = rag:GetPhysicsObjectCount() - 1
 
 		for i = 0, num do
@@ -284,12 +278,14 @@ hook.Add("CreateClientsideRagdoll", "Disarm_Ragdoll", function (ent, oldrag)
 		end
 
 		oldrag:Remove()
-		timer.Simple(30, function ()
+
+		timer.Simple(30, function()
 			if IsValid(rag) then
 				rag:SetSaveValue("m_bFadingOut", true)
 			end
 		end)
-		timer.Simple(0, function ()
+
+		timer.Simple(0, function()
 			Disarm_CleanUp()
 		end)
 	end

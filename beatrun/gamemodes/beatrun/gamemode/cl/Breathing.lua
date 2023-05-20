@@ -2,12 +2,10 @@ local stress = 0
 local breathin = true
 nextbreath = 0
 
-hook.Add("Tick", "BreathingLogic", function ()
+hook.Add("Tick", "BreathingLogic", function()
 	local ply = LocalPlayer()
 
-	if not IsValid(ply) or not ply:Alive() or ply:WaterLevel() == 3 then
-		return
-	end
+	if not IsValid(ply) or not ply:Alive() or ply:WaterLevel() == 3 then return end
 
 	local vel = ply:GetVelocity()
 	local CT = CurTime()
@@ -24,9 +22,7 @@ hook.Add("Tick", "BreathingLogic", function ()
 
 	stress = math.Clamp(stress, -50, 150)
 
-	if stress == -50 and breathin then
-		return
-	end
+	if stress == -50 and breathin then return end
 
 	local breathtype = breathin and "In" or "Out"
 	local breathstring = stress > 50 and "Medium" or "Soft"

@@ -13,9 +13,7 @@ local function push_left(self, x)
 end
 
 local function pop_right(self)
-	if self:is_empty() then
-		return nil
-	end
+	if self:is_empty() then return nil end
 
 	local r = self[self.tail]
 	self[self.tail] = nil
@@ -25,12 +23,11 @@ local function pop_right(self)
 end
 
 local function pop_left(self)
-	if self:is_empty() then
-		return nil
-	end
+	if self:is_empty() then return nil end
 
 	local r = self[self.head + 1]
 	self.head = self.head + 1
+
 	local r = self[self.head]
 	self[self.head] = nil
 
@@ -48,7 +45,7 @@ end
 local function iter_left(self)
 	local i = self.head
 
-	return function ()
+	return function()
 		if i < self.tail then
 			i = i + 1
 
@@ -60,7 +57,7 @@ end
 local function iter_right(self)
 	local i = self.tail + 1
 
-	return function ()
+	return function()
 		if i > self.head + 1 then
 			i = i - 1
 
@@ -125,13 +122,13 @@ GlitchIntensity = 0
 local tr = {}
 local tr_result = {}
 local randvector = Vector()
-local box_mins = Vector(-0.5, -0.5, -0.5)
-local box_maxs = Vector(0.5, 0.5, 0.5)
+-- local box_mins = Vector(-0.5, -0.5, -0.5)
+-- local box_maxs = Vector(0.5, 0.5, 0.5)
 local awareness = CreateClientConVar("blindness_awareness", 10000, true, false, "Awareness in hu")
 local quality = CreateClientConVar("blindness_highquality", 1, true, false, "Draws quads instead of lines")
-local boxang = Angle()
-local vanishvec = Vector()
-local vanishvecrand = Vector()
+-- local boxang = Angle()
+-- local vanishvec = Vector()
+-- local vanishvecrand = Vector()
 vanishrandx = 0.5
 vanishrandy = 0.5
 vanishrandz = 0.5
@@ -172,7 +169,7 @@ local grass = Color(20, 150, 10)
 local sand = Color(76, 70, 50)
 local glass = Color(10, 20, 150)
 local limit = 5400
-local pinged = false
+-- local pinged = false
 local camvector = Vector()
 local camang = Angle()
 local camlerp = 0
@@ -207,7 +204,7 @@ blindcustompoints = {
 	Vector()
 }
 local blindcustompoints = blindcustompoints
-local sizemult = 1
+-- local sizemult = 1
 
 function InvertColors()
 	for k, v in ipairs(colorslist) do
@@ -317,9 +314,7 @@ end
 local function Echo(t)
 	table.insert(soundpoints, t.Pos)
 
-	if not blindedsounds[t.SoundName] and t.SoundName:Left(3) ~= "te/" then
-		return false
-	end
+	if not blindedsounds[t.SoundName] and t.SoundName:Left(3) ~= "te/" then return false end
 end
 
 local function PopThatMotherfucker()
@@ -336,20 +331,19 @@ local meshtbl = meshtbl
 pausescan = false
 local mathrandom = math.random
 
+/*
 local function OptimizeMeshes()
 	local i = 0
-	local vertexcount = 0
+	-- local vertexcount = 0
 
 	for v in meshtbl:iter_left() do
-		if i >= 90 then
-			break
-		end
+		if i >= 90 then break end
 
 		v:Destroy()
-
 		i = i + 1
 	end
 end
+*/
 
 glob_blindangles = Angle()
 glob_blindorigin = Vector()
@@ -363,13 +357,11 @@ local function Blindness(origin, angles)
 	local eyeang = angles
 	local FT = FrameTime()
 	local quality = quality:GetBool()
-
 	glob_blindorigin:Set(origin)
 	glob_blindangles:Set(angles)
-
 	local hitpointscount = nil
-	local vel_l = ply:GetVelocity():Length()
-	local vel = 2.5
+	-- local vel_l = ply:GetVelocity():Length()
+	-- local vel = 2.5
 	cang = math.pi * 2 / 16 + (ply.offset or 0)
 	cpos = Vector(0, math.cos(cang) * 75, math.sin(cang) * 250)
 	ply.offset = (ply.offset or 0) + FrameTime()
@@ -379,7 +371,6 @@ local function Blindness(origin, angles)
 	end
 
 	local randrender = math.Rand(blindrandrendermin, 1)
-
 	render.Clear(blindcolor[1] * randrender, blindcolor[2] * randrender, blindcolor[3] * randrender, 0)
 	render.ClearDepth()
 	render.ClearStencil()
@@ -391,7 +382,6 @@ local function Blindness(origin, angles)
 
 				if trace.Hit then
 					hitpoints:push_right(trace.HitPos)
-
 					local invert = mathrandom()
 
 					if invert < 0.05 then
@@ -399,10 +389,8 @@ local function Blindness(origin, angles)
 					end
 
 					hitnormal:push_right(trace.HitNormal)
-
 					local hcol = colors[trace.MatType]
 					local hcolclass = colorsclass[trace.Entity:GetClass()]
-
 					hitcolor:push_right(hcol or hcolclass or white)
 
 					if limit < hitpoints:length() then
@@ -425,7 +413,6 @@ local function Blindness(origin, angles)
 
 	while limit < hitpointscount do
 		soundpoints:pop_left()
-
 		hitpointscount = soundpoints:length()
 	end
 
@@ -445,20 +432,19 @@ local function Blindness(origin, angles)
 		end
 	end
 
-	local lastpos = hitpoints[hitpoints.tail]
+	-- local lastpos = hitpoints[hitpoints.tail]
 	local f = eyeang:Forward()
 	local eyediff = Vector()
 	local k = limit
 	local k2 = 0
-	local vanishlimit = vanishlimit
-	local vanishrandx = vanishrandx
-	local vanishrandy = vanishrandy
-	local vanishrandz = vanishrandz
-	local blindrandx = blindrandx
-	local blindrandy = blindrandy
-	local blindrandz = blindrandz
-	local blindrandobeyglitch = blindrandobeyglitch
-
+	-- local vanishlimit = vanishlimit
+	-- local vanishrandx = vanishrandx
+	-- local vanishrandy = vanishrandy
+	-- local vanishrandz = vanishrandz
+	-- local blindrandx = blindrandx
+	-- local blindrandy = blindrandy
+	-- local blindrandz = blindrandz
+	-- local blindrandobeyglitch = blindrandobeyglitch
 	render.SetMaterial(circle)
 
 	if not customglitch then
@@ -482,7 +468,7 @@ local function Blindness(origin, angles)
 
 	if not pausescan then
 		if not curmesh:IsValid() or CurTime() < nextcachecheck then
-			local dynmesh = nil
+			-- local dynmesh = nil
 
 			if CurTime() < nextcachecheck then
 				if curmesh:IsValid() then
@@ -497,9 +483,7 @@ local function Blindness(origin, angles)
 
 			for v in hitpoints:iter_right() do
 				local col = hitcolor[hitcolor.tail - k2] or BlindGetColor()
-
 				eyediff:Set(v)
-
 				local drawindex = hitindex % drawcount + 1
 
 				if drawindex == 1 then
@@ -557,7 +541,7 @@ local function Blindness(origin, angles)
 	cam.End3D()
 	hook.Run("Blind3DPost", origin, angles)
 
-	local ctsin = math.sin(CurTime())
+	-- local ctsin = math.sin(CurTime())
 	local col = white
 	col.a = alpha
 
@@ -585,7 +569,8 @@ local function BlindnessPreUI()
 	end
 end
 
-local te = "te/metamorphosis/"
+-- local te = "te/metamorphosis/"
+/*
 local jingles = {
 	land = te .. "3-linedrop",
 	jump = te .. "1-linemove",
@@ -608,6 +593,7 @@ local function BlindnessJingles(event)
 		LocalPlayer():EmitSound(jingles[event] .. math.random(1, jinglescount[event]) .. ".wav")
 	end
 end
+*/
 
 function ToggleBlindness(toggle)
 	blinded = toggle
@@ -662,7 +648,6 @@ function ToggleBlindness(toggle)
 
 		if bgm then
 			bgm:Stop()
-
 			bgm = nil
 		end
 
@@ -674,15 +659,13 @@ function cool()
 	local k = limit
 	local k2 = 0
 	a = Mesh(circle)
-
 	mesh.Begin(a, MATERIAL_QUADS, limit)
 
-	local ed = Vector()
-	local meshlen = meshtbl:length()
+	-- local ed = Vector()
+	-- local meshlen = meshtbl:length()
 
 	for v in hitpoints:iter_right() do
 		mesh.QuadEasy(v, hitnormal[hitnormal.tail - k2], 2, 2, hitcolor[hitcolor.tail - k2] or white)
-
 		k = k - 1
 		k2 = k2 + 1
 	end
@@ -695,20 +678,23 @@ function cool()
 	end
 end
 
-net.Receive("BlindPlayers", function ()
+net.Receive("BlindPlayers", function()
 	ToggleBlindness(net.ReadBool())
 end)
-net.Receive("BlindNPCKilled", function ()
+
+net.Receive("BlindNPCKilled", function()
 	LocalPlayer():EmitSound("bad.wav", 50, 100 + math.random(-5, 2))
 end)
-hook.Add("OnEntityCreated", "BlindnessEntities", function (ent)
-	timer.Simple(0.5, function ()
+
+hook.Add("OnEntityCreated", "BlindnessEntities", function(ent)
+	timer.Simple(0.5, function()
 		if IsValid(ent) and ent.DrawLOC then
 			LOCEntities[ent] = true
 		end
 	end)
 end)
-hook.Add("InitPostEntity", "Beatrun_LOC", function ()
+
+hook.Add("InitPostEntity", "Beatrun_LOC", function()
 	if GetGlobalBool("LOC") then
 		ToggleBlindness(true)
 	end

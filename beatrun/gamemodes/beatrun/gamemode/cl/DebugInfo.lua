@@ -47,11 +47,7 @@ TraceCount = 0
 function TraceLine_d(data)
 	local result = TraceLine_o(data)
 
-	table.insert(traces, {
-		Vector(data.start),
-		Vector(data.endpos),
-		result.Hit and color_red or color_white
-	})
+	table.insert(traces, {Vector(data.start), Vector(data.endpos), result.Hit and color_red or color_white})
 
 	return result
 end
@@ -59,7 +55,7 @@ end
 local function DrawDebugInfo()
 	local sx = ScrW() * startx
 	local sy = ScrH() * starty
-	local htw = 0
+	-- local htw = 0
 
 	surface.SetFont("BeatrunDebug")
 	surface.SetTextPos(sx, sy)
@@ -93,15 +89,13 @@ local function RenderTraces()
 	end
 
 	cam.End3D()
-
 	TraceCount = #traces
-
 	table.Empty(traces)
 end
 
 local debugging = false
 
-concommand.Add("Beatrun_DebugToggle", function ()
+concommand.Add("Beatrun_DebugToggle", function()
 	debugging = not debugging
 
 	if debugging then
@@ -115,7 +109,6 @@ concommand.Add("Beatrun_DebugToggle", function ()
 	else
 		hook.Remove("HUDPaint", "DrawDebugInfo")
 		hook.Remove("PostRender", "RenderTraces")
-
 		util.TraceLine = TraceLine_o
 	end
 end)

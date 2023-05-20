@@ -5,25 +5,28 @@ local ry = 0
 local gy = 0
 local by = 0
 local black = Material("vgui/black")
+
 local ca_r = CreateMaterial("ca_r", "UnlitGeneric", {
 	["$ignorez"] = 1,
 	["$basetexture"] = "vgui/black",
 	["$additive"] = 1,
 	["$color2"] = "[1 0 0]"
 })
+
 local ca_g = CreateMaterial("ca_g", "UnlitGeneric", {
 	["$ignorez"] = 1,
 	["$basetexture"] = "vgui/black",
 	["$additive"] = 1,
 	["$color2"] = "[0 1 0]"
 })
+
 local ca_b = CreateMaterial("ca_b", "UnlitGeneric", {
 	["$ignorez"] = 1,
 	["$basetexture"] = "vgui/black",
 	["$additive"] = 1,
 	["$color2"] = "[0 0 1]"
 })
-local zoom = Material("vgui/zoom.vtf")
+-- local zoom = Material("vgui/zoom.vtf")
 
 local function CA(rx, gx, bx, ry, gy, by)
 	render.UpdateScreenEffectTexture()
@@ -33,6 +36,7 @@ local function CA(rx, gx, bx, ry, gy, by)
 	ca_r:SetTexture("$basetexture", screentx)
 	ca_g:SetTexture("$basetexture", screentx)
 	ca_b:SetTexture("$basetexture", screentx)
+
 	render.SetMaterial(black)
 	render.DrawScreenQuad()
 	render.SetMaterial(ca_r)
@@ -78,7 +82,7 @@ surface.CreateFont("DaisyHUDSmall", {
 })
 
 local deletiontable = {}
-local deletiontime = 0
+-- local deletiontime = 0
 local deletiontypetime = 0
 local deletiontype = 0
 deletionentry = 0
@@ -123,7 +127,6 @@ local deletionlen = 0
 
 function DrawDeletionText()
 	surface.SetFont("DaisyHUDSmall")
-
 	local oldgi = GlitchIntensity
 
 	if incredits then
@@ -160,7 +163,6 @@ function DrawDeletionText()
 		deletionrare = deletionrare
 		deletiontype = 0
 		deletionentry = deletionentry + 1
-
 		table.insert(deletiontable, deletionstringc)
 
 		if #deletiontable >= 6 then
@@ -168,8 +170,7 @@ function DrawDeletionText()
 		end
 	end
 
-	local tw, th = surface.GetTextSize(deletionstringc)
-
+	local _, th = surface.GetTextSize(deletionstringc)
 	cam.Start2D()
 
 	local num = 0
@@ -180,12 +181,10 @@ function DrawDeletionText()
 	vp:Add(vpcl)
 
 	local GlitchIntensity = incredits and 2 or GlitchIntensity
-
 	surface.SetTextColor(255, 255, 255, 2.5 * (num + 1) * GlitchIntensity)
 
 	for k, v in ipairs(deletiontable) do
 		surface.SetTextColor(255, 255, 255, 2.5 * k * GlitchIntensity)
-
 		local text = v
 
 		for i = 1, 4 do
@@ -198,7 +197,6 @@ function DrawDeletionText()
 
 		surface.SetTextPos(ScrW() * 0.01 + vp.x, ScrH() * 0.05 + (k - 1) * th + vp.y)
 		surface.DrawText(text)
-
 		num = k
 	end
 
@@ -208,6 +206,5 @@ function DrawDeletionText()
 	end
 
 	cam.End2D()
-
 	GlitchIntensity = oldgi
 end

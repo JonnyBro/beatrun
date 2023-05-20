@@ -48,6 +48,7 @@ local function infostring()
 	r = math.Round(r)
 	y = math.Round(y)
 	p = math.Round(p)
+
 	local a = "Index: " .. BuildModeIndex .. "\nSelected: " .. table.Count(buildmode_selected) .. "\nAngle: " .. p .. ", " .. y .. ", " .. r
 
 	return a
@@ -100,11 +101,12 @@ function GenerateBuildModeRT(model)
 		render.PushFilterMin(TEXFILTER.ANISOTROPIC)
 		render.PushRenderTarget(tex, 0, 0, texw, texh)
 		render.SuppressEngineLighting(true)
+
 		dummy:SetModel(model)
 
 		local sicon = PositionSpawnIcon(dummy, vector_origin)
-
 		cam.Start3D(sicon.origin, sicon.angles, sicon.fov)
+
 		render.Clear(0, 0, 0, 0)
 		render.ClearDepth()
 		render.SetWriteDepthToDestAlpha(false)
@@ -114,20 +116,23 @@ function GenerateBuildModeRT(model)
 		render.SetModelLighting(3, 4, 4, 4)
 		render.SetModelLighting(4, 3, 3, 3)
 		render.SetModelLighting(5, 4, 4, 4)
+
 		dummy:DrawModel()
 		cam.End3D()
+
 		render.PopRenderTarget()
 		render.PopFilterMag()
 		render.PopFilterMin()
 		render.SuppressEngineLighting(false)
-
 		rtcache[model] = tex
+
 		local mat = CreateMaterial("BM-" .. model, "UnlitGeneric", {
 			["$vertexcolor"] = 1,
 			["$translucent"] = 1,
 			["$vertexalpha"] = 1,
 			["$basetexture"] = tex:GetName()
 		})
+
 		rtmatcache[model] = mat
 	end
 
@@ -148,7 +153,6 @@ local function BMPropClick(e)
 
 	BuildModeCreateGhost()
 	GhostModel:SetModel(buildmode_props[BuildModeIndex] or buildmode_entmodels[BuildModeIndex])
-
 	PlaceStartPos = nil
 	PlaceEndPos = nil
 	PlaceAxisLock = 0
@@ -191,9 +195,11 @@ local function BuildModeElements()
 
 	row = 1
 	col = 0
+
 	local img = AEUI:AddImage(propspanel, Material("vgui/empty.png"), BMPropClick, 0, 0, 64, 64)
 	img.prop = 0
 	img.hover = "Select"
+
 	local buildmode_enticons = {
 		br_swingbar = Material("vgui/editor/swingbar.png"),
 		br_swingpipe = Material("vgui/editor/swingpipe.png"),
@@ -205,15 +211,18 @@ local function BuildModeElements()
 		br_mat = Material("vgui/editor/mat.png"),
 		tt_cp = Material("vgui/editor/checkpoint.png")
 	}
+
 	local buildmode_entnames = {
 		br_zipline = "Zipline (SHIFT = 2-Way)"
 	}
+
 	local obsolete = Material("editor/obsolete")
 
 	for k, v in pairs(buildmode_ents) do
 		local img = AEUI:AddImage(propspanel, buildmode_enticons[k] or obsolete, BMPropClick, 64 * row, 64 * col, 64, 64)
 		img.prop = k
 		img.hover = buildmode_entnames[k] or scripted_ents.GetMember(k, "PrintName")
+
 		row = row + 1
 
 		if row > 5 then
@@ -223,7 +232,6 @@ local function BuildModeElements()
 	end
 
 	propspanel.elements = propspanel_elements
-
 	hook.Remove("InitPostEntity", "BuildModeElements")
 end
 

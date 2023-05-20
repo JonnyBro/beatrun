@@ -3,13 +3,13 @@ local minimalvm
 if CLIENT then
 	minimalvm = CreateClientConVar("Beatrun_MinimalVM", 1, true, true, "Lowers the running viewmodel", 0, 1)
 	cvarwindsound = CreateClientConVar("Beatrun_Wind", 1, true, false, "Wind noises")
-	SWEP.PrintName        = "Unarmed"			
+	SWEP.PrintName        = "Unarmed"
 	SWEP.Slot		= 0
 	SWEP.SlotPos		= 1
 	SWEP.DrawAmmo		= false
 	SWEP.DrawCrosshair	= false
 
-	
+
 	hook.Add("VManipPrePlayAnim", "LOCNoVManip", function()
 		if LocalPlayer():GetActiveWeapon():GetClass() == "runnerhands" or blinded then
 			return false
@@ -26,14 +26,14 @@ SWEP.BounceWeaponIcon = false
 SWEP.DrawWeaponInfoBox = false
 
 SWEP.HoldType = "fist"
- 
+
 SWEP.Spawnable			= false
 SWEP.AdminSpawnable		= false
 
 
 --[[Just don't draw the hands, we don't need 'em]]
 SWEP.UseHands = false
- 
+
 SWEP.ViewModel			= "models/runnerhands.mdl"
 SWEP.WorldModel		= ""
 
@@ -43,7 +43,7 @@ SWEP.Primary.ClipSize		= -1
 SWEP.Primary.DefaultClip	= -1
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo		= "none"
- 
+
 SWEP.Secondary.ClipSize	= -1
 SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
@@ -89,7 +89,7 @@ function SWEP:GetViewModelPosition( pos, ang )
 	if minimalvm:GetBool() then
 		if !self.posz then self.posz = pos.z end
 		local seq = self:GetSequence()
-		
+
 		if runseq[seq] then
 			self.posz = Lerp(10*FrameTime(), self.posz, -2)
 		else
@@ -98,7 +98,7 @@ function SWEP:GetViewModelPosition( pos, ang )
 		pos.z=pos.z + self.posz
 	end
 	if oddseq[self:GetSequence()] then return pos, ang end
-	
+
 	self.BobScale = 0
 	ang.x=math.Clamp(ang.x,-10,89)
 
@@ -111,7 +111,7 @@ function SWEP:Deploy()
 	self.RespawnDelay = 0
 	self:SetWasOnGround(false)
 	self:SetBlockAnims(false)
-	
+
 	self:SetPunch(1)
 	RunConsoleCommand("fov_desired", 100)
 end
@@ -187,8 +187,8 @@ if ply:KeyPressed(IN_JUMP) and self:GetWasOnGround() and !ply:GetJumpTurn() then
 	ply:ViewPunch(Angle(-2,0,0))
 	local eyeang = ply:EyeAngles()
 	eyeang.x = 0
-	
-	
+
+
 	if insidestep and viewmodel:GetCycle() <= 0.1 and GetConVar("Beatrun_QuakeJump"):GetBool() then
 		if SERVER then
 			ply:EmitSound("quakejump.mp3", 100, 100, 0.2)
@@ -196,7 +196,7 @@ if ply:KeyPressed(IN_JUMP) and self:GetWasOnGround() and !ply:GetJumpTurn() then
 		ply.QuakeJumping = true
 		self:SetQuakeJumping(true)
 	end
-	
+
 	if !ismoving and !ply:Crouching() then
 		ParkourEvent("jumpstill",ply)
 	elseif !ply:Crouching() then
@@ -262,11 +262,11 @@ if CLIENT then
 		self.RunWind1 = CreateSound(self, "clotheswind.wav")
 		self.RunWind2 = CreateSound(self, "runwind.wav")
 	end
-	
+
 	if velocity>250 and cvarwindsound:GetBool() then
 		self.RunWind1:Play()
 		self.RunWind2:Play()
-		
+
 		self.RunWindVolume = math.Clamp(self.RunWindVolume + (0.5*FrameTime()), 0, 1)
 		self.RunWind1:ChangeVolume(self.RunWindVolume)
 		self.RunWind2:ChangeVolume(self.RunWindVolume)
@@ -351,7 +351,7 @@ local tr = {}
 local tr_result = {}
 function SWEP:PrimaryAttack()
 	local ply = self.Owner
-	
+
 	if ply:KeyDown(IN_USE) and game.SinglePlayer() then
 		local mult = (ply:InOverdrive() and 1) or 1.25
 		local fovmult = (mult == 1 and 1) or 1.1
@@ -360,16 +360,16 @@ function SWEP:PrimaryAttack()
 		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120)*fovmult, 0.125)
 		return
 	end
-	
+
 	if !ply:OnGround() or ply:Crouching() or ply:GetSliding() or ply:GetGrappling() or ply:GetWallrun() != 0 then
 		return
 	end
-	
-	
+
+
 	local curseq = self:GetSequence()
 	local infall = curseq==19
 	if infall then return end
-	
+
 	if CurTime() > self:GetPunchReset() then
 		self:SetPunch(1)
 	end
@@ -383,27 +383,27 @@ function SWEP:PrimaryAttack()
 	ply:ViewPunch(self.punchangles[punch])
 	self:SetNextPrimaryFire(CurTime()+self.punchdelays[punch])
 	self:SetPunchReset(CurTime()+0.5)
-	
+
 	tr.start = ply:GetShootPos()
 	tr.endpos = ply:GetShootPos() + ply:GetAimVector() * 50
 	tr.filter = ply
 	tr.mins =  Vector( -8 , -8 , -8 )
 	tr.maxs =  Vector( 8 , 8 , 8 )
 	tr.output = tr_result
-	
+
 	if ply:IsPlayer() then
 		ply:LagCompensation( true )
 		self:SetHoldType( "fist" )
 		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST, true)
 	end
-	
+
 	util.TraceHull( tr )
 	self:EmitSound("mirrorsedge/Melee/armswoosh"..math.random(1, 6)..".wav")
-	
+
 	if ply:IsPlayer() then
 		ply:LagCompensation( false )
 	end
-	
+
 	if tr_result.Hit then
 		self:EmitSound("mirrorsedge/Melee/fist"..math.random(1, 5)..".wav")
 		local ent = tr_result.Entity
@@ -416,7 +416,7 @@ function SWEP:PrimaryAttack()
 				d:SetDamageType( DMG_CLUB )
 				d:SetDamagePosition(tr.start)
 				d:SetDamageForce(ply:EyeAngles():Forward()*7000)
-			
+
 				ent:TakeDamageInfo( d )
 				if ent:IsNPC() then
 					ent:SetActivity(ACT_FLINCH_HEAD)
@@ -433,7 +433,7 @@ function SWEP:PrimaryAttack()
 		self:SetPunch(1)
 	end
 end
- 
+
 
 function SWEP:SecondaryAttack()
 

@@ -11,6 +11,7 @@ local hide = {
 	CHudHealth = true,
 	CHudDamageIndicator = true
 }
+local inf = math.huge
 
 hook.Add("HUDShouldDraw", "BeatrunHUDHide", function (name)
 	if hide[name] then
@@ -31,10 +32,8 @@ local tab = {
 	["$pp_colour_colour"] = color
 }
 
-hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function ()
-	if render.GetDXLevel() < 90 then
-		return
-	end
+hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function()
+	if render.GetDXLevel() < 90 then return end
 
 	local ply = LocalPlayer()
 	local inp = color ~= 1
@@ -42,7 +41,6 @@ hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function ()
 
 	if noclipping or inp then
 		tab["$pp_colour_colour"] = color
-
 		DrawColorModify(tab)
 	end
 
@@ -54,10 +52,10 @@ hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function ()
 
 	if LocalPlayer():Health() < 100 then
 		tab["$pp_colour_colour"] = math.max(LocalPlayer():Health() / LocalPlayer():GetMaxHealth(), 0)
-
 		DrawColorModify(tab)
 	end
 end)
+
 surface.CreateFont("BeatrunHUD", {
 	shadow = true,
 	blursize = 0,
@@ -75,6 +73,7 @@ surface.CreateFont("BeatrunHUD", {
 	weight = 500,
 	size = ScreenScale(7)
 })
+
 surface.CreateFont("BeatrunHUDSmall", {
 	shadow = true,
 	blursize = 0,
@@ -96,9 +95,7 @@ surface.CreateFont("BeatrunHUDSmall", {
 local blur = Material("pp/blurscreen")
 
 local function DrawBlurRect(x, y, w, h, a)
-	if render.GetDXLevel() < 90 then
-		return
-	end
+	if render.GetDXLevel() < 90 then return end
 
 	local X = 0
 	local Y = 0
@@ -125,13 +122,12 @@ local function BeatrunHUD()
 
 	surface.SetFont("DebugFixedSmall")
 
-	local vtext = VERSIONGLOBAL
-	local tw, th = surface.GetTextSize(vtext)
-
-	surface.SetTextColor(255, 255, 255, 15)
-	surface.SetTextPos(scrw - tw, 0)
-	surface.DrawText(vtext)
-	surface.SetFont("BeatrunHUD")
+	-- local vtext = (ply:SteamID() or "?") .. " | " .. VERSIONGLOBAL
+	-- local tw, th = surface.GetTextSize(vtext)
+	-- surface.SetTextColor(255, 255, 255, 15)
+	-- surface.SetTextPos(scrw - tw, 0)
+	-- surface.DrawText(vtext)
+	-- surface.SetFont("BeatrunHUD")
 
 	local pl = ply:GetNW2Int("PLoss")
 	local CT = CurTime()
@@ -151,19 +147,12 @@ local function BeatrunHUD()
 		end
 	end
 
-	if BuildMode then
-		return
-	end
-
-	if hidden:GetInt() > 1 then
-		return
-	end
+	if BuildMode then return end
+	if hidden:GetInt() > 1 then return end
 
 	local shoulddraw = hook.Run("BeatrunDrawHUD")
 
-	if shoulddraw == false then
-		return
-	end
+	if shoulddraw == false then return end
 
 	local vp = ply:GetViewPunchAngles()
 
@@ -175,7 +164,7 @@ local function BeatrunHUD()
 	local coursename = nil
 	local customname = hook.Run("BeatrunHUDCourse")
 	coursename = customname and customname or Course_Name ~= "" and Course_Name or "Freeplay"
-	local lastxp = ply.LastXP or 0
+	-- local lastxp = ply.LastXP or 0
 	local nicktext = nil
 
 	if showtotalXP:GetBool() then
@@ -185,14 +174,11 @@ local function BeatrunHUD()
 	end
 
 	surface.SetFont("BeatrunHUDSmall")
-
 	local nickw, nickh = surface.GetTextSize(nicktext)
-
 	surface.SetFont("BeatrunHUD")
-
-	local coursew, courseh = surface.GetTextSize(coursename)
+	local coursew, _ = surface.GetTextSize(coursename)
 	local bgpadw = nickw
-	local bgpadh = nickh
+	-- local bgpadh = nickh
 
 	if bgpadw < coursew then
 		bgpadw = coursew
@@ -209,7 +195,9 @@ local function BeatrunHUD()
 
 		surface.SetDrawColor(20, 20, 20, math.max(150 - hidealpha, 50))
 		surface.DrawRect(-20 + vp.z, scrh * 0.895 + vp.x, 40, SScaleY(85))
+
 		DrawBlurRect(20 + vp.z, scrh * 0.895 + vp.x, SScaleX(bgpadding), SScaleY(85), math.max(255 - hidealpha, 2))
+
 		surface.SetDrawColor(20, 20, 20, math.max(100 - hidealpha, 50))
 		surface.DrawOutlinedRect(20 + vp.z, scrh * 0.895 + vp.x, SScaleX(bgpadding), SScaleY(85))
 		surface.SetFont("BeatrunHUD")

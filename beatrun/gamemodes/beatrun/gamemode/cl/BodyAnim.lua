@@ -55,15 +55,15 @@ deleteonend = true
 lockang = false
 CamAddAng = false
 CamIgnoreAng = false
-local BodyAnimPos = Vector(0, 0, 0)
-local BodyAnimAngLerp = Angle(0, 0, 0)
-local DidDraw = false
+-- local BodyAnimPos = Vector(0, 0, 0)
+-- local BodyAnimAngLerp = Angle(0, 0, 0)
+-- local DidDraw = false
 local AnimString = "nil"
-local angclosenuff = false
+-- local angclosenuff = false
 local savedeyeangb = Angle(0, 0, 0)
-local bodylockview = false
-local bodyanimdone = false
-local holstertime = 0
+-- local bodylockview = false
+-- local bodyanimdone = false
+-- local holstertime = 0
 local animmodelstring = ""
 local showweapon = false
 local showvm = false
@@ -94,12 +94,10 @@ local justremoved = false
 function RemoveBodyAnim(noang)
 	local shouldremove = hook.Run("BodyAnimPreRemove")
 
-	if shouldremove then
-		return
-	end
+	if shouldremove then return end
 
 	local ply = LocalPlayer()
-	local ang = ply:EyeAngles()
+	-- local ang = ply:EyeAngles()
 	local newang = ply:EyeAngles()
 	local noang = noang or false
 
@@ -142,11 +140,8 @@ function RemoveBodyAnim(noang)
 		end
 
 		BodyAnim:Remove()
-
 		justremoved = true
-
 		ply:DrawViewModel(true)
-
 		DidDraw = false
 	end
 
@@ -158,9 +153,9 @@ function RemoveBodyAnim(noang)
 			currentwep:PlayViewModelAnimation("Draw")
 		else
 			weapontoidle = currentwep
-
 			currentwep:SendWeaponAnim(ACT_VM_DRAW)
-			timer.Simple(vm:SequenceDuration(vm:SelectWeightedSequence(ACT_VM_DRAW)), function ()
+
+			timer.Simple(vm:SequenceDuration(vm:SelectWeightedSequence(ACT_VM_DRAW)), function()
 				if ply:GetActiveWeapon() == weapontoidle and weapontoidle:GetSequenceActivityName(weapontoidle:GetSequence()) == "ACT_VM_DRAW" then
 					weapontoidle:GetSequenceActivityName(weapontoidle:GetSequence())
 					weapontoidle:SendWeaponAnim(ACT_VM_IDLE)
@@ -223,9 +218,7 @@ armbones = {
 }
 
 function CacheBodyAnim()
-	if not IsValid(BodyAnim) then
-		return
-	end
+	if not IsValid(BodyAnim) then return end
 
 	local pos = LocalPlayer():GetPos()
 
@@ -234,9 +227,7 @@ function CacheBodyAnim()
 
 	for i = 0, BodyAnim:GetBoneCount() - 1 do
 		local m = BodyAnim:GetBoneMatrix(i)
-
 		m:SetTranslation(m:GetTranslation() - pos)
-
 		cachebody[i] = m
 	end
 
@@ -257,37 +248,33 @@ function CacheLerpBodyAnim()
 		BodyAnimMDL:SetNoDraw(true)
 
 		local pos = LocalPlayer():GetPos()
-		local posdelta = pos - matrixfrompos
+		-- local posdelta = pos - matrixfrompos
 		local self = BodyAnim
 		self.m = self.m or Matrix()
+
 		local from = matrixfrom
 		local to = matrixto
 
 		for bone = 0, self:GetBoneCount() - 1 do
 			if not armbones[BodyAnim:GetBoneName(bone)] then
 				if not to[bone] then
-					to[bone] = {
-						{},
-						{},
-						{}
-					}
+					to[bone] = {{}, {}, {}}
 				end
 
 				local ModelBoneMatrix = BodyAnim:GetBoneMatrix(bone)
-
 				ModelBoneMatrix:SetTranslation(ModelBoneMatrix:GetTranslation())
 
 				from[bone] = cachebody[bone]:FastToTable(from[bone]) or from[bone]
 				to[bone] = to[bone] or ModelBoneMatrix:FastToTable(to[bone])
+
 				local bonematrix = self:GetBoneMatrix(bone)
-
 				bonematrix:SetTranslation(bonematrix:GetTranslation() - pos)
-
 				to[bone] = bonematrix:FastToTable(to[bone])
 
 				for i = 1, 3 do
 					local from = from[bone][i]
 					local v = to[bone][i]
+
 					v[1] = LerpL(transitionlerp, from[1], v[1])
 					v[2] = LerpL(transitionlerp, from[2], v[2])
 					v[3] = LerpL(transitionlerp, from[3], v[3])
@@ -301,8 +288,8 @@ function CacheLerpBodyAnim()
 					local bt1 = bt[1]
 					local bt2 = bt[2]
 					local bt3 = bt[3]
-					slot15 = bt[4]
 
+					slot15 = bt[4]
 					self.m:SetUnpacked(bt1[1], bt1[2], bt1[3], bt1[4], bt2[1], bt2[2], bt2[3], bt2[4], bt3[1], bt3[2], bt3[3], bt3[4], 0, 0, 0, 1)
 				end
 
@@ -321,20 +308,12 @@ end
 function StartBodyAnim(animtable)
 	local prestart = hook.Run("BodyAnimPreStart", animtable)
 
-	if prestart then
-		return
-	end
-
-	if IsValid(BodyAnim) and not justremoved then
-		return
-	end
+	if prestart then return end
+	if IsValid(BodyAnim) and not justremoved then return end
 
 	justremoved = false
 	local ply = LocalPlayer()
-
-	if ply:InVehicle() then
-		return
-	end
+	if ply:InVehicle() then return end
 
 	animmodelstring = animtable.animmodelstring
 	AnimString = animtable.AnimString
@@ -356,6 +335,7 @@ function StartBodyAnim(animtable)
 	customcycle = animtable.customcycle or false
 	showweapon = animtable.showweapon or false
 	showvm = animtable.showvm or false
+
 	ply.OrigEyeAng = ply:EyeAngles()
 	ply.OrigEyeAng.x = 0
 
@@ -372,24 +352,18 @@ function StartBodyAnim(animtable)
 	end
 
 	hook.Add("CalcView", "BodyAnimCalcView2", BodyAnimCalcView2)
-
 	BodyAnimAngLerp = ply:EyeAngles()
 
-	if AnimString == nil or not ply:Alive() and not deathanim then
-		return
-	end
+	if AnimString == nil or not ply:Alive() and not deathanim then return end
 
 	savedeyeangb = Angle(0, 0, 0)
 	BodyAnim = ClientsideModel("models/" .. tostring(animmodelstring) .. ".mdl", RENDERGROUP_BOTH)
-
 	BodyAnim:SetAngles(Angle(0, ply:EyeAngles().y, 0))
 	BodyAnim:SetPos(ply:GetPos())
 	BodyAnim:SetNoDraw(false)
 	BodyAnimStartPos:Set(BodyAnim:GetPos())
 
-	if not IsValid(ply:GetHands()) then
-		return
-	end
+	if not IsValid(ply:GetHands()) then return end
 
 	local plymodel = ply
 	local playermodel = string.Replace(ply:GetModel(), "models/models/", "models/")
@@ -403,7 +377,6 @@ function StartBodyAnim(animtable)
 		end
 
 		BodyAnimMDL:SnatchModelInstance(ply)
-
 		BodyAnimMDLarm = ClientsideModel(handsmodel, RENDERGROUP_BOTH)
 
 		function BodyAnimMDLarm.GetPlayerColor()
@@ -460,7 +433,6 @@ function StartBodyAnim(animtable)
 
 	if tobool(showweapon) and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetModel() ~= "" then
 		BodyAnimWEPMDL = ClientsideModel(ply:GetActiveWeapon():GetModel(), RENDERGROUP_BOTH)
-
 		BodyAnimWEPMDL:SetPos(ply:GetPos())
 		BodyAnimWEPMDL:SetAngles(Angle(0, EyeAngles().y, 0))
 		BodyAnimWEPMDL:SetParent(BodyAnim)
@@ -482,10 +454,8 @@ function StartBodyAnim(animtable)
 	hook.Run("BodyAnimStart")
 end
 
-hook.Add("Think", "BodyAnimThink", function ()
-	if not IsValid(BodyAnim) then
-		return
-	end
+hook.Add("Think", "BodyAnimThink", function()
+	if not IsValid(BodyAnim) then return end
 
 	local ply = LocalPlayer()
 
@@ -513,7 +483,6 @@ local BodyAnimPosEaseLerp = 1
 
 function BodyAnimSetEase(pos)
 	BodyAnimPosEase:Set(pos)
-
 	BodyAnimPosEaseLerp = 0
 end
 
@@ -525,7 +494,7 @@ local lerpedpos = Vector()
 local lastlockang = false
 local lastlockangstart = Angle()
 local lasteyeang = Angle()
-local lerpedang = Vector()
+-- local lerpedang = Vector()
 
 function BodyAnimCalcView2(ply, pos, angles, fov)
 	if ply:InVehicle() then
@@ -600,6 +569,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 			if lerpchangeatt < 1 then
 				local attachId = BodyAnim:LookupAttachment(savedatt)
+
 				lastattdata = BodyAnim:GetAttachment(attachId) or attach
 				lerpedpos = LerpVector(lerpchangeatt, lastattdata.Pos, attach.Pos)
 				lerpchangeatt = math.Approach(lerpchangeatt, 1, FrameTime() * 5)
@@ -651,10 +621,9 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				end
 
 				view.angles = ang
-
 				view.angles:Add(ViewTiltAngle)
-
 				allowedangchange = false
+
 				local neweyeang = Angle(view.angles)
 				neweyeang.y = BodyAnim:GetAngles().y
 				neweyeang.z = 0
@@ -682,7 +651,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 			elseif not IsValid(BodyAnim) and endlerp == 1 then
 				attach = nil
 				endlerp = 0
-
 				hook.Remove("CalcView", "BodyAnimCalcView2")
 
 				if IsValid(vm) then
@@ -697,16 +665,20 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				local FT = RealFrameTime()
 				ang[1] = 0
 				ang[3] = 0
+
 				local MEAng = math.Truncate(ang.y, 2)
 				local target = not lockang and MEAng or ply.OrigEyeAng.y
 				viewtiltlerp.y = math.ApproachAngle(viewtiltlerp.y, target, FT * (1 + math.abs(math.AngleDifference(viewtiltlerp.y, target)) * 5))
+
 				local MEAngDiff = math.AngleDifference(viewtiltlerp.y, not lockang and lastangy or ply.OrigEyeAng.y) * 0.15
 				ViewTiltAngle = Angle(0, 0, MEAngDiff + viewtiltlerp.z)
 
 				view.angles:Add(ViewTiltAngle)
 				ply:SetNoDraw(false)
 				view.angles:Add(ply:GetViewPunchAngles() + ply:GetCLViewPunchAngles())
+
 				hook.Run("BodyAnimCalcView", view)
+
 				pos:Set(view.origin)
 				angles:Set(view.angles)
 
@@ -724,7 +696,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				end
 
 				lastangy = ang.y
-
 				hook.Run("CalcViewBA", ply, pos, angles)
 
 				return
@@ -735,7 +706,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 		if attach == nil or CurTime() < (mantletimer or 0) then
 			view.origin = lastattachpos
-
 			pos:Set(lastattachpos)
 
 			return
@@ -743,22 +713,22 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 	end
 end
 
-hook.Add("CreateMove", "BodyLimitMove", function (cmd)
-	local ply = LocalPlayer()
+hook.Add("CreateMove", "BodyLimitMove", function(cmd)
+	-- local ply = LocalPlayer()
 
 	if IsValid(BodyAnimMDL) and not allowmove then
 		cmd:ClearButtons()
 		cmd:ClearMovement()
 	end
 end)
-hook.Add("PostDrawOpaqueRenderables", "IgnoreZBodyAnim", function (depth, sky)
+
+hook.Add("PostDrawOpaqueRenderables", "IgnoreZBodyAnim", function(depth, sky)
 	if IsValid(BodyAnimMDL) then
 		CacheLerpBodyAnim()
 
 		if ignorez then
 			cam.IgnoreZ(true)
 			BodyAnimMDL:DrawModel()
-
 			local customarmdraw = hook.Run("BodyAnimDrawArm")
 
 			if not customarmdraw and IsValid(BodyAnimMDLarm) then
@@ -770,13 +740,13 @@ hook.Add("PostDrawOpaqueRenderables", "IgnoreZBodyAnim", function (depth, sky)
 	end
 end)
 
-local lasteyeang = Angle()
+-- local lasteyeang = Angle()
 local lastlimitx = 0
 local lastlimity = 0
 local pastlimitx = false
 local pastlimity = false
 
-hook.Add("CreateMove", "BodyAnim_Mouse", function (cmd)
+hook.Add("CreateMove", "BodyAnim_Mouse", function(cmd)
 	local ply = LocalPlayer()
 
 	if not lockang and IsValid(BodyAnim) then
@@ -796,7 +766,6 @@ hook.Add("CreateMove", "BodyAnim_Mouse", function (cmd)
 
 			if BodyAnimLimitEase then
 				ply:CLViewPunch(Angle(-0.2, 0, 0))
-
 				ang.x = math.Approach(ang.x, oang.x + limitx, FrameTime() * 125)
 			else
 				ang.x = oang.x + limitx
@@ -832,7 +801,8 @@ hook.Add("CreateMove", "BodyAnim_Mouse", function (cmd)
 		lastlimitx = BodyLimitX
 	end
 end)
-hook.Add("InputMouseApply", "BodyAnim_Mouse", function (cmd)
+
+hook.Add("InputMouseApply", "BodyAnim_Mouse", function(cmd)
 	local newvalues = false
 
 	if lockang then
@@ -844,17 +814,13 @@ hook.Add("InputMouseApply", "BodyAnim_Mouse", function (cmd)
 
 	if pastlimitx then
 		cmd:SetMouseY(0)
-
 		newvalues = true
 	end
 
 	if pastlimity then
 		cmd:SetMouseX(0)
-
 		newvalues = true
 	end
 
-	if newvalues then
-		return true
-	end
+	if newvalues then return true end
 end)

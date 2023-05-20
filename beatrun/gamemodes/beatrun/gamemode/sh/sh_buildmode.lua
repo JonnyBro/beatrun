@@ -1,5 +1,6 @@
 local mousex = 0
 local mousey = 0
+local inf = math.huge
 buildmode_props = {}
 local propmatsblacklist = {}
 local blocksdir = "models/hunter/blocks/"

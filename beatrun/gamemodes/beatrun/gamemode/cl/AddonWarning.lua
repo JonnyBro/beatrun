@@ -10,10 +10,12 @@ welcome.outlinecolor = Color(54, 55, 56)
 welcome.alpha = 0.9
 welcome.elements = {}
 
+/*
 local function closebutton(self)
 	LocalPlayer():EmitSound("holygrenade.mp3")
 	AEUI:Clear()
 end
+*/
 
 local function warnclosebutton(self)
 	LocalPlayer():EmitSound("holygrenade.mp3")
@@ -22,17 +24,13 @@ local function warnclosebutton(self)
 	bigboy = true
 end
 
-if not game.SinglePlayer() then
-	return
-end
+if not game.SinglePlayer() then return end
 
 local addons = 0
 local warning = Material("vgui/warning.png")
 local shit = {
 	["378401390"] = true,
 	["2027577882"] = true,
-	["1440226338"] = true,
-	["1418478031"] = true,
 	["1190705063"] = true,
 	["123514260"] = true,
 	["2416989205"] = true,
@@ -41,15 +39,12 @@ local shit = {
 	["2230307188"] = true,
 	["2137973704"] = true,
 	["577145478"] = true,
-	["2589006389"] = true,
 	["1632091428"] = true,
-	["104548572"] = true,
 	["1622199072"] = true,
 	["2840019616"] = true,
 	["583517911"] = true,
 	["2106330193"] = true,
 	["2593047682"] = true,
-	["2564569716"] = true,
 	["142911907"] = true,
 	["2316713217"] = true
 }

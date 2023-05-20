@@ -4,23 +4,17 @@ local SScaleX_cached = {}
 local SScaleY_cached = {}
 
 function SScaleX(sizex)
-	local iswide = AEUI.ScrW / AEUI.ScrH > 1.6
+	-- local iswide = AEUI.ScrW / AEUI.ScrH > 1.6
 
-	if SScaleX_cached[sizex] then
-		return SScaleX_cached[sizex]
-	end
-
+	if SScaleX_cached[sizex] then return SScaleX_cached[sizex] end
 	SScaleX_cached[sizex] = math.ceil(sizex / (1920 / AEUI.ScrW))
 
 	return SScaleX_cached[sizex]
 end
 
 function SScaleY(sizey)
-	local iswide = AEUI.ScrW / AEUI.ScrH > 1.6
-
-	if SScaleY_cached[sizey] then
-		return SScaleY_cached[sizey]
-	end
+	-- local iswide = AEUI.ScrW / AEUI.ScrH > 1.6
+	if SScaleY_cached[sizey] then return SScaleY_cached[sizey] end
 
 	SScaleY_cached[sizey] = math.ceil(sizey / (1080 / AEUI.ScrH))
 
@@ -109,9 +103,7 @@ function AEUI:DrawPanel(panel)
 end
 
 function AEUI:AddPanel(panel)
-	if table.HasValue(AEUI.Panels, panel) then
-		return
-	end
+	if table.HasValue(AEUI.Panels, panel) then return end
 
 	table.insert(AEUI.Panels, panel)
 	gui.EnableScreenClicker(true)
@@ -131,6 +123,7 @@ function AEUI:AddText(panel, str, font, x, y, centered, color)
 	y = y or 0
 	centered = centered or false
 	color = color or color_white
+
 	local text = {
 		x = x,
 		y = y,
@@ -152,8 +145,8 @@ function AEUI:AddButton(panel, str, func, font, x, y, centered, color)
 	y = y or 0
 	centered = centered or false
 	color = color or color_white
-	func = func or function ()
-	end
+	func = func or function() end
+
 	local button = {
 		x = x,
 		y = y,
@@ -176,8 +169,8 @@ function AEUI:AddImage(panel, mat, func, x, y, w, h, color)
 	y = y or 0
 	centered = centered or false
 	color = color or color_white
-	func = func or function ()
-	end
+	func = func or function() end
+
 	local image = {
 		x = x,
 		y = y,
@@ -206,9 +199,7 @@ function AEUI:DrawElement(panel, data)
 end
 
 local function AEUIDraw()
-	if AEUI.NoDraw then
-		return
-	end
+	if AEUI.NoDraw then return end
 
 	for k, v in ipairs(AEUI.Panels) do
 		surface.SetAlphaMultiplier(v.alpha or 1)
@@ -222,7 +213,6 @@ local function AEUIDraw()
 		end
 
 		render.SetScissorRect(0, 0, 0, 0, false)
-
 		local maxscroll = math.abs(v.maxscroll or 0)
 
 		if (v.maxscroll or 0) > 0 then
@@ -241,7 +231,6 @@ local function AEUIDraw()
 		if e.hover then
 			local mx = AEUI.MX + SScaleX(20)
 			local my = AEUI.MY + SScaleY(20)
-
 			surface.SetTextColor(255, 255, 255)
 			surface.SetFont("AEUIDefault")
 
@@ -262,7 +251,7 @@ local function AEUIDraw()
 end
 
 hook.Add("HUDPaint", "AEUIDraw", AEUIDraw)
-hook.Add("StartCommand", "AEUI_StartCommand", function (ply, cmd)
+hook.Add("StartCommand", "AEUI_StartCommand", function(ply, cmd)
 	local mx = gui.MouseX()
 	local my = gui.MouseY()
 	AEUI.MY = my
@@ -313,7 +302,6 @@ hook.Add("StartCommand", "AEUI_StartCommand", function (ply, cmd)
 
 					if v.onclick and click and AEUI.LastClick < CurTime() then
 						v:onclick()
-
 						AEUI.LastClick = CurTime() + 0.1
 					end
 
@@ -327,7 +315,8 @@ hook.Add("StartCommand", "AEUI_StartCommand", function (ply, cmd)
 		AEUI.HoveredElement = nil
 	end
 end)
-hook.Add("OnScreenSizeChanged", "AEUI_ScreenSize", function ()
+
+hook.Add("OnScreenSizeChanged", "AEUI_ScreenSize", function()
 	AEUI.ScrH = ScrH()
 	AEUI.ScrW = ScrW()
 
@@ -453,9 +442,7 @@ function AEUI.Elements.Button(panel, data)
 	if data.centered then
 		datah = th + 4
 		dataw = tw + 4
-
 		surface.DrawOutlinedRect(ox + SScaleX(data.x) - tw * 0.5 - 2, oy + SScaleY(data.y) - th * 0.5 - 2, dataw, datah)
-
 		local x = ox + SScaleX(data.x) - tw * 0.5
 		local y = oy + SScaleY(data.y) - th * 0.5
 
@@ -467,9 +454,7 @@ function AEUI.Elements.Button(panel, data)
 	else
 		datah = th
 		dataw = tw
-
 		surface.DrawOutlinedRect(ox + SScaleX(data.x), oy + SScaleY(data.y), tw, th)
-
 		local x = ox + SScaleX(data.x)
 		local y = oy + SScaleY(data.y)
 
@@ -482,9 +467,7 @@ function AEUI.Elements.Button(panel, data)
 
 	data.h = datah
 	data.w = dataw
-
 	surface.DrawText(v)
-
 	posy = posy - oy - SScaleY(panel.h)
 
 	if not panel.maxscroll or panel.maxscroll < posy then
@@ -515,7 +498,7 @@ function AEUI.Elements.Image(panel, data)
 	end
 
 	local posy = 0
-	local x = ox + SScaleX(data.x)
+	-- local x = ox + SScaleX(data.x)
 	local y = oy + SScaleY(data.y)
 
 	if isgreyed then
