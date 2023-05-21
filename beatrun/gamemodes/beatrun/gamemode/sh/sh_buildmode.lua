@@ -602,7 +602,7 @@ if SERVER then
 	function Beatrun_ReadCourse(data)
 		game.CleanUpMap()
 
-		local a = util.Decompress(data)
+		local a = util.Decompress(data) or data
 		local crc = util.CRC(a)
 		local data = util.JSONToTable(a)
 

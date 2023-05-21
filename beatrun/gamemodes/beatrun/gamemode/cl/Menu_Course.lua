@@ -53,11 +53,11 @@ function OpenCourseMenu(ply)
 
 	for k, v in pairs(files) do
 		local data = file.Read(dir .. v, "DATA")
-		data = util.Decompress(data)
+		course = util.Decompress(data) or data
 
-		if data then
-			data = util.JSONToTable(data)
-			local courseentry = AEUI:AddText(courselist, data[5] or "ERROR", "AEUILarge", 10, 40 * #courselist.elements)
+		if course then
+			course = util.JSONToTable(course)
+			local courseentry = AEUI:AddText(courselist, course[5] or "ERROR", "AEUILarge", 10, 40 * #courselist.elements)
 			courseentry.courseid = v:Split(".txt")[1]
 
 			function courseentry:onclick()
