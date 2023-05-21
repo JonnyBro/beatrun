@@ -23,7 +23,7 @@ SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_crossbow.mdl"
 SWEP.WorldModel = "models/weapons/w_crossbow.mdl"
 
-SWEP.ViewModelFOV = 75 -- 65
+SWEP.ViewModelFOV = 55 -- 75
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
@@ -34,6 +34,8 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
+
+local ziplines = {}
 
 function SWEP:SetupDataTables()
 end
@@ -63,12 +65,16 @@ function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
 
 	if SERVER then
-		CreateZipline(ply:EyePos(), ply:GetEyeTrace().HitPos)
+		local zip = CreateZipline(ply:EyePos(), ply:GetEyeTrace().HitPos)
+
+		table.insert(ziplines, zip)
 	end
 end
 
 function SWEP:SecondaryAttack()
-	-- for k, v in pairs(ziplines) do
-	-- 	v:Remove()
-	-- end
+	for k, v in pairs(ziplines) do
+		v:Remove()
+	end
+
+	table.Empty(ziplines)
 end

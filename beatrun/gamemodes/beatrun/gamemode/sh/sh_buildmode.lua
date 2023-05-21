@@ -891,10 +891,8 @@ if CLIENT then
 		local save = {{}, {}, Course_StartPos, Course_StartAng, name or "Unnamed", {}}
 
 		for k, v in pairs(buildmode_placed) do
-			if not IsValid(v) then
-				return
+			if not IsValid(v) then -- Nothing
 			elseif v:GetNW2Bool("BRProtected") then
-				-- Nothing
 				print("ignoring protected ent")
 			else
 				local class = v:GetClass()
@@ -936,7 +934,8 @@ if CLIENT then
 		local jsonsave = util.TableToJSON(save)
 		local crc = util.CRC(jsonsave)
 		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
-		compress = compress or true
+
+		if compress == nil then compress = true end
 
 		file.CreateDir(dir)
 
@@ -946,16 +945,16 @@ if CLIENT then
 			file.Write(dir .. crc .. ".txt", jsonsave)
 		end
 
-		print("Save created:", crc)
+		print("Save created: " .. crc .. ".txt")
 	end
 
 	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)
 		local name = args[1] or "Unnamed"
-		local compress = not args[2]
+		-- local compress = not args[2]
 
-		print(compress)
+		print(args[2])
 
-		SaveCourse(name, compress)
+		SaveCourse(name, args[2])
 	end)
 
 	function LoadCourse(id)
