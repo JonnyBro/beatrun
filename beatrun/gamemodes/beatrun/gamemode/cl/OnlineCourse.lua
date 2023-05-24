@@ -1,5 +1,5 @@
-local apikey = CreateClientConVar("Beatrun_Apikey", "0", true, {FCVAR_ARCHIVE, FCVAR_UNLOGGED})
-local domain = CreateClientConVar("Beatrun_Domain", "localhost", true, {FCVAR_ARCHIVE, FCVAR_UNLOGGED})
+local apikey = CreateClientConVar("Beatrun_Apikey", "0", true, false, "Your API key")
+local domain = CreateClientConVar("Beatrun_Domain", "localhost", true, false, "Online courses domain")
 
 function UploadCourse()
 	if Course_Name == "" or Course_ID == "" then return print("Can't upload in Freeplay") end
