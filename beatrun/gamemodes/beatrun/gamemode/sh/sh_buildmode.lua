@@ -962,7 +962,7 @@ if CLIENT then
 		local save = file.Read(dir .. id .. ".txt", "DATA")
 
 		if not save then
-			print("NON-EXISTENT SAVE", id)
+			print("NON-EXISTENT SAVE: ", id)
 
 			return
 		end
@@ -999,10 +999,16 @@ if CLIENT then
 	end
 
 	concommand.Add("Beatrun_PrintCourse", function(ply, cmd, args, argstr)
-		local dir = "beatrun/courses/" .. game.GetMap() .. "/*.txt"
-		local files = file.Find(dir, "DATA", "datedesc")
+		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
+		local save = file.Read(dir .. args[1] .. ".txt", "DATA")
 
-		PrintTable(files)
+		if not save then
+			print("NON-EXISTENT SAVE: ", args[1])
+
+			return
+		end
+
+		PrintTable(save)
 	end)
 
 	net.Receive("BuildMode_Sync", function()

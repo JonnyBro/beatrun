@@ -1,7 +1,7 @@
 GM_DATATHEFT = 1
 
 DATATHEFT_LOADOUTS = {
-	{"weapon_ss2_colt", "weapon_ss2_circularsaw"}
+	{"mg_swhiskey", "mg_mike4"}
 }
 
 if SERVER then

@@ -1,5 +1,3 @@
-print("h")
-
 --[[
 local prefabs = {
 	basic_floor = {

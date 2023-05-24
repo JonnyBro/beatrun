@@ -52,8 +52,8 @@ local zpunchstart = Angle(2, 0, 0)
 
 hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
-	if not ply:Alive() or (Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope")) then return end
-	if GetGlobalBool(GM_INFECTION) --[[and not ply:GetNW2Entity("Swingrope")]] then return end
+	if not ply:Alive() or Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
+	if GetGlobalBool(GM_INFECTION) and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 
 	local activewep = ply:GetActiveWeapon()
 	local usingrh = IsValid(activewep) and activewep:GetClass() == "runnerhands"
@@ -165,8 +165,8 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			tr.endpos = mv:GetOrigin()
 
 			local mins, maxs = ply:GetHull()
-			mins:Mul(1.01)
-			maxs:Mul(1.01)
+			mins:Mul(1.2)
+			maxs:Mul(1.2)
 
 			tr.mins = mins
 			tr.maxs = maxs

@@ -1,5 +1,5 @@
 if CLIENT then
-	QuickturnGround = CreateClientConVar("Beatrun_QuickturnGround", "1", true, true, "Enables quickturning with secondary attack while on the ground")
+	QuickturnGround = CreateClientConVar("Beatrun_QuickturnGround", "0", true, true, "Enables quickturning with secondary attack while on the ground")
 end
 
 function DoJumpTurn(lookbehind)
