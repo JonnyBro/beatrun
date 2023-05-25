@@ -1,4 +1,4 @@
-# beatrun by datae <img src="https://cdn.discordapp.com/emojis/1022733627005620245.webp">
+# beatrun
 Modified beatrun's source code.<br>
 
 There are lua modules, they are for Discord Rich Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord status.
