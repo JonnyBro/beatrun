@@ -25,7 +25,7 @@ function UploadCourse()
 		["Content-Type"] = "text/plain",
 		["Content-Length"] = filedata:len(),
 		["User-Agent"] = "Valve/Steam HTTP Client 1.0 (4000)",
-		["Accept-Encoding"] = "gzip, deflate",
+		["Accept-Encoding"] = "gzip",
 		Authorization = apikey:GetString(),
 		["Game-Map"] = game.GetMap()
 	}
@@ -54,6 +54,8 @@ function GetCourse(sharecode)
 	http.Fetch("http://" .. domain:GetString() .. "/getcourse.php?sharecode=" .. sharecode .. "&map=" .. game.GetMap() .. "&key=" .. apikey:GetString(), function(body, length, headers, code)
 		local errorcode = GetCourse_Errors[body]
 
+		print(body)
+
 		if not errorcode then
 			print("Success! | Response:", code, "Length:", length)
 			print("Loading course...")
@@ -73,7 +75,8 @@ function GetCourse(sharecode)
 		return false
 	end,
 	{
-		["accept-encoding"] = "gzip, deflate"
+		["User-Agent"] = "Valve/Steam HTTP Client 1.0 (4000)",
+		["Accept-Encoding"] = "gzip"
 	})
 end
 
