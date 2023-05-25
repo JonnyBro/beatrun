@@ -59,7 +59,9 @@ function GetCourse(sharecode)
 		if not errorcode then
 			print("Success! | Response:", code, "Length:", length)
 			print("Loading course...")
-			-- PrintTable(headers)
+
+			PrintTable(headers)
+
 			LoadCourseRaw(util.Compress(body))
 
 			return true
