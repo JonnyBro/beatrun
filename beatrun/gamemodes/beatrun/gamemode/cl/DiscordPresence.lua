@@ -1,4 +1,5 @@
-if file.Find("lua/bin/gmcl_gdiscord_*.dll", "GAME")[1] == nil then return end
+if file.Find("lua/bin/gmcl_gdiscord_*.dll", "GAME") == nil then return end
+
 require("gdiscord")
 
 local image = "default"

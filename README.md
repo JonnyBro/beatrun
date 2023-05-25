@@ -1,7 +1,7 @@
 # beatrun
 Modified beatrun's source code.<br>
 
-There are lua modules, they are for Discord Rich Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord status.
+There are lua modules ([source](https://github.com/fluffy-servers/gmod-discord-rpc)), they are for Discord Rich Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord status.
 
 ## Changes added by me
 * [Custom online courses service](https://courses.beatrun.ru)! DM @Jonny_Bro#4226 for an API key.
