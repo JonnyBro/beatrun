@@ -1,5 +1,19 @@
-# beatrun by datae
-Extracted source code from of beatrun's DLL's.\
-Fixes: [click](https://github.com/JonnyBro/beatrun/blob/master/FIXES.md)
+# beatrun by datae <img src="https://cdn.discordapp.com/emojis/1022733627005620245.webp">
+Modified beatrun's source code.<br>
 
-https://send.ephemeral.land/download/3585ba725ca36278/#NG_JZtPyTdlF_JXRUko5Ow
+There are lua modules, they are for Discord Rich Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord status.
+
+## Changes added by me
+* Custom online courses service! DM @Jonny_Bro#4226 for an API key.
+* Allow Overdrive usage on the server - `Beatrun_AllowOvedriveInMultiplayer`.
+* Change HUD's colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
+* Discord Rich Presence (extract `lua` folder to `garrysmod`, along side with `addons` folder).
+* Small camera punch when diving.
+* Change max moving speed - `Beatrun_MaxSpeed`.
+* Ability to remove ziplines that created with *Zipline Gun* - RMB.
+* Removed your SteamID from right corner, because I can.
+
+## Fixes from previous version
+* Database update because Cloudflare 🤡.
+
+### [All fixes](https://github.com/JonnyBro/beatrun/blob/master/FIXES.md)

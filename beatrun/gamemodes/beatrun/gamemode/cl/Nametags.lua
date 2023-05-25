@@ -43,11 +43,11 @@ local function HideNearby(ply)
 			end
 		end
 
-		local offset = 15
+		local offset = 25
 
 		if not pos then
 			pos = ply:GetPos()
-			offset = 80
+			offset = 90
 		end
 
 		pos.z = pos.z + offset

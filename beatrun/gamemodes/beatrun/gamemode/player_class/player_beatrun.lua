@@ -242,12 +242,9 @@ function PLAYER:Spawn()
 		ply.SpawnFreezeTime = CurTime() + (1.75 * faststartmult)
 	end
 
-	if not GetGlobalBool(GM_DATATHEFT) then
-		ply:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-		ply:SetCustomCollisionCheck(true)
-	else
-		ply:SetCollisionGroup(COLLISION_GROUP_PLAYER)
-		ply:SetCustomCollisionCheck(false)
+	ply:SetCustomCollisionCheck(true)
+
+	if GetGlobalBool(GM_DATATHEFT) then
 		ply:DataTheft_Bank()
 	end
 
@@ -304,13 +301,18 @@ hook.Add("SetupMove", "SpawnFreeze", function(ply, mv, cmd)
 end)
 
 hook.Add("ShouldCollide", "NoPlayerCollisions", function(ent1, ent2)
-	if ent1:IsPlayer() and (ent2:IsPlayer() or ent2.NoPlayerCollisions) then
-		if ent2.BRCollisionFunc then
-			return ent2:BRCollisionFunc(ent1)
-		else
-			return false
-		end
+	if ent1:IsPlayer() and ent2.NoPlayerCollisions then
+		if ent2.BRCollisionFunc then return ent2:BRCollisionFunc(ent1)
+		else return false end
 	end
+
+	-- if ent1:IsPlayer() and (ent2:IsPlayer() or ent2.NoPlayerCollisions) then
+	-- 	if ent2.BRCollisionFunc then
+	-- 		return ent2:BRCollisionFunc(ent1)
+	-- 	else
+	-- 		return false
+	-- 	end
+	-- end
 
 	if ent2:IsPlayer() and ent1:IsNPC() then return true end
 end)

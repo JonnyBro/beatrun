@@ -14,12 +14,11 @@ if SERVER then
 		net.Start("DataTheft_Start")
 		net.Broadcast()
 
-		for k, v in ipairs(player.GetAll()) do
+		for _, v in ipairs(player.GetAll()) do
 			v:DataTheft_Bank()
+
 			v:SetNW2Int("DataCubes", 0)
 			v:SetNW2Int("DataBanked", 0)
-			v:SetCollisionGroup(COLLISION_GROUP_PLAYER)
-			v:SetCustomCollisionCheck(false)
 
 			if v:GetMoveType() == MOVETYPE_NOCLIP then
 				v:SetMoveType(MOVETYPE_WALK)
@@ -35,6 +34,12 @@ if SERVER then
 
 	function Beatrun_StopDataTheft()
 		SetGlobalBool(GM_DATATHEFT, false)
+
+		for _, v in ipairs(player.GetAll()) do
+			v:StripWeapons()
+			v:StripAmmo()
+			v:Give("runnerhands")
+		end
 	end
 
 	local function DataTheftSync(ply)
