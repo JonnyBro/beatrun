@@ -16,4 +16,4 @@ There are lua modules, they are for Discord Rich Presence to work, if you want p
 ## Fixes from previous version
 * Database update because Cloudflare 🤡.
 
-### [All fixes](https://github.com/JonnyBro/beatrun/blob/master/FIXES.md)
+### [All changes](https://github.com/JonnyBro/beatrun/blob/master/CHANGES.md)
