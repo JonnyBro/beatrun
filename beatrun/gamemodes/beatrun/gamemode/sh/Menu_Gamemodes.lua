@@ -1,3 +1,9 @@
+hook.Add("PlayerButtonDown", "GMMenuBind", function(ply, button)
+	if (game.SinglePlayer() or CLIENT and IsFirstTimePredicted()) and button == KEY_F3 then
+		ply:ConCommand("Beatrun_GMMenu")
+	end
+end)
+
 if CLIENT then
 	local gamemodePanel = {
 		w = 1200,
@@ -95,13 +101,15 @@ if CLIENT then
 		AEUI:AddPanel(weaponsList)
 
 		for _, v in pairs(weapons.GetList()) do
-			local weaponentry = AEUI:AddText(weaponsList, v.ClassName, "AEUILarge", 10, 40 * #weaponsList.elements)
+			if not string.find(v.ClassName:lower(), "base") then
+				local weaponentry = AEUI:AddText(weaponsList, v.ClassName, "AEUILarge", 10, 40 * #weaponsList.elements)
 
-			function weaponentry:onclick()
-				LocalPlayer():EmitSound("buttonclick.wav")
+				function weaponentry:onclick()
+					LocalPlayer():EmitSound("buttonclick.wav")
+				end
+
+				weaponentry.greyed = isSA()
 			end
-
-			weaponentry.greyed = sacheck
 		end
 	end
 
@@ -111,12 +119,6 @@ if CLIENT then
 	end)
 
 	concommand.Add("Beatrun_GMMenu", OpenGMMenu)
-
-	hook.Add("PlayerButtonDown", "GMMenuBind", function(ply, button)
-		if (game.SinglePlayer() or CLIENT and IsFirstTimePredicted()) and button == KEY_F3 then
-			ply:ConCommand("Beatrun_GMMenu")
-		end
-	end)
 end
 
 if SERVER then

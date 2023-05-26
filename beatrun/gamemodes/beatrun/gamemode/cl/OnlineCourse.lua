@@ -8,12 +8,13 @@ function UploadCourse()
 	local filedata = util.Decompress(file:Read(file:Size()))
 
 	local function h_success(code, body, headers)
-		print("Response: ", code)
-		print("Your Share Code: ", body)
+		print("Response: " .. code)
+		print(body)
 	end
 
-	local function h_failed(reason)
-		print("HTTP failed: ", reason)
+	local function h_failed(code, body)
+		print("Response: " .. code)
+		print(body)
 	end
 
 	local h_method = "POST"
@@ -22,11 +23,11 @@ function UploadCourse()
 	local h_body = filedata
 
 	local h_headers = {
+		Authorization = apikey:GetString(),
 		["Content-Type"] = "text/plain",
 		["Content-Length"] = filedata:len(),
 		["User-Agent"] = "Valve/Steam HTTP Client 1.0 (4000)",
 		["Accept-Encoding"] = "gzip",
-		Authorization = apikey:GetString(),
 		["Game-Map"] = game.GetMap()
 	}
 
@@ -43,21 +44,10 @@ end
 
 concommand.Add("Beatrun_UploadCourse", UploadCourse)
 
-local GetCourse_Errors = {
-	["Not valid map"] = "Error: You are not playing on the map this course was intended for.",
-	["Not valid share code"] = "Error: The share code provided is invalid.",
-	["Not valid key"] = "Plese message @Jonny_Bro#4226 for a key.",
-	["Ratelimited"] = "You are ratelimited, please try again later!"
-}
-
 function GetCourse(sharecode)
 	http.Fetch("http://" .. domain:GetString() .. "/getcourse.php?sharecode=" .. sharecode .. "&map=" .. game.GetMap() .. "&key=" .. apikey:GetString(), function(body, length, headers, code)
-		local errorcode = GetCourse_Errors[body]
-
-		print(body)
-
-		if not errorcode then
-			print("Success! | Response:", code, "Length:", length)
+		if code == 200 then
+			print("Success! | Response: " .. code .. " | Length: " .. length)
 			print("Loading course...")
 
 			PrintTable(headers)
@@ -66,7 +56,8 @@ function GetCourse(sharecode)
 
 			return true
 		else
-			print(errorcode)
+			print("Error! | Response: " .. code)
+			print(body)
 
 			return false
 		end
