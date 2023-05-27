@@ -1,7 +1,7 @@
 # beatrun
 Modified beatrun's source code.<br><br>
 There are lua modules ([source](https://github.com/fluffy-servers/gmod-discord-rpc)), they are for Discord Rich Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord status.<br>
-This version of the beatrun work on any version of the game (Chromium or not).
+This version of the beatrun works on any version of the game (Chromium or not).
 
 ## Changes added by me
 * [Custom online courses service](https://courses.beatrun.ru)! It's free 🤯! DM @Jonny_Bro#4226 for an API key.
