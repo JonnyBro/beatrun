@@ -10,16 +10,16 @@ coursepanel.outlinecolor = Color(54, 55, 56)
 coursepanel.alpha = 0.9
 coursepanel.elements = {}
 
-local function closebutton(self)
+local function closebutton()
 	AEUI:Clear()
 end
 
-local function stopbutton(self)
+local function stopbutton()
 	net.Start("Course_Stop")
 	net.SendToServer()
 end
 
-local function sacheck(self)
+local function sacheck()
 	return not LocalPlayer():IsSuperAdmin()
 end
 
@@ -40,7 +40,7 @@ local courselist = {
 	elements = {}
 }
 
-function OpenCourseMenu(ply)
+function OpenCourseMenu()
 	AEUI:AddPanel(coursepanel)
 	AEUI:AddPanel(courselist)
 
