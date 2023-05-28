@@ -1,6 +1,8 @@
 local vmatrixmeta = FindMetaTable("VMatrix")
 local playermeta = FindMetaTable("Player")
 
+CLoadout = {}
+
 function CLIENT_IFTP()
 	return CLIENT and IsFirstTimePredicted()
 end

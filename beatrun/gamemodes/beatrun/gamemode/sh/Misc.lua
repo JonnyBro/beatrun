@@ -1,12 +1,13 @@
 if SERVER then
 	local meta = FindMetaTable("Player")
+	local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", {FCVAR_ARCHIVE}, "Allow players to spawn props and entities")
 
 	util.AddNetworkString("SPParkourEvent")
 
 	local spawn = {"PlayerGiveSWEP", "PlayerSpawnEffect", "PlayerSpawnNPC", "PlayerSpawnObject", "PlayerSpawnProp", "PlayerSpawnRagdoll", "PlayerSpawnSENT", "PlayerSpawnSWEP", "PlayerSpawnVehicle"}
 
 	local function BlockSpawn(ply)
-		if not ply:IsSuperAdmin() then return false end
+		if not ply:IsAdmin() and not allowPropSpawn:GetBool() then return false end
 	end
 
 	for k, v in ipairs(spawn) do
@@ -16,7 +17,7 @@ if SERVER then
 	hook.Add("IsSpawnpointSuitable", "NoSpawnFrag", function(ply) return true end)
 
 	hook.Add("AllowPlayerPickup", "AllowAdminsPickUp", function(ply, ent)
-		if not ply:IsSuperAdmin() then return false end
+		if not ply:IsAdmin() and not allowPropSpawn:GetBool() then return false end
 	end)
 
 	function meta:GTAB(minutes)

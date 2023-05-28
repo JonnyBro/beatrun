@@ -36,7 +36,6 @@ function ENT:Initialize()
 end
 
 hook.Add("ShouldCollide", "DataCubeCollisions", function(ent1, ent2)
-	-- If players are about to collide with each other, then they won't collide.
 	if ent1.DataCube and ent2.DataCube then return false end
 end)
 

@@ -301,7 +301,7 @@ hook.Add("SetupMove", "SpawnFreeze", function(ply, mv, cmd)
 end)
 
 hook.Add("ShouldCollide", "NoPlayerCollisions", function(ent1, ent2)
-	if ent1:IsPlayer() and ent2.NoPlayerCollisions then
+	if ent1:IsPlayer() and (ent2:IsPlayer() or ent2.NoPlayerCollisions) then
 		if ent2.BRCollisionFunc then return ent2:BRCollisionFunc(ent1)
 		else return false end
 	end

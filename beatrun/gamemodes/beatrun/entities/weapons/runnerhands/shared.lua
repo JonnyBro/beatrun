@@ -26,8 +26,8 @@ SWEP.DrawWeaponInfoBox = false
 
 SWEP.HoldType = "fist"
 
-SWEP.Spawnable = false
-SWEP.AdminSpawnable = false
+SWEP.Spawnable = true
+SWEP.AdminSpawnable = true
 
 
 --[[Just don't draw the hands, we don't need 'em]]

@@ -4,7 +4,7 @@ There are lua modules ([source](https://github.com/fluffy-servers/gmod-discord-r
 This version of the beatrun works on any version of the game (Chromium or not).
 
 ## Changes added by me
-* [Custom online courses service](https://courses.beatrun.ru)! It's free 🤯! DM @Jonny_Bro#4226 for an API key.
+* [Custom online courses database](https://courses.beatrun.ru)! It's free 🤯!
 * Allow Overdrive usage on the server - `Beatrun_AllowOvedriveInMultiplayer`.
 * Change HUD's colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
 * Discord Rich Presence (extract `lua` folder to `garrysmod`, along side with `addons` folder).
@@ -12,8 +12,10 @@ This version of the beatrun works on any version of the game (Chromium or not).
 * Change max moving speed - `Beatrun_MaxSpeed`.
 * Ability to remove ziplines that created with *Zipline Gun* - RMB.
 * Removed your SteamID from right corner, because I can.
+* Allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
 
 ## Fixes from previous version
-* Database update because Cloudflare 🤡.
+* Fixed player collision.
+* Working on a new Gamemodes menu... (currently doesn't work at all).
 
 ### [All changes](https://github.com/JonnyBro/beatrun/blob/master/CHANGES.md)
