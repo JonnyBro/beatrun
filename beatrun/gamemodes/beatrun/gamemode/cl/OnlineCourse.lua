@@ -4,8 +4,8 @@ local domain = CreateClientConVar("Beatrun_Domain", "localhost", true, false, "O
 function UploadCourse()
 	if Course_Name == "" or Course_ID == "" then return print("Can't upload in Freeplay") end
 
-	local file = file.Open("beatrun/courses/" .. game.GetMap() .. "/" .. Course_ID .. ".txt", "rb", "DATA")
-	local filedata = util.Decompress(file:Read(file:Size()))
+	local data = file.Open("beatrun/courses/" .. game.GetMap() .. "/" .. Course_ID .. ".txt", "rb", "DATA")
+	local filedata = util.Decompress(data:Read(data:Size()))
 
 	local function h_success(code, body, headers)
 		print("Response: " .. code)
