@@ -270,11 +270,23 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 	end
 
 	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 then
-		if kickglitch:GetBool() and ply:GetMelee() >= 5 and mv:KeyDown(IN_JUMP) and not ply:OnGround() then
-			local vel = mv:GetVelocity()
-			vel:Mul(1.25)
-			vel.z = 300
-			mv:SetVelocity(vel)
+		if kickglitch:GetBool() and ply:GetMelee() >= 5 and not ply:OnGround() then
+			if SERVER then
+				local platform = ents.Create("prop_physics")
+				local pos = ply:GetPos()
+
+				pos.z = pos.z - 8
+
+				platform:SetModel("models/hunter/plates/plate05x05.mdl")
+				platform:SetPos(pos)
+				platform:SetColor(Color(0,0,0,0))
+				platform:SetRenderMode(RENDERMODE_TRANSCOLOR)
+				platform:Spawn()
+				local phys = platform:GetPhysicsObject()
+				phys:EnableMotion(false)
+
+				timer.Simple(0.3, function() SafeRemoveEntity(platform) end)
+			end
 
 			ParkourEvent("jumpslow", ply)
 		end
