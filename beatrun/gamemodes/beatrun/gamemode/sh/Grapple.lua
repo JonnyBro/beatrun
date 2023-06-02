@@ -83,6 +83,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetWallrunCount(0)
 			ply:SetJumpTurn(false)
 			ply:SetCrouchJumpBlocked(false)
+			ply:SetNW2Entity("grappleEntity", trout.Entity)
 
 			if CLIENT_IFTP() or game.SinglePlayer() then
 				ply:EmitSound("MirrorsEdge/Gadgets/ME_Magrope_Fire.wav", 40, 100 + math.random(-25, 10))
@@ -102,9 +103,17 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		-- local gpos = ply:GetGrapplePos()
 		local pos = mv:GetOrigin()
 		local eyepos = mv:GetOrigin()
+
+		local ent = ply:GetNW2Entity("grappleEntity")
+
 		eyepos.z = eyepos.z + 64
 
-		if not ply:Alive() or mv:KeyPressed(IN_JUMP) and not grappled and not ply:OnGround() or ply:GetClimbing() ~= 0 or ply:GetMantle() ~= 0 or not usingrh then
+		if (not ply:Alive() or mv:KeyPressed(IN_JUMP) and not grappled and not ply:OnGround() or ply:GetClimbing() ~= 0 or ply:GetMantle() ~= 0 or not usingrh) or (ent == NULL or ent == nil) then
+			if IsValid(ent) and ent != NULL then
+				ent:SetNW2Vector("glastpos", nil)
+				ent:SetNW2Vector("gpos", nil)
+			end
+
 			ply:SetGrappling(false)
 
 			if CLIENT_IFTP() or game.SinglePlayer() then
@@ -128,6 +137,12 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			table.Empty(ply.ZiplineTraceOut)
 
 			return
+		end
+
+		if ent:GetClass() != "worldspawn" then
+			ent:SetNW2Vector("glastpos", ent:GetNW2Vector("gpos", ent:GetPos()))
+			ent:SetNW2Vector("gpos", ent:GetPos())
+			ply:SetGrapplePos(ply:GetGrapplePos() + (ent:GetNW2Vector("gpos") - ent:GetNW2Vector("glastpos")))
 		end
 
 		if mv:KeyDown(IN_ATTACK) and mv:GetOrigin().z < ply:GetGrapplePos().z - 64 then
@@ -203,12 +218,12 @@ local ropelerp = 0
 local ropedown = Vector(0, 0, 20)
 
 hook.Add("PostDrawTranslucentRenderables", "GrappleBeam", function()
-	local ply = LocalPlayer()
+	local lp = LocalPlayer()
 
-	if ply:GetGrappling() then
+	if lp:GetGrappling() then
 		local BA = BodyAnimArmCopy
 
-		if ply:ShouldDrawLocalPlayer() then
+		if lp:ShouldDrawLocalPlayer() then
 			BA = BodyAnim
 		end
 
@@ -239,13 +254,22 @@ hook.Add("PostDrawTranslucentRenderables", "GrappleBeam", function()
 		rhandpos:Add(up)
 
 		render.DrawBeam(LerpVector(ropelerp, lhandpos - ropedown, rhandpos), lhandpos, 1.5, 0, 1)
-		render.DrawBeam(ropetop, ply:GetGrapplePos(), 1.5, 0, 1)
+		render.DrawBeam(ropetop, lp:GetGrapplePos(), 1.5, 0, 1)
 
 		BodyAnim:SetSequence("grapplecenter")
 
 		ropelerp = math.Approach(ropelerp, 1, FrameTime() * 2)
 	else
 		ropelerp = 0
+	end
+
+	for i, ply in ipairs(player.GetAll()) do
+		if ply == lp then continue end
+		if ply:GetGrappling() then
+			local pos = ply:GetPos()
+			pos.z = pos.z + 32
+			render.DrawBeam(pos, ply:GetGrapplePos(), 1.5, 0, 1)
+		end
 	end
 end)
 
