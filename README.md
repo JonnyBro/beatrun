@@ -3,6 +3,8 @@ Modified beatrun's source code.<br><br>
 There are lua modules ([source](https://github.com/fluffy-servers/gmod-discord-rpc)), they are for Discord Rich Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord status.<br>
 This version of the beatrun works on any version of the game (Chromium or not).
 
+[Old Kick Glitch Version](https://github.com/JonnyBro/beatrun/tree/old-kickglitch)
+
 # Installation
 1. Extract `beatrun` folder to *your_game_folder/garrysmod/addons*.
 2. Extract `lua` folder to *your_game_folder/garrysmod*.
@@ -19,8 +21,13 @@ This version of the beatrun works on any version of the game (Chromium or not).
 * Removed your SteamID from right corner, because I can.
 * Allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
 
-## Fixes from previous version
-* Working on a new Gamemodes menu... (currently doesn't work at all).
+## TODO
+- [ ] Configuration menu
+- [ ] Gamemodes menu
+
+## Fixes and changes from previous version
+* Proper Kick Glitch (Like in original ME: https://www.youtube.com/watch?v=zK5y3NBUStc)
+* Grapple fixes. Now it moves with entity it attached to and other players can see it.
 
 # All changes and fixes
 * Course saving works with compression and without.
