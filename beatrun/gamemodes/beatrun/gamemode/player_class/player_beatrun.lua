@@ -302,12 +302,9 @@ end)
 
 hook.Add("ShouldCollide", "NoPlayerCollisions", function(ent1, ent2)
 	if ent1:IsPlayer() and (ent2:IsPlayer() or ent2.NoPlayerCollisions) then
-		if ent2.BRCollisionFunc then 
-			return ent2:BRCollisionFunc(ent1)
+		if ent2.BRCollisionFunc then return ent2:BRCollisionFunc(ent1)
 		else
-			if ent1.br_Fired or ent2.br_Fired then
-				return true
-			end
+			if ent1.br_Fired or ent2.br_Fired then return true end
 
 			return false
 		end
@@ -316,10 +313,15 @@ hook.Add("ShouldCollide", "NoPlayerCollisions", function(ent1, ent2)
 	if ent2:IsPlayer() and ent1:IsNPC() then return true end
 end)
 
-// i was forced
-hook.Add("EntityFireBullets", "thisengineismadebyacrackhead", function(ent, data) 
+-- i was forced
+hook.Add("EntityFireBullets", "thisengineismadebyacrackhead", function(ent, data)
 	ent.br_Fired = true
-	timer.Simple(engine.TickInterval()*2, function() if IsValid(ent) then ent.br_Fired = false end end)
+
+	timer.Simple(engine.TickInterval() * 2, function()
+		if IsValid(ent) then
+			ent.br_Fired = false
+		end
+	end)
 end)
 
 hook.Add("PhysgunPickup", "AllowPlayerPickup", function(ply, ent)

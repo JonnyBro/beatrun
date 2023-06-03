@@ -1,0 +1,10 @@
+hook.Add("AddToolMenuCategories", "Beatrun_Category", function()
+	spawnmenu.AddToolCategory("Beatrun", "beatrun_category", "Beatrun Settings")
+end)
+
+hook.Add("PopulateToolMenu", "CustomMenuSettings", function()
+	spawnmenu.AddToolMenuOption("Utilities", "Beatrun Settings", "Custom_Menu", "#My Custom Menu", "", "", function(panel)
+		panel:ClearControls()
+		panel:NumSlider("Gravity", "sv_gravity", 0, 600)
+	end)
+end)

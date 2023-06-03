@@ -26,6 +26,7 @@ This version of the beatrun works on any version of the game (Chromium or not).
 - [ ] Gamemodes menu
 
 ## Fixes and changes from previous version
+* Hacky fix for weapon damage.
 * Proper Kick Glitch (Like in original ME: https://www.youtube.com/watch?v=zK5y3NBUStc)
 * Grapple fixes. Now it moves with entity it attached to and other players can see it.
 * More reliable grappling.
