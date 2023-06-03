@@ -100,18 +100,25 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if ply:GetGrappling() then
 		local startshrink = (ply.GrappleLengthOld or 0) - ply:GetGrappleLength() < 200
 		local shmovemul = startshrink and 4 or 1
-		-- local gpos = ply:GetGrapplePos()
+
 		local pos = mv:GetOrigin()
 		local eyepos = mv:GetOrigin()
 
 		local ent = ply:GetNW2Entity("grappleEntity")
 
+		local is_ent_invalid = (ent == NULL or ent == nil)
+		local is_getting_off = (not ply:Alive() or mv:KeyPressed(IN_JUMP) and not grappled and not ply:OnGround() or ply:GetClimbing() ~= 0 or ply:GetMantle() ~= 0 or not usingrh)
+		local c_delta = 0
+		if not is_ent_invalid then
+			c_delta = (ent:GetNWVector("gpos", Vector(0,0,0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))):Length()
+		end
+
 		eyepos.z = eyepos.z + 64
 
-		if (not ply:Alive() or mv:KeyPressed(IN_JUMP) and not grappled and not ply:OnGround() or ply:GetClimbing() ~= 0 or ply:GetMantle() ~= 0 or not usingrh) or (ent == NULL or ent == nil) then
+		if is_getting_off or is_ent_invalid or c_delta > 300 then
 			if IsValid(ent) and ent ~= NULL then
-				ent:SetNW2Vector("glastpos", nil)
-				ent:SetNW2Vector("gpos", nil)
+				ent:SetNWVector("glastpos", nil)
+				ent:SetNWVector("gpos", nil)
 			end
 
 			ply:SetGrappling(false)
@@ -140,9 +147,10 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		end
 
 		if ent:GetClass() ~= "worldspawn" then
-			ent:SetNW2Vector("glastpos", ent:GetNW2Vector("gpos", ent:GetPos()))
-			ent:SetNW2Vector("gpos", ent:GetPos())
-			ply:SetGrapplePos(ply:GetGrapplePos() + (ent:GetNW2Vector("gpos") - ent:GetNW2Vector("glastpos")))
+			ent:SetNWVector("glastpos", ent:GetNWVector("gpos", ent:GetPos()))
+			ent:SetNWVector("gpos", ent:GetPos())
+			local delta = ent:GetNWVector("gpos", Vector(0,0,0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))
+			ply:SetGrapplePos(ply:GetGrapplePos() + delta)
 		end
 
 		if mv:KeyDown(IN_ATTACK) and mv:GetOrigin().z < ply:GetGrapplePos().z - 64 then
@@ -171,7 +179,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 
 		mv:SetVelocity(mv:GetVelocity() + newvel)
 
-		if ply:GetGrappleLength() < ply:GetGrapplePos():Distance(pos) and not ply:OnGround() then
+		if ply:GetGrappleLength() < ply:GetGrapplePos():Distance(pos) then
 			local tr = ply.Grapple_tr
 			local trout = ply.Grapple_trout
 
@@ -180,8 +188,8 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			tr.endpos = mv:GetOrigin()
 
 			local mins, maxs = ply:GetHull()
-			mins:Mul(1.2)
-			maxs:Mul(1.2)
+			mins:Mul(1.01)
+			maxs:Mul(1.01)
 
 			tr.mins = mins
 			tr.maxs = maxs
@@ -198,8 +206,6 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			end
 
 			mv:SetVelocity(mv:GetVelocity() - vel * (ply:GetGrapplePos():Distance(pos) - ply:GetGrappleLength()))
-		elseif ply:OnGround() then
-			ply:SetGrappleLength(mv:GetOrigin():Distance(ply:GetGrapplePos()) + 10)
 		end
 
 		if startshrink then
