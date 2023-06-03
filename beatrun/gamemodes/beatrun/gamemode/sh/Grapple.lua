@@ -109,7 +109,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		eyepos.z = eyepos.z + 64
 
 		if (not ply:Alive() or mv:KeyPressed(IN_JUMP) and not grappled and not ply:OnGround() or ply:GetClimbing() ~= 0 or ply:GetMantle() ~= 0 or not usingrh) or (ent == NULL or ent == nil) then
-			if IsValid(ent) and ent != NULL then
+			if IsValid(ent) and ent ~= NULL then
 				ent:SetNW2Vector("glastpos", nil)
 				ent:SetNW2Vector("gpos", nil)
 			end
@@ -139,7 +139,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			return
 		end
 
-		if ent:GetClass() != "worldspawn" then
+		if ent:GetClass() ~= "worldspawn" then
 			ent:SetNW2Vector("glastpos", ent:GetNW2Vector("gpos", ent:GetPos()))
 			ent:SetNW2Vector("gpos", ent:GetPos())
 			ply:SetGrapplePos(ply:GetGrapplePos() + (ent:GetNW2Vector("gpos") - ent:GetNW2Vector("glastpos")))
