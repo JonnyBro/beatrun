@@ -28,6 +28,7 @@ This version of the beatrun works on any version of the game (Chromium or not).
 ## Fixes and changes from previous version
 * Proper Kick Glitch (Like in original ME: https://www.youtube.com/watch?v=zK5y3NBUStc)
 * Grapple fixes. Now it moves with entity it attached to and other players can see it.
+* More reliable grappling.
 
 # All changes and fixes
 * Course saving works with compression and without.
