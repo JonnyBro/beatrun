@@ -3,8 +3,6 @@ Modified beatrun's source code.<br><br>
 There are lua modules, they are for Discord Rich Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord status.<br>
 This version of the beatrun works on any version of the game (Chromium or not).
 
-[Old Kick Glitch Version](https://github.com/JonnyBro/beatrun/tree/old-kickglitch)
-
 # Installation
 0. Delete `beatrun` folder in *addons* if you have it!
 1. Extract `beatrun` folder to *your_game_folder/garrysmod/addons*.
@@ -14,6 +12,7 @@ This version of the beatrun works on any version of the game (Chromium or not).
 ## Changes added by me
 * [Custom online courses database](https://courses.beatrun.ru)! It's free 🤯!
 * Allow Overdrive usage on the server - `Beatrun_AllowOvedriveInMultiplayer`.
+* Toggle between old and new (like in ME) Kick-Glitch - `Beatrun_OldKickGlitch`.
 * Change HUD's colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
 * Discord Rich Presence (extract `lua` folder to `garrysmod`, along side with `addons` folder).
 * Small camera punch when diving.
@@ -28,6 +27,7 @@ This version of the beatrun works on any version of the game (Chromium or not).
 
 ## Fixes and changes from previous version
 * You can now dive to your death =)
+* Kick glitch version toggle.
 
 # All changes and fixes
 * Course saving works with compression and without.

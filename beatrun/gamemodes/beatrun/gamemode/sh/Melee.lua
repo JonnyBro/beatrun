@@ -1,4 +1,5 @@
-local kickglitch = CreateConVar("Beatrun_KickGlitch", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+local kickglitch = CreateConVar("Beatrun_KickGlitch", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+local old_kickglitch = CreateConVar("Beatrun_OldKickGlitch", "0", {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 
 local tr = {}
 local tr_result = {}
@@ -270,8 +271,14 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 		return
 	end
 
-	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 then
-		if kickglitch:GetBool() and ply:GetMelee() >= 5 and not ply:OnGround() then
+	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 and ply:GetMelee() >= 5 and not ply:OnGround() then
+		if kickglitch:GetBool() and old_kickglitch:GetBool() and mv:KeyDown(IN_JUMP) then
+			local vel = mv:GetVelocity()
+			vel:Mul(1.25)
+			vel.z = 300
+
+			mv:SetVelocity(vel)
+		elseif kickglitch:GetBool() and not old_kickglitch:GetBool() then
 			if SERVER then
 				local platform = ents.Create("prop_physics")
 				local pos = ply:GetPos()
