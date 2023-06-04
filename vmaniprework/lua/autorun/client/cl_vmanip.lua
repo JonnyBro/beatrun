@@ -1,4 +1,5 @@
---[[N++ Protip: View > Collapse Level 1
+--[[
+N++ Protip: View > Collapse Level 1
 More detail on stuff in lua/vmanip/vmanip_baseanims.lua
 
 Please keep in mind that you do not fire events *through vmanip*. Think of it as a fully
@@ -549,8 +550,6 @@ hook.Add("PostDrawViewModel", "VManip", function(vm, ply, weapon)
 		end
 	end
 end)
-
-local anglef = Angle(0, 1, 0)
 
 --Very basic stuff, you see
 hook.Add("PostDrawViewModel", "VMLegs", function(vm, ply, weapon)

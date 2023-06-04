@@ -5,14 +5,12 @@ util.AddNetworkString("VManip_StopHold")
 --VManip_StopHold: WriteString of anim to stop holding on client
 
 local function VManip_FindAndImport()
+	local path = "vmanip/anims/"
+	local anims = file.Find(path .. "*.lua", "lsv")
 
-local path="vmanip/anims/"
-local anims=file.Find(path.."*.lua","lsv")
-
-for k,v in pairs(anims) do
-		AddCSLuaFile(path..v)
-end
-
+	for k, v in pairs(anims) do
+		AddCSLuaFile(path .. v)
+	end
 end
 
 VManip_FindAndImport()

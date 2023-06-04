@@ -17,13 +17,12 @@ This version of the beatrun works on any version of the game (Chromium or not).
 * Change HUD's colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
 * Discord Rich Presence (extract `lua` folder to `garrysmod`, along side with `addons` folder).
 * Small camera punch when diving.
-* Change max moving speed - `Beatrun_MaxSpeed`.
 * Ability to remove ziplines that created with *Zipline Gun* - RMB.
 * Removed your SteamID from right corner, because I can.
 * Allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
 
 ## TODO
-- [ ] Configuration menu
+- [X] Configurations menu
 - [ ] Gamemodes menu
 
 ## Fixes and changes from previous version

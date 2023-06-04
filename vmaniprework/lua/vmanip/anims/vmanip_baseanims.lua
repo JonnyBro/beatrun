@@ -26,79 +26,69 @@ Hands
 
 Legs
 "model" - path to model
-"speed" - playback speed 
+"speed" - playback speed
 "forwardboost" - forward offset
 "upboost" - vertical offset (in actual hammer units)
 
 ]]
 
-VManip:RegisterAnim("use",
-{
-["model"]="c_vmanipinteract.mdl",
-["lerp_peak"]=0.4,
-["lerp_speed_in"]=1,
-["lerp_speed_out"]=0.8,
-["lerp_curve"]=2.5,
-["speed"]=1,
-["startcycle"]=0.1,
-["sounds"]={},
-["loop"]=false
-}
-)
+VManip:RegisterAnim("use", {
+	["model"] = "c_vmanipinteract.mdl",
+	["lerp_peak"] = 0.4,
+	["lerp_speed_in"] = 1,
+	["lerp_speed_out"] = 0.8,
+	["lerp_curve"] = 2.5,
+	["speed"] = 1,
+	["startcycle"] = 0.1,
+	["sounds"] = {},
+	["loop"] = false
+})
 
 
-VManip:RegisterAnim("vault",
-{
-["model"]="c_vmanipvault.mdl",
-["lerp_peak"]=0.4,
-["lerp_speed_in"]=1,
-["lerp_speed_out"]=0.5,
-["lerp_curve"]=1,
-["speed"]=1
-}
-)
+VManip:RegisterAnim("vault", {
+	["model"] = "c_vmanipvault.mdl",
+	["lerp_peak"] = 0.4,
+	["lerp_speed_in"] = 1,
+	["lerp_speed_out"] = 0.5,
+	["lerp_curve"] = 1,
+	["speed"] = 1
+})
 
-VManip:RegisterAnim("handslide",
-{
-["model"]="c_vmanipvault.mdl",
-["lerp_peak"]=0.2,
-["lerp_speed_in"]=1,
-["lerp_speed_out"]=0.8,
-["lerp_curve"]=2,
-["speed"]=1.5,
-["holdtime"]=0.25,
-}
-)
+VManip:RegisterAnim("handslide", {
+	["model"] = "c_vmanipvault.mdl",
+	["lerp_peak"] = 0.2,
+	["lerp_speed_in"] = 1,
+	["lerp_speed_out"] = 0.8,
+	["lerp_curve"] = 2,
+	["speed"] = 1.5,
+	["holdtime"] = 0.25,
+})
 
-VManip:RegisterAnim("adrenalinestim",
-{
-["model"]="old/c_vmanip.mdl",
-["lerp_peak"]=1.1,
-["lerp_speed_in"]=1,
-["speed"]=0.7,
-["sounds"]={},
-["loop"]=false
-}
-)
+VManip:RegisterAnim("adrenalinestim", {
+	["model"] = "old/c_vmanip.mdl",
+	["lerp_peak"] = 1.1,
+	["lerp_speed_in"] = 1,
+	["speed"] = 0.7,
+	["sounds"] = {},
+	["loop"] = false
+})
 
-VManip:RegisterAnim("thrownade",
-{
-["model"]="c_vmanipgrenade.mdl",
-["lerp_peak"]=0.85,
-["lerp_speed_in"]=1.2,
-["lerp_speed_out"]=1.2,
-["lerp_curve"]=1,
-["speed"]=1,
-["holdtime"]=0.4,
-}
-)
+VManip:RegisterAnim("thrownade", {
+	["model"] = "c_vmanipgrenade.mdl",
+	["lerp_peak"] = 0.85,
+	["lerp_speed_in"] = 1.2,
+	["lerp_speed_out"] = 1.2,
+	["lerp_curve"] = 1,
+	["speed"] = 1,
+	["holdtime"] = 0.4,
+})
 
 --###################################
 
-VMLegs:RegisterAnim("test", --lmao, im not recompiling to change THAT shit
-{
-["model"]="c_vmaniplegs.mdl",
-["speed"]=1.5,
-["forwardboost"]=4,
-["upwardboost"]=0
+--lmao, im not recompiling to change THAT shit
+VMLegs:RegisterAnim("test", {
+	["model"] = "c_vmaniplegs.mdl",
+	["speed"] = 1.5,
+	["forwardboost"] = 4,
+	["upwardboost"] = 0
 })

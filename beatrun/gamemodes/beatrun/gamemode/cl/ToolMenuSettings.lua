@@ -149,9 +149,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ClearControls()
 		panel:SetName("Misc Settings")
 
-		panel:NumSlider("Max Speed", "Beatrun_MaxSpeed", 0, 1000, 0)
-		panel:ControlHelp("Changes Max Moving Speed")
-
 		panel:CheckBox("Prop Spawning", "Beatrun_AllowPropSpawn")
 		panel:ControlHelp("Allows players without admin rights to spawn props, entities and weapons")
 
@@ -204,5 +201,30 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:CheckBox("Totsugeki Direction", "Beatrun_TotsugekiDir")
 		panel:ControlHelp("Allows to Totsugeki into Another Direction\nCombined with Spam and Heading Allows You to Fly =)")
+	end)
+
+	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_gamemodes", "Gamemodes", "", "", function(panel)
+		panel:ClearControls()
+		panel:SetName("Gamemodes Settings")
+
+		local InfectionButton = vgui.Create("DButton", panel)
+		InfectionButton:SetText("Toggle Infection Gamemode")
+		InfectionButton:SetSize(0, 20)
+		InfectionButton.DoClick = function()
+			if GetGlobalBool(GM_DATATHEFT) then return notification.AddLegacy("Another gamemode is running!", NOTIFY_HINT, 2) end
+
+			StartInfection()
+		end
+		panel:AddItem(InfectionButton)
+
+		local DatatheftButton = vgui.Create("DButton", panel)
+		DatatheftButton:SetText("Toggle Data Theft Gamemode")
+		DatatheftButton:SetSize(0, 20)
+		DatatheftButton.DoClick = function()
+			if GetGlobalBool(GM_INFECTION) then return notification.AddLegacy("Another gamemode is running!", NOTIFY_HINT, 2) end
+
+			StartDataTheft()
+		end
+		panel:AddItem(DatatheftButton)
 	end)
 end)
