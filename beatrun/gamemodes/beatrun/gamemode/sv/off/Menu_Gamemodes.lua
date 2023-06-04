@@ -8,6 +8,7 @@ net.Receive("Beatrun_ToggleGamemode", function(_, ply)
 
 	if gm == "datatheft" then
 		datatheft = not datatheft
+
 		if datatheft then
 			Beatrun_StartDataTheft()
 		else
@@ -15,6 +16,7 @@ net.Receive("Beatrun_ToggleGamemode", function(_, ply)
 		end
 	elseif gm == "infection" then
 		infection = not infection
+
 		if infection then
 			Beatrun_StartInfection()
 		else

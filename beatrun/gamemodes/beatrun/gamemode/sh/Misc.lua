@@ -40,7 +40,7 @@ if SERVER then
 end
 
 if CLIENT then
-	CreateClientConVar("Beatrun_FOV", 90, true, true, "'Woah how are you moving this fast' and other hilarious jokes", 70, 175)
+	CreateClientConVar("Beatrun_FOV", 90, true, true, "'Woah how are you moving this fast' and other hilarious jokes", 70, 120)
 	CreateClientConVar("Beatrun_CPSave", 1, true, true, "Respawning during a course will go back to the last hit checkpoint", 0, 1)
 end
 
