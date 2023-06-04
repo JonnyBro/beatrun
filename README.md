@@ -26,6 +26,7 @@ This version of the beatrun works on any version of the game (Chromium or not).
 - [ ] Gamemodes menu
 
 ## Fixes and changes from previous version
+* Hopefully fixed a bug with sliding/diving and stucking in the animation. Let me know on Github Issues if you can reproduce it again!
 * All mentioned issues with sliding or grapple fixed with new VManip version.
 * You can now dive to your death =)
 * Kick glitch version toggle.
