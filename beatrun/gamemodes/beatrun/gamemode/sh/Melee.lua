@@ -281,15 +281,16 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 		elseif kickglitch:GetBool() and not old_kickglitch:GetBool() then
 			if SERVER then
 				local platform = ents.Create("prop_physics")
-				local pos = ply:GetPos()
 
+				local pos = ply:GetPos()
 				pos.z = pos.z - 8
 
 				platform:SetModel("models/hunter/plates/plate1x1.mdl")
 				platform:SetPos(pos)
-				platform:SetColor(Color(0,0,0,0))
+				platform:SetColor(Color(0, 0, 0, 0))
 				platform:SetRenderMode(RENDERMODE_TRANSCOLOR)
 				platform:Spawn()
+
 				local phys = platform:GetPhysicsObject()
 				phys:EnableMotion(false)
 
@@ -302,7 +303,7 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 
 	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 then
 		ply:SetMeleeTime(0)
-		ply:SetMelee(0)		
+		ply:SetMelee(0)
 	end
 
 	if KeyMelee(ply, mv) and ply:GetMeleeDelay() < CurTime() and ply:GetMeleeTime() == 0 and not ply:GetCrouchJump() and not ply:GetJumpTurn() and ply:GetClimbing() == 0 and ply:GetMantle() == 0 then
