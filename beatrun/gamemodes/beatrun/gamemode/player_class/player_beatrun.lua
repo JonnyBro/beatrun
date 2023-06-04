@@ -302,7 +302,7 @@ end)
 
 hook.Add("ShouldCollide", "NoPlayerCollisions", function(ent1, ent2)
 	if ent1:IsPlayer() and (ent2:IsPlayer() or ent2.NoPlayerCollisions) then
-		if ent2.BRCollisionFunc then 
+		if ent2.BRCollisionFunc then
 			return ent2:BRCollisionFunc(ent1)
 		else
 			if (ent1.br_Fired and ent2.br_FiredBy == ent1) or (ent2.br_Fired and ent1.br_FiredBy == ent2) then return true end
@@ -317,31 +317,41 @@ end)
 local function calc_fov(src, dst)
 	local v_src = src:Forward()
 	local v_dst = dst:Forward()
-
 	local result = math.deg(math.acos(v_dst:Dot(v_src) / v_dst:Length()))
 
-	if result != result or (result == math.huge or result == -math.huge) then
+	if result ~= result or (result == math.huge or result == -math.huge) then
 		result = 0
 	end
 
 	return result
 end
 
-// i was forced
+-- i was forced
 hook.Add("EntityFireBullets", "thisengineismadebyacrackhead", function(ent, data)
 	if not IsValid(ent) or not isfunction(ent.GetShootPos) or not ent:IsPlayer() then return end
 
 	for i, ply in ipairs(player.GetAll()) do
 		if ply == ent then continue end
+
 		local fov = calc_fov(data.Dir:Angle(), (ply:GetShootPos() - data.Src):Angle())
 		if fov > 60 then continue end
 
 		ply.br_FiredBy = ent
-		timer.Simple(engine.TickInterval()*3, function() if IsValid(ply) then ply.br_FiredBy = nil end end)
+
+		timer.Simple(engine.TickInterval() * 3, function()
+			if IsValid(ply) then
+				ply.br_FiredBy = nil
+			end
+		end)
 	end
 
 	ent.br_Fired = true
-	timer.Simple(engine.TickInterval()*3, function() if IsValid(ent) then ent.br_Fired = false end end)
+
+	timer.Simple(engine.TickInterval() * 3, function()
+		if IsValid(ent) then
+			ent.br_Fired = false
+		end
+	end)
 end)
 
 hook.Add("PhysgunPickup", "AllowPlayerPickup", function(ply, ent)

@@ -285,7 +285,7 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 
 				pos.z = pos.z - 8
 
-				platform:SetModel("models/hunter/plates/plate05x05.mdl")
+				platform:SetModel("models/hunter/plates/plate1x1.mdl")
 				platform:SetPos(pos)
 				platform:SetColor(Color(0,0,0,0))
 				platform:SetRenderMode(RENDERMODE_TRANSCOLOR)

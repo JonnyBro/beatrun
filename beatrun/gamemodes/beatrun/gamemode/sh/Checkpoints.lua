@@ -65,7 +65,7 @@ function LoadCheckpoints()
 end
 
 if CLIENT then
-	CreateClientConVar("Beatrun_FastStart", "0", true, true, "Faster start countdown")
+	CreateClientConVar("Beatrun_FastStart", "0", true, true, "Faster start countdown", 0, 1)
 
 	net.Receive("Checkpoint_Hit", function()
 		local timetaken = CurTime() - lastcptime
@@ -246,9 +246,11 @@ function CourseHUD()
 		text = speed .. " km/h"
 		w, _ = surface.GetTextSize(text)
 
+		local r, g, b, a = string.ToColor(GetConVar("Beatrun_HUDTextColor"):GetString())
+
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetFont("BeatrunHUD")
-		surface.SetTextColor(255, 255, 255, 255)
+		surface.SetTextColor(r, g, b, a)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.85 + vpz)
 		surface.DrawText(text)
 	end

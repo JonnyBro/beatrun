@@ -10,6 +10,7 @@ if CLIENT then
 		local activewep = ply:GetActiveWeapon()
 
 		if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then return end
+		if ply:GetMoveType() == MOVETYPE_NOCLIP then return end
 		if GetGlobalBool(GM_INFECTION) or GetGlobalBool(GM_DATATHEFT) then return end
 
 		if not ply.GrappleHUD_tr then
@@ -67,7 +68,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 
 	local grappled = nil
 
-	if not ply:GetGrappling() and ply:GetMelee() == 0 and not ply:OnGround() and ply:GetSafetyRollKeyTime() < CurTime() and ply:GetWallrun() == 0 and usingrh and cmd:GetViewAngles().x <= -15 then
+	if not ply:GetGrappling() and ply:GetMelee() == 0 and not ply:OnGround() and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:GetSafetyRollKeyTime() < CurTime() and ply:GetWallrun() == 0 and usingrh and cmd:GetViewAngles().x <= -15 then
 		local trout = ply:GetEyeTrace()
 		local dist = trout.HitPos:DistToSqr(mv:GetOrigin())
 

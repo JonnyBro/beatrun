@@ -1,5 +1,5 @@
 if CLIENT then
-	PuristMode = CreateClientConVar("Beatrun_PuristMode", "1", true, true, "Purist mode is a clientside preference that severely weakens the ability to strafe while in the air, which is how Mirror's Edge games handle this.\n0 = No restrictions\n1 = Reduced move speed in the air")
+	PuristMode = CreateClientConVar("Beatrun_PuristMode", "1", true, true, "Purist mode is a clientside preference that severely weakens the ability to strafe while in the air, which is how Mirror's Edge games handle this.\n0 = No restrictions\n1 = Reduced move speed in the air", 0, 1)
 end
 
 local PuristModeForce = CreateConVar("Beatrun_PuristModeForce", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Force players to adhere to purist rules", 0, 1)

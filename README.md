@@ -4,9 +4,10 @@ There are lua modules, they are for Discord Rich Presence to work, if you want p
 This version of the beatrun works on any version of the game (Chromium or not).
 
 # Installation
-0. Delete `beatrun` folder in *addons* if you have it!
-1. Extract `beatrun` folder to *your_game_folder/garrysmod/addons*.
-2. Extract `lua` folder to *your_game_folder/garrysmod*.
+**1. Delete or disable VManip (Base) that downloaded from Workshop!**
+**2. Delete `beatrun` folder in *addons* if you have one!**
+3. Extract `beatrun` and `vmaniprework` folders to *your_game_folder/garrysmod/addons*.
+4. Extract `lua` folder to *your_game_folder/garrysmod*.
     * `lua` folder constains modules for Discord Rich Presense to work. They are open source, visit [this](https://github.com/fluffy-servers/gmod-discord-rpc) to see the source.
 
 ## Changes added by me
@@ -26,6 +27,7 @@ This version of the beatrun works on any version of the game (Chromium or not).
 - [ ] Gamemodes menu
 
 ## Fixes and changes from previous version
+* All mentioned issues with sliding or grapple fixed with new VManip version.
 * You can now dive to your death =)
 * Kick glitch version toggle.
 

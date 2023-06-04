@@ -1,3 +1,5 @@
+local NametagsEnable = CreateClientConVar("Beatrun_Nametags", "1", true, false, "Toggles nametags above players", 0, 1)
+
 local enemy = Color(255, 0, 0)
 
 local function HideNearby(ply)
@@ -7,7 +9,7 @@ local function HideNearby(ply)
 	ply.distfromlocal = LocalPlayer():GetPos():Distance(ply:GetPos())
 	local Distance = ply.distfromlocal or 40000
 
-	if Distance < 20000 then
+	if Distance < 20000 and NametagsEnable:GetBool() then
 		local infectionmode = GetGlobalBool(GM_INFECTION)
 		local localinfected = LocalPlayer():GetNW2Bool("Infected")
 		local plyinfected = ply:GetNW2Bool("Infected")

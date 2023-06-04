@@ -121,6 +121,7 @@ local function WallrunningThink(ply, mv, cmd)
 			ParkourEvent("jumpwallrun", ply)
 
 			ply:SetSafetyRollKeyTime(CurTime() + 0.001)
+
 			vel.z = 30
 			vel:Mul(ply:GetOverdriveMult())
 
@@ -153,8 +154,8 @@ local function WallrunningThink(ply, mv, cmd)
 
 		mv:SetVelocity(vecvel)
 		mv:SetForwardSpeed(0)
-
 		mv:SetSideSpeed(0)
+
 		local tr = ply.WallrunTrace
 		local trout = ply.WallrunTraceOut
 		local eyeang = ply.WallrunOrigAng or Angle()
@@ -200,6 +201,7 @@ local function WallrunningThink(ply, mv, cmd)
 
 		if ovel:Length() > 400 then
 			ovel:Mul(0.975)
+
 			ply:SetWallrunOrigVel(ovel)
 		end
 

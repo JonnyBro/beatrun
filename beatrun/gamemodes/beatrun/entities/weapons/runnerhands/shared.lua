@@ -3,7 +3,7 @@ local minimalvm
 
 if CLIENT then
 	minimalvm = CreateClientConVar("Beatrun_MinimalVM", 1, true, true, "Lowers the running viewmodel", 0, 1)
-	cvarwindsound = CreateClientConVar("Beatrun_Wind", 1, true, false, "Wind noises")
+	cvarwindsound = CreateClientConVar("Beatrun_Wind", 1, true, false, "Wind noises", 0, 1)
 
 	SWEP.PrintName = "Unarmed"
 	SWEP.Slot = 0

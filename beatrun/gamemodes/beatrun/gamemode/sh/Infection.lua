@@ -1,13 +1,12 @@
 GM_INFECTION = 0
 Infection_StartTime = 0
 Infection_EndTime = 0
-local rand = math.random
 
 function table.Shuffle(t)
 	local n = #t
 
 	while n > 1 do
-		local k = rand(n)
+		local k = math.random(n)
 		t[k] = t[n]
 		t[n] = t[k]
 		n = n - 1
@@ -76,7 +75,7 @@ if SERVER then
 			timer.Simple(0.01, GiveLastManGun)
 
 			if humancount < 1 then
-				victim:EmitSound("blackout_hit_0" .. rand(1, 3) .. ".wav")
+				victim:EmitSound("blackout_hit_0" .. math.random(1, 3) .. ".wav")
 
 				net.Start("Infection_End")
 					net.WriteFloat(CurTime())
@@ -90,7 +89,7 @@ if SERVER then
 					end
 				end)
 			else
-				victim:EmitSound("player_damage_tonal_hit_0" .. rand(1, 6) .. ".wav")
+				victim:EmitSound("player_damage_tonal_hit_0" .. math.random(1, 6) .. ".wav")
 			end
 		end
 	end)
@@ -135,7 +134,7 @@ if SERVER then
 		end
 
 		if numinfected == 1 then
-			local infected = players[rand(#players)]
+			local infected = players[math.random(#players)]
 			infected:SetNW2Bool("Infected", true)
 
 			net.Start("Infection_XPReward")
