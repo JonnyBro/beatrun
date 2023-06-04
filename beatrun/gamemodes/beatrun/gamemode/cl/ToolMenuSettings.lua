@@ -211,7 +211,14 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		InfectionButton:SetText("Toggle Infection Gamemode")
 		InfectionButton:SetSize(0, 20)
 		InfectionButton.DoClick = function()
-			if GetGlobalBool(GM_DATATHEFT) then return notification.AddLegacy("Another gamemode is running!", NOTIFY_HINT, 2) end
+			-- if GetGlobalBool(GM_DATATHEFT) then return notification.AddLegacy("Another gamemode is running!", NOTIFY_HINT, 2) end
+			if GetGlobalBool(GM_DATATHEFT) then
+				InfectionButton:SetText("Another gamemode is running!")
+				timer.Simple(2, function()
+					InfectionButton:SetText("Toggle Infection Gamemode")
+				end)
+				return
+			end
 
 			StartInfection()
 		end
@@ -221,7 +228,14 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		DatatheftButton:SetText("Toggle Data Theft Gamemode")
 		DatatheftButton:SetSize(0, 20)
 		DatatheftButton.DoClick = function()
-			if GetGlobalBool(GM_INFECTION) then return notification.AddLegacy("Another gamemode is running!", NOTIFY_HINT, 2) end
+			-- if GetGlobalBool(GM_INFECTION) then return notification.AddLegacy("Another gamemode is running!", NOTIFY_HINT, 2) end
+			if GetGlobalBool(GM_INFECTION) then
+				InfectionButton:SetText("Another gamemode is running!")
+				timer.Simple(2, function()
+					InfectionButton:SetText("Toggle Data Theft Gamemode")
+				end)
+				return
+			end
 
 			StartDataTheft()
 		end
