@@ -298,9 +298,11 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 
 			ParkourEvent("jumpslow", ply)
 		end
+	end
 
+	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 then
 		ply:SetMeleeTime(0)
-		ply:SetMelee(0)
+		ply:SetMelee(0)		
 	end
 
 	if KeyMelee(ply, mv) and ply:GetMeleeDelay() < CurTime() and ply:GetMeleeTime() == 0 and not ply:GetCrouchJump() and not ply:GetJumpTurn() and ply:GetClimbing() == 0 and ply:GetMantle() == 0 then
