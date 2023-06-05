@@ -1,5 +1,4 @@
---[[
-N++ Protip: View > Collapse Level 1
+--[[N++ Protip: View > Collapse Level 1
 More detail on stuff in lua/vmanip/vmanip_baseanims.lua
 
 Please keep in mind that you do not fire events *through vmanip*. Think of it as a fully
@@ -551,6 +550,8 @@ hook.Add("PostDrawViewModel", "VManip", function(vm, ply, weapon)
 	end
 end)
 
+local anglef = Angle(0, 1, 0)
+
 --Very basic stuff, you see
 hook.Add("PostDrawViewModel", "VMLegs", function(vm, ply, weapon)
 	if VMLegs:IsActive() then
@@ -627,7 +628,16 @@ hook.Add("NeedsDepthPass", "VManip_RubatPLZ", function()
 	VManip.Attachment = att
 end)
 
+local ISCALC = false
 hook.Add("CalcView", "VManip_Cam", function(ply, origin, angles, fov)
+	// we dont really care about camera manipulations from other hooks during this, thus we can ignore them.
+	// some important calculations can happen in calcview hooks however, so running them is important
+
+	if ISCALC then return end
+	ISCALC = true
+	hook.Run("CalcView", ply, pos, ang, fov)
+	ISCALC = false
+
 	if not VManip:IsActive() or not VManip.Attachment then return end
 	if ply:GetViewEntity() ~= ply or ply:ShouldDrawLocalPlayer() then return end
 	local view = {}
