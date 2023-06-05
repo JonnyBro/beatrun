@@ -739,7 +739,7 @@ if CLIENT then
 	playerstart:SetNoDraw(true)
 
 	local playerstartang = Angle()
-	local ZiplineStart, _ = nil
+	local ZiplineStart = nil
 	local ziplinemins = Vector(-8, -8, -8)
 	local ziplinemaxs = Vector(8, 8, 8)
 

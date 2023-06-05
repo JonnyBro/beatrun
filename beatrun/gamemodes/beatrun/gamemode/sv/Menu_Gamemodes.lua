@@ -1,7 +1,7 @@
 util.AddNetworkString("Beatrun_ToggleGamemode")
 util.AddNetworkString("Beatrun_UpdateDataTheftLoadout")
 
-local datatheft, infection = false
+local datatheft, infection = false, false
 
 net.Receive("Beatrun_ToggleGamemode", function(_, ply)
 	local gm = net.ReadString()

@@ -1412,7 +1412,7 @@ hook.Add("Think", "FBAnimHandler", function()
 	lastwr = ply:GetWallrun()
 end)
 
-local animtr, animtr_result = nil
+local animtr, animtr_result = nil, nil
 local oldnewang = Angle()
 
 local function JumpThink()

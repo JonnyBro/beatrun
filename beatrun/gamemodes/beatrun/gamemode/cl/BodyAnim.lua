@@ -33,7 +33,7 @@ local customcycle = false
 deathanim = false
 local allowmove = false
 local allowedangchange = false
-local attach, attachId, weapontoidle = nil
+local attach, attachId, weapontoidle = nil, nil, nil
 local smoothend = false
 local endlerp = 0
 camoffset = Vector()
@@ -452,7 +452,7 @@ function BodyAnimSetEase(pos)
 end
 
 local lastattachpos = Vector(0, 0, 0)
-local lastatt, savedatt = nil
+local lastatt, savedatt = nil, nil
 local lerpchangeatt = 1
 local lastattdata = nil
 local lerpedpos = Vector()

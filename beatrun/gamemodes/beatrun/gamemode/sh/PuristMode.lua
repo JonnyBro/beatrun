@@ -6,9 +6,9 @@ local PuristModeForce = CreateConVar("Beatrun_PuristModeForce", 0, {FCVAR_REPLIC
 
 local function PuristMove(ply, mv, cmd)
 	if not ply:OnGround() and not ply:GetGrappling() then
-		local purist = ply:GetInfoNum("Beatrun_PuristMode", 0)
+		local purist = PuristMode:GetBool()
 
-		if (purist > 0 or PuristModeForce:GetBool()) and ply:WaterLevel() == 0 then
+		if (purist or PuristModeForce:GetBool()) and ply:WaterLevel() == 0 then
 			mv:SetForwardSpeed(mv:GetForwardSpeed() * 0.001)
 			mv:SetSideSpeed(mv:GetSideSpeed() * 0.001)
 

@@ -141,6 +141,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:CheckBox("Quickturn", "Beatrun_QuickturnGround")
 		panel:ControlHelp("Enables quickturning with secondary attack while on the ground")
+
 		panel:CheckBox("Purist Mode", "Beatrun_PuristMode")
 		panel:ControlHelp("Purist mode is a clientside preference that severely weakens the ability to strafe while in the air, which is how Mirror's Edge games handle this.\nDisabled = No restrictions\nEnabled = Reduced move speed in the air")
 	end)
@@ -240,5 +241,33 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			StartDataTheft()
 		end
 		panel:AddItem(DatatheftButton)
+
+		-- local divider = vgui.Create("DHorizontalDivider")
+		-- panel:AddItem(divider)
+
+		-- local LoadoutMenuButton = vgui.Create("DButton", panel)
+		-- LoadoutMenuButton:SetText("Open Loadouts Menu")
+		-- LoadoutMenuButton:SetSize(0, 20)
+		-- LoadoutMenuButton.DoClick = function()
+		-- 	local frame = vgui.Create("DFrame")
+		-- 	frame:SetTitle("Loadouts menu")
+		-- 	frame:SetSize(400, 300)
+		-- 	frame:SetDeleteOnClose(true)
+		-- 	frame:Center()
+		-- 	frame:MakePopup()
+
+		-- 	local TextEntry = vgui.Create("DTextEntry", frame)
+		-- 	TextEntry:Dock(TOP)
+
+		-- 	local okButton = vgui.Create("DButton", frame)
+		-- 	okButton:SetText("Change API Key")
+		-- 	okButton:SetPos(25, 60)
+		-- 	okButton:SetSize(250, 30)
+		-- 	okButton.DoClick = function()
+		-- 		RunConsoleCommand("Beatrun_LoadoutMenu", TextEntry:GetValue())
+		-- 		frame:Close()
+		-- 	end
+		-- end
+		-- panel:AddItem(LoadoutMenuButton)
 	end)
 end)
