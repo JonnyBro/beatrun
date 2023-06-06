@@ -14,12 +14,6 @@ welcome.outlinecolor = Color(54, 55, 56)
 welcome.alpha = 0.9
 welcome.elements = {}
 
---[[
-local function closebutton(self)
-	LocalPlayer():EmitSound("holygrenade.mp3")
-	AEUI:Clear()
-end
-]]
 
 local function warnclosebutton(self)
 	LocalPlayer():EmitSound("holygrenade.mp3")
@@ -31,7 +25,9 @@ end
 local addons = 0
 local warning = Material("vgui/warning.png")
 
-local shit = {
+local incompatible = {
+	["1581533176"] = true,
+	["2675972006"] = true,
 	["378401390"] = true,
 	["2027577882"] = true,
 	["1190705063"] = true,
@@ -130,7 +126,7 @@ local function CheckAddons()
 			addons = addons + 1
 		end
 
-		if v.mounted and shit[v.wsid] then
+		if v.mounted and incompatible[v.wsid] then
 			conflictlist.string = conflictlist.string .. v.title .. "\n"
 		end
 	end
