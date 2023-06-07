@@ -225,7 +225,7 @@ local function BeatrunHUD()
 		surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.9 + vp.x)
 		surface.DrawText("Lv." .. ply:GetLevel())
 
-		if PuristMode:GetBool() then
+		if tobool(LocalPlayer():GetInfo("Beatrun_PuristMode")) then
 			surface.SetDrawColor(230, 230, 230)
 			surface.SetMaterial(MELogo)
 			surface.DrawTexturedRect(scrw * 0.00125 + vp.z, scrh * 0.9 + vp.x + SScaleY(16) * 0.25, SScaleX(16), SScaleY(16))
