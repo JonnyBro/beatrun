@@ -172,7 +172,7 @@ local function MeleeThink(ply, mv, cmd)
 
 		if ply:GetMelee() >= 5 then
 			local vel = mv:GetVelocity()
-			// why is getwallrundir in the thousands?
+			-- why is getwallrundir in the thousands?
 			vel:Add(ply:GetWallrunDir():GetNormalized() * 0.5 * vel:Length())
 
 			mv:SetVelocity(vel)

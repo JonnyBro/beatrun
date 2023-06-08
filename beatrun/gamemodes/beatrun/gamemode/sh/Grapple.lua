@@ -153,6 +153,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		if ply:GetNW2Bool("grappledNonCourse") and ent:GetClass() ~= "worldspawn" then
 			ent:SetNWVector("glastpos", ent:GetNWVector("gpos", ent:GetPos()))
 			ent:SetNWVector("gpos", ent:GetPos())
+
 			local delta = ent:GetNWVector("gpos", Vector(0,0,0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))
 			ply:SetGrapplePos(ply:GetGrapplePos() + delta)
 		end

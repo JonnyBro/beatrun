@@ -630,9 +630,8 @@ end)
 
 local ISCALC = false
 hook.Add("CalcView", "VManip_Cam", function(ply, origin, angles, fov)
-	// we dont really care about camera manipulations from other hooks during this, thus we can ignore them.
-	// some important calculations can happen in calcview hooks however, so running them is important
-
+	-- we dont really care about camera manipulations from other hooks during this, thus we can ignore them.
+	-- some important calculations can happen in calcview hooks however, so running them is important
 	if ISCALC then return end
 	ISCALC = true
 	hook.Run("CalcView", ply, pos, ang, fov)

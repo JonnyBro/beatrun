@@ -826,7 +826,6 @@ if CLIENT then
 
 		aimvector = util.AimVector(eyeang, 133, mousex, mousey, ScrW(), ScrH())
 
-
 		local dmult = 1
 
 		if input.IsKeyDown(KEY_LALT) then dmult = 0.1 end
@@ -966,8 +965,6 @@ if CLIENT then
 	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)
 		local name = args[1] or "Unnamed"
 		-- local compress = not args[2]
-
-		print(args[2])
 
 		SaveCourse(name, args[2])
 	end)
