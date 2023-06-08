@@ -743,6 +743,8 @@ if CLIENT then
 	local ziplinemins = Vector(-8, -8, -8)
 	local ziplinemaxs = Vector(8, 8, 8)
 
+	local placedistance = 1000
+
 	surface.CreateFont("BuildMode", {
 		shadow = false,
 		blursize = 0,
@@ -824,8 +826,21 @@ if CLIENT then
 
 		aimvector = util.AimVector(eyeang, 133, mousex, mousey, ScrW(), ScrH())
 
+
+		local dmult = 1
+
+		if input.IsKeyDown(KEY_LALT) then dmult = 0.1 end
+
+		if input.IsKeyDown(KEY_EQUAL) then
+			placedistance = math.min(placedistance + 100 * FrameTime() * dmult, inf)
+		end
+
+		if input.IsKeyDown(KEY_MINUS) then
+			placedistance = math.max(placedistance - 100 * FrameTime() * dmult, 0)
+		end
+
 		trace.start = eyepos
-		trace.endpos = eyepos + aimvector * (not PlaceStartPos and 100000 or PlaceStartPos:Distance(ply:GetPos()))
+		trace.endpos = eyepos + aimvector * (not PlaceStartPos and placedistance or PlaceStartPos:Distance(ply:GetPos()))
 		trace.filter = ply
 		trace.output = tracer
 

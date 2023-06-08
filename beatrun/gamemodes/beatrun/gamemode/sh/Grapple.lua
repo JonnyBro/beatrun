@@ -85,6 +85,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetJumpTurn(false)
 			ply:SetCrouchJumpBlocked(false)
 			ply:SetNW2Entity("grappleEntity", trout.Entity)
+			ply:SetNW2Bool("grappledNonCourse", true)
 
 			if CLIENT_IFTP() or game.SinglePlayer() then
 				ply:EmitSound("MirrorsEdge/Gadgets/ME_Magrope_Fire.wav", 40, 100 + math.random(-25, 10))
@@ -107,7 +108,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 
 		local ent = ply:GetNW2Entity("grappleEntity")
 
-		local is_ent_invalid = (ent == NULL or ent == nil)
+		local is_ent_invalid = (ent == NULL or ent == nil) and ply:GetNW2Bool("grappledNonCourse")
 		local is_getting_off = (not ply:Alive() or mv:KeyPressed(IN_JUMP) and not grappled and not ply:OnGround() or ply:GetClimbing() ~= 0 or ply:GetMantle() ~= 0 or not usingrh)
 		local c_delta = 0
 		if not is_ent_invalid then
@@ -121,6 +122,8 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 				ent:SetNWVector("glastpos", nil)
 				ent:SetNWVector("gpos", nil)
 			end
+
+			ply:SetNW2Bool("grappledNonCourse", false)
 
 			ply:SetGrappling(false)
 
@@ -147,7 +150,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			return
 		end
 
-		if ent:GetClass() ~= "worldspawn" then
+		if ply:GetNW2Bool("grappledNonCourse") and ent:GetClass() ~= "worldspawn" then
 			ent:SetNWVector("glastpos", ent:GetNWVector("gpos", ent:GetPos()))
 			ent:SetNWVector("gpos", ent:GetPos())
 			local delta = ent:GetNWVector("gpos", Vector(0,0,0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))
