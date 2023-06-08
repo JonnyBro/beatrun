@@ -459,6 +459,7 @@ local lerpedpos = Vector()
 local lastlockang = false
 local lastlockangstart = Angle()
 local lasteyeang = Angle()
+local updatethirdpersonshit = true
 -- local lerpedang = Vector()
 
 function BodyAnimCalcView2(ply, pos, angles, fov)
@@ -467,6 +468,19 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 		return
 	end
+
+	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 10 then
+		if updatethirdpersonshit then
+			ply:SetNoDraw(false)
+			BodyAnim:SetNoDraw(true)
+			BodyAnim:SetRenderOrigin(pos*1000)
+			updatethirdpersonshit = false
+		end
+		return
+	else
+		updatethirdpersonshit = true
+	end
+
 
 	if IsValid(BodyAnim) or attach ~= nil then
 		if IsValid(BodyAnim) then
