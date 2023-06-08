@@ -550,9 +550,7 @@ hook.Add("PostDrawViewModel", "VManip", function(vm, ply, weapon)
 	end
 end)
 
-local anglef = Angle(0, 1, 0)
-
---Very basic stuff, you see
+-- Very basic stuff, you see
 hook.Add("PostDrawViewModel", "VMLegs", function(vm, ply, weapon)
 	if VMLegs:IsActive() then
 		-- if ply:GetViewEntity() != ply then
