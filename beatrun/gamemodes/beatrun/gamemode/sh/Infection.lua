@@ -1,3 +1,4 @@
+GM_INFECTION = 0
 Infection_StartTime = 0
 Infection_EndTime = 0
 
