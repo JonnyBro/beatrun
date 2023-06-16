@@ -11,25 +11,23 @@ This version of the beatrun works on any version of the game (Chromium or not).
     * `lua` folder constains modules for Discord Rich Presense to work. They are open source, visit [this](https://github.com/fluffy-servers/gmod-discord-rpc) to see the source.
 
 ## Changes added by me
-* [Custom online courses database](https://courses.beatrun.ru)! It's free 🤯!
+* [Custom online courses database](https://courses.beatrun.ru)! It's free 🤯
+* Configurations menu - You can find it in the tool menu, in the *Beatrun* Category!\
+All of the settings below can be changed in the configuration menu
 * Allow Overdrive usage on the server - `Beatrun_AllowOvedriveInMultiplayer`.
 * Toggle between old and new (like in ME) Kick-Glitch - `Beatrun_OldKickGlitch`.
 * Change HUD's colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
+* Allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
 * Discord Rich Presence (extract `lua` folder to `garrysmod`, along side with `addons` folder).
 * Small camera punch when diving.
 * Ability to remove ziplines that created with *Zipline Gun* - RMB.
 * Removed your SteamID from right corner, because I can.
-* Allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
 
 ## TODO
-- [X] Configurations menu
 - [ ] Gamemodes menu
 
 ## Fixes and changes from previous version
-* Hopefully fixed a bug with sliding/diving and stucking in the animation. Let me know on Github Issues if you can reproduce it again!
-* All mentioned issues with sliding or grapple fixed with new VManip version.
-* You can now dive to your death =)
-* Kick glitch version toggle.
+* nothin, just README changes
 
 # All changes and fixes
 * Course saving works with compression and without.
@@ -41,5 +39,6 @@ This version of the beatrun works on any version of the game (Chromium or not).
 * Fixed collisions issues.
 * Fixed and tweaked player-player weapon damage.
 * Proper Kick Glitch (Like in original ME: https://www.youtube.com/watch?v=zK5y3NBUStc)
+* You can now dive to your death =)
 * Grapple fixes. Now it moves with entity it attached to and other players can see it.
 * More reliable grappling.
