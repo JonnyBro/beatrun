@@ -170,7 +170,7 @@ local function BeatrunHUD()
 
 	local coursename = nil
 	local customname = hook.Run("BeatrunHUDCourse")
-	coursename = customname and customname or Course_Name ~= "" and Course_Name or "Freeplay"
+	coursename = customname and customname or Course_Name ~= "" and "Course: " .. Course_Name or "Freeplay"
 	-- local lastxp = ply.LastXP or 0
 	local nicktext = nil
 
@@ -324,7 +324,6 @@ function BeatrunLeaderboard(forced)
 	local isdatatheft = GetGlobalBool(GM_DATATHEFT)
 	local ply = LocalPlayer()
 	local vp = ply:GetViewPunchAngles()
-	-- local scrw = ScrW()
 	local scrh = ScrH()
 
 	if not sway:GetBool() then

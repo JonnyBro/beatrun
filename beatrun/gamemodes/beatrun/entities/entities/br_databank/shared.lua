@@ -126,14 +126,6 @@ if SERVER then
 		local dbtbl = ents.FindByClass("br_databank")
 		local bank = dbtbl[math.random(1, #dbtbl)]
 
-		--[[
-		while self:GetNW2Entity("DataBank") == bank do
-			table.Shuffle(dbtbl)
-
-			bank = dbtbl[1]
-		end
-		]]
-
 		if bank then
 			self:SetNW2Entity("DataBank", bank)
 		end

@@ -1,5 +1,3 @@
-GM_DATATHEFT = 1
-
 DATATHEFT_LOADOUTS = {
 	{"weapon_357", "weapon_ar2"}
 }
@@ -44,9 +42,7 @@ if SERVER then
 
 	local function DataTheftSync(ply)
 		if GetGlobalBool(GM_DATATHEFT) and not ply.DataTheftSynced then
-			net.Start("Infection_Sync")
-				net.WriteFloat(Infection_StartTime)
-				net.WriteFloat(Infection_EndTime)
+			net.Start("DataTheft_Sync")
 			net.Send(ply)
 
 			ply.DataTheftSynced = true

@@ -21,6 +21,8 @@ local function SafetyRollThink(ply, mv, cmd)
 		mv:SetSideSpeed(0)
 		mv:SetForwardSpeed(0)
 
+		mv:AddKey(IN_DUCK)
+
 		if ang ~= landang then
 			local vel = mv:GetVelocity()
 			vel.x = 0
