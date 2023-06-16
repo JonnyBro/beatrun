@@ -403,7 +403,7 @@ end
 local tr = {}
 local tr_result = {}
 
-local allow_overdrive = CreateConVar("Beatrun_AllowOvedriveInMultiplayer", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+local allow_overdrive = CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 
 function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()

@@ -153,7 +153,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("Prop Spawning", "Beatrun_AllowPropSpawn")
 		panel:ControlHelp("Allows players without admin rights to spawn props, entities and weapons")
 
-		panel:CheckBox("Overdrive in Multiplayer", "Beatrun_AllowOvedriveInMultiplayer")
+		panel:CheckBox("Overdrive in Multiplayer", "Beatrun_AllowOverdriveInMultiplayer")
 		panel:ControlHelp("Allows Overdrive usage on the server\nDoesn't affect singleplayer")
 	end)
 

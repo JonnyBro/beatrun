@@ -14,7 +14,7 @@ This version of the beatrun works on any version of the game (Chromium or not).
 * [Custom online courses database](https://courses.beatrun.ru)! It's free 🤯
 * Configurations menu - You can find it in the tool menu, in the *Beatrun* Category!\
 All of the settings below can be changed in the configuration menu
-* Allow Overdrive usage on the server - `Beatrun_AllowOvedriveInMultiplayer`.
+* Allow Overdrive usage on the server - `Beatrun_AllowOverdriveInMultiplayer`.
 * Toggle between old and new (like in ME) Kick-Glitch - `Beatrun_OldKickGlitch`.
 * Change HUD's colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
 * Allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
