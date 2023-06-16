@@ -53,16 +53,16 @@ function OpenCourseMenu()
 
 	for k, v in pairs(files) do
 		local data = file.Read(dir .. v, "DATA")
-		course = util.Decompress(data) or data
+		local course = util.Decompress(data) or data
 
 		if course then
 			course = util.JSONToTable(course)
 			local courseentry = AEUI:AddText(courselist, course[5] or "ERROR", "AEUILarge", 10, 40 * #courselist.elements)
-			courseentry.courseid = v:Split(".txt")[1]
+			local courseid = v:Split(".txt")[1]
 
 			function courseentry:onclick()
-				LocalPlayer():EmitSound("A_TT_CP_Positive.wav")
-				LoadCourse(self.courseid)
+				LocalPlayer():EmitSound("buttonclick.wav")
+				LoadCourse(courseid)
 			end
 
 			courseentry.greyed = sacheck

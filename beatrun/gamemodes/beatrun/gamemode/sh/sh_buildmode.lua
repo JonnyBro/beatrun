@@ -513,7 +513,7 @@ if SERVER then
 
 		for k, v in pairs(props) do
 			local a = ents.Create("prop_physics")
-			print(buildmode_props[v.model], v.model)
+
 			a:SetModel(buildmode_props[v.model])
 
 			CustomPropMat(a)
@@ -539,8 +539,6 @@ if SERVER then
 		local z = net.ReadFloat()
 
 		LoadCheckpoints()
-
-		PrintTable(Checkpoints)
 
 		local a = ents.Create("tt_cp")
 		a:SetPos(Vector(x, y, z))
@@ -606,8 +604,6 @@ if SERVER then
 		local crc = util.CRC(a)
 		local data = util.JSONToTable(a)
 
-		PrintTable(data)
-
 		local props = data[1]
 		local cp = data[2]
 		local pos = data[3]
@@ -642,8 +638,6 @@ if SERVER then
 			a:Spawn()
 
 			LoadCheckpoints()
-
-			print(k, v, a)
 		end
 
 		if entities then
@@ -984,8 +978,6 @@ if CLIENT then
 		net.SendToServer()
 
 		LoadCheckpoints()
-
-		Course_ID = id
 	end
 
 	concommand.Add("Beatrun_LoadCourse", function(ply, cmd, args, argstr)

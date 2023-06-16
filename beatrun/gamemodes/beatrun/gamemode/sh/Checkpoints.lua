@@ -301,23 +301,23 @@ function LoadCheckpointTime()
 	return times or nil
 end
 
-function SaveReplayData()
-	local replay = util.Compress(util.TableToJSON(LocalPlayer().ReplayTicks))
-	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
+-- function SaveReplayData()
+-- 	local replay = util.Compress(util.TableToJSON(LocalPlayer().ReplayTicks))
+-- 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
 
-	if not replay then return end
+-- 	if not replay then return end
 
-	file.CreateDir(dir)
-	file.Write(dir .. Course_ID .. ".txt", replay)
-end
+-- 	file.CreateDir(dir)
+-- 	file.Write(dir .. Course_ID .. ".txt", replay)
+-- end
 
-function LoadReplayData()
-	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
-	local replay = file.Read(dir .. Course_ID .. ".txt")
-	replay = replay and util.JSONToTable(util.Decompress(replay))
+-- function LoadReplayData()
+-- 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
+-- 	local replay = file.Read(dir .. Course_ID .. ".txt")
+-- 	replay = replay and util.JSONToTable(util.Decompress(replay))
 
-	return replay or nil
-end
+-- 	return replay or nil
+-- end
 
 function StartCourse(spawntime)
 	local faststartmult = LocalPlayer():GetInfoNum("Beatrun_FastStart", 0) > 0 and 0.5 or 1
