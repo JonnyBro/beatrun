@@ -632,7 +632,7 @@ hook.Add("CalcView", "VManip_Cam", function(ply, origin, angles, fov)
 	-- some important calculations can happen in calcview hooks however, so running them is important
 	if ISCALC then return end
 	ISCALC = true
-	hook.Run("CalcView", ply, pos, ang, fov)
+	hook.Run("CalcView", ply, origin, angles, fov)
 	ISCALC = false
 
 	if not VManip:IsActive() or not VManip.Attachment then return end
