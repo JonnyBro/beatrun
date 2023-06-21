@@ -626,17 +626,24 @@ hook.Add("NeedsDepthPass", "VManip_RubatPLZ", function()
 	VManip.Attachment = att
 end)
 
-local ISCALC = false
+
+local calcview_hooks = {}
+timer.Simple(5, function()
+	calcview_hooks = hook.GetTable()["CalcView"]
+end)
+
 hook.Add("CalcView", "VManip_Cam", function(ply, origin, angles, fov)
 	-- we dont really care about camera manipulations from other hooks during this, thus we can ignore them.
 	-- some important calculations can happen in calcview hooks however, so running them is important
-	if ISCALC then return end
-	ISCALC = true
-	hook.Run("CalcView", ply, origin, angles, fov)
-	ISCALC = false
 
 	if not VManip:IsActive() or not VManip.Attachment then return end
 	if ply:GetViewEntity() ~= ply or ply:ShouldDrawLocalPlayer() then return end
+
+	for name, func in pairs(calcview_hooks) do
+		if name == "VManip_Cam" then continue end
+		func(ply, origin, angles, fov)
+	end
+
 	local view = {}
 	local camang = VManip.Attachment.Ang - VManip.Cam_Ang
 	view.angles = angles + Angle(camang.x * VManip.Cam_AngInt[1], camang.y * VManip.Cam_AngInt[2], camang.z * VManip.Cam_AngInt[3])
