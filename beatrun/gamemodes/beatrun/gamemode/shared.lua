@@ -8,7 +8,7 @@ GM.Email = "datae@dontemailme.com"
 GM.Website = "www.mirrorsedge.com"
 include("player_class/player_beatrun.lua")
 
-for k, v in ipairs(file.Find("gamemodes/beatrun/gamemode/sh/*.lua", "GAME", "nameasc")) do
+for _, v in ipairs(file.Find("gamemodes/beatrun/gamemode/sh/*.lua", "GAME", "nameasc")) do
 	AddCSLuaFile("sh/" .. v)
 	include("sh/" .. v)
 end
