@@ -26,6 +26,7 @@ If applicable, add screenshots or videos to help explain your problem.
 
 **Additional information:**
  - Game Version: [e.g. non-beta, chromium, x64]
+- Game Type: [e.g. singleplayer or multiplayer]
 
 **Additional context**
 Add any other context about the problem here.
