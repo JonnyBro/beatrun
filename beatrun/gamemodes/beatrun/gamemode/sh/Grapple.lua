@@ -276,6 +276,7 @@ hook.Add("PostDrawTranslucentRenderables", "GrappleBeam", function()
 
 	for i, ply in ipairs(player.GetAll()) do
 		if ply == lp then continue end
+
 		if ply:GetGrappling() then
 			local pos = ply:GetPos()
 			pos.z = pos.z + 32
