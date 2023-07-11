@@ -47,3 +47,6 @@ All of the settings below can be changed in the configuration menu
 * Allowed punching while crouching.
 * Grapple fixes. Now it moves with entity it attached to and other players can see it.
 * More reliable grappling.
+
+# Credits
+* modeltexturesbones - Changed anims a bit.
