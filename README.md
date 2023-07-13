@@ -1,7 +1,7 @@
 # beatrun
 Modified beatrun's source code.<br><br>
 There are lua modules, they are for Discord Rich Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord status.<br>
-This version of the beatrun works on any version of the game (Chromium or not).
+This version should works on any version of the game (Base version is known good, Chromium has some issues and I don't have time to fix them).
 
 # Installation
 1. **Delete or disable VManip (Base) that downloaded from Workshop!**
