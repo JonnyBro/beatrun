@@ -41,7 +41,7 @@ hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function()
 
 	local ply = LocalPlayer()
 	local inp = color ~= 1
-	local noclipping = ply:GetMoveType() == MOVETYPE_NOCLIP and not BuildMode and ply:GetMantle() == 0 and ply:GetClimbing() == 0 and not IsValid(ply:GetLadder())
+	local noclipping = ply:GetMoveType() == MOVETYPE_NOCLIP and not BuildMode and ply:GetMantle() == 0 and ply:GetClimbing() == 0 and not IsValid(ply:GetLadder()) and not ply:InVehicle()
 
 	if noclipping or inp then
 		tab["$pp_colour_colour"] = color

@@ -41,7 +41,7 @@ hook.Add("SetupMove", "SafetyRoll", SafetyRollThink)
 
 local roll = {
 	followplayer = true,
-	animmodelstring = "mirroranim",
+	animmodelstring = "climbanim",
 	showweapon = true,
 	lockang = true,
 	BodyAnimSpeed = 1.15,
@@ -53,7 +53,7 @@ local roll = {
 net.Receive("RollAnimSP", function()
 	if net.ReadBool() then
 		roll.AnimString = "land"
-		roll.animmodelstring = "mirroranim"
+		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1
 	elseif net.ReadBool() then
 		roll.AnimString = "evaderoll"
@@ -139,7 +139,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:SetSafetyRollTime(CurTime() + 0.6)
 
 			roll.AnimString = "land"
-			roll.animmodelstring = "mirroranim"
+			roll.animmodelstring = "climbanim"
 			roll.usefullbody = true
 		else
 			land = false
