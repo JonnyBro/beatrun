@@ -1,6 +1,6 @@
 # beatrun
 Modified beatrun's source code.<br><br>
-There are lua modules, they are for Discord Rich Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord status.<br>
+There are lua modules, they are for Discord Rich Presence and Steam Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord and Steam statuses.<br>
 This version should works on any version of the game (Base version is known good, Chromium has some issues and I don't have time to fix them).
 
 # Installation
@@ -8,7 +8,7 @@ This version should works on any version of the game (Base version is known good
 2. **Delete `beatrun` and `vmaniprework` folders in *addons* if you have one!**
 3. Extract `beatrun` and `vmaniprework` folders to *your_game_folder/garrysmod/addons*.
 4. Extract `lua` folder to *your_game_folder/garrysmod*.
-    * `lua` folder constains modules for Discord Rich Presense to work. They are open source, visit [this](https://github.com/fluffy-servers/gmod-discord-rpc) to see the source.
+	* `lua` folder constains modules for Discord Rich Presense and Steam Presence to work. They are open source, visit [this](https://github.com/fluffy-servers/gmod-discord-rpc) to see the sources of DRP and [this](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) for SP.
 
 ## Changes added by me
 * [Custom online courses database](https://courses.beatrun.ru)! It's free 🤯
@@ -27,10 +27,8 @@ All of the settings below can be changed in the configuration menu
 - [ ] Gamemodes menu
 
 ## Fixes and changes from previous version
-* Punching while crouching.
-* Tweaked safety roll, now you can roll under things.
-* Fixes to Gamemodes menu.
-* Removed unused code.
+* Removed unused anims and merged some together.
+* Added a module for Steam Presence.
 
 # All changes and fixes
 * Course saving works with compression and without.
