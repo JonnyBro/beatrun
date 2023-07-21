@@ -1,4 +1,4 @@
-if file.Find("lua/bin/gmcl_steamfriends_*.dll", "GAME") == nil then return end
+if file.Find("lua/bin/gmcl_steamrichpresencer_*.dll", "GAME") == nil then return end
 
 local richtext = ""
 local nextupdate = 0
