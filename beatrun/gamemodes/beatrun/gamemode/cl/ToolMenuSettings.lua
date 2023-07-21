@@ -137,13 +137,16 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_gameplay", "Gameplay", "", "", function(panel)
 		panel:ClearControls()
-		panel:SetName("Gameplaye Settings")
+		panel:SetName("Gameplay Settings")
 
 		panel:CheckBox("Quickturn", "Beatrun_QuickturnGround")
 		panel:ControlHelp("Enables quickturning with secondary attack while on the ground")
 
 		panel:CheckBox("Purist Mode", "Beatrun_PuristMode")
 		panel:ControlHelp("Purist mode is a clientside preference that severely weakens the ability to strafe while in the air, which is how Mirror's Edge games handle this.\nDisabled = No restrictions\nEnabled = Reduced move speed in the air")
+
+		panel:CheckBox("Disable Grapple Ability", "Beatrun_DisableGrapple")
+		panel:ControlHelp("Disables grapple ability")
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_main", "Main", "", "", function(panel)

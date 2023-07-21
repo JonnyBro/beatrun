@@ -1,9 +1,12 @@
+local disable_grapple = CreateClientConVar("Beatrun_DisableGrapple", 0, true, true, "Disables grapple ability", 0, 1)
+
 if CLIENT then
 	local circle = Material("circlesmooth.png", "nocull smooth")
 
 	hook.Add("HUDPaint", "grappleicon", function()
 		local ply = LocalPlayer()
 
+		if disable_grapple:GetBool() then return end
 		if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
 		if not ply:Alive() or Course_Name ~= "" then return end
 
@@ -52,6 +55,7 @@ end
 local zpunchstart = Angle(2, 0, 0)
 
 hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
+	if ply:GetInfoNum("Beatrun_DisableGrapple", 0) == 1 then return end
 	if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
 	if not ply:Alive() or Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 	if GetGlobalBool(GM_INFECTION) or GetGlobalBool(GM_DATATHEFT) and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
