@@ -23,7 +23,7 @@ local function Dive(ply, mv, cmd)
 		ply:SetCrouchJumpTime(CurTime() + 1.65)
 		ply:SetDive(true)
 
-		ply:ViewPunch(Angle(-6,0,0))
+		ply:ViewPunch(Angle(-10, 0, 0))
 
 		ParkourEvent("divestart", ply)
 

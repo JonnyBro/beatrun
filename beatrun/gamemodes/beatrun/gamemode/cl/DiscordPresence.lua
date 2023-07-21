@@ -1,4 +1,4 @@
-if file.Find("lua/bin/gmcl_gdiscord_*.dll", "GAME") == nil then return end
+if not util.IsBinaryModuleInstalled("gdiscord", "GAME") then return end
 
 require("gdiscord")
 
