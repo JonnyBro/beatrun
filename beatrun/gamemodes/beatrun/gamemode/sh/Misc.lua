@@ -49,9 +49,9 @@ hook.Add("PlayerNoClip", "BlockNoClip", function(ply, enabled)
 		ply:SetNW2Int("CPNum", -1)
 
 		if CLIENT_IFTP() then
-			notification.AddLegacy("Noclip Enabled: Respawn to run the course", NOTIFY_ERROR, 2)
+			notification.AddLegacy("Noclip Detected! Respawn to restart the course", NOTIFY_ERROR, 4)
 		elseif SERVER and game.SinglePlayer() then
-			ply:SendLua("notification.AddLegacy(\"Noclip Enabled: Respawn to run the course\", NOTIFY_ERROR, 2)")
+			ply:SendLua("notification.AddLegacy(\"Noclip Detected! Respawn to restart the course\", NOTIFY_ERROR, 4)")
 		end
 	end
 
