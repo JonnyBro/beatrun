@@ -1,4 +1,4 @@
-if not system.IsWindows() or not file.Exists("lua/bin/gmcl_gdiscord_*.dll", "GAME") then return end
+if file.Find("lua/bin/gmcl_gdiscord_*.dll", "GAME") == nil then return end
 
 require("gdiscord")
 

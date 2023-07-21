@@ -18,6 +18,7 @@ All of the settings below can be changed in the configuration menu
 * Toggle between old and new (like in ME) Kick-Glitch - `Beatrun_OldKickGlitch`.
 * Change HUD's colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
 * Allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
+* `Beatrun_DisableGrapple` - Disables grapple ability.
 * Discord Rich Presence (extract `lua` folder to `garrysmod`, along side with `addons` folder).
 * Small camera punch when diving.
 * Ability to remove ziplines that created with *Zipline Gun* - RMB.
@@ -27,8 +28,7 @@ All of the settings below can be changed in the configuration menu
 - [ ] Gamemodes menu
 
 ## Fixes and changes from previous version
-* Removed unused anims and merged some together.
-* Added a module for Steam Presence.
+* `Beatrun_DisableGrapple` - Disables grapple ability.
 
 # All changes and fixes
 * Course saving works with compression and without.
@@ -45,6 +45,7 @@ All of the settings below can be changed in the configuration menu
 * Allowed punching while crouching.
 * Grapple fixes. Now it moves with entity it attached to and other players can see it.
 * More reliable grappling.
+* Merged some anims into 1 file.
 
 # Credits
 * modeltexturesbones - Changed anims a bit.
