@@ -133,7 +133,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("Viewbob Stabilization", "Beatrun_ViewbobStabilized")
 		panel:ControlHelp("Turn on to reduce motion sickness by making viewbobbing keep the player's look position centered")
 		panel:NumSlider("Viewbob Intensity", "Beatrun_ViewbobIntensity", -100, 100, 0)
-	end)
+	end) 
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_gameplay", "Gameplay", "", "", function(panel)
 		panel:ClearControls()
