@@ -657,7 +657,7 @@ local function ClimbingCheck(ply, mv, cmd)
 	local lastvel = mv:GetVelocity()
 
 	mv:SetVelocity(vector_origin)
-	ply:SetMoveType(MOVETYPE_NOCLIP)
+	-- ply:SetMoveType(MOVETYPE_NOCLIP)
 	ply:ViewPunch(Angle(5, 0, 0.5))
 
 	local wallangc = Angle(wallang)

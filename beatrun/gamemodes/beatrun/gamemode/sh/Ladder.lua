@@ -75,6 +75,8 @@ local function LadderCheck(ply, mv, cmd, ladder)
 	else
 		ply:SetLadderDelay(CurTime() + 0.25)
 	end
+
+	ply:SetMoveType(MOVETYPE_WALK)
 end
 
 local function LadderThink(ply, mv, cmd, ladder)
