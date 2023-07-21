@@ -77,6 +77,10 @@ local red = Color(255, 0, 0, 200)
 local circlepos = Vector()
 local circleup = Vector(0, 0, 10000)
 
+local checkheight = Vector(0, 0, 64) -- eyepos diff
+local arrow = Material("medge/timetrial/checkpoint_arrow")
+local asize = 32
+
 function ENT:DrawTranslucent()
 	self:SetRenderBounds(minb, maxb)
 
@@ -94,6 +98,23 @@ function ENT:DrawTranslucent()
 		local newpos = self:GetPos() + circlepos
 
 		render.DrawBeam(newpos, newpos + circleup, 8, 0, 1, red, true)
+	end
+
+	local nextCP = Checkpoints[self:GetCPNum() + 1] or self
+
+	local selfpos = self:GetPos() + checkheight
+	local fwAng = (nextCP:GetPos() - selfpos):GetNormalized():Angle()
+
+	for i = 0, 1, 0.1 do
+		local prog = (SysTime() * .25) % 0.1 + i
+
+		red.a = 255 * (prog > 0.5 and 0.5 - prog or prog) * 2
+
+		local size = asize * (1 - prog)
+		local pos = selfpos - fwAng:Forward() * asize + fwAng:Forward() * (asize * 2) * prog
+
+		render.SetMaterial(arrow)
+		render.DrawBeam(pos - fwAng:Forward() * size * .5, pos + fwAng:Forward() * size * .5, size, 1, 0, red)
 	end
 
 	-- local bmin, bmax = self:GetRenderBounds()
