@@ -468,7 +468,8 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		return
 	end
 
-	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then -- This is the issue with disappearing model when sliding
+	-- This is the issue with disappearing model when sliding, should be fixed for now
+	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then -- TODO: Something if appears again...
 		if updatethirdperson then
 			ply:SetNoDraw(false)
 			BodyAnim:SetNoDraw(true)
