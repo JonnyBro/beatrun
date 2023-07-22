@@ -468,7 +468,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		return
 	end
 
-	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 10 then
+	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then -- This is the issue with disappearing model when sliding
 		if updatethirdperson then
 			ply:SetNoDraw(false)
 			BodyAnim:SetNoDraw(true)
@@ -480,7 +480,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 	else
 		updatethirdperson = true
 	end
-
 
 	if IsValid(BodyAnim) or attach ~= nil then
 		if IsValid(BodyAnim) then
