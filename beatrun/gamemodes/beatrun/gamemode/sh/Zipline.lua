@@ -276,3 +276,11 @@ function CreateZipline(startpos, endpos)
 		return zipline
 	end
 end
+
+if CLIENT then
+	hook.Add("Think", "ZiplineSoundFix", function()
+		if not IsValid(LocalPlayer():GetZipline()) then
+			LocalPlayer():StopSound("ZiplineLoop")
+		end
+	end)
+end
