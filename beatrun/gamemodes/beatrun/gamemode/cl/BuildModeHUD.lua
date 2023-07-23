@@ -83,7 +83,7 @@ end
 local b = AEUI:AddButton(bmbuttons, "Drag (G)", BuildModeHUDButton, "AEUIDefault", 2, 0, false)
 b.key = KEY_G
 b.greyed = GreyButtons
-local b = AEUI:AddButton(bmbuttons, "Dupe (SHIFT+D)", BuildModeHUDButton, "AEUIDefault", 2, 25, false)
+local b = AEUI:AddButton(bmbuttons, "Copy (SHIFT+D)", BuildModeHUDButton, "AEUIDefault", 2, 25, false)
 b.key = KEY_D
 b.greyed = GreyButtons
 local b = AEUI:AddButton(bmbuttons, "Delete (DEL/BCKSPC)", BuildModeHUDButton, "AEUIDefault", 2, 50, false)

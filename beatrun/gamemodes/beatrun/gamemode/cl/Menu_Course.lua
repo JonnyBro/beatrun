@@ -1,17 +1,17 @@
 local coursepanel = {
-	w = 1200,
+	w = 900,
 	h = 650
 }
 
-coursepanel.x = 960 - coursepanel.w * 0.5
-coursepanel.y = 540 - coursepanel.h * 0.5
+coursepanel.x = 950 - coursepanel.w * 0.5
+coursepanel.y = 550 - coursepanel.h * 0.5
 coursepanel.bgcolor = Color(32, 32, 32)
 coursepanel.outlinecolor = Color(54, 55, 56)
 coursepanel.alpha = 0.9
 coursepanel.elements = {}
 
-local function closebutton()
-	AEUI:Clear()
+local function sacheck()
+	return not LocalPlayer():IsSuperAdmin()
 end
 
 local function stopbutton()
@@ -19,26 +19,37 @@ local function stopbutton()
 	net.SendToServer()
 end
 
-local function sacheck()
-	return not LocalPlayer():IsSuperAdmin()
+local function buildmodebutton()
+	AEUI:Clear()
+
+	LocalPlayer():ConCommand("buildmode")
 end
 
 AEUI:AddText(coursepanel, "Time Trials - " .. game.GetMap(), "AEUIVeryLarge", 20, 30)
-AEUI:AddButton(coursepanel, "  X  ", closebutton, "AEUILarge", coursepanel.w - 47, 0)
 
-local stopbutton = AEUI:AddButton(coursepanel, "Return to Freeplay", stopbutton, "AEUILarge", coursepanel.w - 295, coursepanel.h - 50)
+local buildmodebutton = AEUI:AddButton(coursepanel, "Build Mode Toggle", buildmodebutton, "AEUILarge", coursepanel.w - 400, coursepanel.h - 50)
+buildmodebutton.greyed = sacheck
+
+local stopbutton = AEUI:AddButton(coursepanel, "Return to Freeplay", stopbutton, "AEUILarge", coursepanel.w - 750, coursepanel.h - 50)
 stopbutton.greyed = sacheck
 
 local courselist = {
 	w = 800,
 	h = 450,
-	x = 979.2 - coursepanel.w * 0.5,
+	x = 1000 - coursepanel.w * 0.5,
 	y = 648 - coursepanel.h * 0.5,
 	bgcolor = Color(32, 32, 32),
 	outlinecolor = Color(54, 55, 56),
 	alpha = 0.9,
 	elements = {}
 }
+
+local function closebutton()
+	AEUI:RemovePanel(courselist)
+	AEUI:RemovePanel(coursepanel)
+end
+
+AEUI:AddButton(coursepanel, "  X  ", closebutton, "AEUILarge", coursepanel.w - 47, 0)
 
 function OpenCourseMenu()
 	AEUI:AddPanel(coursepanel)
