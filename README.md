@@ -48,7 +48,7 @@ All of the settings below can be changed in the configuration menu.
 * Merged some anims into 1 file.
 
 # Related
-[beatrun-anims](https://github.com/JonnyBro/beatrun-anims)
+[beatrun-anims](https://github.com/JonnyBro/beatrun-anims) - Sources of animations from Beatrun. You can also find OG animations here
 
 # Credits <3
 * modeltexturesbones - Changed anims a bit.
