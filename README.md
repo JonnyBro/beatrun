@@ -35,8 +35,8 @@ All of the settings below can be changed in the configuration menu.
 * Quick turnaround only with `Unarmed`.
 * Fixed leaderboard sorting in gamemodes.
 * Fixed grapple usage in courses and gamemodes.
-* Fixed DataTheft crash when touching data bank.
-* Fixed error when loading course.
+* Fixed crash in DataTheft when touching data bank.
+* Fixed error on course load.
 * Fixed collisions issues.
 * Fixed and tweaked player-player weapon damage.
 * Proper Kick Glitch (Like in original ME: https://www.youtube.com/watch?v=zK5y3NBUStc).
@@ -47,5 +47,9 @@ All of the settings below can be changed in the configuration menu.
 * More reliable grappling.
 * Merged some anims into 1 file.
 
-# Credits
+# Related
+[beatrun-anims](https://github.com/JonnyBro/beatrun-anims)
+
+# Credits <3
 * modeltexturesbones - Changed anims a bit.
+* All contributors.
