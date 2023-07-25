@@ -244,7 +244,7 @@ function CourseHUD()
 		end
 
 		text = speed .. " km/h"
-		w, _ = surface.GetTextSize(text)
+		local w, _ = surface.GetTextSize(text)
 
 		local r, g, b, a = string.ToColor(GetConVar("Beatrun_HUDTextColor"):GetString())
 
