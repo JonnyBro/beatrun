@@ -247,7 +247,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 		ply:SetMESprintDelay(0)
 		ply:SetMEAng(0)
 
-		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
+		-- mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
 	end
 
 	local ang = mv:GetAngles()
