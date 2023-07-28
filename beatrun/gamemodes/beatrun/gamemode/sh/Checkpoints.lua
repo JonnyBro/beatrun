@@ -245,7 +245,6 @@ function CourseHUD()
 
 		text = speed .. " km/h"
 		local w, _ = surface.GetTextSize(text)
-
 		w = w or 0
 
 		local r, g, b, a = string.ToColor(GetConVar("Beatrun_HUDTextColor"):GetString())
@@ -268,9 +267,8 @@ function CourseHUD()
 
 	if timealpha > 0 then
 		local w, _ = surface.GetTextSize(timetext)
-
 		w = w or 0
-		
+
 		timealpha = math.max(0, timealpha - FrameTime() * 250)
 		timecolor.a = math.min(255, timealpha)
 
