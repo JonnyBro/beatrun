@@ -16,4 +16,5 @@ else:
 	print("Old animations installed successfully")
 
 print("i hate python")
-sys.exit(0)
+
+os.system("pause")
