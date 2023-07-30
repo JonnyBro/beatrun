@@ -19,7 +19,7 @@ namespace BeatrunAnimInstaller
 			{
 				string fileName = Path.GetFileName(filePath);
 				File.Copy(filePath, outputDir + Path.DirectorySeparatorChar + fileName, true);
-				Console.WriteLine(string.Format("Copied {0}", filePath));
+				Console.WriteLine(string.Format("Copied {0} to {1}", filePath, outputDir));
 			}
 
 			foreach (string dirPath in Directory.GetDirectories(inputDir))
@@ -36,7 +36,7 @@ namespace BeatrunAnimInstaller
 			int i = 1;
 			foreach (string choice in choices)
 			{
-				Console.WriteLine(string.Format("{0}. {1}", i, choice));
+				Console.WriteLine(string.Format("{0}: {1}", i, choice));
 				i++;
 			}
 			Console.WriteLine("");
