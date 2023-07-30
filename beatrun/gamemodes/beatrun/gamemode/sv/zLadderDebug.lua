@@ -1,4 +1,4 @@
-function LadderSpawnDebug()
+function SpawnDebugLadder()
 	local p = Entity(1):GetEyeTrace()
 	a = ents.Create("br_ladder")
 

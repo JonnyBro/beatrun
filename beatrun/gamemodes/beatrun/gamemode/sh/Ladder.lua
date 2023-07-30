@@ -75,8 +75,6 @@ local function LadderCheck(ply, mv, cmd, ladder)
 	else
 		ply:SetLadderDelay(CurTime() + 0.25)
 	end
-
-	ply:SetMoveType(MOVETYPE_WALK)
 end
 
 local function LadderThink(ply, mv, cmd, ladder)
@@ -129,7 +127,7 @@ local function LadderThink(ply, mv, cmd, ladder)
 		ply:SetLadderDelay(CurTime() + 0.15)
 		ply:SetLadderStartPos(pos)
 
-		pos.z = pos.z - (40 + math.min(ply:GetLadderHeight() - 40, 0))
+		pos.z = pos.z - (85 + math.min(ply:GetLadderHeight() - 85, 0))
 
 		ply:SetLadderEndPos(pos)
 		ply:SetLadderLerp(0)
@@ -220,6 +218,31 @@ local function LadderThink(ply, mv, cmd, ladder)
 			ply:SetMoveType(MOVETYPE_WALK)
 			ply:SetLadder(nil)
 		end
+	end
+
+	if mv:KeyDown(IN_DUCK) then
+		local ladderangf = ladder:GetAngles():Forward()
+		local newpos = mv:GetOrigin()
+		local facing = {
+			pos = ladderangf.x == 1 and "x" or ladderangf.x == -1 and "x" or ladderangf.y == 1 and "y" or ladderangf.y == -1 and "y",
+			num = ladderangf.x == 1 and 40  or ladderangf.x == -1 and -40 or ladderangf.y == 1 and 40  or ladderangf.y == -1 and -40,
+		}
+
+		newpos[facing.pos] = mv:GetOrigin()[facing.pos] + facing.num
+
+		mv:SetOrigin(newpos)
+		mv:SetVelocity(vector_origin)
+
+		if CLIENT_IFTP() then
+			BodyAnim:SetSequence("jumpfast")
+		elseif game.SinglePlayer() then
+			ply:SendLua("BodyAnim:SetSequence('jumpfast')")
+		end
+
+		ply:SetMoveType(MOVETYPE_WALK)
+		ply:SetLadder(nil)
+
+		return
 	end
 
 	mv:SetVelocity(vector_origin)
