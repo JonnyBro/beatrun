@@ -4,7 +4,8 @@ There are lua modules, they are for Discord Rich Presence and Steam Presence to 
 This version should works on any version of the game (Base version is known good, Chromium has some issues and I don't have time to fix them).
 
 ## Animations
-You can use *Beatrun Animations Installer* if you want to change your animations, there are new ones (from Beatrun Reanimated project) and OG ones, OG is default.
+You can use *Beatrun Animations Installer* if you want to change your animations, there are new ones (from Beatrun Reanimated project) and OG (but fixed) ones, OG is default.
+Installer source can be found [here](/BeatrunAnimInstaller/)
 
 # Installation
 1. **Delete or disable VManip (Base) that downloaded from Workshop!**
