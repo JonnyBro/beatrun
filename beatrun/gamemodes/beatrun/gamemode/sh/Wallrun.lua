@@ -443,7 +443,7 @@ local function WallrunningCheck(ply, mv, cmd)
 		end
 	end
 
-	if mv:KeyDown(IN_JUMP) and not ply:OnGround() or mv:KeyPressed(IN_JUMP) then
+	if not ply:OnGround() or mv:KeyPressed(IN_JUMP) then
 		local tr = ply.WallrunTrace
 		local trout = ply.WallrunTraceOut
 
@@ -484,7 +484,7 @@ local function WallrunningCheck(ply, mv, cmd)
 		end
 	end
 
-	if mv:KeyDown(IN_JUMP) and not ply:OnGround() or mv:KeyPressed(IN_JUMP) then
+	if not ply:OnGround() or mv:KeyPressed(IN_JUMP) then
 		local tr = ply.WallrunTrace
 		local trout = ply.WallrunTraceOut
 

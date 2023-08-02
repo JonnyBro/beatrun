@@ -169,7 +169,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ControlHelp("Forces Purist Mode for all players")
 
 		panel:CheckBox("\"Realistic\" wallrunning", "Beatrun_PuristWallrun")
-		panel:ControlHelp("NOTE:\nYou wallrun a bit further")
+		panel:ControlHelp("You don't lose speed when starting wallrunning when disabled")
 
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
