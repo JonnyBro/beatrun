@@ -88,6 +88,10 @@ local function SlidingAnimStart()
 	BodyLimitY = 80
 	BodyLimitX = 40
 
+	if VMLegs and VMLegs:IsActive() then
+		VMLegs:Remove()
+	end
+
 	if game.SinglePlayer() and not net.ReadBool() or not game.SinglePlayer() and not ply.DiveSliding then
 		CamIgnoreAng = false
 		camjoint = ply:GetSlidingSlippery() and "eyes" or "CameraJoint"
