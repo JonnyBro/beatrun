@@ -202,7 +202,6 @@ local function RabbitCalcView(ply, origin, ang)
 			neweye = true
 
 			ply:CLViewPunch(Angle(12, 0, 0))
-			VManip:PlayAnim("vault")
 		end
 
 		origin:Set(LerpVector(endlerp, lastpos, origin))
