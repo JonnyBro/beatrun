@@ -42,7 +42,6 @@ All of the settings below can be changed in the configuration menu.
 * Proper Kick Glitch (Like in original ME: https://www.youtube.com/watch?v=zK5y3NBUStc).
 * Tweaked safety roll, now you can roll under things.
 * You can now dive to your death =).
-* Allowed punching while crouching.
 * Grapple fixes. Now it moves with entity it attached to and other players can see it.
 * More reliable grappling.
 * Merged some anims into 1 file.
