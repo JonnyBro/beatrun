@@ -52,7 +52,17 @@ function GetCourse(sharecode)
 
 			PrintTable(headers)
 
-			LoadCourseRaw(util.Compress(body))
+			local dir = "beatrun/courses/" .. game.GetMap() .. "/"
+
+			file.CreateDir(dir)
+
+			local coursedata = util.Compress(body)
+
+			if not file.Exists(dir .. sharecode .. ".txt", "DATA") then
+				file.Write(dir .. sharecode .. ".txt", coursedata)
+			end
+
+			LoadCourseRaw(coursedata)
 
 			return true
 		else
