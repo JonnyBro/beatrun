@@ -91,7 +91,7 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 		if SERVER and not land then
 			ply:EmitSound("Cloth.Roll")
 			ply:EmitSound("Cloth.RollLand")
-		elseif CLIENT_IFTP() then
+		elseif true then
 			ply:EmitSound("Handsteps.ConcreteHard")
 			ply:EmitSound("Land.Concrete")
 		end
@@ -155,7 +155,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 		if SERVER and not land then
 			ply:EmitSound("Cloth.Roll")
 			ply:EmitSound("Cloth.RollLand")
-		elseif CLIENT_IFTP() then
+		elseif true then
 			ply:EmitSound("Handsteps.ConcreteHard")
 			ply:EmitSound("Land.Concrete")
 		end
