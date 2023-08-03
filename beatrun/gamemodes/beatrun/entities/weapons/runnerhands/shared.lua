@@ -10,6 +10,10 @@ if CLIENT then
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
 	SWEP.DrawCrosshair = false
+
+	hook.Add("VManipPrePlayAnim", "LOCNoVManip", function()
+		if LocalPlayer():GetActiveWeapon():GetClass() == "runnerhands" or blinded then return false end
+	end)
 end
 
 SWEP.Author = ""

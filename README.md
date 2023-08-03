@@ -8,7 +8,6 @@ You can use *Beatrun Animations Installer* if you want to change your animations
 Installer source can be found [here](/BeatrunAnimInstaller/)
 
 # Installation
-> Beatrun shouldn't conflict with Workshop VManip, but if it does, delete or disable it.<br>
 1. **Delete `beatrun` folder in *addons* if you have one!**
 2. Extract `beatrun` folder to *your_game_folder/garrysmod/addons*.
 3. Extract `lua` folder to *your_game_folder/garrysmod*.

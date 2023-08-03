@@ -355,6 +355,20 @@ hook.Add("PreDrawTranslucentRenderables", "ae", function()
 	end
 end)
 
+hook.Add("VManipVMEntity", "ae", function()
+	local ply = LocalPlayer()
+	local activewep = ply:GetActiveWeapon()
+
+	if activewep.CLVM then return activewep.CLVM end
+end)
+
+hook.Add("VManipLegsVMEntity", "ae", function()
+	local ply = LocalPlayer()
+	local activewep = ply:GetActiveWeapon()
+
+	if activewep.CLVM then return activewep.CLVM end
+end)
+
 function SWEP:PrimaryAttack()
 	if self:Clip1() < 1 then
 		self:DryFire()
