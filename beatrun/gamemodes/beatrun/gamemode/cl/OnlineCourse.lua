@@ -76,12 +76,11 @@ function GetCourse(sharecode)
 		print("An error occurred: ", message)
 
 		return false
-	end)
-	-- end,
-	-- {
-	-- 	["User-Agent"] = "Valve/Steam HTTP Client 1.0 (4000)",
-	-- 	["Accept-Encoding"] = "gzip"
-	-- })
+	end,
+	{
+		["User-Agent"] = "Valve/Steam HTTP Client 1.0 (4000)",
+		["Accept-Encoding"] = "gzip"
+	})
 end
 
 concommand.Add("Beatrun_LoadCode", function(ply, cmd, args, argstr)
