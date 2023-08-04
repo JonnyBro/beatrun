@@ -26,6 +26,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("Save at Checkpoint", "Beatrun_CPSave")
 		panel:ControlHelp("Respawn at last hit checkpoint in courses")
 
+		local divider = vgui.Create("DHorizontalDivider")
+		panel:AddItem(divider)
+
 		panel:TextEntry("Courses server", "Beatrun_Domain")
 		panel:ControlHelp("Database domain\nDefault: courses.beatrun.ru")
 
@@ -44,7 +47,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			TextEntry:Dock(TOP)
 
 			local okButton = vgui.Create("DButton", frame)
-			okButton:SetText("Change API Key")
+			okButton:SetText("OK")
 			okButton:SetPos(25, 60)
 			okButton:SetSize(250, 30)
 			okButton.DoClick = function()
@@ -53,6 +56,68 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			end
 		end
 		panel:AddItem(apiKeyButton)
+
+		local divider = vgui.Create("DHorizontalDivider")
+		panel:AddItem(divider)
+
+		local saveCourseButton = vgui.Create("DButton", panel)
+		saveCourseButton:SetText("Save current course to file")
+		saveCourseButton:SetSize(0, 20)
+		saveCourseButton.DoClick = function()
+			local frame = vgui.Create("DFrame")
+			frame:SetTitle("Enter a name for your course")
+			frame:SetSize(300, 100)
+			frame:SetDeleteOnClose(true)
+			frame:Center()
+			frame:MakePopup()
+
+			local TextEntry = vgui.Create("DTextEntry", frame)
+			TextEntry:Dock(TOP)
+
+			local okButton = vgui.Create("DButton", frame)
+			okButton:SetText("OK")
+			okButton:SetPos(25, 60)
+			okButton:SetSize(250, 30)
+			okButton.DoClick = function()
+				RunConsoleCommand("Beatrun_SaveCourse", TextEntry:GetValue())
+				frame:Close()
+			end
+		end
+		panel:AddItem(saveCourseButton)
+
+		local uploadCourseButton = vgui.Create("DButton", panel)
+		uploadCourseButton:SetText("Upload current course to the database")
+		uploadCourseButton:SetSize(0, 20)
+		uploadCourseButton.DoClick = function()
+			RunConsoleCommand("Beatrun_UploadCourse")
+			notification.AddLegacy("Open your console for the code!", NOTIFY_HINT, 5)
+		end
+		panel:AddItem(uploadCourseButton)
+
+		local loadCodeButton = vgui.Create("DButton", panel)
+		loadCodeButton:SetText("Load a course from the database")
+		loadCodeButton:SetSize(0, 20)
+		loadCodeButton.DoClick = function()
+			local frame = vgui.Create("DFrame")
+			frame:SetTitle("Enter course code")
+			frame:SetSize(300, 100)
+			frame:SetDeleteOnClose(true)
+			frame:Center()
+			frame:MakePopup()
+
+			local TextEntry = vgui.Create("DTextEntry", frame)
+			TextEntry:Dock(TOP)
+
+			local okButton = vgui.Create("DButton", frame)
+			okButton:SetText("OK")
+			okButton:SetPos(25, 60)
+			okButton:SetSize(250, 30)
+			okButton.DoClick = function()
+				RunConsoleCommand("Beatrun_LoadCode", TextEntry:GetValue())
+				frame:Close()
+			end
+		end
+		panel:AddItem(loadCodeButton)
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_hud", "HUD", "", "", function(panel)
