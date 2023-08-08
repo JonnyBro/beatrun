@@ -4,7 +4,7 @@ There are lua modules, they are for Discord Rich Presence and Steam Presence to 
 This version should works on any version of the game (Base version is known good, Chromium has some issues and I don't have time to fix them).
 
 ## Animations
-You can use *Beatrun Animations Installer* if you want to change your animations, there are new ones (from Beatrun Reanimated project) and OG (but fixed) ones, OG is default.<br>
+You can use *Beatrun Animations Installer* if you want to change your animations, there are new ones (from Beatrun Reanimated project) and OG (but fixed) ones, OG is default. Just press a key on your keyboard with the number of the animations you want to install (If it doesn't change animations, run installer as admin).<br>
 Installer source can be found [here](/BeatrunAnimInstaller/)
 
 # Installation
@@ -17,12 +17,16 @@ Installer source can be found [here](/BeatrunAnimInstaller/)
 * [Custom online courses database](https://courses.beatrun.ru), it's free 🤯!
 * Configurations menu - You can find it in the tool menu, in the *Beatrun* Category!\
 All of the settings below can be changed in the configuration menu.
+* Getting off of ladders (don't work on x64, idk).
+* Jumping while walking.
+* Various tweaks to Time Trials Menu (F4).
+* Arrow that shows the next checkpoint.
 * Allow Overdrive usage on the server - `Beatrun_AllowOverdriveInMultiplayer`.
 * Toggle between old and new (like in ME) Kick-Glitch - `Beatrun_OldKickGlitch`.
 * Change HUD's colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
 * Allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
 * Disable grapple ability - `Beatrun_DisableGrapple`.
-* Discord Rich Presence (extract `lua` folder to `garrysmod`, along side with `addons` folder).
+* Discord Rich Presence (See step 3).
 * Small camera punch when diving.
 * Ability to remove ziplines that created with *Zipline Gun* - RMB.
 * Removed your SteamID from right corner, because I can.

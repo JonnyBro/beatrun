@@ -55,8 +55,8 @@ end
 local zpunchstart = Angle(2, 0, 0)
 
 hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
-	if ply:GetInfoNum("Beatrun_DisableGrapple", 0) == 1 then return end
 	if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
+	if ply:GetInfoNum("Beatrun_DisableGrapple", 0) == 1 and Course_Name == "" then return end
 	if not ply:Alive() or Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 	if GetGlobalBool(GM_INFECTION) or GetGlobalBool(GM_DATATHEFT) and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 
