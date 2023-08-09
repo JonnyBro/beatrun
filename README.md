@@ -1,17 +1,20 @@
 # Beatrun
 Modified Beatrun's source code.<br><br>
-There are lua modules, they are for Discord Rich Presence and Steam Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord and Steam statuses.<br><br>
-This version should works on any version of the game (Base version is known good, Chromium has some issues and I don't have time to fix them).
+There are some Lua modules, they are for Discord Rich Presence and Steam Presence to work.<br>
+If you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord and Steam statuses.<br><br>
+This version should works on any version of the game (Base version is known good, x64 has some issues and I'm trying to fix them when I can).
 
 ## Animations
-You can use *Beatrun Animations Installer* if you want to change your animations, there are new ones (from Beatrun Reanimated project) and OG (but fixed) ones, OG is default. Just press a key on your keyboard with the number of the animations you want to install (If it doesn't change animations, run installer as admin).<br>
+You can use **Beatrun Animations Installer** if you want to change your animations, there are new ones (from Beatrun Reanimated project) and OG (but fixed) ones, OG is default.<br>
+Just start the exe and press a key on your keyboard with the number of the animations you want to install (If it doesn't change animations, run installer as admin).<br>
 Installer source can be found [here](/BeatrunAnimInstaller/)
 
 # Installation
+0. Download this repository [here](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip) (should be always up-to-date).
 1. **Delete `beatrun` folder in *addons* if you have one!**
 2. Extract `beatrun` folder to *your_game_folder/garrysmod/addons*.
 3. Extract `lua` folder to *your_game_folder/garrysmod*.
-	* `lua` folder constains modules for Discord Rich Presense and Steam Presence to work. They are open source, visit [this](https://github.com/fluffy-servers/gmod-discord-rpc) to see the sources of DRP and [this](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) for SP.
+	* `lua` folder constains modules for Discord Rich Presense and Steam Presence to work. They are open source, you can find link at the [Credits](https://github.com/JonnyBro/beatrun#credits) section.
 
 ## Changes added by me
 * [Custom online courses database](https://courses.beatrun.ru), it's free 🤯!
@@ -32,7 +35,7 @@ All of the settings below can be changed in the configuration menu.
 * Removed your SteamID from right corner, because I can.
 
 ## Fixes and changes from previous version
-* `Beatrun_DisableGrapple` - Disables grapple ability.
+* *null*
 
 # All changes and fixes
 * Course saving works with compression and without.
@@ -51,11 +54,14 @@ All of the settings below can be changed in the configuration menu.
 * Merged some anims into 1 file.
 
 ## TODO
-- [ ] Gamemodes menu
+- [ ] Gamemodes menu.
 
 # Related
-[Beatrun-Anims](https://github.com/JonnyBro/beatrun-anims) - Sources of animations from Beatrun.
+[beatrun-anims](https://github.com/JonnyBro/beatrun-anims) - Sources of animations from Beatrun.
 
 # Credits <3
-* modeltexturesbones - Beatrun Reanimated project.
 * All contributors.
+* [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated project.
+* [Discord Rich Presence](https://github.com/fluffy-servers/gmod-discord-rpc) by Fluffy Servers.
+* [Steam Presence](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) by YuRaNnNzZZ.
+* [datae](https://www.youtube.com/channel/UCiFqPwGo4x0J65xafIaECDQ) - He made that piece of shit code.
