@@ -11,7 +11,7 @@ Installer source can be found [here](/BeatrunAnimInstaller/)
 1. **Delete `beatrun` folder in *addons* if you have one!**
 2. Extract `beatrun` folder to *your_game_folder/garrysmod/addons*.
 3. Extract `lua` folder to *your_game_folder/garrysmod*.
-	* `lua` folder constains modules for Discord Rich Presense and Steam Presence to work. They are open source, visit [this](https://github.com/fluffy-servers/gmod-discord-rpc) to see the sources of DRP and [this](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) for SP.
+	* `lua` folder constains modules for Discord Rich Presense and Steam Presence to work. They are open source, you can find link at the [Credits](https://github.com/JonnyBro/beatrun#credits) section.
 
 ## Changes added by me
 * [Custom online courses database](https://courses.beatrun.ru), it's free 🤯!
@@ -32,7 +32,7 @@ All of the settings below can be changed in the configuration menu.
 * Removed your SteamID from right corner, because I can.
 
 ## Fixes and changes from previous version
-* `Beatrun_DisableGrapple` - Disables grapple ability.
+* *null*
 
 # All changes and fixes
 * Course saving works with compression and without.
@@ -57,5 +57,7 @@ All of the settings below can be changed in the configuration menu.
 [Beatrun-Anims](https://github.com/JonnyBro/beatrun-anims) - Sources of animations from Beatrun.
 
 # Credits <3
-* modeltexturesbones - Beatrun Reanimated project.
 * All contributors.
+* modeltexturesbones - Beatrun Reanimated project.
+* [Discord Rich Presence by Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc)
+* [Steam Presence by YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer)
