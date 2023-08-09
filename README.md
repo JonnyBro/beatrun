@@ -1,10 +1,12 @@
 # Beatrun
 Modified Beatrun's source code.<br><br>
-There are lua modules, they are for Discord Rich Presence and Steam Presence to work, if you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord and Steam statuses.<br><br>
-This version should works on any version of the game (Base version is known good, Chromium has some issues and I don't have time to fix them).
+There are some Lua modules, they are for Discord Rich Presence and Steam Presence to work.<br>
+If you want pure Lua just don't extract them, but your Level and Map will not be shown in your Discord and Steam statuses.<br><br>
+This version should works on any version of the game (Base version is known good, x64 has some issues and I'm trying to fix them when I can).
 
 ## Animations
-You can use *Beatrun Animations Installer* if you want to change your animations, there are new ones (from Beatrun Reanimated project) and OG (but fixed) ones, OG is default. Just press a key on your keyboard with the number of the animations you want to install (If it doesn't change animations, run installer as admin).<br>
+You can use **Beatrun Animations Installer** if you want to change your animations, there are new ones (from Beatrun Reanimated project) and OG (but fixed) ones, OG is default.<br>
+Just start the exe and press a key on your keyboard with the number of the animations you want to install (If it doesn't change animations, run installer as admin).<br>
 Installer source can be found [here](/BeatrunAnimInstaller/)
 
 # Installation
