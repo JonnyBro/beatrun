@@ -24,7 +24,6 @@ function UploadCourse()
 
 	local h_headers = {
 		Authorization = apikey:GetString(),
-		["Content-Type"] = "text/plain",
 		["Content-Length"] = filedata:len(),
 		["User-Agent"] = "Valve/Steam HTTP Client 1.0 (4000)",
 		["Accept-Encoding"] = "gzip",
