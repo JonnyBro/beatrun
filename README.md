@@ -52,13 +52,14 @@ All of the settings below can be changed in the configuration menu.
 * Merged some anims into 1 file.
 
 ## TODO
-- [ ] Gamemodes menu
+- [ ] Gamemodes menu.
 
 # Related
-[Beatrun-Anims](https://github.com/JonnyBro/beatrun-anims) - Sources of animations from Beatrun.
+[beatrun-anims](https://github.com/JonnyBro/beatrun-anims) - Sources of animations from Beatrun.
 
 # Credits <3
 * All contributors.
-* modeltexturesbones - Beatrun Reanimated project.
-* [Discord Rich Presence by Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc)
-* [Steam Presence by YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer)
+* [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated project.
+* [Discord Rich Presence](https://github.com/fluffy-servers/gmod-discord-rpc) by Fluffy Servers.
+* [Steam Presence](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) by YuRaNnNzZZ.
+* [datae](https://www.youtube.com/channel/UCiFqPwGo4x0J65xafIaECDQ) - He made that piece of shit code.
