@@ -8,6 +8,7 @@ You can use *Beatrun Animations Installer* if you want to change your animations
 Installer source can be found [here](/BeatrunAnimInstaller/)
 
 # Installation
+0. Download this repository [here](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip) (should be always up-to-date).
 1. **Delete `beatrun` folder in *addons* if you have one!**
 2. Extract `beatrun` folder to *your_game_folder/garrysmod/addons*.
 3. Extract `lua` folder to *your_game_folder/garrysmod*.
