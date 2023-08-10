@@ -1,55 +1,44 @@
-local apikey = CreateClientConVar("Beatrun_Apikey", "0", true, false, "Your API key")
+local apikey = CreateClientConVar("Beatrun_Apikey", "0", true, false, "API key")
 local domain = CreateClientConVar("Beatrun_Domain", "courses.beatrun.ru", true, false, "Online courses domain")
 
 function UploadCourse()
 	if Course_Name == "" or Course_ID == "" then return print("Can't upload in Freeplay") end
-
 	local url = domain:GetString() .. "/upload.php"
 	local data = file.Open("beatrun/courses/" .. game.GetMap() .. "/" .. Course_ID .. ".txt", "rb", "DATA")
 	local filedata = util.Decompress(data:Read(data:Size()))
 
-	http.Post(url, 
-		{ 
-			key = apikey:GetString(), 
-			map = game.GetMap(),
-			course_data = util.Base64Encode(filedata, true) 
-		},
-
-		-- onSuccess function
-		function(body, length, headers, code)
-			if code == 200 then
-				print(body)
-			else 
-				print("Error (" .. code .. "): ".. body)
-			end
-		end,
-
-		-- onFailure function
-		function(message)
-			print("Unexpected error: " .. message)
+	http.Post(url, {
+		key = apikey:GetString(),
+		map = game.GetMap(),
+		course_data = util.Base64Encode(filedata, true)
+	},
+	function(body, length, headers, code) -- onSuccess function
+		if code == 200 then
+			print("Response: " .. body)
+		else
+			print("Error (" .. code .. "): " .. body)
 		end
-	)
+	end,
+	function(message) -- onFailure function
+		print("Unexpected error: " .. message)
+	end)
 end
 
 concommand.Add("Beatrun_UploadCourse", UploadCourse)
 
 function GetCourse(sharecode)
-	local url = domain:GetString() .. "/getcourse.php" 
-				.."?sharecode=" .. sharecode
-				.. "&map=" .. game.GetMap() 
-				.. "&key=" .. apikey:GetString()
+	local url = domain:GetString() .. "/getcourse.php"
+		.. "?sharecode=" .. sharecode
+		.. "&map=" .. game.GetMap()
+		.. "&key=" .. apikey:GetString()
 
 	http.Fetch(url, function(body, length, headers, code)
 		if code == 200 then
 			print("Success! | Response: " .. code .. " | Length: " .. length)
 			print("Loading course...")
-
 			PrintTable(headers)
-
 			local dir = "beatrun/courses/" .. game.GetMap() .. "/"
-
 			file.CreateDir(dir)
-
 			local coursedata = util.Compress(body)
 
 			if not file.Exists(dir .. sharecode .. ".txt", "DATA") then
@@ -65,13 +54,11 @@ function GetCourse(sharecode)
 
 			return false
 		end
-	end,
-	function(message)
+	end, function(message)
 		print("An error occurred: ", message)
 
 		return false
-	end,
-	{
+	end, {
 		["User-Agent"] = "Valve/Steam HTTP Client 1.0 (4000)",
 		["Accept-Encoding"] = "gzip"
 	})
