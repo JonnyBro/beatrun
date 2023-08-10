@@ -224,10 +224,11 @@ local function LadderThink(ply, mv, cmd, ladder)
 		local ladderangf = ladder:GetAngles():Forward()
 		local newpos = mv:GetOrigin()
 		local facing = {
-			pos = ladderangf.x == 1 and "x" or ladderangf.x == -1 and "x" or ladderangf.y == 1 and "y" or ladderangf.y == -1 and "y",
-			num = ladderangf.x == 1 and 40  or ladderangf.x == -1 and -40 or ladderangf.y == 1 and 40  or ladderangf.y == -1 and -40,
+			pos = math.Round(ladderangf.x) == 1 and "x" or math.Round(ladderangf.x) == -1 and "x" or math.Round(ladderangf.y) == 1 and "y" or math.Round(ladderangf.y) == -1 and "y",
+			num = math.Round(ladderangf.x) == 1 and 40  or math.Round(ladderangf.x) == -1 and -40 or math.Round(ladderangf.y) == 1 and 40  or math.Round(ladderangf.y) == -1 and -40,
 		}
 
+		print(math.Round(ladderangf.x))
 		newpos[facing.pos] = mv:GetOrigin()[facing.pos] + facing.num
 
 		mv:SetOrigin(newpos)
