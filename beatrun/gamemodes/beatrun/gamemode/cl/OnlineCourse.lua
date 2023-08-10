@@ -4,47 +4,42 @@ local domain = CreateClientConVar("Beatrun_Domain", "courses.beatrun.ru", true, 
 function UploadCourse()
 	if Course_Name == "" or Course_ID == "" then return print("Can't upload in Freeplay") end
 
+	local url = domain:GetString() .. "/upload.php"
 	local data = file.Open("beatrun/courses/" .. game.GetMap() .. "/" .. Course_ID .. ".txt", "rb", "DATA")
 	local filedata = util.Decompress(data:Read(data:Size()))
 
-	local function h_success(code, body, headers)
-		print("Response: " .. code)
-		print(body)
-	end
+	http.Post(url, 
+		{ 
+			key = apikey:GetString(), 
+			map = game.GetMap(),
+			course_data = util.Base64Encode(filedata, true) 
+		},
 
-	local function h_failed(code, body)
-		print("Response: " .. code)
-		print(body)
-	end
+		-- onSuccess function
+		function(body, length, headers, code)
+			if code == 200 then
+				print(body)
+			else 
+				print("Error (" .. code .. "): ".. body)
+			end
+		end,
 
-	local h_method = "POST"
-	local h_url = "http://" .. domain:GetString() .. "/upload.php"
-	local h_type = "text/plain"
-	local h_body = filedata
-
-	local h_headers = {
-		Authorization = apikey:GetString(),
-		["Content-Length"] = filedata:len(),
-		["User-Agent"] = "Valve/Steam HTTP Client 1.0 (4000)",
-		["Accept-Encoding"] = "gzip",
-		["Game-Map"] = game.GetMap()
-	}
-
-	HTTP({
-		failed = h_failed,
-		success = h_success,
-		method = h_method,
-		url = h_url,
-		headers = h_headers,
-		type = h_type,
-		body = h_body
-	})
+		-- onFailure function
+		function(message)
+			print("Unexpected error: " .. message)
+		end
+	)
 end
 
 concommand.Add("Beatrun_UploadCourse", UploadCourse)
 
 function GetCourse(sharecode)
-	http.Fetch("http://" .. domain:GetString() .. "/getcourse.php?sharecode=" .. sharecode .. "&map=" .. game.GetMap() .. "&key=" .. apikey:GetString(), function(body, length, headers, code)
+	local url = domain:GetString() .. "/getcourse.php" 
+				.."?sharecode=" .. sharecode
+				.. "&map=" .. game.GetMap() 
+				.. "&key=" .. apikey:GetString()
+
+	http.Fetch(url, function(body, length, headers, code)
 		if code == 200 then
 			print("Success! | Response: " .. code .. " | Length: " .. length)
 			print("Loading course...")
