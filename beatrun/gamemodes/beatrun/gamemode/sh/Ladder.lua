@@ -228,7 +228,6 @@ local function LadderThink(ply, mv, cmd, ladder)
 			num = math.Round(ladderangf.x) == 1 and 40  or math.Round(ladderangf.x) == -1 and -40 or math.Round(ladderangf.y) == 1 and 40  or math.Round(ladderangf.y) == -1 and -40,
 		}
 
-		print(math.Round(ladderangf.x))
 		newpos[facing.pos] = mv:GetOrigin()[facing.pos] + facing.num
 
 		mv:SetOrigin(newpos)
