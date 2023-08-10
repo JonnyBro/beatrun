@@ -20,7 +20,7 @@ Installer source can be found [here](/BeatrunAnimInstaller/)
 * [Custom online courses database](https://courses.beatrun.ru), it's free 🤯!
 * Configurations menu - You can find it in the tool menu, in the *Beatrun* Category!\
 All of the settings below can be changed in the configuration menu.
-* Getting off of ladders (don't work on x64, idk).
+* Getting off of ladders.
 * Jumping while walking.
 * Various tweaks to Time Trials Menu (F4).
 * Arrow that shows the next checkpoint.
@@ -35,8 +35,8 @@ All of the settings below can be changed in the configuration menu.
 * Removed your SteamID from right corner, because I can.
 
 ## Fixes and changes from previous version
-* *null*
-
+* Just check the commits :shrug:.
+  
 # All changes and fixes
 * Course saving works with compression and without.
 * Quick turnaround only with `Unarmed`.
