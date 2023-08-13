@@ -14,7 +14,14 @@ Installer source can be found [here](/BeatrunAnimInstaller/)
 1. **Delete `beatrun` folder in *addons* if you have one!**
 2. Extract `beatrun` folder to *your_game_folder/garrysmod/addons*.
 3. Extract `lua` folder to *your_game_folder/garrysmod*.
-	* `lua` folder constains modules for Discord Rich Presense and Steam Presence to work. They are open source, you can find links at the [Credits](https://github.com/JonnyBro/beatrun#credits) section.
+	* `lua` folder constains modules for Discord Rich Presense and Steam Presence to work. They are open source, you can find links at the [Credits](https://github.com/JonnyBro/beatrun#credits) section.<br><br>
+ 
+**OR**<br><br>
+1. Run the script below in the Powershell.
+> You can download this file yourself and check the contents, there is nothing malicious.
+```powershell
+iex (iwr "beatrun.ru/install.ps1")
+```
 
 ## Changes added by me
 * [Custom online courses database](https://courses.beatrun.ru), it's free 🤯!
