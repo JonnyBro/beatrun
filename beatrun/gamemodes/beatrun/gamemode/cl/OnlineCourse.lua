@@ -9,7 +9,7 @@ function UploadCourse()
 
 	http.Post(url, {
 		key = apikey:GetString(),
-		map = game.GetMap(),
+		map = string.Replace(game.GetMap(), " ", "-"),
 		course_data = util.Base64Encode(filedata, true)
 	},
 	function(body, length, headers, code) -- onSuccess function
