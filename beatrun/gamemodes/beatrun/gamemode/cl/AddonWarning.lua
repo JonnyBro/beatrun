@@ -184,7 +184,7 @@ local function Seal()
 	surface.SetFont("BeatrunHUD")
 	surface.SetTextPos(2, 0)
 	surface.SetTextColor(220, 20, 20, math.abs(math.sin(CurTime() * 2) * 255))
-	surface.DrawText(REC .. " LIVE PLAYER CAM")
+	surface.DrawText("⚫ LIVE PLAYER CAM")
 
 	LocalPlayer():DrawViewModel(true)
 end

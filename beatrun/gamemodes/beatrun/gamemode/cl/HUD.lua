@@ -231,7 +231,7 @@ local function BeatrunHUD()
 			surface.DrawTexturedRect(scrw * 0.00125 + vp.z, scrh * 0.9 + vp.x + SScaleY(16) * 0.25, SScaleX(16), SScaleY(16))
 		else
 			surface.SetTextPos(scrw * 0.002 + vp.z, scrh * 0.9 + vp.x)
-			surface.DrawText(STAR)
+			surface.DrawText("★")
 		end
 
 		surface.SetFont("BeatrunHUDSmall")
@@ -385,7 +385,7 @@ function BeatrunLeaderboard(forced)
 
 			if k < 4 and pbtimenum ~= 0 then
 				surface.SetTextPos(SScaleX(380 + vp.z), scrh * 0.2 + vp.x + 25 * k)
-				surface.DrawText(STAR)
+				surface.DrawText("★")
 			end
 		end
 	end
