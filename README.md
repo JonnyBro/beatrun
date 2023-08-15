@@ -29,7 +29,7 @@ You can use "**Beatrun Animations Installer**" for custom animations. Currently 
 <br>
 Start the executable and press a key on your keyboard with the number of the animation you want to install (if nothing's changed, run the program as admin).
 <br>
-Installer source can be found [here](https://github.com/JonnyBro/beatrun/tree/master/BeatrunAnimInstaller)
+Installer source can be found [here](/BeatrunAnimInstaller)
 
 ## Changes and fixes done by me
 * Created a [custom online courses database](https://courses.beatrun.ru), which is also free and [open source](https://github.com/relaxtakenotes/beatrun-courses-server/) 🤯!
