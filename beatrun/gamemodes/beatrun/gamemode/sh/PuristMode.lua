@@ -5,10 +5,8 @@ end
 local PuristModeForce = CreateConVar("Beatrun_PuristModeForce", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Force players to adhere to purist rules", 0, 1)
 
 local function PuristMove(ply, mv, cmd)
-	local PuristMode = tobool(ply:GetInfo("Beatrun_PuristMode"))
-
 	if not ply:OnGround() and not ply:GetGrappling() then
-		if (PuristMode or PuristModeForce:GetBool()) and ply:WaterLevel() == 0 then
+		if (tobool(ply:GetInfo("Beatrun_PuristMode")) or PuristModeForce:GetBool()) and ply:WaterLevel() == 0 then
 			mv:SetForwardSpeed(mv:GetForwardSpeed() * 0.001)
 			mv:SetSideSpeed(mv:GetSideSpeed() * 0.001)
 
