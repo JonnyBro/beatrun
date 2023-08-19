@@ -224,7 +224,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 			--[[ TODO: Make this work
 			for i = -64, 64, 1 do
-				tr.endpos = tr.start + Vector(i, mins.z, maxs.z)
+				tr.endpos = tr.start + ply:GetClimbingAngle():Forward() * i
 
 				util.TraceHull(tr)
 
@@ -232,16 +232,16 @@ local function ClimbingThink(ply, mv, cmd)
 				print(tr.endpos)
 
 				if not trout.Hit then
-					tr.start = tr.endpos
-					tr.endpos = tr.start - ply:GetClimbingAngle():Forward() * 20
+					-- tr.start = tr.endpos
+					-- tr.endpos = tr.start - ply:GetClimbingAngle():Forward() * i
 
-					util.TraceHull(tr)
+					-- util.TraceHull(tr)
 
-					if not trout.Hit then
+					-- if not trout.Hit then
 						ply:SetClimbingEnd(tr.endpos)
 						ply:SetClimbing(2)
 						ParkourEvent("climbheave", ply)
-					end
+					-- end
 				end
 			end
 			--]]

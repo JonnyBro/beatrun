@@ -501,9 +501,9 @@ local customarmoffset = {
 	ladderexittoprighthand = Vector(5, 0, 0),
 	ladderclimbhangstart = Vector(-5, 0, 0),
 	ladderenterbottom = Vector(-7.5, 0, 0),
-	crouchstill = Vector(-10, 0, 10),
-	crouchfwd = Vector(-10, 0, 10),
-	crouchbwd = Vector(-10, 0, 10),
+	crouchstill = Vector(-4, 0, -5),
+	crouchfwd = Vector(-4, 0, -5),
+	crouchbwd = Vector(0, 0, 0),
 	walkfwd = Vector(10, 0, -10),
 	runbwd = Vector(0, 0, 3),
 	stand = Vector(10, 0, -10),
@@ -526,9 +526,9 @@ local customcamoffset = {
 	hangstrafeleft = Vector(-2.5, 0, 0),
 	hangstraferight = Vector(-2.5, 0, 0),
 	snatchscar = snatchscarcam1,
-	crouchstill = Vector(0, 0, -10),
-	crouchfwd = Vector(10, 0, -17.5),
-	crouchbwd = Vector(20, 0, -10)
+	crouchstill = Vector(0, 0, 2.5),
+	crouchfwd = Vector(0, 0, 2.5),
+	crouchbwd = Vector(0, 0, 2.5)
 }
 
 local transitionchecks = {
@@ -1482,6 +1482,8 @@ local function JumpThink()
 
 						if ply:KeyDown(IN_FORWARD) then
 							moveback = false
+						elseif ply:Crouching() and moveback then
+							BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchbwd"))
 						else
 							BodyAnim:SetSequence(BodyAnim:LookupSequence("runbwd"))
 						end

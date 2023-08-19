@@ -8,7 +8,7 @@ namespace BeatrunAnimInstaller
 	{
 		private static readonly string inDir = ".";
 		private static readonly string outDir = "gamemodes\\beatrun\\content\\models";
-		private static readonly List<string> choices = new List<string>() { "Beatrun Reanimated", "OG (but fixed) Animations" };
+		private static readonly List<string> choices = new List<string>() { "Beatrun Reanimated", "Original Animations" };
 
 		static void RecursiveCopyDir(string inputDir, string outputDir)
 		{
