@@ -36,7 +36,9 @@ function GetCourse(sharecode)
 		if code == 200 then
 			print("Success! | Response: " .. code .. " | Length: " .. length)
 			print("Loading course...")
+
 			PrintTable(headers)
+
 			local dir = "beatrun/courses/" .. game.GetMap() .. "/"
 			file.CreateDir(dir)
 			local coursedata = util.Compress(body)
