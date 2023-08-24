@@ -27,9 +27,10 @@ SWEP.BobScale = 0
 SWEP.SwayScale = 0
 SWEP.ViewModelFOV = 70
 
-SWEP.PrintName = "AE"
+SWEP.PrintName = "Beatrun SMG?"
 SWEP.Author = "datae"
 SWEP.Instructions = ""
+SWEP.Category = "Beatrun"
 
 SWEP.BulletData = {}
 SWEP.Damage = 15

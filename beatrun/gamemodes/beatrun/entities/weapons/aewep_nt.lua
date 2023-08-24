@@ -22,14 +22,15 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.Spawnable = true
+SWEP.Spawnable = false
 SWEP.BobScale = 0
 SWEP.SwayScale = 0
 SWEP.ViewModelFOV = 70
 
-SWEP.PrintName = "AE"
+SWEP.PrintName = "idk"
 SWEP.Author = "datae"
 SWEP.Instructions = ""
+SWEP.Category = "Beatrun"
 
 SWEP.BulletData = {}
 SWEP.Damage = 15

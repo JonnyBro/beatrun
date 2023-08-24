@@ -16,7 +16,7 @@ if CLIENT then
 	end)
 end
 
-SWEP.Author = ""
+SWEP.Author = "datae"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.Instructions = ""
@@ -28,9 +28,9 @@ SWEP.HoldType = "fist"
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
+SWEP.Category = "Beatrun"
 
-
---[[Just don't draw the hands, we don't need 'em]]
+-- Just don't draw the hands, we don't need 'em
 SWEP.UseHands = false
 
 SWEP.ViewModel = "models/runnerhands.mdl"
