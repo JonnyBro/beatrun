@@ -46,7 +46,8 @@ local incompatible = {
 	["2593047682"] = true,
 	["142911907"] = true,
 	["2316713217"] = true,
-	["2052642961"] = true
+	["2052642961"] = true,
+	["2635378860"] = true
 }
 
 local warnpanel = {
