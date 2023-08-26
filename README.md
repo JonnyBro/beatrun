@@ -14,7 +14,7 @@ This version does not include malicious modules, code or networking. What it doe
 2. Delete the `beatrun` folder in *addons* if you have one!
 3. Extract the `beatrun` folder to *your_game_folder/garrysmod/addons*.
 4. Extract the `lua` folder to *your_game_folder/garrysmod*.
-	* `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](https://github.com/JonnyBro/beatrun#credits) section<br><br>
+	* `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](https://github.com/JonnyBro/beatrun?tab=readme-ov-file#credits-3) section<br><br>
 
 # Installation (Automatic | Windows only)
 Run the command below in the Powershell. (Win + R --> powershell --> the command in question)
