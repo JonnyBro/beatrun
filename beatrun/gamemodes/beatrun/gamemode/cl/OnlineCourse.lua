@@ -29,7 +29,7 @@ concommand.Add("Beatrun_UploadCourse", UploadCourse)
 function GetCourse(sharecode)
 	local url = domain:GetString() .. "/getcourse.php"
 		.. "?sharecode=" .. sharecode
-		.. "&map=" .. game.GetMap()
+		.. "&map=" .. string.gsub(game.GetMap(), " ", "-")
 		.. "&key=" .. apikey:GetString()
 
 	http.Fetch(url, function(body, length, headers, code)
