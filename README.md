@@ -14,18 +14,19 @@ This version does not include malicious modules, code or networking. What it doe
 2. Delete the `beatrun` folder in *addons* if you have one!
 3. Extract the `beatrun` folder to *your_game_folder/garrysmod/addons*.
 4. Extract the `lua` folder to *your_game_folder/garrysmod*.
-	* `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](https://github.com/JonnyBro/beatrun#credits) section<br><br>
+	* `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](https://github.com/JonnyBro/beatrun?tab=readme-ov-file#credits-3) section<br><br>
 
 # Installation (Automatic | Windows only)
-Run the command below in the Powershell. (Win + R --> powershell --> the command in question)
+Run the command below in the Powershell. (Win + R --> powershell --> the command below)
 ```powershell
-iex (iwr "beatrun.ru/install.ps1")
+iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 ```
 
 ## Animations
 You can use "**Beatrun Animations Installer**" for custom animations. Currently there's:
 * Beatrun Reanimated
-* Fixed Original<br>
+* Fixed Original<br><br>
+
 Start the executable and press a key on your keyboard with the number of the animation you want to install (if nothing's changed, run the program as admin).<br>
 Installer's source can be found [here](/BeatrunAnimInstaller).
 
