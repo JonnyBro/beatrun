@@ -69,3 +69,31 @@ end
 concommand.Add("Beatrun_LoadCode", function(ply, cmd, args, argstr)
 	GetCourse(args[1])
 end)
+
+function UpdateCourse(course_code)
+	if Course_Name == "" or Course_ID == "" then return print("Can't upload in Freeplay") end
+	local url = domain:GetString() .. "/updatecourse.php"
+	local data = file.Open("beatrun/courses/" .. game.GetMap() .. "/" .. Course_ID .. ".txt", "rb", "DATA")
+	local filedata = util.Decompress(data:Read(data:Size()))
+
+	http.Post(url, {
+		key = apikey:GetString(),
+		map = string.Replace(game.GetMap(), " ", "-"),
+		course_data = util.Base64Encode(filedata, true),
+		code = course_code
+	},
+	function(body, length, headers, code) -- onSuccess function
+		if code == 200 then
+			print("Response: " .. body)
+		else
+			print("Error (" .. code .. "): " .. body)
+		end
+	end,
+	function(message) -- onFailure function
+		print("Unexpected error: " .. message)
+	end)
+end
+
+concommand.Add("Beatrun_UpdateCourse", function(ply, cmd, args, argstr)
+	UpdateCourse(args[1])
+end)
