@@ -39,20 +39,20 @@ if SERVER then
 	local revealed = false
 	local ended = false
 	local didmusic = false
-	local didgun = false
+	-- local didgun = false
 	local cachedhumancount = -1
 
-	local function GiveLastManGun()
-		if cachedhumancount == 1 then
-			for k, v in pairs(player.GetAll()) do
-				if not didgun and not ended and v:Alive() and not v:GetNW2Bool("Infected") then
-					hook.Run("Infection_LastManGun", v)
-					didgun = true
-					break
-				end
-			end
-		end
-	end
+	-- local function GiveLastManGun()
+	-- 	if cachedhumancount == 1 then
+	-- 		for k, v in pairs(player.GetAll()) do
+	-- 			if not didgun and not ended and v:Alive() and not v:GetNW2Bool("Infected") then
+	-- 				hook.Run("Infection_LastManGun", v)
+	-- 				didgun = true
+	-- 				break
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
 
 	net.Receive("Infection_Touch", function(len, ply)
 		local victim = net.ReadEntity()
@@ -72,7 +72,7 @@ if SERVER then
 			local humancount = HumanCount()
 			cachedhumancount = humancount
 
-			timer.Simple(0.01, GiveLastManGun)
+			-- timer.Simple(0.01, GiveLastManGun)
 
 			if humancount < 1 then
 				victim:EmitSound("blackout_hit_0" .. math.random(1, 3) .. ".wav")
@@ -220,7 +220,7 @@ if SERVER then
 		revealed = false
 		ended = false
 		didmusic = false
-		didgun = false
+		-- didgun = false
 		cachedhumancount = 0
 
 		local players = player.GetAll()
@@ -264,7 +264,7 @@ if SERVER then
 			local humancount = HumanCount()
 			cachedhumancount = humancount
 
-			timer.Simple(0.01, GiveLastManGun)
+			-- timer.Simple(0.01, GiveLastManGun)
 
 			if humancount < 1 then
 				net.Start("Infection_End")
