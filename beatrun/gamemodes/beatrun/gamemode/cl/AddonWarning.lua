@@ -1,6 +1,6 @@
 if not game.SinglePlayer() then return end
 
-local bigboy = false
+local conflictsfound = false
 
 local welcome = {
 	w = 700,
@@ -14,16 +14,13 @@ welcome.outlinecolor = Color(54, 55, 56)
 welcome.alpha = 0.9
 welcome.elements = {}
 
-
 local function warnclosebutton(self)
-	LocalPlayer():EmitSound("holygrenade.mp3")
 	AEUI:Clear()
 
-	bigboy = true
+	conflictsfound = true
 end
 
 local addons = 0
-local warning = Material("vgui/warning.png")
 
 local incompatible = {
 	["1581533176"] = true,
@@ -47,7 +44,8 @@ local incompatible = {
 	["142911907"] = true,
 	["2316713217"] = true,
 	["2052642961"] = true,
-	["2635378860"] = true
+	["2635378860"] = true,
+	["2919957168"] = true
 }
 
 local warnpanel = {
@@ -80,7 +78,7 @@ local warntext = {
 	y = warnpanel.h * 0.125,
 	centered = true,
 	color = color_white,
-	string = "NOTICE\nPlease disable the following addons before playing:"
+	string = "NOTICE\nPlease disable the following addons before playing\nor submitting any issues to GitHub:"
 }
 
 table.insert(warnpanel.elements, warntext)
@@ -106,7 +104,7 @@ local quitbutton = {
 }
 
 table.insert(warnpanel.elements, quitbutton)
-AEUI:AddButton(warnpanel, "Play, but at my own peril", warnclosebutton, "AEUIDefault", warnpanel.w * 0.5, warnpanel.h * 0.93, true)
+AEUI:AddButton(warnpanel, "Play", warnclosebutton, "AEUIDefault", warnpanel.w * 0.5, warnpanel.h * 0.93, true)
 
 local conflictlist = {
 	type = "Text",
@@ -138,63 +136,12 @@ local function CheckAddons()
 	return addons
 end
 
-local sealplead = Material("vgui/sealplead.png")
-local lightlerp = Vector()
-
-local function Seal()
-	local ply = LocalPlayer()
-	local vpang = ply:GetViewPunchAngles()
-	local x = vpang.z + ply.ViewPunchAngle.z * 500
-	local y = vpang.x + ply.ViewPunchAngle.x * 500 - 10
-	local w = sealplead:Width()
-	local h = sealplead:Height()
-	local eyepos = EyePos()
-	local eyeang = EyeAngles()
-
-	LocalPlayer():DrawViewModel(false)
-
-	render.RenderView({
-		y = 0,
-		x = 0,
-		origin = eyepos,
-		angles = (-eyeang:Forward()):Angle(),
-		w = w,
-		h = h
-	})
-
-	render.SetScissorRect(0, 0, w, h, true)
-
-	local light = render.GetLightColor(eyepos)
-	col = lightlerp
-	local colx = col[1]
-	local coly = col[2]
-	local colz = col[3]
-	col[1] = Lerp(25 * FrameTime(), colx, light[1] * 500)
-	col[2] = Lerp(25 * FrameTime(), coly, light[2] * 500)
-	col[3] = Lerp(25 * FrameTime(), colz, light[3] * 500)
-	colz = col[3]
-	coly = col[2]
-	colx = col[1]
-
-	surface.SetDrawColor(math.min(colx, 255), math.min(coly, 255), math.min(colz, 255), 255)
-	surface.SetMaterial(sealplead)
-	surface.DrawTexturedRectRotated(x + w * 0.5, y + h * 0.5, w + x, h + y + math.abs(math.sin(CurTime()) * 10), eyeang.z)
-
-	render.SetScissorRect(0, 0, 0, 0, false)
-
-	surface.SetFont("BeatrunHUD")
-	surface.SetTextPos(2, 0)
-	surface.SetTextColor(220, 20, 20, math.abs(math.sin(CurTime() * 2) * 255))
-	surface.DrawText("⚫ LIVE PLAYER CAM")
-
-	LocalPlayer():DrawViewModel(true)
-end
-
 local function WarningIcon()
-	surface.SetMaterial(warning)
-
-	if bigboy then
-		Seal()
+	if conflictsfound then
+		surface.SetFont("BeatrunHUD")
+		surface.SetTextPos(2, 0)
+		surface.SetTextColor(220, 20, 20, math.abs(math.sin(CurTime() * 2) * 255))
+		surface.DrawText("CONFLICTING ADDONS FOUND")
 
 		return
 	else
@@ -206,7 +153,7 @@ local function WarningIcon()
 	surface.DrawTexturedRect(0, 1, 32, 26)
 end
 
-if CheckAddons() > 100 then
+if CheckAddons() >= 1 then
 	hook.Add("HUDPaint", "AddonWarning", WarningIcon)
 else
 	hook.Remove("HUDPaint", "AddonWarning")

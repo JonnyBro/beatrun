@@ -61,7 +61,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(divider)
 
 		local saveCourseButton = vgui.Create("DButton", panel)
-		saveCourseButton:SetText("Save current course to file")
+		saveCourseButton:SetText("Save current course to a file")
 		saveCourseButton:SetSize(0, 20)
 		saveCourseButton.DoClick = function()
 			local frame = vgui.Create("DFrame")
