@@ -388,13 +388,13 @@ function SWEP:Reload()
 	if not TUTORIALMODE and CurTime() > self.RespawnDelay and self:GetOwner():GetClimbing() == 0 and not IsValid(self:GetOwner():GetSwingbar()) and not self:GetOwner().BuildMode then
 		self:GetOwner():Spawn()
 
-		if self:GetOwner():KeyDown(IN_USE) then
-			if game.SinglePlayer() then
-				RunConsoleCommand("toggleblindness")
-			elseif CLIENT then
-				ToggleBlindness(not blinded)
-			end
-		end
+		-- if self:GetOwner():KeyDown(IN_USE) then
+		-- 	if game.SinglePlayer() then
+		-- 		RunConsoleCommand("toggleblindness")
+		-- 	elseif CLIENT then
+		-- 		ToggleBlindness(not blinded)
+		-- 	end
+		-- end
 
 		self.RespawnDelay = CurTime() + 0.5
 	end
