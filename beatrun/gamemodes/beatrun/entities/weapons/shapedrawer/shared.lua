@@ -42,12 +42,11 @@ function SWEP:Deploy()
 	self:CallOnClient("Deploy")
 	self:SetHoldType(self.HoldType)
 	self:SendWeaponAnim(ACT_VM_DRAW)
-
-	self.points = {}
-	self.center = Vector()
 end
 
 function SWEP:Initialize()
+	self.points = {}
+	self.center = Vector()
 end
 
 function SWEP:Think()
@@ -74,7 +73,6 @@ function SWEP:PrimaryAttack()
 		table.insert(self.points, ply:EyePos() + ply:EyeAngles():Forward() * 50)
 	end
 end
-
 
 function SWEP:SecondaryAttack()
 	self:CallOnClient("SecondaryAttack")

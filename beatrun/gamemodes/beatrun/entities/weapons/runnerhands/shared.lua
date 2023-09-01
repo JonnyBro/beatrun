@@ -419,7 +419,17 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if not ply:OnGround() or ply:GetSliding() or ply:GetGrappling() or ply:GetWallrun() ~= 0 then return end
+	if ply:GetJumpTurn() and not ply:OnGround() then
+		if CLIENT and IsFirstTimePredicted() then
+			ArmInterrupt(jumpturnflypiecesign)
+		elseif game.SinglePlayer() then
+			ply:SendLua("ArmInterrupt('jumpturnflypiecesign')")
+		end
+
+		return
+	end
+
+	if not ply:OnGround() or ply:GetSliding() or ply:GetGrappling() or ply:GetWallrun() ~= 0 or ply:GetJumpTurn() then return end
 
 	local curseq = self:GetSequence()
 	local infall = curseq == 19
