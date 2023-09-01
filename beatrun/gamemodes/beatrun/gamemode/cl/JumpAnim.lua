@@ -436,7 +436,8 @@ local worldarm = {
 	ladderclimbdownfast = true,
 	ladderclimbuprighthand = true,
 	ladderclimbhangstart = true,
-	snatchscar = true
+	snatchscar = true,
+	jumpcoil = true
 }
 
 local ignorezarm = {
