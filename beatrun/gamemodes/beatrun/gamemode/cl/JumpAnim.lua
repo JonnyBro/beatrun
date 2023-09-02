@@ -440,7 +440,6 @@ local worldarm = {
 	snatchscar = true,
 	jumpcoil = true,
 	jumpturnlandidle = true,
-	jumpturnland = true,
 	wallrunright = true,
 	wallrunleft = true,
 	wallrunrightstart = true,
