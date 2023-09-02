@@ -1,6 +1,8 @@
 util.AddNetworkString("Beatrun_ToggleGamemode")
 
 net.Receive("Beatrun_ToggleGamemode", function(_, ply)
+	if not ply:IsAdmin() then return end
+
 	local gm = net.ReadString()
 
 	if gm == "datatheft" then
