@@ -45,7 +45,8 @@ local incompatible = {
 	["2316713217"] = true,
 	["2052642961"] = true,
 	["2635378860"] = true,
-	["2919957168"] = true
+	["2919957168"] = true,
+	["104815552"] = true
 }
 
 local warnpanel = {
@@ -147,10 +148,6 @@ local function WarningIcon()
 	else
 		surface.SetDrawColor(15, 15, 15, 125)
 	end
-
-	surface.DrawRect(0, 0, 33, 29)
-	surface.SetDrawColor(255, 255, 255, 125)
-	surface.DrawTexturedRect(0, 1, 32, 26)
 end
 
 if CheckAddons() >= 1 then
