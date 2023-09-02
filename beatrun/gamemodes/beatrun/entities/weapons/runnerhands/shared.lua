@@ -5,7 +5,7 @@ if CLIENT then
 	minimalvm = CreateClientConVar("Beatrun_MinimalVM", 1, true, true, "Lowers the running viewmodel", 0, 1)
 	cvarwindsound = CreateClientConVar("Beatrun_Wind", 1, true, false, "Wind noises", 0, 1)
 
-	SWEP.PrintName = "Unarmed"
+	SWEP.PrintName = "Runner Hands"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
@@ -19,7 +19,7 @@ end
 SWEP.Author = "datae"
 SWEP.Contact = ""
 SWEP.Purpose = ""
-SWEP.Instructions = ""
+SWEP.Instructions = "LMB - Punch\nE + LMB - Overdrive (if enabled)\nRMB + A/D - Sidestep\nRMB while in air - Jump Turn"
 
 SWEP.BounceWeaponIcon = false
 SWEP.DrawWeaponInfoBox = false
@@ -408,6 +408,14 @@ local allow_overdrive = CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, {
 function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
 
+	if ply:GetJumpTurn() and not ply:OnGround() then
+		if CLIENT then
+			return ArmInterrupt("jumpturnflypiecesign")
+		elseif game.SinglePlayer() then
+			return ply:SendLua("ArmInterrupt('jumpturnflypiecesign')")
+		end
+	end
+
 	if ply:KeyDown(IN_USE) and (game.SinglePlayer() or allow_overdrive:GetBool()) then
 		local mult = (ply:InOverdrive() and 1) or 1.25
 		local fovmult = (mult == 1 and 1) or 1.1
@@ -415,16 +423,6 @@ function SWEP:PrimaryAttack()
 		ply:SetMEMoveLimit(ply:GetMEMoveLimit() * 0.75)
 		ply:SetOverdriveMult(mult)
 		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120) * fovmult, 0.125)
-
-		return
-	end
-
-	if ply:GetJumpTurn() and not ply:OnGround() then
-		if CLIENT and IsFirstTimePredicted() then
-			ArmInterrupt(jumpturnflypiecesign)
-		elseif game.SinglePlayer() then
-			ply:SendLua("ArmInterrupt('jumpturnflypiecesign')")
-		end
 
 		return
 	end

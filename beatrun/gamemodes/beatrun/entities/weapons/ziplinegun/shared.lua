@@ -4,7 +4,7 @@ SWEP.SlotPos = 1
 SWEP.DrawAmmo = false
 SWEP.DrawCrosshair = true
 
-SWEP.Author = ""
+SWEP.Author = "datae"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.Instructions = ""
@@ -35,8 +35,6 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-local ziplines = {}
-
 function SWEP:SetupDataTables()
 end
 
@@ -46,6 +44,7 @@ function SWEP:Deploy()
 end
 
 function SWEP:Initialize()
+	self.ziplines = {}
 end
 
 function SWEP:Think()
@@ -67,14 +66,14 @@ function SWEP:PrimaryAttack()
 	if SERVER then
 		local zip = CreateZipline(ply:EyePos(), ply:GetEyeTrace().HitPos)
 
-		table.insert(ziplines, zip)
+		table.insert(self.ziplines, zip)
 	end
 end
 
 function SWEP:SecondaryAttack()
-	for k, v in pairs(ziplines) do
+	for _, v in pairs(self.ziplines) do
 		v:Remove()
 	end
 
-	table.Empty(ziplines)
+	table.Empty(self.ziplines)
 end
