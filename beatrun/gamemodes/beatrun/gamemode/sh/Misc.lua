@@ -1,5 +1,4 @@
 if SERVER then
-	local meta = FindMetaTable("Player")
 	local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", {FCVAR_ARCHIVE}, "Allow players to spawn props and entities")
 
 	util.AddNetworkString("SPParkourEvent")
@@ -17,30 +16,12 @@ if SERVER then
 	hook.Add("IsSpawnpointSuitable", "NoSpawnFrag", function(ply) return true end)
 
 	hook.Add("AllowPlayerPickup", "AllowAdminsPickUp", function(ply, ent)
-		if not ply:IsAdmin() and not allowPropSpawn:GetBool() then return false end
+		if ply:IsAdmin() then return true end
 	end)
-
-	function meta:GTAB(minutes)
-		local ID = self:SteamID64()
-
-		for k, v in pairs(player.GetAll()) do
-			v:EmitSound("gtab.mp3", 0, 100, 1)
-		end
-
-		timer.Simple(7.5, function()
-			if IsValid(self) and self:SteamID64() == ID then
-				self:Ban(minutes, "GTAB")
-
-				for k, v in pairs(player.GetAll()) do
-					v:EmitSound("vinethud.mp3", 0, 100, 1)
-				end
-			end
-		end)
-	end
 end
 
 if CLIENT then
-	CreateClientConVar("Beatrun_FOV", 90, true, true, "'Woah how are you moving this fast' and other hilarious jokes", 70, 120)
+	CreateClientConVar("Beatrun_FOV", 100, true, true, "'Woah how are you moving this fast' and other hilarious jokes", 70, 120)
 	CreateClientConVar("Beatrun_CPSave", 1, true, true, "Respawning during a course will go back to the last hit checkpoint", 0, 1)
 end
 
