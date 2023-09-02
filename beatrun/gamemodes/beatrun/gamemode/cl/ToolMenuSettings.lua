@@ -85,15 +85,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		end
 		panel:AddItem(saveCourseButton)
 
-		local uploadCourseButton = vgui.Create("DButton", panel)
-		uploadCourseButton:SetText("Upload current course to the database")
-		uploadCourseButton:SetSize(0, 20)
-		uploadCourseButton.DoClick = function()
-			RunConsoleCommand("Beatrun_UploadCourse")
-			notification.AddLegacy("Open your console for the code!", NOTIFY_HINT, 5)
-		end
-		panel:AddItem(uploadCourseButton)
-
 		local loadCodeButton = vgui.Create("DButton", panel)
 		loadCodeButton:SetText("Load a course from the database")
 		loadCodeButton:SetSize(0, 20)
@@ -118,6 +109,41 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			end
 		end
 		panel:AddItem(loadCodeButton)
+
+		local uploadCourseButton = vgui.Create("DButton", panel)
+		uploadCourseButton:SetText("Upload current course to the database")
+		uploadCourseButton:SetSize(0, 20)
+		uploadCourseButton.DoClick = function()
+			RunConsoleCommand("Beatrun_UploadCourse")
+			notification.AddLegacy("Open your console for the code!", NOTIFY_HINT, 5)
+		end
+		panel:AddItem(uploadCourseButton)
+
+		local updateCodeButton = vgui.Create("DButton", panel)
+		updateCodeButton:SetText("Update a course on the database")
+		updateCodeButton:SetSize(0, 20)
+		updateCodeButton.DoClick = function()
+			local frame = vgui.Create("DFrame")
+			frame:SetTitle("Enter course code")
+			frame:SetSize(300, 100)
+			frame:SetDeleteOnClose(true)
+			frame:Center()
+			frame:MakePopup()
+
+			local TextEntry = vgui.Create("DTextEntry", frame)
+			TextEntry:Dock(TOP)
+
+			local okButton = vgui.Create("DButton", frame)
+			okButton:SetText("OK")
+			okButton:SetPos(25, 60)
+			okButton:SetSize(250, 30)
+			okButton.DoClick = function()
+				RunConsoleCommand("Beatrun_UpdateCode", TextEntry:GetValue())
+				notification.AddLegacy("Open your console for server's response!", NOTIFY_HINT, 5)
+				frame:Close()
+			end
+		end
+		panel:AddItem(updateCodeButton)
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_hud", "HUD", "", "", function(panel)
