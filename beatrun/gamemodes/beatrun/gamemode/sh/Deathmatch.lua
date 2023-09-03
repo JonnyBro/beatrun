@@ -50,7 +50,7 @@ if SERVER then
 		if GetGlobalBool("GM_DEATHMATCH") then
 			local plyKills = ply:GetNW2Int("DeathmatchKills", 0)
 
-			if ply == attacker then
+			if ply == attacker and plyKills ~= 0 then
 				ply:SetNW2Int("DeathmatchKills", plyKills - 1)
 			elseif IsValid(attacker) and attacker ~= ply then
 				local kills = attacker:GetNW2Int("DeathmatchKills", 0)
