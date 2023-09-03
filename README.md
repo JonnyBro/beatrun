@@ -49,7 +49,7 @@ All of the settings below can be changed in the configuration menu.
 * SteamID in the right corner is no longer present.
 
 ## Notable changes and fixes done by the community
-* Made quick turnaround work only with `Unarmed`.
+* Made QuickTurn work only with `Runner Hands`.
 * Fixed leaderboard sorting in gamemodes.
 * Fixed grapple usage in courses and gamemodes.
 * Fixed a crash in DataTheft when touching data bank.
