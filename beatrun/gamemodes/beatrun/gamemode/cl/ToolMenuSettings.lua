@@ -300,7 +300,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		InfectionButton:SetText("Toggle Infection Gamemode")
 		InfectionButton:SetSize(0, 20)
 		InfectionButton.DoClick = function()
-			if GetGlobalBool(GM_DEATHMATCH) or GetGlobalBool(GM_DATATHEFT) then
+			if GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_DATATHEFT") then
 				InfectionButton:SetText("Another gamemode is running!")
 				timer.Simple(2, function()
 					InfectionButton:SetText("Toggle Infection Gamemode")
@@ -316,7 +316,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		DatatheftButton:SetText("Toggle Data Theft Gamemode")
 		DatatheftButton:SetSize(0, 20)
 		DatatheftButton.DoClick = function()
-			if GetGlobalBool(GM_INFECTION) or GetGlobalBool(GM_DEATHMATCH) then
+			if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DEATHMATCH") then
 				DatatheftButton:SetText("Another gamemode is running!")
 				timer.Simple(2, function()
 					DatatheftButton:SetText("Toggle Data Theft Gamemode")
@@ -332,7 +332,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		DeathmatchButton:SetText("Toggle Deathmatch Gamemode")
 		DeathmatchButton:SetSize(0, 20)
 		DeathmatchButton.DoClick = function()
-			if GetGlobalBool(GM_INFECTION) or GetGlobalBool(GM_DATATHEFT) then
+			if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") then
 				DeathmatchButton:SetText("Another gamemode is running!")
 				timer.Simple(2, function()
 					DeathmatchButton:SetText("Toggle Deathmatch Gamemode")

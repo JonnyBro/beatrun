@@ -4,13 +4,13 @@ local enemy = Color(255, 0, 0)
 
 local function HideNearby(ply)
 	if ply == LocalPlayer() then return end
-	if GetGlobalBool(GM_DATATHEFT) or GetGlobalBool(GM_DEATHMATCH) then return end
+	if GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then return end
 
 	ply.distfromlocal = LocalPlayer():GetPos():Distance(ply:GetPos())
 	local Distance = ply.distfromlocal or 40000
 
 	if Distance < 20000 and NametagsEnable:GetBool() then
-		local infectionmode = GetGlobalBool(GM_INFECTION)
+		local infectionmode = GetGlobalBool("GM_INFECTION")
 		local localinfected = LocalPlayer():GetNW2Bool("Infected")
 		local plyinfected = ply:GetNW2Bool("Infected")
 		local ang = LocalPlayer():EyeAngles()

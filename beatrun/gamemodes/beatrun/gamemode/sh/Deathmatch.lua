@@ -5,7 +5,7 @@ if SERVER then
 	util.AddNetworkString("Deathmatch_Sync")
 
 	function Beatrun_StartDeathmatch()
-		SetGlobalBool(GM_DEATHMATCH, true)
+		SetGlobalBool("GM_DEATHMATCH", true)
 
 		net.Start("Deathmatch_Start")
 		net.Broadcast()
@@ -24,9 +24,11 @@ if SERVER then
 	end
 
 	function Beatrun_StopDeathmatch()
-		SetGlobalBool(GM_DEATHMATCH, false)
+		SetGlobalBool("GM_DEATHMATCH", false)
 
 		for _, v in ipairs(player.GetAll()) do
+			v:SetNW2Int("DeathmatchKills", 0)
+
 			v:StripWeapons()
 			v:StripAmmo()
 			v:Give("runnerhands")
@@ -34,7 +36,7 @@ if SERVER then
 	end
 
 	local function DeathmatchSync(ply)
-		if GetGlobalBool(GM_DEATHMATCH) and not ply.DeathmatchSynced then
+		if GetGlobalBool("GM_DEATHMATCH") and not ply.DeathmatchSynced then
 			net.Start("Deathmatch_Sync")
 			net.Send(ply)
 
@@ -45,7 +47,7 @@ if SERVER then
 	hook.Add("PlayerSpawn", "DeathmatchSync", DeathmatchSync)
 
 	local function DeathmatchDeath(ply, inflictor, attacker)
-		if GetGlobalBool(GM_DEATHMATCH) then
+		if GetGlobalBool("GM_DEATHMATCH") then
 			local plyKills = ply:GetNW2Int("DeathmatchKills", 0)
 
 			if ply == attacker then
@@ -63,7 +65,7 @@ end
 
 if CLIENT then
 	local function DeathmatchHUDName()
-		if GetGlobalBool(GM_DEATHMATCH) then
+		if GetGlobalBool("GM_DEATHMATCH") then
 			return "Deathmatch"
 		else
 			hook.Remove("BeatrunHUDCourse", "DeathmatchHUDName")

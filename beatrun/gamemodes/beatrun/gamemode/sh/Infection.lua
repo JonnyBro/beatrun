@@ -84,7 +84,7 @@ if SERVER then
 				ended = true
 
 				timer.Simple(15, function()
-					if ended and GetGlobalBool(GM_INFECTION) then
+					if ended and GetGlobalBool("GM_INFECTION") then
 						Beatrun_StartInfection()
 					end
 				end)
@@ -95,7 +95,7 @@ if SERVER then
 	end)
 
 	local function InfectionSync(ply)
-		if GetGlobalBool(GM_INFECTION) and not ply.InfectionSynced then
+		if GetGlobalBool("GM_INFECTION") and not ply.InfectionSynced then
 			net.Start("Infection_Sync")
 				net.WriteFloat(Infection_StartTime)
 				net.WriteFloat(Infection_EndTime)
@@ -108,7 +108,7 @@ if SERVER then
 	hook.Add("PlayerSpawn", "InfectionSync", InfectionSync)
 
 	function Beatrun_StopInfection()
-		SetGlobalBool(GM_INFECTION, false)
+		SetGlobalBool("GM_INFECTION", false)
 
 		local players = player.GetAll()
 
@@ -154,7 +154,7 @@ if SERVER then
 	end
 
 	local function InfectionTimer()
-		if not GetGlobalBool(GM_INFECTION) then return end
+		if not GetGlobalBool("GM_INFECTION") then return end
 
 		if player.GetCount() <= 1 then
 			Beatrun_StopInfection()
@@ -199,7 +199,7 @@ if SERVER then
 			ended = true
 
 			timer.Simple(15, function()
-				if ended and GetGlobalBool(GM_INFECTION) then
+				if ended and GetGlobalBool("GM_INFECTION") then
 					Beatrun_StartInfection()
 				end
 			end)
@@ -207,7 +207,7 @@ if SERVER then
 	end
 
 	function Beatrun_StartInfection()
-		if GetGlobalBool(GM_INFECTION) and not ended then return end
+		if GetGlobalBool("GM_INFECTION") and not ended then return end
 		if Course_Name ~= "" then return end
 		if player.GetCount() < 2 then return end
 
@@ -215,7 +215,7 @@ if SERVER then
 			net.WriteFloat(CurTime())
 		net.Broadcast()
 
-		SetGlobalBool(GM_INFECTION, true)
+		SetGlobalBool("GM_INFECTION", true)
 
 		revealed = false
 		ended = false
@@ -247,7 +247,7 @@ if SERVER then
 	end
 
 	function InfectionDeath(ply)
-		if not GetGlobalBool(GM_INFECTION) then return end
+		if not GetGlobalBool("GM_INFECTION") then return end
 
 		if revealed and Infection_StartTime < CurTime() and not ply:GetNW2Bool("Infected") then
 			if ply.InfectionWuzHere then
@@ -274,7 +274,7 @@ if SERVER then
 				ended = true
 
 				timer.Simple(15, function()
-					if ended and GetGlobalBool(GM_INFECTION) then
+					if ended and GetGlobalBool("GM_INFECTION") then
 						Beatrun_StartInfection()
 					end
 				end)
@@ -306,7 +306,7 @@ if CLIENT then
 	local noclipkey = 0
 
 	local function InfectionHUDName()
-		if GetGlobalBool(GM_INFECTION) then
+		if GetGlobalBool("GM_INFECTION") then
 			local team = LocalPlayer():GetNW2Bool("Infected") and "(Infected)" or "(Human)"
 
 			return "Infection " .. team
@@ -322,7 +322,7 @@ if CLIENT then
 	end
 
 	local function InfectionCalcView(ply, pos, ang)
-		if GetGlobalBool(GM_INFECTION) then
+		if GetGlobalBool("GM_INFECTION") then
 			local keydown = input.IsKeyDown(noclipkey)
 
 			if keydown then
@@ -447,7 +447,7 @@ if CLIENT then
 	end)
 
 	local function InfectionHUD()
-		if not GetGlobalBool(GM_INFECTION) then return end
+		if not GetGlobalBool("GM_INFECTION") then return end
 
 		surface.SetTextColor(color_white)
 		surface.SetFont("BeatrunHUD")
@@ -484,7 +484,7 @@ if CLIENT then
 	end)
 
 	local function BeatrunInfectedVision()
-		if GetGlobalBool(GM_INFECTION) and LocalPlayer():GetNW2Bool("Infected") then
+		if GetGlobalBool("GM_INFECTION") and LocalPlayer():GetNW2Bool("Infected") then
 			tab["$pp_colour_colour"] = CurTime() > (LocalPlayer().InfectionTouchDelay or 0) and 0.91 or 0.1
 			DrawColorModify(tab)
 		end

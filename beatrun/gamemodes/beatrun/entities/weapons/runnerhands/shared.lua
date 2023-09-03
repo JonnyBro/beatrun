@@ -383,7 +383,7 @@ function SWEP:OnRemove()
 end
 
 function SWEP:Reload()
-	if GetGlobalBool(GM_DATATHEFT) or GetGlobalBool(GM_DEATHMATCH) then return end
+	if GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_INFECTION") then return end
 
 	if not TUTORIALMODE and CurTime() > self.RespawnDelay and self:GetOwner():GetClimbing() == 0 and not IsValid(self:GetOwner():GetSwingbar()) and not self:GetOwner().BuildMode then
 		self:GetOwner():Spawn()
@@ -480,7 +480,7 @@ function SWEP:PrimaryAttack()
 		local ent = tr_result.Entity
 
 		if SERVER and IsValid(ent) then
-			if not ply:IsPlayer() or (Course_Name == "" and not GetGlobalBool(GM_INFECTION)) then
+			if not ply:IsPlayer() or (Course_Name == "" and not GetGlobalBool("GM_INFECTION")) then
 				local d = DamageInfo()
 				d:SetDamage((punch ~= 3 and 10) or 20)
 				d:SetAttacker(ply)

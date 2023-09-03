@@ -11,23 +11,14 @@ end
 
 local PLAYER = {}
 
-PLAYER.DuckSpeed = 0.01		-- How fast to go from not ducking, to ducking
-PLAYER.UnDuckSpeed = 0.01	-- How fast to go from ducking, to not ducking
+PLAYER.DuckSpeed = 0.01 -- How fast to go from not ducking, to ducking
+PLAYER.UnDuckSpeed = 0.01 -- How fast to go from ducking, to not ducking
 
---
--- Creates a Taunt Camera
---
 PLAYER.TauntCam = TauntCamera()
 
---
--- See gamemodes/base/player_class/player_default.lua for all overridable variables
---
 PLAYER.WalkSpeed = 200
 PLAYER.RunSpeed = 400
 
---
--- Set up the network table accessors
---
 function PLAYER:SetupDataTables()
 	BaseClass.SetupDataTables(self)
 	self.Player:NetworkVar("Float", 0, "MEMoveLimit")
@@ -130,8 +121,8 @@ function PLAYER:SetupDataTables()
 end
 
 function PLAYER:Loadout()
-	if GetGlobalBool(GM_DATATHEFT) or GetGlobalBool(GM_DEATHMATCH) then
-		for k, v in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
+	if GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then
+		for _, v in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
 			local wep = self.Player:Give(v)
 			self.Player:GiveAmmo(1000, wep:GetPrimaryAmmoType())
 		end
@@ -174,9 +165,6 @@ function PLAYER:SetModel()
 	end
 end
 
---
--- Called when the player spawns
---
 if SERVER then
 	util.AddNetworkString("BeatrunSpawn")
 end
@@ -245,7 +233,7 @@ function PLAYER:Spawn()
 
 	ply:SetCustomCollisionCheck(true)
 
-	if GetGlobalBool(GM_DATATHEFT) then
+	if GetGlobalBool("GM_DATATHEFT") then
 		ply:DataTheft_Bank()
 	end
 
@@ -267,7 +255,7 @@ function PLAYER:Spawn()
 end
 
 hook.Add("IsSpawnpointSuitable", "CheckSpawnPoint", function(ply, spawnpointent, bMakeSuitable)
-	if not GetGlobalBool(GM_DATATHEFT) then return end
+	if not GetGlobalBool("GM_DATATHEFT") or not GetGlobalBool("GM_DEATHMATCH") then return end
 
 	local pos = spawnpointent:GetPos()
 

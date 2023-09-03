@@ -8,7 +8,7 @@ if SERVER then
 	util.AddNetworkString("DataTheft_Sync")
 
 	function Beatrun_StartDataTheft()
-		SetGlobalBool(GM_DATATHEFT, true)
+		SetGlobalBool("GM_DATATHEFT", true)
 
 		net.Start("DataTheft_Start")
 		net.Broadcast()
@@ -32,9 +32,11 @@ if SERVER then
 	end
 
 	function Beatrun_StopDataTheft()
-		SetGlobalBool(GM_DATATHEFT, false)
+		SetGlobalBool("GM_DATATHEFT", false)
 
 		for _, v in ipairs(player.GetAll()) do
+			v:SetNW2Int("DataCubes", 0)
+
 			v:StripWeapons()
 			v:StripAmmo()
 			v:Give("runnerhands")
@@ -42,7 +44,7 @@ if SERVER then
 	end
 
 	local function DataTheftSync(ply)
-		if GetGlobalBool(GM_DATATHEFT) and not ply.DataTheftSynced then
+		if GetGlobalBool("GM_DATATHEFT") and not ply.DataTheftSynced then
 			net.Start("DataTheft_Sync")
 			net.Send(ply)
 
@@ -53,7 +55,7 @@ if SERVER then
 	hook.Add("PlayerSpawn", "DataTheftSync", DataTheftSync)
 
 	local function DataTheftDeath(ply, inflictor, attacker)
-		if GetGlobalBool(GM_DATATHEFT) then
+		if GetGlobalBool("GM_DATATHEFT") then
 			local datacount = ply:GetNW2Int("DataCubes", 0)
 
 			if datacount > 0 then
@@ -82,7 +84,7 @@ end
 
 if CLIENT then
 	local function DataTheftHUDName()
-		if GetGlobalBool(GM_DATATHEFT) then
+		if GetGlobalBool("GM_DATATHEFT") then
 			local datacubes = LocalPlayer():GetNW2Int("DataCubes", 0)
 
 			return "Data Theft (" .. datacubes .. ")"

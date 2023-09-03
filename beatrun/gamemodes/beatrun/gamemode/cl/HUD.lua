@@ -281,7 +281,7 @@ local function sortleaderboard(a, b)
 	local atime = a:GetNW2Float("PBTime")
 	local btime = b:GetNW2Float("PBTime")
 
-	if GetGlobalBool(GM_INFECTION) then
+	if GetGlobalBool("GM_INFECTION") then
 		if atime == 0 then
 			atime = -1
 		end
@@ -291,7 +291,7 @@ local function sortleaderboard(a, b)
 		end
 
 		return atime > btime
-	elseif GetGlobalBool(GM_DATATHEFT) then
+	elseif GetGlobalBool("GM_DATATHEFT") then
 		atime = a:GetNW2Int("DataBanked", 0)
 		btime = b:GetNW2Int("DataBanked", 0)
 
@@ -304,7 +304,7 @@ local function sortleaderboard(a, b)
 		end
 
 		return atime > btime
-	elseif GetGlobalBool(GM_DEATHMATCH) then
+	elseif GetGlobalBool("GM_DEATHMATCH") then
 		atime = a:GetNW2Int("DeathmatchKills", 0)
 		btime = b:GetNW2Int("DeathmatchKills", 0)
 
@@ -331,11 +331,11 @@ local function sortleaderboard(a, b)
 end
 
 function BeatrunLeaderboard(forced)
-	if not forced and Course_Name == "" and not GetGlobalBool(GM_INFECTION) and not GetGlobalBool(GM_DATATHEFT) and not GetGlobalBool(GM_DEATHMATCH) then return end
+	if not forced and Course_Name == "" and not GetGlobalBool("GM_INFECTION") and not GetGlobalBool("GM_DATATHEFT") and not GetGlobalBool("GM_DEATHMATCH") then return end
 
-	local isinfection = GetGlobalBool(GM_INFECTION)
-	local isdatatheft = GetGlobalBool(GM_DATATHEFT)
-	local isdeathmatch = GetGlobalBool(GM_DEATHMATCH)
+	local isinfection = GetGlobalBool("GM_INFECTION")
+	local isdatatheft = GetGlobalBool("GM_DATATHEFT")
+	local isdeathmatch = GetGlobalBool("GM_DEATHMATCH")
 	local ply = LocalPlayer()
 	local vp = ply:GetViewPunchAngles()
 	local scrh = ScrH()
