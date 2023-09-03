@@ -130,10 +130,10 @@ function PLAYER:SetupDataTables()
 end
 
 function PLAYER:Loadout()
-	if GetGlobalBool(GM_DATATHEFT) then
+	if GetGlobalBool(GM_DATATHEFT) or GetGlobalBool(GM_DEATHMATCH) then
 		for k, v in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
 			local wep = self.Player:Give(v)
-			self.Player:GiveAmmo(300, wep:GetPrimaryAmmoType())
+			self.Player:GiveAmmo(1000, wep:GetPrimaryAmmoType())
 		end
 	else
 		self.Player:RemoveAllAmmo()
@@ -141,6 +141,7 @@ function PLAYER:Loadout()
 
 	self.Player:Give("runnerhands")
 	self.Player:SelectWeapon("runnerhands")
+
 	self.Player:SetJumpPower(230)
 	self.Player:SetCrouchedWalkSpeed(0.5)
 	self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 120))

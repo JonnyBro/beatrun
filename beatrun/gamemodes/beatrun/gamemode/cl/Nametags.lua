@@ -4,7 +4,7 @@ local enemy = Color(255, 0, 0)
 
 local function HideNearby(ply)
 	if ply == LocalPlayer() then return end
-	if GetGlobalBool(GM_DATATHEFT) then return end
+	if GetGlobalBool(GM_DATATHEFT) or GetGlobalBool(GM_DEATHMATCH) then return end
 
 	ply.distfromlocal = LocalPlayer():GetPos():Distance(ply:GetPos())
 	local Distance = ply.distfromlocal or 40000

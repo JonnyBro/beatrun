@@ -1,0 +1,81 @@
+GM_DEATHMATCH = 0
+
+if SERVER then
+	util.AddNetworkString("Deathmatch_Start")
+	util.AddNetworkString("Deathmatch_Sync")
+
+	function Beatrun_StartDeathmatch()
+		SetGlobalBool(GM_DEATHMATCH, true)
+
+		net.Start("Deathmatch_Start")
+		net.Broadcast()
+
+		for _, v in ipairs(player.GetAll()) do
+			if v:GetMoveType() == MOVETYPE_NOCLIP then
+				v:SetMoveType(MOVETYPE_WALK)
+				v:Spawn()
+			else
+				for _, b in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
+					local wep = v:Give(b)
+					v:GiveAmmo(1000, wep:GetPrimaryAmmoType())
+				end
+			end
+		end
+	end
+
+	function Beatrun_StopDeathmatch()
+		SetGlobalBool(GM_DEATHMATCH, false)
+
+		for _, v in ipairs(player.GetAll()) do
+			v:StripWeapons()
+			v:StripAmmo()
+			v:Give("runnerhands")
+		end
+	end
+
+	local function DeathmatchSync(ply)
+		if GetGlobalBool(GM_DEATHMATCH) and not ply.DeathmatchSynced then
+			net.Start("Deathmatch_Sync")
+			net.Send(ply)
+
+			ply.DeathmatchSynced = true
+		end
+	end
+
+	hook.Add("PlayerSpawn", "DeathmatchSync", DeathmatchSync)
+
+	local function DeathmatchDeath(ply, inflictor, attacker)
+		if GetGlobalBool(GM_DEATHMATCH) then
+			local plyKills = ply:GetNW2Int("DeathmatchKills", 0)
+
+			if ply == attacker then
+				ply:SetNW2Int("DeathmatchKills", plyKills - 1)
+			elseif IsValid(attacker) and attacker ~= ply then
+				local kills = attacker:GetNW2Int("DeathmatchKills", 0)
+
+				attacker:SetNW2Int("DeathmatchKills", kills + 1)
+			end
+		end
+	end
+
+	hook.Add("PlayerDeath", "DeathmatchDeath", DeathmatchDeath)
+end
+
+if CLIENT then
+	local function DeathmatchHUDName()
+		if GetGlobalBool(GM_DEATHMATCH) then
+			return "Deathmatch"
+		else
+			hook.Remove("BeatrunHUDCourse", "DeathmatchHUDName")
+		end
+	end
+
+	net.Receive("Deathmatch_Sync", function()
+		hook.Add("BeatrunHUDCourse", "DeathmatchHUDName", DeathmatchHUDName)
+	end)
+
+	net.Receive("Deathmatch_Start", function()
+		hook.Add("BeatrunHUDCourse", "DeathmatchHUDName", DeathmatchHUDName)
+		chat.AddText(Color(200, 200, 200), "Deathmatch! Kill players to get points!")
+	end)
+end

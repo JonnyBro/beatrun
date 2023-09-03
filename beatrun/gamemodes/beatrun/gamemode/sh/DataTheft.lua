@@ -1,4 +1,4 @@
-GM_DATATHEFT = 1
+GM_DATATHEFT = 0
 DATATHEFT_LOADOUTS = {
 	{"weapon_357", "weapon_ar2"}
 }
@@ -25,7 +25,7 @@ if SERVER then
 			else
 				for l, b in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
 					local wep = v:Give(b)
-					v:GiveAmmo(300, wep:GetPrimaryAmmoType())
+					v:GiveAmmo(1000, wep:GetPrimaryAmmoType())
 				end
 			end
 		end
@@ -95,10 +95,8 @@ if CLIENT then
 		hook.Add("BeatrunHUDCourse", "DataTheftHUDName", DataTheftHUDName)
 	end)
 
-	local chatcolor = Color(200, 200, 200)
-
 	net.Receive("DataTheft_Start", function()
 		hook.Add("BeatrunHUDCourse", "DataTheftHUDName", DataTheftHUDName)
-		chat.AddText(chatcolor, "Data Theft! Kill players to collect data, deposit data in banks")
+		chat.AddText(Color(200, 200, 200), "Data Theft! Kill players to collect data, deposit data in banks")
 	end)
 end

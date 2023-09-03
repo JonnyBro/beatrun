@@ -13,8 +13,6 @@ AddCSLuaFile()
 ENT.Model = "models/hunter/blocks/cube05x05x05.mdl"
 ENT.DataCube = true
 
-local color_green = Color(0, 255, 0)
-
 function ENT:Initialize()
 	self:SetModel(self.Model)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -31,7 +29,7 @@ function ENT:Initialize()
 		self:GetPhysicsObject():SetVelocity(randvec)
 	end
 
-	self:SetColor(color_green)
+	self:SetColor(Color(0, 255, 0))
 	self:SetCustomCollisionCheck(true)
 end
 

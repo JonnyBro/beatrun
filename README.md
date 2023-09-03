@@ -32,6 +32,7 @@ Installer's source can be found [here](/BeatrunAnimInstaller).
 
 ## Changes and fixes done by me
 * Created a [custom online courses database](https://courses.beatrun.ru), which is also free and [open source](https://github.com/relaxtakenotes/beatrun-courses-server/) 🤯!
+* Added a new gamemode - *Deathmatch*, it's like Data Theft, but you collect kills not cubes!
 * Added an in-game config menu - You can find it in the tool menu, in the *Beatrun* Category!\
 All of the settings below can be changed in the configuration menu.
 * Added the ability Getting off of ladders.

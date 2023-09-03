@@ -295,7 +295,11 @@ local armlock = {
 	ladderclimbuprighthand = true,
 	ladderclimbhangstart = true,
 	vaultontohigh = true,
-	snatchscar = true
+	snatchscar = true,
+	wallrunright = true,
+	wallrunleft = true,
+	wallrunrightstart = true,
+	wallrunleftstart = true
 }
 
 local stillanims = {
@@ -439,11 +443,7 @@ local worldarm = {
 	ladderclimbhangstart = true,
 	snatchscar = true,
 	jumpcoil = true,
-	jumpturnlandidle = true,
-	wallrunright = true,
-	wallrunleft = true,
-	wallrunrightstart = true,
-	wallrunleftstart = true
+	jumpturnlandidle = true
 }
 
 local ignorezarm = {

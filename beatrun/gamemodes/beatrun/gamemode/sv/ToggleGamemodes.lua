@@ -17,5 +17,11 @@ net.Receive("Beatrun_ToggleGamemode", function(_, ply)
 		else
 			Beatrun_StopInfection()
 		end
+	elseif gm == "deathmatch" then
+		if not GetGlobalBool(GM_DEATHMATCH) then
+			Beatrun_StartDeathmatch()
+		else
+			Beatrun_StopDeathmatch()
+		end
 	end
 end)

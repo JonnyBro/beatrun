@@ -383,7 +383,7 @@ function SWEP:OnRemove()
 end
 
 function SWEP:Reload()
-	if GetGlobalBool(GM_DATATHEFT) then return end
+	if GetGlobalBool(GM_DATATHEFT) or GetGlobalBool(GM_DEATHMATCH) then return end
 
 	if not TUTORIALMODE and CurTime() > self.RespawnDelay and self:GetOwner():GetClimbing() == 0 and not IsValid(self:GetOwner():GetSwingbar()) and not self:GetOwner().BuildMode then
 		self:GetOwner():Spawn()

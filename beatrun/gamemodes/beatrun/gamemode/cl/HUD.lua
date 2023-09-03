@@ -304,6 +304,19 @@ local function sortleaderboard(a, b)
 		end
 
 		return atime > btime
+	elseif GetGlobalBool(GM_DEATHMATCH) then
+		atime = a:GetNW2Int("DeathmatchKills", 0)
+		btime = b:GetNW2Int("DeathmatchKills", 0)
+
+		if atime == 0 then
+			atime = -1
+		end
+
+		if btime == 0 then
+			btime = -1
+		end
+
+		return atime > btime
 	else
 		if atime == 0 then
 			atime = inf
@@ -318,10 +331,11 @@ local function sortleaderboard(a, b)
 end
 
 function BeatrunLeaderboard(forced)
-	if not forced and Course_Name == "" and not GetGlobalBool(GM_INFECTION) and not GetGlobalBool(GM_DATATHEFT) then return end
+	if not forced and Course_Name == "" and not GetGlobalBool(GM_INFECTION) and not GetGlobalBool(GM_DATATHEFT) and not GetGlobalBool(GM_DEATHMATCH) then return end
 
 	local isinfection = GetGlobalBool(GM_INFECTION)
 	local isdatatheft = GetGlobalBool(GM_DATATHEFT)
+	local isdeathmatch = GetGlobalBool(GM_DEATHMATCH)
 	local ply = LocalPlayer()
 	local vp = ply:GetViewPunchAngles()
 	local scrh = ScrH()
@@ -362,6 +376,10 @@ function BeatrunLeaderboard(forced)
 
 			if isdatatheft then
 				pbtimenum = v:GetNW2Int("DataBanked", 0)
+				pbtime = pbtimenum
+				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
+			elseif isdeathmatch then
+				pbtimenum = v:GetNW2Int("DeathmatchKills", 0)
 				pbtime = pbtimenum
 				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
 			else

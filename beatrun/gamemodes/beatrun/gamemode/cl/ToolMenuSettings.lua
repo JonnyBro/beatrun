@@ -1,12 +1,6 @@
-local function StartInfection()
+local function ToggleGamemode(gm)
 	net.Start("Beatrun_ToggleGamemode")
-		net.WriteString("infection")
-	net.SendToServer()
-end
-
-local function StartDataTheft()
-	net.Start("Beatrun_ToggleGamemode")
-		net.WriteString("datatheft")
+		net.WriteString(gm)
 	net.SendToServer()
 end
 
@@ -306,7 +300,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		InfectionButton:SetText("Toggle Infection Gamemode")
 		InfectionButton:SetSize(0, 20)
 		InfectionButton.DoClick = function()
-			if GetGlobalBool(GM_DATATHEFT) then
+			if GetGlobalBool(GM_DEATHMATCH) or GetGlobalBool(GM_DATATHEFT) then
 				InfectionButton:SetText("Another gamemode is running!")
 				timer.Simple(2, function()
 					InfectionButton:SetText("Toggle Infection Gamemode")
@@ -314,7 +308,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 				return
 			end
 
-			StartInfection()
+			ToggleGamemode("infection")
 		end
 		panel:AddItem(InfectionButton)
 
@@ -322,17 +316,33 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		DatatheftButton:SetText("Toggle Data Theft Gamemode")
 		DatatheftButton:SetSize(0, 20)
 		DatatheftButton.DoClick = function()
-			if GetGlobalBool(GM_INFECTION) then
-				InfectionButton:SetText("Another gamemode is running!")
+			if GetGlobalBool(GM_INFECTION) or GetGlobalBool(GM_DEATHMATCH) then
+				DatatheftButton:SetText("Another gamemode is running!")
 				timer.Simple(2, function()
-					InfectionButton:SetText("Toggle Data Theft Gamemode")
+					DatatheftButton:SetText("Toggle Data Theft Gamemode")
 				end)
 				return
 			end
 
-			StartDataTheft()
+			ToggleGamemode("datatheft")
 		end
 		panel:AddItem(DatatheftButton)
+
+		local DeathmatchButton = vgui.Create("DButton", panel)
+		DeathmatchButton:SetText("Toggle Deathmatch Gamemode")
+		DeathmatchButton:SetSize(0, 20)
+		DeathmatchButton.DoClick = function()
+			if GetGlobalBool(GM_INFECTION) or GetGlobalBool(GM_DATATHEFT) then
+				DeathmatchButton:SetText("Another gamemode is running!")
+				timer.Simple(2, function()
+					DeathmatchButton:SetText("Toggle Deathmatch Gamemode")
+				end)
+				return
+			end
+
+			ToggleGamemode("deathmatch")
+		end
+		panel:AddItem(DeathmatchButton)
 
 		-- local divider = vgui.Create("DHorizontalDivider")
 		-- panel:AddItem(divider)

@@ -1,5 +1,3 @@
---Kicks people net spamming so the server doesn't eat shit
---Just a pasta of net.Incoming with an added check
 if game.SinglePlayer() then return end
 
 local maxmsgcount = 100
