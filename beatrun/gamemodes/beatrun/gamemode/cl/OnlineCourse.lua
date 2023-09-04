@@ -1,16 +1,29 @@
 local apikey = CreateClientConVar("Beatrun_Apikey", "0", true, false, "API key")
 local domain = CreateClientConVar("Beatrun_Domain", "courses.beatrun.ru", true, false, "Online courses domain")
 
+local QueuedArgs = NULL
+local QueuedFunction = NULL
+concommand.Add("beatrun_confirm", function()
+	if QueuedArgs and QueuedFunction then
+		QueuedFunction(QueuedArgs)
+		return
+	end
+	if QueuedFunction then
+		QueuedFunction()
+		return
+	end
+end)
+concommand.Add("beatrun_cancel", function() 
+	QueuedFunction = NULL
+end)
+
 local function GetCurrentMapWorkshopID()
 	for _, addon in pairs(engine.GetAddons()) do
 		if not addon or not addon.title or not addon.wsid or not addon.mounted or not addon.downloaded then continue end
 
 		_, addon_folders = file.Find("*", addon.title)
 
-		for _, dir in ipairs(addon_folders) do
-			if dir ~= "maps" then continue end
-			if file.Exists("maps/" .. game.GetMap() .. ".bsp", addon.title) then return addon.wsid end
-		end
+		if file.Exists("maps/" .. game.GetMap() .. ".bsp", addon.title) then return addon.wsid end
 	end
 
 	return 0
@@ -39,7 +52,11 @@ function UploadCourse()
 	end)
 end
 
-concommand.Add("Beatrun_UploadCourse", UploadCourse)
+concommand.Add("Beatrun_UploadCourse", function()
+	QueuedFunction = UploadCourse
+	print("You're trying to upload a course with the name "..Course_Name.." and on map "..game.GetMap()..".")
+	print("Write beatrun_confirm to continue, or beatrun_cancel to stop.")
+end)
 
 function GetCourse(sharecode)
 	local url = domain:GetString() .. "/getcourse.php"
@@ -109,5 +126,8 @@ function UpdateCourse(course_code)
 end
 
 concommand.Add("Beatrun_UpdateCode", function(ply, cmd, args, argstr)
-	UpdateCourse(args[1])
+	QueuedFunction = UpdateCourse
+	QueuedArgs = args[1]
+	print("You're trying to update a course with this code: "..args[1]..", with a course on map "..game.GetMap().." and name "..Course_Name..".")
+	print("Write beatrun_confirm to continue, or beatrun_cancel to stop.")
 end)
