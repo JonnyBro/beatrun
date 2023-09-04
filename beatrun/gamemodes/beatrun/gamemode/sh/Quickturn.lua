@@ -98,7 +98,7 @@ local function Quickturn(ply, mv, cmd)
 			elseif (lookahead or lookbehind) and ply:WaterLevel() < 3 and not IsValid(ply:GetSwingbar()) and not IsValid(ply:GetZipline()) then
 				if CLIENT and IsFirstTimePredicted() then
 					DoJumpTurn(lookbehind)
-				elseif SERVER and game.SinglePlayer() then
+				elseif game.SinglePlayer() then
 					ply:SendLua("DoJumpTurn(" .. tostring(lookbehind) .. ")")
 				end
 

@@ -578,7 +578,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 
 		if mv:KeyPressed(IN_BACK) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 then
-			if CLIENT or game.SinglePlayer() then
+			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				cmd:SetViewAngles(ply:GetSlidingAngle())
 			end
 
@@ -589,14 +589,16 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			ply:SetQuickturnTime(CT)
 			ply:SetQuickturnAng(cmd:GetViewAngles())
 
-			if CLIENT then
+			if CLIENT and IsFirstTimePredicted() then
 				DoJumpTurn(false)
 			elseif game.SinglePlayer() then
 				ply:SendLua("DoJumpTurn(false)")
 			end
 
 			ply:SetJumpTurn(true)
+
 			ply:ViewPunch(Angle(2.5, 0, 5))
+
 			ply:SetViewOffsetDucked(Vector(0, 0, 17))
 			ply:SetViewOffset(Vector(0, 0, 64))
 
