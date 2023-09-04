@@ -423,7 +423,7 @@ local function WallrunningCheck(ply, mv, cmd)
 
 				ParkourEvent("wallrunv", ply)
 
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					BodyLimitX = 30
 					BodyLimitY = 70
 					BodyAnimCycle = 0

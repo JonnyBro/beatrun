@@ -96,7 +96,7 @@ local function Quickturn(ply, mv, cmd)
 			if not lookahead and not lookbehind and ply:WaterLevel() < 3 and not IsValid(ply:GetSwingbar()) and not IsValid(ply:GetZipline()) then
 				return
 			elseif (lookahead or lookbehind) and ply:WaterLevel() < 3 and not IsValid(ply:GetSwingbar()) and not IsValid(ply:GetZipline()) then
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					DoJumpTurn(lookbehind)
 				elseif SERVER and game.SinglePlayer() then
 					ply:SendLua("DoJumpTurn(" .. tostring(lookbehind) .. ")")
@@ -212,7 +212,7 @@ local function Quickturn(ply, mv, cmd)
 			standpunch.z = 0
 		end
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			ply:CLViewPunch(standpunch)
 		elseif game.SinglePlayer() then
 			ply:ViewPunch(standpunch)
@@ -236,7 +236,7 @@ local function Quickturn(ply, mv, cmd)
 
 		target.y = lerp
 
-		if CLIENT_IFTP() or game.SinglePlayer() then
+		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:SetEyeAngles(target)
 		end
 

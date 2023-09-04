@@ -2,13 +2,13 @@ local qslide_duration = 3
 local qslide_speedmult = 1
 
 local slide_sounds = {
-	[MAT_DIRT] = {"datae/fol_slide_dirt_01.wav", "datae/fol_slide_dirt_02.wav", "datae/fol_slide_dirt_03.wav", "datae/fol_slide_dirt_04.wav"},
-	[MAT_SAND] = {"datae/fol_slide_sand_01.wav", "datae/fol_slide_sand_02.wav", "datae/fol_slide_sand_03.wav", "datae/fol_slide_sand_04.wav"},
-	[MAT_METAL] = {"datae/fol_slide_metal_01.wav", "datae/fol_slide_metal_02.wav", "datae/fol_slide_metal_03.wav"},
-	[MAT_GLASS] = {"datae/fol_slide_glass_01.wav", "datae/fol_slide_glass_02.wav", "datae/fol_slide_glass_03.wav", "datae/fol_slide_glass_04.wav"},
-	[MAT_GRATE] = {"datae/fol_slide_grate_01.wav"},
+	[MAT_DIRT] = {"fol/fol_slide_dirt_01.wav", "fol/fol_slide_dirt_02.wav", "fol/fol_slide_dirt_03.wav", "fol/fol_slide_dirt_04.wav"},
+	[MAT_SAND] = {"fol/fol_slide_sand_01.wav", "fol/fol_slide_sand_02.wav", "fol/fol_slide_sand_03.wav", "fol/fol_slide_sand_04.wav"},
+	[MAT_METAL] = {"fol/fol_slide_metal_01.wav", "fol/fol_slide_metal_02.wav", "fol/fol_slide_metal_03.wav"},
+	[MAT_GLASS] = {"fol/fol_slide_glass_01.wav", "fol/fol_slide_glass_02.wav", "fol/fol_slide_glass_03.wav", "fol/fol_slide_glass_04.wav"},
+	[MAT_GRATE] = {"fol/fol_slide_grate_01.wav"},
 	[MAT_SLOSH] = {"ambient/water/water_splash1.wav", "ambient/water/water_splash2.wav", "ambient/water/water_splash3.wav"},
-	[MAT_WOOD] = {"datae/fol_slide_generic_01.wav", "datae/fol_slide_generic_02.wav", "datae/fol_slide_generic_03.wav"}
+	[MAT_WOOD] = {"fol/fol_slide_generic_01.wav", "fol/fol_slide_generic_02.wav", "fol/fol_slide_generic_03.wav"}
 }
 
 local slideloop_sounds = {
@@ -430,7 +430,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			net.Send(ply)
 		end
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			SlidingAnimStart()
 
 			hook.Add("Think", "SlidingAnimThink", SlidingAnimThink)
@@ -480,7 +480,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			net.Send(ply)
 
 			ply.DiveSliding = false
-		elseif CLIENT_IFTP() then
+		elseif CLIENT and IsFirstTimePredicted() then
 			SlidingAnimEnd(false, ply.DiveSliding)
 
 			ply.DiveSliding = false
@@ -623,7 +623,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 					net.WriteBool(slippery)
 					net.WriteBool(ply.DiveSliding)
 				net.Send(ply)
-			elseif CLIENT_IFTP() then
+			elseif CLIENT and IsFirstTimePredicted() then
 				SlidingAnimEnd(slippery, ply.DiveSliding)
 			end
 

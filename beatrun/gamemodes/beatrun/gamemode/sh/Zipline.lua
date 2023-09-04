@@ -104,7 +104,7 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 		ply:SetZiplineSpeed(math.min(vel:Length(), 750))
 		ply:SetCrouchJumpBlocked(false)
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			-- local zipline = ply:GetZipline()
 			ply.OrigEyeAng = (endpos - startpos):Angle()
 		elseif game.SinglePlayer() then
@@ -113,7 +113,7 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 			net.Send(ply)
 		end
 
-		if CLIENT_IFTP() or game.SinglePlayer() then
+		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("ZiplineLoop")
 			ply:EmitSound("ZiplineStart")
 		end
@@ -149,7 +149,7 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 
 		ply:SetZiplineDelay(CurTime() + 0.75)
 
-		if CLIENT_IFTP() or game.SinglePlayer() then
+		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("ZiplineEnd")
 			ply:StopSound("ZiplineLoop")
 
@@ -189,7 +189,7 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 
 		ply:SetZiplineDelay(CurTime() + 0.75)
 
-		if CLIENT_IFTP() or game.SinglePlayer() then
+		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("ZiplineEnd")
 			ply:StopSound("ZiplineLoop")
 

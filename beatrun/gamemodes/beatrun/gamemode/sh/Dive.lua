@@ -37,7 +37,7 @@ local function Dive(ply, mv, cmd)
 				effectdata:SetOrigin(vPoint)
 
 				util.Effect("WaterSurfaceExplosion", effectdata)
-			elseif CLIENT_IFTP() then
+			elseif CLIENT and IsFirstTimePredicted() then
 				local vPoint = mv:GetOrigin()
 				local effectdata = EffectData()
 

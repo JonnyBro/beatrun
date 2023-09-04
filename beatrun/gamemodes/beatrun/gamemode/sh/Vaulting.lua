@@ -231,7 +231,7 @@ local function Vault2(ply, mv, ang, t, h)
 		local hulltr2 = util.TraceHull(h)
 
 		if not hulltr.Hit and not hulltr2.Hit then
-			if t.MatType == MAT_GRATE and (CLIENT_IFTP() or game.SinglePlayer()) then
+			if t.MatType == MAT_GRATE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
 				ply:EmitSound("FenceClimb")
 			end
 
@@ -331,7 +331,7 @@ local function Vault3(ply, mv, ang, t, h)
 		local hulltr2 = util.TraceHull(h)
 
 		if not hulltr.Hit and not hulltr2.Hit then
-			if t.MatType == MAT_GRATE and (CLIENT_IFTP() or game.SinglePlayer()) then
+			if t.MatType == MAT_GRATE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
 				ply:EmitSound("FenceClimb")
 			end
 
@@ -596,7 +596,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 			if not ply.VaultStepUp and mlerp > 0.01 and mlerp < 0.65 then
 				mlerprate = mlerprate * mlerp / 0.5
 
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					ply:CLViewPunch(Angle(0.1 / (mlerp / 0.25), 0, 0.05))
 				elseif game.SinglePlayer() then
 					ply:ViewPunch(Angle(0.33 / (mlerp / 0.25), 0, 0.05))
@@ -617,13 +617,13 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 					mlerprate = mlerprate * mult
 				end
 
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					ply:CLViewPunch(Angle(0.25 * mlerp / 0.2, -0.05, -0.15))
 				elseif game.SinglePlayer() then
 					ply:ViewPunch(Angle(0.75 * mlerp / 0.2, -0.25, -0.5))
 				end
 			elseif mlerp > 0.45 and mlerp < 0.7 then
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					ply:CLViewPunch(Angle(-0.15, 0.1, 0.15))
 				elseif game.SinglePlayer() then
 					ply:ViewPunch(Angle(-0.75, 0.25, 0.5))
@@ -633,13 +633,13 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 			ply:SetMantleLerp(math.Approach(mlerp, 1, mlerprate))
 		elseif mantletype == 3 then
 			if mlerp < 0.45 then
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					ply:CLViewPunch(Angle(0.15, 0, 0))
 				elseif game.SinglePlayer() then
 					ply:ViewPunch(Angle(0.3, 0, 0))
 				end
 			elseif mlerp > 0.45 and mlerp < 0.8 then
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					ply:CLViewPunch(Angle(-0.05, 0, 0))
 				elseif game.SinglePlayer() then
 					ply:ViewPunch(Angle(-0.25, 0, 0))
@@ -655,14 +655,14 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 			mlerprate = 0.03 / TargetTick
 
 			if mlerp < 0.0575 then
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					ply:CLViewPunch(Angle(0.25 * mlerp / 0.2, 0, -0.25))
 				elseif game.SinglePlayer() then
 					ply:ViewPunch(Angle(0.75 * mlerp / 0.1, 0, -0.5))
 				end
 
 				mlerprate = mlerprate * 0.1
-			elseif CLIENT_IFTP() then
+			elseif CLIENT and IsFirstTimePredicted() then
 				ply:CLViewPunch(Angle(-0.05, 0, 0.25 / (mlerp / 0.3)))
 			elseif game.SinglePlayer() then
 				ply:ViewPunch(Angle(-0.15, 0, 0.5 / (mlerp / 0.3)))
@@ -677,7 +677,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 			mlerprate = 0.03 / TargetTick
 
 			if mlerp < 0.0575 then
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					ply:CLViewPunch(Angle(-0.15 * mlerp / 0.1, 0, -0.25))
 				elseif game.SinglePlayer() then
 					ply:ViewPunch(Angle(0.15 * mlerp / 0.1, 0, -0.5))
@@ -685,7 +685,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 
 				mlerprate = mlerprate * 0.1
 			else
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					ply:CLViewPunch(Angle(0.01, 0, 0.5 / (mlerp / 0.15)))
 				elseif game.SinglePlayer() then
 					ply:ViewPunch(Angle(-0.05, 0, 0.5 / (mlerp / 0.3)))
@@ -734,7 +734,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 			end
 
 			if mv:KeyDown(IN_JUMP) and mantletype < 4 then
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					BodyLimitX = 90
 					BodyLimitY = 180
 				elseif game.SinglePlayer() then

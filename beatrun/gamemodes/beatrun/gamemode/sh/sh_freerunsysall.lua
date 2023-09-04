@@ -128,7 +128,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 		ply:EmitSound("Footsteps.Spark")
 	end
 
-	if (CLIENT_IFTP() or game.SinglePlayer()) and ply.FootstepLand then
+	if (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) and ply.FootstepLand then
 		local landsound = FOOTSTEPS_LAND_LUT[mat] or "Concrete"
 
 		ply:EmitSound("Land." .. landsound)
@@ -157,7 +157,7 @@ hook.Add("OnPlayerHitGround", "MELandSound", function(ply, water, floater, speed
 	ParkourEvent("land", ply)
 
 	if ply:GetMelee() == MELEE_DROPKICK and ply:GetMeleeTime() < CurTime() and vel:Length() < 300 then
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			Hardland(false)
 		elseif SERVER and game.SinglePlayer() then
 			net.Start("Beatrun_HardLand")
@@ -185,7 +185,7 @@ hook.Add("OnPlayerHitGround", "MELandSound", function(ply, water, floater, speed
 			ply:SetJumpTurn(true)
 		end
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			Hardland(jt)
 		elseif SERVER and game.SinglePlayer() then
 			net.Start("Beatrun_HardLand")

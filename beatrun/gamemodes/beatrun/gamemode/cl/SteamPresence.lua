@@ -1,4 +1,4 @@
-if not util.IsBinaryModuleInstalled("steamrichpresencer", "GAME") then return end
+if not util.IsBinaryModuleInstalled("steamrichpresencer") then return end
 
 require("steamrichpresencer")
 
@@ -10,14 +10,9 @@ local function UpdateRichPresence()
 	if not ply.GetLevel then return end
 
 	local map = game.GetMap()
-	local level = LocalPlayer():GetLevel()
-	local course = nil
+	local level = ply:GetLevel()
 	local customname = hook.Run("BeatrunHUDCourse")
-	course = customname and customname or Course_Name ~= "" and Course_Name or "Freeplay"
-
-	if course == nil then
-		course = "Freeplay"
-	end
+	local course = customname and customname or Course_Name ~= "" and Course_Name or "Freeplay"
 
 	local updatedtext = "Beatrun Lv. " .. level .. " (" .. map .. ") | " .. course
 

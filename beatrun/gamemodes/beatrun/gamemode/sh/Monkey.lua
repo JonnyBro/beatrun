@@ -158,7 +158,7 @@ local function SwingbarThink(ply, mv, cmd)
 
 		ply:SetSBDelay(CurTime() + 1)
 
-		if CLIENT_IFTP() or game.SinglePlayer() then
+		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("Cloth.VaultSwish")
 		end
 

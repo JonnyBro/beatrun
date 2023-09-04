@@ -91,7 +91,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetNW2Entity("grappleEntity", trout.Entity)
 			ply:SetNW2Bool("grappledNonCourse", true)
 
-			if CLIENT_IFTP() or game.SinglePlayer() then
+			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				ply:EmitSound("MirrorsEdge/Gadgets/ME_Magrope_Fire.wav", 40, 100 + math.random(-25, 10))
 			end
 
@@ -131,7 +131,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 
 			ply:SetGrappling(false)
 
-			if CLIENT_IFTP() or game.SinglePlayer() then
+			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				ply:EmitSound("MirrorsEdge/zipline_detach.wav", 40, 100 + math.random(-25, 10))
 			end
 

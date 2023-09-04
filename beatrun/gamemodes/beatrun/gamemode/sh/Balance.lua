@@ -75,7 +75,7 @@ hook.Add("SetupMove", "Balance", function(ply, mv, cmd)
 			ParkourEvent("walkbalancestill", ply)
 		end
 
-		if CLIENT_IFTP() and mv:KeyPressed(IN_ATTACK2) then
+		if CLIENT and IsFirstTimePredicted() and mv:KeyPressed(IN_ATTACK2) then
 			dircache.y = dircache.y - 180
 		end
 

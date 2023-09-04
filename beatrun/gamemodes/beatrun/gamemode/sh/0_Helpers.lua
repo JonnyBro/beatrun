@@ -3,19 +3,6 @@ local playermeta = FindMetaTable("Player")
 
 CLoadout = {}
 
-function CLIENT_IFTP()
-	return CLIENT and IsFirstTimePredicted()
-end
-
---[[
-local matrixdatatmp = {
-	{0, 0, 0, 0},
-	{0, 0, 0, 0},
-	{0, 0, 0, 0},
-	{0, 0, 0, 1}
-}
-]]
-
 local mtmp = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
