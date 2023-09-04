@@ -6,7 +6,7 @@ if CLIENT then
 	hook.Add("HUDPaint", "grappleicon", function()
 		local ply = LocalPlayer()
 
-		if disable_grapple:GetBool() then return end
+		if disable_grapple:GetBool() and Course_Name == "" then return end
 		if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
 		if not ply:Alive() or Course_Name ~= "" then return end
 

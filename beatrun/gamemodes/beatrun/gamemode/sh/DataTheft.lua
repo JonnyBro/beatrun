@@ -1,4 +1,3 @@
-GM_DATATHEFT = 0
 DATATHEFT_LOADOUTS = {
 	{"weapon_357", "weapon_ar2"}
 }

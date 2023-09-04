@@ -1,5 +1,3 @@
-GM_DEATHMATCH = 0
-
 if SERVER then
 	util.AddNetworkString("Deathmatch_Start")
 	util.AddNetworkString("Deathmatch_Sync")
