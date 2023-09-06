@@ -250,6 +250,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:SetName("Moves Settings")
 		panel:Help("You Can Dive with Ctrl + RMB While Midair!\nOverdrive Toggles with E + LMB.")
 
+		panel:NumSlider("Speed Limit", "Beatrun_SpeedLimit", 325, 1000, 0)
+		panel:ControlHelp("Changes player's speed limit (325 is default)")
+
 		panel:CheckBox("Force Purist Mode", "Beatrun_PuristModeForce")
 		panel:ControlHelp("Forces Purist Mode for all players")
 

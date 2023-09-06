@@ -1,5 +1,6 @@
 local quakejump = CreateConVar("Beatrun_QuakeJump", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 local sidestep = CreateConVar("Beatrun_SideStep", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+local speed_limit = CreateConVar("Beatrun_SpeedLimit", 325, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 
 local function Hardland(jt)
 	local ply = LocalPlayer()
@@ -35,7 +36,7 @@ end
 
 hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 	local activewep = ply:GetActiveWeapon()
-	local sprint = ply:GetMEMoveLimit() < 300
+	local sprint = ply:GetMEMoveLimit() < speed_limit:GetInt() - 25
 	local stepmod = ply:GetStepRight() and 1 or -1
 	local stepvel = 1.25
 	local stepvel2 = 1
@@ -92,7 +93,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 	ply:SetStepRight(not ply:GetStepRight())
 
 	if (ply:GetSliding() or CurTime() < ply:GetSafetyRollTime() - 0.5) and not skipcheck then return true end
-	if ply:GetMEMoveLimit() < 155 and ply:KeyDown(IN_FORWARD) and not ply.FootstepLand and not IsValid(ply:GetBalanceEntity()) then return true end
+	if ply:GetMEMoveLimit() < 100 and ply:KeyDown(IN_FORWARD) and not ply.FootstepLand and not IsValid(ply:GetBalanceEntity()) then return true end
 
 	local mat = sound:sub(0, -6)
 	local newsound = FOOTSTEPS_LUT[mat]
@@ -124,7 +125,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 		ply:EmitSound("Footsteps.Water")
 	end
 
-	if ply:InOverdrive() and ply:GetVelocity():Length() > 300 then
+	if ply:InOverdrive() and ply:GetVelocity():Length() > 400 then
 		ply:EmitSound("Footsteps.Spark")
 	end
 
@@ -229,12 +230,12 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 		ply.FootstepLand = true
 	end
 
-	if ply:GetRunSpeed() ~= 325 * ply:GetOverdriveMult() then
-		ply:SetRunSpeed(325 * ply:GetOverdriveMult())
+	if ply:GetRunSpeed() ~= speed_limit:GetInt() * ply:GetOverdriveMult() then
+		ply:SetRunSpeed(speed_limit:GetInt() * ply:GetOverdriveMult())
 	end
 
 	if not ply:GetMEMoveLimit() then
-		ply:SetMEMoveLimit(150)
+		ply:SetMEMoveLimit(speed_limit:GetInt())
 		ply:SetMESprintDelay(0)
 		ply:SetMEAng(0)
 	end
@@ -260,13 +261,13 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	local activewep = ply:GetActiveWeapon()
 
 	if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
-		weaponspeed = 250
+		weaponspeed = speed_limit:GetInt()
 	end
 
 	if (ismoving or ply:GetMantle() ~= 0) and ply:GetMESprintDelay() < CurTime() and (cmd:KeyDown(IN_SPEED) or ply:GetMantle() ~= 0 or not ply:OnGround() or (not ply:OnGround() or ply:GetMantle() ~= 0) and mv:GetVelocity().z > -450) then
-		local mult = 0.6 + math.abs(ply:GetMEMoveLimit() / 300 - 1)
+		local mult = 0.6 + math.abs(ply:GetMEMoveLimit() / (speed_limit:GetInt() - 25) - 1)
 
-		if not ply:InOverdrive() and ply:GetMEMoveLimit() > 225 then
+		if not ply:InOverdrive() and ply:GetMEMoveLimit() > (speed_limit:GetInt() - 100) then
 			mult = mult * 0.35
 		end
 
@@ -274,9 +275,9 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			mult = mult * ply:GetMEMoveLimit() / 1000
 		end
 
-		ply:SetMEMoveLimit(math.Clamp(ply:GetMEMoveLimit() + mult * ply:GetOverdriveMult() * 2, 0, 325 * ply:GetOverdriveMult()))
+		ply:SetMEMoveLimit(math.Clamp(ply:GetMEMoveLimit() + mult * ply:GetOverdriveMult() * 2, 0, speed_limit:GetInt() * ply:GetOverdriveMult()))
 	elseif not ismoving and (not ply:Crouching() or ply:GetCrouchJump()) or CurTime() < ply:GetMESprintDelay() and ply:OnGround() then
-		ply:SetMEMoveLimit(math.Clamp(ply:GetMEMoveLimit() - 40, weaponspeed, 325 * ply:GetOverdriveMult()))
+		ply:SetMEMoveLimit(math.Clamp(ply:GetMEMoveLimit() - 40, weaponspeed, speed_limit:GetInt() * ply:GetOverdriveMult()))
 	end
 
 	if MEAngDiff > 1.25 and ply:GetWallrun() == 0 then
@@ -288,9 +289,9 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 		local stepheight = mv:GetOrigin().z - (ply.LastOrigin or vector_origin).z
 
 		if stepheight > 1.5 then
-			ply:SetMEMoveLimit(math.Approach(ply:GetMEMoveLimit(), 250, FrameTime() * 100))
+			ply:SetMEMoveLimit(math.Approach(ply:GetMEMoveLimit(), speed_limit:GetInt() - 75, FrameTime() * 100))
 		elseif stepheight < -0.8 then
-			ply:SetMEMoveLimit(math.Approach(ply:GetMEMoveLimit(), 400, FrameTime() * 100))
+			ply:SetMEMoveLimit(math.Approach(ply:GetMEMoveLimit(), speed_limit:GetInt() + 75, FrameTime() * 100))
 		end
 	end
 
@@ -356,7 +357,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 		if mv:KeyPressed(IN_JUMP) and not quakejump:GetBool() and activewep:GetWasOnGround() and not ply:GetJumpTurn() and ply:GetViewModel():GetCycle() < 0.25 then
 			local vel = mv:GetVelocity()
 			vel:Mul(0.75)
-			vel.z = -300
+			vel.z = -speed_limit:GetInt() + 25
 
 			mv:SetVelocity(vel)
 
@@ -396,7 +397,7 @@ if CLIENT then
 			vel = vector_origin
 		end
 
-		if vel:Length() > 300 then
+		if vel:Length() > speed_limit:GetInt() + 75 then
 			ply.blurspeed = Lerp(0.001, ply.blurspeed, 0.1)
 		elseif ply:GetMantle() == 0 then
 			ply.blurspeed = math.Approach(ply.blurspeed, 0, 0.005)
