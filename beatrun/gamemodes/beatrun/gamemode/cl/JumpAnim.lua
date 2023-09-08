@@ -914,7 +914,6 @@ fbfunctions = {
 local defaultcamoffset = Vector()
 
 local playermodelbones = {"ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_R_UpperArm"}
-
 local fingers = {"ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11"}
 
 local fingerscustom = {
@@ -1011,7 +1010,6 @@ eventsounds = {
 }
 
 local CharaName = "Faith"
-local CharaLen = #CharaName
 
 local function BodyEventSounds(anim)
 	local tbl = eventsounds[anim]
@@ -1022,7 +1020,7 @@ local function BodyEventSounds(anim)
 		for k, v in pairs(tbl) do
 			local func = nil
 
-			if v:Left(CharaLen) == CharaName then
+			if v:Left(#CharaName) == CharaName then
 				func = ply.FaithVO
 			else
 				func = ply.EmitSound

@@ -9,7 +9,13 @@ function DoJumpTurn(lookbehind)
 		VMLegs:Remove()
 	end
 
-	BodyAnim:SetSequence("jumpturnfly")
+	-- BodyAnim:SetSequence("jumpturnfly")
+	if CLIENT and IsFirstTimePredicted() then
+		BodyAnim:SetSequence("jumpturnfly")
+	elseif game.SinglePlayer() then
+		ply:SendLua("BodyAnim:SetSequence('jumpturnfly')")
+	end
+
 	BodyAnimCycle = 0
 	BodyAnimSpeed = 1
 	BodyLimitX = 40
@@ -39,9 +45,19 @@ function DoJumpTurnStand()
 	local activewep = LocalPlayer():GetActiveWeapon()
 
 	if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
-		BodyAnim:SetSequence("jumpturnlandstandgun")
+		-- BodyAnim:SetSequence("jumpturnlandstandgun")
+		if CLIENT and IsFirstTimePredicted() then
+			BodyAnim:SetSequence("jumpturnlandstandgun")
+		elseif game.SinglePlayer() then
+			ply:SendLua("BodyAnim:SetSequence('jumpturnlandstandgun')")
+		end
 	else
-		BodyAnim:SetSequence("jumpturnlandstand")
+		-- BodyAnim:SetSequence("jumpturnlandstand")
+		if CLIENT and IsFirstTimePredicted() then
+			BodyAnim:SetSequence("jumpturnlandstand")
+		elseif game.SinglePlayer() then
+			ply:SendLua("BodyAnim:SetSequence('jumpturnlandstand')")
+		end
 
 		ParkourEvent("jumpturnlandstand", LocalPlayer(), game.SinglePlayer())
 	end

@@ -271,7 +271,12 @@ hook.Add("PostDrawTranslucentRenderables", "GrappleBeam", function()
 		render.DrawBeam(LerpVector(ropelerp, lhandpos - ropedown, rhandpos), lhandpos, 1.5, 0, 1)
 		render.DrawBeam(ropetop, lp:GetGrapplePos(), 1.5, 0, 1)
 
-		BodyAnim:SetSequence("grapplecenter")
+		-- BodyAnim:SetSequence("grapplecenter")
+		if CLIENT and IsFirstTimePredicted() then
+			BodyAnim:SetSequence("grapplecenter")
+		elseif game.SinglePlayer() then
+			ply:SendLua("BodyAnim:SetSequence('grapplecenter')")
+		end
 
 		ropelerp = math.Approach(ropelerp, 1, FrameTime() * 2)
 	else

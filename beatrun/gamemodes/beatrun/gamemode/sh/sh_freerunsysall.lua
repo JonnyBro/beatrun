@@ -17,9 +17,19 @@ local function Hardland(jt)
 			end
 
 			DoJumpTurn(jt)
-			BodyAnim:SetSequence("jumpturnflyidle")
+			-- BodyAnim:SetSequence("jumpturnflyidle")
+			if CLIENT and IsFirstTimePredicted() then
+				BodyAnim:SetSequence("jumpturnflyidle")
+			elseif game.SinglePlayer() then
+				ply:SendLua("BodyAnim:SetSequence('jumpturnflyidle')")
+			end
 		else
-			BodyAnim:SetSequence("jumpcoilend")
+			-- BodyAnim:SetSequence("jumpcoilend")
+			if CLIENT and IsFirstTimePredicted() then
+				BodyAnim:SetSequence("jumpcoilend")
+			elseif game.SinglePlayer() then
+				ply:SendLua("BodyAnim:SetSequence('jumpcoilend')")
+			end
 		end
 	end
 end

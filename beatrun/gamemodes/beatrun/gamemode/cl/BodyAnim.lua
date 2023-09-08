@@ -10,11 +10,14 @@ BodyAnimString = "nil"
 BodyAnimMDLString = "nil"
 BodyAnimSpeed = 1
 bodyanimlastattachang = Angle(0, 0, 0)
+
 followplayer = true
 deleteonend = true
 lockang = false
+
 CamAddAng = false
 CamIgnoreAng = false
+
 -- local BodyAnimPos = Vector(0, 0, 0)
 -- local BodyAnimAngLerp = Angle(0, 0, 0)
 -- local DidDraw = false
@@ -24,29 +27,38 @@ local savedeyeangb = Angle(0, 0, 0)
 -- local bodylockview = false
 -- local bodyanimdone = false
 -- local holstertime = 0
+
 local animmodelstring = ""
 local showweapon = false
 local showvm = false
 local usefullbody = false
 local ignorez = false
 local customcycle = false
+
 deathanim = false
+
 local allowmove = false
 local allowedangchange = false
 local attach, attachId, weapontoidle = nil, nil, nil
 local smoothend = false
 local endlerp = 0
+
 camoffset = Vector()
 camjoint = "eyes"
+
 BodyAnimCrouchLerp = 1
 BodyAnimCrouchLerpZ = 0
 BodyAnimLimitEase = false
+
 CamShake = false
 CamShakeAng = Angle()
 CamShakeMult = 1
+
 local lastangy = 0
+
 viewtiltlerp = Angle()
 ViewTiltAngle = Angle()
+
 local BodyAnimStartPos = Vector()
 local view = {}
 local justremoved = false
@@ -696,8 +708,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 end
 
 hook.Add("CreateMove", "BodyLimitMove", function(cmd)
-	-- local ply = LocalPlayer()
-
 	if IsValid(BodyAnimMDL) and not allowmove then
 		cmd:ClearButtons()
 		cmd:ClearMovement()
