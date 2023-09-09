@@ -384,11 +384,11 @@ local transitionanims = {
 	meleeairstill = "jumpair",
 	vaultontohigh = "runfwd",
 	snatchscar = "stand",
-	water_swimfwd = "water_out",
-	water_swimright = "water_out",
-	water_swimleft = "water_out",
-	water_swimback = "water_out",
-	water_float = "water_out"
+	water_swimfwd = "runfwd",
+	water_swimright = "runfwd",
+	water_swimleft = "runfwd",
+	water_swimback = "runfwd",
+	water_float = "runfwd"
 }
 
 local nospinebend = {
