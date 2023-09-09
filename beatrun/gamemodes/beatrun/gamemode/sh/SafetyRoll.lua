@@ -13,7 +13,9 @@ local function SafetyRollThink(ply, mv, cmd)
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
 	end
 
-	if CurTime() > ply:GetSafetyRollTime() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then RunConsoleCommand("mgbase_debug_vmrender", "1") end
+	if ply:Alive() and CurTime() > ply:GetSafetyRollTime() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+		RunConsoleCommand("mgbase_debug_vmrender", "1")
+	end
 
 	if CurTime() < ply:GetSafetyRollTime() then
 		ply.FootstepLand = false
@@ -128,7 +130,9 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 		ParkourEvent("roll", ply)
 
-		if (weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base")) then RunConsoleCommand("mgbase_debug_vmrender", "0") end
+		if ply:Alive() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+			RunConsoleCommand("mgbase_debug_vmrender", "0")
+		end
 
 		local ang = ply:EyeAngles()
 		local land = ply:GetVelocity()

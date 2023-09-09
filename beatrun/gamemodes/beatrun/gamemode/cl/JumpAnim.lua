@@ -448,12 +448,7 @@ local worldarm = {
 	ladderclimbhangstart = true,
 	snatchscar = true,
 	jumpcoil = true,
-	jumpturnlandidle = true,
-	water_swimfwd = true,
-	water_swimright = true,
-	water_swimleft = true,
-	water_swimback = true,
-	water_float = true
+	jumpturnlandidle = true
 }
 
 local ignorezarm = {
@@ -463,12 +458,7 @@ local ignorezarm = {
 	hangfoldedheaveup = true,
 	wallrunverticalstart = true,
 	diestandlong = true,
-	vaultontohigh = true,
-	water_swimfwd = true,
-	water_swimright = true,
-	water_swimleft = true,
-	water_swimback = true,
-	water_float = true
+	vaultontohigh = true
 }
 
 local nocyclereset = {
