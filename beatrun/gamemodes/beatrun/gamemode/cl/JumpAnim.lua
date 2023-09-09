@@ -1726,6 +1726,17 @@ local function JumpThink()
 				ang[1] = 0
 				ang[3] = 0
 
+				if vel_l > 0 and string.StartsWith(BodyAnimString, "water_") then -- somehow that worked? i did literally nothing
+					local water_eye_ang = ply:EyeAngles()
+					water_eye_ang[1] = 0
+					water_eye_ang[3] = 0
+					local water_ang = LerpAngle(math.min(lerpspeed * FrameTime() * speed, 1), BodyAnim:GetAngles(), water_eye_ang)
+
+					BodyAnim:SetAngles(water_ang)
+
+					return
+				end
+
 				if vel_l > 0 or BodyAnimString == "walktostandleft" or ply:Crouching() or IsValid(ply:GetBalanceEntity()) then
 					if newang:Forward():Dot(ang:Forward()) > -0.25 then
 						ply.OrigEyeAng = newang
