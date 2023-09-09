@@ -145,12 +145,7 @@ local runanims = {
 	walkfwd = true,
 	crouchstill = true,
 	sprintfwd = true,
-	runbwd = true,
-	water_swimfwd = true,
-	water_swimright = true,
-	water_swimleft = true,
-	water_swimback = true,
-	water_float = true
+	runbwd = true
 }
 
 local events = {
@@ -1725,17 +1720,6 @@ local function JumpThink()
 				local ang = ply:EyeAngles()
 				ang[1] = 0
 				ang[3] = 0
-
-				if vel_l > 0 and string.StartsWith(BodyAnimString, "water_") then -- somehow that worked? i did literally nothing
-					local water_eye_ang = ply:EyeAngles()
-					water_eye_ang[1] = 0
-					water_eye_ang[3] = 0
-					local water_ang = LerpAngle(math.min(lerpspeed * FrameTime() * speed, 1), BodyAnim:GetAngles(), water_eye_ang)
-
-					BodyAnim:SetAngles(water_ang)
-
-					return
-				end
 
 				if vel_l > 0 or BodyAnimString == "walktostandleft" or ply:Crouching() or IsValid(ply:GetBalanceEntity()) then
 					if newang:Forward():Dot(ang:Forward()) > -0.25 then
