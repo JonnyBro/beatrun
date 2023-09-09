@@ -40,19 +40,9 @@ function DoJumpTurnStand()
 	local activewep = LocalPlayer():GetActiveWeapon()
 
 	if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
-		-- BodyAnim:SetSequence("jumpturnlandstandgun")
-		if CLIENT and IsFirstTimePredicted() then
-			BodyAnim:SetSequence("jumpturnlandstandgun")
-		elseif game.SinglePlayer() then
-			ply:SendLua("BodyAnim:SetSequence('jumpturnlandstandgun')")
-		end
+		BodyAnim:SetSequence("jumpturnlandstandgun")
 	else
-		-- BodyAnim:SetSequence("jumpturnlandstand")
-		if CLIENT and IsFirstTimePredicted() then
-			BodyAnim:SetSequence("jumpturnlandstand")
-		elseif game.SinglePlayer() then
-			ply:SendLua("BodyAnim:SetSequence('jumpturnlandstand')")
-		end
+		BodyAnim:SetSequence("jumpturnlandstand")
 
 		ParkourEvent("jumpturnlandstand", LocalPlayer(), game.SinglePlayer())
 	end
