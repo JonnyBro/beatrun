@@ -145,7 +145,12 @@ local runanims = {
 	walkfwd = true,
 	crouchstill = true,
 	sprintfwd = true,
-	runbwd = true
+	runbwd = true,
+	water_swimfwd = true,
+	water_swimright = true,
+	water_swimleft = true,
+	water_swimback = true,
+	water_float = true
 }
 
 local events = {
@@ -383,7 +388,12 @@ local transitionanims = {
 	ladderclimbuprighthand = "ladderclimbuprighthandstill",
 	meleeairstill = "jumpair",
 	vaultontohigh = "runfwd",
-	snatchscar = "stand"
+	snatchscar = "stand",
+	water_swimfwd = "water_out",
+	water_swimright = "water_out",
+	water_swimleft = "water_out",
+	water_swimback = "water_out",
+	water_float = "water_out"
 }
 
 local nospinebend = {
@@ -1457,20 +1467,6 @@ local function JumpThink()
 			local moving = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_MOVELEFT) or ply:KeyDown(IN_MOVERIGHT)
 			local back = ply:KeyDown(IN_BACK)
 
-			if ply:WaterLevel() > 0 then
-				BodyAnim:SetSequence(BodyAnim:LookupSequence("water_float"))
-
-				if ply:KeyDown(IN_MOVELEFT) and vel_l > 5 then
-					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimleft"))
-				elseif ply:KeyDown(IN_MOVERIGHT) and vel_l > 5 then
-					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimright"))
-				elseif ply:KeyDown(IN_FORWARD) and vel_l > 5 then
-					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimfwd"))
-				elseif ply:KeyDown(IN_BACK) and vel_l > 5 then
-					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimback"))
-				end
-			end
-
 			if runanims[BodyAnimString] then
 				if lastBAString == "stand" and vel_l > 0 then
 					BodyAnimCycle = ply:GetStepRight() and 0.5 or 0
@@ -1638,6 +1634,20 @@ local function JumpThink()
 
 			if check and check(ply) or not check and BodyAnimCycle >= 0.9 and transitionanims[BodyAnimString] then
 				BodyAnim:SetSequence(transitionanims[BodyAnimString])
+			end
+
+			if ply:WaterLevel() > 0 then
+				BodyAnim:SetSequence(BodyAnim:LookupSequence("water_float"))
+
+				if ply:KeyDown(IN_MOVELEFT) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimleft"))
+				elseif ply:KeyDown(IN_MOVERIGHT) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimright"))
+				elseif ply:KeyDown(IN_FORWARD) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimfwd"))
+				elseif ply:KeyDown(IN_BACK) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimback"))
+				end
 			end
 
 			if BodyAnimString == "wallrunverticalstart" or BodyAnimString == "wallrunvertical" then

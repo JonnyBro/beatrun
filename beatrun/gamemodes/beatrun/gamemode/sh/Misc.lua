@@ -9,7 +9,7 @@ if SERVER then
 		if not ply:IsAdmin() and not allowPropSpawn:GetBool() then return false end
 	end
 
-	for k, v in ipairs(spawn) do
+	for _, v in ipairs(spawn) do
 		hook.Add(v, "BlockSpawn", BlockSpawn)
 	end
 
