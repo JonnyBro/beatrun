@@ -110,7 +110,12 @@ fbanims = {
 	walkbalancefalloffright = true,
 	meleeairstill = true,
 	swingjumpoff = true,
-	snatchscar = true
+	snatchscar = true,
+	water_swimfwd = true,
+	water_swimright = true,
+	water_swimleft = true,
+	water_swimback = true,
+	water_float = true
 }
 
 local jumpanims = {
@@ -443,7 +448,12 @@ local worldarm = {
 	ladderclimbhangstart = true,
 	snatchscar = true,
 	jumpcoil = true,
-	jumpturnlandidle = true
+	jumpturnlandidle = true,
+	water_swimfwd = true,
+	water_swimright = true,
+	water_swimleft = true,
+	water_swimback = true,
+	water_float = true
 }
 
 local ignorezarm = {
@@ -453,7 +463,12 @@ local ignorezarm = {
 	hangfoldedheaveup = true,
 	wallrunverticalstart = true,
 	diestandlong = true,
-	vaultontohigh = true
+	vaultontohigh = true,
+	water_swimfwd = true,
+	water_swimright = true,
+	water_swimleft = true,
+	water_swimback = true,
+	water_float = true
 }
 
 local nocyclereset = {
@@ -1451,6 +1466,20 @@ local function JumpThink()
 			local vel_l = vel:Length()
 			local moving = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_MOVELEFT) or ply:KeyDown(IN_MOVERIGHT)
 			local back = ply:KeyDown(IN_BACK)
+
+			if ply:WaterLevel() > 0 then
+				BodyAnim:SetSequence(BodyAnim:LookupSequence("water_float"))
+
+				if ply:KeyDown(IN_MOVELEFT) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimleft"))
+				elseif ply:KeyDown(IN_MOVERIGHT) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimright"))
+				elseif ply:KeyDown(IN_FORWARD) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimfwd"))
+				elseif ply:KeyDown(IN_BACK) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimback"))
+				end
+			end
 
 			if runanims[BodyAnimString] then
 				if lastBAString == "stand" and vel_l > 0 then
