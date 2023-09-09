@@ -9,12 +9,7 @@ function DoJumpTurn(lookbehind)
 		VMLegs:Remove()
 	end
 
-	-- BodyAnim:SetSequence("jumpturnfly")
-	if CLIENT and IsFirstTimePredicted() then
-		BodyAnim:SetSequence("jumpturnfly")
-	elseif game.SinglePlayer() then
-		ply:SendLua("BodyAnim:SetSequence('jumpturnfly')")
-	end
+	BodyAnim:SetSequence("jumpturnfly")
 
 	BodyAnimCycle = 0
 	BodyAnimSpeed = 1
