@@ -55,7 +55,7 @@ end
 local standpunch = Angle(-5, 0, 0)
 
 local function Quickturn(ply, mv, cmd)
-	local keypressed = mv:KeyPressed(IN_ATTACK2) and ply:GetActiveWeapon():GetClass() == "runnerhands"
+	local keypressed = mv:KeyPressed(IN_ATTACK2) and ply:Alive() and ply:GetActiveWeapon():GetClass() == "runnerhands"
 
 	if ply:GetWallrun() ~= 0 then
 		if mv:KeyDown(IN_BACK) and mv:KeyPressed(IN_JUMP) or ply:GetQuickturn() then
