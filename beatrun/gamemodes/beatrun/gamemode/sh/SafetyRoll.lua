@@ -76,6 +76,10 @@ end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
+		if ply:Alive() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+			RunConsoleCommand("mgbase_debug_vmrender", "1")
+		end
+
 		local ang = cmd:GetViewAngles()
 
 		ply:SetViewOffset(Vector(0, 0, 64))
@@ -109,6 +113,10 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 				net.WriteBool(false)
 				net.WriteBool(true)
 			net.Send(ply)
+		end
+
+		if ply:Alive() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+			RunConsoleCommand("mgbase_debug_vmrender", "0")
 		end
 	end
 end)
