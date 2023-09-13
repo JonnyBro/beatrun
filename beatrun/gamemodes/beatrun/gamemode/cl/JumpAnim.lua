@@ -499,7 +499,7 @@ local customarmoffset = {
 	meslidestart45 = Vector(2, 5, 5),
 	meslideloop45 = Vector(2, 5, 5),
 	meslideend = Vector(2, 5, 9.5),
-	meslideendprone = Vector(2, 5, 9.5),
+	meslideendprone = Vector(0, 0, 3),
 	meleeslide = Vector(2, 5, 9.5),
 	jumpturnfly = Vector(0, 2.5, 7.5),
 	jumpturnflyidle = Vector(0, 2.5, 7.5),
@@ -1631,7 +1631,7 @@ local function JumpThink()
 				BodyAnim:SetSequence(transitionanims[BodyAnimString])
 			end
 
-			if ply:WaterLevel() >= 2 then
+			if ply:WaterLevel() >= 2 and not ply:Crouching() then
 				BodyAnim:SetSequence(BodyAnim:LookupSequence("water_float"))
 
 				if ply:KeyDown(IN_MOVELEFT) and vel_l > 5 then
