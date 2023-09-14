@@ -13,8 +13,10 @@ local function SafetyRollThink(ply, mv, cmd)
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
 	end
 
-	if ply:Alive() and CLIENT and CurTime() > ply:GetSafetyRollTime() then
-		if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then RunConsoleCommand("mgbase_debug_vmrender", "1")end
+	if ply:Alive() and CLIENT and ply:GetActiveWeapon():IsValid() and CurTime() > ply:GetSafetyRollTime() then
+		if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+			RunConsoleCommand("mgbase_debug_vmrender", "1")
+		end
 	end
 
 	if CurTime() < ply:GetSafetyRollTime() then
@@ -76,8 +78,10 @@ end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
-		if ply:Alive() and CLIENT then
-			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then RunConsoleCommand("mgbase_debug_vmrender", "1") end
+		if ply:Alive() and CLIENT and ply:GetActiveWeapon():IsValid() then
+			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+				RunConsoleCommand("mgbase_debug_vmrender", "1")
+			end
 		end
 
 		local ang = cmd:GetViewAngles()
@@ -115,8 +119,10 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 			net.Send(ply)
 		end
 
-		if ply:Alive() and CLIENT then
-			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then RunConsoleCommand("mgbase_debug_vmrender", "0") end
+		if ply:Alive() and CLIENT and ply:GetActiveWeapon():IsValid() then
+			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+				RunConsoleCommand("mgbase_debug_vmrender", "0")
+			end
 		end
 	end
 end)
@@ -138,8 +144,10 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 		ParkourEvent("roll", ply)
 
-		if ply:Alive() and CLIENT then
-			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then RunConsoleCommand("mgbase_debug_vmrender", "0") end
+		if ply:Alive() and CLIENT and ply:GetActiveWeapon():IsValid() then
+			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+				RunConsoleCommand("mgbase_debug_vmrender", "0")
+			end
 		end
 
 		local ang = ply:EyeAngles()
