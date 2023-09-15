@@ -186,7 +186,7 @@ local spawn = {
 }
 
 function PrintAllBars()
-	for k, v in pairs(ents.FindByClass("br_swingbar")) do
+	for _, v in pairs(ents.FindByClass("br_swingbar")) do
 		local pos, ang = v:GetPos(), v:GetAngles()
 		local str = "{\"br_swingbar\", Vector(" .. pos.x .. ", " .. pos.y .. ", " .. pos.z .. "), Angle(" .. ang.x .. ", " .. ang.y .. ", " .. ang.z .. ")},"
 		print(str)
@@ -194,7 +194,7 @@ function PrintAllBars()
 end
 
 function PrintAllCampBoxes()
-	for k, v in pairs(ents.FindByClass("br_anticampbox")) do
+	for _, v in pairs(ents.FindByClass("br_anticampbox")) do
 		local pos, ang = v:GetPos(), v:GetAngles()
 		local str = "{\"br_anticampbox\", Vector(" .. pos.x .. ", " .. pos.y .. ", " .. pos.z .. "), Angle(" .. ang.x .. ", " .. ang.y .. ", " .. ang.z .. ")},"
 		print(str)
@@ -202,7 +202,7 @@ function PrintAllCampBoxes()
 end
 
 local function CreateSpawnEntities()
-	for k, v in ipairs(spawn) do
+	for _, v in ipairs(spawn) do
 		BRProtectedEntity(v[1], v[2], v[3])
 	end
 end
