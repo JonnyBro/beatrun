@@ -17,6 +17,7 @@ local function Hardland(jt)
 			end
 
 			DoJumpTurn(jt)
+
 			BodyAnim:SetSequence("jumpturnflyidle")
 		else
 			BodyAnim:SetSequence("jumpcoilend")

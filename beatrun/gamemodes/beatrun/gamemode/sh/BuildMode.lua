@@ -1,23 +1,28 @@
 local mousex = 0
 local mousey = 0
 local inf = math.huge
+
 buildmode_props = {}
+
 local propmatsblacklist = {}
 local blocksdir = "models/hunter/blocks/"
 local blocksdir_s = blocksdir .. "*.mdl"
-for k, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
 	table.insert(buildmode_props, blocksdir .. v:lower())
 end
 
 local blocksdir = "models/hunter/triangles/"
 local blocksdir_s = blocksdir .. "*.mdl"
-for k, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
 	table.insert(buildmode_props, blocksdir .. v:lower())
 end
 
 local blocksdir = "models/props_phx/construct/glass/"
 local blocksdir_s = blocksdir .. "*.mdl"
-for k, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
 	local key = table.insert(buildmode_props, blocksdir .. v:lower())
 	propmatsblacklist[key] = true
 end

@@ -82,7 +82,7 @@ local function Quickturn(ply, mv, cmd)
 		end
 	end
 
-	if not ply:GetQuickturn() and not ply:GetJumpTurn() and not ply:GetCrouchJump() and not ply:GetGrappling() and keypressed and not mv:KeyDown(IN_MOVELEFT) and not mv:KeyDown(IN_MOVERIGHT) and (ply:GetWallrun() > 0 or not ply:OnGround() or ply:GetInfoNum("Beatrun_QuickturnGround", 0) == 1 and not ply:Crouching()) then
+	if not ply:GetQuickturn() and not ply:GetJumpTurn() and not ply:GetCrouchJump() and not ply:GetGrappling() and not ply:GetSliding() and keypressed and not mv:KeyDown(IN_MOVELEFT) and not mv:KeyDown(IN_MOVERIGHT) and (ply:GetWallrun() > 0 or not ply:OnGround() or ply:GetInfoNum("Beatrun_QuickturnGround", 0) == 1 and not ply:Crouching()) then
 		if ply:GetWallrun() == 0 and not ply:OnGround() then
 			local eyedir = cmd:GetViewAngles()
 			eyedir.x = 0
