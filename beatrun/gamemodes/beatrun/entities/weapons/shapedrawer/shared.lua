@@ -85,9 +85,9 @@ end
 hook.Add("PostDrawTranslucentRenderables", "ShapeGun", function()
 	local ply = Entity(1)
 	local wep = ply:GetActiveWeapon()
-	local isShapeDrawer = wep:GetClass() == "shapedrawer"
+	local isShapeDrawer = IsValid(wep) and wep:GetClass() == "shapedrawer"
 
-	if IsValid(ply) and IsValid(wep) and isShapeDrawer then
+	if IsValid(ply) and isShapeDrawer then
 		for _, v in ipairs(wep.points) do
 			render.DrawWireframeBox(v, angle_zero, Vector(-1, -1, -1), Vector(1, 1, 1))
 		end
