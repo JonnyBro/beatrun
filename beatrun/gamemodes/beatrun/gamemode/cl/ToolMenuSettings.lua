@@ -159,9 +159,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("Floating XP", "Beatrun_HUDXP")
 		panel:ControlHelp("Show total XP near your nickname")
 
-		panel:CheckBox("Lower Viewmodel", "Beatrun_MinimalVM")
-		panel:ControlHelp("Lowers the running viewmodel")
-
 		panel:CheckBox("Wind", "Beatrun_Wind")
 		panel:ControlHelp("Wind noises when running")
 

@@ -1,9 +1,7 @@
-local cvarwindsound
-local minimalvm
+local windsound
 
 if CLIENT then
-	minimalvm = CreateClientConVar("Beatrun_MinimalVM", 1, true, true, "Lowers the running viewmodel", 0, 1)
-	cvarwindsound = CreateClientConVar("Beatrun_Wind", 1, true, false, "Wind noises", 0, 1)
+	windsound = CreateClientConVar("Beatrun_Wind", 1, true, false, "Wind noises", 0, 1)
 
 	SWEP.PrintName = "Runner Hands"
 	SWEP.Slot = 0
@@ -86,22 +84,6 @@ local oddseq = {
 }
 
 function SWEP:GetViewModelPosition(pos, ang)
-	if minimalvm:GetBool() then
-		if not self.posz then
-			self.posz = pos.z
-		end
-
-		local seq = self:GetSequence()
-
-		if runseq[seq] then
-			self.posz = Lerp(10 * FrameTime(), self.posz, -2)
-		else
-			self.posz = Lerp(10 * FrameTime(), self.posz, 0)
-		end
-
-		pos.z = pos.z + self.posz
-	end
-
 	if oddseq[self:GetSequence()] then return pos, ang end
 
 	self.BobScale = 0
@@ -296,7 +278,7 @@ function SWEP:Think()
 			self.RunWind2 = CreateSound(self, "runwind.wav")
 		end
 
-		if velocity > 250 and cvarwindsound:GetBool() then
+		if velocity > 250 and windsound:GetBool() then
 			self.RunWind1:Play()
 			self.RunWind2:Play()
 
