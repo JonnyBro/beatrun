@@ -83,7 +83,9 @@ function SWEP:SecondaryAttack()
 end
 
 hook.Add("PostDrawTranslucentRenderables", "ShapeGun", function()
-	local ply = Entity(1)
+	if not CLIENT then return end
+
+	local ply = LocalPlayer()
 	local wep = ply:GetActiveWeapon()
 	local isShapeDrawer = IsValid(wep) and wep:GetClass() == "shapedrawer"
 
