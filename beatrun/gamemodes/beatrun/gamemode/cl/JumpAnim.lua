@@ -329,7 +329,10 @@ local arminterrupts = {
 	doorbash = true,
 	punchmid = true,
 	punchleft = true,
-	jumpturnflypiecesign = true
+	jumpturnflypiecesign = true,
+	standhandwallright = true,
+	standhandwallleft = true,
+	standhandwallboth = true
 }
 
 local transitionanims = {
@@ -453,7 +456,10 @@ local worldarm = {
 	ladderclimbhangstart = true,
 	snatchscar = true,
 	jumpcoil = true,
-	jumpturnlandidle = true
+	jumpturnlandidle = true,
+	standhandwallright = true,
+	standhandwallleft = true,
+	standhandwallboth = true
 }
 
 local ignorezarm = {
@@ -1380,7 +1386,7 @@ function ArmInterrupt(anim)
 		local arm = CreateBodyAnimArmCopy()
 
 		if IsValid(arm) then
-			for k, v in ipairs(fingers) do
+			for _, v in ipairs(fingers) do
 				local b = BodyAnimArmCopy:LookupBone(v)
 
 				if b then
@@ -1388,13 +1394,26 @@ function ArmInterrupt(anim)
 				end
 			end
 
-			for k, v in pairs(fingerscustom) do
+			for k, _ in pairs(fingerscustom) do
 				local b = BodyAnimArmCopy:LookupBone(k)
 
 				if b then
 					arm:ManipulateBoneAngles(b, angle_zero)
 				end
 			end
+
+			--[[ TODO: make work good
+			if string.match(anim, "standhandwall") then
+				local ply = LocalPlayer()
+				local trace = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply)
+				local newAng = Angle(trace.Normal.x * (5 * trace.Fraction * trace.Normal.x), 0, trace.Normal.x * (10 * trace.Fraction * trace.Normal.y))
+
+				ply:ChatPrint("Fraction: " .. tostring(trace.Fraction))
+				ply:ChatPrint("Normal: " .. tostring(trace.Normal))
+
+				arm:SetAngles(newAng)
+			end
+			--]]
 
 			arm:SetSequence(anim)
 			arm:SetCycle(0)

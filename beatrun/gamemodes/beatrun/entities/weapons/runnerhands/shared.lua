@@ -71,10 +71,10 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Float", 2, "PunchReset")
 end
 
-local runseq = {
-	[6] = true,
-	[7] = true
-}
+-- local runseq = {
+-- 	[6] = true,
+-- 	[7] = true
+-- }
 
 local oddseq = {
 	[8] = true,
@@ -124,6 +124,7 @@ local fallct = 0
 function SWEP:Think()
 	local ply = self:GetOwner()
 	local viewmodel = ply:GetViewModel()
+
 	if not IsValid(viewmodel) then return end
 
 	if self:GetHoldType() == "fist" and CurTime() > self:GetPunchReset() then
@@ -144,6 +145,38 @@ function SWEP:Think()
 	local ismoving = vel:Length() > 100 and not ply:KeyDown(IN_BACK) and ply:IsSprinting() and not ply:Crouching() and not ply:KeyDown(IN_DUCK)
 	local injump = curseq == 13 or curseq == 14 or curseq == 17 or curseq == -1 or curseq == 1
 	infall = curseq == 19
+
+	-- what a piece of shit, send help
+	if vel:Length() == 0 and util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply).Hit and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:Crouching() and ply:WaterLevel() == 0 then
+		if (math.floor(ply:LocalEyeAngles().y) <= 35 and math.floor(ply:LocalEyeAngles().y) >= 5) or
+				(math.floor(ply:LocalEyeAngles().y) <= 125 and math.floor(ply:LocalEyeAngles().y) >= 95) or
+				(math.floor(ply:LocalEyeAngles().y) <= -55 and math.floor(ply:LocalEyeAngles().y) >= -85) or
+				(math.floor(ply:LocalEyeAngles().y) <= -145 and math.floor(ply:LocalEyeAngles().y) >= -175) then
+			if CLIENT then
+				return ArmInterrupt("standhandwallright")
+			elseif game.SinglePlayer() then
+				return ply:SendLua("ArmInterrupt('standhandwallright')")
+			end
+		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -5) or
+				(math.floor(ply:LocalEyeAngles().y) <= 95 and math.floor(ply:LocalEyeAngles().y) >= 85) or
+				(math.floor(ply:LocalEyeAngles().y) <= -85 and math.floor(ply:LocalEyeAngles().y) >= -95) or
+				(math.floor(ply:LocalEyeAngles().y) <= -175 or math.floor(ply:LocalEyeAngles().y) >= 175) then
+			if CLIENT then
+				return ArmInterrupt("standhandwallboth")
+			elseif game.SinglePlayer() then
+				return ply:SendLua("ArmInterrupt('standhandwallboth')")
+			end
+		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -35) or
+				(math.floor(ply:LocalEyeAngles().y) <= 85 and math.floor(ply:LocalEyeAngles().y) >= 55) or
+				(math.floor(ply:LocalEyeAngles().y) <= -95 and math.floor(ply:LocalEyeAngles().y) >= -125) or
+				(math.floor(ply:LocalEyeAngles().y) <= 175 and math.floor(ply:LocalEyeAngles().y) >= 145) then
+			if CLIENT then
+				return ArmInterrupt("standhandwallleft")
+			elseif game.SinglePlayer() then
+				return ply:SendLua("ArmInterrupt('standhandwallleft')")
+			end
+		end
+	end
 
 	self:SetSideStep((curseq == 15 or curseq == 16) and GetConVar("Beatrun_SideStep"):GetBool())
 

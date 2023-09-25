@@ -48,7 +48,7 @@ concommand.Add("blindplayer", function(ply, cmd, args)
 	local mname = ""
 	local mcount = 0
 
-	for k, v in ipairs(player.GetAll()) do
+	for _, v in ipairs(player.GetAll()) do
 		local name = v:Nick()
 		local smatch = string.match(name, plysearch)
 
