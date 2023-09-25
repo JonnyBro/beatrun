@@ -1,5 +1,6 @@
 if CLIENT then
 	QuickturnGround = CreateClientConVar("Beatrun_QuickturnGround", "0", true, true, "Enables quickturning with secondary attack while on the ground", 0, 1)
+	QuickturnHandsOnly = CreateClientConVar("Beatrun_QuickturnHandsOnly", "1", true, true, "Enables quickturning with \"Runner Hands\" only", 0, 1)
 end
 
 function DoJumpTurn(lookbehind)
@@ -55,7 +56,7 @@ end
 local standpunch = Angle(-5, 0, 0)
 
 local function Quickturn(ply, mv, cmd)
-	local keypressed = ply:Alive() and mv:KeyPressed(IN_ATTACK2) and ply:GetActiveWeapon():GetClass() == "runnerhands"
+	local keypressed = ply:Alive() and mv:KeyPressed(IN_ATTACK2) and (ply:GetInfoNum("Beatrun_QuickturnHandsOnly", 0) == 1 and ply:GetActiveWeapon():GetClass() == "runnerhands" or ply:GetInfoNum("Beatrun_QuickturnHandsOnly", 0) == 0)
 
 	if ply:GetWallrun() ~= 0 then
 		if mv:KeyDown(IN_BACK) and mv:KeyPressed(IN_JUMP) or ply:GetQuickturn() then

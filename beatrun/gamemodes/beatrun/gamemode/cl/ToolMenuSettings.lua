@@ -224,6 +224,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("Quickturn", "Beatrun_QuickturnGround")
 		panel:ControlHelp("Enables quickturning with secondary attack while on the ground")
 
+		panel:CheckBox("Quickturn Hands Only", "Beatrun_QuickturnHandsOnly")
+		panel:ControlHelp("Enables quickturning with \"Runner Hands\" only")
+
 		panel:CheckBox("Purist Mode", "Beatrun_PuristMode")
 		panel:ControlHelp("Purist mode is a clientside preference that severely weakens the ability to strafe while in the air, which is how Mirror's Edge games handle this.\nDisabled = No restrictions\nEnabled = Reduced move speed in the air")
 
