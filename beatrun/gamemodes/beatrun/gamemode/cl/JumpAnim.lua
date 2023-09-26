@@ -280,7 +280,10 @@ local armfollowanims = {
 	diestandlong = true,
 	diveslidestart = true,
 	vaultoverhigh = true,
-	walkfwd = true
+	walkfwd = true,
+	crouchstill = true,
+	crouchfwd = true,
+	crouchbwd = true
 }
 
 local armlock = {
@@ -425,7 +428,10 @@ local nospinebend = {
 	ladderclimbuprighthand = true,
 	ladderclimbhangstart = true,
 	vaultontohigh = true,
-	snatchscar = true
+	snatchscar = true,
+	crouchstill = true,
+	crouchfwd = true,
+	crouchbwd = true
 }
 
 local worldarm = {
@@ -524,9 +530,9 @@ local customarmoffset = {
 	ladderexittoprighthand = Vector(5, 0, 0),
 	ladderclimbhangstart = Vector(-5, 0, 0),
 	ladderenterbottom = Vector(-7.5, 0, 0),
-	crouchstill = Vector(-4, 0, -5),
-	crouchfwd = Vector(-4, 0, -5),
-	crouchbwd = Vector(0, 0, 0),
+	crouchstill = Vector(-4, 0, -2),
+	crouchfwd = Vector(-4, 0, -2),
+	crouchbwd = Vector(-4, 0, -2),
 	walkfwd = Vector(10, 0, -10),
 	runbwd = Vector(0, 0, 3),
 	stand = Vector(10, 0, -10),
@@ -549,9 +555,9 @@ local customcamoffset = {
 	hangstrafeleft = Vector(-2.5, 0, 0),
 	hangstraferight = Vector(-2.5, 0, 0),
 	snatchscar = snatchscarcam1,
-	crouchstill = Vector(0, 0, 2.5),
-	crouchfwd = Vector(0, 0, 2.5),
-	crouchbwd = Vector(0, 0, 2.5)
+	crouchstill = Vector(2, 0, 2.5),
+	crouchfwd = Vector(2, 0, 2.5),
+	crouchbwd = Vector(2, 0, 2.5)
 }
 
 local transitionchecks = {

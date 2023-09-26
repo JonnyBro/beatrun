@@ -147,7 +147,7 @@ function SWEP:Think()
 	infall = curseq == 19
 
 	-- what a piece of shit, send help
-	if vel:Length() == 0 and util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply).Hit and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:Crouching() and ply:WaterLevel() == 0 then
+	if vel:Length() == 0 and util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply).Hit and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:Crouching() and ply:WaterLevel() == 0 and ply:GetWallrun() == 0 then
 		if (math.floor(ply:LocalEyeAngles().y) <= 35 and math.floor(ply:LocalEyeAngles().y) >= 5) or
 				(math.floor(ply:LocalEyeAngles().y) <= 125 and math.floor(ply:LocalEyeAngles().y) >= 95) or
 				(math.floor(ply:LocalEyeAngles().y) <= -55 and math.floor(ply:LocalEyeAngles().y) >= -85) or

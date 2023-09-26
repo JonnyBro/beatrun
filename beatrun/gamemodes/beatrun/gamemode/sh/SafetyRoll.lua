@@ -13,12 +13,6 @@ local function SafetyRollThink(ply, mv, cmd)
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
 	end
 
-	if ply:Alive() and CLIENT and ply:GetActiveWeapon():IsValid() and CurTime() > ply:GetSafetyRollTime() then
-		if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
-			RunConsoleCommand("mgbase_debug_vmrender", "1")
-		end
-	end
-
 	if CurTime() < ply:GetSafetyRollTime() then
 		ply.FootstepLand = false
 
@@ -39,6 +33,12 @@ local function SafetyRollThink(ply, mv, cmd)
 			ply:SetMEMoveLimit(400)
 		else
 			mv:SetVelocity(vector_origin)
+		end
+	end
+
+	if ply:Alive() and ply:GetActiveWeapon():IsValid() and CurTime() > ply:GetSafetyRollTime() then
+		if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+			RunConsoleCommand("mgbase_debug_vmrender", "1")
 		end
 	end
 end
@@ -78,9 +78,9 @@ end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
-		if ply:Alive() and CLIENT and ply:GetActiveWeapon():IsValid() then
+		if ply:Alive() and ply:GetActiveWeapon():IsValid() then
 			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
-				RunConsoleCommand("mgbase_debug_vmrender", "1")
+				RunConsoleCommand("mgbase_debug_vmrender", "0")
 			end
 		end
 
@@ -118,12 +118,6 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 				net.WriteBool(true)
 			net.Send(ply)
 		end
-
-		if ply:Alive() and CLIENT and ply:GetActiveWeapon():IsValid() then
-			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
-				RunConsoleCommand("mgbase_debug_vmrender", "0")
-			end
-		end
 	end
 end)
 
@@ -144,7 +138,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 		ParkourEvent("roll", ply)
 
-		if ply:Alive() and CLIENT and ply:GetActiveWeapon():IsValid() then
+		if ply:Alive() and ply:GetActiveWeapon():IsValid() then
 			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
 				RunConsoleCommand("mgbase_debug_vmrender", "0")
 			end
