@@ -1656,7 +1656,7 @@ local function JumpThink()
 				BodyAnim:SetSequence(transitionanims[BodyAnimString])
 			end
 
-			if ply:WaterLevel() >= 2 and not ply:Crouching() and not ply:OnGround() then
+			if ply:WaterLevel() >= 2 and not ply:Crouching() and not ply:OnGround() and ply:GetMoveType() ~= MOVETYPE_NOCLIP then
 				BodyAnim:SetSequence(BodyAnim:LookupSequence("water_float"))
 
 				if ply:KeyDown(IN_MOVELEFT) and vel_l > 5 then
