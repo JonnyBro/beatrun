@@ -47,7 +47,9 @@ local incompatible = {
 	["2635378860"] = true, -- MW/WZ Skydive/Parachute + Infil
 	["2919957168"] = true, -- Modern Warfare II - Takedowns & Revive System
 	["104815552"] = true, -- SmartSnap (how tho?)
-	["2600234804"] = true -- ASTW2 - Base Weapons
+	["2600234804"] = true, -- ASTW2 - Base Weapons
+	["2824714462"] = true, -- TFA Camera Shake
+	["3037375111"] = true -- Quick Slide With Legs
 }
 
 local warnpanel = {
