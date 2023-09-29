@@ -33,7 +33,7 @@ You can use "**BeatrunAnimInstaller**" (located in `beatrun` [here](https://gith
 Start the executable and press a key on your keyboard with the number of the animation you want to install (if nothing's changed, run the program as admin).<br>
 Installer's source can be found [here](/BeatrunAnimInstaller).
 
-## Changes and fixes done by me
+## Changes and fixes done by the community
 * Jonny_Bro is hosting [custom online courses database](https://courses.beatrun.ru), which is also free and [open source](https://github.com/relaxtakenotes/beatrun-courses-server/) 🤯!
 * Added a new gamemode - *Deathmatch*, it's like Data Theft, but you collect kills not cubes! (it's way more fun I promise)
 * Added an in-game config menu - You can find it in the tool menu, in the *Beatrun* Category!\
@@ -47,6 +47,7 @@ Installer's source can be found [here](/BeatrunAnimInstaller).
 * Added some ConVars to change HUD colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
 * Added a ConVar to allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
 * Added a ConVar to disable grapple ability - `Beatrun_DisableGrapple`.
+* Added a ConVar to allow QuickTurn with any weapon or only with *Runner Hands* - `Beatrun_QuickturnHandsOnly`.
 * Implemented Discord Rich Presence using open source tools (See [credits](https://github.com/JonnyBro/beatrun?tab=readme-ov-file#credits-3)).
 * Added small camera punch when diving.
 * Added the ability to remove ziplines that created with *Zipline Gun* - RMB.
