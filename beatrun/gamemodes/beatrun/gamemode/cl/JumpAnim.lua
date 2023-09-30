@@ -1413,7 +1413,10 @@ function ArmInterrupt(anim)
 			if string.match(anim, "standhandwall") then
 				local ply = LocalPlayer()
 				local trace = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply)
-				local newAng = Angle(trace.Normal.x * (5 * trace.Fraction * trace.Normal.x), 0, trace.Normal.x * (10 * trace.Fraction * trace.Normal.y))
+				local x = trace.Normal.x < 0.6 and trace.Normal.x or trace.Normal.y
+				local y = trace.Normal.y > -0.8 and trace.Normal.y or -trace.Normal.x
+
+				local newAng = Angle(x * (5 * trace.Fraction * x), 0, x * (10 * trace.Fraction * y))
 
 				ply:ChatPrint("Fraction: " .. tostring(trace.Fraction))
 				ply:ChatPrint("Normal: " .. tostring(trace.Normal))

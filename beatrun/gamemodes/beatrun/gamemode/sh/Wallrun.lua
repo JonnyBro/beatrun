@@ -526,7 +526,7 @@ hook.Add("SetupMove", "Wallrunning", function(ply, mv, cmd)
 		ply:SetWallrun(0)
 	end
 
-	if ply:GetWallrun() == 0 and mv:GetVelocity().z > -450 and not ply:OnGround() and mv:KeyDown(IN_FORWARD) and not ply:Crouching() and not mv:KeyDown(IN_DUCK) and ply:GetMoveType() ~= MOVETYPE_NOCLIP then
+	if ply:GetWallrun() == 0 and mv:GetVelocity().z > -450 and not ply:OnGround() and mv:KeyDown(IN_FORWARD) and not ply:Crouching() and not mv:KeyDown(IN_DUCK) and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:WaterLevel() < 1 then
 		WallrunningCheck(ply, mv, cmd)
 	end
 

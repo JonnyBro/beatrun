@@ -72,7 +72,7 @@ local function SlidingAnimThink()
 		local newang = LerpAngle(20 * FrameTime(), oldang, ang)
 		ba:SetAngles(newang)
 
-		BodyLimitX = math.min(40 + ang[1] - 360, 60)
+		BodyLimitX = math.min(20 + ang[1] - 360, 60)
 		CamShakeMult = ply:GetVelocity():Length() * 0.0005
 	end
 end
@@ -346,7 +346,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 	local normal = slipperytraceout.HitNormal
 	local sang = normal:Angle()
-	local slippery = sang.x > 315 and sang.x < 330 and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:GetCrouchJump() and onground and not slipfail
+	local slippery = sang.x > 315 and sang.x < 330 and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:GetCrouchJump() and onground and not slipfail and ply:WaterLevel() < 1
 
 	ply:SetSlidingSlippery(slippery)
 

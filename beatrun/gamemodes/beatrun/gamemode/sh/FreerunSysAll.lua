@@ -246,8 +246,6 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 		ply:SetMEMoveLimit(150)
 		ply:SetMESprintDelay(0)
 		ply:SetMEAng(0)
-
-		-- mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
 	end
 
 	local ang = mv:GetAngles()
@@ -370,7 +368,6 @@ if CLIENT then
 
 	hook.Add("CreateMove", "MECreateMove", function(cmd)
 		local ply = LocalPlayer()
-		local usingrh = ply:UsingRH()
 		local hardland = CurTime() < (ply.hardlandtime or 0)
 
 		if hardland and not ply:InOverdrive() then
@@ -379,7 +376,7 @@ if CLIENT then
 			cmd:SetSideMove(cmd:GetSideMove() * 0.01)
 		end
 
-		if (ply:InOverdrive() or usingrh and ply:GetMoveType() == MOVETYPE_WALK and not hardland and ply:OnGround()) and not cmd:KeyDown(IN_SPEED) and not ply:GetSliding() and not IsValid(ply:GetBalanceEntity()) then
+		if (ply:InOverdrive() or ply:UsingRH() and ply:GetMoveType() == MOVETYPE_WALK and not hardland and ply:OnGround()) and not cmd:KeyDown(IN_SPEED) and not ply:GetSliding() and not IsValid(ply:GetBalanceEntity()) then
 			cmd:SetButtons(cmd:GetButtons() + IN_SPEED)
 		end
 	end)

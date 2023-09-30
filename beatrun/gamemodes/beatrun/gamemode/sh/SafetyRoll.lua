@@ -7,7 +7,7 @@ local landang = Angle(0, 0, 0)
 local function SafetyRollThink(ply, mv, cmd)
 	local speed = mv:GetVelocity().z
 
-	if speed <= -350 and not ply:OnGround() and not ply:GetWasOnGround() and (mv:KeyPressed(IN_SPEED) or mv:KeyPressed(IN_DUCK) or mv:KeyPressed(IN_BULLRUSH)) then
+	if speed <= -350 and not ply:OnGround() and not ply:GetWasOnGround() and (mv:KeyPressed(IN_DUCK) or mv:KeyPressed(IN_SPEED) or mv:KeyPressed(IN_BULLRUSH)) then
 		ply:SetSafetyRollKeyTime(CurTime() + 0.5)
 
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
