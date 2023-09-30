@@ -3,17 +3,23 @@ local domain = CreateClientConVar("Beatrun_Domain", "courses.beatrun.ru", true, 
 
 local QueuedArgs = NULL
 local QueuedFunction = NULL
-concommand.Add("beatrun_confirm", function()
+
+concommand.Add("Beatrun_Confirm", function()
 	if QueuedArgs and QueuedFunction then
 		QueuedFunction(QueuedArgs)
+
 		return
 	end
+
 	if QueuedFunction then
 		QueuedFunction()
+
 		return
 	end
 end)
-concommand.Add("beatrun_cancel", function() 
+
+concommand.Add("Beatrun_Cancel", function()
+	QueuedArgs = NULL
 	QueuedFunction = NULL
 end)
 
@@ -54,8 +60,9 @@ end
 
 concommand.Add("Beatrun_UploadCourse", function()
 	QueuedFunction = UploadCourse
-	print("You're trying to upload a course with the name "..Course_Name.." and on map "..game.GetMap()..".")
-	print("Write beatrun_confirm to continue, or beatrun_cancel to stop.")
+
+	print("You're trying to upload a course with the name " .. Course_Name .. " and on map " .. game.GetMap() .. ".")
+	print("Write Beatrun_Confirm to continue, or Beatrun_Cancel to cancel.")
 end)
 
 function GetCourse(sharecode)
@@ -128,6 +135,7 @@ end
 concommand.Add("Beatrun_UpdateCode", function(ply, cmd, args, argstr)
 	QueuedFunction = UpdateCourse
 	QueuedArgs = args[1]
-	print("You're trying to update a course with this code: "..args[1]..", with a course on map "..game.GetMap().." and name "..Course_Name..".")
-	print("Write beatrun_confirm to continue, or beatrun_cancel to stop.")
+
+	print("You're trying to update a course with this code: " .. args[1] .. ", with a course on map " .. game.GetMap() .. " and name " .. Course_Name .. ".")
+	print("Write Beatrun_Confirm to continue, or Beatrun_Cancel to cancel.")
 end)

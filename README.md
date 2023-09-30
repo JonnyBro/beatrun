@@ -50,11 +50,11 @@ Installer's source can be found [here](/BeatrunAnimInstaller).
 * Added a ConVar to allow QuickTurn with any weapon or only with *Runner Hands* - `Beatrun_QuickturnHandsOnly`.
 * Implemented Discord Rich Presence using open source tools (See [credits](https://github.com/JonnyBro/beatrun?tab=readme-ov-file#credits-3)).
 * Added small camera punch when diving.
-* Added the ability to remove ziplines that created with *Zipline Gun* - RMB.
+* Added the ability to remove ziplines that created with *Zipline Gun* - `RMB`.
+* Fixed some playermodels show up as ERROR.
 * SteamID in the right corner is no longer present.
 
 ## Notable changes and fixes done by the community
-* Made QuickTurn work only with `Runner Hands`.
 * Fixed leaderboard sorting in gamemodes.
 * Fixed grapple usage in courses and gamemodes.
 * Fixed a crash in DataTheft when touching data bank.

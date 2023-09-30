@@ -105,7 +105,6 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 		ply:SetCrouchJumpBlocked(false)
 
 		if CLIENT and IsFirstTimePredicted() then
-			-- local zipline = ply:GetZipline()
 			ply.OrigEyeAng = (endpos - startpos):Angle()
 		elseif game.SinglePlayer() then
 			net.Start("Zipline_SPFix")

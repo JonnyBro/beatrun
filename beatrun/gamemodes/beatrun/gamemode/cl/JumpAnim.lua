@@ -486,7 +486,8 @@ local nocyclereset = {
 
 local ignorebac = {
 	evaderoll = true,
-	meroll = true
+	meroll = true,
+	merollgun = true
 }
 
 local customspeed = {

@@ -343,8 +343,8 @@ function StartBodyAnim(animtable)
 	if not IsValid(ply:GetHands()) then return end
 
 	local plymodel = ply
-	local playermodel = string.Replace(ply:GetModel(), "models/models/", "models/")
-	local handsmodel = string.Replace(ply:GetHands():GetModel(), "models/models/", "models/")
+	local playermodel = ply:GetModel()
+	local handsmodel = ply:GetHands():GetModel()
 
 	if usefullbody == 2 then
 		BodyAnimMDL = ClientsideModel(playermodel, RENDERGROUP_BOTH)
@@ -480,8 +480,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		return
 	end
 
-	-- This is the issue with disappearing model when sliding, should be fixed for now
-	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then -- TODO: Something if appears again...
+	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then
 		if updatethirdperson then
 			ply:SetNoDraw(false)
 			BodyAnim:SetNoDraw(true)

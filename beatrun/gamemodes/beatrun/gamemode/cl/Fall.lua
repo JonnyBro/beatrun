@@ -16,6 +16,7 @@ local vignettealpha = 0
 local function FallCheck()
 	local ply = LocalPlayer()
 	if not IsValid(ply) then return end
+
 	local speed = ply:GetVelocity().z
 
 	if not ply.FallStatic and speed <= -800 and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:GetDive() == false then

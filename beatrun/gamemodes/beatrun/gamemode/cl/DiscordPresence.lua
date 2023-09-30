@@ -9,6 +9,7 @@ local discord_start = discord_start or -1
 
 function DiscordUpdate()
 	local ply = LocalPlayer()
+
 	if not ply.GetLevel then return end
 
 	local rpc_data = {}

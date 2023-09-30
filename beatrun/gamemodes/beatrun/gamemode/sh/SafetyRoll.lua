@@ -57,6 +57,8 @@ local roll = {
 }
 
 net.Receive("RollAnimSP", function()
+	local ply = LocalPlayer()
+
 	if net.ReadBool() then
 		roll.AnimString = "land"
 		roll.animmodelstring = "climbanim"
@@ -66,7 +68,12 @@ net.Receive("RollAnimSP", function()
 		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1.5
 	else
-		roll.AnimString = "meroll"
+		if ply:GetActiveWeapon():GetClass() ~= "runnerhands" then
+			roll.AnimString = "merollgun"
+		else
+			roll.AnimString = "meroll"
+		end
+
 		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1.15
 	end
@@ -165,7 +172,12 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:SetSafetyRollAng(ang)
 			ply:SetSafetyRollTime(CurTime() + 1.05)
 
-			roll.AnimString = "meroll"
+			if ply:GetActiveWeapon():GetClass() ~= "runnerhands" then
+				roll.AnimString = "merollgun"
+			else
+				roll.AnimString = "meroll"
+			end
+
 			roll.animmodelstring = "climbanim"
 			roll.usefullbody = false
 		end

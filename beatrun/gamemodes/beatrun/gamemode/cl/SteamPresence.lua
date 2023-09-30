@@ -7,6 +7,7 @@ local refresh_time = 60
 
 local function UpdateRichPresence()
 	local ply = LocalPlayer()
+
 	if not ply.GetLevel then return end
 
 	local map = game.GetMap()
