@@ -68,10 +68,10 @@ net.Receive("RollAnimSP", function()
 		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1.5
 	else
-		if ply:GetActiveWeapon():GetClass() ~= "runnerhands" then
-			roll.AnimString = "merollgun"
-		else
+		if ply:UsingRH() then
 			roll.AnimString = "meroll"
+		else
+			roll.AnimString = "merollgun"
 		end
 
 		roll.animmodelstring = "climbanim"
@@ -172,10 +172,10 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:SetSafetyRollAng(ang)
 			ply:SetSafetyRollTime(CurTime() + 1.05)
 
-			if ply:GetActiveWeapon():GetClass() ~= "runnerhands" then
-				roll.AnimString = "merollgun"
-			else
+			if ply:UsingRH() then
 				roll.AnimString = "meroll"
+			else
+				roll.AnimString = "merollgun"
 			end
 
 			roll.animmodelstring = "climbanim"

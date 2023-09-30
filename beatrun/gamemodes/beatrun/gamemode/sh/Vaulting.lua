@@ -48,7 +48,7 @@ end
 local function PlayVaultAnim(ply, legs, ang)
 	local activewep = ply:GetActiveWeapon()
 
-	if IsValid(activewep) and activewep:GetClass() == "runnerhands" and activewep:GetSequence() == 17 then
+	if ply:UsingRH() and activewep:GetSequence() == 17 then
 		activewep:SendWeaponAnim(ACT_VM_DRAW)
 	end
 
@@ -764,7 +764,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 
 				local activewep = ply:GetActiveWeapon()
 
-				if IsValid(activewep) and activewep:GetClass() == "runnerhands" and mantletype == 1 then
+				if ply:UsingRH() and mantletype == 1 then
 					activewep:SendWeaponAnim(ACT_VM_RECOIL1)
 				end
 			end

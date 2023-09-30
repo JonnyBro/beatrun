@@ -38,9 +38,7 @@ function DoJumpTurnStand()
 		VMLegs:Remove()
 	end
 
-	local activewep = LocalPlayer():GetActiveWeapon()
-
-	if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
+	if LocalPlayer():notUsingRH() then
 		BodyAnim:SetSequence("jumpturnlandstandgun")
 	else
 		BodyAnim:SetSequence("jumpturnlandstand")
@@ -56,7 +54,7 @@ end
 local standpunch = Angle(-5, 0, 0)
 
 local function Quickturn(ply, mv, cmd)
-	local keypressed = ply:Alive() and mv:KeyPressed(IN_ATTACK2) and (ply:GetInfoNum("Beatrun_QuickturnHandsOnly", 0) == 1 and ply:GetActiveWeapon():GetClass() == "runnerhands" or ply:GetInfoNum("Beatrun_QuickturnHandsOnly", 0) == 0)
+	local keypressed = ply:Alive() and mv:KeyPressed(IN_ATTACK2) and (ply:GetInfoNum("Beatrun_QuickturnHandsOnly", 0) == 1 and ply:UsingRH() or ply:GetInfoNum("Beatrun_QuickturnHandsOnly", 0) == 0)
 
 	if ply:GetWallrun() ~= 0 then
 		if mv:KeyDown(IN_BACK) and mv:KeyPressed(IN_JUMP) or ply:GetQuickturn() then
@@ -118,14 +116,7 @@ local function Quickturn(ply, mv, cmd)
 			end
 		end
 
-		local usingrh = false
-		local activewep = ply:GetActiveWeapon()
-
-		if IsValid(activewep) then
-			usingrh = activewep:GetClass() == "runnerhands"
-		end
-
-		if not usingrh and ply:GetWallrun() >= 2 then return end
+		if not ply:UsingRH() and ply:GetWallrun() >= 2 then return end
 
 		ply:SetQuickturn(true)
 		ply:SetQuickturnTime(CurTime())
@@ -147,11 +138,7 @@ local function Quickturn(ply, mv, cmd)
 
 			local activewep = ply:GetActiveWeapon()
 
-			if IsValid(activewep) then
-				usingrh = activewep:GetClass() == "runnerhands"
-			end
-
-			if usingrh then
+			if ply:UsingRH() then
 				activewep:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 				activewep:SetBlockAnims(true)
 			end
@@ -204,9 +191,8 @@ local function Quickturn(ply, mv, cmd)
 		end
 
 		standpunch.x = -math.abs(math.min(CurTime() - ply:GetJumpTurnRecovery() + 0.5, 0))
-		local activewep = ply:GetActiveWeapon()
 
-		if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
+		if ply:notUsingRH() then
 			standpunch.x = standpunch.x * 0.1
 			standpunch.z = standpunch.x * 10
 		else

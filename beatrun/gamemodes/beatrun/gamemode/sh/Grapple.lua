@@ -9,10 +9,7 @@ if CLIENT then
 		if disable_grapple:GetBool() and Course_Name == "" then return end
 		if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
 		if not ply:Alive() or Course_Name ~= "" then return end
-
-		local activewep = ply:GetActiveWeapon()
-
-		if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then return end
+		if ply:notUsingRH() then return end
 		if ply:GetMoveType() == MOVETYPE_NOCLIP then return end
 		if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then return end
 
@@ -60,8 +57,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if not ply:Alive() or Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 	if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 
-	local activewep = ply:GetActiveWeapon()
-	local usingrh = IsValid(activewep) and activewep:GetClass() == "runnerhands"
+	local usingrh = ply:UsingRH()
 
 	if not ply.Grapple_tr then
 		ply.Grapple_tr = {}

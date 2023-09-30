@@ -105,11 +105,7 @@ local function WallrunningThink(ply, mv, cmd)
 
 			local activewep = ply:GetActiveWeapon()
 
-			if IsValid(activewep) then
-				usingrh = activewep:GetClass() == "runnerhands"
-			end
-
-			if usingrh then
+			if ply:UsingRH() then
 				activewep:SendWeaponAnim(ACT_VM_HITCENTER)
 				activewep:SetBlockAnims(false)
 			end
@@ -132,11 +128,7 @@ local function WallrunningThink(ply, mv, cmd)
 
 			local activewep = ply:GetActiveWeapon()
 
-			if IsValid(activewep) then
-				usingrh = activewep:GetClass() == "runnerhands"
-			end
-
-			if usingrh then
+			if ply:UsingRH() then
 				activewep:SendWeaponAnim(ACT_VM_HITCENTER)
 				activewep:SetBlockAnims(false)
 			end

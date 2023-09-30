@@ -36,7 +36,6 @@ if game.SinglePlayer() and CLIENT then
 end
 
 hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
-	local activewep = ply:GetActiveWeapon()
 	local sprint = ply:GetMEMoveLimit() < speed_limit:GetInt() - 25
 	local stepmod = ply:GetStepRight() and 1 or -1
 	local stepvel = 1.25
@@ -51,7 +50,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 	local stepmod2 = 1
 	local stepmod3 = 1
 
-	if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
+	if ply:notUsingRH() then
 		stepmod2 = 0.25
 
 		if not ply:IsSprinting() then
@@ -59,7 +58,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 		end
 	end
 
-	if not ply:Crouching() and not ply:KeyDown(IN_WALK) then
+	if not ply:Crouching() and not walking then
 		if game.SinglePlayer() then
 			local intensity = ply:GetInfoNum("Beatrun_ViewbobIntensity", 20) / 20
 
@@ -212,8 +211,7 @@ hook.Add("OnPlayerHitGround", "MELandSound", function(ply, water, floater, speed
 end)
 
 hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
-	local activewep = ply:GetActiveWeapon()
-	local usingrh = IsValid(activewep) and activewep:GetClass() == "runnerhands"
+	local usingrh = ply:UsingRH()
 	local ismoving = (mv:KeyDown(IN_FORWARD) or not ply:OnGround() or ply:Crouching()) and not mv:KeyDown(IN_BACK) and ply:Alive() and (mv:GetVelocity():Length() > 50 or ply:GetMantle() ~= 0 or ply:Crouching())
 
 	if (CLIENT or game.SinglePlayer()) and CurTime() > (ply:GetStepRelease() or 0) and ply.FootstepReleaseLand then
@@ -261,7 +259,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	local weaponspeed = 150
 	local activewep = ply:GetActiveWeapon()
 
-	if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
+	if ply:notUsingRH() then
 		weaponspeed = speed_limit:GetInt()
 	end
 

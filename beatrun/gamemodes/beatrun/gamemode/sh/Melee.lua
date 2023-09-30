@@ -105,7 +105,7 @@ local doors = {
 }
 
 local function KeyMelee(ply, mv)
-	return mv:KeyPressed(IN_ALT2) or mv:KeyPressed(IN_ATTACK) and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == "runnerhands"
+	return mv:KeyPressed(IN_ALT2) or mv:KeyPressed(IN_ATTACK) and ply:UsingRH()
 end
 
 local function MeleeType(ply, mv, cmd)

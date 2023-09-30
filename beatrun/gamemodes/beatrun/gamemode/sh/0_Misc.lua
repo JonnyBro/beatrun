@@ -70,9 +70,7 @@ hook.Add("SetupMove", "JumpDetect", function(ply, mv, cmd)
 		end
 	end
 
-	local activewep = ply:GetActiveWeapon()
-
-	if IsValid(activewep) and activewep:GetClass() == "runnerhands" then
+	if ply:UsingRH() then
 		ply:SetWasOnGround(ply:OnGround())
 
 		return

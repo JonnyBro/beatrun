@@ -649,11 +649,7 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	local activewep = ply:GetActiveWeapon()
 
-	if IsValid(activewep) then
-		usingrh = activewep:GetClass() == "runnerhands"
-	end
-
-	if usingrh and activewep.SendWeaponAnim then
+	if ply:UsingRH() and activewep.SendWeaponAnim then
 		activewep:SendWeaponAnim(ACT_VM_HITCENTER)
 		activewep:SetBlockAnims(false)
 	end

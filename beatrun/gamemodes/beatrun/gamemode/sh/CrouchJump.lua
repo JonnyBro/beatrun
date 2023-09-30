@@ -1,4 +1,3 @@
-local usingrh = nil
 local punch = Angle(0.5, 0, 0)
 local punchland = Angle(10, 0, 0.5)
 local punchthink = Angle()
@@ -30,13 +29,9 @@ hook.Add("SetupMove", "CrouchJump", function(ply, mv, cmd)
 		ply:SetCrouchJumpBlocked(false)
 	end
 
+	local activewep = ply:GetActiveWeapon()
+
 	if ply:Alive() and not ply:GetCrouchJumpBlocked() and not IsValid(ply:GetZipline()) and not IsValid(ply:GetLadder()) and ply:GetClimbing() == 0 and not ply:GetJumpTurn() and ply:GetMantle() == 0 and not ply:OnGround() and ply:GetVelocity().z > -350 and ply:GetCrouchJumpTime() < CurTime() and ply:GetWallrun() == 0 and mv:KeyPressed(IN_DUCK) then
-		local activewep = ply:GetActiveWeapon()
-
-		if IsValid(activewep) then
-			usingrh = activewep:GetClass() == "runnerhands"
-		end
-
 		if CLIENT then
 			local ang = ply:EyeAngles()
 			ang.x = 0
@@ -47,7 +42,7 @@ hook.Add("SetupMove", "CrouchJump", function(ply, mv, cmd)
 				BodyAnimCycle = 0
 				BodyAnimCrouchLerp = 0
 
-				if usingrh then
+				if ply:UsingRH() then
 					BodyAnimCrouchLerpZ = mv:GetOrigin().z - 32
 				else
 					BodyAnimCrouchLerpZ = mv:GetOrigin().z
@@ -70,16 +65,10 @@ hook.Add("SetupMove", "CrouchJump", function(ply, mv, cmd)
 		ply:ViewPunch(punch)
 		ply:SetViewOffsetDucked(Vector(0, 0, 28))
 
-		if usingrh then
+		if ply:UsingRH() then
 			activewep:SendWeaponAnim(ACT_VM_HOLSTER)
 		end
 	elseif (ply:OnGround() or ply:GetCrouchJumpTime() < CurTime() or not ply:Alive()) and ply:GetCrouchJump() then
-		local activewep = ply:GetActiveWeapon()
-
-		if IsValid(activewep) then
-			usingrh = activewep:GetClass() == "runnerhands"
-		end
-
 		if game.SinglePlayer() then
 			net.Start("CrouchJumpSP")
 				net.WriteBool(false)
@@ -88,7 +77,7 @@ hook.Add("SetupMove", "CrouchJump", function(ply, mv, cmd)
 
 		ply:SetCrouchJump(false)
 
-		if usingrh and IsValid(activewep) then
+		if ply:UsingRH() then
 			activewep:SendWeaponAnim(ACT_VM_DRAW)
 		end
 

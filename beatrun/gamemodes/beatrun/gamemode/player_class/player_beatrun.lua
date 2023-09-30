@@ -374,7 +374,7 @@ end
 hook.Add("FinishMove", "BeatrunRHVelocity", function(ply, mv)
 	local activewep = ply:GetActiveWeapon()
 
-	if IsValid(activewep) and activewep:GetClass() == "runnerhands" and activewep.SetOwnerVelocity then
+	if ply:UsingRH() and activewep.SetOwnerVelocity then
 		activewep:SetOwnerVelocity(math.Round(mv:GetVelocity():Length()))
 	end
 end)

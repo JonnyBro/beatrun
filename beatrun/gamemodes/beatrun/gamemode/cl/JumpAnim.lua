@@ -1233,7 +1233,7 @@ local function JumpArmDraw(a, b, c)
 
 		local activewep = ply:GetActiveWeapon()
 
-		if IsValid(activewep) and activewep:GetClass() == "runnerhands" then
+		if ply:UsingRH() then
 			if not worldarm[BodyAnimString] then
 				cam.Start3D(pos, ang)
 					cam.IgnoreZ(ignorezarm[BodyAnimString] or false)

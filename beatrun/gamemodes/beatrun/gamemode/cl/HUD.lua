@@ -541,7 +541,7 @@ local function BeatrunReticle()
 
 	local wep = LocalPlayer():GetActiveWeapon()
 
-	if not IsValid(wep) or wep:GetClass() ~= "runnerhands" then return end
+	if not IsValid(wep) or LocalPlayer():notUsingRH() then return end
 
 	surface.SetDrawColor(255, 255, 255)
 	surface.SetMaterial(crosshair_standard)

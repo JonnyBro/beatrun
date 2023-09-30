@@ -10,7 +10,7 @@ if CLIENT then
 	SWEP.DrawCrosshair = false
 
 	hook.Add("VManipPrePlayAnim", "LOCNoVManip", function()
-		if LocalPlayer():GetActiveWeapon():GetClass() == "runnerhands" or blinded then return false end
+		if LocalPlayer():UsingRH() or blinded then return false end
 	end)
 end
 
@@ -148,32 +148,29 @@ function SWEP:Think()
 
 	-- what a piece of shit, send help
 	if vel:Length() == 0 and util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply).Hit and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:Crouching() and ply:WaterLevel() == 0 and ply:GetWallrun() == 0 then
-		if (math.floor(ply:LocalEyeAngles().y) <= 35 and math.floor(ply:LocalEyeAngles().y) >= 5) or
-				(math.floor(ply:LocalEyeAngles().y) <= 125 and math.floor(ply:LocalEyeAngles().y) >= 95) or
-				(math.floor(ply:LocalEyeAngles().y) <= -55 and math.floor(ply:LocalEyeAngles().y) >= -85) or
-				(math.floor(ply:LocalEyeAngles().y) <= -145 and math.floor(ply:LocalEyeAngles().y) >= -175) then
+		if (math.floor(ply:LocalEyeAngles().y) <= 35 and math.floor(ply:LocalEyeAngles().y) >= 5) or (math.floor(ply:LocalEyeAngles().y) <= 125 and math.floor(ply:LocalEyeAngles().y) >= 95) or (math.floor(ply:LocalEyeAngles().y) <= -55 and math.floor(ply:LocalEyeAngles().y) >= -85) or (math.floor(ply:LocalEyeAngles().y) <= -145 and math.floor(ply:LocalEyeAngles().y) >= -175) then
 			if CLIENT then
+				BodyLimitX = 20
+
 				return ArmInterrupt("standhandwallright")
 			elseif game.SinglePlayer() then
-				return ply:SendLua("ArmInterrupt('standhandwallright')")
+				return ply:SendLua("BodyLimitX = 20 ArmInterrupt('standhandwallright')")
 			end
-		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -5) or
-				(math.floor(ply:LocalEyeAngles().y) <= 95 and math.floor(ply:LocalEyeAngles().y) >= 85) or
-				(math.floor(ply:LocalEyeAngles().y) <= -85 and math.floor(ply:LocalEyeAngles().y) >= -95) or
-				(math.floor(ply:LocalEyeAngles().y) <= -175 or math.floor(ply:LocalEyeAngles().y) >= 175) then
+		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -5) or (math.floor(ply:LocalEyeAngles().y) <= 95 and math.floor(ply:LocalEyeAngles().y) >= 85) or (math.floor(ply:LocalEyeAngles().y) <= -85 and math.floor(ply:LocalEyeAngles().y) >= -95) or (math.floor(ply:LocalEyeAngles().y) <= -175 or math.floor(ply:LocalEyeAngles().y) >= 175) then
 			if CLIENT then
+				BodyLimitX = 20
+
 				return ArmInterrupt("standhandwallboth")
 			elseif game.SinglePlayer() then
-				return ply:SendLua("ArmInterrupt('standhandwallboth')")
+				return ply:SendLua("BodyLimitX = 20 ArmInterrupt('standhandwallboth')")
 			end
-		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -35) or
-				(math.floor(ply:LocalEyeAngles().y) <= 85 and math.floor(ply:LocalEyeAngles().y) >= 55) or
-				(math.floor(ply:LocalEyeAngles().y) <= -95 and math.floor(ply:LocalEyeAngles().y) >= -125) or
-				(math.floor(ply:LocalEyeAngles().y) <= 175 and math.floor(ply:LocalEyeAngles().y) >= 145) then
+		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -35) or (math.floor(ply:LocalEyeAngles().y) <= 85 and math.floor(ply:LocalEyeAngles().y) >= 55) or (math.floor(ply:LocalEyeAngles().y) <= -95 and math.floor(ply:LocalEyeAngles().y) >= -125) or (math.floor(ply:LocalEyeAngles().y) <= 175 and math.floor(ply:LocalEyeAngles().y) >= 145) then
 			if CLIENT then
+				BodyLimitX = 20
+
 				return ArmInterrupt("standhandwallleft")
 			elseif game.SinglePlayer() then
-				return ply:SendLua("ArmInterrupt('standhandwallleft')")
+				return ply:SendLua("BodyLimitX = 20 ArmInterrupt('standhandwallleft')")
 			end
 		end
 	end
