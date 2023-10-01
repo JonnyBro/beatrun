@@ -2,6 +2,8 @@
 
 Infamous parkour addon for Garry's Mod, fully open sourced and maintained by the community.
 
+**READ THE ***ENTIRE*** README BEFORE ASKING QUESTIONS ON THE [beatrun.ru](https://beatrun.ru) DISCORD!**
+
 This version does not include malicious modules, code or networking. What it does contain is:
 * Lua modules for Discord Rich Presence
 * Lua modules for Steam Presence
@@ -10,8 +12,8 @@ This version does not include malicious modules, code or networking. What it doe
 **All of this is optional and you may remove all of it. (modules are located [here](/lua/bin/) and online courses functionality is [here](/beatrun/gamemodes/beatrun/gamemode/cl/OnlineCourse.lua))**
 
 ## Automatic Installation (Windows only!)
-Run the command below in the Powershell.
-> (Win + R > powershell > command in question)
+Run the command below in Powershell.
+> (Win + R > `powershell` > command in question)
 ```powershell
 iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 ```
