@@ -7,18 +7,16 @@ This version does not include malicious modules, code or networking. What it doe
 * Lua modules for Steam Presence
 * Network connectivity for courses (activates only when you load or upload courses, and by default `courses.beatrun.ru` is used)
 
-**All of this is optional and you may remove all of it. (modules are located [here](https://github.com/JonnyBro/beatrun/blob/master/lua/bin/) and online courses functionality is [here](https://github.com/JonnyBro/beatrun/blob/master/beatrun/gamemodes/beatrun/gamemode/cl/OnlineCourse.lua))**
+**All of this is optional and you may remove all of it. (modules are located [here](/lua/bin/) and online courses functionality is [here](/beatrun/gamemodes/beatrun/gamemode/cl/OnlineCourse.lua))**
 
-## **PLEASE READ ALL BEFORE ASKING QUESTIONS ON OUR SERVER!**
-
-# (Prefered) Installation (Automatic | Windows only)
+## Automatic Installation (Windows only!)
 Run the command below in the Powershell.
 > (Win + R > powershell > command in question)
 ```powershell
 iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 ```
 
-## Installation (Manual)
+## Manual Installation
 1. Download this repository [here](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).
 2. Delete the `beatrun` folder in *addons* if you have one!
 3. Extract the `beatrun` folder to *your_game_folder/garrysmod/addons*.
@@ -28,7 +26,7 @@ iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 ## Animations
 You can use "**BeatrunAnimInstaller**" (located in `beatrun` [here](https://github.com/JonnyBro/beatrun/tree/master/beatrun)) for custom animations. Currently there's:
 * Beatrun Reanimated
-* Fixed Original<br><br>
+* Fixed Original<br>
 
 Start the executable and press a key on your keyboard with the number of the animation you want to install (if nothing's changed, run the program as admin).<br>
 Installer's source can be found [here](/BeatrunAnimInstaller).
@@ -73,8 +71,9 @@ Installer's source can be found [here](/BeatrunAnimInstaller).
 
 # Credits <3
 * All contributors.
-* [EarthyKiller127](https://www.youtube.com/channel/UCiFqPwGo4x0J65xafIaECDQ) - He made that piece of shit.
-* [relaxtakenotes](https://github.com/relaxtakenotes) - Made all of this possible.
-* [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated project.
-* [Discord Rich Presence](https://github.com/fluffy-servers/gmod-discord-rpc) by Fluffy Servers.
-* [Steam Presence](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) by YuRaNnNzZZ.
+* **[JonnyBro](https://github.com/JonnyBro)** - Making most, if not all of the fixes in this repository
+* **[EarthyKiller127](https://www.youtube.com/channel/UCiFqPwGo4x0J65xafIaECDQ)**, a.k.a ***datæ*** - He made that piece of shit.
+* **[relaxtakenotes](https://github.com/relaxtakenotes)** - Made all of this possible.
+* **[MTB](https://www.youtube.com/@MTB396)** - Beatrun Reanimated project.
+* **[Discord Rich Presence](https://github.com/fluffy-servers/gmod-discord-rpc)** by Fluffy Servers.
+* **[Steam Presence](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer)** by YuRaNnNzZZ.
