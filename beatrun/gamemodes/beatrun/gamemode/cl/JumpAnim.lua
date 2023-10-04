@@ -461,7 +461,6 @@ local worldarm = {
 	ladderclimbuprighthand = true,
 	ladderclimbhangstart = true,
 	snatchscar = true,
-	jumpcoil = true,
 	jumpturnlandidle = true,
 	standhandwallright = true,
 	standhandwallleft = true,
