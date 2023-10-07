@@ -104,19 +104,18 @@ hook.Add("SetupMove", "JumpDetect", function(ply, mv, cmd)
 end)
 
 hook.Add("CanProperty", "BlockProperty", function(ply)
-	if not ply:IsSuperAdmin() then return false end
+	if not ply:IsAdmin() then return false end
 end)
 
 hook.Add("CanDrive", "BlockDrive", function(ply)
-	if not ply:IsSuperAdmin() then return false end
+	if not ply:IsAdmin() then return false end
 end)
 
--- hook.Add("SetupMove", "TestingSomething", function(ply, mv)
---	local weapon = ply:GetActiveWeapon()
+hook.Add("SetupMove", "TestingSomething", function(ply, mv)
+	local weapon = ply:GetActiveWeapon()
 
---	if not IsValid(weapon) then return end
---	if not weapon.SetupMove then return end
--- end)
+	if not IsValid(weapon) then return end
+end)
 
 if CLIENT and game.SinglePlayer() then
 	net.Receive("SPParkourEvent", function()
