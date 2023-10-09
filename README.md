@@ -27,10 +27,10 @@ iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 
 ## Animations
 You can use "**BeatrunAnimInstaller**" (located in `beatrun` [here](https://github.com/JonnyBro/beatrun/tree/master/beatrun)) for custom animations. Currently there's:
-* Beatrun Reanimated
-* Fixed Original<br><br>
+* Beatrun Reanimated project
+* Original but fixed animations<br><br>
 
-Start the executable and press a key on your keyboard with the number of the animation you want to install (if nothing's changed, run the program as admin).<br>
+Start the executable and press a key on your keyboard with the number of the animation you want to install (if nothing's changed, close the game and run the program as admin).<br>
 Installer's source can be found [here](/BeatrunAnimInstaller).
 
 ## Changes and fixes done by the community
