@@ -7,13 +7,13 @@ This version does not include malicious modules, code or networking. What it doe
 * Lua modules for Steam Presence
 * Network connectivity for courses (activates only when you load or upload courses, and by default `courses.beatrun.ru` is used)
 
-**All of this is optional and you may remove all of it. (modules are located [here](https://github.com/JonnyBro/beatrun/blob/master/lua/bin/) and online courses functionality is [here](https://github.com/JonnyBro/beatrun/blob/master/beatrun/gamemodes/beatrun/gamemode/cl/OnlineCourse.lua))**
-
-## **PLEASE READ ALL BEFORE ASKING QUESTIONS ON OUR SERVER!**
+**All of this is optional and you may remove all of it.**\
+Modules are located [here](/lua/bin/) and courses database functionality is [here](/beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).<br><br>
+**PLEASE READ ALL BEFORE ASKING QUESTIONS ON OUR SERVER!**
 
 # (Prefered) Installation (Automatic | Windows only)
-Run the command below in the Powershell.
-> (Win + R > powershell > command in question)
+Run the command below in Powershell.
+> (Win + R > `powershell` > command in question)
 ```powershell
 iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 ```
