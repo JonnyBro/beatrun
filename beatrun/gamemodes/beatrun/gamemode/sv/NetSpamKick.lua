@@ -1,7 +1,7 @@
 if game.SinglePlayer() then return end
 
 local maxmsgcount = 100
-local netIncoming_old = net.Receive
+-- local netIncoming_old = net.Incoming
 
 local netIncoming_detour = function(length, ply)
 	local tickcount = engine.TickCount()

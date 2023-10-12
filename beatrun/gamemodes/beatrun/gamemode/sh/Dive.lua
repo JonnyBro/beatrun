@@ -1,7 +1,7 @@
-local totsugeki = CreateConVar("Beatrun_Totsugeki", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Oh no...", 0, 1)
-local totsugekispam = CreateConVar("Beatrun_TotsugekiSpam", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "OH NO...", 0, 1)
-local totsugekiheading = CreateConVar("Beatrun_TotsugekiHeading", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Can we dive on the x axis?", 0, 1)
-local totsugekidir = CreateConVar("Beatrun_TotsugekiDir", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Can we dive into another dir?", 0, 1)
+local totsugeki = CreateConVar("Beatrun_Totsugeki", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
+local totsugekispam = CreateConVar("Beatrun_TotsugekiSpam", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
+local totsugekiheading = CreateConVar("Beatrun_TotsugekiHeading", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
+local totsugekidir = CreateConVar("Beatrun_TotsugekiDir", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 
 local function Dive(ply, mv, cmd)
 	if (not ply:GetDive() or ply:GetDive() and ply.QuakeJumping and totsugeki:GetBool() and totsugekispam:GetBool()) and ply:GetCrouchJump() and mv:KeyPressed(IN_ATTACK2) then

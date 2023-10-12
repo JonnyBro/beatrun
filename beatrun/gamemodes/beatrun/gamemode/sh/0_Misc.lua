@@ -1,5 +1,5 @@
 if SERVER then
-	local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", {FCVAR_ARCHIVE}, "Allow players to spawn props and entities")
+	local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", {FCVAR_ARCHIVE})
 
 	util.AddNetworkString("SPParkourEvent")
 
@@ -21,8 +21,8 @@ if SERVER then
 end
 
 if CLIENT then
-	CreateClientConVar("Beatrun_FOV", 100, true, true, "'Woah how are you moving this fast' and other hilarious jokes", 70, 120)
-	CreateClientConVar("Beatrun_CPSave", 1, true, true, "Respawning during a course will go back to the last hit checkpoint", 0, 1)
+	CreateClientConVar("Beatrun_FOV", 100, true, true, language.GetPhrase("beatrun.convars.fov"), 70, 120)
+	CreateClientConVar("Beatrun_CPSave", 1, true, true, language.GetPhrase("beatrun.convars.cpsave"), 0, 1)
 end
 
 hook.Add("PlayerNoClip", "BlockNoClip", function(ply, enabled)
@@ -30,9 +30,9 @@ hook.Add("PlayerNoClip", "BlockNoClip", function(ply, enabled)
 		ply:SetNW2Int("CPNum", -1)
 
 		if CLIENT and IsFirstTimePredicted() then
-			notification.AddLegacy("Noclip Detected! Respawn to restart the course", NOTIFY_ERROR, 4)
+			notification.AddLegacy(language.GetPhrase("beatrun.misc.noclipdetected"), NOTIFY_ERROR, 4)
 		elseif SERVER and game.SinglePlayer() then
-			ply:SendLua("notification.AddLegacy(\"Noclip Detected! Respawn to restart the course\", NOTIFY_ERROR, 4)")
+			ply:SendLua("notification.AddLegacy(\"#beatrun.misc.noclipdetected\", NOTIFY_ERROR, 4)")
 		end
 	end
 
@@ -109,12 +109,6 @@ end)
 
 hook.Add("CanDrive", "BlockDrive", function(ply)
 	if not ply:IsAdmin() then return false end
-end)
-
-hook.Add("SetupMove", "idkhowitworksbutitworks_DiveAnimsFix", function(ply, mv)
-	local weapon = ply:GetActiveWeapon()
-
-	if not IsValid(weapon) then return end
 end)
 
 if CLIENT and game.SinglePlayer() then

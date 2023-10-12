@@ -17,7 +17,7 @@ end
 local function HumanCount()
 	local count = 0
 
-	for k, v in ipairs(player.GetAll()) do
+	for _, v in ipairs(player.GetAll()) do
 		if IsValid(v) and not v:GetNW2Bool("Infected") then
 			count = count + 1
 		end
@@ -376,7 +376,7 @@ if CLIENT then
 		hook.Add("BeatrunHUDCourse", "InfectionHUDName", InfectionHUDName)
 		hook.Add("CalcView", "InfectionCalcView", InfectionCalcView)
 
-		chat.AddText(chatcolor, "Infection! Touch other players to infect them\n", math.max(math.floor(player.GetCount() / 4), 1) .. " player(s) will become infected in 10s")
+		chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.start"):format(math.max(math.floor(player.GetCount() / 4), 1), _time))
 	end)
 
 	local music = nil
@@ -399,12 +399,12 @@ if CLIENT then
 			survivors = survivors:sub(1, -3)
 
 			if survivors == "" then
-				survivors = "None..."
+				survivors = "#beatrun.infection.nosurvivors"
 
 				LocalPlayer():EmitSound("death.wav")
 			end
 
-			chat.AddText(chatcolor, "The game has ended!\nSurvivors: " .. survivors .. "\nRestarting in 15s")
+			chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.end"):format(survivors, _time))
 		end)
 
 		if music and music.Stop then
@@ -432,9 +432,9 @@ if CLIENT then
 
 		if IsValid(attacker) and IsValid(victim) then
 			if attacker == victim then
-				chat.AddText(attacker, red, " died!")
+				chat.AddText(attacker, red, " #beatrun.infection.infected")
 			else
-				chat.AddText(attacker, red, " has infected ", yellow, victim, "!")
+				chat.AddText(attacker, red, " #beatrun.infection.infectedby ", yellow, victim, "!")
 			end
 
 			attacker.InfectionTouchDelay = CurTime() + 3
@@ -497,10 +497,10 @@ if CLIENT then
 
 		if humanwin then
 			LocalPlayer():AddXP(200)
-			chat.AddText(chatcolor, "You were awarded 200 XP for surviving")
+			chat.AddText(chatcolor, "#beatrun.infection.award")
 		else
 			LocalPlayer():AddXP(100)
-			chat.AddText(chatcolor, "You were awarded 100 XP for spawning as an infected")
+			chat.AddText(chatcolor, "#beatrun.infection.awardinfected")
 		end
 	end)
 

@@ -86,7 +86,7 @@ if CLIENT then
 		if GetGlobalBool("GM_DATATHEFT") then
 			local datacubes = LocalPlayer():GetNW2Int("DataCubes", 0)
 
-			return "Data Theft (" .. datacubes .. ")"
+			return language.GetPhrase("beatrun.datatheft.name"):format(datacubes)
 		else
 			hook.Remove("BeatrunHUDCourse", "DataTheftHUDName")
 		end
@@ -98,6 +98,6 @@ if CLIENT then
 
 	net.Receive("DataTheft_Start", function()
 		hook.Add("BeatrunHUDCourse", "DataTheftHUDName", DataTheftHUDName)
-		chat.AddText(Color(200, 200, 200), "Data Theft! Kill players to collect data, deposit data in banks")
+		chat.AddText(Color(200, 200, 200), "#beatrun.datatheft.start")
 	end)
 end

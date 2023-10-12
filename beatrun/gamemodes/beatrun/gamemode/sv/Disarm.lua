@@ -1,5 +1,5 @@
 util.AddNetworkString("DisarmStart")
-local cvardisarm = CreateConVar("Beatrun_Disarm", 1, FCVAR_ARCHIVE, "Whether 'using' NPCs triggers a disarm", 0, 1)
+local cvardisarm = CreateConVar("Beatrun_Disarm", 1, FCVAR_ARCHIVE, "", 0, 1)
 
 local function Disarm_Init(ply, victim)
 	victim:NextThink(CurTime() + 100)
