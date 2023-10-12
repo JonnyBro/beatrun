@@ -232,90 +232,92 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.toolsmenu.gameplay.quickturnground", "Beatrun_QuickturnGround")
 		panel:ControlHelp("#beatrun.toolsmenu.gameplay.quickturngrounddesc")
 
-		panel:CheckBox("Quickturn Hands Only", "Beatrun_QuickturnHandsOnly")
-		panel:ControlHelp("Enables quickturning with \"Runner Hands\" only")
+		panel:CheckBox("#beatrun.toolsmenu.gameplay.quickturnhandsonly", "Beatrun_QuickturnHandsOnly")
+		panel:ControlHelp("#beatrun.toolsmenu.gameplay.quickturnhandsonlydesc")
 
-		panel:CheckBox("Purist Mode", "Beatrun_PuristMode")
-		panel:ControlHelp("Purist mode is a clientside preference that severely weakens the ability to strafe while in the air, which is how Mirror's Edge games handle this.\nDisabled = No restrictions\nEnabled = Reduced move speed in the air")
+		panel:CheckBox("#beatrun.toolsmenu.gameplay.puristmode", "Beatrun_PuristMode")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.gameplay.puristmodedesc"))
 
-		panel:CheckBox("Disable Grapple Ability", "Beatrun_DisableGrapple")
-		panel:ControlHelp("Disables grapple ability")
+		panel:CheckBox("#beatrun.toolsmenu.gameplay.disablegrapple", "Beatrun_DisableGrapple")
+		panel:ControlHelp("#beatrun.toolsmenu.gameplay.disablegrappledesc")
 	end)
 
-	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_main", "Main", "", "", function(panel)
+	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_misc", "#beatrun.toolsmenu.misc.name", "", "", function(panel)
 		panel:ClearControls()
-		panel:SetName("Misc Settings")
+		panel:SetName("#beatrun.toolsmenu.misc.desc")
 
-		panel:CheckBox("Prop Spawning", "Beatrun_AllowPropSpawn")
-		panel:ControlHelp("Allows players without admin rights to spawn props, entities and weapons")
+		panel:CheckBox("#beatrun.toolsmenu.misc.propspawn", "Beatrun_AllowPropSpawn")
+		panel:ControlHelp("#beatrun.toolsmenu.misc.propspawndesc")
 
-		panel:CheckBox("Overdrive in Multiplayer", "Beatrun_AllowOverdriveInMultiplayer")
-		panel:ControlHelp("Allows Overdrive usage on the server\nDoesn't affect singleplayer")
+		panel:CheckBox("#beatrun.toolsmenu.misc.overdrivemp", "Beatrun_AllowOverdriveInMultiplayer")
+		panel:ControlHelp("#beatrun.toolsmenu.misc.overdrivempdesc")
 	end)
 
-	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_moves", "Moves", "", "", function(panel)
+	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_moves", "#beatrun.toolsmenu.moves.name", "", "", function(panel)
 		panel:ClearControls()
-		panel:SetName("Moves Settings")
-		panel:Help("You Can Dive with Ctrl + RMB While Midair!\nOverdrive Toggles with E + LMB.")
+		panel:SetName("#beatrun.toolsmenu.moves.desc")
+		panel:Help(language.GetPhrase("beatrun.toolsmenu.moves.help"))
 
-		panel:NumSlider("Speed Limit", "Beatrun_SpeedLimit", 325, 1000, 0)
-		panel:ControlHelp("Changes player's speed limit (325 is default)")
+		panel:NumSlider("#beatrun.toolsmenu.moves.speedlimit", "Beatrun_SpeedLimit", 325, 1000, 0)
+		panel:ControlHelp("#beatrun.toolsmenu.moves.speedlimitdesc")
 
-		panel:CheckBox("Force Purist Mode", "Beatrun_PuristModeForce")
-		panel:ControlHelp("Forces Purist Mode for all players")
+		panel:CheckBox("#beatrun.toolsmenu.moves.forcepuristmode", "Beatrun_PuristModeForce")
+		panel:ControlHelp("#beatrun.toolsmenu.moves.forcepuristmodedesc")
 
-		panel:CheckBox("\"Realistic\" wallrunning", "Beatrun_PuristWallrun")
-		panel:ControlHelp("You don't lose speed when starting wallrunning when disabled")
+		panel:CheckBox("#beatrun.toolsmenu.moves.realisticwallrunning", "Beatrun_PuristWallrun")
+		panel:ControlHelp("#beatrun.toolsmenu.moves.realisticwallrunningdesc")
 
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
 
-		panel:CheckBox("Kick-Glitch", "Beatrun_KickGlitch")
-		panel:ControlHelp("Toggles Kick-Glitch Move\nLMB when Wallrunning and Then Jumping Right After")
+		panel:CheckBox("#beatrun.toolsmenu.moves.kickglitch", "Beatrun_KickGlitch")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.kickglitchdesc"))
 
-		panel:CheckBox("Kick-Glitch Version", "Beatrun_OldKickGlitch")
-		panel:ControlHelp("Enabled - Old Kick-Glitch\nDisabled - New Kick-Glitch\nNew version uses mechanic from Mirror's Edge that spawns a small platform under a player")
+		panel:CheckBox("#beatrun.toolsmenu.moves.kickglitchversion", "Beatrun_OldKickGlitch")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.kickglitchversiondesc"))
 
-		panel:CheckBox("Quake Jump", "Beatrun_QuakeJump")
-		panel:ControlHelp("Toggles Quake Jump Move\nPress RMB Right After Side Step")
+		panel:CheckBox("#beatrun.toolsmenu.moves.quakejump", "Beatrun_QuakeJump")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.quakejumpdesc"))
 
-		panel:CheckBox("Side Step", "Beatrun_SideStep")
-		panel:ControlHelp("Toggles Side Step Move\nA/D + RMB")
+		panel:CheckBox("#beatrun.toolsmenu.moves.sidestep", "Beatrun_SideStep")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.sidestepdesc"))
 
-		panel:CheckBox("Disarm", "Beatrun_Disarm")
-		panel:ControlHelp("Toggles Ability to Disarm NPC\nInteract with NPC")
+		panel:CheckBox("#beatrun.toolsmenu.moves.disarm", "Beatrun_Disarm")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.disarmdesc"):format(IN_USE))
 
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
 
-		panel:Help("Dive Settings")
+		panel:Help("#beatrun.toolsmenu.moves.divesettings")
 
-		panel:CheckBox("Totsugeki", "Beatrun_Totsugeki")
-		panel:ControlHelp("Toggles Totsugeki Move\nDive After Quake Jump")
+		panel:CheckBox("#beatrun.toolsmenu.moves.totsugeki", "Beatrun_Totsugeki")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.totsugekidesc"))
 
-		panel:CheckBox("Totsugeki Spam", "Beatrun_TotsugekiSpam")
-		panel:ControlHelp("Toggles Ability to Spam Totsugeki")
+		panel:CheckBox("#beatrun.toolsmenu.moves.totsugekispam", "Beatrun_TotsugekiSpam")
+		panel:ControlHelp("#beatrun.toolsmenu.moves.totsugekispamdesc")
 
-		panel:CheckBox("Totsugeki Heading", "Beatrun_TotsugekiHeading")
-		panel:ControlHelp("Allows to Totsugeki on X axis (up/down)")
+		panel:CheckBox("#beatrun.toolsmenu.moves.totsugekiheading", "Beatrun_TotsugekiHeading")
+		panel:ControlHelp("#beatrun.toolsmenu.moves.totsugekiheadingdesc")
 
-		panel:CheckBox("Totsugeki Direction", "Beatrun_TotsugekiDir")
-		panel:ControlHelp("Allows to Totsugeki into Another Direction\nCombined with Spam and Heading Allows You to Fly =)")
+		panel:CheckBox("#beatrun.toolsmenu.moves.totsugekidirection", "Beatrun_TotsugekiDir")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.totsugekidirectiondesc"))
 	end)
 
-	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_gamemodes", "Gamemodes", "", "", function(panel)
+	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_gamemodes", "#beatrun.toolsmenu.gamemodes.name", "", "", function(panel)
 		panel:ClearControls()
-		panel:SetName("Gamemodes Settings")
+		panel:SetName("#beatrun.toolsmenu.gamemodes.desc")
 
 		local InfectionButton = vgui.Create("DButton", panel)
-		InfectionButton:SetText("Toggle Infection Gamemode")
+		InfectionButton:SetText("#beatrun.toolsmenu.gamemodesc.infection")
 		InfectionButton:SetSize(0, 20)
 		InfectionButton.DoClick = function()
 			if GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_DATATHEFT") then
-				InfectionButton:SetText("Another gamemode is running!")
+				InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.error")
+
 				timer.Simple(2, function()
-					InfectionButton:SetText("Toggle Infection Gamemode")
+					InfectionButton:SetText("#beatrun.toolsmenu.gamemodesc.infection")
 				end)
+
 				return
 			end
 
@@ -324,14 +326,16 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(InfectionButton)
 
 		local DatatheftButton = vgui.Create("DButton", panel)
-		DatatheftButton:SetText("Toggle Data Theft Gamemode")
+		DatatheftButton:SetText("#beatrun.toolsmenu.gamemodesc.datatheft")
 		DatatheftButton:SetSize(0, 20)
 		DatatheftButton.DoClick = function()
 			if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DEATHMATCH") then
-				DatatheftButton:SetText("Another gamemode is running!")
+				DatatheftButton:SetText("#beatrun.toolsmenu.gamemodes.error")
+
 				timer.Simple(2, function()
-					DatatheftButton:SetText("Toggle Data Theft Gamemode")
+					DatatheftButton:SetText("#beatrun.toolsmenu.gamemodesc.datatheft")
 				end)
+
 				return
 			end
 
@@ -340,14 +344,16 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(DatatheftButton)
 
 		local DeathmatchButton = vgui.Create("DButton", panel)
-		DeathmatchButton:SetText("Toggle Deathmatch Gamemode")
+		DeathmatchButton:SetText("#beatrun.toolsmenu.gamemodesc.deathmatch")
 		DeathmatchButton:SetSize(0, 20)
 		DeathmatchButton.DoClick = function()
 			if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") then
-				DeathmatchButton:SetText("Another gamemode is running!")
+				DeathmatchButton:SetText("#beatrun.toolsmenu.gamemodes.error")
+
 				timer.Simple(2, function()
-					DeathmatchButton:SetText("Toggle Deathmatch Gamemode")
+					DeathmatchButton:SetText("#beatrun.toolsmenu.gamemodesc.deathmatch")
 				end)
+
 				return
 			end
 

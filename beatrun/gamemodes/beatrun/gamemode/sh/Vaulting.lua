@@ -389,6 +389,7 @@ function Vault4(ply, mv, ang, t, h)
 	local tsafetyout = util.TraceLine(tsafety)
 
 	if tsafetyout.Hit then return false end
+
 	tsafety.start = mv:GetOrigin() + chestvec
 	tsafety.endpos = tsafety.start + ang:Forward() * 150
 
@@ -471,6 +472,7 @@ function Vault5(ply, mv, ang, t, h)
 	t = util.TraceLine(t)
 
 	if not t.Hit then return false end
+
 	if t.Entity and t.Entity.NoPlayerCollisions then return false end
 
 	local vaultend = t.HitPos + mantlevec

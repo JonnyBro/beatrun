@@ -1,36 +1,44 @@
 # Beatrun | Community edition
+
 Infamous parkour addon for Garry's Mod, fully open sourced and maintained by the community.
 
-This version does not include malicious modules, code or networking. What it does contain is:
-* Lua modules for Discord Rich Presence.
-* Lua modules for Steam Presence.
-* Network connectivity for courses (activates only when you load or upload courses, and by default `courses.beatrun.ru` is used).
+> [!IMPORTANT]
+> This version does not include malicious modules, code or networking. What it does contain is:
+>
+> * Lua modules for Discord Rich Presence.
+> * Lua modules for Steam Presence.
+> * Network connectivity for courses (activates only when you load or upload courses, and by default `courses.beatrun.ru` is used).
 
 **All of this is optional and you may remove all of it.**\
 Modules are located [here](/lua/bin/) and courses database functionality is [here](/beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).<br><br>
 **PLEASE READ ALL BEFORE ASKING QUESTIONS ON OUR SERVER!**
 
-# (Prefered) Installation (Automatic | Windows only)
+## (Prefered) Installation (Automatic | Windows only)
+
 Run the command below in Powershell.
 > [!NOTE]
 > Win + R > `powershell` > command in question
+
 ```powershell
 iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 ```
 
 ## Installation (Manual)
+
 1. Download this repository [here](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).
 2. **Delete the `beatrun` folder in *your_game_folder/garrysmod/addons* if you have one.**
 3. Extract the `beatrun` folder to *your_game_folder/garrysmod/addons*.
 4. Extract the `lua` folder to *your_game_folder/garrysmod*.
-	* `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](#credits) section.<br><br>
+   * `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](#credits) section.<br><br>
 
 ## Animations
+
 Please refer to this [README](/beatrun/README.md).
 
 ## Changes and fixes done by the community
+
 > [!IMPORTANT]
-> There are many undocumented changes and fixes in this version, you better look at the commits if you want to see something specific
+> There are many undocumented changes and fixes in this version, you better look at the commits if you want to see something specific.
 
 * Jonny_Bro is hosting [custom online courses database](https://courses.beatrun.ru), which is also free and [open source](https://github.com/relaxtakenotes/beatrun-courses-server/) 🤯!
 * Implemented a new gamemode - **Deathmatch** (it's way more fun than Data Theft I promise).
@@ -56,6 +64,7 @@ For now Russian and English are supported.
 * SteamID in the right corner is no longer present.
 
 ## Notable changes and fixes done by the community
+
 * Added Proper Kick Glitch just like in [original ME](https://www.youtube.com/watch?v=zK5y3NBUStc). (cry about prediction errors l0l)
 * Fixed leaderboard sorting in gamemodes.
 * Fixed grapple usage in courses and gamemodes.
@@ -67,12 +76,15 @@ For now Russian and English are supported.
 * Made it possible to dive to your death =).
 
 ## TODO
-- [ ] Gamemodes menu. (idk how to properly implement this for know).
 
-# Related
+* [ ] Gamemodes menu. (idk how to properly implement this for know).
+
+## Related
+
 * [Beatrun Reanimated Project](https://github.com/JonnyBro/beatrun-anims).
 
-# Credits
+## Credits
+
 * [All contributors](https://github.com/JonnyBro/beatrun/graphs/contributors) - <3.
 * [EarthyKiller127](https://www.youtube.com/channel/UCiFqPwGo4x0J65xafIaECDQ) - He made that piece of shit.
 * [relaxtakenotes](https://github.com/relaxtakenotes) - Made all of this possible.
