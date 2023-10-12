@@ -38,7 +38,7 @@ iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 
 Please refer to this [README](/beatrun/README.md).
 
-## Changes and fixes done by the community
+## Changes
 
 > [!IMPORTANT]
 > There are many undocumented changes and fixes in this version, you better look at the commits for more specific changes.
@@ -63,7 +63,7 @@ For now Russian and English are supported.
 * Added the ability to remove ziplines that created with *Zipline Gun* - `RMB`.
 * Implemented Discord Rich Presence using [open source](#credits) module.
 
-## Notable changes and fixes done by the community
+## Fixes
 
 * Your SteamID in the right corner is no longer present.
 * Fixed some playermodels show up as ERROR.
