@@ -13,7 +13,7 @@ Modules are located [here](/lua/bin/) and courses database functionality is [her
 # (Prefered) Installation (Automatic | Windows only)
 Run the command below in Powershell.
 > [!NOTE]
-> (Win + R > `powershell` > command in question)
+> Win + R > `powershell` > command in question
 ```powershell
 iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 ```
@@ -23,12 +23,15 @@ iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 2. **Delete the `beatrun` folder in *your_game_folder/garrysmod/addons* if you have one.**
 3. Extract the `beatrun` folder to *your_game_folder/garrysmod/addons*.
 4. Extract the `lua` folder to *your_game_folder/garrysmod*.
-	* `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](#credits) section<br><br>
+	* `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](#credits) section.<br><br>
 
 ## Animations
 Please refer to this [README](/beatrun/README.md).
 
 ## Changes and fixes done by the community
+> [!IMPORTANT]
+> There are many undocumented changes and fixes in this version, you better look at the commits if you want to see something specific
+
 * Jonny_Bro is hosting [custom online courses database](https://courses.beatrun.ru), which is also free and [open source](https://github.com/relaxtakenotes/beatrun-courses-server/) 🤯!
 * Implemented a new gamemode - **Deathmatch** (it's way more fun than Data Theft I promise).
 * Added an in-game config menu - You can find it in the tool menu, in the *Beatrun* Category.\
@@ -41,7 +44,7 @@ For now Russian and English are supported.
 * Done various tweaks to the Time Trials Menu (F4).
 * Added an arrow that shows the next checkpoint.
 * Added a ConVar to allow Overdrive usage on the server - `Beatrun_AllowOverdriveInMultiplayer`.
-* Added a ConVar to toggle between old and new (like in ME) Kick-Glitch - `Beatrun_OldKickGlitch`.
+* Added a ConVar to toggle between old and new Kick-Glitch - `Beatrun_OldKickGlitch`.
 * Added some ConVars to change HUD colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
 * Added a ConVar to allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
 * Added a ConVar to disable grapple ability - `Beatrun_DisableGrapple`.
@@ -67,7 +70,7 @@ For now Russian and English are supported.
 - [ ] Gamemodes menu. (idk how to properly implement this for know).
 
 # Related
-* [beatrun-anims](https://github.com/JonnyBro/beatrun-anims) - Decompiled and reworked Beatrun animations.
+* [Beatrun Reanimated Project](https://github.com/JonnyBro/beatrun-anims).
 
 # Credits
 * [All contributors](https://github.com/JonnyBro/beatrun/graphs/contributors) - <3.

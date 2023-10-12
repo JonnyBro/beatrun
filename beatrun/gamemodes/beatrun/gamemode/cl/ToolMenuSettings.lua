@@ -215,21 +215,22 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(HudFXPColor)
 	end)
 
-	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_viewbob", "Viewbob", "", "", function(panel)
+	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_viewbob", "#beatrun.toolsmenu.viewbob.name", "", "", function(panel)
 		panel:ClearControls()
-		panel:SetName("Viewbob Settings")
+		panel:SetName("#beatrun.toolsmenu.viewbob.desc")
 
-		panel:CheckBox("Viewbob Stabilization", "Beatrun_ViewbobStabilized")
-		panel:ControlHelp("Turn on to reduce motion sickness by making viewbobbing keep the player's look position centered")
-		panel:NumSlider("Viewbob Intensity", "Beatrun_ViewbobIntensity", -100, 100, 0)
+		panel:CheckBox("#beatrun.toolsmenu.viewbob.stabilization", "Beatrun_ViewbobStabilized")
+		panel:ControlHelp("#beatrun.toolsmenu.viewbob.stabilizationdesc")
+
+		panel:NumSlider("#beatrun.toolsmenu.viewbob.intensity", "Beatrun_ViewbobIntensity", -100, 100, 0)
 	end)
 
-	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_gameplay", "Gameplay", "", "", function(panel)
+	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_gameplay", "#beatrun.toolsmenu.gameplay.name", "", "", function(panel)
 		panel:ClearControls()
-		panel:SetName("Gameplay Settings")
+		panel:SetName("#beatrun.toolsmenu.gameplay.desc")
 
-		panel:CheckBox("Quickturn", "Beatrun_QuickturnGround")
-		panel:ControlHelp("Enables quickturning with secondary attack while on the ground")
+		panel:CheckBox("#beatrun.toolsmenu.gameplay.quickturnground", "Beatrun_QuickturnGround")
+		panel:ControlHelp("#beatrun.toolsmenu.gameplay.quickturngrounddesc")
 
 		panel:CheckBox("Quickturn Hands Only", "Beatrun_QuickturnHandsOnly")
 		panel:ControlHelp("Enables quickturning with \"Runner Hands\" only")
