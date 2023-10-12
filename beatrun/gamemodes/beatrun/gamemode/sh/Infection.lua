@@ -376,7 +376,7 @@ if CLIENT then
 		hook.Add("BeatrunHUDCourse", "InfectionHUDName", InfectionHUDName)
 		hook.Add("CalcView", "InfectionCalcView", InfectionCalcView)
 
-		chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.start"):format(math.max(math.floor(player.GetCount() / 4), 1), time))
+		chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.start"):format(math.max(math.floor(player.GetCount() / 4), 1), _time))
 	end)
 
 	local music = nil
@@ -404,7 +404,7 @@ if CLIENT then
 				LocalPlayer():EmitSound("death.wav")
 			end
 
-			chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.end"):format(survivors))
+			chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.end"):format(survivors, _time))
 		end)
 
 		if music and music.Stop then

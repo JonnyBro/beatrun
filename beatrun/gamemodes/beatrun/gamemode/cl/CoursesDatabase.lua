@@ -136,6 +136,6 @@ concommand.Add("Beatrun_UpdateCode", function(ply, cmd, args, argstr)
 	QueuedFunction = UpdateCourse
 	QueuedArgs = args[1]
 
-	print(language.GetPhrase("beatrun.coursesdatabase.update1"):format(QueuedArgs, currentMap, Course_Name))
+	print(language.GetPhrase("beatrun.coursesdatabase.update1"):format(QueuedArgs, Course_Name, currentMap))
 	print(language.GetPhrase("beatrun.coursesdatabase.upload2"))
 end)

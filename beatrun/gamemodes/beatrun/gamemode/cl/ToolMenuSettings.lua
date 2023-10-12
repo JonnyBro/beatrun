@@ -115,7 +115,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		uploadCourseButton:SetSize(0, 20)
 		uploadCourseButton.DoClick = function()
 			RunConsoleCommand("Beatrun_UploadCourse")
-			notification.AddLegacy("#beatrun.toolsmenu.courses.uploadcoursehelp", NOTIFY_HINT, 5)
+			notification.AddLegacy("#beatrun.misc.checkconsole", NOTIFY_HINT, 5)
 		end
 		panel:AddItem(uploadCourseButton)
 
@@ -139,7 +139,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			okButton:SetSize(250, 30)
 			okButton.DoClick = function()
 				RunConsoleCommand("Beatrun_UpdateCode", TextEntry:GetValue())
-				notification.AddLegacy("#beatrun.toolsmenu.courses.updatecourseconsole", NOTIFY_HINT, 5)
+				notification.AddLegacy("#beatrun.misc.checkconsole", NOTIFY_HINT, 5)
 				frame:Close()
 			end
 		end
@@ -259,7 +259,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:Help(language.GetPhrase("beatrun.toolsmenu.moves.help"))
 
 		panel:NumSlider("#beatrun.toolsmenu.moves.speedlimit", "Beatrun_SpeedLimit", 325, 1000, 0)
-		panel:ControlHelp("#beatrun.toolsmenu.moves.speedlimitdesc")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.speedlimitdesc"))
 
 		panel:CheckBox("#beatrun.toolsmenu.moves.forcepuristmode", "Beatrun_PuristModeForce")
 		panel:ControlHelp("#beatrun.toolsmenu.moves.forcepuristmodedesc")
