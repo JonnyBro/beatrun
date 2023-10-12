@@ -10,14 +10,15 @@ Infamous parkour addon for Garry's Mod, fully open sourced and maintained by the
 > * Network connectivity for courses (activates only when you load or upload courses, and by default `courses.beatrun.ru` is used).
 
 **All of this is optional and you may remove all of it.**\
-Modules are located [here](/lua/bin/) and courses database functionality is [here](/beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).<br><br>
+Modules are located [here](/lua/bin/) and courses database functionality is [here](/beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).\
+\
 **PLEASE READ ALL BEFORE ASKING QUESTIONS ON OUR SERVER!**
 
 ## (Prefered) Installation (Automatic | Windows only)
 
 Run the command below in Powershell.
 > [!NOTE]
-> Win + R > `powershell` > command in question
+> Win + R > `powershell`
 
 ```powershell
 iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
@@ -29,7 +30,7 @@ iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 2. **Delete the `beatrun` folder in *your_game_folder/garrysmod/addons* if you have one.**
 3. Extract the `beatrun` folder to *your_game_folder/garrysmod/addons*.
 4. Extract the `lua` folder to *your_game_folder/garrysmod*.
-   * `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](#credits) section.<br><br>
+   * `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](#credits) section.
 
 ## Animations
 

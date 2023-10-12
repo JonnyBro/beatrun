@@ -45,7 +45,7 @@ function meta:SetMantleEndPos(value)
 	return self:SetDTVector(14, value)
 end
 
-local function PlayVaultAnim(ply, legs, ang)
+local function PlayVaultAnim(ply, ang)
 	local activewep = ply:GetActiveWeapon()
 
 	if ply:UsingRH() and activewep:GetSequence() == 17 then
@@ -140,7 +140,7 @@ local function Vault1(ply, mv, ang, t, h)
 			ply:SetMantle(1)
 			ply:SetWallrunTime(0)
 
-			PlayVaultAnim(ply)
+			PlayVaultAnim(ply, ang)
 
 			ply:ViewPunch(vpunch1)
 			ply.MantleInitVel = mv:GetVelocity()
@@ -238,7 +238,7 @@ local function Vault2(ply, mv, ang, t, h)
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 2)
 			ply:SetWallrunTime(0)
 
-			PlayVaultAnim(ply, 1)
+			PlayVaultAnim(ply, ang)
 
 			ply:ViewPunch(vpunch2)
 			ply.MantleInitVel = mv:GetVelocity()
@@ -338,7 +338,7 @@ local function Vault3(ply, mv, ang, t, h)
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 3)
 			ply:SetWallrunTime(0)
 
-			PlayVaultAnim(ply, 2)
+			PlayVaultAnim(ply, ang)
 
 			ply:ViewPunch(vpunch3)
 			ply.MantleInitVel = mv:GetVelocity()
@@ -415,7 +415,7 @@ function Vault4(ply, mv, ang, t, h)
 	ply:SetMantleData(startpos, vaultpos, 0, 4)
 	ply:SetWallrunTime(0)
 
-	PlayVaultAnim(ply, 1)
+	PlayVaultAnim(ply, ang)
 
 	ply:ViewPunch(Angle(2.5, 0, 0))
 	ply.MantleInitVel = mv:GetVelocity()
@@ -516,7 +516,7 @@ function Vault5(ply, mv, ang, t, h)
 		ply:SetMantle(5)
 		ply:SetWallrunTime(0)
 
-		PlayVaultAnim(ply, false, ang)
+		PlayVaultAnim(ply, ang)
 
 		ply:ViewPunch(vpunch1)
 		ply.MantleInitVel = mv:GetVelocity()

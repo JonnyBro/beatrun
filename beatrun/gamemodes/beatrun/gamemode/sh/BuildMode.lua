@@ -328,9 +328,6 @@ if SERVER then
 	util.AddNetworkString("BuildMode_Sync")
 	util.AddNetworkString("Course_Stop")
 
-	buildmodelogs = {}
-	local buildmodelogs = buildmodelogs
-
 	function Course_Sync()
 		net.Start("BuildMode_Sync")
 			net.WriteFloat(Course_StartPos.x)
@@ -428,10 +425,6 @@ if SERVER then
 		end
 
 		table.insert(buildmode_placed, a)
-
-		local bmlog = tostring(ply) .. " placed " .. tostring(a)
-
-		table.insert(buildmodelogs, bmlog)
 	end)
 
 	net.Receive("BuildMode_Duplicate", function(len, ply)
@@ -440,7 +433,7 @@ if SERVER then
 		local selected = net.ReadTable()
 		local selectedents = net.ReadTable()
 
-		for k, v in pairs(selected) do
+		for _, v in pairs(selected) do
 			local a = ents.Create("prop_physics")
 			a:SetModel(v:GetModel())
 
@@ -461,17 +454,13 @@ if SERVER then
 			a:SetHealth(inf)
 		end
 
-		for k, v in pairs(selectedents) do
+		for _, v in pairs(selectedents) do
 			local a = ents.Create(v:GetClass())
 
 			a:SetPos(v:GetPos())
 			a:SetAngles(v:GetAngles())
 			a:Spawn()
 		end
-
-		local bmlog = tostring(ply) .. " duped " .. tostring(table.Count(selected)) .. " props"
-
-		table.insert(buildmodelogs, bmlog)
 	end)
 
 	net.Receive("BuildMode_Delete", function(len, ply)
@@ -479,15 +468,11 @@ if SERVER then
 
 		local selected = net.ReadTable()
 
-		for k, v in pairs(selected) do
+		for _, v in pairs(selected) do
 			if IsValid(v) then
 				v:Remove()
 			end
 		end
-
-		local bmlog = tostring(ply) .. " deleted " .. tostring(table.Count(selected)) .. " entities"
-
-		table.insert(buildmodelogs, bmlog)
 	end)
 
 	net.Receive("BuildMode_Highlight", function(len, ply)
@@ -495,7 +480,7 @@ if SERVER then
 
 		local selected = net.ReadTable()
 
-		for k, v in pairs(selected) do
+		for _, v in pairs(selected) do
 			v.hr = not v.hr
 
 			CustomPropMat(v)
@@ -516,7 +501,7 @@ if SERVER then
 		local a = util.Decompress(net.ReadData(len))
 		local props = util.JSONToTable(a)
 
-		for k, v in pairs(props) do
+		for _, v in pairs(props) do
 			local a = ents.Create("prop_physics")
 
 			a:SetModel(buildmode_props[v.model])
@@ -616,7 +601,7 @@ if SERVER then
 		local name = data[5]
 		local entities = data[6]
 
-		for k, v in pairs(props) do
+		for _, v in pairs(props) do
 			local a = ents.Create("prop_physics")
 			a.hr = v.hr
 			a:SetModel(buildmode_props[v.model])
@@ -634,7 +619,7 @@ if SERVER then
 			a:SetHealth(inf)
 		end
 
-		for k, v in ipairs(cp) do
+		for _, v in ipairs(cp) do
 			LoadCheckpoints()
 
 			local a = ents.Create("tt_cp")
@@ -646,7 +631,7 @@ if SERVER then
 		end
 
 		if entities then
-			for k, v in ipairs(entities) do
+			for _, v in ipairs(entities) do
 				local a = ents.Create(v.ent)
 				local dontsetpos = nil
 
@@ -671,7 +656,7 @@ if SERVER then
 
 		Course_Sync()
 
-		for k, v in pairs(player.GetAll()) do
+		for _, v in pairs(player.GetAll()) do
 			v:SetNW2Float("PBTime", 0)
 			v:SetNW2Int("CPNum", 1)
 			v:SetMoveType(MOVETYPE_WALK)
@@ -903,7 +888,7 @@ if CLIENT then
 	function CourseData(name)
 		local save = {{}, {}, Course_StartPos, Course_StartAng, name or "Unnamed", {}}
 
-		for k, v in pairs(buildmode_placed) do
+		for _, v in pairs(buildmode_placed) do
 			if not IsValid(v) then -- Nothing
 			elseif v:GetNW2Bool("BRProtected") then
 				print("ignoring protected ent")
@@ -935,7 +920,7 @@ if CLIENT then
 			end
 		end
 
-		for k, v in ipairs(Checkpoints) do
+		for _, v in ipairs(Checkpoints) do
 			table.insert(save[2], v:GetPos())
 		end
 
@@ -963,7 +948,6 @@ if CLIENT then
 
 	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)
 		local name = args[1] or "Unnamed"
-		-- local compress = not args[2]
 
 		SaveCourse(name, args[2])
 	end)
@@ -1458,7 +1442,7 @@ if CLIENT then
 
 			cam.Start3D()
 
-				for k, v in ipairs(buildmode_placed) do
+				for _, v in ipairs(buildmode_placed) do
 					if IsValid(v) and not v:GetNW2Bool("BRProtected") then
 						local pos = v:GetRenderOrigin() or v:GetPos()
 						local w2s = pos:ToScreen()
@@ -1551,7 +1535,7 @@ if CLIENT then
 		surface.SetFont("DebugFixed")
 		surface.SetTextColor(255, 255, 255)
 
-		for k, v in pairs(Checkpoints) do
+		for _, v in pairs(Checkpoints) do
 			if not IsValid(v) then
 				LoadCheckpoints()
 

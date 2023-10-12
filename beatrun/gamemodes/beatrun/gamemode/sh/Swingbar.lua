@@ -26,6 +26,7 @@ local function SwingbarCheck(ply, mv, cmd)
 
 		if math.abs(dot) < 0.7 then return end
 
+
 		if CLIENT then
 			swingbar:SetPredictable(true)
 		end
@@ -162,7 +163,7 @@ local function SwingbarThink(ply, mv, cmd)
 			ply:EmitSound("Cloth.VaultSwish")
 		end
 
-		ply:SetMEMoveLimit(350)
+		ply:SetMEMoveLimit(GetConVar("Beatrun_SpeedLimit"):GetInt())
 		ply:SetMESprintDelay(-1)
 
 		if CLIENT then

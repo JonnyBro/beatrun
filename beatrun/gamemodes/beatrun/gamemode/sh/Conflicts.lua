@@ -4,7 +4,7 @@ local problematichooks = {
 
 local function RemoveConflicting()
 	for k, v in pairs(problematichooks) do
-		for l, b in ipairs(v) do
+		for _, b in ipairs(v) do
 			hook.Remove(k, b)
 		end
 	end

@@ -1,6 +1,6 @@
 if CLIENT then
-	QuickturnGround = CreateClientConVar("Beatrun_QuickturnGround", "0", true, true, "Enables quickturning with secondary attack while on the ground", 0, 1)
-	QuickturnHandsOnly = CreateClientConVar("Beatrun_QuickturnHandsOnly", "1", true, true, "Enables quickturning with \"Runner Hands\" only", 0, 1)
+	QuickturnGround = CreateClientConVar("Beatrun_QuickturnGround", "0", true, true, language.GetPhrase("beatrun.convars.quickturnground"), 0, 1)
+	QuickturnHandsOnly = CreateClientConVar("Beatrun_QuickturnHandsOnly", "1", true, true, language.GetPhrase("beatrun.convars.quickturnhandsonly"), 0, 1)
 end
 
 function DoJumpTurn(lookbehind)

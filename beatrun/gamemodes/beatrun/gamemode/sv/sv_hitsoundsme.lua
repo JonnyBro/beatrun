@@ -4,7 +4,7 @@ hook.Add("EntityTakeDamage", "MEHitSounds", function(ply, dmginfo)
 	if not ply:IsPlayer() then return end
 
 	if dmginfo:IsBulletDamage() then
-		--[[Block damage if they're going very fast]]
+		-- Block damage if they're going very fast
 		if ply:GetVelocity():Length() > 400 then return true end
 
 		ply:EmitSound("mirrorsedge/Flesh_0" .. tostring(math.random(1, 9)) .. ".wav")
