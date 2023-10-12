@@ -111,12 +111,6 @@ hook.Add("CanDrive", "BlockDrive", function(ply)
 	if not ply:IsAdmin() then return false end
 end)
 
-hook.Add("SetupMove", "idkhowitworksbutitworks_DiveAnimsFix", function(ply, mv)
-	local weapon = ply:GetActiveWeapon()
-
-	if not IsValid(weapon) then return end
-end)
-
 if CLIENT and game.SinglePlayer() then
 	net.Receive("SPParkourEvent", function()
 		local event = net.ReadString()

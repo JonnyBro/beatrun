@@ -25,12 +25,12 @@ local function buildmodebutton()
 	LocalPlayer():ConCommand("buildmode")
 end
 
-AEUI:AddText(coursepanel, "Time Trials - " .. game.GetMap(), "AEUIVeryLarge", 20, 30)
+AEUI:AddText(coursepanel, language.GetPhrase("beatrun.coursemenu.trials"):format(game.GetMap()), "AEUIVeryLarge", 20, 30)
 
-local buildmodebutton = AEUI:AddButton(coursepanel, "Build Mode Toggle", buildmodebutton, "AEUILarge", coursepanel.w - 400, coursepanel.h - 50)
+local buildmodebutton = AEUI:AddButton(coursepanel, "#beatrun.coursemenu.buildmode", buildmodebutton, "AEUILarge", coursepanel.w - 400, coursepanel.h - 50)
 buildmodebutton.greyed = sacheck
 
-local stopbutton = AEUI:AddButton(coursepanel, "Return to Freeplay", stopbutton, "AEUILarge", coursepanel.w - 750, coursepanel.h - 50)
+local stopbutton = AEUI:AddButton(coursepanel, "#beatrun.coursemenu.freeplay", stopbutton, "AEUILarge", coursepanel.w - 750, coursepanel.h - 50)
 stopbutton.greyed = sacheck
 
 local courselist = {
