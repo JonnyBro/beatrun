@@ -12,7 +12,7 @@ Infamous parkour addon for Garry's Mod, fully open sourced and maintained by the
 > * Custom Courses Database.
 >
 > **All of this is optional and you can remove all of it.**\
-> Modules are located [here](/lua/bin/) and courses database functionality is [here](/beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).\
+> Modules are located [here](lua/bin/) and courses database functionality is [here](beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).\
 > You can find source code for modules in [Credits](#credits) section.
 
 **PLEASE READ EVERYTHING BEFORE ASKING QUESTIONS ON OUR SERVER!**
@@ -36,7 +36,7 @@ iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 
 ## Animations
 
-Please refer to this [README](/beatrun/README.md).
+Please refer to this [README](beatrun/README.md).
 
 ## Changes
 
