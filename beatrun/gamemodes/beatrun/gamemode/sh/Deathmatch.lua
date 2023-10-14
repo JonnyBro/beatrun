@@ -77,6 +77,6 @@ if CLIENT then
 
 	net.Receive("Deathmatch_Start", function()
 		hook.Add("BeatrunHUDCourse", "DeathmatchHUDName", DeathmatchHUDName)
-		chat.AddText(Color(200, 200, 200), "#beatrun.deathmatch.start")
+		chat.AddText(Color(200, 200, 200), language.GetPhrase("beatrun.deathmatch.start"))
 	end)
 end

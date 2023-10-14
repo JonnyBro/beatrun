@@ -98,6 +98,6 @@ if CLIENT then
 
 	net.Receive("DataTheft_Start", function()
 		hook.Add("BeatrunHUDCourse", "DataTheftHUDName", DataTheftHUDName)
-		chat.AddText(Color(200, 200, 200), "#beatrun.datatheft.start")
+		chat.AddText(Color(200, 200, 200), language.GetPhrase("beatrun.datatheft.start"))
 	end)
 end
