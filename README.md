@@ -48,7 +48,6 @@ Please refer to this [README](beatrun/README.md).
 * Implemented "Proper" Kick Glitch just like in [original ME](https://www.youtube.com/watch?v=zK5y3NBUStc).
 * Added an in-game config menu - you can find it in the tool menu, in the *Beatrun* Category.\
 **All** of the Beatrun settings can be changed in the configuration menu.
-* Settings on the map selection screen.
 * Localization support.\
 For now Russian and English are supported.
 * Added the ability to get off of ladders.
