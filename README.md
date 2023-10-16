@@ -17,7 +17,7 @@ Infamous parkour addon for Garry's Mod, fully open sourced and maintained by the
 
 **PLEASE READ EVERYTHING BEFORE ASKING QUESTIONS ON OUR SERVER!**
 
-## (Recommended) Automatic Installation (Windows only)
+## Automatic Installation (Recommended | Windows only)
 
 Run the command below in Powershell.
 > [!NOTE]
