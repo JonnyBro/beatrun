@@ -24,7 +24,7 @@ Run the command below in Powershell.
 > Win + R > `powershell`
 
 ```powershell
-iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
+iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
 ```
 
 ## Manual Installation
