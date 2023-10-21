@@ -12,7 +12,7 @@
 > * Пользовательская онлайн база курсов.
 >
 > **Всё это необязательно и может быть удалено.**\
-> Модули находятся [тут](lua/bin/) и функционал онлайн базы курсов доступен [здесь](beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).\
+> Модули находятся [тут](https://github.com/JonnyBro/beatrun/tree/main/lua/bin) и функционал онлайн базы курсов доступен [здесь](https://github.com/JonnyBro/beatrun/blob/main/beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).\
 > Исходный код модулей можно найти в [благодарностях](#благодарности).
 
 **ПОЖАЛУЙСТА, ПРОЧТИТЕ ВЕСЬ ДОКУМЕНТ ПЕРЕД ТЕМ КАК ЗАДАВАТЬ ВОПРОСЫ НА НАШЕМ СЕРВЕРЕ!**
