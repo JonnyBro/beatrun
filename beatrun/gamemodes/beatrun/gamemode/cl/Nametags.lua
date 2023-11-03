@@ -1,4 +1,4 @@
-local NametagsEnable = CreateClientConVar("Beatrun_Nametags", "1", true, false, "Toggles nametags above players", 0, 1)
+local NametagsEnable = CreateClientConVar("Beatrun_Nametags", "1", true, false, language.GetPhrase("beatrun.convars.nametags"), 0, 1)
 
 local enemy = Color(255, 0, 0)
 

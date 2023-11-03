@@ -203,13 +203,13 @@ end
 local function AEUIDraw()
 	if AEUI.NoDraw then return end
 
-	for k, v in ipairs(AEUI.Panels) do
+	for _, v in ipairs(AEUI.Panels) do
 		surface.SetAlphaMultiplier(v.alpha or 1)
 		AEUI:DrawPanel(v)
 		surface.SetAlphaMultiplier(1)
 
 		if v.elements then
-			for l, b in ipairs(v.elements) do
+			for _, b in ipairs(v.elements) do
 				AEUI:DrawElement(v, b)
 			end
 		end
@@ -288,7 +288,7 @@ hook.Add("StartCommand", "AEUI_StartCommand", function(ply, cmd)
 	local click = input.WasMousePressed(MOUSE_LEFT)
 
 	if hoveredpanel then
-		for k, v in ipairs(hoveredpanel.elements) do
+		for _, v in ipairs(hoveredpanel.elements) do
 			if (v.onclick or v.hover) and (not v.greyed or not v.greyed()) and v.w and v.h then
 				local x = SScaleX(hoveredpanel.x) + SScaleX(v.x)
 				local y = SScaleY(hoveredpanel.y) + SScaleY(v.y) + (hoveredpanel.scroll or 0)
