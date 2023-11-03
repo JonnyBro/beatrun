@@ -1,6 +1,6 @@
-local disable_grapple = CreateClientConVar("Beatrun_DisableGrapple", 0, true, true, "Disables grapple ability", 0, 1)
-
 if CLIENT then
+	local disable_grapple = CreateClientConVar("Beatrun_DisableGrapple", 0, true, true, language.GetPhrase("beatrun.convars.disablegrapple"), 0, 1)
+
 	local circle = Material("circlesmooth.png", "nocull smooth")
 
 	hook.Add("HUDPaint", "grappleicon", function()

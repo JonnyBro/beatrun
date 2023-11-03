@@ -57,9 +57,10 @@ local function infostring()
 	y = math.Round(y)
 	p = math.Round(p)
 
-	local a = "Index: " .. BuildModeIndex .. "\nSelected: " .. table.Count(buildmode_selected) .. "\nAngle: " .. p .. ", " .. y .. ", " .. r
+	local angle = p .. ", " .. y .. ", " .. r
+	local str = language.GetPhrase("beatrun.buildmodehud.info"):format(BuildModeIndex, table.Count(buildmode_selected), angle)
 
-	return a
+	return str
 end
 
 AEUI:AddText(bminfo, infostring, "AEUIDefault", bminfo.w / 2, bminfo.h / 2 - 20, true)
@@ -75,25 +76,27 @@ end
 local function PanelElementsToggle(e)
 	local showingents = propspanel.elements == EntitiesElements
 	propspanel.elements = showingents and propspanel_elements or EntitiesElements
-	e.string = showingents and "Menu / Props" or "Menu / Entities"
+
+	e.string = showingents and "#beatrun.buildmodehud.props" or "#beatrun.buildmodehud.entities"
+
 	propspanel.maxscroll = nil
 	propspanel.scroll = nil
 end
 
-local b = AEUI:AddButton(bmbuttons, "Drag (G)", BuildModeHUDButton, "AEUIDefault", 2, 0, false)
+local b = AEUI:AddButton(bmbuttons, "#beatrun.buildmodehud.drag", BuildModeHUDButton, "AEUIDefault", 2, 0, false)
 b.key = KEY_G
 b.greyed = GreyButtons
-local b = AEUI:AddButton(bmbuttons, "Copy (SHIFT+D)", BuildModeHUDButton, "AEUIDefault", 2, 25, false)
+local b = AEUI:AddButton(bmbuttons, "#beatrun.buildmodehud.copy", BuildModeHUDButton, "AEUIDefault", 2, 25, false)
 b.key = KEY_D
 b.greyed = GreyButtons
-local b = AEUI:AddButton(bmbuttons, "Delete (DEL/BCKSPC)", BuildModeHUDButton, "AEUIDefault", 2, 50, false)
+local b = AEUI:AddButton(bmbuttons, "#beatrun.buildmodehud.delete", BuildModeHUDButton, "AEUIDefault", 2, 50, false)
 b.key = KEY_DELETE
 b.greyed = GreyButtons
-local b = AEUI:AddButton(bmbuttons, "Highlight (T)", BuildModeHUDButton, "AEUIDefault", 2, 75, false)
+local b = AEUI:AddButton(bmbuttons, "#beatrun.buildmodehud.highlight", BuildModeHUDButton, "AEUIDefault", 2, 75, false)
 b.key = KEY_T
 b.greyed = GreyButtons
 
-AEUI:AddButton(elementstogglepanel, "Menu / Props", PanelElementsToggle, "AEUILarge", 192, 20, true)
+AEUI:AddButton(elementstogglepanel, "#beatrun.buildmodehud.props", PanelElementsToggle, "AEUILarge", 192, 20, true)
 
 local dummy = ClientsideModel("models/hunter/blocks/cube025x025x025.mdl")
 
@@ -150,7 +153,6 @@ end
 local function BMPropClick(e)
 	BuildModeIndex = e.prop or 0
 
-	print(e.prop)
 	LocalPlayer():EmitSound("buttonclick.wav")
 
 	if BuildModeIndex == 0 then
@@ -168,7 +170,7 @@ end
 
 local img = AEUI:AddImage(propspanel, Material("vgui/empty.png"), BMPropClick, 0, 0, 64, 64)
 img.prop = 0
-img.hover = "Select"
+img.hover = "#beatrun.buildmodehud.select"
 local row = 1
 local col = 0
 
@@ -194,7 +196,7 @@ end
 
 local img = AEUI:AddImage(propspanel, Material("vgui/empty.png"), BMPropClick, 64 * row, 64 * col, 64, 64)
 img.prop = 0
-img.hover = "Select"
+img.hover = "#beatrun.buildmodehud.select"
 
 local function BuildModeElements()
 	propspanel.elements = EntitiesElements
@@ -206,7 +208,7 @@ local function BuildModeElements()
 
 	local img = AEUI:AddImage(propspanel, Material("vgui/empty.png"), BMPropClick, 0, 0, 64, 64)
 	img.prop = 0
-	img.hover = "Select"
+	img.hover = "#beatrun.buildmodehud.select"
 
 	local buildmode_enticons = {
 		br_swingbar = Material("vgui/editor/swingbar.png"),
@@ -221,7 +223,7 @@ local function BuildModeElements()
 	}
 
 	local buildmode_entnames = {
-		br_zipline = "Zipline (SHIFT = 2-Way)"
+		br_zipline = "#beatrun.buildmodehud.zipline"
 	}
 
 	local obsolete = Material("editor/obsolete")

@@ -308,7 +308,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			activewep:SendWeaponAnim(ACT_TURNLEFT45)
 			activewep:SetSideStep(true)
 
-			mv:SetVelocity(cmd:GetViewAngles():Right() * -600)
+			mv:SetVelocity(cmd:GetViewAngles():Right() * -(speed_limit:GetInt() * 1.8))
 
 			ply:ViewPunch(Angle(-3, 0, -4.5))
 
@@ -323,7 +323,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			activewep:SendWeaponAnim(ACT_TURNRIGHT45)
 			activewep:SetSideStep(true)
 
-			mv:SetVelocity(cmd:GetViewAngles():Right() * 600)
+			mv:SetVelocity(cmd:GetViewAngles():Right() * (speed_limit:GetInt() * 1.8))
 
 			ply:ViewPunch(Angle(-3, 0, 4.5))
 
@@ -339,7 +339,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 		local forwarddelta = activewep.SideStepDir:Dot(ang:Forward())
 
 		if forwarddelta > 0.35 then
-			ply:SetMEMoveLimit(250)
+			ply:SetMEMoveLimit(speed_limit:GetInt())
 		end
 
 		if forwarddelta < 0.65 then

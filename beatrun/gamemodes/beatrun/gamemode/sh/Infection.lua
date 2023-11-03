@@ -1,6 +1,9 @@
 Infection_StartTime = 0
 Infection_EndTime = 0
 
+local startTime = CreateConVar("Beatrun_InfectionStartTime", 10, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 5, 20)
+local gameTime = CreateConVar("Beatrun_InfectionGameTime", 190, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 30, 600)
+
 function table.Shuffle(t)
 	local n = #t
 
@@ -17,7 +20,7 @@ end
 local function HumanCount()
 	local count = 0
 
-	for k, v in ipairs(player.GetAll()) do
+	for _, v in ipairs(player.GetAll()) do
 		if IsValid(v) and not v:GetNW2Bool("Infected") then
 			count = count + 1
 		end
@@ -239,8 +242,8 @@ if SERVER then
 			end
 		end
 
-		Infection_StartTime = CurTime() + 10
-		Infection_EndTime = CurTime() + 190
+		Infection_StartTime = CurTime() + startTime:GetInt()
+		Infection_EndTime = CurTime() + gameTime:GetInt()
 
 		hook.Add("Think", "InfectionTimer", InfectionTimer)
 	end
@@ -283,7 +286,7 @@ if SERVER then
 
 			if timeremaining <= 70 and timeremaining >= 50 and player.GetCount() > 6 and humancount == 1 then
 				timer.Simple(0.1, function()
-					for k, v in ipairs(player.GetAll()) do
+					for _, v in ipairs(player.GetAll()) do
 						if v:Alive() and not v:GetNW2Bool("Infected") then
 							net.Start("Infection_LastMan")
 							net.Send(v)
@@ -370,13 +373,13 @@ if CLIENT then
 		noclipkey = input.GetKeyCode(noclipbind)
 		endtime = 0
 
-		Infection_StartTime = start + 10
-		Infection_EndTime = start + 190
+		Infection_StartTime = start + startTime:GetInt()
+		Infection_EndTime = start + gameTime:GetInt()
 
 		hook.Add("BeatrunHUDCourse", "InfectionHUDName", InfectionHUDName)
 		hook.Add("CalcView", "InfectionCalcView", InfectionCalcView)
 
-		chat.AddText(chatcolor, "Infection! Touch other players to infect them\n", math.max(math.floor(player.GetCount() / 4), 1) .. " player(s) will become infected in 10s")
+		chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.start"):format(math.max(math.floor(player.GetCount() / 4), 1), startTime:GetInt()))
 	end)
 
 	local music = nil
@@ -399,12 +402,12 @@ if CLIENT then
 			survivors = survivors:sub(1, -3)
 
 			if survivors == "" then
-				survivors = "None..."
+				survivors = language.GetPhrase("beatrun.infection.nosurvivors")
 
 				LocalPlayer():EmitSound("death.wav")
 			end
 
-			chat.AddText(chatcolor, "The game has ended!\nSurvivors: " .. survivors .. "\nRestarting in 15s")
+			chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.end"):format(survivors, _time))
 		end)
 
 		if music and music.Stop then
@@ -432,9 +435,9 @@ if CLIENT then
 
 		if IsValid(attacker) and IsValid(victim) then
 			if attacker == victim then
-				chat.AddText(attacker, red, " died!")
+				chat.AddText(attacker, red, " " .. language.GetPhrase("beatrun.infection.infected"))
 			else
-				chat.AddText(attacker, red, " has infected ", yellow, victim, "!")
+				chat.AddText(attacker, red, " " .. language.GetPhrase("beatrun.infection.infectedby") .. " ", yellow, victim, "!")
 			end
 
 			attacker.InfectionTouchDelay = CurTime() + 3
@@ -497,10 +500,10 @@ if CLIENT then
 
 		if humanwin then
 			LocalPlayer():AddXP(200)
-			chat.AddText(chatcolor, "You were awarded 200 XP for surviving")
+			chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.award"))
 		else
 			LocalPlayer():AddXP(100)
-			chat.AddText(chatcolor, "You were awarded 100 XP for spawning as an infected")
+			chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.awardinfected"))
 		end
 	end)
 

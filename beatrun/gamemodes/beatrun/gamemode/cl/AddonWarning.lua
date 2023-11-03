@@ -43,12 +43,10 @@ local incompatible = {
 	["2593047682"] = true, -- Viewpunch Viewbob
 	["142911907"] = true, -- Advanced Combat Rolls
 	["2316713217"] = true, -- Player Speeds Changer 2.0 [REUPLOAD]
-	["2052642961"] = true, -- SNPC Particle Resource Pack
 	["2635378860"] = true, -- MW/WZ Skydive/Parachute + Infil
 	["2919957168"] = true, -- Modern Warfare II - Takedowns & Revive System
-	["104815552"] = true, -- SmartSnap (how tho?)
 	["2600234804"] = true, -- ASTW2 - Base Weapons
-	["2824714462"] = true, -- TFA Camera Shake
+	["2824714462"] = true, -- [TFA] Screen Shake
 	["3037375111"] = true -- Quick Slide With Legs
 }
 
@@ -82,7 +80,7 @@ local warntext = {
 	y = warnpanel.h * 0.125,
 	centered = true,
 	color = color_white,
-	string = "NOTICE\nPlease disable the following addons before playing\nor submitting any issues to GitHub:"
+	string = language.GetPhrase("beatrun.addonwarning.warntext")
 }
 
 table.insert(warnpanel.elements, warntext)
@@ -94,21 +92,18 @@ local quitbutton = {
 	y = warnpanel.h * 0.85,
 	centered = true,
 	color = color_white,
-	string = "Return to Main Menu",
+	string = "#beatrun.addonwarning.quitbutton",
 	onclick = function(self)
 		surface.PlaySound("garrysmod/ui_click.wav")
-		MsgC(Color(255, 100, 100), "Quitting Beatrun due to conflicting addons!")
 
-		timer.Simple(0.5, function()
-			RunConsoleCommand("killserver")
+		timer.Simple(0.2, function()
+			RunConsoleCommand("disconnect")
 		end)
-
-		self.onclick = nil
 	end
 }
 
 table.insert(warnpanel.elements, quitbutton)
-AEUI:AddButton(warnpanel, "Play", warnclosebutton, "AEUIDefault", warnpanel.w * 0.5, warnpanel.h * 0.93, true)
+AEUI:AddButton(warnpanel, "#beatrun.addonwarning.play", warnclosebutton, "AEUIDefault", warnpanel.w * 0.5, warnpanel.h * 0.93, true)
 
 local conflictlist = {
 	type = "Text",
@@ -135,8 +130,6 @@ local function CheckAddons()
 		end
 	end
 
-	print(conflictlist.string)
-
 	return addons
 end
 
@@ -145,7 +138,7 @@ local function WarningIcon()
 		surface.SetFont("BeatrunHUD")
 		surface.SetTextPos(2, 0)
 		surface.SetTextColor(220, 20, 20, math.abs(math.sin(CurTime() * 2) * 255))
-		surface.DrawText("CONFLICTING ADDONS FOUND")
+		surface.DrawText("#beatrun.addonwarning.conflictfound")
 
 		return
 	else

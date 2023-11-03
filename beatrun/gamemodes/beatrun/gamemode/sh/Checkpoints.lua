@@ -44,28 +44,28 @@ function LoadCheckpoints()
 	table.Empty(Checkpoints)
 
 	if SERVER then
-		for k, v in pairs(player.GetAll()) do
+		for _, v in pairs(player.GetAll()) do
 			v:SetNW2Int("CPNum", 1)
 		end
 	end
 
 	if CLIENT then
 		timer.Simple(1, function()
-			for k, v in pairs(ents.FindByClass("tt_cp")) do
+			for _, v in pairs(ents.FindByClass("tt_cp")) do
 				if IsValid(v) and v.GetCPNum then
 					Checkpoints[v:GetCPNum()] = v
 				end
 			end
 		end)
 	else
-		for k, v in pairs(ents.FindByClass("tt_cp")) do
+		for _, v in pairs(ents.FindByClass("tt_cp")) do
 			Checkpoints[v:GetCPNum()] = v
 		end
 	end
 end
 
 if CLIENT then
-	CreateClientConVar("Beatrun_FastStart", "0", true, true, "Faster start countdown", 0, 1)
+	CreateClientConVar("Beatrun_FastStart", "0", true, true, language.GetPhrase("beatrun.convars.faststart"), 0, 1)
 
 	net.Receive("Checkpoint_Hit", function()
 		local timetaken = CurTime() - lastcptime
@@ -181,7 +181,11 @@ end
 local countdown = 0
 local countdownalpha = 255
 
-local countdowntext = {"Ready", "Set", "Go!!"}
+local countdowntext = {
+	"#beatrun.checkpoints.countdown1",
+	"#beatrun.checkpoints.countdown2",
+	"#beatrun.checkpoints.countdown3"
+}
 
 local function StartCountdown()
 	local CT = CurTime()
@@ -243,7 +247,8 @@ function CourseHUD()
 			speed = "0" .. speed
 		end
 
-		text = speed .. " km/h"
+		text = language.GetPhrase("beatrun.checkpoints.speedometer"):format(speed)
+
 		local w, _ = surface.GetTextSize(text)
 		w = w or 0
 

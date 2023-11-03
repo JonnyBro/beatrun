@@ -3,5 +3,6 @@
 	"base"		"base"
 	"title"		"Beatrun"
 	"maps"		"^br_"
+	"category"	"other"
 	"menusystem"	"1"
 }

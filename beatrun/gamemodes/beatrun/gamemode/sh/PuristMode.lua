@@ -1,8 +1,8 @@
 if CLIENT then
-	CreateClientConVar("Beatrun_PuristMode", "1", true, true, "Purist mode is a clientside preference that severely weakens the ability to strafe while in the air, which is how Mirror's Edge games handle this.\n0 = No restrictions\n1 = Reduced move speed in the air")
+	CreateClientConVar("Beatrun_PuristMode", "1", true, true, language.GetPhrase("beatrun.convars.puristmode"))
 end
 
-local PuristModeForce = CreateConVar("Beatrun_PuristModeForce", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Force players to adhere to purist rules", 0, 1)
+local PuristModeForce = CreateConVar("Beatrun_PuristModeForce", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 
 local function PuristMove(ply, mv, cmd)
 	if not ply:OnGround() and not ply:GetGrappling() then
