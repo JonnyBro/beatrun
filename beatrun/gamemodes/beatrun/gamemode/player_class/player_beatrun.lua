@@ -143,6 +143,9 @@ hook.Add("PlayerSwitchWeapon", "ResetFOV", function(ply)
 	local fovmult = (ply:InOverdrive() and 1.1) or 1
 
 	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120) * fovmult)
+
+	-- Hacky way to fix FOV after switching away from/to ARC9 SWEPs
+	timer.Simple(0, function() ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120) * fovmult) end)
 end)
 
 function PLAYER:SetModel()
