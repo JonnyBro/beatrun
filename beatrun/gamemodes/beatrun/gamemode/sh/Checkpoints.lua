@@ -22,7 +22,7 @@ if SERVER then
 	util.AddNetworkString("Checkpoint_Finish")
 else
 	surface.CreateFont("BeatrunHUD", {
-		shadow = true,
+		shadow = false,
 		blursize = 0,
 		underline = false,
 		rotary = false,
@@ -35,8 +35,8 @@ else
 		italic = false,
 		outline = false,
 		symbol = false,
-		size = 32,
-		weight = 2000
+		size = 32 * (ScrH() / 1080),
+		weight = 20
 	})
 end
 
