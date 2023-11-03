@@ -241,7 +241,7 @@ function CourseHUD()
 	end
 
 	if GetConVar("Beatrun_HUDHidden") and not GetConVar("Beatrun_HUDHidden"):GetBool() and not BuildMode and hook.Run("BeatrunDrawHUD") ~= false and not ply.InReplay then
-		local speed = math.Round(ply:GetVelocity():Length() * 0.06858125)
+		local speed = math.Round(ply:GetVelocity():Length2D() * 0.06858125) -- 2D speed, ME-style (:Length2D() instead of just :Length())
 
 		if speed < 10 then
 			speed = "0" .. speed
