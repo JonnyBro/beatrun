@@ -21,7 +21,7 @@ if SERVER then
 	util.AddNetworkString("Checkpoint_Hit")
 	util.AddNetworkString("Checkpoint_Finish")
 else
-	surface.CreateFont("BeatrunHUD", {
+	surface.CreateFont("BeatRoboto", {
 		shadow = false,
 		blursize = 0,
 		underline = false,
@@ -233,34 +233,47 @@ function CourseHUD()
 	local incourse = Course_Name ~= ""
 	local totaltime = CheckpointNumber ~= -1 and math.max(0, CurTime() - Course_StartTime) or Course_EndTime
 
+	
+	--text = language.GetPhrase("beatrun.checkpoints.speedometer")
+	PlayingCourse = false
+	ShowFreeplaySpeed = false
+	if incourse and not BuildMode then
+		PlayingCourse = true
+	elseif GetConVar("Beatrun_HUDHidden") and not GetConVar("Beatrun_HUDHidden"):GetBool() and not BuildMode then
+		ShowFreeplaySpeed = true
+	end
+	if (PlayingCourse or ShowFreeplaySpeed) and hook.Run("BeatrunDrawHUD") ~= false and not ply.InReplay then
+        local speed = math.Round(ply:GetVelocity():Length2D() * 0.06858125)
+		text = language.GetPhrase("beatrun.checkpoints.speedometer")
+
+        surface.SetFont("BeatRoboto")
+
+        surface.SetTextColor(255, 255, 255, 255)
+
+        if speed < 10 then
+            speed = "0" .. speed .. " "
+        elseif speed < 100 then
+            speed = speed .. " "
+        end
+        
+        w, h = surface.GetTextSize(text)
+
+		w = w or 0 -- Backported, no clue what this does
+		
+        -- Visually "accurate" speedometer (number can overlap with km/h text)
+        surface.SetTextPos(ScrW() * 0.8469 + vpx, ScrH() * 0.85 + vpz)
+        surface.DrawText(text)
+        surface.SetTextPos(ScrW() * 0.8469 - 35.712 * (ScrH() / 1080) + vpx, ScrH() * 0.85 + vpz)
+        surface.DrawText(speed)
+    end
+
 	if incourse then
 		local text = string.FormattedTime(totaltime, "%02i:%02i:%02i")
 		local w, _ = surface.GetTextSize(text)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.075 + vpz)
 		surface.DrawText(text)
 	end
-
-	if GetConVar("Beatrun_HUDHidden") and not GetConVar("Beatrun_HUDHidden"):GetBool() and not BuildMode and hook.Run("BeatrunDrawHUD") ~= false and not ply.InReplay then
-		local speed = math.Round(ply:GetVelocity():Length2D() * 0.06858125) -- 2D speed, ME-style (:Length2D() instead of just :Length())
-
-		if speed < 10 then
-			speed = "0" .. speed
-		end
-
-		text = language.GetPhrase("beatrun.checkpoints.speedometer"):format(speed)
-
-		local w, _ = surface.GetTextSize(text)
-		w = w or 0
-
-		local r, g, b, a = string.ToColor(GetConVar("Beatrun_HUDTextColor"):GetString())
-
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetFont("BeatrunHUD")
-		surface.SetTextColor(r, g, b, a)
-		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.85 + vpz)
-		surface.DrawText(text)
-	end
-
+	
 	if incourse and pbtimes then
 		local text = string.FormattedTime(pbtotal, "%02i:%02i:%02i")
 		local w, h = surface.GetTextSize(text)
