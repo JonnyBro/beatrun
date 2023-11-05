@@ -47,7 +47,9 @@ local incompatible = {
 	["2919957168"] = true, -- Modern Warfare II - Takedowns & Revive System
 	["2600234804"] = true, -- ASTW2 - Base Weapons
 	["2824714462"] = true, -- [TFA] Screen Shake
-	["3037375111"] = true -- Quick Slide With Legs
+	["3037375111"] = true, -- Quick Slide With Legs
+	["748422181"] = true, -- FOV Changer
+	["2930331275"] = true -- Realistic Fragmentation System
 }
 
 local warnpanel = {
