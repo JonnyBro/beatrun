@@ -309,7 +309,7 @@ if CLIENT then
 
 	local function InfectionHUDName()
 		if GetGlobalBool("GM_INFECTION") then
-			local team = LocalPlayer():GetNW2Bool("Infected") and "(Infected)" or "(Human)"
+			local team = LocalPlayer():GetNW2Bool("Infected") and language.GetPhrase("beatrun.infection.infectedtext") or language.GetPhrase("beatrun.infection.humantext")
 
 			return "Infection " .. team
 		else
