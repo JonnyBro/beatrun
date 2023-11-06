@@ -5,6 +5,14 @@ local inf = math.huge
 buildmode_props = {}
 
 local propmatsblacklist = {}
+
+local blocksdir = "models/hunter/plates/"
+local blocksdir_s = blocksdir .. "*.mdl"
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+	table.insert(buildmode_props, blocksdir .. v:lower())
+end
+
 local blocksdir = "models/hunter/blocks/"
 local blocksdir_s = blocksdir .. "*.mdl"
 
@@ -19,7 +27,83 @@ for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
 	table.insert(buildmode_props, blocksdir .. v:lower())
 end
 
+local blocksdir = "models/hunter/geometric/"
+local blocksdir_s = blocksdir .. "*.mdl"
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+	table.insert(buildmode_props, blocksdir .. v:lower())
+end
+
+local props = {
+	"models/props_wasteland/",
+	"models/props_borealis/",
+	"models/props_building_details/",
+	"models/props_c17/",
+	"models/props_canal/",
+	"models/props_citizen_tech/",
+	"models/props_docks/",
+	"models/props_junk/",
+	"models/props_phx/construct/",
+	"models/props_phx2/",
+	"models/phxtended/",
+	"models/hunter/misc/",
+	"models/props_pipes/",
+	"models/props_rooftop/",
+	"models/props_trainstation/",
+	"models/props_vents/"
+}
+
+for _, v in ipairs(props) do
+	local blocksdir = v
+	local blocksdir_s = blocksdir .. "*.mdl"
+
+	for _, b in ipairs(file.Find(blocksdir_s, "GAME")) do
+		local key = table.insert(buildmode_props, blocksdir .. b:lower())
+		propmatsblacklist[key] = true
+	end
+end
+
 local blocksdir = "models/props_phx/construct/glass/"
+local blocksdir_s = blocksdir .. "*.mdl"
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+	local key = table.insert(buildmode_props, blocksdir .. v:lower())
+	propmatsblacklist[key] = true
+end
+
+local blocksdir = "models/props_phx/construct/windows/"
+local blocksdir_s = blocksdir .. "*.mdl"
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+	local key = table.insert(buildmode_props, blocksdir .. v:lower())
+	propmatsblacklist[key] = true
+end
+
+local blocksdir = "models/props/cs_assault/"
+local blocksdir_s = blocksdir .. "*.mdl"
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+	local key = table.insert(buildmode_props, blocksdir .. v:lower())
+	propmatsblacklist[key] = true
+end
+
+local blocksdir = "models/props/cs_militia/"
+local blocksdir_s = blocksdir .. "*.mdl"
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+	local key = table.insert(buildmode_props, blocksdir .. v:lower())
+	propmatsblacklist[key] = true
+end
+
+local blocksdir = "models/props/cs_office/"
+local blocksdir_s = blocksdir .. "*.mdl"
+
+for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
+	local key = table.insert(buildmode_props, blocksdir .. v:lower())
+	propmatsblacklist[key] = true
+end
+
+local blocksdir = "models/props/de_nuke/"
 local blocksdir_s = blocksdir .. "*.mdl"
 
 for _, v in ipairs(file.Find(blocksdir_s, "GAME")) do
@@ -39,14 +123,16 @@ buildmode_entmodels = {
 	br_swingbar = "models/hunter/plates/plate2.mdl"
 }
 
+--[[
 local misc = {"models/hunter/misc/lift2x2.mdl", "models/hunter/misc/stair1x1.mdl", "models/hunter/misc/stair1x1inside.mdl", "models/hunter/misc/stair1x1outside.mdl", "models/props_combine/combine_barricade_short02a.mdl", "models/props_combine/combine_bridge_b.mdl", "models/props_docks/channelmarker_gib02.mdl", "models/props_docks/channelmarker_gib04.mdl", "models/props_docks/channelmarker_gib03.mdl", "models/props_lab/blastdoor001a.mdl", "models/props_lab/blastdoor001c.mdl", "models/props_wasteland/cargo_container01.mdl", "models/props_wasteland/cargo_container01b.mdl", "models/props_wasteland/cargo_container01c.mdl", "models/props_wasteland/horizontalcoolingtank04.mdl", "models/props_wasteland/laundry_washer001a.mdl", "models/props_wasteland/laundry_washer003.mdl", "models/props_junk/TrashDumpster01a.mdl", "models/props_junk/TrashDumpster02.mdl", "models/props_junk/wood_crate001a.mdl", "models/props_junk/wood_crate002a.mdl", "models/props_junk/wood_pallet001a.mdl", "models/props_c17/fence01a.mdl", "models/props_c17/fence01b.mdl", "models/props_c17/fence02a.mdl", "models/props_c17/fence03a.mdl", "models/props_c17/fence04a.mdl", "models/props_wasteland/interior_fence001g.mdl", "models/props_wasteland/interior_fence002d.mdl", "models/props_wasteland/interior_fence002e.mdl", "models/props_building_details/Storefront_Template001a_Bars.mdl", "models/props_wasteland/wood_fence01a.mdl", "models/props_wasteland/wood_fence02a.mdl", "models/props_c17/concrete_barrier001a.mdl", "models/props_wasteland/medbridge_base01.mdl", "models/props_wasteland/medbridge_post01.mdl", "models/props_wasteland/medbridge_strut01.mdl", "models/props_c17/column02a.mdl", "models/props_junk/iBeam01a_cluster01.mdl", "models/props_junk/iBeam01a.mdl", "models/props_canal/canal_cap001.mdl", "models/props_canal/canal_bridge04.mdl", "models/Mechanics/gears2/pinion_80t3.mdl", "models/props_phx/gears/rack36.mdl", "models/props_phx/gears/rack70.mdl", "models/cranes/crane_frame.mdl", "models/cranes/crane_docks.mdl", "models/props_wasteland/cranemagnet01a.mdl"}
 
-for k, v in ipairs(misc) do
+for _, v in ipairs(misc) do
 	local key = table.insert(buildmode_props, v:lower())
 	propmatsblacklist[key] = true
 end
 
 misc = nil
+--]]
 
 buildmode_ents = {
 	br_swingpipe = true,
@@ -498,7 +584,7 @@ if SERVER then
 	net.Receive("BuildMode_ReadSave", function(len, ply)
 		if not ply.BuildMode then return end
 
-		local a = util.Decompress(net.ReadData(len))
+		local a = net.ReadData(len)
 		local props = util.JSONToTable(a)
 
 		for _, v in pairs(props) do
@@ -1144,24 +1230,13 @@ if CLIENT then
 			end
 		end,
 		[KEY_BACKSPACE] = function()
-			if not dragging then
-				local props = {}
-
-				for k, v in pairs(buildmode_selected) do
-					table.insert(props, k)
-					buildmode_selected[k] = nil
-				end
-
-				net.Start("BuildMode_Delete")
-					net.WriteTable(props)
-				net.SendToServer()
-			end
+			buildmodeinputs[KEY_DELETE]()
 		end,
 		[KEY_T] = function()
 			if not dragging then
 				local props = {}
 
-				for k, v in pairs(buildmode_selected) do
+				for k, _ in pairs(buildmode_selected) do
 					if not propmatsblacklist[buildmode_props_index[k:GetModel()]] then
 						table.insert(props, k)
 					end
@@ -1205,7 +1280,7 @@ if CLIENT then
 				end
 			end
 		end,
-		[KEY_ENTER] = function()
+		[KEY_PAD_MINUS] = function()
 			if table.Count(buildmode_selected) == 0 then return end
 
 			local save = {}
@@ -1228,7 +1303,7 @@ if CLIENT then
 			local jsonsave = util.TableToJSON(save)
 
 			file.CreateDir("beatrun/savedbuilds")
-			file.Write("beatrun/savedbuilds/save.txt", util.Compress(jsonsave))
+			file.Write("beatrun/savedbuilds/save.txt", jsonsave)
 		end,
 		[KEY_PAD_PLUS] = function()
 			local save = file.Read("beatrun/savedbuilds/save.txt", "DATA")
@@ -1546,7 +1621,7 @@ if CLIENT then
 			local num = v:GetCPNum()
 
 			surface.SetTextPos(w2s.x, w2s.y)
-			surface.DrawText(num)
+			surface.DrawText("Checkpoint: " .. num)
 		end
 
 		local startw2s = Course_StartPos:ToScreen()
