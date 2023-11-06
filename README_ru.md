@@ -31,8 +31,8 @@ iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
 
 1. Скачайте данный репозиторий по данной [ссылке](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).
 2. **Удалите старую папку `beatrun` по пути *путь_к_игре/garrysmod/addons* если она у вас имеется.**
-3. Извлеките папку `beatrun` по пути *путь_к_игре/garrysmod/addons*.
-4. Извлеките папку `lua` по пути *путь_к_игре/garrysmod*.
+3. Извлеките папку `beatrun-main/beatrun` по пути *путь_к_игре/garrysmod/addons*.
+4. Извлеките папку `beatrun-main/lua` по пути *путь_к_игре/garrysmod*.
 
 ## Анимации
 
