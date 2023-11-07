@@ -283,7 +283,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.sidestepdesc"))
 
 		panel:CheckBox("#beatrun.toolsmenu.moves.disarm", "Beatrun_Disarm")
-		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.disarmdesc"):format(IN_USE))
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.disarmdesc"))
 
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
