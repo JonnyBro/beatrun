@@ -1,17 +1,20 @@
 # Beatrun | Community edition
 
-* [Русский](./README_ru.md)
+*Looking for the replay stuff? This isn't the branch for that. It's on the [`jonny/replays`](https://github.com/UnderSet/beatrun-jonny/tree/jonny/replays) branch instead.*
+* [Русский](./README_ru.md) (Outdated, I don't speak Russian)
 
 Infamous parkour addon for Garry's Mod, fully open sourced and maintained by the community.
 
 **READ THE ***ENTIRE*** README BEFORE ASKING QUESTIONS ON THE [beatrun.ru](https://beatrun.ru) DISCORD!**
 
-This version does not include malicious modules, code or networking. What it does contain is:
-* Lua modules for Discord Rich Presence
-* Lua modules for Steam Presence
-* Network connectivity for courses (activates only when you load or upload courses, and by default `courses.beatrun.ru` is used)
-
-**All of this is optional and you may remove all of it. (modules are located [here](/lua/bin/) and online courses functionality is [here](/beatrun/gamemodes/beatrun/gamemode/cl/OnlineCourse.lua))**
+> [!NOTE]
+> This version does not include malicious modules, code or networking. What it does contain is:
+> * Lua modules for Discord Rich Presence
+> * Lua modules for Steam Presence
+> * Network connectivity for courses (activates only when you load or upload courses, and by default `courses.beatrun.ru` is used)
+>
+> **All of this is optional and you may remove all of it.
+> Modules are located in [/lua/bin](/lua/bin/) and online courses functionality is in [OnlineCourse.lua](/beatrun/gamemodes/beatrun/gamemode/cl/OnlineCourse.lua)**
 
 ## Automatic Installation (Windows only!)
 Run the command below in Powershell.
