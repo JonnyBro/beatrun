@@ -16,13 +16,6 @@ Infamous parkour addon for Garry's Mod, fully open sourced and maintained by the
 > **All of this is optional and you may remove all of it.
 > Modules are located in [/lua/bin](/lua/bin/) and online courses functionality is in [OnlineCourse.lua](/beatrun/gamemodes/beatrun/gamemode/cl/OnlineCourse.lua)**
 
-## Automatic Installation (Windows only!)
-Run the command below in Powershell.
-> (Win + R > `powershell` > command in question)
-```powershell
-iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
-```
-
 ## Manual Installation
 1. Download this repository [here](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).
 2. **Delete the `beatrun` folder in *your_game_folder/garrysmod/addons* if you have one.**
