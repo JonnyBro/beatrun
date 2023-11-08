@@ -1319,7 +1319,7 @@ end)
 
 hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 	if has_tool_equipped then return end
-	
+
 	pos:Sub(oldpos)
 	pos:Add(campos)
 	ang:Sub(oldang)

@@ -303,7 +303,7 @@ local function CustomPropMat(prop)
 
 	if prop.hr == true then
 		prop:SetMaterial("medge/redplainplastervertex")
-	elseif prop.hr == nil then
+	elseif prop.hr == nil or prop.hr == false then
 		prop:SetMaterial("medge/plainplastervertex")
 	end
 end
@@ -980,8 +980,9 @@ if CLIENT then
 		local id = args[1]
 
 		if not id then
-			print("Supply the name.") 
-			return 
+			print("Supply course name")
+
+			return
 		end
 
 		LoadCourse(id)
@@ -989,7 +990,7 @@ if CLIENT then
 
 	function LoadCourseRaw(data)
 		if not data then
-			print("LOAD NOTHING??!!")
+			print("Supply course data")
 
 			return
 		end
@@ -1406,6 +1407,7 @@ if CLIENT then
 	hook.Add("OnEntityCreated", "BuildModeProps", function(ent)
 		if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] then
 			if not BuildMode then ent.buildmode_placed_manually = true end
+
 			table.insert(buildmode_placed, ent)
 		end
 	end)

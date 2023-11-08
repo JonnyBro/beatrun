@@ -35,10 +35,9 @@ XP_floatingxp = {}
 
 hook.Add("OnParkour", "ParkourXP", function(event)
 	local ply = LocalPlayer()
-
 	if not IsValid(ply) then return end
 
-	if ply.InReplay then return end
+	-- if ply.InReplay then return end
 
 	local pos = ply:GetPos()
 

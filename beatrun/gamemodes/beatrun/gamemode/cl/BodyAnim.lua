@@ -18,10 +18,15 @@ lockang = false
 CamAddAng = false
 CamIgnoreAng = false
 
-local tools = {["gmod_tool"] = true, ["weapon_physgun"] = true, ["gmod_camera"] = true}
+local tools = {
+	["gmod_tool"] = true,
+	["weapon_physgun"] = true,
+	["gmod_camera"] = true
+}
+
 has_tool_equipped = false
 
-hook.Add("Think", "beatrun_detect_tool", function() 
+hook.Add("Think", "beatrun_detect_tool", function()
 	local lp = LocalPlayer()
 	if not IsValid(lp) then return end
 
@@ -30,7 +35,11 @@ hook.Add("Think", "beatrun_detect_tool", function()
 
 	local class = weapon:GetClass()
 
-	if tools[class] then has_tool_equipped = true else has_tool_equipped = false end
+	if tools[class] then
+		has_tool_equipped = true
+	else
+		has_tool_equipped = false
+	end
 end)
 
 -- local BodyAnimPos = Vector(0, 0, 0)
@@ -496,7 +505,8 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 	if has_tool_equipped then
 		BodyAnim:SetNoDraw(true)
 		BodyAnim:SetRenderOrigin(pos * 1000)
-		return 
+
+		return
 	end
 
 	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then
@@ -691,9 +701,11 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				hook.Run("BodyAnimCalcView", view)
 
 				pos:Set(view.origin)
+
 				if not has_tool_equipped then
 					angles:Set(view.angles)
 				end
+
 				if lerpchangeatt < 1 then
 					pos:Set(lerpedpos)
 				end
