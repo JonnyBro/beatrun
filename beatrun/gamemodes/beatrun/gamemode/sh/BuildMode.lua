@@ -301,9 +301,9 @@ end
 local function CustomPropMat(prop)
 	if propmatsblacklist[buildmode_props_index[prop:GetModel()]] then return end
 
-	if prop.hr then
+	if prop.hr == true then
 		prop:SetMaterial("medge/redplainplastervertex")
-	else
+	elseif prop.hr == nil then
 		prop:SetMaterial("medge/plainplastervertex")
 	end
 end
@@ -604,7 +604,14 @@ if SERVER then
 		for _, v in pairs(props) do
 			local a = ents.Create("prop_physics")
 			a.hr = v.hr
-			a:SetModel(buildmode_props[v.model])
+
+			local is_model_an_index = tonumber(v.model)
+			if is_model_an_index then
+				a:SetModel(buildmode_props[v.model])
+			else
+				a:SetModel(v.model)
+			end
+
 			CustomPropMat(a)
 
 			a:SetPos(v.pos)
@@ -886,7 +893,7 @@ if CLIENT then
 	end
 
 	function CourseData(name)
-		local save = {{}, {}, Course_StartPos, Course_StartAng, name or "Unnamed", {}}
+		local save = {{}, {}, Course_StartPos, Course_StartAng, name or os.date("%H:%M:%S - %d/%m/%Y", os.time()), {}}
 
 		for _, v in pairs(buildmode_placed) do
 			if not IsValid(v) then -- Nothing
@@ -895,13 +902,13 @@ if CLIENT then
 			else
 				local class = v:GetClass()
 
-				if class == "prop_physics" and not buildmode_props_index[v:GetModel():lower()] then
-					print("ignoring", v:GetModel():lower())
-				elseif class == "prop_physics" then
+				if class == "prop_physics" then
 					local hr = v:GetMaterial() == "medge/redplainplastervertex" and true or nil
 
+					if v.buildmode_placed_manually then hr = false end
+
 					table.insert(save[1], {
-						model = buildmode_props_index[v:GetModel():lower()],
+						model = v:GetModel():lower(),
 						pos = v:GetPos(),
 						ang = v:GetAngles(),
 						hr = hr
@@ -947,7 +954,7 @@ if CLIENT then
 	end
 
 	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)
-		local name = args[1] or "Unnamed"
+		local name = args[1] or os.date("%H:%M:%S - %d/%m/%Y", os.time())
 
 		SaveCourse(name, args[2])
 	end)
@@ -970,7 +977,12 @@ if CLIENT then
 	end
 
 	concommand.Add("Beatrun_LoadCourse", function(ply, cmd, args, argstr)
-		local id = args[1] or "Unnamed"
+		local id = args[1]
+
+		if not id then
+			print("Supply the name.") 
+			return 
+		end
 
 		LoadCourse(id)
 	end)
@@ -1393,6 +1405,7 @@ if CLIENT then
 
 	hook.Add("OnEntityCreated", "BuildModeProps", function(ent)
 		if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] then
+			if not BuildMode then ent.buildmode_placed_manually = true end
 			table.insert(buildmode_placed, ent)
 		end
 	end)
