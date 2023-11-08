@@ -1,4 +1,4 @@
-VERSIONGLOBAL = "04.09.2023"
+VERSIONGLOBAL = "v1.0?"
 
 DeriveGamemode("sandbox")
 
