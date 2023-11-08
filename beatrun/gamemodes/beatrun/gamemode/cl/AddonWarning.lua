@@ -23,30 +23,33 @@ end
 local addons = 0
 
 local incompatible = {
-	["1581533176"] = true,
-	["2675972006"] = true,
-	["378401390"] = true,
-	["2027577882"] = true,
-	["1190705063"] = true,
-	["123514260"] = true,
-	["2416989205"] = true,
-	["2591814455"] = true,
-	["240159269"] = true,
-	["2230307188"] = true,
-	["2137973704"] = true,
-	["577145478"] = true,
-	["1632091428"] = true,
-	["1622199072"] = true,
-	["2840019616"] = true,
-	["583517911"] = true,
-	["2106330193"] = true,
-	["2593047682"] = true,
-	["142911907"] = true,
-	["2316713217"] = true,
-	["2052642961"] = true,
-	["2635378860"] = true,
-	["2919957168"] = true,
-	["104815552"] = true
+	["1581533176"] = true, -- The Aperture [Reupload]
+	["2675972006"] = true, -- Custom Loadout
+	["378401390"] = true, -- Quake/Half-Life View bobbing
+	["2027577882"] = true, -- Mantle + Wallrun
+	["1190705063"] = true, -- Lerped View Models
+	["123514260"] = true, -- SharpeYe
+	["2416989205"] = true, -- Quick Slide
+	["2591814455"] = true, -- [PF] Half-Life: Alyx
+	["240159269"] = true, -- S.M.A.R.T.:Smooth Parkour Movement
+	["2230307188"] = true, -- EFT Walk Sounds (Footsteps)
+	["2137973704"] = true, -- [PF] Modern Warfare 2
+	["577145478"] = true, -- ViewMod
+	["1632091428"] = true, -- Fine Speed
+	["1622199072"] = true, -- SaVav Parkour Mod
+	["2840019616"] = true, -- cBobbing (Reupped & Fixed)
+	["583517911"] = true, -- Eye View Attachment
+	["2106330193"] = true, -- BSMod Punch SWEP + Kick & KillMoves
+	["2593047682"] = true, -- Viewpunch Viewbob
+	["142911907"] = true, -- Advanced Combat Rolls
+	["2316713217"] = true, -- Player Speeds Changer 2.0 [REUPLOAD]
+	["2635378860"] = true, -- MW/WZ Skydive/Parachute + Infil
+	["2919957168"] = true, -- Modern Warfare II - Takedowns & Revive System
+	["2600234804"] = true, -- ASTW2 - Base Weapons
+	["2824714462"] = true, -- [TFA] Screen Shake
+	["3037375111"] = true, -- Quick Slide With Legs
+	["748422181"] = true, -- FOV Changer
+	["2930331275"] = true -- Realistic Fragmentation System
 }
 
 local warnpanel = {
@@ -79,7 +82,7 @@ local warntext = {
 	y = warnpanel.h * 0.125,
 	centered = true,
 	color = color_white,
-	string = "NOTICE\nPlease disable the following addons before playing\nor submitting any issues to GitHub:"
+	string = language.GetPhrase("beatrun.addonwarning.warntext")
 }
 
 table.insert(warnpanel.elements, warntext)
@@ -91,21 +94,18 @@ local quitbutton = {
 	y = warnpanel.h * 0.85,
 	centered = true,
 	color = color_white,
-	string = "Return to Main Menu",
+	string = "#beatrun.addonwarning.quitbutton",
 	onclick = function(self)
 		surface.PlaySound("garrysmod/ui_click.wav")
-		MsgC(Color(255, 100, 100), "Quitting Beatrun due to conflicting addons!")
 
-		timer.Simple(0.5, function()
-			RunConsoleCommand("killserver")
+		timer.Simple(0.2, function()
+			RunConsoleCommand("disconnect")
 		end)
-
-		self.onclick = nil
 	end
 }
 
 table.insert(warnpanel.elements, quitbutton)
-AEUI:AddButton(warnpanel, "Play", warnclosebutton, "AEUIDefault", warnpanel.w * 0.5, warnpanel.h * 0.93, true)
+AEUI:AddButton(warnpanel, "#beatrun.addonwarning.play", warnclosebutton, "AEUIDefault", warnpanel.w * 0.5, warnpanel.h * 0.93, true)
 
 local conflictlist = {
 	type = "Text",
@@ -132,8 +132,6 @@ local function CheckAddons()
 		end
 	end
 
-	print(conflictlist.string)
-
 	return addons
 end
 
@@ -142,7 +140,7 @@ local function WarningIcon()
 		surface.SetFont("BeatrunHUD")
 		surface.SetTextPos(2, 0)
 		surface.SetTextColor(220, 20, 20, math.abs(math.sin(CurTime() * 2) * 255))
-		surface.DrawText("CONFLICTING ADDONS FOUND")
+		surface.DrawText("#beatrun.addonwarning.conflictfound")
 
 		return
 	else

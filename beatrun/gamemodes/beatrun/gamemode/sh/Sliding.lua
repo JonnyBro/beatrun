@@ -2,13 +2,13 @@ local qslide_duration = 3
 local qslide_speedmult = 1
 
 local slide_sounds = {
-	[MAT_DIRT] = {"datae/fol_slide_dirt_01.wav", "datae/fol_slide_dirt_02.wav", "datae/fol_slide_dirt_03.wav", "datae/fol_slide_dirt_04.wav"},
-	[MAT_SAND] = {"datae/fol_slide_sand_01.wav", "datae/fol_slide_sand_02.wav", "datae/fol_slide_sand_03.wav", "datae/fol_slide_sand_04.wav"},
-	[MAT_METAL] = {"datae/fol_slide_metal_01.wav", "datae/fol_slide_metal_02.wav", "datae/fol_slide_metal_03.wav"},
-	[MAT_GLASS] = {"datae/fol_slide_glass_01.wav", "datae/fol_slide_glass_02.wav", "datae/fol_slide_glass_03.wav", "datae/fol_slide_glass_04.wav"},
-	[MAT_GRATE] = {"datae/fol_slide_grate_01.wav"},
+	[MAT_DIRT] = {"fol/fol_slide_dirt_01.wav", "fol/fol_slide_dirt_02.wav", "fol/fol_slide_dirt_03.wav", "fol/fol_slide_dirt_04.wav"},
+	[MAT_SAND] = {"fol/fol_slide_sand_01.wav", "fol/fol_slide_sand_02.wav", "fol/fol_slide_sand_03.wav", "fol/fol_slide_sand_04.wav"},
+	[MAT_METAL] = {"fol/fol_slide_metal_01.wav", "fol/fol_slide_metal_02.wav", "fol/fol_slide_metal_03.wav"},
+	[MAT_GLASS] = {"fol/fol_slide_glass_01.wav", "fol/fol_slide_glass_02.wav", "fol/fol_slide_glass_03.wav", "fol/fol_slide_glass_04.wav"},
+	[MAT_GRATE] = {"fol/fol_slide_grate_01.wav"},
 	[MAT_SLOSH] = {"ambient/water/water_splash1.wav", "ambient/water/water_splash2.wav", "ambient/water/water_splash3.wav"},
-	[MAT_WOOD] = {"datae/fol_slide_generic_01.wav", "datae/fol_slide_generic_02.wav", "datae/fol_slide_generic_03.wav"}
+	[MAT_WOOD] = {"fol/fol_slide_generic_01.wav", "fol/fol_slide_generic_02.wav", "fol/fol_slide_generic_03.wav"}
 }
 
 local slideloop_sounds = {
@@ -72,7 +72,7 @@ local function SlidingAnimThink()
 		local newang = LerpAngle(20 * FrameTime(), oldang, ang)
 		ba:SetAngles(newang)
 
-		BodyLimitX = math.min(40 + ang[1] - 360, 60)
+		BodyLimitX = math.min(20 + ang[1] - 360, 60)
 		CamShakeMult = ply:GetVelocity():Length() * 0.0005
 	end
 end
@@ -346,7 +346,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 	local normal = slipperytraceout.HitNormal
 	local sang = normal:Angle()
-	local slippery = sang.x > 315 and sang.x < 330 and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:GetCrouchJump() and onground and not slipfail
+	local slippery = sang.x > 315 and sang.x < 330 and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:GetCrouchJump() and onground and not slipfail and ply:WaterLevel() < 1
 
 	ply:SetSlidingSlippery(slippery)
 
@@ -430,7 +430,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			net.Send(ply)
 		end
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			SlidingAnimStart()
 
 			hook.Add("Think", "SlidingAnimThink", SlidingAnimThink)
@@ -480,7 +480,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			net.Send(ply)
 
 			ply.DiveSliding = false
-		elseif CLIENT_IFTP() then
+		elseif CLIENT and IsFirstTimePredicted() then
 			SlidingAnimEnd(false, ply.DiveSliding)
 
 			ply.DiveSliding = false
@@ -578,7 +578,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 
 		if mv:KeyPressed(IN_BACK) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 then
-			if CLIENT or game.SinglePlayer() then
+			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				cmd:SetViewAngles(ply:GetSlidingAngle())
 			end
 
@@ -589,14 +589,16 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			ply:SetQuickturnTime(CT)
 			ply:SetQuickturnAng(cmd:GetViewAngles())
 
-			if CLIENT then
+			if CLIENT and IsFirstTimePredicted() then
 				DoJumpTurn(false)
 			elseif game.SinglePlayer() then
 				ply:SendLua("DoJumpTurn(false)")
 			end
 
 			ply:SetJumpTurn(true)
+
 			ply:ViewPunch(Angle(2.5, 0, 5))
+
 			ply:SetViewOffsetDucked(Vector(0, 0, 17))
 			ply:SetViewOffset(Vector(0, 0, 64))
 
@@ -623,7 +625,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 					net.WriteBool(slippery)
 					net.WriteBool(ply.DiveSliding)
 				net.Send(ply)
-			elseif CLIENT_IFTP() then
+			elseif CLIENT and IsFirstTimePredicted() then
 				SlidingAnimEnd(slippery, ply.DiveSliding)
 			end
 

@@ -1,9 +1,7 @@
-local cvarwindsound
-local minimalvm
+local windsound
 
 if CLIENT then
-	minimalvm = CreateClientConVar("Beatrun_MinimalVM", 1, true, true, "Lowers the running viewmodel", 0, 1)
-	cvarwindsound = CreateClientConVar("Beatrun_Wind", 1, true, false, "Wind noises", 0, 1)
+	windsound = CreateClientConVar("Beatrun_Wind", 1, true, false, "Wind noises", 0, 1)
 
 	SWEP.PrintName = "Runner Hands"
 	SWEP.Slot = 0
@@ -12,7 +10,7 @@ if CLIENT then
 	SWEP.DrawCrosshair = false
 
 	hook.Add("VManipPrePlayAnim", "LOCNoVManip", function()
-		if LocalPlayer():GetActiveWeapon():GetClass() == "runnerhands" or blinded then return false end
+		if LocalPlayer():UsingRH() or blinded then return false end
 	end)
 end
 
@@ -73,10 +71,10 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Float", 2, "PunchReset")
 end
 
-local runseq = {
-	[6] = true,
-	[7] = true
-}
+-- local runseq = {
+-- 	[6] = true,
+-- 	[7] = true
+-- }
 
 local oddseq = {
 	[8] = true,
@@ -86,22 +84,6 @@ local oddseq = {
 }
 
 function SWEP:GetViewModelPosition(pos, ang)
-	if minimalvm:GetBool() then
-		if not self.posz then
-			self.posz = pos.z
-		end
-
-		local seq = self:GetSequence()
-
-		if runseq[seq] then
-			self.posz = Lerp(10 * FrameTime(), self.posz, -2)
-		else
-			self.posz = Lerp(10 * FrameTime(), self.posz, 0)
-		end
-
-		pos.z = pos.z + self.posz
-	end
-
 	if oddseq[self:GetSequence()] then return pos, ang end
 
 	self.BobScale = 0
@@ -142,6 +124,7 @@ local fallct = 0
 function SWEP:Think()
 	local ply = self:GetOwner()
 	local viewmodel = ply:GetViewModel()
+
 	if not IsValid(viewmodel) then return end
 
 	if self:GetHoldType() == "fist" and CurTime() > self:GetPunchReset() then
@@ -162,6 +145,36 @@ function SWEP:Think()
 	local ismoving = vel:Length() > 100 and not ply:KeyDown(IN_BACK) and ply:IsSprinting() and not ply:Crouching() and not ply:KeyDown(IN_DUCK)
 	local injump = curseq == 13 or curseq == 14 or curseq == 17 or curseq == -1 or curseq == 1
 	infall = curseq == 19
+
+	--[[ what a piece of shit, send help
+	if vel:Length() == 0 and util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply).Hit and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:Crouching() and ply:WaterLevel() == 0 and ply:GetWallrun() == 0 then
+		if (math.floor(ply:LocalEyeAngles().y) <= 35 and math.floor(ply:LocalEyeAngles().y) >= 5) or (math.floor(ply:LocalEyeAngles().y) <= 125 and math.floor(ply:LocalEyeAngles().y) >= 95) or (math.floor(ply:LocalEyeAngles().y) <= -55 and math.floor(ply:LocalEyeAngles().y) >= -85) or (math.floor(ply:LocalEyeAngles().y) <= -145 and math.floor(ply:LocalEyeAngles().y) >= -175) then
+			if CLIENT then
+				BodyLimitX = 20
+
+				return ArmInterrupt("standhandwallright")
+			elseif game.SinglePlayer() then
+				return ply:SendLua("BodyLimitX = 20 ArmInterrupt('standhandwallright')")
+			end
+		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -5) or (math.floor(ply:LocalEyeAngles().y) <= 95 and math.floor(ply:LocalEyeAngles().y) >= 85) or (math.floor(ply:LocalEyeAngles().y) <= -85 and math.floor(ply:LocalEyeAngles().y) >= -95) or (math.floor(ply:LocalEyeAngles().y) <= -175 or math.floor(ply:LocalEyeAngles().y) >= 175) then
+			if CLIENT then
+				BodyLimitX = 20
+
+				return ArmInterrupt("standhandwallboth")
+			elseif game.SinglePlayer() then
+				return ply:SendLua("BodyLimitX = 20 ArmInterrupt('standhandwallboth')")
+			end
+		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -35) or (math.floor(ply:LocalEyeAngles().y) <= 85 and math.floor(ply:LocalEyeAngles().y) >= 55) or (math.floor(ply:LocalEyeAngles().y) <= -95 and math.floor(ply:LocalEyeAngles().y) >= -125) or (math.floor(ply:LocalEyeAngles().y) <= 175 and math.floor(ply:LocalEyeAngles().y) >= 145) then
+			if CLIENT then
+				BodyLimitX = 20
+
+				return ArmInterrupt("standhandwallleft")
+			elseif game.SinglePlayer() then
+				return ply:SendLua("BodyLimitX = 20 ArmInterrupt('standhandwallleft')")
+			end
+		end
+	end
+	--]]
 
 	self:SetSideStep((curseq == 15 or curseq == 16) and GetConVar("Beatrun_SideStep"):GetBool())
 
@@ -296,7 +309,7 @@ function SWEP:Think()
 			self.RunWind2 = CreateSound(self, "runwind.wav")
 		end
 
-		if velocity > 250 and cvarwindsound:GetBool() then
+		if velocity > 250 and windsound:GetBool() then
 			self.RunWind1:Play()
 			self.RunWind2:Play()
 

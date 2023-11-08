@@ -1,5 +1,6 @@
 function BRProtectedEntity(class, pos, ang)
 	local a = ents.Create(class)
+
 	a:SetPos(pos)
 	a:SetAngles(ang)
 	a:Spawn()

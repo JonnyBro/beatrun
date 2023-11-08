@@ -67,7 +67,7 @@ end
 
 function SWEP:PrimaryAttack()
 	self:CallOnClient("PrimaryAttack")
-	local ply = self.Owner
+	local ply = self:GetOwner()
 
 	if not self.points[#self.points] or (ply:EyePos() + ply:EyeAngles():Forward() * 50):Distance(self.points[#self.points]) > 5 then
 		table.insert(self.points, ply:EyePos() + ply:EyeAngles():Forward() * 50)
@@ -77,17 +77,20 @@ end
 function SWEP:SecondaryAttack()
 	self:CallOnClient("SecondaryAttack")
 
-	local ply = self.Owner
+	local ply = self:GetOwner()
 
 	self.center:Set(ply:GetEyeTrace().HitPos)
 end
 
 hook.Add("PostDrawTranslucentRenderables", "ShapeGun", function()
-	local ply = Entity(1)
-	local wep = ply:GetActiveWeapon() or nil
+	if not CLIENT then return end
 
-	if IsValid(wep) and wep:GetClass() == "shapedrawer" then
-		for k, v in ipairs(wep.points) do
+	local ply = LocalPlayer()
+	local wep = ply:GetActiveWeapon()
+	local isShapeDrawer = IsValid(wep) and wep:GetClass() == "shapedrawer"
+
+	if IsValid(ply) and isShapeDrawer then
+		for _, v in ipairs(wep.points) do
 			render.DrawWireframeBox(v, angle_zero, Vector(-1, -1, -1), Vector(1, 1, 1))
 		end
 

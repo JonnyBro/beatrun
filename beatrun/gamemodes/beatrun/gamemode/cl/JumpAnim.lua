@@ -16,11 +16,9 @@ local animtable = {
 fbanims = {
 	ladderexittoplefthand = true,
 	runfwdstart = true,
-	vaultkong = true,
 	walktostandleft = true,
 	wallrunverticalstart = true,
 	meleeair = true,
-	vaultonto = true,
 	fallinguncontrolled = true,
 	stand = true,
 	meslideend = true,
@@ -36,7 +34,6 @@ fbanims = {
 	hangheaveup = true,
 	jumpwrright = true,
 	meleeairhit = true,
-	vaultover = true,
 	jumpstill = true,
 	dodgejumpright = true,
 	jumpturnflyidle = true,
@@ -75,10 +72,8 @@ fbanims = {
 	diveslideidle = true,
 	wallrunright = true,
 	diveslideend = true,
-	vaultontohigh = true,
 	divestart = true,
 	hangfoldedheaveup = true,
-	vaultoverhigh = true,
 	ziplinestart = true,
 	dodgejumpleft = true,
 	evaderoll = true,
@@ -107,10 +102,20 @@ fbanims = {
 	ladderclimbuprighthandstill = true,
 	jumpidle = true,
 	jumpair = true,
+	vaultkong = true,
+	vaultonto = true,
+	vaultover = true,
+	vaultontohigh = true,
+	vaultoverhigh = true,
 	walkbalancefalloffright = true,
 	meleeairstill = true,
 	swingjumpoff = true,
-	snatchscar = true
+	snatchscar = true,
+	water_swimfwd = true,
+	water_swimright = true,
+	water_swimleft = true,
+	water_swimback = true,
+	water_float = true
 }
 
 local jumpanims = {
@@ -149,7 +154,6 @@ local events = {
 	fall = true,
 	ladderclimbleft = true,
 	jumpwallrun = true,
-	vaultonto = true,
 	ziplinestart = true,
 	hangstrafeleft = true,
 	hangstraferight = true,
@@ -165,7 +169,6 @@ local events = {
 	jumpslide = true,
 	swingpipeleft = true,
 	ladderenterhang = true,
-	vault = true,
 	disarmsniper = true,
 	jumpstill = true,
 	climb = true,
@@ -199,10 +202,13 @@ local events = {
 	ladderexittoprighthand = true,
 	hangend = true,
 	springboard = true,
+	vault = true,
 	vaultkong = true,
+	vaultonto = true,
+	vaultover = true,
+	vaultontohigh = true,
 	ladderclimbright = true,
-	meleeairstill = true,
-	vaultontohigh = true
+	meleeairstill = true
 }
 
 local eventslut = {
@@ -275,7 +281,10 @@ local armfollowanims = {
 	diestandlong = true,
 	diveslidestart = true,
 	vaultoverhigh = true,
-	walkfwd = true
+	walkfwd = true,
+	crouchstill = true,
+	crouchfwd = true,
+	crouchbwd = true
 }
 
 local armlock = {
@@ -321,10 +330,13 @@ local stillanims = {
 
 local arminterrupts = {
 	punchright = true,
-	doorbash = true,
-	punchmid = true,
 	punchleft = true,
-	jumpturnflypiecesign = true
+	punchmid = true,
+	doorbash = true,
+	jumpturnflypiecesign = true,
+	standhandwallright = true,
+	standhandwallleft = true,
+	standhandwallboth = true
 }
 
 local transitionanims = {
@@ -333,8 +345,6 @@ local transitionanims = {
 	ladderexittoplefthand = "runfwd",
 	walktostandleft = "stand",
 	fallinguncontrolled = "runfwd",
-	vaultoverhigh = "runfwd",
-	vaultonto = "runfwd",
 	hangstrafeleft = "hang",
 	ladderclimbhangstart = "ladderclimbuprighthandstill",
 	hanghardstart2 = "hang",
@@ -350,7 +360,6 @@ local transitionanims = {
 	hangheaveup = "runfwd",
 	dodgejumpleft = "stand",
 	walkbalancefalloffleft = "jumpair",
-	vaultover = "jumpair",
 	meleeairhit = "jumpair",
 	dodgejumpright = "stand",
 	meleeair = "jumpair",
@@ -368,7 +377,6 @@ local transitionanims = {
 	ladderclimbuplefthand = "ladderclimbuplefthandstill",
 	jumpturnfly = "jumpturnflyidle",
 	meleewrleft = "jumpair",
-	vaultkong = "runfwd",
 	meleeslide = "meslideloop",
 	stepuprightleg = "runfwd",
 	snatchsniper = "stand",
@@ -377,8 +385,17 @@ local transitionanims = {
 	wallrunverticalturn = "jumpslow",
 	ladderclimbuprighthand = "ladderclimbuprighthandstill",
 	meleeairstill = "jumpair",
+	vaultoverhigh = "runfwd",
+	vaultonto = "runfwd",
+	vaultover = "jumpair",
+	vaultkong = "runfwd",
 	vaultontohigh = "runfwd",
-	snatchscar = "stand"
+	snatchscar = "stand",
+	water_swimfwd = "runfwd",
+	water_swimright = "runfwd",
+	water_swimleft = "runfwd",
+	water_swimback = "runfwd",
+	water_float = "runfwd"
 }
 
 local nospinebend = {
@@ -412,7 +429,10 @@ local nospinebend = {
 	ladderclimbuprighthand = true,
 	ladderclimbhangstart = true,
 	vaultontohigh = true,
-	snatchscar = true
+	snatchscar = true,
+	crouchstill = true,
+	crouchfwd = true,
+	crouchbwd = true
 }
 
 local worldarm = {
@@ -442,8 +462,12 @@ local worldarm = {
 	ladderclimbuprighthand = true,
 	ladderclimbhangstart = true,
 	snatchscar = true,
-	jumpcoil = true,
-	jumpturnlandidle = true
+	jumpturnlandidle = true,
+	standhandwallright = true,
+	standhandwallleft = true,
+	standhandwallboth = true,
+	swing = true,
+	swingstraight = true
 }
 
 local ignorezarm = {
@@ -464,7 +488,8 @@ local nocyclereset = {
 
 local ignorebac = {
 	evaderoll = true,
-	meroll = true
+	meroll = true,
+	merollgun = true
 }
 
 local customspeed = {
@@ -489,7 +514,7 @@ local customarmoffset = {
 	meslidestart45 = Vector(2, 5, 5),
 	meslideloop45 = Vector(2, 5, 5),
 	meslideend = Vector(2, 5, 9.5),
-	meslideendprone = Vector(2, 5, 9.5),
+	meslideendprone = Vector(0, 0, 3),
 	meleeslide = Vector(2, 5, 9.5),
 	jumpturnfly = Vector(0, 2.5, 7.5),
 	jumpturnflyidle = Vector(0, 2.5, 7.5),
@@ -508,9 +533,9 @@ local customarmoffset = {
 	ladderexittoprighthand = Vector(5, 0, 0),
 	ladderclimbhangstart = Vector(-5, 0, 0),
 	ladderenterbottom = Vector(-7.5, 0, 0),
-	crouchstill = Vector(-4, 0, -5),
-	crouchfwd = Vector(-4, 0, -5),
-	crouchbwd = Vector(0, 0, 0),
+	crouchstill = Vector(-4, 0, -2),
+	crouchfwd = Vector(-4, 0, -2),
+	crouchbwd = Vector(-4, 0, -2),
 	walkfwd = Vector(10, 0, -10),
 	runbwd = Vector(0, 0, 3),
 	stand = Vector(10, 0, -10),
@@ -533,9 +558,9 @@ local customcamoffset = {
 	hangstrafeleft = Vector(-2.5, 0, 0),
 	hangstraferight = Vector(-2.5, 0, 0),
 	snatchscar = snatchscarcam1,
-	crouchstill = Vector(0, 0, 2.5),
-	crouchfwd = Vector(0, 0, 2.5),
-	crouchbwd = Vector(0, 0, 2.5)
+	crouchstill = Vector(2, 0, 2.5),
+	crouchfwd = Vector(2, 0, 2.5),
+	crouchbwd = Vector(2, 0, 2.5)
 }
 
 local transitionchecks = {
@@ -753,7 +778,14 @@ local transitionchecks = {
 
 fbfunctions = {
 	vaultontohigh = function(ply) return true end,
+	swing = function(ply)
+		CamIgnoreAng = false
+		BodyLimitY = 180
+	end,
 	swingstraight = function(ply)
+		CamIgnoreAng = false
+		BodyLimitY = 180
+
 		BodyAnim:SetPoseParameter("swing", (ply:GetSBOffset() / 45 - 1) * 100)
 	end,
 	ziplinestart = function(ply)
@@ -914,7 +946,6 @@ fbfunctions = {
 local defaultcamoffset = Vector()
 
 local playermodelbones = {"ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_R_UpperArm"}
-
 local fingers = {"ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11"}
 
 local fingerscustom = {
@@ -1011,7 +1042,6 @@ eventsounds = {
 }
 
 local CharaName = "Faith"
-local CharaLen = #CharaName
 
 local function BodyEventSounds(anim)
 	local tbl = eventsounds[anim]
@@ -1022,7 +1052,7 @@ local function BodyEventSounds(anim)
 		for k, v in pairs(tbl) do
 			local func = nil
 
-			if v:Left(CharaLen) == CharaName then
+			if v:Left(#CharaName) == CharaName then
 				func = ply.FaithVO
 			else
 				func = ply.EmitSound
@@ -1212,7 +1242,7 @@ local function JumpArmDraw(a, b, c)
 
 		local activewep = ply:GetActiveWeapon()
 
-		if IsValid(activewep) and activewep:GetClass() == "runnerhands" then
+		if ply:UsingRH() then
 			if not worldarm[BodyAnimString] then
 				cam.Start3D(pos, ang)
 					cam.IgnoreZ(ignorezarm[BodyAnimString] or false)
@@ -1372,7 +1402,7 @@ function ArmInterrupt(anim)
 		local arm = CreateBodyAnimArmCopy()
 
 		if IsValid(arm) then
-			for k, v in ipairs(fingers) do
+			for _, v in ipairs(fingers) do
 				local b = BodyAnimArmCopy:LookupBone(v)
 
 				if b then
@@ -1380,13 +1410,29 @@ function ArmInterrupt(anim)
 				end
 			end
 
-			for k, v in pairs(fingerscustom) do
+			for k, _ in pairs(fingerscustom) do
 				local b = BodyAnimArmCopy:LookupBone(k)
 
 				if b then
 					arm:ManipulateBoneAngles(b, angle_zero)
 				end
 			end
+
+			--[[ TODO: make work good
+			if string.match(anim, "standhandwall") then
+				local ply = LocalPlayer()
+				local trace = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply)
+				local x = trace.Normal.x < 0.6 and trace.Normal.x or trace.Normal.y
+				local y = trace.Normal.y > -0.8 and trace.Normal.y or -trace.Normal.x
+
+				local newAng = Angle(x * (5 * trace.Fraction * x), 0, x * (10 * trace.Fraction * y))
+
+				ply:ChatPrint("Fraction: " .. tostring(trace.Fraction))
+				ply:ChatPrint("Normal: " .. tostring(trace.Normal))
+
+				arm:SetAngles(newAng)
+			end
+			--]]
 
 			arm:SetSequence(anim)
 			arm:SetCycle(0)
@@ -1621,6 +1667,20 @@ local function JumpThink()
 
 			if check and check(ply) or not check and BodyAnimCycle >= 0.9 and transitionanims[BodyAnimString] then
 				BodyAnim:SetSequence(transitionanims[BodyAnimString])
+			end
+
+			if ply:WaterLevel() >= 2 and not ply:Crouching() and not ply:OnGround() and ply:GetMoveType() ~= MOVETYPE_NOCLIP then
+				BodyAnim:SetSequence(BodyAnim:LookupSequence("water_float"))
+
+				if ply:KeyDown(IN_MOVELEFT) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimleft"))
+				elseif ply:KeyDown(IN_MOVERIGHT) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimright"))
+				elseif ply:KeyDown(IN_FORWARD) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimfwd"))
+				elseif ply:KeyDown(IN_BACK) and vel_l > 5 then
+					BodyAnim:SetSequence(BodyAnim:LookupSequence("water_swimback"))
+				end
 			end
 
 			if BodyAnimString == "wallrunverticalstart" or BodyAnimString == "wallrunvertical" then

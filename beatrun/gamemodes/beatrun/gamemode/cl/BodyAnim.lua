@@ -10,11 +10,14 @@ BodyAnimString = "nil"
 BodyAnimMDLString = "nil"
 BodyAnimSpeed = 1
 bodyanimlastattachang = Angle(0, 0, 0)
+
 followplayer = true
 deleteonend = true
 lockang = false
+
 CamAddAng = false
 CamIgnoreAng = false
+
 -- local BodyAnimPos = Vector(0, 0, 0)
 -- local BodyAnimAngLerp = Angle(0, 0, 0)
 -- local DidDraw = false
@@ -24,29 +27,38 @@ local savedeyeangb = Angle(0, 0, 0)
 -- local bodylockview = false
 -- local bodyanimdone = false
 -- local holstertime = 0
+
 local animmodelstring = ""
 local showweapon = false
 local showvm = false
 local usefullbody = false
 local ignorez = false
 local customcycle = false
+
 deathanim = false
+
 local allowmove = false
 local allowedangchange = false
 local attach, attachId, weapontoidle = nil, nil, nil
 local smoothend = false
 local endlerp = 0
+
 camoffset = Vector()
 camjoint = "eyes"
+
 BodyAnimCrouchLerp = 1
 BodyAnimCrouchLerpZ = 0
 BodyAnimLimitEase = false
+
 CamShake = false
 CamShakeAng = Angle()
 CamShakeMult = 1
+
 local lastangy = 0
+
 viewtiltlerp = Angle()
 ViewTiltAngle = Angle()
+
 local BodyAnimStartPos = Vector()
 local view = {}
 local justremoved = false
@@ -108,7 +120,7 @@ function RemoveBodyAnim(noang)
 	local currentwep = ply:GetActiveWeapon()
 	local vm = ply:GetViewModel()
 
-	if IsValid(currentwep) and currentwep:GetClass() ~= "runnerhands" then
+	if ply:notUsingRH() then
 		if currentwep.PlayViewModelAnimation then
 			currentwep:PlayViewModelAnimation("Draw")
 		else
@@ -210,13 +222,13 @@ function CacheLerpBodyAnim()
 
 		local pos = LocalPlayer():GetPos()
 		-- local posdelta = pos - matrixfrompos
-		local self = BodyAnim
-		self.m = self.m or Matrix()
+		local this = BodyAnim
+		this.m = this.m or Matrix()
 
 		local from = matrixfrom
 		local to = matrixto
 
-		for bone = 0, self:GetBoneCount() - 1 do
+		for bone = 0, this:GetBoneCount() - 1 do
 			if not armbones[BodyAnim:GetBoneName(bone)] then
 				if not to[bone] then
 					to[bone] = {{}, {}, {}}
@@ -228,7 +240,7 @@ function CacheLerpBodyAnim()
 				from[bone] = cachebody[bone]:FastToTable(from[bone]) or from[bone]
 				to[bone] = to[bone] or ModelBoneMatrix:FastToTable(to[bone])
 
-				local bonematrix = self:GetBoneMatrix(bone)
+				local bonematrix = this:GetBoneMatrix(bone)
 				bonematrix:SetTranslation(bonematrix:GetTranslation() - pos)
 
 				to[bone] = bonematrix:FastToTable(to[bone])
@@ -243,8 +255,8 @@ function CacheLerpBodyAnim()
 					v[4] = LerpL(transitionlerp, from[4], v[4])
 				end
 
-				if not self.m then
-					self.m = Matrix(to[bone])
+				if not this.m then
+					this.m = Matrix(to[bone])
 				else
 					local bt = to[bone]
 					local bt1 = bt[1]
@@ -252,12 +264,12 @@ function CacheLerpBodyAnim()
 					local bt3 = bt[3]
 					slot15 = bt[4]
 
-					self.m:SetUnpacked(bt1[1], bt1[2], bt1[3], bt1[4], bt2[1], bt2[2], bt2[3], bt2[4], bt3[1], bt3[2], bt3[3], bt3[4], 0, 0, 0, 1)
+					this.m:SetUnpacked(bt1[1], bt1[2], bt1[3], bt1[4], bt2[1], bt2[2], bt2[3], bt2[4], bt3[1], bt3[2], bt3[3], bt3[4], 0, 0, 0, 1)
 				end
 
-				self.m:SetTranslation(self.m:GetTranslation() + pos)
-				self.m:SetScale(scalevec)
-				self:SetBoneMatrix(bone, self.m)
+				this.m:SetTranslation(this.m:GetTranslation() + pos)
+				this.m:SetScale(scalevec)
+				this:SetBoneMatrix(bone, this.m)
 			end
 		end
 
@@ -331,8 +343,8 @@ function StartBodyAnim(animtable)
 	if not IsValid(ply:GetHands()) then return end
 
 	local plymodel = ply
-	local playermodel = string.Replace(ply:GetModel(), "models/models/", "models/")
-	local handsmodel = string.Replace(ply:GetHands():GetModel(), "models/models/", "models/")
+	local playermodel = ply:GetModel()
+	local handsmodel = ply:GetHands():GetModel()
 
 	if usefullbody == 2 then
 		BodyAnimMDL = ClientsideModel(playermodel, RENDERGROUP_BOTH)
@@ -468,8 +480,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		return
 	end
 
-	-- This is the issue with disappearing model when sliding, should be fixed for now
-	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then -- TODO: Something if appears again...
+	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then
 		if updatethirdperson then
 			ply:SetNoDraw(false)
 			BodyAnim:SetNoDraw(true)
@@ -494,9 +505,8 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 					if ply:Crouching() then
 						local from = BodyAnimCrouchLerpZ
-						local activewep = ply:GetActiveWeapon()
 
-						if IsValid(activewep) and activewep:GetClass() == "runnerhands" then
+						if ply:UsingRH() then
 							from = ply:EyePos().z - 64
 						end
 
@@ -696,8 +706,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 end
 
 hook.Add("CreateMove", "BodyLimitMove", function(cmd)
-	-- local ply = LocalPlayer()
-
 	if IsValid(BodyAnimMDL) and not allowmove then
 		cmd:ClearButtons()
 		cmd:ClearMovement()

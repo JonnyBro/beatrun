@@ -1,5 +1,4 @@
 local meta = FindMetaTable("Player")
--- local XP_max = 2000000
 local XP_ratiocache = nil
 local parkourevent_lastpos = Vector()
 

@@ -66,6 +66,8 @@ function SWEP:PrimaryAttack()
 	if SERVER then
 		local zip = CreateZipline(ply:EyePos(), ply:GetEyeTrace().HitPos)
 
+		zip:SetTwoWay(true)
+
 		table.insert(self.ziplines, zip)
 	end
 end

@@ -70,7 +70,7 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 
 				ParkourEvent("wallrunv", ply)
 
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					BodyLimitX = 30
 					BodyLimitY = 70
 					BodyAnimCycle = 0
@@ -198,11 +198,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 
 			local activewep = ply:GetActiveWeapon()
 
-			if IsValid(activewep) then
-				usingrh = activewep:GetClass() == "runnerhands"
-			end
-
-			if usingrh then
+			if ply:UsingRH() then
 				activewep:SendWeaponAnim(ACT_VM_HITCENTER)
 				activewep:SetBlockAnims(false)
 			end
@@ -225,11 +221,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 
 			local activewep = ply:GetActiveWeapon()
 
-			if IsValid(activewep) then
-				usingrh = activewep:GetClass() == "runnerhands"
-			end
-
-			if usingrh then
+			if ply:UsingRH() then
 				activewep:SendWeaponAnim(ACT_VM_HITCENTER)
 				activewep:SetBlockAnims(false)
 			end

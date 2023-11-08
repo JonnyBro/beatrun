@@ -72,4 +72,4 @@ local function ToggleWhitescale()
 	end
 end
 
-concommand.Add("ToggleWhitescale", ToggleWhitescale)
+concommand.Add("Beatrun_ToggleWhitescale", ToggleWhitescale)

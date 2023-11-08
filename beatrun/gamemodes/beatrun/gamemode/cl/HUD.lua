@@ -1,15 +1,16 @@
-local showtotalXP = CreateClientConVar("Beatrun_HUDXP", "1", true, false, "Show total XP near nickname", 0, 1)
-local sway = CreateClientConVar("Beatrun_HUDSway", "1", true, false, "Display HUD swaying", 0, 1)
-local dynamic = CreateClientConVar("Beatrun_HUDDynamic", "0", true, false, "Hide HUD when moving", 0, 1)
-local hidden = CreateClientConVar("Beatrun_HUDHidden", "0", true, false, "Hides most of the XP HUD", 0, 2)
-local reticle = CreateClientConVar("Beatrun_HUDReticle", "1", true, false, "Display a reticle", 0, 1)
+local showtotalXP = CreateClientConVar("Beatrun_HUDXP", "1", true, false, language.GetPhrase("beatrun.convars.hudxp"), 0, 1)
+local sway = CreateClientConVar("Beatrun_HUDSway", "1", true, false, language.GetPhrase("beatrun.convars.hudsway"), 0, 1)
+local dynamic = CreateClientConVar("Beatrun_HUDDynamic", "0", true, false, language.GetPhrase("beatrun.convars.huddynamic"), 0, 1)
+local hidden = CreateClientConVar("Beatrun_HUDHidden", "0", true, false, language.GetPhrase("beatrun.convars.hudhidden"), 0, 2)
+local reticle = CreateClientConVar("Beatrun_HUDReticle", "1", true, false, language.GetPhrase("beatrun.convars.hudreticle"), 0, 1)
+
+CreateClientConVar("Beatrun_HUDTextColor", "255 255 255 255", true, true, language.GetPhrase("beatrun.convars.hudtextcolor"))
+CreateClientConVar("Beatrun_HUDCornerColor", "20 20 20 100", true, true, language.GetPhrase("beatrun.convars.hudcornercolor"))
+CreateClientConVar("Beatrun_HUDFloatingXPColor", "255 255 255 255", true, true, language.GetPhrase("beatrun.convars.hudfloatxpcolor"))
+
 local packetloss = Material("vgui/packetloss.png")
 local lastloss = 0
 local MELogo = Material("vgui/MELogo.png", "mips smooth")
-
-CreateClientConVar("Beatrun_HUDTextColor", "255 255 255 255", true, true, "HUD Text Color\nDefault: 255 255 255 255")
-CreateClientConVar("Beatrun_HUDCornerColor", "20 20 20 100", true, true, "HUD Left Corner Color\nDefault: 20 20 20 100")
-CreateClientConVar("Beatrun_HUDFloatingXPColor", "255 255 255 255", true, true, "HUD Floating XP Color\nDefault: 255 255 255 255")
 
 local hide = {
 	CHudBattery = true,
@@ -129,12 +130,12 @@ local function BeatrunHUD()
 
 	surface.SetFont("DebugFixedSmall")
 
-	-- local vtext = (ply:SteamID() or "?") .. " | " .. VERSIONGLOBAL
-	-- local tw, th = surface.GetTextSize(vtext)
-	-- surface.SetTextColor(255, 255, 255, 15)
-	-- surface.SetTextPos(scrw - tw, 0)
-	-- surface.DrawText(vtext)
-	-- surface.SetFont("BeatrunHUD")
+	local vtext = VERSIONGLOBAL
+	local tw, _ = surface.GetTextSize(vtext)
+	surface.SetTextColor(255, 255, 255, 15)
+	surface.SetTextPos(scrw - tw, 0)
+	surface.DrawText(vtext)
+	surface.SetFont("BeatrunHUD")
 
 	local pl = ply:GetNW2Int("PLoss")
 	local CT = CurTime()
@@ -170,7 +171,7 @@ local function BeatrunHUD()
 
 	local coursename = nil
 	local customname = hook.Run("BeatrunHUDCourse")
-	coursename = customname and customname or Course_Name ~= "" and "Course: " .. Course_Name or "Freeplay"
+	coursename = customname and customname or Course_Name ~= "" and language.GetPhrase("beatrun.hud.course"):format(Course_Name) or "#beatrun.hud.freeplay"
 	-- local lastxp = ply.LastXP or 0
 	local nicktext = nil
 
@@ -223,7 +224,7 @@ local function BeatrunHUD()
 		surface.SetFont("BeatrunHUD")
 		surface.SetTextColor(text_color)
 		surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.9 + vp.x)
-		surface.DrawText("Lv." .. ply:GetLevel())
+		surface.DrawText(language.GetPhrase("beatrun.hud.lvl"):format(ply:GetLevel()))
 
 		if tobool(LocalPlayer():GetInfo("Beatrun_PuristMode")) then
 			surface.SetDrawColor(230, 230, 230)
@@ -396,7 +397,7 @@ function BeatrunLeaderboard(forced)
 
 			if isinfection and pbtimenum == 0 and v:GetNW2Bool("Infected") then
 				surface.SetTextColor(infectorcolor)
-				surface.DrawText(" | Infector")
+				surface.DrawText(" | " .. language.GetPhrase("beatrun.hud.infector"))
 			else
 				surface.DrawText(" | " .. pbtime)
 			end
@@ -541,7 +542,7 @@ local function BeatrunReticle()
 
 	local wep = LocalPlayer():GetActiveWeapon()
 
-	if not IsValid(wep) or wep:GetClass() ~= "runnerhands" then return end
+	if not IsValid(wep) or LocalPlayer():notUsingRH() then return end
 
 	surface.SetDrawColor(255, 255, 255)
 	surface.SetMaterial(crosshair_standard)

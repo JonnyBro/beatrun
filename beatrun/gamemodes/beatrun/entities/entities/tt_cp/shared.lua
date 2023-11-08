@@ -100,7 +100,7 @@ function ENT:DrawTranslucent()
 		render.DrawBeam(newpos, newpos + circleup, 8, 0, 1, red, true)
 	end
 
-	local nextCP = Checkpoints[self:GetCPNum() + 1] or self
+	local nextCP = IsValid(Checkpoints[self:GetCPNum() + 1]) and Checkpoints[self:GetCPNum() + 1] or self
 
 	local selfpos = self:GetPos() + checkheight
 	local fwAng = (nextCP:GetPos() - selfpos):GetNormalized():Angle()

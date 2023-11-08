@@ -1,6 +1,6 @@
-if SERVER then
-	local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", {FCVAR_ARCHIVE}, "Allow players to spawn props and entities")
+local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", {FCVAR_ARCHIVE})
 
+if SERVER then
 	util.AddNetworkString("SPParkourEvent")
 
 	local spawn = {"PlayerGiveSWEP", "PlayerSpawnEffect", "PlayerSpawnNPC", "PlayerSpawnObject", "PlayerSpawnProp", "PlayerSpawnRagdoll", "PlayerSpawnSENT", "PlayerSpawnSWEP", "PlayerSpawnVehicle"}
@@ -9,7 +9,7 @@ if SERVER then
 		if not ply:IsAdmin() and not allowPropSpawn:GetBool() then return false end
 	end
 
-	for k, v in ipairs(spawn) do
+	for _, v in ipairs(spawn) do
 		hook.Add(v, "BlockSpawn", BlockSpawn)
 	end
 
@@ -21,18 +21,18 @@ if SERVER then
 end
 
 if CLIENT then
-	CreateClientConVar("Beatrun_FOV", 100, true, true, "'Woah how are you moving this fast' and other hilarious jokes", 70, 120)
-	CreateClientConVar("Beatrun_CPSave", 1, true, true, "Respawning during a course will go back to the last hit checkpoint", 0, 1)
+	CreateClientConVar("Beatrun_FOV", 100, true, true, language.GetPhrase("beatrun.convars.fov"), 70, 120)
+	CreateClientConVar("Beatrun_CPSave", 1, true, true, language.GetPhrase("beatrun.convars.cpsave"), 0, 1)
 end
 
 hook.Add("PlayerNoClip", "BlockNoClip", function(ply, enabled)
 	if enabled and Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 then
 		ply:SetNW2Int("CPNum", -1)
 
-		if CLIENT_IFTP() then
-			notification.AddLegacy("Noclip Detected! Respawn to restart the course", NOTIFY_ERROR, 4)
+		if CLIENT and IsFirstTimePredicted() then
+			notification.AddLegacy(language.GetPhrase("beatrun.misc.noclipdetected"), NOTIFY_ERROR, 4)
 		elseif SERVER and game.SinglePlayer() then
-			ply:SendLua("notification.AddLegacy(\"Noclip Detected! Respawn to restart the course\", NOTIFY_ERROR, 4)")
+			ply:SendLua("notification.AddLegacy(\"#beatrun.misc.noclipdetected\", NOTIFY_ERROR, 4)")
 		end
 	end
 
@@ -70,9 +70,7 @@ hook.Add("SetupMove", "JumpDetect", function(ply, mv, cmd)
 		end
 	end
 
-	local activewep = ply:GetActiveWeapon()
-
-	if IsValid(activewep) and activewep:GetClass() == "runnerhands" then
+	if ply:UsingRH() then
 		ply:SetWasOnGround(ply:OnGround())
 
 		return
@@ -106,11 +104,11 @@ hook.Add("SetupMove", "JumpDetect", function(ply, mv, cmd)
 end)
 
 hook.Add("CanProperty", "BlockProperty", function(ply)
-	if not ply:IsSuperAdmin() then return false end
+	if not ply:IsAdmin() then return false end
 end)
 
 hook.Add("CanDrive", "BlockDrive", function(ply)
-	if not ply:IsSuperAdmin() then return false end
+	if not ply:IsAdmin() then return false end
 end)
 
 if CLIENT and game.SinglePlayer() then

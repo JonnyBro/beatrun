@@ -45,7 +45,7 @@ net.Receive("SlowSounds", function()
 	end
 end)
 
-concommand.Add("ToggleTimeSlow", function(ply)
+concommand.Add("Beatrun_ToggleTimeSlow", function(ply)
 	slow = not slow
 
 	net.Start("SlowSounds")

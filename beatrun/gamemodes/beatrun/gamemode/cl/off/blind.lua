@@ -610,9 +610,8 @@ function ToggleBlindness(toggle)
 	if blinded then
 		local ply = LocalPlayer()
 		local activewep = ply:GetActiveWeapon()
-		local usingrh = IsValid(activewep) and activewep:GetClass() == "runnerhands"
 
-		if usingrh and activewep.RunWind1 then
+		if ply:UsingRH() and activewep.RunWind1 then
 			activewep.RunWind1:Stop()
 			activewep.RunWind2:Stop()
 		end

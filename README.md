@@ -1,75 +1,95 @@
-# Beatrun | Community version
+# Beatrun | Community edition
 
-Infamous parkour addon for Garry's Mod, fully open sourced and maintained by the community.
+* [Русский](./README_ru.md)
 
-This version does not include malicious modules, code or networking. What it does contain is:
-* Lua modules for Discord Rich Presence
-* Lua modules for Steam Presence
-* Network connectivity for courses (activates only when you load or upload courses, and by default `courses.beatrun.ru` is used)
+Infamous parkour addon for Garry's Mod, fully open sourced and maintained by the community (me 😞).
 
-**All of this is optional and you may remove all of it. (modules are located [here](https://github.com/JonnyBro/beatrun/blob/master/lua/bin/) and online courses functionality is [here](https://github.com/JonnyBro/beatrun/blob/master/beatrun/gamemodes/beatrun/gamemode/cl/OnlineCourse.lua))**
+> [!IMPORTANT]
+> You will not find here any malicious modules, code or networking! We have modules and networking for:
+>
+> * Discord Rich Presence.
+> * Steam Presence.
+> * Custom Courses Database.
+>
+> **All of this is optional and you can remove all of it.**\
+> Modules are located [here](https://github.com/JonnyBro/beatrun/tree/main/lua/bin) and courses database functionality is [here](https://github.com/JonnyBro/beatrun/blob/main/beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).\
+> You can find source code for modules in [Credits](#credits) section.
 
-# Installation (Manual)
-1. Download this repository [here](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).
-2. Delete the `beatrun` folder in *addons* if you have one!
-3. Extract the `beatrun` folder to *your_game_folder/garrysmod/addons*.
-4. Extract the `lua` folder to *your_game_folder/garrysmod*.
-	* `lua` folder contains modules for Discord Rich Presense and Steam Presence. They are optional. You can find their source code in the [credits](https://github.com/JonnyBro/beatrun?tab=readme-ov-file#credits-3) section<br><br>
+**PLEASE READ EVERYTHING BEFORE ASKING QUESTIONS ON OUR SERVER!**
 
-# Installation (Automatic | Windows only)
-Run the command below in the Powershell. (Win + R --> powershell --> the command below)
+## Automatic Installation (Recommended | Windows only)
+
+Run the command below in Powershell.
+> [!NOTE]
+> Win + R > `powershell`
+
 ```powershell
-iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
+iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
 ```
 
+## Manual Installation
+
+1. Download this repository [here](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).
+2. **Delete the `beatrun` folder in *your_game_folder/garrysmod/addons* if you have one.**
+3. Extract the `beatrun-main/beatrun` folder to *your_game_folder/garrysmod/addons*.
+4. Extract the `beatrun-main/lua` folder to *your_game_folder/garrysmod*.
+
 ## Animations
-You can use "**Beatrun Animations Installer**" for custom animations. Currently there's:
-* Beatrun Reanimated
-* Fixed Original<br><br>
 
-Start the executable and press a key on your keyboard with the number of the animation you want to install (if nothing's changed, run the program as admin).<br>
-Installer's source can be found [here](/BeatrunAnimInstaller).
+Please refer to this [README](beatrun/README.md).
 
-## Changes and fixes done by me
-* Created a [custom online courses database](https://courses.beatrun.ru), which is also free and [open source](https://github.com/relaxtakenotes/beatrun-courses-server/) 🤯!
-* Added a new gamemode - *Deathmatch*, it's like Data Theft, but you collect kills not cubes!
-* Added an in-game config menu - You can find it in the tool menu, in the *Beatrun* Category!\
-All of the settings below can be changed in the configuration menu.
-* Added the ability Getting off of ladders.
-* Allowed jumping while slowwalking.
-* Done various tweaks to the Time Trials Menu (F4).
+## Changes
+
+> [!IMPORTANT]
+> There are many undocumented changes and fixes in this version, you better look at the commits for more specific changes.
+
+* Jonny_Bro is hosting [custom online courses database](https://courses.beatrun.ru), which is also free and [open source](https://github.com/relaxtakenotes/beatrun-courses-server/) 🤯!
+* Implemented a new gamemode - **Deathmatch** (it's way more fun than Data Theft I promise).
+* Implemented "Proper" Kick Glitch just like in [original ME](https://www.youtube.com/watch?v=zK5y3NBUStc).
+* Added an in-game config menu - you can find it in the tool menu, in the *Beatrun* Category.\
+**All** of the Beatrun settings can be changed in the configuration menu.
+* Localization support.\
+For now Russian and English are supported.
+* Added the ability to get off of ladders.
 * Added an arrow that shows the next checkpoint.
-* Added a convar to allow Overdrive usage on the server - `Beatrun_AllowOverdriveInMultiplayer`.
-* Added a convar to toggle between old and new (like in ME) Kick-Glitch - `Beatrun_OldKickGlitch`.
-* Added convars to change HUD's colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
-* Added a convar to allow players to spawn props without admin rights - `Beatrun_AllowPropSpawn`.
-* Added a convar to disable grapple ability - `Beatrun_DisableGrapple`.
-* Implemented Discord Rich Presence using open source tools (See step 3).
+* Added a ConVar to allow Overdrive usage on the server - `Beatrun_AllowOverdriveInMultiplayer`.
+* Added a ConVar to toggle between old and new Kick Glitch - `Beatrun_OldKickGlitch`.
+* Added some ConVars to change HUD colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
+* Added a ConVar to allow players to spawn props and weapons without admin rights - `Beatrun_AllowPropSpawn`.
+* Added a ConVar to disable grapple ability - `Beatrun_DisableGrapple`.
+* Added a ConVar to allow QuickTurn with any weapon or only with *Runner Hands* - `Beatrun_QuickturnHandsOnly`.
 * Added small camera punch when diving.
-* Added the ability to remove ziplines that created with *Zipline Gun* - RMB.
-* SteamID in the right corner is no longer present.
+* Added the ability to remove ziplines that created with *Zipline Gun* - `RMB`.
+* Implemented Discord Rich Presence using [open source](#credits) module.
 
-## Notable changes and fixes done by the community
-* Made QuickTurn work only with `Runner Hands`.
+## Fixes
+
+* Your SteamID in the right corner is no longer present.
+* Fixed some playermodels show up as ERROR.
+* Done various tweaks to the Courses Menu (F4).
+* Allowed jumping while walking (🤷).
 * Fixed leaderboard sorting in gamemodes.
 * Fixed grapple usage in courses and gamemodes.
-* Fixed a crash in DataTheft when touching data bank.
-* Fixed an error on course load.
-* Fixed collisions issues. (you getting stuck in walls for no reason or player to player damage not going through in gamemodes other than datatheft)
-* Added Proper Kick Glitch ([Like in original ME](https://www.youtube.com/watch?v=zK5y3NBUStc)). (cry about prediction errors l0l)
+* Fixed a crash in Data Theft when touching Data Bank.
+* Fixed an error on course loading.
+* Fixed collisions issues. (PvP damage not going through in gamemodes other than Data Theft)
 * Tweaked safety roll, now you can roll under things.
+* Tweaked some grapple related stuff. Now it moves with the entity it was attached to and other players can see the rope.
 * Made it possible to dive to your death =).
-* Added some grapple related stuff. Now it moves with the entity it was attached to and other players can see the rope.
 
 ## TODO
-- [ ] Gamemodes menu.
 
-# Related
-* [beatrun-anims](https://github.com/JonnyBro/beatrun-anims) - Decompiled beatrun animations.
+* [ ] Loadouts creation menu for Data Theft and Deathmatch. (idk how to properly implement this for know).
 
-# Credits <3
-* All contributors.
-* [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated project.
+## Related
+
+* [Beatrun Reanimated Project](https://github.com/JonnyBro/beatrun-anims).
+
+## Credits
+
+* [All contributors](https://github.com/JonnyBro/beatrun/graphs/contributors) - <3.
+* [EarthyKiller127](https://www.youtube.com/channel/UCiFqPwGo4x0J65xafIaECDQ) - He made that piece of shit.
+* [relaxtakenotes](https://github.com/relaxtakenotes) - Made all of this possible.
+* [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated Project.
 * [Discord Rich Presence](https://github.com/fluffy-servers/gmod-discord-rpc) by Fluffy Servers.
 * [Steam Presence](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) by YuRaNnNzZZ.
-* [earthykiller](https://www.youtube.com/channel/UCiFqPwGo4x0J65xafIaECDQ) - He made that piece of shit code.

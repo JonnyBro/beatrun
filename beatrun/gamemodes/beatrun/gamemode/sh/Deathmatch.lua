@@ -1,5 +1,3 @@
-GM_DEATHMATCH = 0
-
 if SERVER then
 	util.AddNetworkString("Deathmatch_Start")
 	util.AddNetworkString("Deathmatch_Sync")
@@ -17,7 +15,8 @@ if SERVER then
 			else
 				for _, b in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
 					local wep = v:Give(b)
-					v:GiveAmmo(1000, wep:GetPrimaryAmmoType())
+
+					v:GiveAmmo(9999, wep:GetPrimaryAmmoType() or "Pistol", true)
 				end
 			end
 		end
@@ -66,7 +65,7 @@ end
 if CLIENT then
 	local function DeathmatchHUDName()
 		if GetGlobalBool("GM_DEATHMATCH") then
-			return "Deathmatch"
+			return "#beatrun.deathmatch.name"
 		else
 			hook.Remove("BeatrunHUDCourse", "DeathmatchHUDName")
 		end
@@ -78,6 +77,6 @@ if CLIENT then
 
 	net.Receive("Deathmatch_Start", function()
 		hook.Add("BeatrunHUDCourse", "DeathmatchHUDName", DeathmatchHUDName)
-		chat.AddText(Color(200, 200, 200), "Deathmatch! Kill players to get points!")
+		chat.AddText(Color(200, 200, 200), language.GetPhrase("beatrun.deathmatch.start"))
 	end)
 end

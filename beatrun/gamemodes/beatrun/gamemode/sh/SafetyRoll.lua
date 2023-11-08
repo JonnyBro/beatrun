@@ -7,7 +7,7 @@ local landang = Angle(0, 0, 0)
 local function SafetyRollThink(ply, mv, cmd)
 	local speed = mv:GetVelocity().z
 
-	if speed <= -350 and not ply:OnGround() and not ply:GetWasOnGround() and (mv:KeyPressed(IN_SPEED) or mv:KeyPressed(IN_DUCK) or mv:KeyPressed(IN_BULLRUSH)) then
+	if speed <= -350 and not ply:OnGround() and not ply:GetWasOnGround() and (mv:KeyPressed(IN_DUCK) or mv:KeyPressed(IN_SPEED) or mv:KeyPressed(IN_BULLRUSH)) then
 		ply:SetSafetyRollKeyTime(CurTime() + 0.5)
 
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
@@ -35,6 +35,12 @@ local function SafetyRollThink(ply, mv, cmd)
 			mv:SetVelocity(vector_origin)
 		end
 	end
+
+	if ply:Alive() and ply:GetActiveWeapon():IsValid() and CurTime() > ply:GetSafetyRollTime() then
+		if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+			RunConsoleCommand("mgbase_debug_vmrender", "1")
+		end
+	end
 end
 
 hook.Add("SetupMove", "SafetyRoll", SafetyRollThink)
@@ -51,8 +57,14 @@ local roll = {
 }
 
 net.Receive("RollAnimSP", function()
+	local ply = LocalPlayer()
+
 	if net.ReadBool() then
-		roll.AnimString = "land"
+		if ply:UsingRH() then
+			roll.AnimString = "land"
+		else
+			roll.AnimString = "landgun"
+		end
 		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1
 	elseif net.ReadBool() then
@@ -60,7 +72,12 @@ net.Receive("RollAnimSP", function()
 		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1.5
 	else
-		roll.AnimString = "meroll"
+		if ply:UsingRH() then
+			roll.AnimString = "meroll"
+		else
+			roll.AnimString = "merollgun"
+		end
+
 		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1.15
 	end
@@ -72,6 +89,12 @@ end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
+		if ply:Alive() and ply:GetActiveWeapon():IsValid() then
+			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+				RunConsoleCommand("mgbase_debug_vmrender", "0")
+			end
+		end
+
 		local ang = cmd:GetViewAngles()
 
 		ply:SetViewOffset(Vector(0, 0, 64))
@@ -91,12 +114,12 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 		if SERVER and not land then
 			ply:EmitSound("Cloth.Roll")
 			ply:EmitSound("Cloth.RollLand")
-		elseif CLIENT_IFTP() or game.SinglePlayer() then
+		elseif CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("Handsteps.ConcreteHard")
 			ply:EmitSound("Land.Concrete")
 		end
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			CacheBodyAnim()
 			RemoveBodyAnim()
 			StartBodyAnim(roll)
@@ -126,6 +149,12 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 		ParkourEvent("roll", ply)
 
+		if ply:Alive() and ply:GetActiveWeapon():IsValid() then
+			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+				RunConsoleCommand("mgbase_debug_vmrender", "0")
+			end
+		end
+
 		local ang = ply:EyeAngles()
 		local land = ply:GetVelocity()
 		ang.x = 0
@@ -138,7 +167,12 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:SetSafetyRollAng(landang)
 			ply:SetSafetyRollTime(CurTime() + 0.6)
 
-			roll.AnimString = "land"
+			if ply:UsingRH() then
+				roll.AnimString = "land"
+			else
+				roll.AnimString = "landgun"
+			end
+
 			roll.animmodelstring = "climbanim"
 			roll.usefullbody = true
 		else
@@ -147,7 +181,12 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:SetSafetyRollAng(ang)
 			ply:SetSafetyRollTime(CurTime() + 1.05)
 
-			roll.AnimString = "meroll"
+			if ply:UsingRH() then
+				roll.AnimString = "meroll"
+			else
+				roll.AnimString = "merollgun"
+			end
+
 			roll.animmodelstring = "climbanim"
 			roll.usefullbody = false
 		end
@@ -155,12 +194,12 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 		if SERVER and not land then
 			ply:EmitSound("Cloth.Roll")
 			ply:EmitSound("Cloth.RollLand")
-		elseif CLIENT_IFTP() or game.SinglePlayer() then
+		elseif CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("Handsteps.ConcreteHard")
 			ply:EmitSound("Land.Concrete")
 		end
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			CacheBodyAnim()
 			RemoveBodyAnim()
 			StartBodyAnim(roll)

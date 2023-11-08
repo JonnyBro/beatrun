@@ -1,4 +1,4 @@
-if not util.IsBinaryModuleInstalled("gdiscord", "GAME") then return end
+if not util.IsBinaryModuleInstalled("gdiscord") then return end
 
 require("gdiscord")
 
@@ -8,6 +8,10 @@ local refresh_time = 60
 local discord_start = discord_start or -1
 
 function DiscordUpdate()
+	local ply = LocalPlayer()
+
+	if not ply.GetLevel then return end
+
 	local rpc_data = {}
 
 	if game.SinglePlayer() then
@@ -34,13 +38,9 @@ function DiscordUpdate()
 		rpc_data["partyMax"] = 0
 	end
 
-	local level = LocalPlayer():GetLevel()
+	local level = ply:GetLevel()
 	local customname = hook.Run("BeatrunHUDCourse")
 	local course = customname and customname or Course_Name ~= "" and Course_Name or "Freeplay"
-
-	if course == nil then
-		course = "Freeplay"
-	end
 
 	rpc_data["details"] = "Level: " .. level .. " | Map: " .. game.GetMap()
 	rpc_data["startTimestamp"] = discord_start

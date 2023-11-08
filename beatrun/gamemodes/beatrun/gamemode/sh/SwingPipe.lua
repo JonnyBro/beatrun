@@ -162,7 +162,7 @@ local function SwingpipeThink(ply, mv, cmd)
 	if CLIENT or game.SinglePlayer() then
 		ply:SetEyeAngles(LerpAngle(startlerp, ply:EyeAngles(), circlepos:Angle()))
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			viewtiltlerp.z = startlerp * -10 * dir
 
 			ply:CLViewPunch(Angle(0, 0.1 * dir))

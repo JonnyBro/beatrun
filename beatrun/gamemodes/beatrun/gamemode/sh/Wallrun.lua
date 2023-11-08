@@ -105,11 +105,7 @@ local function WallrunningThink(ply, mv, cmd)
 
 			local activewep = ply:GetActiveWeapon()
 
-			if IsValid(activewep) then
-				usingrh = activewep:GetClass() == "runnerhands"
-			end
-
-			if usingrh then
+			if ply:UsingRH() then
 				activewep:SendWeaponAnim(ACT_VM_HITCENTER)
 				activewep:SetBlockAnims(false)
 			end
@@ -132,11 +128,7 @@ local function WallrunningThink(ply, mv, cmd)
 
 			local activewep = ply:GetActiveWeapon()
 
-			if IsValid(activewep) then
-				usingrh = activewep:GetClass() == "runnerhands"
-			end
-
-			if usingrh then
+			if ply:UsingRH() then
 				activewep:SendWeaponAnim(ACT_VM_HITCENTER)
 				activewep:SetBlockAnims(false)
 			end
@@ -423,7 +415,7 @@ local function WallrunningCheck(ply, mv, cmd)
 
 				ParkourEvent("wallrunv", ply)
 
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					BodyLimitX = 30
 					BodyLimitY = 70
 					BodyAnimCycle = 0
@@ -534,7 +526,7 @@ hook.Add("SetupMove", "Wallrunning", function(ply, mv, cmd)
 		ply:SetWallrun(0)
 	end
 
-	if ply:GetWallrun() == 0 and mv:GetVelocity().z > -450 and not ply:OnGround() and mv:KeyDown(IN_FORWARD) and not ply:Crouching() and not mv:KeyDown(IN_DUCK) and ply:GetMoveType() ~= MOVETYPE_NOCLIP then
+	if ply:GetWallrun() == 0 and mv:GetVelocity().z > -450 and not ply:OnGround() and mv:KeyDown(IN_FORWARD) and not ply:Crouching() and not mv:KeyDown(IN_DUCK) and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:WaterLevel() < 1 then
 		WallrunningCheck(ply, mv, cmd)
 	end
 

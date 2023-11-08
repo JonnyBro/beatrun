@@ -1,5 +1,6 @@
 if CLIENT then
-	QuickturnGround = CreateClientConVar("Beatrun_QuickturnGround", "0", true, true, "Enables quickturning with secondary attack while on the ground", 0, 1)
+	QuickturnGround = CreateClientConVar("Beatrun_QuickturnGround", "0", true, true, language.GetPhrase("beatrun.convars.quickturnground"), 0, 1)
+	QuickturnHandsOnly = CreateClientConVar("Beatrun_QuickturnHandsOnly", "1", true, true, language.GetPhrase("beatrun.convars.quickturnhandsonly"), 0, 1)
 end
 
 function DoJumpTurn(lookbehind)
@@ -10,6 +11,7 @@ function DoJumpTurn(lookbehind)
 	end
 
 	BodyAnim:SetSequence("jumpturnfly")
+
 	BodyAnimCycle = 0
 	BodyAnimSpeed = 1
 	BodyLimitX = 40
@@ -36,9 +38,7 @@ function DoJumpTurnStand()
 		VMLegs:Remove()
 	end
 
-	local activewep = LocalPlayer():GetActiveWeapon()
-
-	if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
+	if LocalPlayer():notUsingRH() then
 		BodyAnim:SetSequence("jumpturnlandstandgun")
 	else
 		BodyAnim:SetSequence("jumpturnlandstand")
@@ -54,7 +54,7 @@ end
 local standpunch = Angle(-5, 0, 0)
 
 local function Quickturn(ply, mv, cmd)
-	local keypressed = mv:KeyPressed(IN_ATTACK2) and ply:GetActiveWeapon():GetClass() == "runnerhands"
+	local keypressed = ply:Alive() and mv:KeyPressed(IN_ATTACK2) and (ply:GetInfoNum("Beatrun_QuickturnHandsOnly", 0) == 1 and ply:UsingRH() or ply:GetInfoNum("Beatrun_QuickturnHandsOnly", 0) == 0)
 
 	if ply:GetWallrun() ~= 0 then
 		if mv:KeyDown(IN_BACK) and mv:KeyPressed(IN_JUMP) or ply:GetQuickturn() then
@@ -81,7 +81,7 @@ local function Quickturn(ply, mv, cmd)
 		end
 	end
 
-	if not ply:GetQuickturn() and not ply:GetJumpTurn() and not ply:GetCrouchJump() and not ply:GetGrappling() and keypressed and not mv:KeyDown(IN_MOVELEFT) and not mv:KeyDown(IN_MOVERIGHT) and (ply:GetWallrun() > 0 or not ply:OnGround() or ply:GetInfoNum("Beatrun_QuickturnGround", 0) == 1 and not ply:Crouching()) then
+	if not ply:GetQuickturn() and not ply:GetJumpTurn() and not ply:GetCrouchJump() and not ply:GetGrappling() and not ply:GetSliding() and keypressed and not mv:KeyDown(IN_MOVELEFT) and not mv:KeyDown(IN_MOVERIGHT) and (ply:GetWallrun() > 0 or not ply:OnGround() or ply:GetInfoNum("Beatrun_QuickturnGround", 0) == 1 and not ply:Crouching()) then
 		if ply:GetWallrun() == 0 and not ply:OnGround() then
 			local eyedir = cmd:GetViewAngles()
 			eyedir.x = 0
@@ -96,9 +96,9 @@ local function Quickturn(ply, mv, cmd)
 			if not lookahead and not lookbehind and ply:WaterLevel() < 3 and not IsValid(ply:GetSwingbar()) and not IsValid(ply:GetZipline()) then
 				return
 			elseif (lookahead or lookbehind) and ply:WaterLevel() < 3 and not IsValid(ply:GetSwingbar()) and not IsValid(ply:GetZipline()) then
-				if CLIENT_IFTP() then
+				if CLIENT and IsFirstTimePredicted() then
 					DoJumpTurn(lookbehind)
-				elseif SERVER and game.SinglePlayer() then
+				elseif game.SinglePlayer() then
 					ply:SendLua("DoJumpTurn(" .. tostring(lookbehind) .. ")")
 				end
 
@@ -116,14 +116,7 @@ local function Quickturn(ply, mv, cmd)
 			end
 		end
 
-		local usingrh = false
-		local activewep = ply:GetActiveWeapon()
-
-		if IsValid(activewep) then
-			usingrh = activewep:GetClass() == "runnerhands"
-		end
-
-		if not usingrh and ply:GetWallrun() >= 2 then return end
+		if not ply:UsingRH() and ply:GetWallrun() >= 2 then return end
 
 		ply:SetQuickturn(true)
 		ply:SetQuickturnTime(CurTime())
@@ -145,11 +138,7 @@ local function Quickturn(ply, mv, cmd)
 
 			local activewep = ply:GetActiveWeapon()
 
-			if IsValid(activewep) then
-				usingrh = activewep:GetClass() == "runnerhands"
-			end
-
-			if usingrh then
+			if ply:UsingRH() then
 				activewep:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 				activewep:SetBlockAnims(true)
 			end
@@ -202,9 +191,8 @@ local function Quickturn(ply, mv, cmd)
 		end
 
 		standpunch.x = -math.abs(math.min(CurTime() - ply:GetJumpTurnRecovery() + 0.5, 0))
-		local activewep = ply:GetActiveWeapon()
 
-		if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
+		if ply:notUsingRH() then
 			standpunch.x = standpunch.x * 0.1
 			standpunch.z = standpunch.x * 10
 		else
@@ -212,7 +200,7 @@ local function Quickturn(ply, mv, cmd)
 			standpunch.z = 0
 		end
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			ply:CLViewPunch(standpunch)
 		elseif game.SinglePlayer() then
 			ply:ViewPunch(standpunch)
@@ -236,7 +224,7 @@ local function Quickturn(ply, mv, cmd)
 
 		target.y = lerp
 
-		if CLIENT_IFTP() or game.SinglePlayer() then
+		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:SetEyeAngles(target)
 		end
 

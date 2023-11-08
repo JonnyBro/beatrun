@@ -19,7 +19,7 @@ local meleedata = {
 	},
 	{
 		"meleeslide", 0.175, 0.6, function(ply, mv, cmd)
-			if CLIENT_IFTP() then
+			if CLIENT and IsFirstTimePredicted() then
 				ply:CLViewPunch(Angle(0.05, 0, -1))
 			elseif game.SinglePlayer() then
 				ply:ViewPunch(Angle(0.1, 0, -1.5))
@@ -29,7 +29,7 @@ local meleedata = {
 	},
 	{
 		"meleeairstill", 0.1, 1, function(ply, mv, cmd)
-			if CLIENT_IFTP() then
+			if CLIENT and IsFirstTimePredicted() then
 				ply:CLViewPunch(Angle(0.5, 0, -0.1))
 			elseif game.SinglePlayer() then
 				ply:ViewPunch(Angle(1, 0, -0.25))
@@ -39,7 +39,7 @@ local meleedata = {
 	},
 	{
 		"meleeair", 0.15, 1, function(ply, mv, cmd)
-			if CLIENT_IFTP() then
+			if CLIENT and IsFirstTimePredicted() then
 				ply:CLViewPunch(Angle(0.05, 0, -1))
 			elseif game.SinglePlayer() then
 				ply:ViewPunch(Angle(0.1, 0, -1.5))
@@ -51,7 +51,7 @@ local meleedata = {
 
 meleedata[5] = {
 	"meleewrleft", 0.2, 0.75, function(ply, mv, cmd)
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			ply:CLViewPunch(Angle(0.075, 0, 1))
 		elseif game.SinglePlayer() then
 			ply:ViewPunch(Angle(0.1, 0, 1.5))
@@ -64,7 +64,7 @@ meleedata[5] = {
 
 		mv:SetVelocity(vel)
 
-		if CLIENT_IFTP() or game.SinglePlayer() then
+		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			local ang = ply:EyeAngles()
 			ang.y = ang.y + (CurTime() - ply:GetMeleeDelay()) / 0.15 * 0.25
 
@@ -76,7 +76,7 @@ meleedata[5] = {
 
 meleedata[6] = {
 	"meleewrright", 0.2, 0.75, function(ply, mv, cmd)
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			ply:CLViewPunch(Angle(0.075, 0, -1))
 		elseif game.SinglePlayer() then
 			ply:ViewPunch(Angle(0.1, 0, -1.5))
@@ -89,7 +89,7 @@ meleedata[6] = {
 
 		mv:SetVelocity(vel)
 
-		if CLIENT_IFTP() or game.SinglePlayer() then
+		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			local ang = ply:EyeAngles()
 			ang.y = ang.y - (CurTime() - ply:GetMeleeDelay()) / 0.15 * 0.25
 
@@ -105,7 +105,7 @@ local doors = {
 }
 
 local function KeyMelee(ply, mv)
-	return mv:KeyPressed(IN_ALT2) or mv:KeyPressed(IN_ATTACK) and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == "runnerhands"
+	return mv:KeyPressed(IN_ALT2) or mv:KeyPressed(IN_ATTACK) and ply:UsingRH()
 end
 
 local function MeleeType(ply, mv, cmd)

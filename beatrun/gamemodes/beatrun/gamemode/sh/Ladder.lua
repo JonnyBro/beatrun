@@ -36,7 +36,7 @@ local function LadderCheck(ply, mv, cmd, ladder)
 		ply:SendLua("BodyAnimSetEase(LocalPlayer():GetNW2Vector('SPBAEase'))")
 	end
 
-	if CLIENT_IFTP() then
+	if CLIENT and IsFirstTimePredicted() then
 		local ang = ply:EyeAngles()
 		ang.y = ladder:GetAngles().y - 180
 		ang.x = 0
@@ -141,7 +141,7 @@ local function LadderThink(ply, mv, cmd, ladder)
 	elseif ply.LadderDown and ply:GetLadderDelay() < CurTime() then
 		ply.LadderDown = false
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			ply:CLViewPunch(Angle(5, 0, 0))
 			BodyAnim:SetSequence("ladderclimbuprighthandstill")
 		elseif game.SinglePlayer() then
@@ -233,7 +233,7 @@ local function LadderThink(ply, mv, cmd, ladder)
 		mv:SetOrigin(newpos)
 		mv:SetVelocity(vector_origin)
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			BodyAnim:SetSequence("jumpfast")
 		elseif game.SinglePlayer() then
 			ply:SendLua("BodyAnim:SetSequence('jumpfast')")

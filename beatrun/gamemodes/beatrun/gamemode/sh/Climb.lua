@@ -159,7 +159,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 			ParkourEvent("hangend", ply)
 
-			if CLIENT_IFTP() then
+			if CLIENT and IsFirstTimePredicted() then
 				lockang2 = false
 				lockang = false
 				BodyLimitX = 90
@@ -182,7 +182,7 @@ local function ClimbingThink(ply, mv, cmd)
 			ply:SetSafetyRollKeyTime(CurTime() + 0.1)
 			ParkourEvent("hangjump", ply)
 
-			if CLIENT_IFTP() then
+			if CLIENT and IsFirstTimePredicted() then
 				lockang2 = false
 				lockang = false
 				BodyLimitX = 90
@@ -649,11 +649,7 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	local activewep = ply:GetActiveWeapon()
 
-	if IsValid(activewep) then
-		usingrh = activewep:GetClass() == "runnerhands"
-	end
-
-	if usingrh and activewep.SendWeaponAnim then
+	if ply:UsingRH() and activewep.SendWeaponAnim then
 		activewep:SendWeaponAnim(ACT_VM_HITCENTER)
 		activewep:SetBlockAnims(false)
 	end
@@ -716,7 +712,7 @@ local function ClimbingCheck(ply, mv, cmd)
 		ply:EmitSound("Handsteps.ConcreteHard")
 		ply:EmitSound("Cloth.RollLand")
 
-		if CLIENT_IFTP() then
+		if CLIENT and IsFirstTimePredicted() then
 			ply.OrigEyeAng = wallang
 			lockang2 = true
 

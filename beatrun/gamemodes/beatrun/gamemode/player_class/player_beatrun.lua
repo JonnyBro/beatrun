@@ -319,7 +319,7 @@ end
 hook.Add("EntityFireBullets", "thisengineismadebyacrackhead", function(ent, data)
 	if not IsValid(ent) or not isfunction(ent.GetShootPos) or not ent:IsPlayer() then return end
 
-	for i, ply in ipairs(player.GetAll()) do
+	for _, ply in ipairs(player.GetAll()) do
 		if ply == ent then continue end
 
 		local fov = calc_fov(data.Dir:Angle(), (ply:GetShootPos() - data.Src):Angle())
@@ -374,7 +374,7 @@ end
 hook.Add("FinishMove", "BeatrunRHVelocity", function(ply, mv)
 	local activewep = ply:GetActiveWeapon()
 
-	if IsValid(activewep) and activewep:GetClass() == "runnerhands" and activewep.SetOwnerVelocity then
+	if ply:UsingRH() and activewep.SetOwnerVelocity then
 		activewep:SetOwnerVelocity(math.Round(mv:GetVelocity():Length()))
 	end
 end)

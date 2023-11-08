@@ -2,8 +2,8 @@ local meta = FindMetaTable("Player")
 local metavec = FindMetaTable("Vector")
 local PUNCH_DAMPING = 9
 local PUNCH_SPRING_CONSTANT = 120
-local viewbob_intensity = CreateClientConVar("Beatrun_ViewbobIntensity", "20", true, true, "Viewbob Intensity", -100, 100)
-local viewbob_stabilized = CreateClientConVar("Beatrun_ViewbobStabilized", "0", true, true, "Turn on to reduce motion sickness by making viewbobbing keep the player's look position centered", 0, 1)
+local viewbob_intensity = CreateClientConVar("Beatrun_ViewbobIntensity", "20", true, true, language.GetPhrase("beatrun.convars.viewbob"), -100, 100)
+local viewbob_stabilized = CreateClientConVar("Beatrun_ViewbobStabilized", "0", true, true, language.GetPhrase("beatrun.convars.viewbobstabilization"), 0, 1)
 
 local function lensqr(ang)
 	return ang[1] ^ 2 + ang[2] ^ 2 + ang[3] ^ 2

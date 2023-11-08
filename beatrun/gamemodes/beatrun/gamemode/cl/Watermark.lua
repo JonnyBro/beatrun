@@ -24,4 +24,4 @@ hook.Add("PostRender", "Watermark", function()
 		surface.DrawText(LocalPlayer():Nick())
 	cam.End2D()
 end)
-]]
+--]]
