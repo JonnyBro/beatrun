@@ -619,8 +619,10 @@ if SERVER then
 			a:Spawn()
 
 			local phys = a:GetPhysicsObject()
-			phys:EnableMotion(false)
-			phys:Sleep()
+			if IsValid(phys) then
+				phys:EnableMotion(false)
+				phys:Sleep()
+			end
 
 			a:PhysicsDestroy()
 			a:SetHealth(inf)
@@ -1404,13 +1406,18 @@ if CLIENT then
 		if bind ~= "buildmode" and not camcontrol then return true end
 	end
 
-	hook.Add("OnEntityCreated", "BuildModeProps", function(ent)
-		if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] then
-			if not BuildMode then ent.buildmode_placed_manually = true end
-
-			table.insert(buildmode_placed, ent)
-		end
+	hook.Add("InitPostEntity", "buildmode_create_hook", function()
+		timer.Simple(2, function() 
+			hook.Add("OnEntityCreated", "BuildModeProps", function(ent)
+				if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] then
+					if not BuildMode then ent.buildmode_placed_manually = true end
+		
+					table.insert(buildmode_placed, ent)
+				end
+			end)
+		end)
 	end)
+
 
 	local dragorigin = nil
 
