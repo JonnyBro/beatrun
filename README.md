@@ -1,3 +1,5 @@
+*Note: The code in here is **kinda** garbage, especially the parts that I made myself. I don't do networking, and I sort of suck at coding, so don't expect any high quality bug-free stuff or anything. (To be fair, Beatrun was never bug-free to begin with.) Any constructive criticism about the code is appreciated.*
+
 # Beatrun | Community edition
 
 *Looking for the replay stuff? This isn't the branch for that. It's on the [`jonny/replays`](https://github.com/UnderSet/beatrun-jonny/tree/jonny/replays) branch instead.*
