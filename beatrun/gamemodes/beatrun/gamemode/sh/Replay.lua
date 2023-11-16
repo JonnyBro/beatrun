@@ -36,7 +36,7 @@ end
 hook.Add("StartCommand", "ReplayStart", ReplayCmd)
 
 function ReplayStart(ply)
-	if not game.SinglePlayer() then return end
+	--if not game.SinglePlayer() then return end
 	if ply.InReplay then return end
 
 	print("Starting Replay")
@@ -49,7 +49,7 @@ function ReplayStart(ply)
 end
 
 function ReplayStop(ply, debugdump)
-	if not game.SinglePlayer() then return end
+	--if not game.SinglePlayer() then return end
 	if not ply.ReplayTicks then return end
 	if ply.InReplay then return end
 
@@ -140,7 +140,7 @@ function ReplayPlayback(ply, cmd)
 end
 
 function ReplaySendToClient(ply)
-	if not game.SinglePlayer() then return end
+	--if not game.SinglePlayer() then return end
 
 	local replaydata = util.JSONToTable(util.Decompress(file.Read("beatrun/replays/" .. game.GetMap() .. "/replaydump.txt", "DATA")))
 
@@ -157,6 +157,26 @@ function ReplaySendToClient(ply)
 	ply:SetVelocity(vector_origin)
 
 	hook.Add("StartCommand", "ReplayPlay", ReplayPlayback)
+end
+
+if SERVER then
+	--hook.Add("Tick", "TickReplayRecord", function()
+	--	for _, v in ipairs(player.GetAll()) do
+	--		print(v:UserID())
+	--		if Player(v:UserID()).ReplayRecording then
+	--			print("attempting to record tick")
+	--			ReplayCmd(Player(v:UserID()), Player(v:UserID()):GetCurrentCommand())
+	--			--PrintTable(v.ReplayTicks)
+	--		end -- how not to record replays 101
+	--	end
+	--end)
+	function GM:SetupMove(ply, mv, cmd)
+		if ply.ReplayRecording then
+			print("attempting to record tick")
+			ReplayCmd(ply, cmd)
+			--PrintTable(v.ReplayTicks)
+		end -- how not to record replays 101
+	end
 end
 
 if CLIENT then
