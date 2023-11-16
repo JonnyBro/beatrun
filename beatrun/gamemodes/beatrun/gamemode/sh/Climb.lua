@@ -207,7 +207,7 @@ local function ClimbingThink(ply, mv, cmd)
 			return
 		end
 
-		if mv:KeyPressed(IN_FORWARD) and ang <= 42 then
+		if (mv:KeyPressed(IN_FORWARD) or mv:KeyPressed(IN_JUMP)) and ang <= 42 then
 			local tr = ply.ClimbingTraceSafety
 			local trout = ply.ClimbingTraceSafetyOut
 			local mins, maxs = ply:GetHull()

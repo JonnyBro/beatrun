@@ -50,6 +50,8 @@ Please refer to this [README](beatrun/README.md).
 **All** of the Beatrun settings can be changed in the configuration menu.
 * Localization support.\
 For now Russian and English are supported.
+* Build Mode Tweaks.\
+You can now spawn any prop from Spawn Menu and they will save in course.
 * Added the ability to get off of ladders.
 * Added an arrow that shows the next checkpoint.
 * Added a ConVar to allow Overdrive usage on the server - `Beatrun_AllowOverdriveInMultiplayer`.
