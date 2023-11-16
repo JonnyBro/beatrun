@@ -619,6 +619,7 @@ if SERVER then
 			a:Spawn()
 
 			local phys = a:GetPhysicsObject()
+
 			if IsValid(phys) then
 				phys:EnableMotion(false)
 				phys:Sleep()
@@ -1407,11 +1408,11 @@ if CLIENT then
 	end
 
 	hook.Add("InitPostEntity", "buildmode_create_hook", function()
-		timer.Simple(2, function() 
+		timer.Simple(2, function()
 			hook.Add("OnEntityCreated", "BuildModeProps", function(ent)
 				if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] then
 					if not BuildMode then ent.buildmode_placed_manually = true end
-		
+
 					table.insert(buildmode_placed, ent)
 				end
 			end)
