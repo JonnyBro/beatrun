@@ -780,11 +780,11 @@ fbfunctions = {
 	vaultontohigh = function(ply) return true end,
 	swing = function(ply)
 		CamIgnoreAng = false
-		BodyLimitY = 180
+		BodyLimitY = 45
 	end,
 	swingstraight = function(ply)
 		CamIgnoreAng = false
-		BodyLimitY = 180
+		BodyLimitY = 45
 
 		BodyAnim:SetPoseParameter("swing", (ply:GetSBOffset() / 45 - 1) * 100)
 	end,

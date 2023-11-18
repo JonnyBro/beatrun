@@ -1,6 +1,6 @@
 # ENGLISH
 
-# Animations Installer Source Code
+## Animations Installer Source Code
 
 Here you can find source code of the animations installer.\
 I don't know why you will ever need that but we put it here so you can be sure we don't supply malware with our fork.
@@ -13,9 +13,10 @@ Please refer to this [README](../beatrun/README.md).
 
 * [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ) - Creator of this installer.
 
+<!-- markdownlint-disable-next-line -->
 # RUSSIAN
 
-# Исходный код установщика анимаций
+## Исходный код установщика анимаций
 
 Здесь находятся исходники нашего установщика анимаций.\
 Я не знаю зачем это вам, но мы оставили их здесь чтобы вы могли убедиться что мы не распространяем вирусы в нашем форке.
