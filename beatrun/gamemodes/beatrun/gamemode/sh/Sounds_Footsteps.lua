@@ -241,14 +241,14 @@ sound.Add({
 	sound = {"bigspark1.wav", "bigspark2.wav"}
 })
 
-sound.Add({
-	name = "CyborgRun",
-	volume = 0.75,
-	sound = "cyborgrun.wav",
-	level = 40,
-	channel = CHAN_STATIC,
-	pitch = {90, 110}
-})
+-- sound.Add({
+-- 	name = "CyborgRun",
+-- 	volume = 0.75,
+-- 	sound = "cyborgrun.wav",
+-- 	level = 40,
+-- 	channel = CHAN_STATIC,
+-- 	pitch = {90, 110}
+-- })
 
 FOOTSTEPS_LUT = {
 	["player/footsteps/woodpanel"] = "Wood",

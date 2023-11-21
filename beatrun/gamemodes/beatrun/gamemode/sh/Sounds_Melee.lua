@@ -4,7 +4,7 @@ sound.Add({
 	level = 50,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"melee/foot1.wav", "melee/foot2.wav", "melee/foot3.wav", "melee/foot4.wav", "melee/foot5.wav"}
+	sound = {"mirrorsedge/Melee/foot1.wav", "mirrorsedge/Melee/foot2.wav", "mirrorsedge/Melee/foot3.wav", "mirrorsedge/Melee/foot4.wav", "mirrorsedge/Melee/foot5.wav"}
 })
 
 sound.Add({
@@ -13,7 +13,7 @@ sound.Add({
 	level = 45,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"melee/fist1.wav", "melee/fist2.wav", "melee/fist3.wav", "melee/fist4.wav", "melee/fist5.wav"}
+	sound = {"mirrorsedge/Melee/fist1.wav", "mirrorsedge/Melee/fist2.wav", "mirrorsedge/Melee/fist3.wav", "mirrorsedge/Melee/fist4.wav", "mirrorsedge/Melee/fist5.wav"}
 })
 
 sound.Add({
@@ -22,7 +22,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"melee/legswoosh1.wav", "melee/legswoosh2.wav", "melee/legswoosh3.wav", "melee/legswoosh4.wav"}
+	sound = {"mirrorsedge/Melee/legswoosh1.wav", "mirrorsedge/Melee/legswoosh2.wav", "mirrorsedge/Melee/legswoosh3.wav", "mirrorsedge/Melee/legswoosh4.wav"}
 })
 
 sound.Add({
@@ -31,5 +31,5 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"melee/armswoosh1.wav", "melee/armswoosh2.wav", "melee/armswoosh3.wav", "melee/armswoosh4.wav", "melee/armswoosh5.wav", "melee/armswoosh6.wav"}
+	sound = {"mirrorsedge/Melee/armswoosh1.wav", "mirrorsedge/Melee/armswoosh2.wav", "mirrorsedge/Melee/armswoosh3.wav", "mirrorsedge/Melee/armswoosh4.wav", "mirrorsedge/Melee/armswoosh5.wav", "mirrorsedge/Melee/armswoosh6.wav"}
 })

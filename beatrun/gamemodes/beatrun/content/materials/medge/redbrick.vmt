@@ -1,8 +1,8 @@
 LightmappedGeneric
 {
-	"$basetexture"	"medge/BLACK"
+	"$basetexture"	"medge/red"
 	"$surfaceprop" "plaster"
-	"$bumpmap" "medge/tile_normal"
+	"$bumpmap" "medge/brick_normal"
  	"$envmap" "env_cubemap"
 	"$envmapcontrast" "1"
 	"$normalmapalphaenvmapmask" "1"

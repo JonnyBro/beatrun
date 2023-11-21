@@ -55,11 +55,11 @@ function ENT:Initialize()
 		self:SetRenderBounds(mins, maxs)
 		self.CLModel = ClientsideModel(self.Model)
 		self.CLModel:SetPos(self:GetPos())
-		self.CLModel:SetAngles(self:GetAngles())
-		self.CLModel:SetMaterial("medge/plain/redbrickvertex")
+		self.CLModel:SetAngles(ang)
+		self.CLModel:SetMaterial("medge/redbrickvertex")
 	end
 
-	self:SetPos(self:GetPos() - self:GetAngles():Forward() * 10)
+	self:SetPos(self:GetPos() - ang:Forward() * 10)
 end
 
 function ENT:UpdateTransmitState()
@@ -96,7 +96,7 @@ function ENT:Think()
 			self.CLModel = ClientsideModel(self.Model)
 			self.CLModel:SetPos(self:GetPos())
 			self.CLModel:SetAngles(self:GetAngles())
-			self.CLModel:SetMaterial("medge/plain/redbrickvertex")
+			self.CLModel:SetMaterial("medge/redbrickvertex")
 		end
 
 		if IsValid(physobj) then
@@ -141,9 +141,9 @@ function ENT:Draw()
 
 	if not IsValid(self.CLModel) then
 		self.CLModel = ClientsideModel(self.Model)
-		self.CLModel:SetPos(self:GetPos())
-		self.CLModel:SetAngles(self:GetAngles())
-		self.CLModel:SetMaterial("medge/plain/redbrickvertex")
+		self.CLModel:SetPos(pos)
+		self.CLModel:SetAngles(ang)
+		self.CLModel:SetMaterial("medge/redbrickvertex")
 	end
 
 	self:SetRenderBounds(mins, maxs)

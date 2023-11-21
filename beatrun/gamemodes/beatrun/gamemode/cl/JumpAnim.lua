@@ -1565,9 +1565,9 @@ local function JumpThink()
 					lerpspeed = 30
 
 					if vel:Length() > 300 and ply:OnGround() then
-						if ply:InOverdrive() and BodyAnimString ~= "sprintfwd" and vel:Length() < 300 then
-							ply:EmitSound("CyborgRun")
-						end
+						-- if ply:InOverdrive() and BodyAnimString ~= "sprintfwd" and vel:Length() < 300 then
+						-- 	ply:EmitSound("CyborgRun")
+						-- end
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("sprintfwd"))
 					elseif ply:OnGround() and not moveback then

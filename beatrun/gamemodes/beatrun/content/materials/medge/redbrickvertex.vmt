@@ -1,9 +1,9 @@
-LightmappedGeneric
+VertexLitGeneric
 {
-	"$basetexture"	"medge/YELLOW"
+	"$basetexture"	"medge/red"
 	"$surfaceprop" "plaster"
-	"$bumpmap" "medge/brick_normal"
  	"$envmap" "env_cubemap"
+	"$envmaptint" 0.5
 	"$envmapcontrast" "1"
 	"$normalmapalphaenvmapmask" "1"
 }
