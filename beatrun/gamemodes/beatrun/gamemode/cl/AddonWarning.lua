@@ -49,7 +49,9 @@ local incompatible = {
 	["2824714462"] = true, -- [TFA] Screen Shake
 	["3037375111"] = true, -- Quick Slide With Legs
 	["748422181"] = true, -- FOV Changer
-	["2930331275"] = true -- Realistic Fragmentation System
+	["2930331275"] = true, -- Realistic Fragmentation System
+	["112806637"] = true, -- Gmod Legs 3
+	["678037029"] = true -- Enhanced Camera
 }
 
 local warnpanel = {
