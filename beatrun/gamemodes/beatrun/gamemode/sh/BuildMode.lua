@@ -570,7 +570,9 @@ if SERVER then
 	function Beatrun_ReadCourseNet(len, ply)
 		if not ply:IsSuperAdmin() then return end
 
-		Beatrun_ReadCourse(net.ReadData(len))
+		local data = util.Decompress(net.ReadData(len))
+
+		Beatrun_ReadCourse(data)
 	end
 
 	function Beatrun_ReadCourseLocal(id)
@@ -963,8 +965,8 @@ if CLIENT then
 	end)
 
 	function LoadCourse(id)
-		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
-		local save = file.Read(dir .. id .. ".txt", "DATA")
+		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
+		local save = util.Compress(file.Read(dir .. id .. ".txt", "DATA"))
 
 		if not save then
 			print("NON-EXISTENT SAVE: ", id)
