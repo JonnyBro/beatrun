@@ -26,6 +26,7 @@ Run the command below in Powershell.
 ```powershell
 iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
 ```
+Select the `Beatrun` gamemode in right lower corner.
 
 ## Manual Installation
 
@@ -33,6 +34,7 @@ iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
 2. **Delete the `beatrun` folder in *your_game_folder/garrysmod/addons* if you have one.**
 3. Extract the `beatrun-main/beatrun` folder to *your_game_folder/garrysmod/addons*.
 4. Extract the `beatrun-main/lua` folder to *your_game_folder/garrysmod*.
+5. Select the `Beatrun` gamemode in right lower corner.
 
 ## Animations
 
