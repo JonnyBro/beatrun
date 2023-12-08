@@ -26,6 +26,7 @@
 ```powershell
 iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
 ```
+Включите режим `Beatrun` в правом нижнем углу.
 
 ## Ручная установка
 
@@ -33,6 +34,7 @@ iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
 2. **Удалите старую папку `beatrun` по пути *путь_к_игре/garrysmod/addons* если она у вас имеется.**
 3. Извлеките папку `beatrun-main/beatrun` по пути *путь_к_игре/garrysmod/addons*.
 4. Извлеките папку `beatrun-main/lua` по пути *путь_к_игре/garrysmod*.
+5. Включите режим `Beatrun` в правом нижнем углу.
 
 ## Анимации
 
