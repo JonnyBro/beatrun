@@ -111,7 +111,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		local is_ent_invalid = (ent == NULL or ent == nil) and ply:GetNW2Bool("grappledNonCourse")
 		local is_getting_off = (not ply:Alive() or mv:KeyPressed(IN_JUMP) and not grappled and not ply:OnGround() or ply:GetClimbing() ~= 0 or ply:GetMantle() ~= 0 or not usingrh)
 		local c_delta = 0
-		if not is_ent_invalid then
+		if IsValid(ent) and not is_ent_invalid then
 			c_delta = (ent:GetNWVector("gpos", Vector(0,0,0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))):Length()
 		end
 
