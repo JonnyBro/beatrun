@@ -6,8 +6,7 @@ if SERVER then
 	local spawn = {"PlayerGiveSWEP", "PlayerSpawnEffect", "PlayerSpawnNPC", "PlayerSpawnObject", "PlayerSpawnProp", "PlayerSpawnRagdoll", "PlayerSpawnSENT", "PlayerSpawnSWEP", "PlayerSpawnVehicle"}
 
 	local function BlockSpawn(ply)
-		if ply:IsAdmin() then return true
-		elseif allowPropSpawn:GetBool() then return true end
+		if not allowPropSpawn:GetBool() or not ply:IsAdmin() then return false end
 	end
 
 	for _, v in ipairs(spawn) do
