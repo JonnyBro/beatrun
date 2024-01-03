@@ -36,7 +36,7 @@ local function SafetyRollThink(ply, mv, cmd)
 		end
 	end
 
-	if ply:Alive() and ply:GetActiveWeapon():IsValid() and CurTime() > ply:GetSafetyRollTime() then
+	if CLIENT and ply:Alive() and IsValid(ply:GetActiveWeapon()) and CurTime() > ply:GetSafetyRollTime() then
 		if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
 			RunConsoleCommand("mgbase_debug_vmrender", "1")
 		end
@@ -80,7 +80,7 @@ end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
-		if ply:Alive() and ply:GetActiveWeapon():IsValid() then
+		if CLIENT and ply:Alive() and IsValid(ply:GetActiveWeapon()) then
 			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
 				RunConsoleCommand("mgbase_debug_vmrender", "0")
 			end
@@ -140,7 +140,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 		ParkourEvent("roll", ply)
 
-		if ply:Alive() and ply:GetActiveWeapon():IsValid() then
+		if CLIENT and ply:Alive() and IsValid(ply:GetActiveWeapon()) then
 			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
 				RunConsoleCommand("mgbase_debug_vmrender", "0")
 			end

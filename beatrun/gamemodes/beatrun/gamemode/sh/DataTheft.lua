@@ -24,7 +24,7 @@ if SERVER then
 			else
 				for l, b in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
 					local wep = v:Give(b)
-					v:GiveAmmo(1000, wep:GetPrimaryAmmoType())
+					v:GiveAmmo(9999, wep:GetPrimaryAmmoType())
 				end
 			end
 		end
