@@ -7,7 +7,7 @@ if SERVER then
 
 	local function BlockSpawn(ply)
 		if game.SinglePlayer() or ply:IsAdmin() then return true end
-		if not allowPropSpawn:GetBool() then return false end
+		if not allowPropSpawn:GetBool() then return false else return true end
 	end
 
 	for _, v in ipairs(spawn) do
