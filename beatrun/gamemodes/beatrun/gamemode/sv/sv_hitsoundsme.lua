@@ -19,6 +19,6 @@ hook.Add("EntityTakeDamage", "MEHitSounds", function(ply, dmginfo)
 			end
 		end)
 
-		ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 255), 0.05, 10)
+		ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 255), 0.05, 5)
 	end
 end)
