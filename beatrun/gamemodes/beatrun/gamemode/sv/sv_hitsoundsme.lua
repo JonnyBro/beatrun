@@ -9,7 +9,7 @@ hook.Add("EntityTakeDamage", "MEHitSounds", function(ply, dmginfo)
 
 		ply:EmitSound("mirrorsedge/Flesh_0" .. tostring(math.random(1, 9)) .. ".wav")
 		ply:ViewPunch(Angle(math.Rand(-10, -5), 0, math.Rand(0, 5)))
-	elseif (dmginfo:IsFallDamage() and ply:Health() - dmginfo:GetDamage() <= 0) and not ply:HasGodMode() and not blinded then
+	elseif dmginfo:IsFallDamage() and not ply:HasGodMode() then
 		net.Start("DeathStopSound")
 		net.Send(ply)
 

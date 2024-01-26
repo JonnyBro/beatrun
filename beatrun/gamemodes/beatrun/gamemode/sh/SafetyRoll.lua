@@ -207,7 +207,7 @@ if SERVER then
 			return 0
 		end
 
-		if speed >= 800 and not ply:InOverdrive() then
+		if speed >= 800 and not ply:InOverdrive() and not ply:HasGodMode() then
 			if speed < 800 and CurTime() < ply:GetSafetyRollKeyTime() and not ply:GetCrouchJump() and not ply:Crouching() then
 				return 0
 			else
