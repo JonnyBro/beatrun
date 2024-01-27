@@ -79,7 +79,7 @@ function meta:LevelUp()
 	end
 
 	if i > 0 then
-		self:EmitSound("MirrorsEdge/UI/ME_UI_challenge_end_success.wav", 35, 100 + math.random(-5, 5))
+		self:EmitSound("mirrorsedge/UI/ME_UI_challenge_end_success.wav", 35, 100 + math.random(-5, 5))
 	end
 end
 

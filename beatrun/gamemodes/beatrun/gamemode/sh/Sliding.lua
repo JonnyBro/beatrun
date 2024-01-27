@@ -12,8 +12,8 @@ local slide_sounds = {
 }
 
 local slideloop_sounds = {
-	[0] = "MirrorsEdge/Slide/ME_FootStep_ConcreteSlideLoop.wav",
-	[MAT_GLASS] = "MirrorsEdge/Slide/ME_FootStep_GlassSlideLoop.wav"
+	[0] = "mirrorsedge/Slide/ME_FootStep_ConcreteSlideLoop.wav",
+	[MAT_GLASS] = "mirrorsedge/Slide/ME_FootStep_GlassSlideLoop.wav"
 }
 
 slide_sounds[MAT_GRASS] = slide_sounds[MAT_DIRT]
