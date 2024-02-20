@@ -356,6 +356,9 @@ function PLAYER:CreateMove(cmd)
 end
 
 function PLAYER:CalcView(view)
+	if CLIENT then
+		view.fov = GetConVar("Beatrun_FOV"):GetFloat()
+	end
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
 end
 
