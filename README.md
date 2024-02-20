@@ -51,7 +51,7 @@ Please refer to this [README](beatrun/README.md).
 * Added an in-game config menu - you can find it in the tool menu, in the *Beatrun* Category.\
 **All** of the Beatrun settings can be changed in the configuration menu.
 * Localization support.\
-For now Russian and English are supported.
+Available in 5 languages now!
 * Build Mode Tweaks.\
 You can now spawn any prop from Spawn Menu and they will save in course.
 * Added the ability to get off of ladders.
