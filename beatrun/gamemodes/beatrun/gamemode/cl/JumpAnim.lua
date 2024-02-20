@@ -780,11 +780,11 @@ fbfunctions = {
 	vaultontohigh = function(ply) return true end,
 	swing = function(ply)
 		CamIgnoreAng = false
-		BodyLimitY = 180
+		BodyLimitY = 45
 	end,
 	swingstraight = function(ply)
 		CamIgnoreAng = false
-		BodyLimitY = 180
+		BodyLimitY = 45
 
 		BodyAnim:SetPoseParameter("swing", (ply:GetSBOffset() / 45 - 1) * 100)
 	end,
@@ -1318,6 +1318,8 @@ hook.Add("PostDrawSkyBox", "JumpArm3DSky", function()
 end)
 
 hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
+	if has_tool_equipped then return end
+
 	pos:Sub(oldpos)
 	pos:Add(campos)
 	ang:Sub(oldang)
@@ -1563,9 +1565,9 @@ local function JumpThink()
 					lerpspeed = 30
 
 					if vel:Length() > 300 and ply:OnGround() then
-						if ply:InOverdrive() and BodyAnimString ~= "sprintfwd" and vel:Length() < 300 then
-							ply:EmitSound("CyborgRun")
-						end
+						-- if ply:InOverdrive() and BodyAnimString ~= "sprintfwd" and vel:Length() < 300 then
+						-- 	ply:EmitSound("CyborgRun")
+						-- end
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("sprintfwd"))
 					elseif ply:OnGround() and not moveback then

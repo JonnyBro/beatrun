@@ -96,8 +96,8 @@ function ENT:Initialize()
 
 		self.CLModel:EnableMatrix("RenderMultiply", mat)
 		self.CLModelEnd:EnableMatrix("RenderMultiply", mat)
-		self.CLModel:SetMaterial("medge/plain/redbrickvertex")
-		self.CLModelEnd:SetMaterial("medge/plain/redbrickvertex")
+		self.CLModel:SetMaterial("medge/redbrickvertex")
+		self.CLModelEnd:SetMaterial("medge/redbrickvertex")
 	end
 
 	self:SetPos(self:GetPos() - self:GetAngles():Forward() * 10)
@@ -157,8 +157,8 @@ function ENT:Think()
 
 			self.CLModel:EnableMatrix("RenderMultiply", mat)
 			self.CLModelEnd:EnableMatrix("RenderMultiply", mat)
-			self.CLModel:SetMaterial("medge/plain/redbrickvertex")
-			self.CLModelEnd:SetMaterial("medge/plain/redbrickvertex")
+			self.CLModel:SetMaterial("medge/redbrickvertex")
+			self.CLModelEnd:SetMaterial("medge/redbrickvertex")
 		end
 
 		if IsValid(physobj) then
@@ -222,8 +222,8 @@ function ENT:Draw()
 
 		self.CLModel:EnableMatrix("RenderMultiply", mat)
 		self.CLModelEnd:EnableMatrix("RenderMultiply", mat)
-		self.CLModel:SetMaterial("medge/plain/redbrickvertex")
-		self.CLModelEnd:SetMaterial("medge/plain/redbrickvertex")
+		self.CLModel:SetMaterial("medge/redbrickvertex")
+		self.CLModelEnd:SetMaterial("medge/redbrickvertex")
 	end
 
 	self:SetRenderBounds(mins, maxs)

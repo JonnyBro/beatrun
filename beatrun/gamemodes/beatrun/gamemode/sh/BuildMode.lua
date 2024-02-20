@@ -301,9 +301,9 @@ end
 local function CustomPropMat(prop)
 	if propmatsblacklist[buildmode_props_index[prop:GetModel()]] then return end
 
-	if prop.hr then
+	if prop.hr == true then
 		prop:SetMaterial("medge/redplainplastervertex")
-	else
+	elseif prop.hr == nil or prop.hr == false then
 		prop:SetMaterial("medge/plainplastervertex")
 	end
 end
@@ -498,7 +498,7 @@ if SERVER then
 	net.Receive("BuildMode_ReadSave", function(len, ply)
 		if not ply.BuildMode then return end
 
-		local a = util.Decompress(net.ReadData(len))
+		local a = net.ReadData(len)
 		local props = util.JSONToTable(a)
 
 		for _, v in pairs(props) do
@@ -570,7 +570,9 @@ if SERVER then
 	function Beatrun_ReadCourseNet(len, ply)
 		if not ply:IsSuperAdmin() then return end
 
-		Beatrun_ReadCourse(net.ReadData(len))
+		local data = util.Decompress(net.ReadData(len))
+
+		Beatrun_ReadCourse(data)
 	end
 
 	function Beatrun_ReadCourseLocal(id)
@@ -604,7 +606,14 @@ if SERVER then
 		for _, v in pairs(props) do
 			local a = ents.Create("prop_physics")
 			a.hr = v.hr
-			a:SetModel(buildmode_props[v.model])
+
+			local is_model_an_index = tonumber(v.model)
+			if is_model_an_index then
+				a:SetModel(buildmode_props[v.model])
+			else
+				a:SetModel(v.model)
+			end
+
 			CustomPropMat(a)
 
 			a:SetPos(v.pos)
@@ -612,8 +621,11 @@ if SERVER then
 			a:Spawn()
 
 			local phys = a:GetPhysicsObject()
-			phys:EnableMotion(false)
-			phys:Sleep()
+
+			if IsValid(phys) then
+				phys:EnableMotion(false)
+				phys:Sleep()
+			end
 
 			a:PhysicsDestroy()
 			a:SetHealth(inf)
@@ -886,7 +898,7 @@ if CLIENT then
 	end
 
 	function CourseData(name)
-		local save = {{}, {}, Course_StartPos, Course_StartAng, name or "Unnamed", {}}
+		local save = {{}, {}, Course_StartPos, Course_StartAng, name or os.date("%H:%M:%S - %d/%m/%Y", os.time()), {}}
 
 		for _, v in pairs(buildmode_placed) do
 			if not IsValid(v) then -- Nothing
@@ -895,13 +907,13 @@ if CLIENT then
 			else
 				local class = v:GetClass()
 
-				if class == "prop_physics" and not buildmode_props_index[v:GetModel():lower()] then
-					print("ignoring", v:GetModel():lower())
-				elseif class == "prop_physics" then
+				if class == "prop_physics" then
 					local hr = v:GetMaterial() == "medge/redplainplastervertex" and true or nil
 
+					if v.buildmode_placed_manually then hr = false end
+
 					table.insert(save[1], {
-						model = buildmode_props_index[v:GetModel():lower()],
+						model = v:GetModel():lower(),
 						pos = v:GetPos(),
 						ang = v:GetAngles(),
 						hr = hr
@@ -947,14 +959,14 @@ if CLIENT then
 	end
 
 	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)
-		local name = args[1] or "Unnamed"
+		local name = args[1] or os.date("%H:%M:%S - %d/%m/%Y", os.time())
 
 		SaveCourse(name, args[2])
 	end)
 
 	function LoadCourse(id)
-		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
-		local save = file.Read(dir .. id .. ".txt", "DATA")
+		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
+		local save = util.Compress(file.Read(dir .. id .. ".txt", "DATA"))
 
 		if not save then
 			print("NON-EXISTENT SAVE: ", id)
@@ -970,14 +982,20 @@ if CLIENT then
 	end
 
 	concommand.Add("Beatrun_LoadCourse", function(ply, cmd, args, argstr)
-		local id = args[1] or "Unnamed"
+		local id = args[1]
+
+		if not id then
+			print("Supply course name")
+
+			return
+		end
 
 		LoadCourse(id)
 	end)
 
 	function LoadCourseRaw(data)
 		if not data then
-			print("LOAD NOTHING??!!")
+			print("Supply course data")
 
 			return
 		end
@@ -1144,24 +1162,13 @@ if CLIENT then
 			end
 		end,
 		[KEY_BACKSPACE] = function()
-			if not dragging then
-				local props = {}
-
-				for k, v in pairs(buildmode_selected) do
-					table.insert(props, k)
-					buildmode_selected[k] = nil
-				end
-
-				net.Start("BuildMode_Delete")
-					net.WriteTable(props)
-				net.SendToServer()
-			end
+			buildmodeinputs[KEY_DELETE]()
 		end,
 		[KEY_T] = function()
 			if not dragging then
 				local props = {}
 
-				for k, v in pairs(buildmode_selected) do
+				for k, _ in pairs(buildmode_selected) do
 					if not propmatsblacklist[buildmode_props_index[k:GetModel()]] then
 						table.insert(props, k)
 					end
@@ -1205,7 +1212,7 @@ if CLIENT then
 				end
 			end
 		end,
-		[KEY_ENTER] = function()
+		[KEY_PAD_MINUS] = function()
 			if table.Count(buildmode_selected) == 0 then return end
 
 			local save = {}
@@ -1228,7 +1235,7 @@ if CLIENT then
 			local jsonsave = util.TableToJSON(save)
 
 			file.CreateDir("beatrun/savedbuilds")
-			file.Write("beatrun/savedbuilds/save.txt", util.Compress(jsonsave))
+			file.Write("beatrun/savedbuilds/save.txt", jsonsave)
 		end,
 		[KEY_PAD_PLUS] = function()
 			local save = file.Read("beatrun/savedbuilds/save.txt", "DATA")
@@ -1402,11 +1409,18 @@ if CLIENT then
 		if bind ~= "buildmode" and not camcontrol then return true end
 	end
 
-	hook.Add("OnEntityCreated", "BuildModeProps", function(ent)
-		if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] then
-			table.insert(buildmode_placed, ent)
-		end
+	hook.Add("InitPostEntity", "buildmode_create_hook", function()
+		timer.Simple(2, function()
+			hook.Add("OnEntityCreated", "BuildModeProps", function(ent)
+				if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] then
+					if not BuildMode then ent.buildmode_placed_manually = true end
+
+					table.insert(buildmode_placed, ent)
+				end
+			end)
+		end)
 	end)
+
 
 	local dragorigin = nil
 
@@ -1546,7 +1560,7 @@ if CLIENT then
 			local num = v:GetCPNum()
 
 			surface.SetTextPos(w2s.x, w2s.y)
-			surface.DrawText(num)
+			surface.DrawText("Checkpoint: " .. num)
 		end
 
 		local startw2s = Course_StartPos:ToScreen()

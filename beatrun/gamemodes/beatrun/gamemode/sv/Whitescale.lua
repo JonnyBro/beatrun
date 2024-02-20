@@ -1,4 +1,5 @@
 util.AddNetworkString("ToggleWhitescale")
+
 local skypaint
 
 local skypaintdata = {Vector(0, 0.34, 0.93), Vector(0.36, 0.76, 1), Vector(0.25, 0.1, 0), Vector(1, 1, 1), 0.44, 0.66, 0.79, 0.5, 7.44}

@@ -26,6 +26,7 @@ Run the command below in Powershell.
 ```powershell
 iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
 ```
+Select the `Beatrun` gamemode in right lower corner.
 
 ## Manual Installation
 
@@ -33,6 +34,7 @@ iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
 2. **Delete the `beatrun` folder in *your_game_folder/garrysmod/addons* if you have one.**
 3. Extract the `beatrun-main/beatrun` folder to *your_game_folder/garrysmod/addons*.
 4. Extract the `beatrun-main/lua` folder to *your_game_folder/garrysmod*.
+5. Select the `Beatrun` gamemode in right lower corner.
 
 ## Animations
 
@@ -50,6 +52,8 @@ Please refer to this [README](beatrun/README.md).
 **All** of the Beatrun settings can be changed in the configuration menu.
 * Localization support.\
 For now Russian and English are supported.
+* Build Mode Tweaks.\
+You can now spawn any prop from Spawn Menu and they will save in course.
 * Added the ability to get off of ladders.
 * Added an arrow that shows the next checkpoint.
 * Added a ConVar to allow Overdrive usage on the server - `Beatrun_AllowOverdriveInMultiplayer`.

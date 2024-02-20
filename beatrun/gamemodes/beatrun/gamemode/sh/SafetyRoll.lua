@@ -36,7 +36,7 @@ local function SafetyRollThink(ply, mv, cmd)
 		end
 	end
 
-	if ply:Alive() and ply:GetActiveWeapon():IsValid() and CurTime() > ply:GetSafetyRollTime() then
+	if CLIENT and ply:Alive() and IsValid(ply:GetActiveWeapon()) and CurTime() > ply:GetSafetyRollTime() then
 		if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
 			RunConsoleCommand("mgbase_debug_vmrender", "1")
 		end
@@ -60,11 +60,7 @@ net.Receive("RollAnimSP", function()
 	local ply = LocalPlayer()
 
 	if net.ReadBool() then
-		if ply:UsingRH() then
-			roll.AnimString = "land"
-		else
-			roll.AnimString = "landgun"
-		end
+		roll.AnimString = ply:UsingRH() and "land" or "landgun"
 		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1
 	elseif net.ReadBool() then
@@ -72,12 +68,7 @@ net.Receive("RollAnimSP", function()
 		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1.5
 	else
-		if ply:UsingRH() then
-			roll.AnimString = "meroll"
-		else
-			roll.AnimString = "merollgun"
-		end
-
+		roll.AnimString = ply:UsingRH() and "meroll" or "merollgun"
 		roll.animmodelstring = "climbanim"
 		roll.BodyAnimSpeed = 1.15
 	end
@@ -89,7 +80,7 @@ end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
-		if ply:Alive() and ply:GetActiveWeapon():IsValid() then
+		if CLIENT and ply:Alive() and IsValid(ply:GetActiveWeapon()) then
 			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
 				RunConsoleCommand("mgbase_debug_vmrender", "0")
 			end
@@ -149,7 +140,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 		ParkourEvent("roll", ply)
 
-		if ply:Alive() and ply:GetActiveWeapon():IsValid() then
+		if CLIENT and ply:Alive() and IsValid(ply:GetActiveWeapon()) then
 			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
 				RunConsoleCommand("mgbase_debug_vmrender", "0")
 			end
@@ -167,12 +158,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:SetSafetyRollAng(landang)
 			ply:SetSafetyRollTime(CurTime() + 0.6)
 
-			if ply:UsingRH() then
-				roll.AnimString = "land"
-			else
-				roll.AnimString = "landgun"
-			end
-
+			roll.AnimString = ply:UsingRH() and "land" or "landgun"
 			roll.animmodelstring = "climbanim"
 			roll.usefullbody = true
 		else
@@ -181,12 +167,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:SetSafetyRollAng(ang)
 			ply:SetSafetyRollTime(CurTime() + 1.05)
 
-			if ply:UsingRH() then
-				roll.AnimString = "meroll"
-			else
-				roll.AnimString = "merollgun"
-			end
-
+			roll.AnimString = ply:UsingRH() and "meroll" or "merollgun"
 			roll.animmodelstring = "climbanim"
 			roll.usefullbody = false
 		end
@@ -226,7 +207,7 @@ if SERVER then
 			return 0
 		end
 
-		if speed >= 800 and not ply:InOverdrive() then
+		if speed >= 800 and not ply:InOverdrive() and not ply:HasGodMode() then
 			if speed < 800 and CurTime() < ply:GetSafetyRollKeyTime() and not ply:GetCrouchJump() and not ply:Crouching() then
 				return 0
 			else

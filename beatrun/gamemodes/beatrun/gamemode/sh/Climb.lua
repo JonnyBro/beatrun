@@ -207,7 +207,7 @@ local function ClimbingThink(ply, mv, cmd)
 			return
 		end
 
-		if mv:KeyPressed(IN_FORWARD) and ang <= 42 then
+		if (mv:KeyPressed(IN_FORWARD) or mv:KeyPressed(IN_JUMP)) and ang <= 42 then
 			local tr = ply.ClimbingTraceSafety
 			local trout = ply.ClimbingTraceSafetyOut
 			local mins, maxs = ply:GetHull()
@@ -468,12 +468,13 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
-	-- local fraction = trout.Fraction
 	local detectionlen = 60
 
 	if trout.Fraction <= 0 or trout.Fraction >= 0.5 then
 		tr.start = mv:GetOrigin() + wallang:Forward() * 20 + upvalue
 		tr.endpos = tr.start - Vector(0, 0, 90)
+
+		-- debugoverlay.Line(tr.start, tr.endpos, 5, Color(0, 0, 255), true)
 
 		util.TraceLine(tr)
 
@@ -525,6 +526,15 @@ local function ClimbingCheck(ply, mv, cmd)
 	util.TraceLine(tr)
 
 	if trout.Hit then return end
+	-- 	local h1 = trout.HitPos
+	-- 	local h2 = tr.start - wallang:Forward() - Vector(100, 0, 0)
+	-- 	local hit = util.QuickTrace(h1, h2, ply)
+
+	-- 	debugoverlay.Line(h1, h2, 5, Color(255, 200, 100), true)
+
+	-- 	print(hit.Hit)
+	-- 	print(hit.HitPos)
+	-- end
 
 	tr.start = startpos + Vector(0, 0, 77)
 	tr.endpos = tr.start + wallang:Forward() * detectionlen * 0.5

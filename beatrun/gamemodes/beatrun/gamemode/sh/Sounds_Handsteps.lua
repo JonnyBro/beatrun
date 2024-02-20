@@ -4,7 +4,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"MirrorsEdge/Handsteps/Concrete/ConcreteHandStepSoft_01.wav", "MirrorsEdge/Handsteps/Concrete/ConcreteHandStepSoft_02.wav", "MirrorsEdge/Handsteps/Concrete/ConcreteHandStepSoft_03.wav", "MirrorsEdge/Handsteps/Concrete/ConcreteHandStepSoft_04.wav"}
+	sound = {"mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_01.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_02.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_03.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_04.wav"}
 })
 
 sound.Add({
@@ -13,7 +13,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"MirrorsEdge/Handsteps/Concrete/ConcreteHandStepHard_01.wav", "MirrorsEdge/Handsteps/Concrete/ConcreteHandStepHard_02.wav", "MirrorsEdge/Handsteps/Concrete/ConcreteHandStepHard_03.wav"}
+	sound = {"mirrorsedge/Handsteps/Concrete/ConcreteHandStepHard_01.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepHard_02.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepHard_03.wav"}
 })
 
 sound.Add({
@@ -22,7 +22,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {75, 90},
-	sound = {"MirrorsEdge/Ladder/LadderHandstep_01.ogg", "MirrorsEdge/Ladder/LadderHandstep_02.ogg", "MirrorsEdge/Ladder/LadderHandstep_03.ogg", "MirrorsEdge/Ladder/LadderHandstep_04.ogg", "MirrorsEdge/Ladder/LadderHandstep_05.ogg", "MirrorsEdge/Ladder/LadderHandstep_06.ogg", "MirrorsEdge/Ladder/LadderHandstep_07.ogg", "MirrorsEdge/Ladder/LadderHandstep_08.ogg", "MirrorsEdge/Ladder/LadderHandstep_09.ogg", "MirrorsEdge/Ladder/LadderHandstep_10.ogg", "MirrorsEdge/Ladder/LadderHandstep_21.ogg", "MirrorsEdge/Ladder/LadderHandstep_22.ogg", "MirrorsEdge/Ladder/LadderHandstep_23.ogg", "MirrorsEdge/Ladder/LadderHandstep_24.ogg", "MirrorsEdge/Ladder/LadderHandstep_25.ogg", "MirrorsEdge/Ladder/LadderHandstep_26.ogg", "MirrorsEdge/Ladder/LadderHandstep_27.ogg", "MirrorsEdge/Ladder/LadderHandstep_28.ogg", "MirrorsEdge/Ladder/LadderHandstep_29.ogg", "MirrorsEdge/Ladder/LadderHandstep_30.ogg", "MirrorsEdge/Ladder/LadderHandstep_41.ogg", "MirrorsEdge/Ladder/LadderHandstep_42.ogg", "MirrorsEdge/Ladder/LadderHandstep_43.ogg", "MirrorsEdge/Ladder/LadderHandstep_44.ogg", "MirrorsEdge/Ladder/LadderHandstep_45.ogg", "MirrorsEdge/Ladder/LadderHandstep_46.ogg", "MirrorsEdge/Ladder/LadderHandstep_47.ogg", "MirrorsEdge/Ladder/LadderHandstep_48.ogg", "MirrorsEdge/Ladder/LadderHandstep_49.ogg", "MirrorsEdge/Ladder/LadderHandstep_50.ogg"}
+	sound = {"mirrorsedge/Ladder/LadderHandstep_01.ogg", "mirrorsedge/Ladder/LadderHandstep_02.ogg", "mirrorsedge/Ladder/LadderHandstep_03.ogg", "mirrorsedge/Ladder/LadderHandstep_04.ogg", "mirrorsedge/Ladder/LadderHandstep_05.ogg", "mirrorsedge/Ladder/LadderHandstep_06.ogg", "mirrorsedge/Ladder/LadderHandstep_07.ogg", "mirrorsedge/Ladder/LadderHandstep_08.ogg", "mirrorsedge/Ladder/LadderHandstep_09.ogg", "mirrorsedge/Ladder/LadderHandstep_10.ogg", "mirrorsedge/Ladder/LadderHandstep_21.ogg", "mirrorsedge/Ladder/LadderHandstep_22.ogg", "mirrorsedge/Ladder/LadderHandstep_23.ogg", "mirrorsedge/Ladder/LadderHandstep_24.ogg", "mirrorsedge/Ladder/LadderHandstep_25.ogg", "mirrorsedge/Ladder/LadderHandstep_26.ogg", "mirrorsedge/Ladder/LadderHandstep_27.ogg", "mirrorsedge/Ladder/LadderHandstep_28.ogg", "mirrorsedge/Ladder/LadderHandstep_29.ogg", "mirrorsedge/Ladder/LadderHandstep_30.ogg", "mirrorsedge/Ladder/LadderHandstep_41.ogg", "mirrorsedge/Ladder/LadderHandstep_42.ogg", "mirrorsedge/Ladder/LadderHandstep_43.ogg", "mirrorsedge/Ladder/LadderHandstep_44.ogg", "mirrorsedge/Ladder/LadderHandstep_45.ogg", "mirrorsedge/Ladder/LadderHandstep_46.ogg", "mirrorsedge/Ladder/LadderHandstep_47.ogg", "mirrorsedge/Ladder/LadderHandstep_48.ogg", "mirrorsedge/Ladder/LadderHandstep_49.ogg", "mirrorsedge/Ladder/LadderHandstep_50.ogg"}
 })
 
 sound.Add({
@@ -31,5 +31,5 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {75, 90},
-	sound = {"MirrorsEdge/Handsteps/Concrete/ConcreteHandStepFastRelease_01.wav", "MirrorsEdge/Handsteps/Concrete/ConcreteHandStepFastRelease_02.wav", "MirrorsEdge/Handsteps/Concrete/ConcreteHandStepFastRelease_03.wav"}
+	sound = {"mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_01.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_02.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_03.wav"}
 })

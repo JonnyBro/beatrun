@@ -18,6 +18,30 @@ lockang = false
 CamAddAng = false
 CamIgnoreAng = false
 
+local tools = {
+	["gmod_tool"] = true,
+	["weapon_physgun"] = true,
+	["gmod_camera"] = true
+}
+
+has_tool_equipped = false
+
+hook.Add("Think", "beatrun_detect_tool", function()
+	local lp = LocalPlayer()
+	if not IsValid(lp) then return end
+
+	local weapon = lp:GetActiveWeapon()
+	if not IsValid(weapon) then return end
+
+	local class = weapon:GetClass()
+
+	if tools[class] then
+		has_tool_equipped = true
+	else
+		has_tool_equipped = false
+	end
+end)
+
 -- local BodyAnimPos = Vector(0, 0, 0)
 -- local BodyAnimAngLerp = Angle(0, 0, 0)
 -- local DidDraw = false
@@ -338,8 +362,6 @@ function StartBodyAnim(animtable)
 	BodyAnim:SetPos(ply:GetPos())
 	BodyAnim:SetNoDraw(false)
 
-	BodyAnimStartPos:Set(BodyAnim:GetPos())
-
 	if not IsValid(ply:GetHands()) then return end
 
 	local plymodel = ply
@@ -480,6 +502,13 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		return
 	end
 
+	if has_tool_equipped then
+		BodyAnim:SetNoDraw(true)
+		BodyAnim:SetRenderOrigin(pos * 1000)
+
+		return
+	end
+
 	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then
 		if updatethirdperson then
 			ply:SetNoDraw(false)
@@ -575,7 +604,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		end
 
 		if attach ~= nil then
-			view.origin = attach.Pos
+			view.origin = has_tool_equipped and pos or attach.Pos
 
 			if savedeyeangb == Angle(0, 0, 0) then
 				savedeyeangb = Angle(0, attach.Ang.y, 0)
@@ -583,10 +612,10 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 			view.angles = ply:EyeAngles()
 
-			if lockang2 then
-				view.angles = attach.Ang
+			if lockang2 and not has_tool_equipped then
+				view.angles = has_tool_equipped and angles or attach.Ang
 				view.angles.x = ply:EyeAngles().x
-				view.origin = attach.Pos
+				view.origin = has_tool_equipped and pos or attach.Pos
 			end
 
 			allowedangchange = true
@@ -598,7 +627,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				lastlockangstart:Set(lasteyeang)
 			end
 
-			if ply:Alive() and lockang then
+			if ply:Alive() and (lockang and not has_tool_equipped) then
 				local attachId = BodyAnim:LookupAttachment(camjoint)
 				local attach = BodyAnim:GetAttachment(attachId) or attach
 				local ang = attach.Ang
@@ -608,7 +637,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 					lerplockang = math.Approach(lerplockang, 1, FrameTime() * 4.5)
 				end
 
-				view.angles = ang
+				view.angles = has_tool_equipped and angles or ang
 				view.angles:Add(ViewTiltAngle)
 				allowedangchange = false
 
@@ -672,7 +701,10 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				hook.Run("BodyAnimCalcView", view)
 
 				pos:Set(view.origin)
-				angles:Set(view.angles)
+
+				if not has_tool_equipped then
+					angles:Set(view.angles)
+				end
 
 				if lerpchangeatt < 1 then
 					pos:Set(lerpedpos)
@@ -697,7 +729,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		end
 
 		if attach == nil or CurTime() < (mantletimer or 0) then
-			view.origin = lastattachpos
+			view.origin = has_tool_equipped and pos or lastattachpos
 			pos:Set(lastattachpos)
 
 			return
@@ -745,8 +777,8 @@ hook.Add("CreateMove", "BodyAnim_Mouse", function(cmd)
 		local limitx = BodyLimitX or 30
 		local limity = BodyLimitY or 50
 
-		pastlimitx = limitx < math.AngleDifference(nang.x, oang.x)
-		pastlimity = limity < math.abs(math.AngleDifference(nang.y, oang.y))
+		pastlimitx = limitx < math.AngleDifference(nang.x, oang.x) and not has_tool_equipped
+		pastlimity = limity < math.abs(math.AngleDifference(nang.y, oang.y)) and not has_tool_equipped
 
 		if limitx ~= lastlimitx and pastlimitx or limity ~= lastlimity and pastlimity then
 			BodyAnimLimitEase = true
@@ -796,7 +828,7 @@ end)
 hook.Add("InputMouseApply", "BodyAnim_Mouse", function(cmd)
 	local newvalues = false
 
-	if lockang then
+	if lockang and not has_tool_equipped then
 		cmd:SetMouseX(0)
 		cmd:SetMouseY(0)
 
