@@ -77,7 +77,11 @@ if CLIENT then
 end
 
 if SERVER then
+	local healthRegen = CreateConVar("Beatrun_HealthRegen", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+
 	hook.Add("PlayerPostThink", "HealthRegen", function(ply)
+		if not healthRegen:GetBool() then return end
+
 		if not ply.LastHP then
 			ply.LastHP = ply:Health()
 			ply.RegenTime = 0

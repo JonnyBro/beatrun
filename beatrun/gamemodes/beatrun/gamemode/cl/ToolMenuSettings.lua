@@ -251,6 +251,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:CheckBox("#beatrun.toolsmenu.misc.overdrivemp", "Beatrun_AllowOverdriveInMultiplayer")
 		panel:ControlHelp("#beatrun.toolsmenu.misc.overdrivempdesc")
+
+		panel:CheckBox("#beatrun.toolsmenu.misc.healthregen", "Beatrun_HealthRegen")
+		panel:ControlHelp("#beatrun.toolsmenu.misc.healthregendesc")
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_moves", "#beatrun.toolsmenu.moves.name", "", "", function(panel)
