@@ -60,8 +60,9 @@ You can now spawn any prop from Spawn Menu and they will save in course.
 * Added a ConVar to toggle between old and new Kick Glitch - `Beatrun_OldKickGlitch`.
 * Added some ConVars to change HUD colors - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`.
 * Added a ConVar to allow players to spawn props and weapons without admin rights - `Beatrun_AllowPropSpawn`.
-* Added a ConVar to disable grapple ability - `Beatrun_DisableGrapple`.
+* Added a ConVar to toggle the grapple ability - `Beatrun_DisableGrapple`.
 * Added a ConVar to allow QuickTurn with any weapon or only with *Runner Hands* - `Beatrun_QuickturnHandsOnly`.
+* Added a ConVar to toggle the heatlh regeneration - `Beatrun_HealthRegen`.
 * Added small camera punch when diving.
 * Added the ability to remove ziplines that created with *Zipline Gun* - `RMB`.
 * Implemented Discord Rich Presence using [open source](#credits) module.
