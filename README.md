@@ -24,7 +24,7 @@ Run the command below in Powershell.
 > Win + R > `powershell`
 
 ```powershell
-iex (iwr "rlxx.ru/beatrun" -UseBasicParsing)
+iex (iwr "beatrun.ru/install" -UseBasicParsing)
 ```
 Select the `Beatrun` gamemode in right lower corner.
 
