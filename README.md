@@ -26,6 +26,7 @@ Run the command below in Powershell.
 ```powershell
 iex (iwr "beatrun.ru/install" -UseBasicParsing)
 ```
+
 Select the `Beatrun` gamemode in right lower corner.
 
 ## Manual Installation
