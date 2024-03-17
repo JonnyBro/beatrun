@@ -9,7 +9,7 @@
 >
 > * Discord Rich Presence.
 > * Steam Presence.
-> * Пользовательская онлайн база курсов.
+> * Кастомная база курсов.
 >
 > **Всё это необязательно и может быть удалено.**\
 > Модули находятся [тут](https://github.com/JonnyBro/beatrun/tree/main/lua/bin) и функционал онлайн базы курсов доступен [здесь](https://github.com/JonnyBro/beatrun/blob/main/beatrun/gamemodes/beatrun/gamemode/cl/CoursesDatabase.lua).\
@@ -24,7 +24,7 @@
 > Win + R > `powershell`
 
 ```powershell
-iex (iwr "beatrun.ru/install" -UseBasicParsing)
+iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
 ```
 
 Включите режим `Beatrun` в правом нижнем углу.
