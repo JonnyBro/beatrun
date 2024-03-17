@@ -24,7 +24,7 @@
 > Win + R > `powershell`
 
 ```powershell
-iex (iwr "beatrun.ru/install.ps1" -UseBasicParsing)
+iex (iwr "beatrun.ru/install" -UseBasicParsing)
 ```
 
 Включите режим `Beatrun` в правом нижнем углу.
