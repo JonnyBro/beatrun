@@ -124,7 +124,11 @@ function PLAYER:Loadout()
 	if GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then
 		for _, v in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
 			local wep = self.Player:Give(v)
-			self.Player:GiveAmmo(1000, wep:GetPrimaryAmmoType())
+
+			timer.Simple(1, function()
+				if wep:GetPrimaryAmmoType() ~= -1 then self.Player:GiveAmmo(10000, wep:GetPrimaryAmmoType(), true) end
+				if wep:GetSecondaryAmmoType() ~= -1 then self.Player:GiveAmmo(5, wep:GetSecondaryAmmoType(), true) end
+			end)
 		end
 	else
 		self.Player:RemoveAllAmmo()
@@ -138,12 +142,6 @@ function PLAYER:Loadout()
 	self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 120))
 	self.Player:SetCanZoom(false)
 end
-
-hook.Add("PlayerSwitchWeapon", "ResetFOV", function(ply)
-	local fovmult = (ply:InOverdrive() and 1.1) or 1
-
-	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120) * fovmult)
-end)
 
 function PLAYER:SetModel()
 	BaseClass.SetModel(self)
@@ -356,8 +354,11 @@ function PLAYER:CreateMove(cmd)
 end
 
 function PLAYER:CalcView(view)
+	local fov = GetConVar("Beatrun_FOV"):GetInt()
+	local mult = (self.Player:InOverdrive() and 1.1) or 1
+
 	if CLIENT then
-		view.fov = GetConVar("Beatrun_FOV"):GetInt()
+		view.fov = fov * mult
 	end
 
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
@@ -508,7 +509,7 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 		if transition and IsValid(ply) then
 			ply:ResetParkourTimes()
 			ply:SetJumpPower(230)
-			ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 110))
+			ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
 			ply:SetCanZoom(false)
 			ply.ClimbingTrace = nil
 		end

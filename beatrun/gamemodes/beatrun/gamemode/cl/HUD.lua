@@ -2,7 +2,7 @@ local showtotalXP = CreateClientConVar("Beatrun_HUDXP", "1", true, false, langua
 local sway = CreateClientConVar("Beatrun_HUDSway", "1", true, false, language.GetPhrase("beatrun.convars.hudsway"), 0, 1)
 local dynamic = CreateClientConVar("Beatrun_HUDDynamic", "0", true, false, language.GetPhrase("beatrun.convars.huddynamic"), 0, 1)
 local hidden = CreateClientConVar("Beatrun_HUDHidden", "0", true, false, language.GetPhrase("beatrun.convars.hudhidden"), 0, 2)
-local reticle = CreateClientConVar("Beatrun_HUDReticle", "1", true, false, language.GetPhrase("beatrun.convars.hudreticle"), 0, 1)
+-- local reticle = CreateClientConVar("Beatrun_HUDReticle", "1", true, false, language.GetPhrase("beatrun.convars.hudreticle"), 0, 1)
 
 CreateClientConVar("Beatrun_HUDTextColor", "255 255 255 255", true, true, language.GetPhrase("beatrun.convars.hudtextcolor"))
 CreateClientConVar("Beatrun_HUDCornerColor", "20 20 20 100", true, true, language.GetPhrase("beatrun.convars.hudcornercolor"))
@@ -532,10 +532,9 @@ end
 
 hook.Add("Tick", "SpeedGraph", RecordSpeedGraph)
 
+--[[
 local crosshair_unarmed = Material("vgui/hud/crosshair_unarmed")
 local crosshair_standard = Material("vgui/hud/crosshair_standard")
--- local crosshair_weapon = Material("vgui/hud/crosshair_weapon")
--- local crosshair_reaction = Material("vgui/hud/crosshair_reaction")
 
 local function BeatrunReticle()
 	if not reticle:GetBool() then return end
@@ -552,3 +551,4 @@ local function BeatrunReticle()
 end
 
 hook.Add("HUDPaint", "BeatrunReticle", BeatrunReticle)
+--]]

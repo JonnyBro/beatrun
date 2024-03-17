@@ -7,7 +7,7 @@ if CLIENT then
 	SWEP.Slot = 0
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
-	SWEP.DrawCrosshair = false
+	SWEP.DrawCrosshair = true
 
 	hook.Add("VManipPrePlayAnim", "LOCNoVManip", function()
 		if LocalPlayer():UsingRH() or blinded then return false end

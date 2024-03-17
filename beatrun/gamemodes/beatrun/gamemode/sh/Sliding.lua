@@ -563,15 +563,15 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			end
 		end
 
-		if not slippery then
+		if not slippery then -- TODO: Find a way to make proper slide jump. It works on slippery because you are not holding Crouch for slippery objects
 			if mv:KeyDown(IN_MOVELEFT) then
 				local ang = ply:GetSlidingAngle()
-				ang.y = ang.y + 0.25
+				ang.y = ang.y + 0.5
 
 				ply:SetSlidingAngle(ang)
 			elseif mv:KeyDown(IN_MOVERIGHT) then
 				local ang = ply:GetSlidingAngle()
-				ang.y = ang.y - 0.25
+				ang.y = ang.y - 0.5
 
 				ply:SetSlidingAngle(ang)
 			end
