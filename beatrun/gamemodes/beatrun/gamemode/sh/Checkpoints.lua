@@ -164,7 +164,7 @@ local finishcolor = Color(45, 45, 175, 100)
 
 function FinishCourse(ply)
 	ply:ScreenFade(SCREENFADE.IN, finishcolor, 0, 4)
-	ply:SetLaggedMovementValue(0.1)
+	-- ply:SetLaggedMovementValue(0.1)
 	ply:DrawViewModel(false)
 
 	net.Start("Checkpoint_Finish")
@@ -173,7 +173,7 @@ function FinishCourse(ply)
 	ply:SetNW2Int("CPNum", -1)
 
 	timer.Simple(4, function()
-		ply:SetLaggedMovementValue(1)
+		-- ply:SetLaggedMovementValue(1)
 		ply:DrawViewModel(true)
 	end)
 end
