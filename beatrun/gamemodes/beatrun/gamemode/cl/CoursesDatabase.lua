@@ -22,6 +22,9 @@ concommand.Add("Beatrun_Confirm", function()
 
 		return
 	end
+
+	QueuedArgs = NULL
+	QueuedFunction = NULL
 end)
 
 local function GetCurrentMapWorkshopID()
@@ -33,7 +36,7 @@ local function GetCurrentMapWorkshopID()
 		if file.Exists("maps/" .. currentMap .. ".bsp", addon.title) then return addon.wsid end
 	end
 
-	return 0
+	return "no_map_id"
 end
 
 function GetCourse(sharecode)
@@ -89,7 +92,7 @@ function UploadCourse()
 
 			return true
 		else
-			print("An error occurred: " .. message)
+			print("An error occurred: " .. response.message)
 
 			return false
 		end
