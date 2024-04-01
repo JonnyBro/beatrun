@@ -82,7 +82,7 @@ function UploadCourse()
 
 	local url = domain:GetString() .. "/api/upload"
 	local data = file.Open("beatrun/courses/" .. currentMap .. "/" .. Course_ID .. ".txt", "rb", "DATA")
-	local filedata = util.Decompress(data:Read(data:Size())) or data:Read(data:Size())
+	local filedata = data:Read()
 
 	http.Post(url, NULL, function(body, length, headers, code)
 		local response = util.JSONToTable(body)
@@ -118,7 +118,7 @@ function UpdateCourse(course_code)
 
 	local url = domain:GetString() .. "/api/update"
 	local data = file.Open("beatrun/courses/" .. currentMap .. "/" .. Course_ID .. ".txt", "rb", "DATA")
-	local filedata = util.Decompress(data:Read(data:Size())) or data:Read(data:Size())
+	local filedata = data:Read()
 
 	http.Post(url, NULL, function(body, length, headers, code)
 		local response = util.JSONToTable(body)

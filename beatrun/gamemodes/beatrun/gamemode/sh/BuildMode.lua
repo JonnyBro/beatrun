@@ -1009,6 +1009,7 @@ if CLIENT then
 		Course_ID = id
 	end
 
+	--[[
 	concommand.Add("Beatrun_PrintCourse", function(ply, cmd, args, argstr)
 		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
 		local save = file.Read(dir .. args[1] .. ".txt", "DATA")
@@ -1019,8 +1020,9 @@ if CLIENT then
 			return
 		end
 
-		PrintTable(save)
+		print(save)
 	end)
+	--]]
 
 	net.Receive("BuildMode_Sync", function()
 		local x = net.ReadFloat()
