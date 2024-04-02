@@ -62,8 +62,8 @@ function GetCourse(sharecode)
 
 			return false
 		end
-	end, function(message)
-		print("An error occurred: " .. message)
+	end, function(e)
+		print("An error occurred: " .. e)
 
 		return false
 	end, {
@@ -96,8 +96,8 @@ function UploadCourse()
 
 			return false
 		end
-	end, function(message)
-		print("Unexpected error: " .. message)
+	end, function(e)
+		print("Unexpected error: " .. e)
 	end, {
 		authorization = apikey:GetString(),
 		course = util.Base64Encode(filedata, true),
@@ -128,12 +128,12 @@ function UpdateCourse(course_code)
 
 			return true
 		else
-			print("An error occurred: " .. message)
+			print("An error occurred: " .. response.message)
 
 			return false
 		end
-	end, function(message)
-		print("Unexpected error: " .. message)
+	end, function(e)
+		print("Unexpected error: " .. e)
 	end, {
 		authorization = apikey:GetString(),
 		code = course_code,
