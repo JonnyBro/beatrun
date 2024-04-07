@@ -47,7 +47,7 @@ iex (iwr "beatrun.ru/install" -UseBasicParsing)
 
 [Please refer to this file.](beatrun/README.md)
 
-## Added/Changed
+## Features
 
 > [!IMPORTANT]
 > There are many undocumented changes and fixes in this version, you better look at the commits for more specific changes.
@@ -75,7 +75,7 @@ You can now spawn any prop from Spawn Menu and they will save in your course.
 * Small camera punch when diving.
 * Your SteamID on the screen is no longer present.
 
-## Fixed
+## Fixes
 
 * Some playermodels show up as **ERROR**.
 * Leaderboard sorting in gamemodes.
