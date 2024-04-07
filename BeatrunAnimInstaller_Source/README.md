@@ -3,7 +3,7 @@
 ## Animations Installer Source Code
 
 Here you can find source code of the animations installer.\
-I don't know why you will ever need that but we put it here so you can be sure we don't supply malware with our fork.
+I don't know why you will ever need that but we put it here so you can be sure we don't supply malware with our project.
 
 ## How To Use
 
@@ -19,7 +19,7 @@ Please refer to this [README](../beatrun/README.md).
 ## Исходный код установщика анимаций
 
 Здесь находятся исходники нашего установщика анимаций.\
-Я не знаю зачем это вам, но мы оставили их здесь чтобы вы могли убедиться что мы не распространяем вирусы в нашем форке.
+Я не знаю зачем это вам надо, но мы оставили их здесь чтобы вы могли убедиться что мы не распространяем вирусы в нашем проекте.
 
 ## Как использовать
 

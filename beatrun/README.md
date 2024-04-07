@@ -2,10 +2,10 @@
 
 ## Animations Installer
 
-You can use **BeatrunAnimInstaller** (located literally here) to change animations. Currently we have:
+You can use **BeatrunAnimInstaller** (located here) to change animations. Currently we have:
 
-1. `Beatrun Reanimated Project` animations.
-2. Original but fixed animations.
+* Beatrun Reanimated Project.
+* Original but fixed animations.
 
 ## How To Use
 
@@ -13,7 +13,7 @@ You can use **BeatrunAnimInstaller** (located literally here) to change animatio
 2. Press a key on your keyboard with the number of the animation you want to install.
 
 > [!NOTE]
-> If nothing is changed, close the game and/or try run the program with admin priveleges.
+> If nothing is changed, close the game and try run the program with admin priveleges.
 
 ## Source Code
 
@@ -24,10 +24,10 @@ Please refer to this [README](../BeatrunAnimInstaller_Source/README.md).
 
 ## Установщик анимаций
 
-Используйте **BeatrunAnimInstaller** (который расположен прямо тут) чтобы менять анимации. На данный момент у нас имеются:
+Используйте **BeatrunAnimInstaller** (расположен прямо тут) чтобы менять анимации. На данный момент у нас имеются:
 
-1. Анимации из `Beatrun Reanimated Project`.
-2. Оригинальные анимации с правками и фиксами.
+* Beatrun Reanimated Project.
+* Починенные оригинальные анимации.
 
 ## Как использовать
 
@@ -35,7 +35,7 @@ Please refer to this [README](../BeatrunAnimInstaller_Source/README.md).
 2. Нажмите цифру желаемых анимаций на клавиатуре.
 
 > [!NOTE]
-> Если ничего не изменилось, закройте игру и/или запустите файл от имени администратора.
+> Если ничего не изменилось, закройте игру и запустите файл от имени администратора.
 
 ## Исходный код
 
