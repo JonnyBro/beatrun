@@ -52,7 +52,7 @@ iex (iwr "beatrun.ru/install" -UseBasicParsing)
 > [!IMPORTANT]
 > Множество изменений и исправлений не задокументированы, обратитесь к списку коммитов для более подробного списка изменений.
 
-* Jonny_Bro поддерживает **[свою базу курсов](https://courses.beatrun.ru)**, которая так же **бесплатна** к использованию и имеет **[открытый исходный код](https://git.jonnybro.ru/jonny_bro/beatrun-courses-server-express)**!
+* Jonny_Bro поддерживает **[свою базу курсов](https://courses.jonnybro.ru)**, которая так же **бесплатна** к использованию и имеет **[открытый исходный код](https://git.jonnybro.ru/jonny_bro/beatrun-courses-server-express)**!
 * Новый режим - **Deathmatch** (намного веселее чем Data Theft, честно).
 * "Правильный" Kick Glitch прямо как в **[оригинальной игре](https://www.youtube.com/watch?v=zK5y3NBUStc)**.
 * Меню настроек - найти его можно в меню инструментов, в категории **Beatrun**.\

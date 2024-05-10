@@ -52,7 +52,7 @@ iex (iwr "beatrun.ru/install" -UseBasicParsing)
 > [!IMPORTANT]
 > There are many undocumented changes and fixes in this version, you better look at the commits for more specific changes.
 
-* Jonny_Bro is hosting **[custom courses database](https://courses.beatrun.ru)**, which is also **free** to use and **[open sourced](https://git.jonnybro.ru/jonny_bro/beatrun-courses-server-express)**!
+* Jonny_Bro is hosting **[custom courses database](https://courses.jonnybro.ru)**, which is also **free** to use and **[open sourced](https://git.jonnybro.ru/jonny_bro/beatrun-courses-server-express)**!
 * New gamemode - **Deathmatch** (it's way more fun than Data Theft I promise).
 * "Proper" Kick Glitch just like in **[original game](https://www.youtube.com/watch?v=zK5y3NBUStc)**.
 * In-game configuration menu - you can find it in the tools menu, in the **Beatrun** category.\
