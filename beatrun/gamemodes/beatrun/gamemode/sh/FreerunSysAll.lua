@@ -258,7 +258,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	local activewep = ply:GetActiveWeapon()
 
 	if ply:notUsingRH() then
-		weaponspeed = speed_limit:GetInt()
+		weaponspeed = speed_limit:GetInt() + math.floor(325 - speed_limit:GetInt())
 	end
 
 	if (ismoving or ply:GetMantle() ~= 0) and ply:GetMESprintDelay() < CurTime() and (cmd:KeyDown(IN_SPEED) or ply:GetMantle() ~= 0 or not ply:OnGround() or (not ply:OnGround() or ply:GetMantle() ~= 0) and mv:GetVelocity().z > -450) then
