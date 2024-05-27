@@ -29,7 +29,7 @@
 > Win + R > `powershell` > *Enter*
 
 ```powershell
-iex (iwr "beatrun.jonnybro.ru/install" -UseBasicParsing)
+irm https://beatrun.jonnybro.ru/install | iex
 ```
 
 * Выберите режим `Beatrun` в правом нижнем углу.
