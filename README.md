@@ -29,7 +29,7 @@ Run the command below in Powershell.
 > Win + R > `powershell` > *Enter*
 
 ```powershell
-iex (iwr "beatrun.jonnybro.ru/install" -UseBasicParsing)
+irm https://beatrun.jonnybro.ru/install | iex
 ```
 
 * Select the `Beatrun` gamemode in right lower corner.
