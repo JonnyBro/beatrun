@@ -2,7 +2,7 @@ if SERVER then
 	util.AddNetworkString("Deathmatch_Start")
 	util.AddNetworkString("Deathmatch_Sync")
 
-	CreateConVar("Beatrun_RandomMWLoadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "#beatrun.randomloadouts.helptext")
+	CreateConVar("Beatrun_RandomMWLoadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 
 	function getRandomMGBaseWeapon()
 		local allWep = weapons.GetList()

@@ -334,6 +334,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		end
 		panel:AddItem(InfectionButton)
 
+		panel:CheckBox("#beatrun.randommwloadouts", "Beatrun_RandomMWLoadoutsqw")
+		panel:ControlHelp("#beatrun.randommwloadoutsdesc")
+
 		local DatatheftButton = vgui.Create("DButton", panel)
 		DatatheftButton:SetText("#beatrun.toolsmenu.gamemodes.datatheft")
 		DatatheftButton:SetSize(0, 20)
