@@ -1,7 +1,9 @@
 local vmatrixmeta = FindMetaTable("VMatrix")
 local playermeta = FindMetaTable("Player")
 
-CLoadout = {}
+BEATRUN_GAMEMODES_LOADOUTS = {
+	{"weapon_357", "weapon_ar2"}
+}
 
 local mtmp = {
 	{0, 0, 0, 0},

@@ -2,6 +2,20 @@ if SERVER then
 	util.AddNetworkString("Deathmatch_Start")
 	util.AddNetworkString("Deathmatch_Sync")
 
+	CreateConVar("Beatrun_RandomMWLoadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "#beatrun.randomloadouts.helptext")
+
+	function getRandomMGBaseWeapon()
+		local allWep = weapons.GetList()
+		local wepIndex = math.random(#allWep)
+		local wep = allWep[wepIndex]
+
+		if wep.Base == "mg_base" then
+			return wep
+		else
+			return getRandomMGBaseWeapon()
+		end
+	end
+
 	function Beatrun_StartDeathmatch()
 		SetGlobalBool("GM_DEATHMATCH", true)
 
@@ -12,11 +26,26 @@ if SERVER then
 			if v:GetMoveType() == MOVETYPE_NOCLIP then
 				v:SetMoveType(MOVETYPE_WALK)
 				v:Spawn()
-			else
-				for _, b in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
-					local wep = v:Give(b)
+			end
 
-					v:GiveAmmo(9999, wep:GetPrimaryAmmoType() or "Pistol", true)
+			if GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
+				for i = 0, 1 do
+					local randomSWEP = getRandomMGBaseWeapon()
+					local w = v:Give(randomSWEP.ClassName)
+
+					timer.Simple(1, function()
+						if w:GetPrimaryAmmoType() ~= -1 then v:GiveAmmo(10000, w:GetPrimaryAmmoType(), true) end
+						if w:GetSecondaryAmmoType() ~= -1 then v:GiveAmmo(5, w:GetSecondaryAmmoType(), true) end
+					end)
+				end
+			else
+				for _, b in ipairs(BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]) do
+					local w = v:Give(b)
+
+					timer.Simple(1, function()
+						if w:GetPrimaryAmmoType() ~= -1 then v:GiveAmmo(10000, w:GetPrimaryAmmoType(), true) end
+						if w:GetSecondaryAmmoType() ~= -1 then v:GiveAmmo(5, w:GetSecondaryAmmoType(), true) end
+					end)
 				end
 			end
 		end

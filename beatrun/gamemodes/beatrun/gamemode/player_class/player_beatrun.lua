@@ -122,13 +122,25 @@ end
 
 function PLAYER:Loadout()
 	if GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then
-		for _, v in ipairs(DATATHEFT_LOADOUTS[math.random(#DATATHEFT_LOADOUTS)]) do
-			local wep = self.Player:Give(v)
+		if GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
+			for i = 0, 1 do
+				local randomSWEP = getRandomMGBaseWeapon()
+				local w = self.Player:Give(randomSWEP.ClassName)
 
-			timer.Simple(1, function()
-				if wep:GetPrimaryAmmoType() ~= -1 then self.Player:GiveAmmo(10000, wep:GetPrimaryAmmoType(), true) end
-				if wep:GetSecondaryAmmoType() ~= -1 then self.Player:GiveAmmo(5, wep:GetSecondaryAmmoType(), true) end
-			end)
+				timer.Simple(1, function()
+					if w:GetPrimaryAmmoType() ~= -1 then self.Player:GiveAmmo(10000, w:GetPrimaryAmmoType(), true) end
+					if w:GetSecondaryAmmoType() ~= -1 then self.Player:GiveAmmo(5, w:GetSecondaryAmmoType(), true) end
+				end)
+			end
+		else
+			for _, v in ipairs(BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]) do
+				local w = self.Player:Give(v)
+
+				timer.Simple(1, function()
+					if w:GetPrimaryAmmoType() ~= -1 then self.Player:GiveAmmo(10000, w:GetPrimaryAmmoType(), true) end
+					if w:GetSecondaryAmmoType() ~= -1 then self.Player:GiveAmmo(5, w:GetSecondaryAmmoType(), true) end
+				end)
+			end
 		end
 	else
 		self.Player:RemoveAllAmmo()
