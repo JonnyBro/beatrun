@@ -124,7 +124,7 @@ local meta = FindMetaTable("Player")
 if SERVER then
 	function meta:DataTheft_Bank()
 		local dbtbl = ents.FindByClass("br_databank")
-		local bank = dbtbl[math.random(1, #dbtbl)]
+		local bank = dbtbl[math.random(#dbtbl)]
 
 		if bank then
 			self:SetNW2Entity("DataBank", bank)
