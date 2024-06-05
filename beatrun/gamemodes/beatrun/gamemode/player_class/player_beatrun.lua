@@ -19,6 +19,8 @@ PLAYER.TauntCam = TauntCamera()
 PLAYER.WalkSpeed = 200
 PLAYER.RunSpeed = 400
 
+local FOVModifierBlock = false -- trust me this is important -losttrackpad
+
 function PLAYER:SetupDataTables()
 	BaseClass.SetupDataTables(self)
 	self.Player:NetworkVar("Float", 0, "MEMoveLimit")
@@ -368,9 +370,15 @@ end
 function PLAYER:CalcView(view)
 	local fov = GetConVar("Beatrun_FOV"):GetInt()
 	local mult = (self.Player:InOverdrive() and 1.1) or 1
+	local fixfovmult = 1
 
 	if CLIENT then
-		view.fov = fov * mult
+		if !LocalPlayer():GetActiveWeapon().ARC9 and !FOVModifierBlock then
+			fixfovmult = view.fov / fov
+		else
+			fixfovmult = 1
+		end
+		view.fov = fov * mult * fixfovmult
 	end
 
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
@@ -526,6 +534,19 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 			ply.ClimbingTrace = nil
 		end
 	end)
+end)
+
+hook.Add("PlayerSwitchWeapon", "BeatrunSwitchFOVFix", function(ply, oldwep)
+	-- This ENTIRE hook is for dealing with ARC9's stupid FOV reset
+	-- behavior after switching away from an ARC9 SWEP.
+
+	-- Yes this is hacky as hell.
+	FOVModifierBlock = true
+	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
+	timer.Simple(0, function()
+		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
+	end)
+	timer.Simple(0.8, function() FOVModifierBlock = false end)
 end)
 
 player_manager.RegisterClass("player_beatrun", PLAYER, "player_default")
