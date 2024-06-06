@@ -8,7 +8,8 @@ if CLIENT then
 	CreateConVar("cl_playerskin", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The skin to use, if the model has any")
 	CreateConVar("cl_playerbodygroups", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The bodygroups to use, if the model has any")
 
-	CreateConVar("Beatrun_Debug_FOVFix", "0", {FCVAR_DONTRECORD, FCVAR_UNREGISTERED}, "DEBUG: Toggles the FOV fix on or off.")
+	--CreateConVar("Beatrun_Debug_FOVFix", 0, {FCVAR_DONTRECORD, FCVAR_UNREGISTERED, FCVAR_USERINFO}, "DEBUG: Toggles the FOV fix on or off.", 0, 1)
+	CreateClientConVar("Beatrun_Debug_FOVFix", 1, false, true, "debugging", 0, 1)
 	-- Don't record this CVar's value. Don't want players wondering how they broke FOV behavior even after restarting GMod.
 
 	local lframeswepclass = lframeswepclass or ""
@@ -373,30 +374,28 @@ function PLAYER:CreateMove(cmd)
 end
 
 function PLAYER:CalcView(view)
-	local fov = GetConVar("Beatrun_FOV"):GetInt()
 	local mult = (self.Player:InOverdrive() and 1.1) or 1
 	local fixfovmult = 1
 
 	if CLIENT then
-		if GetConVar("Beatrun_Debug_FOVFix"):GetBool() then
-			-- VERY hacky and dirty code and I apologize in advance
+		-- VERY hacky and dirty code and I apologize in advance
 
-			if lframeswepclass != LocalPlayer():GetActiveWeapon():GetClass() then
-				-- SP weapon swap detection, proper hook isn't called in SP
-				FOVModifierBlock = true
-				timer.Simple(1, function() FOVModifierBlock = false end)
-			end
+		local fov = GetConVar("Beatrun_FOV"):GetInt()
 
-			if !FOVModifierBlock and !LocalPlayer():GetActiveWeapon().ARC9 then
-				fixfovmult = view.fov / fov
-			else
-				fixfovmult = 1
-			end
-			view.fov = fov * mult * fixfovmult
-			lframeswepclass = LocalPlayer():GetActiveWeapon():GetClass()
-		else
-			view.fov = fov * mult
+		if lframeswepclass != LocalPlayer():GetActiveWeapon():GetClass() then
+			-- SP clientside weapon swap detection
+			FOVModifierBlock = true
+			timer.Simple(1, function() FOVModifierBlock = false end)
 		end
+
+		if !FOVModifierBlock and !LocalPlayer():GetActiveWeapon().ARC9 then
+			fixfovmult = view.fov / fov
+		else
+			fixfovmult = 1
+		end
+
+		view.fov = GetConVar("Beatrun_FOV"):GetInt() * mult * fixfovmult
+		lframeswepclass = LocalPlayer():GetActiveWeapon():GetClass()
 	end
 
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
@@ -554,16 +553,21 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 	end)
 end)
 
-hook.Add("PlayerSwitchWeapon", "BeatrunSwitchFOVFix", function(ply, oldwep)
+hook.Add("PlayerSwitchWeapon", "BeatrunSwitchFOVFix", function(ply)
 	-- This ENTIRE hook is for dealing with ARC9's stupid FOV reset
 	-- behavior after switching away from an ARC9 SWEP.
 
 	-- Yes this is hacky as hell.
-	if ply:GetInfoNum("Beatrun_Debug_FOVFix", 1) == 1 then
+	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
+	timer.Simple(0, function()
 		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
-		timer.Simple(0, function()
-			ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
-		end)
+	end)
+end)
+
+cvars.AddChangeCallback("Beatrun_FOV", function(convar, oldval, newval)
+	-- Fixes live FOV changes. I'm not kidding.
+	if CLIENT then
+		LocalPlayer():SetFOV(newval)
 	end
 end)
 
