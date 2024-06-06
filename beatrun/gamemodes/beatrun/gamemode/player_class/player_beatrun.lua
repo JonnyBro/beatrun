@@ -378,20 +378,24 @@ function PLAYER:CalcView(view)
 
 		local fov = GetConVar("Beatrun_FOV"):GetInt()
 
-		if lframeswepclass != LocalPlayer():GetActiveWeapon():GetClass() then
-			-- SP clientside weapon swap detection
-			FOVModifierBlock = true
-			timer.Simple(1, function() FOVModifierBlock = false end)
-		end
+		if IsValid(LocalPlayer():GetActiveWeapon()) then
+			if lframeswepclass != LocalPlayer():GetActiveWeapon():GetClass() then
+				-- SP clientside weapon swap detection
+				FOVModifierBlock = true
+				timer.Simple(1, function() FOVModifierBlock = false end)
+			end
 
-		if !FOVModifierBlock and !LocalPlayer():GetActiveWeapon().ARC9 then
-			fixfovmult = view.fov / fov
+			if !FOVModifierBlock and !LocalPlayer():GetActiveWeapon().ARC9 then
+				fixfovmult = view.fov / fov
+			else
+				fixfovmult = 1
+			end
+
+			view.fov = fov * mult * fixfovmult
+			lframeswepclass = LocalPlayer():GetActiveWeapon():GetClass()
 		else
-			fixfovmult = 1
+			view.fov = fov * mult
 		end
-
-		view.fov = GetConVar("Beatrun_FOV"):GetInt() * mult * fixfovmult
-		lframeswepclass = LocalPlayer():GetActiveWeapon():GetClass()
 	end
 
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
