@@ -7,6 +7,11 @@ if CLIENT then
 	CreateConVar("cl_weaponcolor", "0.30 1.80 2.10", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The value is a Vector - so between 0-1 - not between 0-255")
 	CreateConVar("cl_playerskin", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The skin to use, if the model has any")
 	CreateConVar("cl_playerbodygroups", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The bodygroups to use, if the model has any")
+
+	CreateConVar("Beatrun_Debug_FOVFix", "0", {FCVAR_DONTRECORD, FCVAR_UNREGISTERED}, "DEBUG: Toggles the FOV fix on or off.")
+	-- Don't record this CVar's value. Don't want players wondering how they broke FOV behavior even after restarting GMod.
+
+	local lframeswepclass = lframeswepclass or ""
 end
 
 local PLAYER = {}
@@ -373,12 +378,25 @@ function PLAYER:CalcView(view)
 	local fixfovmult = 1
 
 	if CLIENT then
-		if !LocalPlayer():GetActiveWeapon().ARC9 and !FOVModifierBlock then
-			fixfovmult = view.fov / fov
+		if GetConVar("Beatrun_Debug_FOVFix"):GetBool() then
+			-- VERY hacky and dirty code and I apologize in advance
+
+			if lframeswepclass != LocalPlayer():GetActiveWeapon():GetClass() then
+				-- SP weapon swap detection, proper hook isn't called in SP
+				FOVModifierBlock = true
+				timer.Simple(1, function() FOVModifierBlock = false end)
+			end
+
+			if !FOVModifierBlock and !LocalPlayer():GetActiveWeapon().ARC9 then
+				fixfovmult = view.fov / fov
+			else
+				fixfovmult = 1
+			end
+			view.fov = fov * mult * fixfovmult
+			lframeswepclass = LocalPlayer():GetActiveWeapon():GetClass()
 		else
-			fixfovmult = 1
+			view.fov = fov * mult
 		end
-		view.fov = fov * mult * fixfovmult
 	end
 
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
@@ -541,12 +559,12 @@ hook.Add("PlayerSwitchWeapon", "BeatrunSwitchFOVFix", function(ply, oldwep)
 	-- behavior after switching away from an ARC9 SWEP.
 
 	-- Yes this is hacky as hell.
-	FOVModifierBlock = true
-	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
-	timer.Simple(0, function()
+	if ply:GetInfoNum("Beatrun_Debug_FOVFix", 1) == 1 then
 		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
-	end)
-	timer.Simple(0.8, function() FOVModifierBlock = false end)
+		timer.Simple(0, function()
+			ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
+		end)
+	end
 end)
 
 player_manager.RegisterClass("player_beatrun", PLAYER, "player_default")
