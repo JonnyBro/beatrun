@@ -8,10 +8,6 @@ if CLIENT then
 	CreateConVar("cl_playerskin", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The skin to use, if the model has any")
 	CreateConVar("cl_playerbodygroups", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The bodygroups to use, if the model has any")
 
-	--CreateConVar("Beatrun_Debug_FOVFix", 0, {FCVAR_DONTRECORD, FCVAR_UNREGISTERED, FCVAR_USERINFO}, "DEBUG: Toggles the FOV fix on or off.", 0, 1)
-	CreateClientConVar("Beatrun_Debug_FOVFix", 1, false, true, "debugging", 0, 1)
-	-- Don't record this CVar's value. Don't want players wondering how they broke FOV behavior even after restarting GMod.
-
 	local lframeswepclass = lframeswepclass or ""
 end
 
