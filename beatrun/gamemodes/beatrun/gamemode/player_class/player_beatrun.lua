@@ -9,6 +9,11 @@ if CLIENT then
 	CreateConVar("cl_playerbodygroups", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The bodygroups to use, if the model has any")
 
 	local lframeswepclass = lframeswepclass or ""
+	local fovdelaytoggle = false
+end
+
+if SERVER then
+	util.AddNetworkString("Beatrun_ClientFOVChange")
 end
 
 local PLAYER = {}
@@ -565,10 +570,27 @@ hook.Add("PlayerSwitchWeapon", "BeatrunSwitchFOVFix", function(ply)
 end)
 
 cvars.AddChangeCallback("Beatrun_FOV", function(convar, oldval, newval)
-	-- Fixes live FOV changes. I'm not kidding.
-	if CLIENT then
+	-- Live FOV change in SP, needs work for MP
+	if CLIENT and game.SinglePlayer() then
 		LocalPlayer():SetFOV(newval)
+	elseif CLIENT then
+		FOVModifierBlock = true
+		timer.Create("beatrunfovdelay", 0.16, 1, function()
+			FOVModifierBlock = false
+			if !FOVModifierBlock then
+				net.Start("Beatrun_ClientFOVChange")
+				net.WriteInt(newval, 16)
+				net.SendToServer()
+				FOVModifierBlock = true
+			end
+		end)
 	end
 end)
+
+if SERVER then
+	net.Receive("Beatrun_ClientFOVChange", function(len, ply)
+		ply:SetFOV((net.ReadInt(16)))
+	end)
+end
 
 player_manager.RegisterClass("player_beatrun", PLAYER, "player_default")
