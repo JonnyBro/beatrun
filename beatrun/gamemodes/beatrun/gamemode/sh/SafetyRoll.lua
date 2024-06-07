@@ -42,7 +42,7 @@ local function SafetyRollThink(ply, mv, cmd)
 			local speedLimit = GetConVar("Beatrun_SpeedLimit"):GetFloat()
 
 			if (con:GetBool()) then
-				mv:SetVelocity(ang:Forward() * (speedLimit / 2) + vel)
+				mv:SetVelocity(ang:Forward() * 250 + vel)
 			else
 				local max = math.max(250, math.Clamp(lastGroundSpeed, 200, speedLimit + 50))
 				mv:SetVelocity(ang:Forward() * (max + 40))	
