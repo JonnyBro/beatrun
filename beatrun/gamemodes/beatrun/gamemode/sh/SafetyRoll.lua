@@ -39,11 +39,11 @@ local function SafetyRollThink(ply, mv, cmd)
 			vel.y = 0
 
 			local con = GetConVar("Beatrun_LoseSpeedOnRoll")
+			local speedLimit = GetConVar("Beatrun_SpeedLimit"):GetFloat()
 
 			if (con:GetBool()) then
-				mv:SetVelocity(ang:Forward() * 225 + vel)
+				mv:SetVelocity(ang:Forward() * (speedLimit / 2) + vel)
 			else
-				local speedLimit = GetConVar("Beatrun_SpeedLimit"):GetFloat()
 				local max = math.max(250, math.Clamp(lastGroundSpeed, 200, speedLimit + 50))
 				mv:SetVelocity(ang:Forward() * (max + 40))	
 			end
@@ -127,8 +127,6 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 			ply:EmitSound("Handsteps.ConcreteHard")
 			ply:EmitSound("Land.Concrete")
 		end
-
-		BodyAnim:SetAngles(Angle(0, ply:EyeAngles().y, 0))
 
 		if CLIENT and IsFirstTimePredicted() then
 			CacheBodyAnim()
