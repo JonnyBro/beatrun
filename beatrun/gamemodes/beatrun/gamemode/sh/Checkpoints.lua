@@ -240,6 +240,7 @@ function CourseHUD()
 	if incourse then
 		local text = string.FormattedTime(totaltime, "%02i:%02i:%02i")
 		local w, _ = surface.GetTextSize(text)
+		surface.SetFont("BeatrunHUD")
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.075 + vpz)
 		surface.DrawText(text)
 	end
@@ -269,6 +270,7 @@ function CourseHUD()
 		local text = string.FormattedTime(pbtotal, "%02i:%02i:%02i")
 		local w, h = surface.GetTextSize(text)
 
+		surface.SetFont("BeatrunHUD")
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.075 + h + vpz)
 		surface.SetTextColor(255, 255, 255, 125)
 		surface.DrawText(text)
@@ -281,6 +283,7 @@ function CourseHUD()
 		timealpha = math.max(0, timealpha - FrameTime() * 250)
 		timecolor.a = math.min(255, timealpha)
 
+		surface.SetFont("BeatrunHUD")
 		surface.SetTextPos(ScrW() * 0.5 - w * 0.5 + vpx, ScrH() * 0.3 + vpz)
 		surface.SetTextColor(timecolor)
 		surface.DrawText(timetext)
