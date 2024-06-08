@@ -104,7 +104,7 @@ function syn:Think()
 end
 
 local testbuildup = false
-local testfovconvar = GetConVar("Beatrun_FOV", 110)
+local testfovconvar = GetConVar("Beatrun_FOV", 100)
 local testfov = 100
 local colbeatr = 250
 local colbeatg = 120
