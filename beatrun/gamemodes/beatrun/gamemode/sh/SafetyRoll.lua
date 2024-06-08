@@ -6,7 +6,7 @@ local landang = Angle(0, 0, 0)
 local lastGroundSpeed = 0
 
 if CLIENT then
-	local loseSpeed = CreateClientConVar("Beatrun_LoseSpeedOnRoll", 1, true, true, language.GetPhrase("beatrun.convars.loseSpeedOnRoll"), 0, 1)
+	CreateClientConVar("Beatrun_RollSpeedLoss", 1, true, true, language.GetPhrase("beatrun.convars.rollspeedloss"), 0, 1)
 end
 
 local function SafetyRollThink(ply, mv, cmd)
@@ -17,8 +17,14 @@ local function SafetyRollThink(ply, mv, cmd)
 
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
 	end
-	
+
 	local isRolling = CurTime() < ply:GetSafetyRollKeyTime()
+	if ply:OnGround() and not isRolling then
+		lastGroundSpeed = mv:GetVelocity():Length()
+	end
+
+	local isRolling = CurTime() < ply:GetSafetyRollKeyTime()
+
 	if ply:OnGround() and not isRolling then
 		lastGroundSpeed = mv:GetVelocity():Length()
 	end
@@ -28,7 +34,7 @@ local function SafetyRollThink(ply, mv, cmd)
 
 		local ang = ply:GetSafetyRollAng()
 
-	    mv:SetSideSpeed(0)
+		mv:SetSideSpeed(0)
 		mv:SetForwardSpeed(0)
 
 		mv:AddKey(IN_DUCK)
@@ -38,14 +44,14 @@ local function SafetyRollThink(ply, mv, cmd)
 			vel.x = 0
 			vel.y = 0
 
-			local con = GetConVar("Beatrun_LoseSpeedOnRoll")
-			local speedLimit = GetConVar("Beatrun_SpeedLimit"):GetFloat()
+			local speedloss = GetConVar("Beatrun_RollSpeedLoss"):GetBool()
+			local speedLimit = GetConVar("Beatrun_SpeedLimit"):GetInt()
 
-			if (con:GetBool()) then
+			if speedloss then
 				mv:SetVelocity(ang:Forward() * 250 + vel)
 			else
 				local max = math.max(250, math.Clamp(lastGroundSpeed, 200, speedLimit + 50))
-				mv:SetVelocity(ang:Forward() * (max + 40))	
+				mv:SetVelocity(ang:Forward() * (max + 40))
 			end
 
 			ply:SetMEMoveLimit(450)
@@ -111,7 +117,7 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 		ang.x = 0
 		ang.z = 0
 
-	    ang:RotateAroundAxis(Vector(0, 0, 1), 180)
+		ang:RotateAroundAxis(Vector(0, 0, 1), 180)
 		ply:SetJumpTurn(false)
 		ply:SetSafetyRollAng(ang)
 		ply:SetSafetyRollTime(CurTime() + 0.9)
