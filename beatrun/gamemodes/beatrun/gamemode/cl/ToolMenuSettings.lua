@@ -215,14 +215,14 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(HudFXPColor)
 	end)
 
-	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_viewbob", "#beatrun.toolsmenu.viewbob.name", "", "", function(panel)
+	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_camera", "#beatrun.toolsmenu.camera.name", "", "", function(panel)
 		panel:ClearControls()
-		panel:SetName("#beatrun.toolsmenu.viewbob.desc")
+		panel:SetName("#beatrun.toolsmenu.camera.desc")
 
-		panel:CheckBox("#beatrun.toolsmenu.viewbob.stabilization", "Beatrun_ViewbobStabilized")
-		panel:ControlHelp("#beatrun.toolsmenu.viewbob.stabilizationdesc")
+		panel:CheckBox("#beatrun.toolsmenu.camera.stabilization", "Beatrun_ViewbobStabilized")
+		panel:ControlHelp("#beatrun.toolsmenu.camera.stabilizationdesc")
 
-		panel:NumSlider("#beatrun.toolsmenu.viewbob.intensity", "Beatrun_ViewbobIntensity", -100, 100, 0)
+		panel:NumSlider("#beatrun.toolsmenu.camera.intensity", "Beatrun_ViewbobIntensity", -100, 100, 0)
 
 		panel:NumSlider("#beatrun.toolsmenu.camera.fov", "Beatrun_FOV", 90, 120, 0)
 		panel:Help("#beatrun.toolsmenu.camera.fovdesc")
