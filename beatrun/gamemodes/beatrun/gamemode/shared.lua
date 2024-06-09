@@ -1,4 +1,5 @@
-VERSIONGLOBAL = "v1.0.1"
+--has anyone even seen this text?
+VERSIONGLOBAL = ""
 
 DeriveGamemode("sandbox")
 
