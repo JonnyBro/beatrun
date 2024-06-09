@@ -1081,6 +1081,20 @@ if CLIENT then
 
 			LocalPlayer():EmitSound("buttonrollover.wav")
 		end,
+		[KEY_H] = function()
+			local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
+
+			BuildModeAngle:RotateAroundAxis(Vector(0, 0, 1), 15 * mult)
+
+			LocalPlayer():EmitSound("buttonrollover.wav")
+		end,
+		[KEY_J] = function()
+			local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
+
+			BuildModeAngle:RotateAroundAxis(Vector(0, 0, 1), -15 * mult)
+
+			LocalPlayer():EmitSound("buttonrollover.wav")
+		end,
 		[KEY_F] = function()
 			if CurTime() < BuildModePlaceDelay then return end
 
