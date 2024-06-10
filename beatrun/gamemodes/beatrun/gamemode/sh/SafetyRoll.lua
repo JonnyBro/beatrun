@@ -6,7 +6,7 @@ local landang = Angle(0, 0, 0)
 local lastGroundSpeed = 0
 
 if CLIENT then
-	CreateClientConVar("Beatrun_RollSpeedLoss", 1, true, true, language.GetPhrase("beatrun.convars.rollspeedloss"), 0, 1)
+	CreateConVar("Beatrun_RollSpeedLoss", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 end
 
 local function SafetyRollThink(ply, mv, cmd)
