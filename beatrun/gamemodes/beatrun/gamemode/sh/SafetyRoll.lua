@@ -4,10 +4,7 @@ end
 
 local landang = Angle(0, 0, 0)
 local lastGroundSpeed = 0
-
-if CLIENT then
-	CreateConVar("Beatrun_RollSpeedLoss", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
-end
+local rollspeedloss = CreateConVar("Beatrun_RollSpeedLoss", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 
 local function SafetyRollThink(ply, mv, cmd)
 	local speed = mv:GetVelocity().z
@@ -44,7 +41,7 @@ local function SafetyRollThink(ply, mv, cmd)
 			vel.x = 0
 			vel.y = 0
 
-			local speedloss = GetConVar("Beatrun_RollSpeedLoss"):GetBool()
+			local speedloss = rollspeedloss:GetBool()
 			local speedLimit = GetConVar("Beatrun_SpeedLimit"):GetInt()
 
 			if speedloss then
