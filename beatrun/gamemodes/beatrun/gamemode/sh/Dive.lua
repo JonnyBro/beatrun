@@ -3,9 +3,7 @@ local totsugekispam = CreateConVar("Beatrun_TotsugekiSpam", 0, {FCVAR_REPLICATED
 local totsugekiheading = CreateConVar("Beatrun_TotsugekiHeading", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 local totsugekidir = CreateConVar("Beatrun_TotsugekiDir", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 
-if CLIENT then
-	CreateClientConVar("Beatrun_TotsugekiAudio", 1, true, true, language.GetPhrase("beatrun.convars.totsugekiaudio"), 0, 1)
-end
+local totsugekiaudio = CreateConVar("Beatrun_TotsugekiAudio", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 
 local function Dive(ply, mv, cmd)
 	if (not ply:GetDive() or ply:GetDive() and ply.QuakeJumping and totsugeki:GetBool() and totsugekispam:GetBool()) and ply:GetCrouchJump() and mv:KeyPressed(IN_ATTACK2) then
@@ -33,7 +31,7 @@ local function Dive(ply, mv, cmd)
 
 		if ply:UsingRH() and ply:GetActiveWeapon():GetQuakeJumping() and totsugeki:GetBool() then
 			if SERVER then
-				if GetConVar("Beatrun_TotsugekiAudio"):GetBool() then
+				if totsugekiaudio:GetBool() then
 					ply:EmitSound("misc/totsugeki" .. math.random(1, 2) .. ".mp3", 60, 100, 1, CHAN_VOICE)
 				end
 
