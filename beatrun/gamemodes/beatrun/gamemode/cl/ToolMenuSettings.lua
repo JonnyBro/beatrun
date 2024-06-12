@@ -166,11 +166,11 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.toolsmenu.hud.hudxp", "Beatrun_HUDXP")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.hudxpdesc")
 
+		panel:CheckBox("#beatrun.toolsmenu.hud.showspeedometer", "Beatrun_ShowSpeedometer")
+		panel:ControlHelp("#beatrun.toolsmenu.hud.showspeedometerdesc")
+
 		panel:CheckBox("#beatrun.toolsmenu.hud.wind", "Beatrun_Wind")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.winddesc")
-
-		panel:NumSlider("#beatrun.toolsmenu.hud.fov", "Beatrun_FOV", 90, 120, 0)
-		panel:Help("#beatrun.toolsmenu.hud.fovdesc")
 
 		panel:NumSlider("#beatrun.toolsmenu.hud.hidden", "Beatrun_HUDHidden", 0, 2, 0)
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.hud.hiddendesc"))
@@ -215,14 +215,17 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(HudFXPColor)
 	end)
 
-	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_viewbob", "#beatrun.toolsmenu.viewbob.name", "", "", function(panel)
+	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_camera", "#beatrun.toolsmenu.camera.name", "", "", function(panel)
 		panel:ClearControls()
-		panel:SetName("#beatrun.toolsmenu.viewbob.desc")
+		panel:SetName("#beatrun.toolsmenu.camera.desc")
 
-		panel:CheckBox("#beatrun.toolsmenu.viewbob.stabilization", "Beatrun_ViewbobStabilized")
-		panel:ControlHelp("#beatrun.toolsmenu.viewbob.stabilizationdesc")
+		panel:CheckBox("#beatrun.toolsmenu.camera.stabilization", "Beatrun_ViewbobStabilized")
+		panel:ControlHelp("#beatrun.toolsmenu.camera.stabilizationdesc")
 
-		panel:NumSlider("#beatrun.toolsmenu.viewbob.intensity", "Beatrun_ViewbobIntensity", -100, 100, 0)
+		panel:NumSlider("#beatrun.toolsmenu.camera.intensity", "Beatrun_ViewbobIntensity", -100, 100, 0)
+
+		panel:NumSlider("#beatrun.toolsmenu.camera.fov", "Beatrun_FOV", 90, 120, 0)
+		panel:Help("#beatrun.toolsmenu.camera.fovdesc")
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_gameplay", "#beatrun.toolsmenu.gameplay.name", "", "", function(panel)
@@ -240,6 +243,12 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:CheckBox("#beatrun.toolsmenu.gameplay.disablegrapple", "Beatrun_DisableGrapple")
 		panel:ControlHelp("#beatrun.toolsmenu.gameplay.disablegrappledesc")
+
+		panel:CheckBox("#beatrun.toolsmenu.gameplay.rollspeedloss", "Beatrun_RollSpeedLoss")
+		panel:ControlHelp("#beatrun.toolsmenu.gameplay.rollspeedlossdesc")
+
+		panel:CheckBox("#beatrun.toolsmenu.moves.totsugekiaudio", "Beatrun_TotsugekiAudio")
+		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.totsugekiaudiodesc"))
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_misc", "#beatrun.toolsmenu.misc.name", "", "", function(panel)

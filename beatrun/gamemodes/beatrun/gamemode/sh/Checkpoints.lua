@@ -17,6 +17,10 @@ local timetext = ""
 local timealpha = 1000
 local timecolor = color_neutral
 
+if CLIENT then
+	CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("#beatrun.convars.showspeedometer"), 0, 1)
+end
+
 if SERVER then
 	util.AddNetworkString("Checkpoint_Hit")
 	util.AddNetworkString("Checkpoint_Finish")
@@ -241,7 +245,7 @@ function CourseHUD()
 		surface.DrawText(text)
 	end
 
-	if GetConVar("Beatrun_HUDHidden") and not GetConVar("Beatrun_HUDHidden"):GetBool() and not BuildMode and hook.Run("BeatrunDrawHUD") ~= false and not ply.InReplay then
+	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() then
 		local speed = math.Round(ply:GetVelocity():Length() * 0.06858125)
 
 		if speed < 10 then
