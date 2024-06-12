@@ -562,8 +562,7 @@ end)
 hook.Add("PlayerSwitchWeapon", "BeatrunSwitchARC9FOVFix", function(ply)
 	-- This ENTIRE hook is for dealing with ARC9's stupid FOV reset
 	-- behavior after switching away from an ARC9 SWEP.
-	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
-
+	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
 	timer.Simple(0, function()
 		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
 	end)
