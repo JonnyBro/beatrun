@@ -8,6 +8,8 @@ elseif CLIENT and game.SinglePlayer() then
 	net.Receive("CrouchJumpSP", function()
 		local ply = LocalPlayer()
 
+		if ply:GetMoveType() == MOVETYPE_NOCLIP then return end
+
 		if BodyAnimArmCopy then
 			BodyAnimCycle = 0
 			BodyAnimCrouchLerp = 0
@@ -28,6 +30,8 @@ hook.Add("SetupMove", "CrouchJump", function(ply, mv, cmd)
 	if ply:OnGround() and ply:GetCrouchJumpBlocked() then
 		ply:SetCrouchJumpBlocked(false)
 	end
+
+	if ply:GetMoveType() == MOVETYPE_NOCLIP then return end
 
 	local activewep = ply:GetActiveWeapon()
 
