@@ -13,7 +13,7 @@ if SERVER then
 
 			v:SetNW2Int("DataCubes", 0)
 			v:SetNW2Int("DataBanked", 0)
-			
+
 			if v:GetMoveType() == MOVETYPE_NOCLIP then
 				v:SetMoveType(MOVETYPE_WALK)
 				v:Spawn()

@@ -9,7 +9,6 @@ if CLIENT then
 	CreateConVar("cl_playerbodygroups", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The bodygroups to use, if the model has any")
 
 	local lframeswepclass = lframeswepclass or ""
-	local fovdelaytoggle = false
 end
 
 if SERVER then
@@ -160,7 +159,7 @@ function PLAYER:Loadout()
 
 	self.Player:SetJumpPower(230)
 	self.Player:SetCrouchedWalkSpeed(0.5)
-	self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 120))
+	self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 100))
 	self.Player:SetCanZoom(false)
 end
 
@@ -380,17 +379,19 @@ function PLAYER:CalcView(view)
 
 	if CLIENT then
 		-- VERY hacky and dirty code and I apologize in advance
-
 		local fov = GetConVar("Beatrun_FOV"):GetInt()
 
 		if IsValid(LocalPlayer():GetActiveWeapon()) then
-			if lframeswepclass != LocalPlayer():GetActiveWeapon():GetClass() then
+			if lframeswepclass ~= LocalPlayer():GetActiveWeapon():GetClass() then
 				-- SP clientside weapon swap detection
 				FOVModifierBlock = true
-				timer.Simple(1, function() FOVModifierBlock = false end)
+
+				timer.Simple(1, function()
+					FOVModifierBlock = false
+				end)
 			end
 
-			if !FOVModifierBlock and !LocalPlayer():GetActiveWeapon().ARC9 then
+			if not FOVModifierBlock and not LocalPlayer():GetActiveWeapon().ARC9 then
 				fixfovmult = view.fov / fov
 			else
 				fixfovmult = 1
@@ -558,26 +559,25 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 	end)
 end)
 
-hook.Add("PlayerSwitchWeapon", "BeatrunSwitchFOVFix", function(ply)
+hook.Add("PlayerSwitchWeapon", "BeatrunSwitchARC9FOVFix", function(ply)
 	-- This ENTIRE hook is for dealing with ARC9's stupid FOV reset
 	-- behavior after switching away from an ARC9 SWEP.
-
-	-- Yes this is hacky as hell.
 	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
 	timer.Simple(0, function()
-		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
+		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
 	end)
 end)
 
 cvars.AddChangeCallback("Beatrun_FOV", function(convar, oldval, newval)
-	-- Live FOV change in SP, needs work for MP
 	if CLIENT and game.SinglePlayer() then
 		LocalPlayer():SetFOV(newval)
 	elseif CLIENT then
 		FOVModifierBlock = true
-		timer.Create("beatrunfovdelay", 0.16, 1, function()
+
+		timer.Simple(0.16, function()
 			FOVModifierBlock = false
-			if !FOVModifierBlock then
+
+			if not FOVModifierBlock then
 				net.Start("Beatrun_ClientFOVChange")
 				net.WriteInt(newval, 16)
 				net.SendToServer()
@@ -589,7 +589,7 @@ end)
 
 if SERVER then
 	net.Receive("Beatrun_ClientFOVChange", function(len, ply)
-		ply:SetFOV((net.ReadInt(16)))
+		ply:SetFOV(net.ReadInt(16))
 	end)
 end
 

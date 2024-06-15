@@ -99,8 +99,6 @@ function SWEP:Deploy()
 	self:SetWasOnGround(false)
 	self:SetBlockAnims(false)
 	self:SetPunch(1)
-
-	RunConsoleCommand("fov_desired", 100)
 end
 
 function SWEP:Initialize()
@@ -437,7 +435,7 @@ function SWEP:PrimaryAttack()
 
 		ply:SetMEMoveLimit(ply:GetMEMoveLimit() * 0.75)
 		ply:SetOverdriveMult(mult)
-		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120) * fovmult, 0.125)
+		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100) * fovmult, 0.125)
 
 		return
 	end
