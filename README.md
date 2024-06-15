@@ -115,4 +115,4 @@ I'm not kidding, check there first for problems. ***Do not** report issues with 
 * [Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc) for Discord Rich Presence module
 * [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) for Steam Presence module
 
-[^1] *A Steam account with a copy of Garry's Mod is required. Ask them why if you're curious.*
+[^1]: *A Steam account with a copy of Garry's Mod is required. Ask them why if you're curious.*
