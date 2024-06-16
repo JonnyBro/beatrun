@@ -28,7 +28,7 @@ Not supported. I (LostTrackpad) am not going to set this up.[^2]
 
 ***Note**: `<Garry's Mod game folder>` is a placeholder for your Garry's Mod game folder.*
 
-1. **[Download this repository](example.com)**. (I'll replace this link later)
+1. **[Download this repository](https://github.com/LostTrackpad/beatrun-forked/archive/refs/heads/dev.zip)**.
 2. **Delete the `beatrun` folder in *`<Garry's Mod game folder>/garrysmod/addons`* if you have one.**
 3. Extract the `beatrun-main/beatrun` folder to *`<Garry's Mod game folder>/garrysmod/addons`*.
    * If you want to have Discord and Steam Presence:
