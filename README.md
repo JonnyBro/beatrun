@@ -52,24 +52,22 @@ If you're ready and willing to use this method, read [this](repocontent/WindowsG
 
 [Please refer to this file.](beatrun/README.md)
 
-## Features
+## New Features
 
 > [!IMPORTANT]
 > This version has *lots* of undocumented features and fixes. Look into the commit history if you wanna see all of them.
 
-* Jonny_Bro (original repository hoster) is hosting **[custom courses database](https://courses.jonnybro.ru)**, which is ***free***[^1] to use and **[open sourced](https://git.jonnybro.ru/jonny_bro/beatrun-courses-server-express)**!
-* New gamemode - **Deathmatch** (it's way more fun than Data Theft I promise).
+* Jonny_Bro (original fork creator) is hosting **[a custom course database](https://courses.jonnybro.ru)**, which is ***free***[^1] to use and also **[open source](https://git.jonnybro.ru/jonny_bro/beatrun-courses-server-express)**!
+* New *Deathmatch* gamemode (it's definitely more fun than *Data Theft* trust us)
 * "Proper" kick glitch just like in **[original game](https://www.youtube.com/watch?v=zK5y3NBUStc)**
-  * Kick glitch behavior type toggle (yep, original kick glitch is still usable!) `Beatrun_OldKickGlitch` to toggle
-* In-game configuration menu - you can find it in the tools menu, in the **`Beatrun`** category\
-  ***Most*** Beatrun settings can now be configured there! Use `cvarlist beatrun_` to list all Beatrun options (and some commands)
+  * Kick glitch behavior type toggle (yep, original kick glitch is still usable!) - `Beatrun_OldKickGlitch` to toggle
+* In-game configuration menu - you can find it in the spawn menu, in the **`Beatrun`** category\
+  ***Most*** Beatrun settings can now be configured there! Use `cvarlist beatrun_` to list *all* Beatrun options (and some commands), including some I didn't list
 * Discord and Steam Presence *(only Discord presence is new actually)*
 * Localization support.\
-  Now usable in 5+ languages *(mostly, some stuff is locked in English)*
-* Build Mode Tweaks.\
-You can now spawn any prop from Spawn Menu and they will save in your course.
+  Now in 7 languages *(mostly, some stuff is locked in English)*!
 * Dismounting from ladders with your duck key (default is `CTRL`)
-* Removing ziplines created with Zipline Gun using your alternate fire bind (default is Right Mouse Button)
+* Removing ziplines created with Zipline Gun using your alternate fire bind (default is `Right Mouse Button`)
 * Arrow that points to the next checkpoint
 * Serverside option to enable Overdrive mode in multiplayer: `Beatrun_AllowOverdriveInMultiplayer`
 * Serverside option to allow prop spawning without being an admin: `Beatrun_AllowPropSpawn`.
@@ -79,16 +77,16 @@ You can now spawn any prop from Spawn Menu and they will save in your course.
 * ConVar to allow QuickTurn with any weapon or only with *Runner Hands* (client) - `Beatrun_QuickturnHandsOnly`.
 * Small camera punch when diving.
 * Your Steam account ID/*SteamID* is no longer shown on screen
-## Fixes
+## Some Older (?) Fixes
 
 * Some playermodels showing up as **`ERROR`**
 * Leaderboard sorting in gamemodes
 * Allow using the grapple in Time Trial and gamemodes
 * Crash in Data Theft when touching Data Bank
 * Collision issues - PvP damage not going through in gamemodes other than Data Theft
-* Allowed jumping while walking (🤷).
+* Allowed jumping while walking *(don't ask me, Jonny did this...)*.
 * Tweaked safety roll to allow rolling under stuff
-* Tweaked some grapple related stuff - now it moves with the entity it was attached to and other players can see the rope.
+* Some grapple tweaks (moves with attached entity, other players can see rope)
 
 ## TODO
 
