@@ -138,6 +138,7 @@ local function SwingbarThink(ply, mv, cmd)
 	offset = ply:GetSBOffset()
 
 	if mv:KeyPressed(IN_JUMP) or mv:KeyDown(IN_JUMP) and offset > 90 then
+		print("ONE")
 		ParkourEvent("swingjump", ply)
 
 		if mv:KeyPressed(IN_JUMP) and offset > 90 then
@@ -187,6 +188,21 @@ local function Swingbar(ply, mv, cmd)
 
 	if IsValid(ply:GetSwingbar()) then
 		SwingbarThink(ply, mv, cmd)
+	end
+
+	if RunnerHandsOnly:GetBool() and !ply:UsingRH() then
+		ParkourEvent("swingjump", ply)
+
+		local ang = cmd:GetViewAngles()
+		ang.x = 0
+
+		ply:SetMoveType(MOVETYPE_WALK)
+		ply:SetSwingbarLast(ply:GetSwingbar())
+		ply:SetSwingbar(nil)
+		ply:SetWallrunDir(dummyvec)
+
+		ply:SetMEMoveLimit(GetConVar("Beatrun_SpeedLimit"):GetInt())
+		ply:SetMESprintDelay(-1)
 	end
 end
 

@@ -785,3 +785,9 @@ hook.Add("SetupMove", "Climbing", function(ply, mv, cmd)
 		ClimbingThink(ply, mv, cmd)
 	end
 end)
+
+hook.Add("PlayerSwitchWeapon", "NoSwitchForClimbers", function(ply)
+	if ply:GetClimbing() != 0 then
+		return true
+	end
+end)

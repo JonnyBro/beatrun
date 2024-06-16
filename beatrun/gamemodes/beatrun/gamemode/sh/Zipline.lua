@@ -138,7 +138,7 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 		dir:Mul(-1)
 	end
 
-	if fraction >= 1 or cmd:KeyDown(IN_DUCK) then
+	if fraction >= 1 or cmd:KeyDown(IN_DUCK) or (RunnerHandsOnly:GetBool() and !ply:UsingRH()) then
 		ply:SetZipline(nil)
 		ply:SetMoveType(MOVETYPE_WALK)
 		ply:SetCrouchJumpBlocked(true)
