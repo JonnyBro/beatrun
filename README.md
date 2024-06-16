@@ -18,13 +18,13 @@ Fully open sourced and maintained by the community (like 4 people I think).
 > You can find all compiled modules **[here](lua/bin)** in the repository.\
 > Check **[Credits](#credits)** section for module source code.
 
-## Automatic Installation (Recommended | Windows 10/11)
+## Automatic Installation?
 
-Not supported. I (LostTrackpad) am not going to set this up.
+Not supported. I (LostTrackpad) am not going to set this up.[^2]
 
 ## Manual Installation
 
-#### *Method 1: Repository download and extract (easy)*
+### *Method 1: Repository download and extract (easy)*
 
 ***Note**: `<Garry's Mod game folder>` is a placeholder for your Garry's Mod game folder.*
 
@@ -35,7 +35,7 @@ Not supported. I (LostTrackpad) am not going to set this up.
      * Extract the `beatrun-main/lua` folder to *`<Garry's Mod game folder>/garrysmod`*.
 4. That's it, Beatrun is installed.
 
-#### *Method 2: Using Git and Directory Junctions* ***(Windows 10+ Only!)***
+### *Method 2: Using Git and Directory Junctions* ***(Windows 10+ Only!)***
 > [!WARNING]
 > This method requires:<br>
 > * **A working and up to date installation of Windows 10 or above.**
@@ -114,3 +114,4 @@ I'm not kidding, check there first for problems. ***Do not** report issues with 
 * [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) for Steam Presence module
 
 [^1]: *A Steam account with a copy of Garry's Mod is required. Ask them why if you're curious.*
+[^2]: *I already tried to set up a webserver on my PC. It failed. I don't want people spamming requests for the install script to my PC either, and I know Cloudflare is a thing. Maybe I'll try GitHub Pages?*
