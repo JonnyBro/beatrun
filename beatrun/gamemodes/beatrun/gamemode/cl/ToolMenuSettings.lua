@@ -410,4 +410,12 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		-- end
 		-- panel:AddItem(LoadoutMenuButton)
 	end)
+
+	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_serverfun", "Fun", "", "", function(panel)
+		panel:ClearControls()
+		panel:SetName("Fun/Experimental Settings")
+
+		panel:CheckBox("Cruelty Parkour (?)", "Beatrun_CrueltyParkour")
+		panel:ControlHelp("\"Funny\" optional feature that blocks some parkour moves and changes some moves\' behavior with a different weapon out.")
+	end)
 end)

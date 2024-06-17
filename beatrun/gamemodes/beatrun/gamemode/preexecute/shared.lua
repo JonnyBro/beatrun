@@ -1,1 +1,1 @@
-RunnerHandsOnly = CreateConVar("Beatrun_RunnerHandsOnly", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Also known as \"Cruelty Mode\".\nDisables some Beatrun parkour abilities using anything but the Beatrun hands when enabled.", 0, 1)
+CrueltyParkour = CreateConVar("Beatrun_CrueltyParkour", 0, {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Also known as \"Cruelty Mode\".\nDisables some Beatrun parkour abilities using anything but the Beatrun hands when enabled.", 0, 1)

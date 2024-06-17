@@ -522,12 +522,12 @@ end
 local vecdir = Vector(1000, 1000, 1000)
 
 hook.Add("SetupMove", "Wallrunning", function(ply, mv, cmd)
-	if ply:GetWallrun() == nil or not ply:Alive() or (RunnerHandsOnly:GetBool() and !(ply:UsingRH())) then
+	if ply:GetWallrun() == nil or not ply:Alive() or (CrueltyParkour:GetBool() and !(ply:UsingRH())) then
 		ply:SetWallrun(0)
 	end
 
 	if ply:GetWallrun() == 0 and mv:GetVelocity().z > -450 and not ply:OnGround() and mv:KeyDown(IN_FORWARD) and not ply:Crouching() and not mv:KeyDown(IN_DUCK) and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:WaterLevel() < 1 then
-		if (RunnerHandsOnly:GetBool() and (ply:GetActiveWeapon():GetClass() != "runnerhands")) then
+		if (CrueltyParkour:GetBool() and (ply:GetActiveWeapon():GetClass() != "runnerhands")) then
 		else
 			WallrunningCheck(ply, mv, cmd)
 		end

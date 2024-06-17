@@ -190,7 +190,7 @@ local function Swingbar(ply, mv, cmd)
 		SwingbarThink(ply, mv, cmd)
 	end
 
-	if RunnerHandsOnly:GetBool() and !ply:UsingRH() then
+	if CrueltyParkour:GetBool() and !ply:UsingRH() then
 		ParkourEvent("swingjump", ply)
 
 		local ang = cmd:GetViewAngles()

@@ -73,7 +73,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		local dist = trout.HitPos:DistToSqr(mv:GetOrigin())
 
 		if trout.Fraction > 0 and dist < 2750000 and dist > 90000 and mv:KeyPressed(IN_JUMP) then
-			if RunnerHandsOnly:GetBool() and !ply:UsingRH() then
+			if CrueltyParkour:GetBool() and !ply:UsingRH() then
 			else
 				local vel = mv:GetVelocity()
 				vel.z = -math.abs(vel.z)
