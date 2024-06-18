@@ -20,39 +20,41 @@ local function SwingbarCheck(ply, mv, cmd)
 	util.TraceHull(tr)
 
 	if IsValid(trout.Entity) and trout.Entity:GetClass() == "br_swingbar" and (ply:GetSwingbarLast() ~= trout.Entity or ply:GetSBDelay() < CurTime()) then
-		local swingbar = trout.Entity
-		local dot = cmd:GetViewAngles():Forward():Dot(swingbar:GetAngles():Forward())
-		local dir = dot > 0 and true or false
+		if CrueltyParkour:GetBool() and !ply:UsingRH() then
+			local swingbar = trout.Entity
+			local dot = cmd:GetViewAngles():Forward():Dot(swingbar:GetAngles():Forward())
+			local dir = dot > 0 and true or false
 
-		if math.abs(dot) < 0.7 then return end
+			if math.abs(dot) < 0.7 then return end
 
 
-		if CLIENT then
-			swingbar:SetPredictable(true)
-		end
+			if CLIENT then
+				swingbar:SetPredictable(true)
+			end
 
-		ply:SetSwingbar(swingbar)
-		ply:SetWallrunTime(0)
-		ply:SetWallrunCount(0)
-		ply:SetSBDir(dir)
-		ply:SetSBStartLerp(0)
-		ply:SetSBOffset(30)
-		ply:SetSBPeak(0)
-		ply:SetDive(false)
-		ply:SetCrouchJump(false)
+			ply:SetSwingbar(swingbar)
+			ply:SetWallrunTime(0)
+			ply:SetWallrunCount(0)
+			ply:SetSBDir(dir)
+			ply:SetSBStartLerp(0)
+			ply:SetSBOffset(30)
+			ply:SetSBPeak(0)
+			ply:SetDive(false)
+			ply:SetCrouchJump(false)
 
-		ParkourEvent("swingbar", ply)
+			ParkourEvent("swingbar", ply)
 
-		mv:SetVelocity(vector_origin)
+			mv:SetVelocity(vector_origin)
 
-		if mv:KeyDown(IN_FORWARD) or mv:GetVelocity():Length() > 150 then
-			ply:SetSBOffsetSpeed(2)
-		else
-			ply:SetSBOffsetSpeed(0)
-		end
+			if mv:KeyDown(IN_FORWARD) or mv:GetVelocity():Length() > 150 then
+				ply:SetSBOffsetSpeed(2)
+			else
+				ply:SetSBOffsetSpeed(0)
+			end
 
-		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-			ply:EmitSound("Handsteps.ConcreteHard")
+			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
+				ply:EmitSound("Handsteps.ConcreteHard")
+			end
 		end
 	end
 end
@@ -137,7 +139,7 @@ local function SwingbarThink(ply, mv, cmd)
 
 	offset = ply:GetSBOffset()
 
-	if mv:KeyPressed(IN_JUMP) or mv:KeyDown(IN_JUMP) and offset > 90 then
+	if mv:KeyPressed(IN_JUMP) or mv:KeyDown(IN_JUMP) and offset > 90 or (CrueltyParkour:GetBool() and !ply:UsingRH()) then
 		print("ONE")
 		ParkourEvent("swingjump", ply)
 
@@ -188,21 +190,6 @@ local function Swingbar(ply, mv, cmd)
 
 	if IsValid(ply:GetSwingbar()) then
 		SwingbarThink(ply, mv, cmd)
-	end
-
-	if CrueltyParkour:GetBool() and !ply:UsingRH() then
-		ParkourEvent("swingjump", ply)
-
-		local ang = cmd:GetViewAngles()
-		ang.x = 0
-
-		ply:SetMoveType(MOVETYPE_WALK)
-		ply:SetSwingbarLast(ply:GetSwingbar())
-		ply:SetSwingbar(nil)
-		ply:SetWallrunDir(dummyvec)
-
-		ply:SetMEMoveLimit(GetConVar("Beatrun_SpeedLimit"):GetInt())
-		ply:SetMESprintDelay(-1)
 	end
 end
 
