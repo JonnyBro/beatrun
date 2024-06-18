@@ -246,7 +246,7 @@ function CourseHUD()
 	end
 
 	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() then
-		local speed = math.Round(ply:GetVelocity():Length() * 0.06858125)
+		local speed = math.Round(ply:GetVelocity():Length2D() * 0.06858125)
 
 		if speed < 10 then
 			speed = "0" .. speed
