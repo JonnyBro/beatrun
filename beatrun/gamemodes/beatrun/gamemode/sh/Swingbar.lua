@@ -21,6 +21,7 @@ local function SwingbarCheck(ply, mv, cmd)
 
 	if IsValid(trout.Entity) and trout.Entity:GetClass() == "br_swingbar" and (ply:GetSwingbarLast() ~= trout.Entity or ply:GetSBDelay() < CurTime()) then
 		if CrueltyParkour:GetBool() and !ply:UsingRH() then
+		else
 			local swingbar = trout.Entity
 			local dot = cmd:GetViewAngles():Forward():Dot(swingbar:GetAngles():Forward())
 			local dir = dot > 0 and true or false
