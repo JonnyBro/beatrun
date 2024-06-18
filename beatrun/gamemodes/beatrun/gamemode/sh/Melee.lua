@@ -343,7 +343,6 @@ hook.Add("KeyPress", "KickglitchFR", function(ply, key)
 			if !ply:Alive() then
 			else
 				local forward = ply:EyeAngles()
-				forward.y, forward.r = math.Round(forward.y), math.Round(forward.r) -- Prediction is better if math.Round is used on angles
 				forward.p = 0
 				forward = forward:Forward()
 				local speedboost = forward * (4 / 0.06858125)
