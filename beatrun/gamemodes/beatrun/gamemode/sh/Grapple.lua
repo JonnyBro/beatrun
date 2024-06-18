@@ -73,32 +73,29 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		local dist = trout.HitPos:DistToSqr(mv:GetOrigin())
 
 		if trout.Fraction > 0 and dist < 2750000 and dist > 90000 and mv:KeyPressed(IN_JUMP) then
-			if CrueltyParkour:GetBool() and !ply:UsingRH() then
-			else
-				local vel = mv:GetVelocity()
-				vel.z = -math.abs(vel.z)
+			local vel = mv:GetVelocity()
+			vel.z = -math.abs(vel.z)
 
-				mv:SetVelocity(vel)
+			mv:SetVelocity(vel)
 
-				ply:SetGrapplePos(trout.HitPos)
-				ply:SetGrappling(true)
-				ply:SetGrappleLength(mv:GetOrigin():Distance(trout.HitPos))
-				ply:SetWallrunCount(0)
-				ply:SetJumpTurn(false)
-				ply:SetCrouchJumpBlocked(false)
-				ply:SetNW2Entity("grappleEntity", trout.Entity)
-				ply:SetNW2Bool("grappledNonCourse", true)
+			ply:SetGrapplePos(trout.HitPos)
+			ply:SetGrappling(true)
+			ply:SetGrappleLength(mv:GetOrigin():Distance(trout.HitPos))
+			ply:SetWallrunCount(0)
+			ply:SetJumpTurn(false)
+			ply:SetCrouchJumpBlocked(false)
+			ply:SetNW2Entity("grappleEntity", trout.Entity)
+			ply:SetNW2Bool("grappledNonCourse", true)
 
-				if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-					ply:EmitSound("mirrorsedge/Gadgets/ME_Magrope_Fire.wav", 40, 100 + math.random(-25, 10))
-				end
-
-				ply:ViewPunch(zpunchstart)
-
-				grappled = true
-
-				ply.GrappleLengthOld = ply:GetGrappleLength()
+			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
+				ply:EmitSound("mirrorsedge/Gadgets/ME_Magrope_Fire.wav", 40, 100 + math.random(-25, 10))
 			end
+
+			ply:ViewPunch(zpunchstart)
+
+			grappled = true
+
+			ply.GrappleLengthOld = ply:GetGrappleLength()
 		end
 	end
 
