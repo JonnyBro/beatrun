@@ -323,43 +323,26 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 	end
 end)
 
---hook.Add("Finishmove", "ProperKickglitch", function(ply, mv, cmd)
---	if !kickglitchwindow then return end
---
---	if mv:KeyDown(IN_JUMP) then
---		print("dis shit got called")
---		local speedboost = ply:EyeAngles():Forward() * (32 * 0.06858125)
---
---		local vel = mv:GetVelocity()
---		vel.z = 300
---		mv:SetVelocity(vel + speedboost)
---	end
---end)
+hook.Add("Move", "KickglitchApply", function(ply,mv,cmd)
+	if mv:KeyPressed(IN_JUMP) and ply:GetNWBool("KickglitchWindowActive", false) and !GetConVar("Beatrun_OldKickGlitch"):GetBool() then
+		if !ply:Alive() then
+		else
+			local forward = ply:EyeAngles()
+			forward.p = 0
+			forward = forward:Forward()
+			local speedboost = forward * (4 / 0.06858125)
+			--print(speedboost)
 
-hook.Add("KeyPress", "KickglitchFR", function(ply, key)
-	--if !kickglitchwindow then return end
-	if key == IN_JUMP and ply:GetNWBool("KickglitchWindowActive", false) and !GetConVar("Beatrun_OldKickGlitch"):GetBool() then
-		hook.Add("FinishMove", "KickglitchApply", function(ply,mv,cmd)
-			if !ply:Alive() then
-			else
-				local forward = ply:EyeAngles()
-				forward.p = 0
-				forward = forward:Forward()
-				local speedboost = forward * (4 / 0.06858125)
-				--print(speedboost)
+			--print("--")
 
-				--print("--")
-
-				--print(mv:GetVelocity())
-				local vel = mv:GetVelocity()
-				vel = vel + speedboost
-				--print("--")
-				--print(vel)
-				vel.z = 300
-				mv:SetVelocity(vel)
-			end
-			hook.Remove("FinishMove", "KickglitchApply")
-		end)
+			--print(mv:GetVelocity())
+			local vel = mv:GetVelocity()
+			vel = vel + speedboost
+			--print("--")
+			--print(vel)
+			vel.z = 300
+			mv:SetVelocity(vel)
+		end
 		ply:SetNWBool("KickglitchWindowActive", false)
 	end
 end)
