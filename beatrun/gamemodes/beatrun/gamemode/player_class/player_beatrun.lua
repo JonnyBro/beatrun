@@ -569,23 +569,26 @@ hook.Add("PlayerSwitchWeapon", "BeatrunSwitchARC9FOVFix", function(ply)
 	end)
 end)
 
-cvars.AddChangeCallback("Beatrun_FOV", function(convar, oldval, newval)
-	if CLIENT and game.SinglePlayer() then
-		LocalPlayer():SetFOV(newval)
-	elseif CLIENT then
-		FOVModifierBlock = true
+hook.Add("InitPostEntity", "FOVChangeFix", function()
+	-- FOV change fix, don't tinker with this unless you know what you're doing...
+	cvars.AddChangeCallback("Beatrun_FOV", function(convar, oldval, newval)
+		if CLIENT and game.SinglePlayer() then
+			LocalPlayer():SetFOV(newval)
+		elseif CLIENT then
+			FOVModifierBlock = true
 
-		timer.Simple(0.16, function()
-			FOVModifierBlock = false
+			timer.Simple(0.16, function()
+				FOVModifierBlock = false
 
-			if not FOVModifierBlock then
-				net.Start("Beatrun_ClientFOVChange")
-				net.WriteInt(newval, 16)
-				net.SendToServer()
-				FOVModifierBlock = true
-			end
-		end)
-	end
+				if not FOVModifierBlock then
+					net.Start("Beatrun_ClientFOVChange")
+					net.WriteInt(newval, 16)
+					net.SendToServer()
+					FOVModifierBlock = true
+				end
+			end)
+		end
+	end)
 end)
 
 if SERVER then
