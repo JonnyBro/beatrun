@@ -11,9 +11,9 @@ if CLIENT then
 	local lframeswepclass = lframeswepclass or ""
 end
 
-if SERVER then
+--[[if SERVER then
 	util.AddNetworkString("Beatrun_ClientFOVChange")
-end
+end]]
 
 local PLAYER = {}
 
@@ -25,7 +25,7 @@ PLAYER.TauntCam = TauntCamera()
 PLAYER.WalkSpeed = 200
 PLAYER.RunSpeed = 400
 
-local FOVModifierBlock = false -- trust me this is important -losttrackpad
+--local FOVModifierBlock = false -- trust me this is important -losttrackpad
 
 function PLAYER:SetupDataTables()
 	BaseClass.SetupDataTables(self)
@@ -377,28 +377,22 @@ function PLAYER:CalcView(view)
 	local mult = (self.Player:InOverdrive() and 1.1) or 1
 	local fixfovmult = 1
 
+	-- this is the code i added as a comment
+
+	--[[local fov = GetConVar("Beatrun_FOV"):GetInt()
+	view.fov = fov * mult * fixfovmult]]
+
 	if CLIENT then
-		-- VERY hacky and dirty code and I apologize in advance
 		local fov = GetConVar("Beatrun_FOV"):GetInt()
 
 		if IsValid(LocalPlayer():GetActiveWeapon()) then
-			if lframeswepclass ~= LocalPlayer():GetActiveWeapon():GetClass() then
-				-- SP clientside weapon swap detection
-				FOVModifierBlock = true
-
-				timer.Simple(1, function()
-					FOVModifierBlock = false
-				end)
-			end
-
-			if not FOVModifierBlock and not LocalPlayer():GetActiveWeapon().ARC9 then
-				fixfovmult = view.fov / fov
+			if LocalPlayer():GetActiveWeapon().ARC9 then
+				-- the issue was this line that got replaced by this message, you created a problem somehow lol
 			else
 				fixfovmult = 1
 			end
 
 			view.fov = fov * mult * fixfovmult
-			lframeswepclass = LocalPlayer():GetActiveWeapon():GetClass()
 		else
 			view.fov = fov * mult
 		end
@@ -569,7 +563,9 @@ hook.Add("PlayerSwitchWeapon", "BeatrunSwitchARC9FOVFix", function(ply)
 	end)
 end)
 
-cvars.AddChangeCallback("Beatrun_FOV", function(convar, oldval, newval)
+-- you created more issues by adding this, so i commented it :P
+
+--[[cvars.AddChangeCallback("Beatrun_FOV", function(convar, oldval, newval)
 	if CLIENT and game.SinglePlayer() then
 		LocalPlayer():SetFOV(newval)
 	elseif CLIENT then
@@ -587,11 +583,10 @@ cvars.AddChangeCallback("Beatrun_FOV", function(convar, oldval, newval)
 		end)
 	end
 end)
-
 if SERVER then
 	net.Receive("Beatrun_ClientFOVChange", function(len, ply)
 		ply:SetFOV(net.ReadInt(16))
 	end)
-end
+end]]
 
 player_manager.RegisterClass("player_beatrun", PLAYER, "player_default")
