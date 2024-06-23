@@ -26,6 +26,7 @@ PLAYER.WalkSpeed = 200
 PLAYER.RunSpeed = 400
 
 --local FOVModifierBlock = false -- trust me this is important -losttrackpad
+-- its not important, in-fact -c4nk
 
 function PLAYER:SetupDataTables()
 	BaseClass.SetupDataTables(self)
