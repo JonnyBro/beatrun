@@ -62,6 +62,7 @@ irm https://beatrun.jonnybro.ru/install | iex
   Available in 5 languages now!
 * Build Mode Tweaks.\
 You can now spawn any prop from Spawn Menu and they will save in your course.
+* Ability to roll after ziplines with CTRL 🤯 (thanks c4nk <3).
 * Ability to get off of ladders - Press CTRL.
 * Ability to remove ziplines that created with *Zipline Gun* - Press RMB.
 * Arrow that shows the next checkpoint.
