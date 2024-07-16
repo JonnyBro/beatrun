@@ -1347,10 +1347,7 @@ end)
 
 local function JumpAnim(event, ply)
 	if !animsetchange then animsetchange = false end
-	print("-------------")
-	print("JumpAnim called  --  " .. engine.TickCount())
 	if animsetchange != UseOldAnims:GetBool() then
-		print("---- BodyAnim removed  --  " .. engine.TickCount())
 		RemoveBodyAnim()
 	end
 	if animsetchange != UseOldAnims:GetBool() then
@@ -1360,7 +1357,6 @@ local function JumpAnim(event, ply)
 			animtable.animmodelstring = "climbanim"
 		end
 		StartBodyAnim(animtable)
-		print("---- BodyAnim recreated  --  " .. engine.TickCount())
 
 		if not IsValid(BodyAnim) then return end
 
@@ -1381,7 +1377,6 @@ local function JumpAnim(event, ply)
 		hook.Add("PostDrawOpaqueRenderables", "JumpArmDraw", JumpArmDraw)
 	end
 	if events[event] then
-		print("-- JumpAnim in event --  " .. engine.TickCount())
 		local wasjumpanim = fbanims[BodyAnimString] and IsValid(BodyAnim)
 
 		if changedanimset then
@@ -1389,7 +1384,6 @@ local function JumpAnim(event, ply)
 		end
 
 		if not wasjumpanim then
-			print("---- BodyAnim removed  --  " .. engine.TickCount())
 			RemoveBodyAnim()
 		end
 
@@ -1424,7 +1418,6 @@ local function JumpAnim(event, ply)
 				animtable.animmodelstring = "climbanim"
 			end
 			StartBodyAnim(animtable)
-			print("---- BodyAnim recreated  --  " .. engine.TickCount())
 
 			if not IsValid(BodyAnim) then return end
 
