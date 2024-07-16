@@ -379,7 +379,7 @@ function PLAYER:CalcView(view)
 
 	if CLIENT then
 		-- VERY hacky and dirty code and I apologize in advance
-		local fov = GetConVar("Beatrun_FOV"):GetInt()
+		local fov = GetConVar("fov_desired"):GetInt()
 
 		if IsValid(LocalPlayer():GetActiveWeapon()) then
 			if lframeswepclass ~= LocalPlayer():GetActiveWeapon():GetClass() then
