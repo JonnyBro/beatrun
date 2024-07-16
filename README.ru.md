@@ -1,5 +1,7 @@
 # Beatrun | Community edition
 
+[Нажми чтобы присоединиться к нашему Discord серверу!](https://discord.gg/93Psubbgsg)
+
 * [English](./README.md)
 
 **ПОЖАЛУЙСТА, ПРОЧИТАЙТЕ ЭТОТ ФАЙЛ ПЕРЕД ТЕМ КАК ЗАДАВАТЬ ВОПРОСЫ!**\
