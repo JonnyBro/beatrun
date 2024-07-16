@@ -65,7 +65,7 @@ irm https://beatrun.jonnybro.ru/install | iex
   **All** of the Beatrun settings can be changed in the configuration menu!
 * Discord and Steam Presence.
 * Localization support.\
-  Available in 5 languages now!
+  Available in 7 languages!
 * Build Mode Tweaks.\
 You can now spawn any prop from Spawn Menu and they will save in your course.
 * Ability to roll after ziplines with CTRL 🤯 (thanks c4nk <3).
