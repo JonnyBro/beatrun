@@ -1,5 +1,7 @@
 # Beatrun | Community edition
 
+[Click to join our Discord!](https://discord.gg/93Psubbgsg)
+
 * [Русский](./README.ru.md)
 
 **PLEASE READ EVERYTHING BEFORE ASKING QUESTIONS ON OUR SERVER!**\
