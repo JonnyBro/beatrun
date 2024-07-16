@@ -20,7 +20,11 @@
 > Все модули можно найти **[здесь](https://github.com/JonnyBro/beatrun/tree/main/lua/bin)**.\
 > Проверьте **[Благодарности](#благодарности)** чтобы найти исходный код модулей.
 
-## Автоматическая установка (Рекомендуемое | Windows 10/11)
+## Steam Workshop (ржака)
+
+[Подписаться](https://steamcommunity.com/sharedfiles/filedetails/?id=3290421288)
+
+### Автоматическая установка (Рекомендуемое | Windows 10/11)
 
 > [!WARNING]
 > Windows 7 не поддерживается.\
@@ -36,7 +40,7 @@ irm https://beatrun.jonnybro.ru/install | iex
 
 * Выберите режим `Beatrun` в правом нижнем углу.
 
-## Ручная установка
+### Ручная установка
 
 1. **[Скачайте проект](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip)**.
 2. **Удалите папку `beatrun` по пути *путь_к_игре/garrysmod/addons* если присутствует.**
