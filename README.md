@@ -20,11 +20,7 @@ Fully open sourced and maintained by the community (me 😞).
 > You can find all modules **[here](https://github.com/JonnyBro/beatrun/tree/main/lua/bin)**.\
 > Check **[Credits](#credits)** section for their source code.
 
-## Steam Workshop (lmao)
-
-[Subscribe](https://steamcommunity.com/sharedfiles/filedetails/?id=3290421288)
-
-### Automatic Installation (Recommended | Windows 10/11)
+## Automatic Installation (Recommended | Windows 10/11)
 
 > [!WARNING]
 > Windows 7 is not supported.\
@@ -40,7 +36,7 @@ irm https://beatrun.jonnybro.ru/install | iex
 
 * Select the `Beatrun` gamemode in right lower corner.
 
-### Manual Installation
+## Manual Installation
 
 1. **[Download this repository](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip)**.
 2. **Delete the `beatrun` folder in *your_game_folder/garrysmod/addons* if you have one.**
