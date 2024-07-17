@@ -1,6 +1,8 @@
 # Beatrun | Community edition
 
-* [Русский](./README_ru.md)
+[Click to join our Discord!](https://discord.gg/93Psubbgsg)
+
+* [Русский](./README.ru.md)
 
 **PLEASE READ EVERYTHING BEFORE ASKING QUESTIONS ON OUR SERVER!**\
 **WE DOCUMENTED EVERYTHING ENOUGH SO YOU CAN INSTALL THIS YOURSELF PRETTY EASILY**
@@ -18,7 +20,11 @@ Fully open sourced and maintained by the community (me 😞).
 > You can find all modules **[here](https://github.com/JonnyBro/beatrun/tree/main/lua/bin)**.\
 > Check **[Credits](#credits)** section for their source code.
 
-## Automatic Installation (Recommended | Windows 10/11)
+## Steam Workshop (lmao)
+
+[Subscribe](https://steamcommunity.com/sharedfiles/filedetails/?id=3290421288)
+
+### Automatic Installation (Recommended | Windows 10/11)
 
 > [!WARNING]
 > Windows 7 is not supported.\
@@ -34,7 +40,7 @@ irm https://beatrun.jonnybro.ru/install | iex
 
 * Select the `Beatrun` gamemode in right lower corner.
 
-## Manual Installation
+### Manual Installation
 
 1. **[Download this repository](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip)**.
 2. **Delete the `beatrun` folder in *your_game_folder/garrysmod/addons* if you have one.**
@@ -59,9 +65,10 @@ irm https://beatrun.jonnybro.ru/install | iex
   **All** of the Beatrun settings can be changed in the configuration menu!
 * Discord and Steam Presence.
 * Localization support.\
-  Available in 5 languages now!
+  Available in 7 languages!
 * Build Mode Tweaks.\
 You can now spawn any prop from Spawn Menu and they will save in your course.
+* Ability to roll after ziplines with CTRL 🤯 (thanks c4nk <3).
 * Ability to get off of ladders - Press CTRL.
 * Ability to remove ziplines that created with *Zipline Gun* - Press RMB.
 * Arrow that shows the next checkpoint.
