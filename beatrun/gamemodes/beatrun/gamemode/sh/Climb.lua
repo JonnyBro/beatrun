@@ -11,7 +11,7 @@ local CLIMB_FOLDEDHEAVEUP = 6
 
 local climb1 = {
 	followplayer = false,
-	animmodelstring = "climbanim",
+	animmodelstring = "new_climbanim",
 	allowmove = true,
 	lockang = false,
 	ignorez = true,

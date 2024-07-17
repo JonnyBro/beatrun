@@ -83,7 +83,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetGrappleLength(mv:GetOrigin():Distance(trout.HitPos))
 			ply:SetWallrunCount(0)
 			ply:SetJumpTurn(false)
-			ply:SetCrouchJumpBlocked(false)
+			ply:SetCrouchJumpBlocked(true)
 			ply:SetNW2Entity("grappleEntity", trout.Entity)
 			ply:SetNW2Bool("grappledNonCourse", true)
 
@@ -126,6 +126,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetNW2Bool("grappledNonCourse", false)
 
 			ply:SetGrappling(false)
+			ply:SetCrouchJumpBlocked(false)
 
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				ply:EmitSound("mirrorsedge/zipline_detach.wav", 40, 100 + math.random(-25, 10))
