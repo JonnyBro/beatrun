@@ -11,10 +11,6 @@ if CLIENT then
 	local lframeswepclass = lframeswepclass or ""
 end
 
-if SERVER then
-	util.AddNetworkString("Beatrun_ClientFOVChange")
-end
-
 local PLAYER = {}
 
 PLAYER.DuckSpeed = 0.01 -- How fast to go from not ducking, to ducking
@@ -24,8 +20,6 @@ PLAYER.TauntCam = TauntCamera()
 
 PLAYER.WalkSpeed = 200
 PLAYER.RunSpeed = 400
-
-local FOVModifierBlock = false -- trust me this is important -losttrackpad
 
 function PLAYER:SetupDataTables()
 	BaseClass.SetupDataTables(self)
@@ -386,23 +380,7 @@ function PLAYER:CalcView(view)
 				-- SP clientside weapon swap detection
 				FOVModifierBlock = true
 
-				timer.Simple(1, function()
-					FOVModifierBlock = false
-				end)
-			end
-
-			if not FOVModifierBlock and not LocalPlayer():GetActiveWeapon().ARC9 then
-				fixfovmult = view.fov / fov
-			else
-				fixfovmult = 1
-			end
-
-			view.fov = fov * mult * fixfovmult
-			lframeswepclass = LocalPlayer():GetActiveWeapon():GetClass()
-		else
-			view.fov = fov * mult
-		end
-	end
+	view.fov = fov * mult
 
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
 end

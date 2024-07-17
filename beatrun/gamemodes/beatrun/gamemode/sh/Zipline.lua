@@ -141,10 +141,8 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 	if fraction >= 1 or cmd:KeyDown(IN_DUCK) or (CrueltyParkour:GetBool() and !ply:UsingRH()) then
 		ply:SetZipline(nil)
 		ply:SetMoveType(MOVETYPE_WALK)
-		ply:SetCrouchJumpBlocked(true)
 
 		mv:SetVelocity(dir * speed * 0.75)
-		mv:SetButtons(0)
 
 		ply:SetZiplineDelay(CurTime() + 0.75)
 

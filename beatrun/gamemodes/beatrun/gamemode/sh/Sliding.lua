@@ -31,7 +31,7 @@ local animtable = {
 	deleteonend = false,
 	BodyLimitX = 50,
 	AnimString = "meslidestart",
-	animmodelstring = "climbanim",
+	animmodelstring = "new_climbanim",
 	camjoint = "camerajoint",
 	usefullbody = 2
 }

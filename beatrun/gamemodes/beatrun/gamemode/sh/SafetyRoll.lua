@@ -68,7 +68,7 @@ hook.Add("SetupMove", "SafetyRoll", SafetyRollThink)
 
 local roll = {
 	followplayer = true,
-	animmodelstring = "climbanim",
+	animmodelstring = "new_climbanim",
 	showweapon = true,
 	lockang = true,
 	BodyAnimSpeed = 1.15,
@@ -82,15 +82,15 @@ net.Receive("RollAnimSP", function()
 
 	if net.ReadBool() then
 		roll.AnimString = ply:UsingRH() and "land" or "landgun"
-		roll.animmodelstring = "climbanim"
+		roll.animmodelstring = "new_climbanim"
 		roll.BodyAnimSpeed = 1
 	elseif net.ReadBool() then
 		roll.AnimString = "evaderoll"
-		roll.animmodelstring = "climbanim"
+		roll.animmodelstring = "new_climbanim"
 		roll.BodyAnimSpeed = 1.5
 	else
 		roll.AnimString = ply:UsingRH() and "meroll" or "merollgun"
-		roll.animmodelstring = "climbanim"
+		roll.animmodelstring = "new_climbanim"
 		roll.BodyAnimSpeed = 1.15
 	end
 
@@ -126,7 +126,7 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 		ply:SetSafetyRollTime(CurTime() + 0.9)
 
 		roll.AnimString = "evaderoll"
-		roll.animmodelstring = "climbanim"
+		roll.animmodelstring = "new_climbanim"
 		roll.usefullbody = false
 
 		if SERVER and not land then
@@ -192,7 +192,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:SetSafetyRollTime(CurTime() + 0.6)
 
 			roll.AnimString = ply:UsingRH() and "land" or "landgun"
-			roll.animmodelstring = "climbanim"
+			roll.animmodelstring = "new_climbanim"
 			roll.usefullbody = true
 		else
 			land = false
@@ -201,7 +201,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:SetSafetyRollTime(CurTime() + 1.05)
 
 			roll.AnimString = ply:UsingRH() and "meroll" or "merollgun"
-			roll.animmodelstring = "climbanim"
+			roll.animmodelstring = "new_climbanim"
 			roll.usefullbody = false
 		end
 
