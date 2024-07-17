@@ -369,7 +369,16 @@ end
 
 function PLAYER:CalcView(view)
 	local mult = (self.Player:InOverdrive() and 1.1) or 1
-	local fov = GetConVar("Beatrun_FOV"):GetInt()
+	local fixfovmult = 1
+
+	if CLIENT then
+		-- VERY hacky and dirty code and I apologize in advance
+		local fov = GetConVar("fov_desired"):GetInt()
+
+		if IsValid(LocalPlayer():GetActiveWeapon()) then
+			if lframeswepclass ~= LocalPlayer():GetActiveWeapon():GetClass() then
+				-- SP clientside weapon swap detection
+				FOVModifierBlock = true
 
 	view.fov = fov * mult
 
@@ -531,8 +540,7 @@ end)
 hook.Add("PlayerSwitchWeapon", "BeatrunSwitchARC9FOVFix", function(ply)
 	-- This ENTIRE hook is for dealing with ARC9's stupid FOV reset
 	-- behavior after switching away from an ARC9 SWEP.
-	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
-
+	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 120))
 	timer.Simple(0, function()
 		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
 	end)

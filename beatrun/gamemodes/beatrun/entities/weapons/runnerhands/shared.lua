@@ -221,14 +221,16 @@ function SWEP:Think()
 		local eyeang = ply:EyeAngles()
 		eyeang.x = 0
 
-		if insidestep and viewmodel:GetCycle() <= 0.1 and GetConVar("Beatrun_QuakeJump"):GetBool() then
-			if SERVER then
-				ply:EmitSound("quakejump.mp3", 100, 100, 0.2)
+		if insidestep and GetConVar("Beatrun_QuakeJump"):GetBool() then
+			if (!GetConVar("Beatrun_QuakeJump_Timing"):GetBool() and viewmodel:GetCycle() <= 0.1) or ply:GetNWBool("Beatrun_ExtraQuakeJumpTiming") then
+				if SERVER then
+					ply:EmitSound("quakejump.mp3", 100, 100, 0.2)
+				end
+
+				ply.QuakeJumping = true
+
+				self:SetQuakeJumping(true)
 			end
-
-			ply.QuakeJumping = true
-
-			self:SetQuakeJumping(true)
 		end
 
 		if not ismoving and not ply:Crouching() then

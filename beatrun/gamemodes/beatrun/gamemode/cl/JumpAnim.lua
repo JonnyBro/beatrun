@@ -15,6 +15,12 @@ local animtable = {
 	usefullbody = 2
 }
 
+changedanimset = false
+
+if UseOldAnims:GetBool() then
+	animtable.animmodelstring = "meclimbanim"
+end
+
 fbanims = {
 	ladderexittoplefthand = true,
 	runfwdstart = true,
@@ -1342,8 +1348,42 @@ hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 end)
 
 local function JumpAnim(event, ply)
+	if !animsetchange then animsetchange = false end
+	if animsetchange != UseOldAnims:GetBool() then
+		RemoveBodyAnim()
+	end
+	if animsetchange != UseOldAnims:GetBool() then
+		if UseOldAnims:GetBool() then
+			animtable.animmodelstring = "meclimbanim"
+		else
+			animtable.animmodelstring = "climbanim"
+		end
+		StartBodyAnim(animtable)
+
+		if not IsValid(BodyAnim) then return end
+
+		CreateBodyAnimArmCopy()
+
+		if not ply:ShouldDrawLocalPlayer() or CurTime() < 10 then
+			for k, v in ipairs(playermodelbones) do
+				local b = BodyAnim:LookupBone(v)
+
+				if b then
+					BodyAnim:ManipulateBonePosition(b, Vector(0, 0, 100 * (k == 1 and -1 or 1)))
+				end
+			end
+		end
+
+		hook.Add("BodyAnimCalcView", "JumpCalcView", JumpCalcView)
+		hook.Add("BodyAnimDrawArm", "JumpArmThink", JumpArmThink)
+		hook.Add("PostDrawOpaqueRenderables", "JumpArmDraw", JumpArmDraw)
+	end
 	if events[event] then
 		local wasjumpanim = fbanims[BodyAnimString] and IsValid(BodyAnim)
+
+		if changedanimset then
+			wasjumpanim = false
+		end
 
 		if not wasjumpanim then
 			RemoveBodyAnim()
@@ -1374,6 +1414,11 @@ local function JumpAnim(event, ply)
 		end
 
 		if not wasjumpanim then
+			if UseOldAnims:GetBool() then
+				animtable.animmodelstring = "meclimbanim"
+			else
+				animtable.animmodelstring = "climbanim"
+			end
 			StartBodyAnim(animtable)
 
 			if not IsValid(BodyAnim) then return end
@@ -1397,6 +1442,7 @@ local function JumpAnim(event, ply)
 			BodyAnim:ResetSequence(BodyAnim:LookupSequence(BodyAnimString))
 		end
 	end
+	animsetchange = UseOldAnims:GetBool()
 end
 
 function CheckAnims()
