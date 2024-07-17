@@ -7,6 +7,7 @@ end
 hook.Add("AddToolMenuCategories", "Beatrun_Category", function()
 	spawnmenu.AddToolCategory("Beatrun", "Client", language.GetPhrase("beatrun.toolsmenu.client"))
 	spawnmenu.AddToolCategory("Beatrun", "Server", language.GetPhrase("beatrun.toolsmenu.server"))
+	spawnmenu.AddToolCategory("Beatrun", "Extra", language.GetPhrase("beatrun.toolsmenu.extra"))
 end)
 
 hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
@@ -412,5 +413,16 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		-- 	end
 		-- end
 		-- panel:AddItem(LoadoutMenuButton)
+	end)
+
+	spawnmenu.AddToolMenuOption("Beatrun", "Extra", "beatrun_extra", "#beatrun.toolsmenu.extra.name", "", "", function(panel)
+		panel:ClearControls()
+		panel:SetName("#beatrun.toolsmenu.extra.desc")
+
+		panel:CheckBox("#beatrun.toolsmenu.extra.stats", "Beatrun_HUDStats")
+		panel:ControlHelp("#beatrun.toolsmenu.extra.statsdesc")
+
+		panel:CheckBox("#beatrun.toolsmenu.extra.speedrunsverif", "Beatrun_HUDVerification")
+		panel:ControlHelp("#beatrun.toolsmenu.extra.speedrunsverifdesc")
 	end)
 end)

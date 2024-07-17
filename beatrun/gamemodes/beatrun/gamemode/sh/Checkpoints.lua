@@ -19,6 +19,7 @@ local timecolor = color_neutral
 
 if CLIENT then
 	CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("#beatrun.convars.showspeedometer"), 0, 1)
+	CreateClientConVar("Beatrun_HUDStats", "0", true, false, "", 0, 1)
 end
 
 if SERVER then
@@ -264,6 +265,44 @@ function CourseHUD()
 		surface.SetTextColor(r, g, b, a)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.85 + vpz)
 		surface.DrawText(text)
+
+		if GetConVar("Beatrun_HUDStats"):GetBool() then
+			local ang1 = ply:GetAimVector()
+			ang1 = math.Round(ang1:Angle()[2] % 90, 0)
+			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.88 + vpz)
+			surface.DrawText(ang1)
+
+			surface.SetTextPos(ScrW() * 0.87 - w * 0.5 + vpx, ScrH() * 0.88 + vpz)
+			surface.DrawText("Angle")
+
+			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.90 + vpz)
+			surface.DrawText(ply:GetWallrun())
+			surface.SetTextPos(ScrW() * 0.87 - w * 0.5 + vpx, ScrH() * 0.90 + vpz)
+			surface.DrawText("Wall stat")
+
+			if ply:UsingRH() then
+				surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.92 + vpz)
+				surface.DrawText(tostring(ply:GetActiveWeapon():GetQuakeJumping()))
+				surface.SetTextPos(ScrW() * 0.89 - w * 0.5 + vpx, ScrH() * 0.92 + vpz)
+				surface.DrawText("Quake")
+			end
+
+			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.94 + vpz)
+			if (ply:GetWallrunTime() - CurTime()) < 0 then
+				surface.DrawText("0.00")
+			else
+				surface.DrawText(tostring(math.Round(ply:GetWallrunTime() - CurTime(), 2)))
+			end
+
+			surface.SetTextPos(ScrW() * 0.89 - w * 0.5 + vpx, ScrH() * 0.94 + vpz)
+			surface.DrawText("Wallrun Time Remains")
+
+			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.96 + vpz)
+			surface.DrawText(tostring(CurTime() < ply:GetWallrunTime()))
+
+			surface.SetTextPos(ScrW() * 0.89 - w * 0.5 + vpx, ScrH() * 0.96 + vpz)
+			surface.DrawText("Wallrunning")
+		end
 	end
 
 	if incourse and pbtimes then
