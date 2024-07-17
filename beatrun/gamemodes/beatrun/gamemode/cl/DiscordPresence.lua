@@ -1,5 +1,4 @@
 if not util.IsBinaryModuleInstalled("gdiscord") then return end
-
 require("gdiscord")
 
 local image = "default"
@@ -9,7 +8,6 @@ local discord_start = discord_start or -1
 
 function DiscordUpdate()
 	local ply = LocalPlayer()
-
 	if not ply.GetLevel then return end
 
 	local rpc_data = {}
@@ -26,7 +24,6 @@ function DiscordUpdate()
 				rpc_data["state"] = "Local Server"
 			end
 		else
-			-- rpc_data["state"] = string.Replace(ip, ":27015", "")
 			rpc_data["state"] = "Dedicated Server"
 		end
 	end
@@ -41,13 +38,10 @@ function DiscordUpdate()
 	local level = ply:GetLevel()
 	local customname = hook.Run("BeatrunHUDCourse")
 	local course = customname and customname or Course_Name ~= "" and Course_Name or "Freeplay"
-
 	rpc_data["details"] = "Level: " .. level .. " | Map: " .. game.GetMap()
 	rpc_data["startTimestamp"] = discord_start
-
 	rpc_data["largeImageKey"] = image
 	rpc_data["largeImageText"] = course
-
 	DiscordUpdateRPC(rpc_data)
 end
 

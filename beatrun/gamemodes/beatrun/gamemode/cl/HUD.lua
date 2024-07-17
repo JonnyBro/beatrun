@@ -1,7 +1,8 @@
-local showtotalXP = CreateClientConVar("Beatrun_HUDXP", "1", true, false, language.GetPhrase("beatrun.convars.hudxp"), 0, 1)
+local show_total_xp = CreateClientConVar("Beatrun_HUDXP", "1", true, false, language.GetPhrase("beatrun.convars.hudxp"), 0, 1)
 local sway = CreateClientConVar("Beatrun_HUDSway", "1", true, false, language.GetPhrase("beatrun.convars.hudsway"), 0, 1)
 local dynamic = CreateClientConVar("Beatrun_HUDDynamic", "0", true, false, language.GetPhrase("beatrun.convars.huddynamic"), 0, 1)
 local hidden = CreateClientConVar("Beatrun_HUDHidden", "0", true, false, language.GetPhrase("beatrun.convars.hudhidden"), 0, 2)
+local verificationstats = CreateClientConVar("Beatrun_HUDVerification", "0", true, false, "", 0, 1)
 -- local reticle = CreateClientConVar("Beatrun_HUDReticle", "1", true, false, language.GetPhrase("beatrun.convars.hudreticle"), 0, 1)
 
 CreateClientConVar("Beatrun_HUDTextColor", "255 255 255 255", true, true, language.GetPhrase("beatrun.convars.hudtextcolor"))
@@ -175,7 +176,7 @@ local function BeatrunHUD()
 	-- local lastxp = ply.LastXP or 0
 	local nicktext = nil
 
-	if showtotalXP:GetBool() then
+	if show_total_xp:GetBool() then
 		nicktext = ply:Nick() .. " | " .. ply:GetXP() .. "XP"
 	else
 		nicktext = ply:Nick()
@@ -225,6 +226,18 @@ local function BeatrunHUD()
 		surface.SetTextColor(text_color)
 		surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.9 + vp.x)
 		surface.DrawText(language.GetPhrase("beatrun.hud.lvl"):format(ply:GetLevel()))
+
+		if verificationstats:GetBool() then
+			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.02 + vp.x)
+			surface.DrawText("Purist: ")
+			surface.DrawText(LocalPlayer():GetInfo("Beatrun_PuristMode") == "1" and "true" or "false")
+			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.04 + vp.x)
+			surface.DrawText("Purist Wallrun: ")
+			surface.DrawText(LocalPlayer():GetInfo("Beatrun_PuristWallrun") == "1" and "true" or "false")
+			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.06 + vp.x)
+			surface.DrawText("Kick Glitch: ")
+			surface.DrawText(LocalPlayer():GetInfo("Beatrun_OldKickGlitch") == "1" and "Old" or "New")
+		end
 
 		if tobool(LocalPlayer():GetInfo("Beatrun_PuristMode")) then
 			surface.SetDrawColor(230, 230, 230)
