@@ -99,6 +99,8 @@ function SWEP:Deploy()
 	self:SetWasOnGround(false)
 	self:SetBlockAnims(false)
 	self:SetPunch(1)
+
+	return true
 end
 
 function SWEP:Initialize()
