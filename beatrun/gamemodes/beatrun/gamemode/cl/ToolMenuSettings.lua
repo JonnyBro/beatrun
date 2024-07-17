@@ -232,6 +232,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ClearControls()
 		panel:SetName("#beatrun.toolsmenu.gameplay.desc")
 
+		panel:CheckBox("#beatrun.toolsmenu.gameplay.oldanims", "Beatrun_OldAnims")
+		panel:ControlHelp("#beatrun.toolsmenu.gameplay.oldanimsdesc")
+
 		panel:CheckBox("#beatrun.toolsmenu.gameplay.quickturnground", "Beatrun_QuickturnGround")
 		panel:ControlHelp("#beatrun.toolsmenu.gameplay.quickturngrounddesc")
 
