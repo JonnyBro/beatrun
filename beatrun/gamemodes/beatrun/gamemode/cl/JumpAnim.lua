@@ -1,5 +1,3 @@
-local OldAnims = CreateClientConVar("Beatrun_OldAnims", "0", true, false, "")
-
 local animtable = {
 	lockang = false,
 	allowmove = true,
@@ -10,7 +8,7 @@ local animtable = {
 	BodyLimitX = 90,
 	AnimString = "jumpslow",
 	CamIgnoreAng = true,
-	animmodelstring = "new_climbanim",
+	animmodelstring = "climbanim",
 	BodyLimitY = 180,
 	usefullbody = 2
 }
@@ -1349,7 +1347,10 @@ end)
 
 local function JumpAnim(event, ply)
 	if !animsetchange then animsetchange = false end
+	print("-------------")
+	print("JumpAnim called  --  " .. engine.TickCount())
 	if animsetchange != UseOldAnims:GetBool() then
+		print("---- BodyAnim removed  --  " .. engine.TickCount())
 		RemoveBodyAnim()
 	end
 	if animsetchange != UseOldAnims:GetBool() then
@@ -1359,6 +1360,7 @@ local function JumpAnim(event, ply)
 			animtable.animmodelstring = "climbanim"
 		end
 		StartBodyAnim(animtable)
+		print("---- BodyAnim recreated  --  " .. engine.TickCount())
 
 		if not IsValid(BodyAnim) then return end
 
@@ -1379,6 +1381,7 @@ local function JumpAnim(event, ply)
 		hook.Add("PostDrawOpaqueRenderables", "JumpArmDraw", JumpArmDraw)
 	end
 	if events[event] then
+		print("-- JumpAnim in event --  " .. engine.TickCount())
 		local wasjumpanim = fbanims[BodyAnimString] and IsValid(BodyAnim)
 
 		if changedanimset then
@@ -1386,6 +1389,7 @@ local function JumpAnim(event, ply)
 		end
 
 		if not wasjumpanim then
+			print("---- BodyAnim removed  --  " .. engine.TickCount())
 			RemoveBodyAnim()
 		end
 
@@ -1420,6 +1424,7 @@ local function JumpAnim(event, ply)
 				animtable.animmodelstring = "climbanim"
 			end
 			StartBodyAnim(animtable)
+			print("---- BodyAnim recreated  --  " .. engine.TickCount())
 
 			if not IsValid(BodyAnim) then return end
 
@@ -1445,37 +1450,6 @@ local function JumpAnim(event, ply)
 	animsetchange = UseOldAnims:GetBool()
 end
 
-function CheckAnims()
-	RemoveBodyAnim()
-
-	if OldAnims:GetBool() then
-		animtable.animmodelstring = "old_climbanim"
-	else
-		animtable.animmodelstring = "new_climbanim"
-	end
-
-	StartBodyAnim(animtable)
-
-	if not IsValid(BodyAnim) then return end
-
-	CreateBodyAnimArmCopy()
-
-	if not LocalPlayer():ShouldDrawLocalPlayer() or CurTime() < 10 then
-		for k, v in ipairs(playermodelbones) do
-			local b = BodyAnim:LookupBone(v)
-
-			if b then
-				BodyAnim:ManipulateBonePosition(b, Vector(0, 0, 100 * (k == 1 and -1 or 1)))
-			end
-		end
-	end
-end
-
-cvars.AddChangeCallback("Beatrun_OldAnims", function(cvar, vOld, vNew)
-	CheckAnims()
-end)
-
-hook.Add("PlayerInitialSpawn", "CheckAnims", CheckAnims)
 hook.Add("OnParkour", "JumpAnim", JumpAnim)
 
 function ArmInterrupt(anim)
