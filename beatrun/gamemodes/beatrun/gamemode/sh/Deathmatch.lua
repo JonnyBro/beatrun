@@ -9,7 +9,7 @@ if SERVER then
 		local wepIndex = math.random(#allWep)
 		local wep = allWep[wepIndex]
 
-		if wep.Base == "mg_base" then
+		if wep.Base == "mg_base" and not wep.AdminOnly then
 			return wep
 		else
 			return getRandomMGBaseWeapon()
@@ -17,6 +17,9 @@ if SERVER then
 	end
 
 	function Beatrun_StartDeathmatch()
+		if GetGlobalBool("GM_DEATHMATCH") then return end
+		if Course_Name ~= "" then return end
+
 		SetGlobalBool("GM_DEATHMATCH", true)
 
 		net.Start("Deathmatch_Start")
@@ -78,7 +81,7 @@ if SERVER then
 		if GetGlobalBool("GM_DEATHMATCH") then
 			local plyKills = ply:GetNW2Int("DeathmatchKills", 0)
 
-			if ply == attacker and plyKills ~= 0 then
+			if ply == attacker and plyKills > 0 then
 				ply:SetNW2Int("DeathmatchKills", plyKills - 1)
 			elseif IsValid(attacker) and attacker ~= ply then
 				local kills = attacker:GetNW2Int("DeathmatchKills", 0)
