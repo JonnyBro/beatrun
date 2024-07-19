@@ -158,9 +158,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.toolsmenu.hud.sway", "Beatrun_HUDSway")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.swaydesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.hud.reticle", "Beatrun_HUDReticle")
-		panel:ControlHelp("#beatrun.toolsmenu.hud.reticledesc")
-
 		panel:CheckBox("#beatrun.toolsmenu.hud.nametags", "Beatrun_Nametags")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.nametagsdesc")
 
@@ -233,7 +230,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ClearControls()
 		panel:SetName("#beatrun.toolsmenu.gameplay.desc")
 
-		panel:CheckBox("#beatrun.toolsmenu.gameplay.oldanims", "Beatrun_OldAnims")
+		panel:CheckBox("#beatrun.toolsmenu.gameplay.oldanims", "Beatrun_UseOldAnims")
 		panel:ControlHelp("#beatrun.toolsmenu.gameplay.oldanimsdesc")
 
 		panel:CheckBox("#beatrun.toolsmenu.gameplay.quickturnground", "Beatrun_QuickturnGround")
