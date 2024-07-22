@@ -25,7 +25,7 @@ local function buildmodebutton()
 	LocalPlayer():ConCommand("buildmode")
 end
 
-AEUI:AddText(coursepanel, language.GetPhrase("beatrun.coursemenu.trials"):format(game.GetMap()), "AEUIVeryLarge", 20, 30)
+AEUI:Text(coursepanel, language.GetPhrase("beatrun.coursemenu.trials"):format(game.GetMap()), "AEUIVeryLarge", 20, 30)
 
 local buildmodebutton = AEUI:AddButton(coursepanel, "#beatrun.coursemenu.buildmode", buildmodebutton, "AEUILarge", coursepanel.w - 400, coursepanel.h - 50)
 buildmodebutton.greyed = sacheck
@@ -67,13 +67,14 @@ function OpenCourseMenu()
 		local course = util.Decompress(data) or data
 
 		if course then
-			course = util.JSONToTable(course)
-			local courseentry = AEUI:AddText(courselist, course[5] or "ERROR", "AEUILarge", 10, 40 * #courselist.elements)
-			local courseid = v:Split(".txt")[1]
+			local coursetable = util.JSONToTable(course)
+			local filename = v:Split(".txt")[1]
+			local courseid = util.CRC(course)
+			local courseentry = AEUI:Text(courselist, coursetable[5] and coursetable[5] .. " (" .. courseid .. ")" or "ERROR", "AEUILarge", 10, 40 * #courselist.elements)
 
 			function courseentry:onclick()
 				LocalPlayer():EmitSound("buttonclick.wav")
-				LoadCourse(courseid)
+				LoadCourse(filename)
 			end
 
 			courseentry.greyed = sacheck

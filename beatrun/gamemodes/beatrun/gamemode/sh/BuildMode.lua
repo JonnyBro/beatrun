@@ -593,7 +593,7 @@ if SERVER then
 		game.CleanUpMap()
 
 		local a = util.Decompress(data) or data
-		local crc = util.CRC(a)
+		local id = util.CRC(a)
 		local data = util.JSONToTable(a)
 
 		local props = data[1]
@@ -664,7 +664,7 @@ if SERVER then
 
 		Course_StartAng = ang
 		Course_Name = name
-		Course_ID = crc
+		Course_ID = id
 
 		Course_Sync()
 
@@ -942,7 +942,7 @@ if CLIENT then
 	function SaveCourse(name, compress)
 		local save = CourseData(name)
 		local jsonsave = util.TableToJSON(save)
-		local crc = util.CRC(jsonsave)
+		local id = util.CRC(jsonsave)
 		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
 
 		if compress == nil then compress = true end
@@ -950,12 +950,12 @@ if CLIENT then
 		file.CreateDir(dir)
 
 		if compress then
-			file.Write(dir .. crc .. ".txt", util.Compress(jsonsave))
+			file.Write(dir .. id .. ".txt", util.Compress(jsonsave))
 		else
-			file.Write(dir .. crc .. ".txt", jsonsave)
+			file.Write(dir .. id .. ".txt", jsonsave)
 		end
 
-		print("Save created: " .. crc .. ".txt")
+		print("Save created: " .. id .. ".txt")
 	end
 
 	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)

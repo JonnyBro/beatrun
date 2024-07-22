@@ -119,7 +119,7 @@ function AEUI:RemovePanel(panel)
 	end
 end
 
-function AEUI:AddText(panel, str, font, x, y, centered, color)
+function AEUI:Text(panel, str, font, x, y, centered, color)
 	font = font or "AEUIDefault"
 	x = x or 0
 	y = y or 0
