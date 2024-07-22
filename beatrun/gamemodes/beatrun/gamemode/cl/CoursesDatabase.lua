@@ -45,7 +45,7 @@ function GetCourse(sharecode)
 	http.Fetch(url, function(body, length, headers, code)
 		local response = util.JSONToTable(body)
 
-		if response.res == 200 then
+		if response and response.res == 200 then
 			print("Success! | Length: " .. length .. "\nLoading course...")
 
 			local dir = "beatrun/courses/" .. currentMap .. "/"
@@ -57,6 +57,10 @@ function GetCourse(sharecode)
 			LoadCourseRaw(coursedata)
 
 			return true
+		elseif not response then
+			print("Can't access the database! Please make sure that domain is correct")
+
+			return false
 		else
 			print("Error! | Response: " .. response.message)
 

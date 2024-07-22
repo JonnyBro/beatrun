@@ -158,9 +158,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.toolsmenu.hud.sway", "Beatrun_HUDSway")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.swaydesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.hud.reticle", "Beatrun_HUDReticle")
-		panel:ControlHelp("#beatrun.toolsmenu.hud.reticledesc")
-
 		panel:CheckBox("#beatrun.toolsmenu.hud.nametags", "Beatrun_Nametags")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.nametagsdesc")
 
