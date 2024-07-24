@@ -6,6 +6,10 @@ end
 
 http.Fetch("https://raw.githubusercontent.com/JonnyBro/beatrun/main/version.txt", function(body, size, headers, code)
 	if code == 200 then
+		if not file.Exists("beatrun/version.txt", "DATA") then
+			file.Write("beatrun/version.txt", body)
+		end
+
 		if body ~= VERSIONGLOBAL then
 			file.Write("beatrun/version.txt", body)
 		else
