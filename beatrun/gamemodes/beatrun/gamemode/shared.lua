@@ -1,11 +1,11 @@
-VERSIONGLOBAL = "v1.0.7"
+VERSIONGLOBAL = "1.0.8"
 
 DeriveGamemode("sandbox")
 
 GM.Name = "Beatrun"
-GM.Author = "who cares"
-GM.Email = "whocares@noone.com"
-GM.Website = "www.mirrorsedge.com xd"
+GM.Author = "N/A"
+GM.Email = "N/A"
+GM.Website = "github.com/JonnyBro/beatrun"
 
 include("player_class/player_beatrun.lua")
 

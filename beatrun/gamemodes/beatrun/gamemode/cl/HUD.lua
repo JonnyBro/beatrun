@@ -131,12 +131,23 @@ local function BeatrunHUD()
 
 	surface.SetFont("DebugFixedSmall")
 
-	local vtext = VERSIONGLOBAL
-	local tw, _ = surface.GetTextSize(vtext)
-	surface.SetTextColor(255, 255, 255, 15)
+	local tw, _ = surface.GetTextSize("v" .. VERSIONGLOBAL)
+	surface.SetTextColor(255, 255, 255, 20)
 	surface.SetTextPos(scrw - tw, 0)
-	surface.DrawText(vtext)
+	surface.DrawText("v" .. VERSIONGLOBAL)
 	surface.SetFont("BeatrunHUD")
+
+	if file.Exists("beatrun/version.txt", "DATA") then
+		local latest_version = file.Read("beatrun/version.txt", "DATA")
+
+		if latest_version ~= VERSIONGLOBAL then
+			local notlatest_w, _ = surface.GetTextSize("Update available!")
+			surface.SetTextColor(255, 255, 255, 30)
+			surface.SetTextPos(scrw - notlatest_w, 10)
+			surface.DrawText("Update available!")
+			surface.SetFont("BeatrunHUD")
+		end
+	end
 
 	local pl = ply:GetNW2Int("PLoss")
 	local CT = CurTime()
