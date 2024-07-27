@@ -12,7 +12,7 @@ SWEP.Instructions = ""
 SWEP.BounceWeaponIcon = false
 SWEP.DrawWeaponInfoBox = false
 
-SWEP.HoldType = "crossbow"
+SWEP.HoldType = "pistol"
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
