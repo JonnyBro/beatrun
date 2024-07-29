@@ -158,21 +158,24 @@ if CLIENT then
 	local radial = Material("radial.png")
 	local dmgalpha = 0
 
-	hook.Add("HUDPaint", "NTScreenEffects", function()
-		local ply = LocalPlayer()
+	hook.Add("PreDrawHUD", "NTScreenEffects", function()
+		-- Not doing it this way breaks HUDs. And that's not cool.
+		cam.Start2D()
+			local ply = LocalPlayer()
 
-		if not ply:Alive() then return end
+			if not ply:Alive() then return end
 
-		local w = ScrW()
-		local h = ScrH()
+			local w = ScrW()
+			local h = ScrH()
 
-		dmgalpha = math.min(300 * math.abs(ply:Health() / ply:GetMaxHealth() - 1), 255)
+			dmgalpha = math.min(300 * math.abs(ply:Health() / ply:GetMaxHealth() - 1), 255)
 
-		surface.SetMaterial(radial)
-		surface.SetDrawColor(0, 0, 0, dmgalpha * 0.85)
-		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
-		surface.DrawTexturedRectRotated(ScrW() * 0.5, ScrH() * 0.5, ScrW(), ScrH(), 180)
-		surface.SetDrawColor(255, 25, 25, dmgalpha * math.max(0, math.sin(CurTime() * 6) * 0.045))
-		surface.DrawTexturedRect(0, 0, w, h)
+			surface.SetMaterial(radial)
+			surface.SetDrawColor(0, 0, 0, dmgalpha * 0.58)
+			surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
+			surface.DrawTexturedRectRotated(ScrW() * 0.5, ScrH() * 0.5, ScrW(), ScrH(), 180)
+			surface.SetDrawColor(255, 25, 25, dmgalpha * math.max(0, math.sin(CurTime() * 6) * 0.09))
+			surface.DrawTexturedRect(0, 0, w, h)
+		cam.End2D()
 	end)
 end
