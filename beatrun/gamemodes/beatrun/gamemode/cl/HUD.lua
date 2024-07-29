@@ -51,7 +51,7 @@ hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function()
 	end
 
 	if noclipping then
-		color = math.Approach(color, 0.5, RealFrameTime())
+		--color = math.Approach(color, 0.5, RealFrameTime())
 	elseif inp then
 		color = math.Approach(color, 1, RealFrameTime() * 2)
 	end
