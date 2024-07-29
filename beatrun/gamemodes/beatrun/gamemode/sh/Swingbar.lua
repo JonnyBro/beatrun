@@ -141,7 +141,6 @@ local function SwingbarThink(ply, mv, cmd)
 	offset = ply:GetSBOffset()
 
 	if mv:KeyPressed(IN_JUMP) or mv:KeyDown(IN_JUMP) and offset > 90 or (CrueltyParkour:GetBool() and !ply:UsingRH()) then
-		print("ONE")
 		ParkourEvent("swingjump", ply)
 
 		if mv:KeyPressed(IN_JUMP) and offset > 90 then
