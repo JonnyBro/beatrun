@@ -133,6 +133,7 @@ end
 function ReplaySendToClient(ply, args)
 	--if not game.SinglePlayer() then return end
 
+	ply.InReplay = true
 	ply:Spawn()
 	local replaydata = util.JSONToTable(util.Decompress(file.Read("beatrun/replays/" .. game.GetMap() .. "/"..Course_Name.."/"..args..".txt", "DATA")))
 
@@ -152,7 +153,6 @@ function ReplaySendToClient(ply, args)
 		net.WriteData(compressedreplay, #compressedreplay)
 	net.Send(ply)
 
-	ply.InReplay = true
 	ply:SetPos(ply.ReplayStartPos)
 	ply:SetVelocity(vector_origin)
 
@@ -197,7 +197,7 @@ if CLIENT then
 		RFF = CurTime() + 1
 
 		hook.Add("StartCommand", "ReplayPlay", ReplayPlayback)
-		hook.Add("RenderScreenspaceEffects", "BeatrunReplayVision", BeatrunReplayVision)
+		--hook.Add("RenderScreenspaceEffects", "BeatrunReplayVision", BeatrunReplayVision)
 		hook.Add("HUDPaint", "BeatrunReplayHUD", BeatrunReplayHUD)
 
 		surface.PlaySound("friends/friend_join.wav")

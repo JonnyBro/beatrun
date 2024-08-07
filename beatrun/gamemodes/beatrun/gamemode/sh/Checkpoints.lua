@@ -240,6 +240,8 @@ function CourseHUD()
 	local vpz = vp.z
 	local incourse = Course_Name ~= ""
 	local totaltime = CheckpointNumber ~= -1 and math.max(0, CurTime() - Course_StartTime) or Course_EndTime
+
+	local text_color = string.ToColor(LocalPlayer():GetInfo("Beatrun_HUDTextColor"))
 	
 	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() then
 		local speed = math.Round(ply:GetVelocity():Length2D() * 0.06858125)
@@ -300,21 +302,42 @@ function CourseHUD()
 		end
 	end
 
-	if incourse then
+	if incourse and !ply.InReplay then
 		local text = string.FormattedTime(totaltime, "%02i:%02i:%02i")
 		local w, _ = surface.GetTextSize(text)
 		surface.SetFont("BeatrunHUD")
+		surface.SetTextColor(text_color)
 		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + vpz)
 		surface.DrawText(text)
 	end
 	
-	if incourse and pbtimes then
+	if incourse and pbtimes and !ply.InReplay then
 		local text = string.FormattedTime(pbtotal, "%02i:%02i:%02i")
 		local w, h = surface.GetTextSize(text)
+
+		pbcolor = text_color
+		pbcolor.r = text_color.r * 0.6
+		pbcolor.g = text_color.g * 0.6
+		pbcolor.b = text_color.b * 0.6
 		
 		surface.SetFont("BeatrunHUD")
 		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + h + vpz)
-		surface.SetTextColor(255, 255, 255, 125)
+		surface.SetTextColor(pbcolor)
+		surface.DrawText(text)
+	end
+
+	if incourse and ply.InReplay then
+		local text = string.FormattedTime(tickcount * engine.TickInterval(), "%02i:%02i:%02i") .. " / " .. string.FormattedTime(#ply.ReplayTicks * engine.TickInterval(),  "%02i:%02i:%02i")
+		local w, _ = surface.GetTextSize(text)
+		surface.SetFont("BeatrunHUD")
+		surface.SetTextColor(text_color)
+		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + vpz)
+		surface.DrawText(text)
+
+		local text = "REPLAY MODE - MAY BE INACCURATE"
+		local w, h = surface.GetTextSize(text)
+		surface.SetTextColor(text_color)
+		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + vpz + h)
 		surface.DrawText(text)
 	end
 
