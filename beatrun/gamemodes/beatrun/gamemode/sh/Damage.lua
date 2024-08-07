@@ -163,7 +163,10 @@ if CLIENT then
 		cam.Start2D()
 			local ply = LocalPlayer()
 
-			if not ply:Alive() then return end
+			if not ply:Alive() then
+				cam.End2D()
+				return
+			end
 
 			local w = ScrW()
 			local h = ScrH()

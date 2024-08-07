@@ -12,19 +12,11 @@ function ReplayCmd(ply, cmd)
 
 	local ang = cmd:GetViewAngles()
 
-	if ply.ReplayLastAng == ang then
-		ang = 0
-	else
-		ply.ReplayLastAng = ang
-	end
-
 	local curtick = cmd:TickCount() - ply.ReplayFirstTick + 1
 
-	if ang == 0 then
-		ply.ReplayTicks[curtick] = {cmd:GetButtons(), cmd:GetForwardMove(), cmd:GetSideMove()}
-	else
-		ply.ReplayTicks[curtick] = {cmd:GetButtons(), ang.x, ang.y, cmd:GetForwardMove(), cmd:GetSideMove()}
-	end
+	--print(ang)
+
+	ply.ReplayTicks[curtick] = {cmd:GetButtons(), ang.x, ang.y, cmd:GetForwardMove(), cmd:GetSideMove()}
 
 	if curtick > 23760 then
 		ErrorNoHalt("Replay recording stopped (too long). Your course might be too long.")
@@ -48,8 +40,12 @@ function ReplayStart(ply)
 	ply.ReplayLastAng = nil
 end
 
-function ReplayStop(ply, debugdump)
+function ReplayStop(ply, dontsave)
 	--if not game.SinglePlayer() then return end
+	if dontsave then 
+		print("Replay Ended - NOT SAVED")
+		return
+	end
 	if not ply.ReplayTicks then return end
 	if ply.InReplay then return end
 
@@ -58,13 +54,14 @@ function ReplayStop(ply, debugdump)
 	ply.InReplay = false
 	ply.ReplayRecording = false
 
-	local debugdata = {ply.ReplayStartPos, ply.ReplayTicks}
+	local debugdata = {ply.ReplayStartPos, ply.ReplayTicks, engine.TickInterval()}
 
 	local replay = util.Compress(util.TableToJSON(debugdata))
-	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
+	local dir = "beatrun/replays/" .. game.GetMap() .. "/" .. Course_Name .. "/"
 
 	file.CreateDir(dir)
-	file.Write(dir .. "replaydump.txt", replay)
+	file.Write(dir .. os.date("%H-%M-%S_%d-%m-%Y", os.time()) .. ".txt", replay)
+	print("Replay saved as "..dir .. os.date("%H-%M-%S_%d-%m-%Y", os.time()) .. ".txt")
 end
 
 local RFF = true
@@ -96,7 +93,6 @@ function ReplayPlayback(ply, cmd)
 		end
 
 		local tickdata = ply.ReplayTicks[tickcount]
-		local shortdata = #tickdata == 3
 		local ang = shortdata and 0 or Angle(tickdata[2], tickdata[3], cmd:GetViewAngles().z)
 
 		if not shortdata then
@@ -106,13 +102,8 @@ function ReplayPlayback(ply, cmd)
 		cmd:SetButtons(tickdata[1])
 		cmd:SetViewAngles(ply.ReplayLastAng)
 
-		if shortdata then
-			cmd:SetForwardMove(tickdata[2])
-			cmd:SetSideMove(tickdata[3])
-		else
-			cmd:SetForwardMove(tickdata[4])
-			cmd:SetSideMove(tickdata[5])
-		end
+		cmd:SetForwardMove(tickdata[4])
+		cmd:SetSideMove(tickdata[5])
 
 		cmd:RemoveKey(IN_RELOAD)
 	elseif SERVER and cmdtc - firsttick + 1 > 0 or CLIENT and not ply:GetNWBool("InReplay") and RFF < CurTime() then
@@ -139,17 +130,26 @@ function ReplayPlayback(ply, cmd)
 	end
 end
 
-function ReplaySendToClient(ply)
-	if not game.SinglePlayer() then return end
+function ReplaySendToClient(ply, args)
+	--if not game.SinglePlayer() then return end
 
-	local replaydata = util.JSONToTable(util.Decompress(file.Read("beatrun/replays/" .. game.GetMap() .. "/replaydump.txt", "DATA")))
+	ply:Spawn()
+	local replaydata = util.JSONToTable(util.Decompress(file.Read("beatrun/replays/" .. game.GetMap() .. "/"..Course_Name.."/"..args..".txt", "DATA")))
 
 	ply.ReplayFirstTick = false
 	ply.ReplayStartPos = replaydata[1]
 	ply.ReplayTicks = replaydata[2]
 	ply:SetNWBool("InReplay", true)
 
+	local compressedreplay = util.Compress(util.TableToJSON(replaydata))
+
+	if replaydata[3] != engine.TickInterval then
+		errorstring = "Replay tickrate and current tickrate does not match. Replay tick interval is: " .. (1 / engine.TickInterval())
+		ErrorNoHalt(errorstring)
+	end
+
 	net.Start("ReplaySendToClient")
+		net.WriteData(compressedreplay, #compressedreplay)
 	net.Send(ply)
 
 	ply.InReplay = true
@@ -206,11 +206,7 @@ if CLIENT then
 	net.Receive("ReplayRequest", ReplayBegin)
 
 	net.Receive("ReplaySendToClient", function(length)
-		if length < 100 then
-			LocalPlayer().ReplayTicks = util.JSONToTable(util.Decompress(file.Read("beatrun/replays/" .. game.GetMap() .. "/replaydump.txt", "DATA")))[2]
-		else
-			LocalPlayer().ReplayTicks = util.JSONToTable(util.Decompress(net.ReadData(length)))
-		end
+		LocalPlayer().ReplayTicks = util.JSONToTable(util.Decompress(net.ReadData(length/8)))[2]
 
 		LocalPlayer().ReplayFirstTick = false
 		ReplayBegin()
@@ -229,3 +225,7 @@ function ReplayCancel(ply)
 		net.WriteBool(true)
 	net.SendToServer()
 end
+
+concommand.Add("Beatrun_BeginReplayPlayback", function(ply,cmd,args,argstr)
+	ReplaySendToClient(ply,argstr)
+end)

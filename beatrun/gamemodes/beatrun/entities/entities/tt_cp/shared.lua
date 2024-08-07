@@ -44,7 +44,7 @@ function ENT:StartTouch(ent)
 		ent:SetNW2Int("CPNum", ent:GetNW2Int("CPNum", 1) + 1)
 
 		if ent:GetNW2Int("CPNum", 1) > table.Count(Checkpoints) then
-			ReplayStop(ent)
+			ReplayStop(ent, false)
 			FinishCourse(ent)
 		else
 			ent.CPSavePos = ent:GetPos()
