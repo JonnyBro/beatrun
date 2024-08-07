@@ -381,7 +381,6 @@ function LoadCheckpointTime()
 end
 
 function SaveReplayData()
-	PrintTable(LocalPlayer().ReplayTicks)
 	local replay = util.Compress(util.TableToJSON(LocalPlayer().ReplayTicks))
 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
 	if not replay then return end
