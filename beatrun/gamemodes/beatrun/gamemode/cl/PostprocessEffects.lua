@@ -52,9 +52,9 @@ hook.Add("RenderScreenspaceEffects", "funnybrdof", function()
     blur_mat:SetTexture("$BASETEXTURE", render.GetScreenEffectTexture(1))
     blur_mat:SetTexture("$DEPTHTEXTURE", render.GetResolvedFullFrameDepth())
     
-    blur_mat:SetFloat("$size", BOKEN_FORCE * 10)
+    blur_mat:SetFloat("$size", BOKEN_FORCE * 8)
     blur_mat:SetFloat("$focus", 0)
-    blur_mat:SetFloat("$focusradius", 2 - 0.5 * 2)
+    blur_mat:SetFloat("$focusradius", 2 - 0.25 * 2)
     
     --blur_mat:SetFloat("$size", BOKEN_FORCE * 3)
     --blur_mat:SetFloat("$focus", 0)
