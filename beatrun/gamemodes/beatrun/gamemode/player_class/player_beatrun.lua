@@ -229,8 +229,8 @@ function PLAYER:Spawn()
 				ply:SetPos(Course_StartPos)
 			end)
 
-			-- ReplayStop(ply)
-			-- ReplayStart(ply)
+			ReplayStop(ply)
+			ReplayStart(ply)
 		end
 	end
 
