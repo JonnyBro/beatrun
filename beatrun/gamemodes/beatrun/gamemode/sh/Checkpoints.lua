@@ -144,6 +144,9 @@ if CLIENT then
 
 		net.Start("Checkpoint_Finish")
 			net.WriteFloat(totaltime)
+			if !LocalPlayer().InReplay then
+				notification.AddLegacy("Replay saved as ".."beatrun/replays/" .. game.GetMap() .. "/"..Course_Name .. os.date("%H-%M-%S_%d-%m-%Y", os.time()) .. ".txt", 0, 3)
+			end
 		net.SendToServer()
 
 		timealpha = 1000
