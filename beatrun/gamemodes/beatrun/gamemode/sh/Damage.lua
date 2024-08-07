@@ -159,7 +159,7 @@ if CLIENT then
 	local dmgalpha = 0
 
 	hook.Add("PreDrawHUD", "NTScreenEffects", function()
-		-- Not doing it this way breaks HUDs. And that's not cool.
+		-- Draw the overlay this way or we (sort of) break other HUDs.
 		cam.Start2D()
 			local ply = LocalPlayer()
 
@@ -168,7 +168,8 @@ if CLIENT then
 			local w = ScrW()
 			local h = ScrH()
 
-			dmgalpha = math.min(300 * math.abs(ply:Health() / ply:GetMaxHealth() - 1), 255)
+			curhealth = math.Clamp(ply:Health(), 0, ply:GetMaxHealth())
+			dmgalpha = math.min(300 * math.abs(curhealth / ply:GetMaxHealth() - 1), 255)
 
 			surface.SetMaterial(radial)
 			surface.SetDrawColor(0, 0, 0, dmgalpha * 0.58)
