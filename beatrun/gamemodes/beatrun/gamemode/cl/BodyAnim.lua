@@ -457,6 +457,7 @@ hook.Add("Think", "BodyAnimThink", function()
 	if not IsValid(BodyAnim) then return end
 
 	local ply = LocalPlayer()
+	SlowmoMultiplier = ply:GetLaggedMovementValue()
 
 	if not ply:Alive() and not deathanim then
 		RemoveBodyAnim()
@@ -464,7 +465,7 @@ hook.Add("Think", "BodyAnimThink", function()
 		return
 	end
 
-	BodyAnimCycle = BodyAnimCycle + FrameTime() / BodyAnim:SequenceDuration() * BodyAnimSpeed
+	BodyAnimCycle = BodyAnimCycle + FrameTime() / BodyAnim:SequenceDuration() * BodyAnimSpeed * SlowmoMultiplier
 
 	if not customcycle then
 		BodyAnim:SetCycle(BodyAnimCycle)
