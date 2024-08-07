@@ -27,7 +27,7 @@ function ReplayCmd(ply, cmd)
 	end
 
 	if curtick > 23760 then
-		print("Replay recording stopped - too long")
+		ErrorNoHalt("Replay recording stopped (too long). Your course might be too long.")
 
 		ply.ReplayRecording = false
 	end
@@ -36,7 +36,7 @@ end
 hook.Add("StartCommand", "ReplayStart", ReplayCmd)
 
 function ReplayStart(ply)
-	if not game.SinglePlayer() then return end
+	--if not game.SinglePlayer() then return end
 	if ply.InReplay then return end
 
 	print("Starting Replay")
@@ -49,7 +49,7 @@ function ReplayStart(ply)
 end
 
 function ReplayStop(ply, debugdump)
-	if not game.SinglePlayer() then return end
+	--if not game.SinglePlayer() then return end
 	if not ply.ReplayTicks then return end
 	if ply.InReplay then return end
 
