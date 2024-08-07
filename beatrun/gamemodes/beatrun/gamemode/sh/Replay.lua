@@ -42,12 +42,12 @@ end
 
 function ReplayStop(ply, dontsave)
 	--if not game.SinglePlayer() then return end
+	if not ply.ReplayTicks then return end
+	if ply.InReplay then return end
 	if dontsave then 
 		print("Replay Ended - NOT SAVED")
 		return
 	end
-	if not ply.ReplayTicks then return end
-	if ply.InReplay then return end
 
 	print("Ending Replay (" .. #ply.ReplayTicks .. "ticks)")
 
@@ -143,9 +143,9 @@ function ReplaySendToClient(ply, args)
 
 	local compressedreplay = util.Compress(util.TableToJSON(replaydata))
 
-	if replaydata[3] != engine.TickInterval then
-		errorstring = "Replay tickrate and current tickrate does not match. Replay tick interval is: " .. (1 / engine.TickInterval())
-		ErrorNoHalt(errorstring)
+	if replaydata[3] != engine.TickInterval() then
+		errorstring = "Replay tickrate and current tickrate does not match. Replay tick interval is: " .. (replaydata[3]) .. " " .. engine.TickInterval()
+		print(errorstring)
 	end
 
 	net.Start("ReplaySendToClient")
