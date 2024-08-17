@@ -3,6 +3,9 @@ if SERVER then
 	util.AddNetworkString("DataTheft_Sync")
 
 	function Beatrun_StartDataTheft()
+		if GetGlobalBool("GM_DATATHEFT") then return end
+		if Course_Name ~= "" then return end
+
 		SetGlobalBool("GM_DATATHEFT", true)
 
 		net.Start("DataTheft_Start")

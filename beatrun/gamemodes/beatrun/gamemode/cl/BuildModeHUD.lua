@@ -63,7 +63,7 @@ local function infostring()
 	return str
 end
 
-AEUI:AddText(bminfo, infostring, "AEUIDefault", bminfo.w / 2, bminfo.h / 2 - 20, true)
+AEUI:Text(bminfo, infostring, "AEUIDefault", bminfo.w / 2, bminfo.h / 2 - 20, true)
 
 local function BuildModeHUDButton(e)
 	buildmodeinputs[e.key](true)

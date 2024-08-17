@@ -1418,11 +1418,8 @@ local function JumpAnim(event, ply)
 		end
 
 		if not wasjumpanim then
-			if UseOldAnims:GetBool() then
-				animtable.animmodelstring = "meclimbanim"
-			else
-				animtable.animmodelstring = "climbanim"
-			end
+			CheckAnims()
+
 			StartBodyAnim(animtable)
 			--print("---- BodyAnim recreated  --  " .. engine.TickCount())
 

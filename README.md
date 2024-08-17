@@ -1,7 +1,11 @@
 # Beatrun | Community edition
 
-* [Русский](./README_ru.md)\
-  *(If you can read English: This isn't maintained, I don't speak Russian)*
+[![forthebadge](https://forthebadge.com/images/featured/featured-powered-by-electricity.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
+
+[Click to join our Discord!](https://discord.gg/93Psubbgsg)
+
+* [Русский](./README.ru.md)
 
 **PLEASE READ EVERYTHING BEFORE ASKING QUESTIONS ON OUR SERVER!**
 
