@@ -495,13 +495,12 @@ function SWEP:PrimaryAttack()
 		if SERVER and IsValid(ent) then
 			if not ply:IsPlayer() or (Course_Name == "" and not GetGlobalBool("GM_INFECTION")) then
 				local d = DamageInfo()
-				d:SetDamage((punch ~= 3 and 10) or 20)
-				d:SetAttacker(ply)
-				d:SetInflictor(self)
-				d:SetDamageType(DMG_CLUB)
-				d:SetDamagePosition(tr.start)
-				d:SetDamageForce(ply:EyeAngles():Forward() * 7000)
-
+					d:SetDamage((punch ~= 3 and 10) or 20)
+					d:SetAttacker(ply)
+					d:SetInflictor(self)
+					d:SetDamageType(DMG_CLUB)
+					d:SetDamagePosition(tr.start)
+					d:SetDamageForce(ply:EyeAngles():Forward() * 7000)
 				ent:TakeDamageInfo(d)
 
 				if ent:IsNPC() then

@@ -196,15 +196,14 @@ hook.Add("OnPlayerHitGround", "MELandSound", function(ply, water, floater, speed
 	end
 
 	if SERVER and speed >= 500 and ply:GetJumpTurn() then
-		local info = DamageInfo()
 		local dmg = ply:Health() * 0.1
 
 		if ply:Health() - dmg > 0 then
-			info:SetDamage(dmg)
-			info:SetDamageType(DMG_FALL)
-			info:SetAttacker(game.GetWorld())
-			info:SetInflictor(game.GetWorld())
-
+			local info = DamageInfo()
+				info:SetDamage(dmg)
+				info:SetDamageType(DMG_FALL)
+				info:SetAttacker(game.GetWorld())
+				info:SetInflictor(game.GetWorld())
 			ply:TakeDamageInfo(info)
 		end
 	end
