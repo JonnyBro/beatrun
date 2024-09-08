@@ -246,7 +246,7 @@ function CourseHUD()
 		surface.DrawText(text)
 	end
 
-	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() then
+	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() and GetConVar("Beatrun_HUDHidden"):GetInt() ~= 2 then
 		local speed = math.Round(ply:GetVelocity():Length() * 0.06858125)
 
 		if speed < 10 then

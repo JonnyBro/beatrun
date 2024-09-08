@@ -7,7 +7,7 @@ local color_black_t = Color(0, 0, 0, 100)
 local size = 35
 
 local function ShowKeyStrokes()
-	if showKeystrokes:GetBool() then
+	if showKeystrokes:GetBool() and GetConVar("Beatrun_HUDHidden"):GetInt() == 0 then
 		-- Key W
 		if LocalPlayer():KeyDown(IN_FORWARD) then
 			surface.SetDrawColor(color_white_t)
