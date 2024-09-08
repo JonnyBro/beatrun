@@ -1,4 +1,4 @@
-VERSIONGLOBAL = "1.0.11"
+VERSIONGLOBAL = "1.0.12"
 VERSIONLATEST = ""
 
 DeriveGamemode("sandbox")
