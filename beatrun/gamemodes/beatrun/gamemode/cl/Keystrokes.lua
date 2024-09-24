@@ -8,125 +8,140 @@ local size = 35
 
 local function ShowKeyStrokes()
 	if showKeystrokes:GetBool() and GetConVar("Beatrun_HUDHidden"):GetInt() == 0 then
+		local forward = string.upper(input.LookupBinding("+forward"))
+		local back = string.upper(input.LookupBinding("+back"))
+		local moveleft = string.upper(input.LookupBinding("+moveleft"))
+		local moveright = string.upper(input.LookupBinding("+moveright"))
+		local use = string.upper(input.LookupBinding("+use"))
+		local reload = string.upper(input.LookupBinding("+reload"))
+		local jump = string.upper(input.LookupBinding("+jump"))
+		local speed = string.upper(input.LookupBinding("+speed"))
+		local duck = string.upper(input.LookupBinding("+duck"))
+		local attack = string.upper(input.LookupBinding("+attack"))
+		local attack2 = string.upper(input.LookupBinding("+attack2"))
+
+		if attack == "MOUSE1" then attack = "LMB" end
+		if attack2 == "MOUSE2" then attack2 = "RMB" end
+
 		-- Key W
 		if LocalPlayer():KeyDown(IN_FORWARD) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(size, 0, size, size)
-			draw.SimpleText("W", "BeatrunHUD", size + 10, size - 30, color_black)
+			draw.SimpleText(forward, "BeatrunHUD", size + 10, size - 30, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(size, 0, size, size)
-			draw.SimpleText("W", "BeatrunHUD", size + 10, size - 30, color_white)
+			draw.SimpleText(forward, "BeatrunHUD", size + 10, size - 30, color_white)
 		end
 
 		-- Key E
 		if LocalPlayer():KeyDown(IN_USE) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(size * 2, 0, size, size)
-			draw.SimpleText("E", "BeatrunHUD", size + 48, size - 30, color_black)
+			draw.SimpleText(use, "BeatrunHUD", size + 48, size - 30, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(size * 2, 0, size, size)
-			draw.SimpleText("E", "BeatrunHUD", size + 48, size - 30, color_white)
+			draw.SimpleText(use, "BeatrunHUD", size + 48, size - 30, color_white)
 		end
 
 		-- Key R
 		if LocalPlayer():KeyDown(IN_RELOAD) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(size * 3, 0, size, size)
-			draw.SimpleText("R", "BeatrunHUD", size * 3 + 12, size - 30, color_black)
+			draw.SimpleText(reload, "BeatrunHUD", size * 3 + 12, size - 30, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(size * 3, 0, size, size)
-			draw.SimpleText("R", "BeatrunHUD", size * 3 + 12, size - 30, color_white)
+			draw.SimpleText(reload, "BeatrunHUD", size * 3 + 12, size - 30, color_white)
 		end
 
 		-- Key A
 		if LocalPlayer():KeyDown(IN_MOVELEFT) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(0, size, size, size)
-			draw.SimpleText("A", "BeatrunHUD", size - 23, size + 8, color_black)
+			draw.SimpleText(moveleft, "BeatrunHUD", size - 23, size + 8, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(0, size, size, size)
-			draw.SimpleText("A", "BeatrunHUD", size - 23, size + 8, color_white)
+			draw.SimpleText(moveleft, "BeatrunHUD", size - 23, size + 8, color_white)
 		end
 
 		-- Key S
 		if LocalPlayer():KeyDown(IN_BACK) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(size, size, size, size)
-			draw.SimpleText("S", "BeatrunHUD", size + 12, size + 8, color_black)
+			draw.SimpleText(back, "BeatrunHUD", size + 12, size + 8, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(size, size, size, size)
-			draw.SimpleText("S", "BeatrunHUD", size + 12, size + 8, color_white)
+			draw.SimpleText(back, "BeatrunHUD", size + 12, size + 8, color_white)
 		end
 
 		-- Key D
 		if LocalPlayer():KeyDown(IN_MOVERIGHT) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(size * 2, size, size, size)
-			draw.SimpleText("D", "BeatrunHUD", size + 48, size + 8, color_black)
+			draw.SimpleText(moveright, "BeatrunHUD", size + 48, size + 8, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(size * 2, size, size, size)
-			draw.SimpleText("D", "BeatrunHUD", size + 48, size + 8, color_white)
+			draw.SimpleText(moveright, "BeatrunHUD", size + 48, size + 8, color_white)
 		end
 
 		-- Space
 		if LocalPlayer():KeyDown(IN_JUMP) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(0, size * 2, size * 3, size)
-			draw.SimpleText("SPACE", "BeatrunHUD", 28, size * 2 + 8, color_black)
+			draw.SimpleText(jump, "BeatrunHUD", 28, size * 2 + 8, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(0, size * 2, size * 3, size)
-			draw.SimpleText("SPACE", "BeatrunHUD", 28, size * 2 + 8, color_white)
+			draw.SimpleText(jump, "BeatrunHUD", 28, size * 2 + 8, color_white)
 		end
 
 		-- Shift
 		if LocalPlayer():KeyDown(IN_SPEED) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(0, size * 3, size * 3, size)
-			draw.SimpleText("SHIFT", "BeatrunHUD", 28, size * 3 + 8, color_black)
+			draw.SimpleText(speed, "BeatrunHUD", 28, size * 3 + 8, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(0, size * 3, size * 3, size)
-			draw.SimpleText("SHIFT", "BeatrunHUD", 28, size * 3 + 8, color_white)
+			draw.SimpleText(speed, "BeatrunHUD", 28, size * 3 + 8, color_white)
 		end
 
 		-- Ctrl
 		if LocalPlayer():KeyDown(IN_DUCK) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(0, size * 4, size * 3, size)
-			draw.SimpleText("CTRL", "BeatrunHUD", 32, size * 4 + 8, color_black)
+			draw.SimpleText(duck, "BeatrunHUD", 32, size * 4 + 8, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(0, size * 4, size * 3, size)
-			draw.SimpleText("CTRL", "BeatrunHUD", 32, size * 4 + 8, color_white)
+			draw.SimpleText(duck, "BeatrunHUD", 32, size * 4 + 8, color_white)
 		end
 
 		-- Left Mouse
 		if LocalPlayer():KeyDown(IN_ATTACK) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(size * 3, size, size * 2, size)
-			draw.SimpleText("LMB", "BeatrunHUD", size + 87, size + 8, color_black)
+			draw.SimpleText(attack, "BeatrunHUD", size + 87, size + 8, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(size * 3, size, size * 2, size)
-			draw.SimpleText("LMB", "BeatrunHUD", size + 87, size + 8, color_white)
+			draw.SimpleText(attack, "BeatrunHUD", size + 87, size + 8, color_white)
 		end
 
 		-- Right Mouse
 		if LocalPlayer():KeyDown(IN_ATTACK2) then
 			surface.SetDrawColor(color_white_t)
 			surface.DrawRect(size * 3, size * 2, size * 2, size)
-			draw.SimpleText("RMB", "BeatrunHUD", size + 86, size * 2 + 8, color_black)
+			draw.SimpleText(attack2, "BeatrunHUD", size + 86, size * 2 + 8, color_black)
 		else
 			surface.SetDrawColor(color_black_t)
 			surface.DrawRect(size * 3, size * 2, size * 2, size)
-			draw.SimpleText("RMB", "BeatrunHUD", size + 86, size * 2 + 8, color_white)
+			draw.SimpleText(attack2, "BeatrunHUD", size + 86, size * 2 + 8, color_white)
 		end
 	end
 end

@@ -131,14 +131,14 @@ local function BeatrunHUD()
 
 	surface.SetFont("DebugFixedSmall")
 
-	local version_text = "v" .. VERSIONGLOBAL
+	local version_text = "v" .. VERSION_GLOBAL
 	local tw, _ = surface.GetTextSize(version_text)
 	surface.SetTextColor(255, 255, 255, 20)
 	surface.SetTextPos(scrw - tw, 0)
 	surface.DrawText(version_text)
 	surface.SetFont("BeatrunHUD")
 
-	if VERSIONGLOBAL ~= VERSIONLATEST then
+	if VERSION_GLOBAL ~= VERSION_LATEST then
 		local update_text = "Update available!"
 		local notlatest_w, _ = surface.GetTextSize(update_text)
 		surface.SetTextColor(255, 255, 255, 30)
