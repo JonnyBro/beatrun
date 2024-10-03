@@ -1,5 +1,3 @@
--- This file has lots of strings that needs to be localized.
-
 local buttonhints = CreateClientConVar("Beatrun_HUDButtonHints", "1", true, false, "Show button hints on the bottom-right of your display when enabled.", 0, 1)
 
 local function GetFormattedKey(bind)
