@@ -152,6 +152,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ClearControls()
 		panel:SetName("#beatrun.toolsmenu.hud.desc")
 
+		panel:CheckBox("#beatrun.toolsmenu.hud.buttonhints", "Beatrun_HUDButtonHints")
+		panel:ControlHelp("#beatrun.toolsmenu.hud.buttonhintsdesc")
+
 		panel:CheckBox("#beatrun.toolsmenu.hud.dynamic", "Beatrun_HUDDynamic")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.dynamicdesc")
 
