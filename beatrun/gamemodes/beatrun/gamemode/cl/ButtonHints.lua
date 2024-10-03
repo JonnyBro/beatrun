@@ -135,20 +135,7 @@ hook.Add("HUDPaint", "BeatrunButtonPrompts", function()
 	end
 
 	if IsValid(ply:GetLadder()) then
-		local tr = ply.LadderTrace
-		tr.output = ply.LadderTraceOut
-		tr.start = ply:GetPos() + Vector(0, 0, 64)
-		tr.endpos = tr.start + EyeAngles():Forward() * 100
-		tr.filter = ply
-		util.TraceLine(tr)
-		local fraction = ply.LadderTraceOut.Fraction
-
-		if ((fraction or 1) <= 0.35) then
-			ButtonsTable[#ButtonsTable + 1] = {language.GetPhrase("beatrun.buttonhints.climb"), {"HELDPRESS", GetFormattedKey("+forward")}}
-		else
-			ButtonsTable[#ButtonsTable + 1] = {language.GetPhrase("beatrun.buttonhints.jump"), {GetFormattedKey("+jump"), "AND", GetFormattedKey("+forward")}}
-		end
-
+		ButtonsTable[#ButtonsTable + 1] = {language.GetPhrase("beatrun.buttonhints.climb"), {"HELDPRESS", GetFormattedKey("+forward")}}
 		ButtonsTable[#ButtonsTable + 1] = {language.GetPhrase("beatrun.buttonhints.ladderdescend"), {"HELDPRESS", GetFormattedKey("+back")}}
 		ButtonsTable[#ButtonsTable + 1] = {language.GetPhrase("beatrun.buttonhints.drop"), {GetFormattedKey("+duck")}}
 	elseif IsValid(ply:GetBalanceEntity()) then
