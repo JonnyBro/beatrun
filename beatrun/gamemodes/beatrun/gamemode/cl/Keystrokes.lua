@@ -6,19 +6,35 @@ local color_black = Color(0, 0, 0)
 local color_black_t = Color(0, 0, 0, 100)
 local size = 35
 
+local function GetFormattedKey(bind)
+	string = input.LookupBinding(bind)
+
+	if string == "MOUSE1" then string = "LMB"      -- Don't localize LMB and RMB. Maybe.
+	elseif string == "MOUSE2" then string = "RMB"
+	elseif string == "MOUSE3" then string = "MMB" end
+
+	if string then
+		return string.upper(string)
+	else
+		return "???"
+	end
+end
+
 local function ShowKeyStrokes()
 	if showKeystrokes:GetBool() and GetConVar("Beatrun_HUDHidden"):GetInt() == 0 then
-		local forward = string.upper(input.LookupBinding("+forward"))
-		local back = string.upper(input.LookupBinding("+back"))
-		local moveleft = string.upper(input.LookupBinding("+moveleft"))
-		local moveright = string.upper(input.LookupBinding("+moveright"))
-		local use = string.upper(input.LookupBinding("+use"))
-		local reload = string.upper(input.LookupBinding("+reload"))
-		local jump = string.upper(input.LookupBinding("+jump"))
-		local speed = string.upper(input.LookupBinding("+speed"))
-		local duck = string.upper(input.LookupBinding("+duck"))
-		local attack = string.upper(input.LookupBinding("+attack"))
-		local attack2 = string.upper(input.LookupBinding("+attack2"))
+		-- will have inconsistent indent on GH web view, thanks github
+		-- absolutely indented correctly, view in an editor like vscode
+        local forward = GetFormattedKey("+forward")
+        local back = GetFormattedKey("+back")
+        local moveleft = GetFormattedKey("+moveleft")
+        local moveright = GetFormattedKey("+moveright")
+        local use = GetFormattedKey("+use")
+        local reload = GetFormattedKey("+reload")
+        local jump = GetFormattedKey("+jump")
+        local speed = GetFormattedKey("+speed")
+        local duck = GetFormattedKey("+duck")
+        local attack = GetFormattedKey("+attack")
+        local attack2 = GetFormattedKey("+attack2")
 
 		if attack == "MOUSE1" then attack = "LMB" end
 		if attack2 == "MOUSE2" then attack2 = "RMB" end
