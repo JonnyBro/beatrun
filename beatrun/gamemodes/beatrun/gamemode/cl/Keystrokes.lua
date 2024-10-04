@@ -9,7 +9,7 @@ local size = 35
 local function GetFormattedKey(bind)
 	string = input.LookupBinding(bind)
 
-	if string == "MOUSE1" then string = "LMB"      -- Don't localize LMB and RMB. Maybe.
+	if string == "MOUSE1" then string = "LMB"
 	elseif string == "MOUSE2" then string = "RMB"
 	elseif string == "MOUSE3" then string = "MMB" end
 
