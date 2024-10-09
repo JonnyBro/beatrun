@@ -23,6 +23,9 @@ end
 local addons = 0
 
 local incompatible = {
+	["2155366756"] = true, -- VManip (Base)
+	["2364206712"] = true, -- [VManip] Vaulting
+	["2416989205"] = true, -- [VManip] Quick Slide
 	["1581533176"] = true, -- The Aperture [Reupload]
 	["2675972006"] = true, -- Custom Loadout
 	["378401390"] = true, -- Quake/Half-Life View bobbing
