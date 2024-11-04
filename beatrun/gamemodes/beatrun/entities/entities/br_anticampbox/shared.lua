@@ -37,7 +37,7 @@ function ENT:StartTouch(ent)
 end
 
 function ENT:Touch(ent)
-	if ent:IsPlayer() then
+	if ent:IsPlayer() and GetGlobalBool("GM_INFECTION") then
 		if CurTime() > ent.MemeTime then
 			if not ent.MemeMessage then
 				ent:ChatPrint("Are you having fun standing still in a parkour game? Let's spice things up a bit!")
