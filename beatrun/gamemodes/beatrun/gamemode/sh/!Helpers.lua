@@ -91,7 +91,12 @@ function playermeta:notUsingRH(wep)
 	end
 end
 
-function getRandomMGBaseSWEP()
+function Beatrun_GiveAmmo(weapon, ply)
+	if weapon:GetPrimaryAmmoType() ~= -1 then ply:GiveAmmo(10000, weapon:GetPrimaryAmmoType(), true) end
+	if weapon:GetSecondaryAmmoType() ~= -1 then ply:GiveAmmo(5, weapon:GetSecondaryAmmoType(), true) end
+end
+
+function Beatrun_getRandomMWBaseSWEP()
 	local allWep = weapons.GetList()
 	local wepIndex = math.random(#allWep)
 	local wep = allWep[wepIndex]
@@ -99,11 +104,11 @@ function getRandomMGBaseSWEP()
 	if wep.Base == "mg_base" and not wep.AdminOnly then
 		return wep
 	else
-		return getRandomMGBaseSWEP()
+		return Beatrun_getRandomMWBaseSWEP()
 	end
 end
 
-function getRandomARC9SWEP()
+function Beatrun_getRandomARC9SWEP()
 	local allWep = weapons.GetList()
 	local wepIndex = math.random(#allWep)
 	local wep = allWep[wepIndex]
@@ -111,6 +116,34 @@ function getRandomARC9SWEP()
 	if wep.Base == "arc9_cod2019_base" and not wep.AdminOnly then
 		return wep
 	else
-		return getRandomARC9SWEP()
+		return Beatrun_getRandomARC9SWEP()
+	end
+end
+
+function Beatrun_GiveGMWeapon(ply)
+	if GetConVar("Beatrun_RandomMWLoadouts"):GetBool() and not GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() then
+		for i = 0, 1 do
+			local swep = Beatrun_getRandomMWBaseSWEP()
+			local w = ply:Give(swep.ClassName)
+
+			timer.Simple(1, function()
+				Beatrun_GiveAmmo(w, ply)
+			end)
+		end
+	elseif GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() and not GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
+		for i = 0, 1 do
+			-- We don't need ammo because ARC9 got the infinite ammo option!
+
+			local swep = Beatrun_getRandomARC9SWEP()
+			ply:Give(swep.ClassName)
+		end
+	elseif not GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() and not GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
+		for _, b in ipairs(BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]) do
+			local w = v:Give(b)
+
+			timer.Simple(1, function()
+				Beatrun_GiveAmmo(w, ply)
+			end)
+		end
 	end
 end

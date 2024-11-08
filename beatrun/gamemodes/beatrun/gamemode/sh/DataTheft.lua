@@ -22,33 +22,7 @@ if SERVER then
 				v:Spawn()
 			end
 
-			if GetConVar("Beatrun_RandomMWLoadouts"):GetBool() and not GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() then
-				for i = 0, 1 do
-					local swep = getRandomMGBaseSWEP()
-					local w = v:Give(swep.ClassName)
-
-					timer.Simple(1, function()
-						if w:GetPrimaryAmmoType() ~= -1 then v:GiveAmmo(10000, w:GetPrimaryAmmoType(), true) end
-						if w:GetSecondaryAmmoType() ~= -1 then v:GiveAmmo(5, w:GetSecondaryAmmoType(), true) end
-					end)
-				end
-			elseif GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() and not GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
-				for i = 0, 1 do
-					-- We don't need ammo because ARC9 got the infinite ammo option!
-
-					local swep = getRandomARC9SWEP()
-					v:Give(swep.ClassName)
-				end
-			elseif not GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() and not GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
-				for _, b in ipairs(BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]) do
-					local w = v:Give(b)
-
-					timer.Simple(1, function()
-						if w:GetPrimaryAmmoType() ~= -1 then v:GiveAmmo(10000, w:GetPrimaryAmmoType(), true) end
-						if w:GetSecondaryAmmoType() ~= -1 then v:GiveAmmo(5, w:GetSecondaryAmmoType(), true) end
-					end)
-				end
-			end
+			Beatrun_GiveGMWeapon(v)
 		end
 	end
 
