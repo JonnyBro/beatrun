@@ -1,6 +1,9 @@
 local vmatrixmeta = FindMetaTable("VMatrix")
 local playermeta = FindMetaTable("Player")
 
+CreateConVar("Beatrun_RandomMWLoadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+CreateConVar("Beatrun_RandomARC9Loadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+
 BEATRUN_GAMEMODES_LOADOUTS = {
 	{"weapon_357", "weapon_ar2"}
 }
@@ -85,5 +88,29 @@ function playermeta:notUsingRH(wep)
 		return true
 	else
 		return false
+	end
+end
+
+function getRandomMGBaseSWEP()
+	local allWep = weapons.GetList()
+	local wepIndex = math.random(#allWep)
+	local wep = allWep[wepIndex]
+
+	if wep.Base == "mg_base" and not wep.AdminOnly then
+		return wep
+	else
+		return getRandomMGBaseSWEP()
+	end
+end
+
+function getRandomARC9SWEP()
+	local allWep = weapons.GetList()
+	local wepIndex = math.random(#allWep)
+	local wep = allWep[wepIndex]
+
+	if wep.Base == "arc9_cod2019_base" and not wep.AdminOnly then
+		return wep
+	else
+		return getRandomARC9SWEP()
 	end
 end
