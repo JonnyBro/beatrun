@@ -54,7 +54,8 @@ local incompatible = {
 	["748422181"] = true, -- FOV Changer
 	["2930331275"] = true, -- Realistic Fragmentation System
 	["112806637"] = true, -- Gmod Legs 3
-	["678037029"] = true -- Enhanced Camera
+	["678037029"] = true, -- Enhanced Camera
+	["2497150824"] = true -- Smooth Camera
 }
 
 local warnpanel = {
