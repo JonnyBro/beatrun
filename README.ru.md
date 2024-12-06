@@ -62,7 +62,7 @@ irm https://beatrun.jonnybro.ru/install | iex
 
 ### Новые возможности
 
-- **База курсов** от Jonny_Bro: **[Доступна здесь](https://courses.jonnybro.ru)** (бесплатна и имеет **[открытый исходный код](https://git.jonnybro.ru/jonny_bro/beatrun-courses-server-docker)**).
+- **База курсов** от Jonny_Bro: **[Доступна здесь](https://courses.jonnybro.ru)** (бесплатна и имеет **[открытый исходный код](https://git.jonnybro.ru/jonny_bro/beatrun-courses-server)**).
 - **Новый режим:** Deathmatch.
 - Полностью исправленный Kick Glitch, как в **[оригинальной игре](https://www.youtube.com/watch?v=zK5y3NBUStc)**.
 - Меню настроек в игре в категории **Beatrun** в меню Инструментов.
