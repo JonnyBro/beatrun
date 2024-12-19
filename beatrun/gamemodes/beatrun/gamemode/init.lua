@@ -6,6 +6,10 @@ for _, v in ipairs(file.Find("gamemodes/beatrun/gamemode/cl/*.lua", "GAME")) do
 	AddCSLuaFile("cl/" .. v)
 end
 
+if SERVER then
+	include("preexecute/server.lua")
+end
+
 for _, v in ipairs(file.Find("gamemodes/beatrun/gamemode/sh/*.lua", "GAME")) do
 	AddCSLuaFile("sh/" .. v)
 	include("sh/" .. v)

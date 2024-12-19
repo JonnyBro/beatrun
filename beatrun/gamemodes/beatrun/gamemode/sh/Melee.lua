@@ -279,6 +279,9 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 			mv:SetVelocity(vel)
 		elseif kickglitch:GetBool() and not old_kickglitch:GetBool() then
 			if SERVER then
+				local oldfriction = ply:GetFriction()
+				ply:SetFriction(0)
+
 				local platform = ents.Create("prop_physics")
 
 				local pos = ply:GetPos()
@@ -293,7 +296,12 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 				local phys = platform:GetPhysicsObject()
 				phys:EnableMotion(false)
 
-				timer.Simple(0.3, function() SafeRemoveEntity(platform) end)
+				ply:SetNWBool("KickglitchWindowActive", true)
+				timer.Simple(0.3, function()
+					ply:SetNWBool("KickglitchWindowActive", false)
+					ply:SetFriction(oldfriction)
+					SafeRemoveEntity(platform)
+				end)
 			end
 
 			ParkourEvent("jumpslow", ply)
@@ -313,3 +321,29 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 		MeleeThink(ply, mv, cmd)
 	end
 end)
+
+hook.Add("Move", "KickglitchApply", function(ply,mv,cmd)
+	if mv:KeyPressed(IN_JUMP) and ply:GetNWBool("KickglitchWindowActive", false) and !GetConVar("Beatrun_OldKickGlitch"):GetBool() then
+		if !ply:Alive() then
+		else
+			local forward = ply:EyeAngles()
+			forward.p = 0
+			forward = forward:Forward()
+			local speedboost = forward * (4 / 0.06858125)
+			--print(speedboost)
+
+			--print("--")
+
+			--print(mv:GetVelocity())
+			local vel = mv:GetVelocity()
+			vel = vel + speedboost
+			--print("--")
+			--print(vel)
+			vel.z = 300
+			mv:SetVelocity(vel)
+		end
+		ply:SetNWBool("KickglitchWindowActive", false)
+	end
+end)
+
+hook.Remove("SetupMove", "ProperKickglitch")

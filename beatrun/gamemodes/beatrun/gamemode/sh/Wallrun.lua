@@ -78,6 +78,10 @@ local function WallrunningThink(ply, mv, cmd)
 		mv:SetButtons(mv:GetButtons() - IN_DUCK)
 	end
 
+	if math.Round(math.Rand(0, 1.1), 1) > 1 and SlippyWallrun:GetBool() and !ply:UsingRH() then
+		timer.Simple(math.Rand(0, (ply:GetWallrunTime() - CurTime())), function() ply:SetWallrunTime(0) end)
+	end
+
 	local wrtimeremains = CurTime() < ply:GetWallrunTime()
 
 	if PuristWallrun:GetBool() then
@@ -522,12 +526,15 @@ end
 local vecdir = Vector(1000, 1000, 1000)
 
 hook.Add("SetupMove", "Wallrunning", function(ply, mv, cmd)
-	if ply:GetWallrun() == nil or not ply:Alive() then
+	if ply:GetWallrun() == nil or not ply:Alive() or (CrueltyParkour:GetBool() and !ply:UsingRH() and !SlippyWallrun:GetBool()) then
 		ply:SetWallrun(0)
 	end
 
 	if ply:GetWallrun() == 0 and mv:GetVelocity().z > -450 and not ply:OnGround() and mv:KeyDown(IN_FORWARD) and not ply:Crouching() and not mv:KeyDown(IN_DUCK) and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:WaterLevel() < 1 then
-		WallrunningCheck(ply, mv, cmd)
+		if (CrueltyParkour:GetBool() and !ply:UsingRH() and !SlippyWallrun:GetBool()) then
+		else
+			WallrunningCheck(ply, mv, cmd)
+		end
 	end
 
 	if ply:GetWallrun() ~= 0 then

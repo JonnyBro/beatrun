@@ -64,7 +64,7 @@ function ENT:BRCollisionFunc(ent)
 
 	local dmginfo = DamageInfo()
 		dmginfo:SetAttacker(self)
-		dmginfo:SetDamage(1000)
+		dmginfo:SetDamage(math.huge)
 		dmginfo:SetDamageType(DMG_DISSOLVE)
 	ent:TakeDamageInfo(dmginfo)
 	ent:EmitSound("bigspark" .. math.random(1, 2) .. ".wav")

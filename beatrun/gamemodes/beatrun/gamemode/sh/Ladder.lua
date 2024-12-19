@@ -17,7 +17,10 @@ end
 local function LadderCheck(ply, mv, cmd, ladder)
 	local ladderang = ladder:GetAngles()
 
-	if math.abs(math.AngleDifference(cmd:GetViewAngles().y, ladderang.y - 180)) > 30 then return false end
+	if math.abs(math.AngleDifference(cmd:GetViewAngles().y, ladderang.y - 180)) > 30 then
+		print("kill me already")
+		return false
+	end
 
 	local zlevel = mv:GetOrigin().z
 	local newpos = ladder:GetPos() + ladderang:Forward() * 19
@@ -83,6 +86,18 @@ local function LadderThink(ply, mv, cmd, ladder)
 
 	cmd:ClearMovement()
 
+	local tr = ply.LadderTrace
+	tr.output = ply.LadderTraceOut
+	tr.start = mv:GetOrigin() + Vector(0, 0, 64)
+	tr.endpos = tr.start + cmd:GetViewAngles():Forward() * 100
+	tr.filter = ply
+
+	util.TraceLine(tr)
+
+	local eyetr = ply.LadderTraceOut
+	local eyetrentity = eyetr.Entity
+	local fraction = eyetr.Fraction
+
 	if ply:GetLadderEntering() then
 		local lerprate = 2
 
@@ -103,7 +118,7 @@ local function LadderThink(ply, mv, cmd, ladder)
 		return
 	end
 
-	if mv:KeyDown(IN_FORWARD) and ply:GetLadderDelay() < CurTime() and ply:GetLadderHeight() < ladder:GetLadderHeight() then
+	if mv:KeyDown(IN_FORWARD) and ply:GetLadderDelay() < CurTime() and ply:GetLadderHeight() < ladder:GetLadderHeight() and (fraction or 1) <= 0.35 then
 		local pos = mv:GetOrigin()
 
 		ply:SetLadderDelay(CurTime() + 0.35)
@@ -245,6 +260,43 @@ local function LadderThink(ply, mv, cmd, ladder)
 		return
 	end
 
+	if mv:KeyDown(IN_JUMP) and mv:KeyDown(IN_FORWARD) and !((fraction or 1) <= 0.35) then
+		local ladderangf = ladder:GetAngles():Forward()
+		local newpos = mv:GetOrigin()
+		local facing = {
+			pos = math.Round(ladderangf.x) == 1 and "x" or math.Round(ladderangf.x) == -1 and "x" or math.Round(ladderangf.y) == 1 and "y" or math.Round(ladderangf.y) == -1 and "y",
+			num = math.Round(ladderangf.x) == 1 and 40  or math.Round(ladderangf.x) == -1 and -40 or math.Round(ladderangf.y) == 1 and 40  or math.Round(ladderangf.y) == -1 and -40,
+		}
+
+		local forward = ply:EyeAngles()
+		forward.p = 0
+		forward = forward:Forward()
+
+		newpos[facing.pos] = mv:GetOrigin()[facing.pos] + facing.num
+
+		vel = vector_origin
+		vel = vel + forward * (6 / 0.06858125)
+		--print("--")
+		--print(vel)
+		vel.z = 300
+		mv:SetOrigin(newpos)
+		mv:SetVelocity(vel)
+		print(CurTime())
+
+		if CLIENT and IsFirstTimePredicted() then
+			BodyAnim:SetSequence("jumpfast")
+		elseif game.SinglePlayer() then
+			ply:SendLua("BodyAnim:SetSequence('jumpfast')")
+		end
+
+		ply:SetMoveType(MOVETYPE_WALK)
+		ply:SetLadder(nil)
+
+		--mv:SetVelocity(vector_origin + forward * (6 / 0.06858125))
+
+		return
+	end
+
 	mv:SetVelocity(vector_origin)
 	mv:SetButtons(0)
 end
@@ -310,4 +362,15 @@ function CreateLadder(pos, angy, mul)
 
 		return ladder
 	end
+end
+
+if CLIENT then
+	preladderwep = ""
+	hook.Add("HUDPaint", "NoGunsOnLadders", function()	
+		if !LocalPlayer():Alive() then return end
+		if LocalPlayer():GetActiveWeapon():GetClass() != "runnerhands" and IsValid(LocalPlayer():GetLadder()) then -- :troll:
+			preladderwep = LocalPlayer():GetActiveWeapon():GetClass()
+			input.SelectWeapon(LocalPlayer():GetWeapon("runnerhands"))
+		end
+	end)
 end

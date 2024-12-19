@@ -134,7 +134,7 @@ if CLIENT then
 
 			LocalPlayer():EmitSound("A_TT_Finish_Positive.wav")
 			SaveCheckpointTime()
-			-- SaveReplayData()
+			SaveReplayData()
 		else
 			timetext = "+" .. string.FormattedTime(math.abs(timestr), "%02i:%02i:%02i")
 			timecolor = color_negative
@@ -144,6 +144,9 @@ if CLIENT then
 
 		net.Start("Checkpoint_Finish")
 			net.WriteFloat(totaltime)
+			if !LocalPlayer().InReplay then
+				notification.AddLegacy("Replay saved as ".."beatrun/replays/" .. game.GetMap() .. "/"..Course_Name .. os.date("%H-%M-%S_%d-%m-%Y", os.time()) .. ".txt", 0, 3)
+			end
 		net.SendToServer()
 
 		timealpha = 1000
@@ -169,7 +172,7 @@ local finishcolor = Color(45, 45, 175, 100)
 
 function FinishCourse(ply)
 	ply:ScreenFade(SCREENFADE.IN, finishcolor, 0, 4)
-	-- ply:SetLaggedMovementValue(0.1)
+	ply:SetLaggedMovementValue(0.1)
 	ply:DrawViewModel(false)
 
 	net.Start("Checkpoint_Finish")
@@ -178,7 +181,7 @@ function FinishCourse(ply)
 	ply:SetNW2Int("CPNum", -1)
 
 	timer.Simple(4, function()
-		-- ply:SetLaggedMovementValue(1)
+		ply:SetLaggedMovementValue(1)
 		ply:DrawViewModel(true)
 	end)
 end
@@ -305,13 +308,42 @@ function CourseHUD()
 		end
 	end
 
-	if incourse and pbtimes then
+	if incourse and !ply.InReplay then
+		local text = string.FormattedTime(totaltime, "%02i:%02i:%02i")
+		local w, _ = surface.GetTextSize(text)
+		surface.SetFont("BeatrunHUD")
+		surface.SetTextColor(text_color)
+		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + vpz)
+		surface.DrawText(text)
+	end
+
+	if incourse and pbtimes and !ply.InReplay then
 		local text = string.FormattedTime(pbtotal, "%02i:%02i:%02i")
 		local w, h = surface.GetTextSize(text)
 
+		pbcolor = text_color
+		pbcolor.r = text_color.r * 0.6
+		pbcolor.g = text_color.g * 0.6
+		pbcolor.b = text_color.b * 0.6
+
 		surface.SetFont("BeatrunHUD")
-		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.075 + h + vpz)
-		surface.SetTextColor(255, 255, 255, 125)
+		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + h + vpz)
+		surface.SetTextColor(pbcolor)
+		surface.DrawText(text)
+	end
+
+	if incourse and ply.InReplay then
+		local text = string.FormattedTime(tickcount * engine.TickInterval(), "%02i:%02i:%02i") .. " / " .. string.FormattedTime(#ply.ReplayTicks * engine.TickInterval(),  "%02i:%02i:%02i")
+		local w, _ = surface.GetTextSize(text)
+		surface.SetFont("BeatrunHUD")
+		surface.SetTextColor(text_color)
+		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + vpz)
+		surface.DrawText(text)
+
+		local text = "REPLAY MODE - MAY BE INACCURATE"
+		local w, h = surface.GetTextSize(text)
+		surface.SetTextColor(text_color)
+		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + vpz + h)
 		surface.DrawText(text)
 	end
 
@@ -354,23 +386,19 @@ function LoadCheckpointTime()
 	return times or nil
 end
 
--- function SaveReplayData()
--- 	local replay = util.Compress(util.TableToJSON(LocalPlayer().ReplayTicks))
--- 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
-
--- 	if not replay then return end
-
--- 	file.CreateDir(dir)
--- 	file.Write(dir .. Course_ID .. ".txt", replay)
--- end
-
--- function LoadReplayData()
--- 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
--- 	local replay = file.Read(dir .. Course_ID .. ".txt")
--- 	replay = replay and util.JSONToTable(util.Decompress(replay))
-
--- 	return replay or nil
--- end
+function SaveReplayData()
+	local replay = util.Compress(util.TableToJSON(LocalPlayer().ReplayTicks))
+	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
+	if not replay then return end
+	file.CreateDir(dir)
+	file.Write(dir .. Course_ID .. ".txt", replay)
+end
+function LoadReplayData()
+	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
+	local replay = file.Read(dir .. Course_ID .. ".txt")
+	replay = replay and util.JSONToTable(util.Decompress(replay))
+	return replay or nil
+end
 
 function StartCourse(spawntime)
 	local faststartmult = LocalPlayer():GetInfoNum("Beatrun_FastStart", 0) > 0 and 0.5 or 1

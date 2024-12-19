@@ -775,3 +775,11 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 		end
 	end
 end)
+
+hook.Add("PlayerSwitchWeapon", "NoWeaponWhileMantling", function(ply)
+	if ply:GetMantle() == 5 then
+		-- You are still mantling at this state, don't pull an SMG
+		-- out of your back pocket
+		return true
+	end
+end)

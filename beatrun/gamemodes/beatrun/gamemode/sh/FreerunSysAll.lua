@@ -1,6 +1,8 @@
 local quakejump = CreateConVar("Beatrun_QuakeJump", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 local sidestep = CreateConVar("Beatrun_SideStep", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 local speed_limit = CreateConVar("Beatrun_SpeedLimit", 325, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+beatrunquakejumptiming = CreateConVar("Beatrun_QuakeJump_Timing", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Quakejump extra timing window in engine ticks (default 66).")
+-- This NEEDS to be accessible from runnerhands' code.
 
 local function Hardland(jt)
 	local ply = LocalPlayer()
@@ -308,6 +310,14 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			activewep:SetSideStep(true)
 
 			mv:SetVelocity(cmd:GetViewAngles():Right() * -(speed_limit:GetInt() * 1.8))
+			if beatrunquakejumptiming:GetInt() != 0 then
+				ply:SetNWBool("Beatrun_ExtraQuakeJumpTiming", true)
+				ply:SetFriction(ply:GetFriction() * 0.01)
+				timer.Simple((engine.TickInterval() * beatrunquakejumptiming:GetInt()), function()
+					ply:SetFriction(ply:GetFriction() / 0.01)
+					ply:SetNWBool("Beatrun_ExtraQuakeJumpTiming", false)
+				end)
+			end
 
 			ply:ViewPunch(Angle(-3, 0, -4.5))
 
@@ -323,6 +333,14 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			activewep:SetSideStep(true)
 
 			mv:SetVelocity(cmd:GetViewAngles():Right() * (speed_limit:GetInt() * 1.8))
+			if beatrunquakejumptiming:GetInt() != 0 then
+				ply:SetNWBool("Beatrun_ExtraQuakeJumpTiming", true)
+				ply:SetFriction(ply:GetFriction() * 0.01)
+				timer.Simple((engine.TickInterval() * beatrunquakejumptiming:GetInt()), function()
+					ply:SetFriction(ply:GetFriction() / 0.01)
+					ply:SetNWBool("Beatrun_ExtraQuakeJumpTiming", false)
+				end)
+			end
 
 			ply:ViewPunch(Angle(-3, 0, 4.5))
 
@@ -423,4 +441,15 @@ if CLIENT then
 		ArmInterrupt("doorbash")
 		LocalPlayer():CLViewPunch(Angle(1.5, -0.75, 0))
 	end)
+end
+
+if SERVER then
+	concommand.Add(
+		"Beatrun_ResetFriction",
+		function()
+			for _, ply in ipairs(player.GetAll()) do
+				ply:SetFriction(1)
+			end
+		end
+	)
 end

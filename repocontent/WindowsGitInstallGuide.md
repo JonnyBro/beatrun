@@ -1,0 +1,1 @@
+This guide is currently a work in progress. Check back later. Use [Method 1](../README.md#method-1-repository-download-and-extract-easy) for now.

@@ -25,7 +25,7 @@ local function buildmodebutton()
 	LocalPlayer():ConCommand("buildmode")
 end
 
-AEUI:Text(coursepanel, language.GetPhrase("beatrun.coursemenu.trials"):format(game.GetMap()), "AEUIVeryLarge", 20, 30)
+AEUI:Text(coursepanel, language.GetPhrase("beatrun.coursemenu.trials"):format(string.Replace(game.GetMap(), " ", "-")), "AEUIVeryLarge", 20, 30)
 
 local buildmodebutton = AEUI:AddButton(coursepanel, "#beatrun.coursemenu.buildmode", buildmodebutton, "AEUILarge", coursepanel.w - 400, coursepanel.h - 50)
 buildmodebutton.greyed = sacheck
@@ -55,7 +55,7 @@ function OpenCourseMenu()
 	AEUI:AddPanel(coursepanel)
 	AEUI:AddPanel(courselist)
 
-	local dir = "beatrun/courses/" .. game.GetMap() .. "/"
+	local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
 	local dirsearch = dir .. "*.txt"
 	local files = file.Find(dirsearch, "DATA", "datedesc")
 

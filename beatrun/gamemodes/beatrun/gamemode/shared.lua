@@ -1,4 +1,4 @@
-VERSION_GLOBAL = "1.0.14"
+VERSION_GLOBAL = "1.0.22"
 VERSION_LATEST = ""
 VERSION_CHECKED = false
 
@@ -10,6 +10,8 @@ GM.Email = "N/A"
 GM.Website = "github.com/JonnyBro/beatrun"
 
 include("player_class/player_beatrun.lua")
+
+include("preexecute/shared.lua")
 
 for _, v in ipairs(file.Find("gamemodes/beatrun/gamemode/sh/*.lua", "GAME", "nameasc")) do
 	AddCSLuaFile("sh/" .. v)

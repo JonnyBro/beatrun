@@ -233,7 +233,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ClearControls()
 		panel:SetName("#beatrun.toolsmenu.gameplay.desc")
 
-		panel:CheckBox("#beatrun.toolsmenu.gameplay.oldanims", "Beatrun_OldAnims")
+		panel:CheckBox("#beatrun.toolsmenu.gameplay.oldanims", "Beatrun_UseOldAnims")
 		panel:ControlHelp("#beatrun.toolsmenu.gameplay.oldanimsdesc")
 
 		panel:CheckBox("#beatrun.toolsmenu.gameplay.quickturnground", "Beatrun_QuickturnGround")
@@ -353,6 +353,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.randommwloadouts", "Beatrun_RandomMWLoadouts")
 		panel:ControlHelp("#beatrun.randommwloadoutsdesc")
 
+		panel:CheckBox("#beatrun.randoarc9loadouts", "Beatrun_RandomARC9Loadouts")
+		panel:ControlHelp("#beatrun.randoarc9loadoutsdesc")
+
 		local DatatheftButton = vgui.Create("DButton", panel)
 		DatatheftButton:SetText("#beatrun.toolsmenu.gamemodes.datatheft")
 		DatatheftButton:SetSize(0, 20)
@@ -416,6 +419,28 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		-- 	end
 		-- end
 		-- panel:AddItem(LoadoutMenuButton)
+	end)
+
+	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_serverfun", "Fun", "", "", function(panel)
+		local funoptions = vgui.Create("DForm")
+		local experimentals = vgui.Create("DForm")
+		panel:ClearControls()
+		panel:SetName("Fun/Experimental Settings")
+
+		panel:Help("Some settings that may not be very practical, are very hacky or are just for fun.")
+		panel:ControlHelp("Note: For checkboxes, ticked is ON and unticked/empty box is OFF.")
+
+		panel:AddItem(funoptions)
+		panel:AddItem(experimentals)
+
+		funoptions:SetName("The Fun Options™")
+
+		funoptions:CheckBox("Cruelty Parkour (?)", "Beatrun_CrueltyParkour")
+		funoptions:ControlHelp("\"Funny\" optional feature that blocks some parkour moves and changes some moves\' behavior with a different weapon out.")
+
+		experimentals:SetName("Experimental Things™")
+		experimentals:CheckBox("\"Slippy Wallruns\"", "Beatrun_Experimentals_SlippyWallrun")
+		experimentals:ControlHelp("You randomly drop from wallruns with a different weapon out. Requires Cruelty Parkour to be ON.")
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Extra", "beatrun_extra", "#beatrun.toolsmenu.extra.name", "", "", function(panel)

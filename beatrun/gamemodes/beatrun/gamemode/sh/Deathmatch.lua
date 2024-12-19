@@ -2,20 +2,6 @@ if SERVER then
 	util.AddNetworkString("Deathmatch_Start")
 	util.AddNetworkString("Deathmatch_Sync")
 
-	CreateConVar("Beatrun_RandomMWLoadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
-
-	function getRandomMGBaseWeapon()
-		local allWep = weapons.GetList()
-		local wepIndex = math.random(#allWep)
-		local wep = allWep[wepIndex]
-
-		if wep.Base == "mg_base" and not wep.AdminOnly then
-			return wep
-		else
-			return getRandomMGBaseWeapon()
-		end
-	end
-
 	function Beatrun_StartDeathmatch()
 		if GetGlobalBool("GM_DEATHMATCH") then return end
 		if Course_Name ~= "" then return end
@@ -31,26 +17,7 @@ if SERVER then
 				v:Spawn()
 			end
 
-			if GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
-				for i = 0, 1 do
-					local randomSWEP = getRandomMGBaseWeapon()
-					local w = v:Give(randomSWEP.ClassName)
-
-					timer.Simple(1, function()
-						if w:GetPrimaryAmmoType() ~= -1 then v:GiveAmmo(10000, w:GetPrimaryAmmoType(), true) end
-						if w:GetSecondaryAmmoType() ~= -1 then v:GiveAmmo(5, w:GetSecondaryAmmoType(), true) end
-					end)
-				end
-			else
-				for _, b in ipairs(BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]) do
-					local w = v:Give(b)
-
-					timer.Simple(1, function()
-						if w:GetPrimaryAmmoType() ~= -1 then v:GiveAmmo(10000, w:GetPrimaryAmmoType(), true) end
-						if w:GetSecondaryAmmoType() ~= -1 then v:GiveAmmo(5, w:GetSecondaryAmmoType(), true) end
-					end)
-				end
-			end
+			Beatrun_GiveGMWeapon(v)
 		end
 	end
 
