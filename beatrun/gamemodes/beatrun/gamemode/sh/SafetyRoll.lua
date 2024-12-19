@@ -249,7 +249,7 @@ if SERVER then
 			if speed < 800 and CurTime() < ply:GetSafetyRollKeyTime() and not ply:GetCrouchJump() and not ply:Crouching() then
 				return 0
 			else
-				return 1000
+				return math.huge
 			end
 		end
 

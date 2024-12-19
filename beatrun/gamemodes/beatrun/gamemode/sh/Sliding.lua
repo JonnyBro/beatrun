@@ -246,6 +246,7 @@ end
 
 hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 	if not ply:Alive() then return end
+	if ply:GetSafetyRollKeyTime() > CurTime() then return end
 
 	if not ply.OldDuckSpeed then
 		ply.OldDuckSpeed = ply:GetDuckSpeed()
@@ -321,12 +322,10 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 					ply:SetCrouchJump(false)
 
-					if SERVER and mv:GetVelocity().z <= -1250 then
+					if SERVER and mv:GetVelocity().z <= -1250 and not ply:InOverdrive() then
 						local dmg = DamageInfo()
-
-						dmg:SetDamageType(DMG_FALL)
-						dmg:SetDamage(1000)
-
+							dmg:SetDamageType(DMG_FALL)
+							dmg:SetDamage(1000)
 						ply:TakeDamageInfo(dmg)
 					end
 				end
@@ -520,8 +519,8 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		if not slippery and pos.z > ply:GetSlidingLastPos().z + 1 then
 			ply:SetSlidingTime(ply:GetSlidingTime() - 0.025)
 		elseif slippery or slidedelta < 1 and pos.z < ply:GetSlidingLastPos().z - 0.25 then
-			ply:SetSlidingTime(CT + slidetime)                          --[[ 450 * ply:GetOverdriveMult() ]]
-			ply:SetSlidingVel(math.min(mv:GetVelocity():Length() * 0.865, GetConVar("Beatrun_SpeedLimit"):GetInt() * 2) * ply:GetOverdriveMult())
+			ply:SetSlidingTime(CT + slidetime)                       --[[ GetConVar("Beatrun_SpeedLimit"):GetInt() ]]
+			ply:SetSlidingVel(math.min(mv:GetVelocity():Length() * 0.865, 450 * ply:GetOverdriveMult()))
 		end
 
 		ply:SetSlidingLastPos(pos)

@@ -576,7 +576,7 @@ if SERVER then
 	end
 
 	function Beatrun_ReadCourseLocal(id)
-		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
+		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
 		local save = file.Read(dir .. id .. ".txt", "DATA")
 
 		if not save then
@@ -943,7 +943,7 @@ if CLIENT then
 		local save = CourseData(name)
 		local jsonsave = util.TableToJSON(save)
 		local id = util.CRC(jsonsave)
-		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
+		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
 
 		if compress == nil then compress = true end
 
@@ -1011,7 +1011,7 @@ if CLIENT then
 
 	--[[
 	concommand.Add("Beatrun_PrintCourse", function(ply, cmd, args, argstr)
-		local dir = "beatrun/courses/" .. game.GetMap() .. "/"
+		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
 		local save = file.Read(dir .. args[1] .. ".txt", "DATA")
 
 		if not save then

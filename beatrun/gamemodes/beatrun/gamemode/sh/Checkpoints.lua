@@ -241,49 +241,55 @@ function CourseHUD()
 	local incourse = Course_Name ~= ""
 	local totaltime = CheckpointNumber ~= -1 and math.max(0, CurTime() - Course_StartTime) or Course_EndTime
 
-	local text_color = string.ToColor(LocalPlayer():GetInfo("Beatrun_HUDTextColor"))
-	
-	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() then
-		local speed = math.Round(ply:GetVelocity():Length2D() * 0.06858125)
-		
+	if incourse then
+		local text = string.FormattedTime(totaltime, "%02i:%02i:%02i")
+		local w, _ = surface.GetTextSize(text)
+		surface.SetFont("BeatrunHUD")
+		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.075 + vpz)
+		surface.DrawText(text)
+	end
+
+	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() and GetConVar("Beatrun_HUDHidden"):GetInt() ~= 2 then
+		local speed = math.Round(ply:GetVelocity():Length() * 0.06858125)
+
 		if speed < 10 then
 			speed = "0" .. speed
 		end
-		
+
 		text = language.GetPhrase("beatrun.checkpoints.speedometer"):format(speed)
-		
+
 		local w, _ = surface.GetTextSize(text)
 		w = w or 0
-		
+
 		local r, g, b, a = string.ToColor(GetConVar("Beatrun_HUDTextColor"):GetString())
-		
+
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetFont("BeatrunHUD")
 		surface.SetTextColor(r, g, b, a)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.85 + vpz)
 		surface.DrawText(text)
-		
+
 		if GetConVar("Beatrun_HUDStats"):GetBool() then
 			local ang1 = ply:GetAimVector()
 			ang1 = math.Round(ang1:Angle()[2] % 90, 0)
 			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.88 + vpz)
 			surface.DrawText(ang1)
-			
+
 			surface.SetTextPos(ScrW() * 0.87 - w * 0.5 + vpx, ScrH() * 0.88 + vpz)
 			surface.DrawText("Angle")
-			
+
 			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.90 + vpz)
 			surface.DrawText(ply:GetWallrun())
 			surface.SetTextPos(ScrW() * 0.87 - w * 0.5 + vpx, ScrH() * 0.90 + vpz)
 			surface.DrawText("Wall stat")
-			
+
 			if ply:UsingRH() then
 				surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.92 + vpz)
 				surface.DrawText(tostring(ply:GetActiveWeapon():GetQuakeJumping()))
 				surface.SetTextPos(ScrW() * 0.89 - w * 0.5 + vpx, ScrH() * 0.92 + vpz)
 				surface.DrawText("Quake")
 			end
-			
+
 			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.94 + vpz)
 			if (ply:GetWallrunTime() - CurTime()) < 0 then
 				surface.DrawText("0.00")
@@ -293,10 +299,10 @@ function CourseHUD()
 
 			surface.SetTextPos(ScrW() * 0.89 - w * 0.5 + vpx, ScrH() * 0.94 + vpz)
 			surface.DrawText("Wallrun Time Remains")
-			
+
 			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.96 + vpz)
 			surface.DrawText(tostring(CurTime() < ply:GetWallrunTime()))
-			
+
 			surface.SetTextPos(ScrW() * 0.89 - w * 0.5 + vpx, ScrH() * 0.96 + vpz)
 			surface.DrawText("Wallrunning")
 		end
@@ -310,7 +316,7 @@ function CourseHUD()
 		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + vpz)
 		surface.DrawText(text)
 	end
-	
+
 	if incourse and pbtimes and !ply.InReplay then
 		local text = string.FormattedTime(pbtotal, "%02i:%02i:%02i")
 		local w, h = surface.GetTextSize(text)
@@ -319,7 +325,7 @@ function CourseHUD()
 		pbcolor.r = text_color.r * 0.6
 		pbcolor.g = text_color.g * 0.6
 		pbcolor.b = text_color.b * 0.6
-		
+
 		surface.SetFont("BeatrunHUD")
 		surface.SetTextPos(ScrW() * 0.87 - w + vpx, ScrH() * 0.075 + h + vpz)
 		surface.SetTextColor(pbcolor)

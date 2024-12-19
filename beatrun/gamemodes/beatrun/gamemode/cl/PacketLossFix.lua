@@ -1,4 +1,3 @@
--- local checktimer = 0
 local errorc = Color(255, 25, 25)
 
 local whitelist = {
@@ -8,11 +7,7 @@ local whitelist = {
 local whitelistanims = fbanims
 
 local function BodyAnimAntiStuck()
-	if not IsValid(BodyAnim) then
-		checktimer = 0
-
-		return
-	end
+	if not IsValid(BodyAnim) then return end
 
 	local ply = LocalPlayer()
 

@@ -63,10 +63,9 @@ function ENT:BRCollisionFunc(ent)
 	if util.QuickTrace(self:GetPos(), ang:Up() * self.LaserLength, self).Entity ~= ent then return false end
 
 	local dmginfo = DamageInfo()
-	dmginfo:SetAttacker(self)
-	dmginfo:SetDamage(1000)
-	dmginfo:SetDamageType(DMG_DISSOLVE)
-
+		dmginfo:SetAttacker(self)
+		dmginfo:SetDamage(math.huge)
+		dmginfo:SetDamageType(DMG_DISSOLVE)
 	ent:TakeDamageInfo(dmginfo)
 	ent:EmitSound("bigspark" .. math.random(1, 2) .. ".wav")
 

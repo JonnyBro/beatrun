@@ -167,8 +167,8 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.toolsmenu.hud.showspeedometer", "Beatrun_ShowSpeedometer")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.showspeedometerdesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.hud.wind", "Beatrun_Wind")
-		panel:ControlHelp("#beatrun.toolsmenu.hud.winddesc")
+		panel:CheckBox("#beatrun.toolsmenu.hud.keystrokes", "Beatrun_ShowKeystrokes")
+		panel:ControlHelp("#beatrun.toolsmenu.hud.keystrokesdesc")
 
 		panel:NumSlider("#beatrun.toolsmenu.hud.hidden", "Beatrun_HUDHidden", 0, 2, 0)
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.hud.hiddendesc"))
@@ -250,6 +250,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:CheckBox("#beatrun.toolsmenu.moves.totsugekiaudio", "Beatrun_TotsugekiAudio")
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.totsugekiaudiodesc"))
+
+		panel:CheckBox("#beatrun.toolsmenu.gameplay.wind", "Beatrun_Wind")
+		panel:ControlHelp("#beatrun.toolsmenu.gameplay.winddesc")
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_misc", "#beatrun.toolsmenu.misc.name", "", "", function(panel)
@@ -346,6 +349,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:CheckBox("#beatrun.randommwloadouts", "Beatrun_RandomMWLoadouts")
 		panel:ControlHelp("#beatrun.randommwloadoutsdesc")
+
+		panel:CheckBox("#beatrun.randoarc9loadouts", "Beatrun_RandomARC9Loadouts")
+		panel:ControlHelp("#beatrun.randoarc9loadoutsdesc")
 
 		local DatatheftButton = vgui.Create("DButton", panel)
 		DatatheftButton:SetText("#beatrun.toolsmenu.gamemodes.datatheft")

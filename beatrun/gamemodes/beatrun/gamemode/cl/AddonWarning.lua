@@ -23,6 +23,9 @@ end
 local addons = 0
 
 local incompatible = {
+	["2155366756"] = true, -- VManip (Base)
+	["2364206712"] = true, -- [VManip] Vaulting
+	["2416989205"] = true, -- [VManip] Quick Slide
 	["1581533176"] = true, -- The Aperture [Reupload]
 	["2675972006"] = true, -- Custom Loadout
 	["378401390"] = true, -- Quake/Half-Life View bobbing
@@ -49,9 +52,10 @@ local incompatible = {
 	["2824714462"] = true, -- [TFA] Screen Shake
 	["3037375111"] = true, -- Quick Slide With Legs
 	["748422181"] = true, -- FOV Changer
-	["2930331275"] = true, -- Realistic Fragmentation System
+	["2919970981"] = true, -- Realistic Fragmentation System [OLD]
 	["112806637"] = true, -- Gmod Legs 3
-	["678037029"] = true -- Enhanced Camera
+	["678037029"] = true, -- Enhanced Camera
+	["2497150824"] = true -- Smooth Camera
 }
 
 local warnpanel = {

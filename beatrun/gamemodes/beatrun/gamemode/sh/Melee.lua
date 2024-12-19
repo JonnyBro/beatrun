@@ -191,13 +191,12 @@ local function MeleeThink(ply, mv, cmd)
 
 			if SERVER and IsValid(ent) and (not ent:IsPlayer() or Course_Name == "" and not GetGlobalBool("GM_INFECTION") and GetConVar("sbox_playershurtplayers"):GetBool()) then
 				local d = DamageInfo()
-				d:SetDamage(meleedata[ply:GetMelee()][6])
-				d:SetAttacker(ply)
-				d:SetInflictor(ply)
-				d:SetDamageType(DMG_CLUB)
-				d:SetDamagePosition(tr.start)
-				d:SetDamageForce(ply:EyeAngles():Forward() * 7000)
-
+					d:SetDamage(meleedata[ply:GetMelee()][6])
+					d:SetAttacker(ply)
+					d:SetInflictor(ply)
+					d:SetDamageType(DMG_CLUB)
+					d:SetDamagePosition(tr.start)
+					d:SetDamageForce(ply:EyeAngles():Forward() * 7000)
 				ent:TakeDamageInfo(d)
 
 				if SERVER and ent:GetClass() == "func_breakable_surf" then

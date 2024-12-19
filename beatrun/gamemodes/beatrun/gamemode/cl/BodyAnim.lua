@@ -42,15 +42,8 @@ hook.Add("Think", "beatrun_detect_tool", function()
 	end
 end)
 
--- local BodyAnimPos = Vector(0, 0, 0)
--- local BodyAnimAngLerp = Angle(0, 0, 0)
--- local DidDraw = false
 local AnimString = "nil"
--- local angclosenuff = false
 local savedeyeangb = Angle(0, 0, 0)
--- local bodylockview = false
--- local bodyanimdone = false
--- local holstertime = 0
 
 local animmodelstring = ""
 local showweapon = false
@@ -93,7 +86,6 @@ function RemoveBodyAnim(noang)
 	if shouldremove then return end
 
 	local ply = LocalPlayer()
-	-- local ang = ply:EyeAngles()
 	local newang = ply:EyeAngles()
 	local noang = noang or false
 
@@ -245,7 +237,6 @@ function CacheLerpBodyAnim()
 		BodyAnimMDL:SetNoDraw(true)
 
 		local pos = LocalPlayer():GetPos()
-		-- local posdelta = pos - matrixfrompos
 		local this = BodyAnim
 		this.m = this.m or Matrix()
 
