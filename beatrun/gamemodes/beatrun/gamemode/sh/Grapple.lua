@@ -2,6 +2,9 @@ if CLIENT then
 	local disable_grapple = CreateClientConVar("Beatrun_DisableGrapple", 0, true, true, language.GetPhrase("beatrun.convars.disablegrapple"), 0, 1)
 
 	local circle = Material("circlesmooth.png", "nocull smooth")
+	local brcross = Material("brcross.png", "nocull smooth")
+
+	local rotate_timer = 0
 
 	hook.Add("HUDPaint", "grappleicon", function()
 		local ply = LocalPlayer()
@@ -26,8 +29,8 @@ if CLIENT then
 			cam.End3D()
 
 			surface.SetDrawColor(255, 255, 255)
-			surface.SetMaterial(circle)
-			surface.DrawTexturedRect(w2s.x - SScaleX(4), w2s.y - SScaleY(4), SScaleX(8), SScaleY(8))
+			surface.SetMaterial(brcross)
+			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32), SScaleY(32), math.fmod(rotate_timer * 100, 360))
 
 			return
 		end
@@ -37,14 +40,16 @@ if CLIENT then
 		local trout = ply:GetEyeTrace()
 		local dist = trout.HitPos:DistToSqr(ply:GetPos())
 
-		if trout.Fraction > 0 and dist < 2750000 and dist > 90000 then
+		if not trout.HitSky and trout.Fraction > 0 and dist < 2750000 and dist > 90000 then
 			cam.Start3D()
 				local w2s = trout.HitPos:ToScreen()
 			cam.End3D()
 
+			rotate_timer = rotate_timer + FrameTime()
+
 			surface.SetDrawColor(255, 255, 255)
-			surface.SetMaterial(circle)
-			surface.DrawTexturedRect(w2s.x - SScaleX(4), w2s.y - SScaleY(4), SScaleX(8), SScaleY(8))
+			surface.SetMaterial(brcross)
+			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32), SScaleY(32), math.fmod(rotate_timer * 100, 360))
 		end
 	end)
 end
@@ -72,7 +77,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		local trout = ply:GetEyeTrace()
 		local dist = trout.HitPos:DistToSqr(mv:GetOrigin())
 
-		if trout.Fraction > 0 and dist < 2750000 and dist > 90000 and mv:KeyPressed(IN_JUMP) then
+		if not trout.HitSky and trout.Fraction > 0 and dist < 2750000 and dist > 90000 and mv:KeyPressed(IN_JUMP) then
 			local vel = mv:GetVelocity()
 			vel.z = -math.abs(vel.z)
 
@@ -156,7 +161,10 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ent:SetNWVector("gpos", ent:GetPos())
 
 			local delta = ent:GetNWVector("gpos", Vector(0,0,0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))
-			ply:SetGrapplePos(ply:GetGrapplePos() + delta)
+
+			if game.SinglePlayer() then // this is pretty much impossible to predict, so lets keep it only for sp
+				ply:SetGrapplePos(ply:GetGrapplePos() + delta)
+			end
 		end
 
 		if mv:KeyDown(IN_ATTACK) and mv:GetOrigin().z < ply:GetGrapplePos().z - 64 then
