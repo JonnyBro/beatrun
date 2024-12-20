@@ -398,7 +398,11 @@ end
 
 hook.Add("StartCommand", "ClimbingRemoveInput", ClimbingRemoveInput)
 
+local realistic = CreateConVar("Beatrun_LeRealisticClimbing", "0", FCVAR_ARCHIVE, "Makes you be able to climb and wallrun only if you have runnerhands equipped.")
+
 local function ClimbingCheck(ply, mv, cmd)
+	if realistic:GetBool() and not ply:UsingRH() then return end
+
 	local mins, maxs = ply:GetHull()
 
 	if not ply.ClimbingTrace then

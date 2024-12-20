@@ -20,6 +20,7 @@ local timecolor = color_neutral
 if CLIENT then
 	CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("#beatrun.convars.showspeedometer"), 0, 1)
 	CreateClientConVar("Beatrun_HUDStats", "0", true, false, "", 0, 1)
+	CreateClientConVar("Beatrun_SpeedometerMode", 0, true, true, language.GetPhrase("#beatrun.convars.showspeedometer"), 0, 2)
 end
 
 if SERVER then
@@ -247,13 +248,30 @@ function CourseHUD()
 	end
 
 	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() and GetConVar("Beatrun_HUDHidden"):GetInt() ~= 2 then
-		local speed = math.Round(ply:GetVelocity():Length() * 0.06858125)
+		local speed = 0 
+
+		local mode = GetConVar("Beatrun_SpeedometerMode"):GetInt()
+		if mode == 0 then // km/h
+			speed = math.Round(ply:GetVelocity():Length() * 0.06858125)
+		elseif mode == 1 then // mph
+			speed = math.Round(ply:GetVelocity():Length() * 0.11037055)
+		elseif mode == 2 then // hu/h
+			speed = math.Round(ply:GetVelocity():Length())
+		end
 
 		if speed < 10 then
 			speed = "0" .. speed
 		end
 
-		text = language.GetPhrase("beatrun.checkpoints.speedometer"):format(speed)
+		local text = ""
+
+		if mode == 0 then // km/h
+			text = language.GetPhrase("beatrun.checkpoints.speedometer"):format(speed)
+		elseif mode == 1 then // mph
+			text = language.GetPhrase("beatrun.checkpoints.speedometer_miles"):format(speed)
+		elseif mode == 2 then // hu/h
+			text = language.GetPhrase("beatrun.checkpoints.speedometer_hammerunits"):format(speed)
+		end
 
 		local w, _ = surface.GetTextSize(text)
 		w = w or 0

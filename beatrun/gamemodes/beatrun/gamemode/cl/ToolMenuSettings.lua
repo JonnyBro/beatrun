@@ -170,6 +170,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.toolsmenu.hud.keystrokes", "Beatrun_ShowKeystrokes")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.keystrokesdesc")
 
+		panel:NumSlider("#beatrun.toolsmenu.hud.speedometermode", "Beatrun_SpeedometerMode", 0, 2, 0)
+		panel:ControlHelp("#beatrun.toolsmenu.hud.speedometermodedesc")
+
 		panel:NumSlider("#beatrun.toolsmenu.hud.hidden", "Beatrun_HUDHidden", 0, 2, 0)
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.hud.hiddendesc"))
 
@@ -267,6 +270,11 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:CheckBox("#beatrun.toolsmenu.misc.healthregen", "Beatrun_HealthRegen")
 		panel:ControlHelp("#beatrun.toolsmenu.misc.healthregendesc")
+
+		panel:CheckBox("#beatrun.toolsmenu.misc.lerealisticclimbing", "Beatrun_LeRealisticClimbing")
+		panel:ControlHelp("#beatrun.toolsmenu.misc.lerealisticclimbingdesc")
+
+		
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_moves", "#beatrun.toolsmenu.moves.name", "", "", function(panel)

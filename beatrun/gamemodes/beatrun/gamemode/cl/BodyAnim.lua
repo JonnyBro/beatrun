@@ -670,19 +670,20 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 			end
 
 			if not ply:ShouldDrawLocalPlayer() and not ply:InVehicle() then
-				local ang = ply:GetAngles()
+				local ang = Vector(view.angles:Unpack())
 				local FT = RealFrameTime()
 				ang[1] = 0
 				ang[3] = 0
 
-				local MEAng = math.Truncate(ang.y, 2)
+				local MEAng = ang.y
 				local target = not lockang and MEAng or ply.OrigEyeAng.y
 
-				viewtiltlerp.y = math.ApproachAngle(viewtiltlerp.y, target, FT * (1 + math.abs(math.AngleDifference(viewtiltlerp.y, target)) * 5))
+				viewtiltlerp.y = math.ApproachAngle(viewtiltlerp.y, target, FrameTime() * (1 + math.abs(math.AngleDifference(viewtiltlerp.y, target)) * 5))
 
 				local MEAngDiff = math.AngleDifference(viewtiltlerp.y, not lockang and lastangy or ply.OrigEyeAng.y) * 0.15
 
 				ViewTiltAngle = Angle(0, 0, MEAngDiff + viewtiltlerp.z)
+
 				view.angles:Add(ViewTiltAngle)
 
 				ply:SetNoDraw(false)
