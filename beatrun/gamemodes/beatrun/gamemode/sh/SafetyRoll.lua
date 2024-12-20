@@ -31,6 +31,7 @@ local function SafetyRollThink(ply, mv, cmd)
 
 		local ang = ply:GetSafetyRollAng()
 
+		removingbuttons["SafetyRoll.lua:34"] = SysTime()
 		mv:SetSideSpeed(0)
 		mv:SetForwardSpeed(0)
 

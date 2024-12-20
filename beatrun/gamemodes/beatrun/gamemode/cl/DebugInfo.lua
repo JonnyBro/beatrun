@@ -68,6 +68,19 @@ local function DrawDebugInfo()
 			surface.DrawText(text)
 		end
 	end
+
+	local counter = 0
+
+	surface.SetTextColor(255, 255, 255, 255)
+	surface.SetTextPos(100, 100)
+	surface.DrawText("Removing Control:")
+
+	for k, v in pairs(removingbuttons) do
+		if SysTime() - v > 30 then continue end
+		counter = counter + 1
+		surface.SetTextPos(100, 100 + counter * 16)
+		surface.DrawText(k .. ": " .. math.Round(v, 2))
+	end
 end
 
 local function RenderTraces()

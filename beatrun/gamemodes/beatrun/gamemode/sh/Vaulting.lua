@@ -577,6 +577,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 		mv:SetSideSpeed(0)
 		mv:SetUpSpeed(0)
 		mv:SetForwardSpeed(0)
+		removingbuttons["Vaulting.lua:580"] = SysTime()
 
 		cmd:ClearMovement()
 
@@ -771,6 +772,7 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 				end
 			end
 		else
+			removingbuttons["Vaulting.lua:774"] = SysTime()
 			mv:SetButtons(0)
 		end
 	end
