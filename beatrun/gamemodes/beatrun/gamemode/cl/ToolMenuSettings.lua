@@ -170,6 +170,10 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.toolsmenu.hud.keystrokes", "Beatrun_ShowKeystrokes")
 		panel:ControlHelp("#beatrun.toolsmenu.hud.keystrokesdesc")
 
+		panel:NumSlider("#beatrun.toolsmenu.hud.keystrokes_x_offset", "Beatrun_KeystrokesXOffset", 0, ScrW(), 0)
+		panel:NumSlider("#beatrun.toolsmenu.hud.keystrokes_y_offset", "Beatrun_KeystrokesYOffset", 0, ScrH(), 0)
+		panel:NumSlider("#beatrun.toolsmenu.hud.keystrokes_corner", "Beatrun_KeystrokesCorner", 0, 3, 0)
+
 		panel:NumSlider("#beatrun.toolsmenu.hud.speedometermode", "Beatrun_SpeedometerMode", 0, 2, 0)
 		panel:ControlHelp("#beatrun.toolsmenu.hud.speedometermodedesc")
 

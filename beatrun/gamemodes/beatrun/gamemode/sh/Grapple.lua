@@ -5,6 +5,7 @@ if CLIENT then
 	local brcross = Material("brcross.png", "nocull smooth")
 
 	local rotate_timer = 0
+	local scale = 1
 
 	hook.Add("HUDPaint", "grappleicon", function()
 		local ply = LocalPlayer()
@@ -30,7 +31,7 @@ if CLIENT then
 
 			surface.SetDrawColor(255, 255, 255)
 			surface.SetMaterial(brcross)
-			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32), SScaleY(32), math.fmod(rotate_timer * 100, 360))
+			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32 * scale), SScaleY(32 * scale), math.fmod(rotate_timer * 100, 360))
 
 			return
 		end
@@ -40,16 +41,18 @@ if CLIENT then
 		local trout = ply:GetEyeTrace()
 		local dist = trout.HitPos:DistToSqr(ply:GetPos())
 
+
 		if not trout.HitSky and trout.Fraction > 0 and dist < 2750000 and dist > 90000 then
 			cam.Start3D()
 				local w2s = trout.HitPos:ToScreen()
 			cam.End3D()
 
+			scale = math.Remap(dist, 90000, 2750000, 1.3, 0.7)
 			rotate_timer = rotate_timer + FrameTime()
 
 			surface.SetDrawColor(255, 255, 255)
 			surface.SetMaterial(brcross)
-			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32), SScaleY(32), math.fmod(rotate_timer * 100, 360))
+			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32 * scale), SScaleY(32 * scale), math.fmod(rotate_timer * 100, 360))
 		end
 	end)
 end
