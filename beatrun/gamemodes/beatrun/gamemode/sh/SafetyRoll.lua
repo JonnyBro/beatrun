@@ -54,6 +54,7 @@ local function SafetyRollThink(ply, mv, cmd)
 
 			ply:SetMEMoveLimit(450)
 		else
+			removingbuttons["SafetyRoll.lua:57"] = SysTime()
 			mv:SetVelocity(vector_origin)
 		end
 	end
