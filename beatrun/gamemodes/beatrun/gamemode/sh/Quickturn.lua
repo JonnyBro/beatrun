@@ -146,7 +146,6 @@ local function Quickturn(ply, mv, cmd)
 	end
 
 	if ply:GetJumpTurn() then
-		removingbuttons["Quickturn.lua:149"] = SysTime()
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
 		mv:SetUpSpeed(0)
@@ -180,12 +179,10 @@ local function Quickturn(ply, mv, cmd)
 	end
 
 	if CurTime() < ply:GetJumpTurnRecovery() then
-		removingbuttons["Quickturn.lua:183"] = SysTime()
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
 		mv:SetUpSpeed(0)
 		mv:SetButtons(0)
-		removingbuttons["Quickturn.lua:186"] = SysTime()
 
 		cmd:ClearMovement()
 

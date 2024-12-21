@@ -211,7 +211,6 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 	ply:SetZiplineSpeed(math.Approach(speed, 750, FrameTime() * 250))
 
 	mv:SetVelocity(dir * speed)
-	removingbuttons["Zipline.lua:214"] = SysTime()
 	mv:SetButtons(0)
 	mv:SetForwardSpeed(0)
 	mv:SetSideSpeed(0)

@@ -91,7 +91,6 @@ local function Dive(ply, mv, cmd)
 			ply.DiveSliding = true
 			ply:SetDive(false)
 		elseif ply:OnGround() and mv:KeyDown(IN_BULLRUSH) then
-			removingbuttons["Dive.lua:94"] = SysTime()
 			mv:SetButtons(0)
 		end
 	end

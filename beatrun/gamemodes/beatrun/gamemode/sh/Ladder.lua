@@ -78,8 +78,6 @@ local function LadderCheck(ply, mv, cmd, ladder)
 end
 
 local function LadderThink(ply, mv, cmd, ladder)
-	removingbuttons["Ladder.lua:81"] = SysTime()
-
 	mv:SetForwardSpeed(0)
 	mv:SetSideSpeed(0)
 
@@ -247,7 +245,6 @@ local function LadderThink(ply, mv, cmd, ladder)
 		return
 	end
 
-	removingbuttons["Ladder.lua:248"] = SysTime()
 	mv:SetVelocity(vector_origin)
 	mv:SetButtons(0)
 end

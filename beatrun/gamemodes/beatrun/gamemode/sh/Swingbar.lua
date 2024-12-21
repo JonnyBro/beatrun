@@ -78,7 +78,6 @@ local function SwingbarThink(ply, mv, cmd)
 		return
 	end
 
-	removingbuttons["Swingbar.lua:81"] = SysTime()
 	mv:SetForwardSpeed(0)
 	mv:SetSideSpeed(0)
 

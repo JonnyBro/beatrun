@@ -366,7 +366,12 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 	end
 
-	if ply:GetSlidingDelay() < CT and ply:Alive() and (ducking and sprinting and speed > runspeed * 0.5 or slippery and ply:GetSafetyRollTime() <= CurTime() + 0.25 or ply:GetDive() and ply:GetSafetyRollKeyTime() <= CurTime()) and onground and not sliding then
+	local isRolling = CurTime() < ply:GetSafetyRollKeyTime()
+	local turnedInAir = ply:GetJumpTurn()
+	//if ply:GetSlidingDelay() < CT and ply:Alive() and (ducking and sprinting and speed > runspeed * 0.5 or slippery and ply:GetSafetyRollTime() <= CurTime() + 0.25 or ply:GetDive() and ply:GetSafetyRollKeyTime() <= CurTime()) and onground and not sliding then
+	if not ply:GetSliding() and not isRolling and not turnedInAir and ply:Alive() and 
+	   (ply:GetSlidingDelay() < CT) and 
+	   ((ducking and sprinting and speed > runspeed * 0.5) or slippery or ply:GetDive()) then
 		vel = math.min(speed, 541.44) * ply:GetOverdriveMult()
 
 		ParkourEvent(slippery and "slide45" or "slide", ply)

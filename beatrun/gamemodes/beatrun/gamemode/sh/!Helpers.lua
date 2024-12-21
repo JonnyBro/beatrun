@@ -1,17 +1,3 @@
-removingbuttons = {}
-
-if SERVER then
-	hook.Add("Think", "removingbuttonsprint", function() 
-		if engine.TickCount() % 10 == 0 then
-			for i, ply in ipairs(player.GetAll()) do
-				for path, time in pairs(removingbuttons) do
-					ply:SendLua("removingbuttons[" .. "\"" .. path .. "\"" .. "] = " .. " \"" .. time .. " \"")
-				end
-			end
-		end
-	end)
-end
-
 local vmatrixmeta = FindMetaTable("VMatrix")
 local playermeta = FindMetaTable("Player")
 

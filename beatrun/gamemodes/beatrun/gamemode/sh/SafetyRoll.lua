@@ -20,18 +20,11 @@ local function SafetyRollThink(ply, mv, cmd)
 		lastGroundSpeed = mv:GetVelocity():Length()
 	end
 
-	local isRolling = CurTime() < ply:GetSafetyRollKeyTime()
-
-	if ply:OnGround() and not isRolling then
-		lastGroundSpeed = mv:GetVelocity():Length()
-	end
-
 	if CurTime() < ply:GetSafetyRollTime() then
 		ply.FootstepLand = false
 
 		local ang = ply:GetSafetyRollAng()
 
-		removingbuttons["SafetyRoll.lua:34"] = SysTime()
 		mv:SetSideSpeed(0)
 		mv:SetForwardSpeed(0)
 
@@ -54,7 +47,6 @@ local function SafetyRollThink(ply, mv, cmd)
 
 			ply:SetMEMoveLimit(450)
 		else
-			removingbuttons["SafetyRoll.lua:57"] = SysTime()
 			mv:SetVelocity(vector_origin)
 		end
 	end

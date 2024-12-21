@@ -110,7 +110,6 @@ local function ClimbingThink(ply, mv, cmd)
 			ply:SetClimbingDelay(CurTime() + 1.35)
 		end
 
-		removingbuttons["Climb.lua:113"] = SysTime()
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
 		mv:SetUpSpeed(0)
@@ -121,8 +120,6 @@ local function ClimbingThink(ply, mv, cmd)
 	end
 
 	if (ply:GetClimbing() == 2 or ply:GetClimbing() == 6) and ply:GetClimbingTime() >= 1 then
-		removingbuttons["Climb.lua:123"] = SysTime()
-
 		mv:SetButtons(0)
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
@@ -155,7 +152,6 @@ local function ClimbingThink(ply, mv, cmd)
 
 			ply:SetMoveType(MOVETYPE_WALK)
 
-			removingbuttons["Climb.lua:157"] = SysTime()
 			mv:SetButtons(0)
 
 			ply:SetClimbing(0)
@@ -181,7 +177,6 @@ local function ClimbingThink(ply, mv, cmd)
 		if mv:KeyDown(IN_JUMP) and ang > 42 then
 			mv:SetOrigin(ply:GetClimbingStart() - ply:GetClimbingAngle():Forward() * 0.6)
 			ply:SetMoveType(MOVETYPE_WALK)
-			removingbuttons["Climb.lua:183"] = SysTime()
 			mv:SetButtons(0)
 			ply:SetClimbing(0)
 			ply:SetSafetyRollKeyTime(CurTime() + 0.1)
@@ -391,7 +386,6 @@ local function ClimbingThink(ply, mv, cmd)
 		ply:SetClimbingTime(lerp + FrameTime() * lerprate)
 	end
 
-	removingbuttons["Climb.lua:394"] = SysTime()
 	mv:SetForwardSpeed(0)
 	mv:SetSideSpeed(0)
 	mv:SetUpSpeed(0)
@@ -773,7 +767,6 @@ local function ClimbingCheck(ply, mv, cmd)
 		ply:ConCommand("-jump")
 	end
 
-	removingbuttons["Climb.lua:774"] = SysTime()
 	mv:SetButtons(0)
 	mv:SetForwardSpeed(0)
 	mv:SetSideSpeed(0)

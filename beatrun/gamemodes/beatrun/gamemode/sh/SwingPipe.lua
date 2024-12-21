@@ -80,7 +80,6 @@ local function SwingpipeThink(ply, mv, cmd)
 		return
 	end
 
-	removingbuttons["Swingpipe.lua:83"] = SysTime()
 	mv:SetForwardSpeed(0)
 	mv:SetSideSpeed(0)
 

@@ -19,7 +19,7 @@ local function FallCheck()
 
 	local speed = ply:GetVelocity().z
 
-	if not ply.FallStatic and speed <= -800 and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:GetDive() == false then
+	if not ply.FallStatic and speed <= -800 and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:GetDive() == false and ply:Alive() then
 		ply:EmitSound("FallStatic")
 		ply.FallStatic = true
 

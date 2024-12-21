@@ -186,7 +186,6 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 		local vel = ang:Forward() * 30
 		vel.z = 25
 
-		removingbuttons["WallrunME.lua:189"] = SysTime()
 		mv:SetVelocity(vel)
 		mv:SetSideSpeed(0)
 		mv:SetForwardSpeed(0)
@@ -238,7 +237,6 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 		vecvel:Add(ply:GetWallrunDir():Angle():Forward() * -50)
 		vecvel:Mul(ply:GetOverdriveMult())
 
-		removingbuttons["WallrunME.lua:241"] = SysTime()
 		mv:SetVelocity(vecvel)
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
@@ -280,7 +278,6 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 	if wr >= 2 and wrtimeremains then
 		local dir = wr == 2 and 1 or -1
 
-		removingbuttons["WallrunME.lua:283"] = SysTime()
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
 
