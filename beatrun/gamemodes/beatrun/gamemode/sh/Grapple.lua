@@ -205,8 +205,8 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			tr.endpos = mv:GetOrigin()
 
 			local mins, maxs = ply:GetHull()
-			mins:Mul(1.01)
-			maxs:Mul(1.01)
+			mins:Mul(1.05)
+			maxs:Mul(1.05)
 
 			tr.mins = mins
 			tr.maxs = maxs
@@ -219,9 +219,10 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			vel:Normalize()
 
 			if not trout.Hit then
-				mv:SetOrigin(mv:GetOrigin() - vel * (ply:GetGrapplePos():Distance(pos) - ply:GetGrappleLength() - 10))
+				mv:SetOrigin(mv:GetOrigin() - vel * (ply:GetGrapplePos():Distance(pos) - ply:GetGrappleLength()))
 			end
 
+			
 			mv:SetVelocity(mv:GetVelocity() - vel * (ply:GetGrapplePos():Distance(pos) - ply:GetGrappleLength()))
 		end
 

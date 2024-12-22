@@ -246,7 +246,7 @@ end
 
 hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 	if not ply:Alive() then return end
-	if ply:GetSafetyRollKeyTime() > CurTime() then return end
+	if ply:GetSafetyRollTime() > CurTime() then return end
 
 	if not ply.OldDuckSpeed then
 		ply.OldDuckSpeed = ply:GetDuckSpeed()
@@ -366,11 +366,8 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 	end
 
-	local isRolling = CurTime() < ply:GetSafetyRollKeyTime()
-	local turnedInAir = ply:GetJumpTurn()
-	//if ply:GetSlidingDelay() < CT and ply:Alive() and (ducking and sprinting and speed > runspeed * 0.5 or slippery and ply:GetSafetyRollTime() <= CurTime() + 0.25 or ply:GetDive() and ply:GetSafetyRollKeyTime() <= CurTime()) and onground and not sliding then
-	if not ply:GetSliding() and not isRolling and not turnedInAir and ply:Alive() and 
-	   (ply:GetSlidingDelay() < CT) and 
+	if not ply:GetSliding() and not ply:GetJumpTurn() and ply:Alive() and 
+	   (ply:GetSlidingDelay() < CT) and ducking and
 	   ((ducking and sprinting and speed > runspeed * 0.5) or slippery or ply:GetDive()) then
 		vel = math.min(speed, 541.44) * ply:GetOverdriveMult()
 
