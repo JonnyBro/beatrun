@@ -366,7 +366,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 	end
 
-	if not ply:GetSliding() and not ply:GetJumpTurn() and ply:Alive() and 
+	if onground and not ply:GetSliding() and not ply:GetJumpTurn() and ply:Alive() and 
 	   (ply:GetSlidingDelay() < CT) and ducking and
 	   ((ducking and sprinting and speed > runspeed * 0.5) or slippery or ply:GetDive()) then
 		vel = math.min(speed, 541.44) * ply:GetOverdriveMult()
