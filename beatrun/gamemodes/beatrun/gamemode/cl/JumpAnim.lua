@@ -1536,6 +1536,7 @@ local function JumpThink()
 			local vel_l = vel:Length()
 			local moving = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_MOVELEFT) or ply:KeyDown(IN_MOVERIGHT)
 			local back = ply:KeyDown(IN_BACK)
+			vel.z = 0
 
 			if runanims[BodyAnimString] then
 				if lastBAString == "stand" and vel_l > 0 then
@@ -1564,7 +1565,7 @@ local function JumpThink()
 					else
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchbwd"))
 					end
-				elseif vel_l > 0 and moving then
+				elseif vel_l > 0 and moving and ply:GetWallrun() == 0 and ply:GetMantle() == 0 then
 					ang = vel:Angle()
 
 					if moveback then
@@ -1792,9 +1793,9 @@ local function JumpThink()
 			if not stillanims[BodyAnimString] then
 				local speed = vel_l > 5 and math.min(vel_l / 200, 1) or 1
 				local newang = LerpAngle(math.min(lerpspeed * FrameTime() * speed, 1), BodyAnim:GetAngles(), ang)
-				local ang = ply:EyeAngles()
-				ang[1] = 0
-				ang[3] = 0
+				local _ang = ply:EyeAngles()
+				_ang[1] = 0
+				_ang[3] = 0
 
 				if vel_l > 0 or BodyAnimString == "walktostandleft" or ply:Crouching() or IsValid(ply:GetBalanceEntity()) then
 					if newang:Forward():Dot(ang:Forward()) > -0.25 then
@@ -1803,7 +1804,7 @@ local function JumpThink()
 						BodyAnim:SetAngles(newang)
 						oldnewang:Set(BodyAnim:GetAngles())
 					else
-						oldnewang:Set(LerpAngle(FrameTime() * 8, oldnewang, ang))
+						oldnewang:Set(LerpAngle(FrameTime() * 8, oldnewang, _ang))
 
 						ply.OrigEyeAng = Angle(oldnewang)
 
