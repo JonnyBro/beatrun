@@ -132,14 +132,14 @@ function Beatrun_GiveGMWeapon(ply)
 		end
 	elseif GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() and not GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
 		for i = 0, 1 do
-			-- We don't need ammo because ARC9 got the infinite ammo option!
+			-- We don't need ammo because ARC9 got the infinite ammo option
 
 			local swep = Beatrun_getRandomARC9SWEP()
 			ply:Give(swep.ClassName)
 		end
 	elseif not GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() and not GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
 		for _, b in ipairs(BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]) do
-			local w = v:Give(b)
+			local w = ply:Give(b)
 
 			timer.Simple(1, function()
 				Beatrun_GiveAmmo(w, ply)
