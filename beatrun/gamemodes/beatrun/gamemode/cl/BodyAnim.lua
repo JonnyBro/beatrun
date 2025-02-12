@@ -493,7 +493,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		return
 	end
 
-	if has_tool_equipped then
+	if has_tool_equipped and IsValid(BodyAnim) then
 		BodyAnim:SetNoDraw(true)
 		BodyAnim:SetRenderOrigin(pos * 1000)
 
