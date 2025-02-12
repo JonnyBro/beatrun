@@ -621,7 +621,8 @@ local function ClimbingCheck(ply, mv, cmd)
 		mv:SetOrigin(startpos)
 	end
 
-	tr.start = mv:GetOrigin() + wallang:Forward() * 20 + vector_up * tr.maxs.z + vector_up
+	local __mins, __maxs = ply:GetHull()
+	tr.start = mv:GetOrigin() + wallang:Forward() * 20 + vector_up * __maxs.z + vector_up * 5
 	tr.endpos = tr.start
 
 	util.TraceHull(tr)
