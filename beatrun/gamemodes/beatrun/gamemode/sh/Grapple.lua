@@ -65,6 +65,8 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if not ply:Alive() or Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 	if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 
+	if FrameTime() <= 0 then return end
+
 	local usingrh = ply:UsingRH()
 
 	if not ply.Grapple_tr then
