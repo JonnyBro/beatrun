@@ -1,10 +1,16 @@
 local OldAnims = CreateClientConVar("Beatrun_OldAnims", "0", true, false, "")
-CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
+local AutoHandSw = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
 
-local requires_arms = { -- animations that use arms for auto hand switching
+local requires_arms = { -- animations that uses arms for auto hand switching
 	hang = true,
 	hanghardstartvertical = true,
 	hangheaveup = true,
+	hangfoldedstart = true,
+	hanghardstart2 = true,
+	hangfoldedendhang = true,
+	hangfoldedheaveup= true,
+	hangstrafeleft = true,
+	hangstraferight = true
 }
 
 local animtable = {
@@ -1518,7 +1524,7 @@ local weapon_before_hands
 local function JumpThink()
 	-- auto hand switching code
 	local ply = LocalPlayer()
-	if GetConVar("Beatrun_AutoHandSwitching"):GetInt() == 1 and ply:Alive() then
+	if AutoHandSw:GetInt() == 1 and ply:Alive() then
 		if (ply:GetWallrun() > 0 or ply:GetMantle() > 0 or requires_arms[BodyAnimString]) and not using_hands then
 			weapon_before_hands = (ply:GetActiveWeapon())
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
@@ -1534,7 +1540,7 @@ local function JumpThink()
 			end
 		end
 		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and ply:UsingRH() then
-			if weapon_before_hands ~= nil then -- safe guard
+			if IsValid(weapon_before_hands) then 
 				input.SelectWeapon(weapon_before_hands)
 			end
 			
