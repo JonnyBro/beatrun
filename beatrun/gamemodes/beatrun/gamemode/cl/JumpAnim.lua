@@ -1,7 +1,7 @@
 local OldAnims = CreateClientConVar("Beatrun_OldAnims", "0", true, false, "")
 local AutoHandSw = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
 
-local requires_arms = { -- animations that uses arms for auto hand switching
+local requires_arms = { -- animations that use arms for auto hand switching
 	hang = true,
 	hanghardstartvertical = true,
 	hangheaveup = true,
@@ -10,7 +10,26 @@ local requires_arms = { -- animations that uses arms for auto hand switching
 	hangfoldedendhang = true,
 	hangfoldedheaveup= true,
 	hangstrafeleft = true,
-	hangstraferight = true
+	hangstraferight = true,
+	hanghardstart = true,
+	ladder = true,
+	ladderclimbdownfast = true,
+	ladderclimbhangstart = true,
+	ladderclimbleft = true,
+	ladderclimbright = true,
+	ladderclimbuplefthand = true,
+	ladderclimbuplefthandstill = true,
+	ladderclimbuprighthand = true,
+	ladderclimbuprighthandstill = true,
+	ladderenterbottom = true,
+	ladderenter = true,
+	ladderenterhang = true,
+	ladderexitarm1 = true,
+	ladderexitarm2 = true,
+	ladderexittoplefthand = true,
+	ladderexittoprighthand = true,
+	swingstraight = true,
+	swingjumpoff = true
 }
 
 local animtable = {
@@ -1525,25 +1544,29 @@ local function JumpThink()
 	-- auto hand switching code
 	local ply = LocalPlayer()
 	if AutoHandSw:GetInt() == 1 and ply:Alive() then
-		if (ply:GetWallrun() > 0 or ply:GetMantle() > 0 or requires_arms[BodyAnimString]) and not using_hands then
+		if (ply:GetWallrun() > 0 or ply:GetMantle() > 0 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands then
 			weapon_before_hands = (ply:GetActiveWeapon())
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
 			using_hands = true
 			if ply:GetWallrun() == 1 then -- 1 = verticaL
 				BodyAnim:SetSequence("wallrunverticalstart")
 			end
-			
+
 			if ply:GetMantle() == 2 then
 				BodyAnim:SetSequence("vaultover")
 			elseif ply:GetMantle() == 3 then
 				BodyAnim:SetSequence("vaultkong")
 			end
+
+			if IsValid(ply:GetZipline()) then
+				BodyAnim:SetSequence("zipline")
+			end
 		end
-		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and ply:UsingRH() then
+		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and ply:UsingRH() and not IsValid(ply:GetZipline()) then
 			if IsValid(weapon_before_hands) then 
 				input.SelectWeapon(weapon_before_hands)
 			end
-			
+
 			using_hands = false
 		end
 	end
