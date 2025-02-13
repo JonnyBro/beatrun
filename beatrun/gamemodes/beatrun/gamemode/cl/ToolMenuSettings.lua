@@ -247,7 +247,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ControlHelp("#beatrun.toolsmenu.gameplay.quickturnhandsonlydesc")
 
 		panel:CheckBox("#beatrun.toolsmenu.gameplay.autohandswitch", "Beatrun_AutoHandSwitching")
-		panel:ControlHelp("#beatrun.toolsmenu.gameplay.autohandswitch")
+		panel:ControlHelp("#beatrun.toolsmenu.gameplay.autohandswitchdesc")
 
 		panel:CheckBox("#beatrun.toolsmenu.gameplay.puristmode", "Beatrun_PuristMode")
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.gameplay.puristmodedesc"))
