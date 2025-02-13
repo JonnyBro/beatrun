@@ -1,5 +1,44 @@
 local OldAnims = CreateClientConVar("Beatrun_OldAnims", "0", true, false, "")
 
+---------------------------------------------------------------------------------------
+CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
+
+local requires_arms = { -- animations that uses arms
+	hang = true,
+	hanghardstartvertical = true,
+	hangheaveup = true,
+}
+
+local using_hands = false
+
+hook.Add( "Think", "switch_hands_auto", function()
+	if GetConVar("Beatrun_AutoHandSwitching"):GetInt() == 0 then return end
+	local ply = LocalPlayer()
+	if !ply:Alive() then return end -- prevents errors
+		if ply:GetWallrun() > 0 or ply:GetMantle()>0 or requires_arms[BodyAnimString] then
+			if using_hands == false then
+				weapon_before_hands = (ply:GetActiveWeapon())
+				input.SelectWeapon(ply:GetWeapon("runnerhands"))
+				using_hands = true
+				if ply:GetWallrun() == 1 then -- 1 = verticaL
+					BodyAnim:SetSequence("wallrunverticalstart")
+				end
+				if ply:GetMantle() == 2 then
+					BodyAnim:SetSequence("vaultover")
+				elseif ply:GetMantle() == 3 then
+					BodyAnim:SetSequence("vaultkong")
+				end
+			end
+		end
+		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and ply:UsingRH() then
+			if weapon_before_hands ~= nil then -- safe guard
+				input.SelectWeapon(weapon_before_hands)
+			end
+			using_hands = false
+		end
+end)
+---------------------------------------------------------------------------------------
+
 local animtable = {
 	lockang = false,
 	allowmove = true,
