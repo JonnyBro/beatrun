@@ -1544,11 +1544,13 @@ local function JumpThink()
 	-- auto hand switching code
 	local ply = LocalPlayer()
 	if AutoHandSw:GetInt() == 1 and ply:Alive() then
-		if (ply:GetWallrun() > 0 or ply:GetMantle() > 0 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands then
+		if (ply:GetWallrun() == 1 or ply:GetMantle() > 0 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands then
 			weapon_before_hands = (ply:GetActiveWeapon())
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
 			using_hands = true
 			if ply:GetWallrun() == 1 then -- 1 = verticaL
+				BodyLimitX = 25 -- fixes a bug where if u look behind u will vault over air
+				BodyLimitY = 70
 				BodyAnim:SetSequence("wallrunverticalstart")
 			end
 
