@@ -280,8 +280,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:CheckBox("#beatrun.toolsmenu.misc.lerealisticclimbing", "Beatrun_LeRealisticClimbing")
 		panel:ControlHelp("#beatrun.toolsmenu.misc.lerealisticclimbingdesc")
-
-		
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_moves", "#beatrun.toolsmenu.moves.name", "", "", function(panel)

@@ -50,7 +50,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 	local stepmod2 = 1
 	local stepmod3 = 1
 
-	if ply:notUsingRH() then
+	if not ply:UsingRH() then
 		stepmod2 = 0.25
 
 		if not ply:IsSprinting() then
@@ -256,7 +256,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	local weaponspeed = 150
 	local activewep = ply:GetActiveWeapon()
 
-	if ply:notUsingRH() then
+	if not ply:UsingRH() then
 		weaponspeed = speed_limit:GetInt() + math.floor(325 - speed_limit:GetInt())
 	end
 

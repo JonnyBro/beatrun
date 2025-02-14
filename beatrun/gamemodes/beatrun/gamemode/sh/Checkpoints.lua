@@ -20,7 +20,7 @@ local timecolor = color_neutral
 if CLIENT then
 	CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("#beatrun.convars.showspeedometer"), 0, 1)
 	CreateClientConVar("Beatrun_HUDStats", "0", true, false, "", 0, 1)
-	CreateClientConVar("Beatrun_SpeedometerMode", 0, true, true, language.GetPhrase("#beatrun.convars.showspeedometer"), 0, 2)
+	CreateClientConVar("Beatrun_SpeedometerMode", 0, true, true, language.GetPhrase("#beatrun.convars.speedometermode"), 0, 2)
 end
 
 if SERVER then
@@ -135,7 +135,6 @@ if CLIENT then
 
 			LocalPlayer():EmitSound("A_TT_Finish_Positive.wav")
 			SaveCheckpointTime()
-			-- SaveReplayData()
 		else
 			timetext = "+" .. string.FormattedTime(math.abs(timestr), "%02i:%02i:%02i")
 			timecolor = color_negative
@@ -170,7 +169,6 @@ local finishcolor = Color(45, 45, 175, 100)
 
 function FinishCourse(ply)
 	ply:ScreenFade(SCREENFADE.IN, finishcolor, 0, 4)
-	-- ply:SetLaggedMovementValue(0.1)
 	ply:DrawViewModel(false)
 
 	net.Start("Checkpoint_Finish")
@@ -179,7 +177,6 @@ function FinishCourse(ply)
 	ply:SetNW2Int("CPNum", -1)
 
 	timer.Simple(4, function()
-		-- ply:SetLaggedMovementValue(1)
 		ply:DrawViewModel(true)
 	end)
 end
@@ -248,14 +245,14 @@ function CourseHUD()
 	end
 
 	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() and GetConVar("Beatrun_HUDHidden"):GetInt() ~= 2 then
-		local speed = 0 
+		local speed = 0
 
 		local mode = GetConVar("Beatrun_SpeedometerMode"):GetInt()
-		if mode == 0 then // km/h
+		if mode == 0 then -- km/h
 			speed = math.Round(ply:GetVelocity():Length() * 0.06858125)
-		elseif mode == 1 then // mph
+		elseif mode == 1 then -- mph
 			speed = math.Round(ply:GetVelocity():Length() * 0.11037055)
-		elseif mode == 2 then // hu/h
+		elseif mode == 2 then -- hu/h
 			speed = math.Round(ply:GetVelocity():Length())
 		end
 
@@ -265,11 +262,11 @@ function CourseHUD()
 
 		local text = ""
 
-		if mode == 0 then // km/h
+		if mode == 0 then -- km/h
 			text = language.GetPhrase("beatrun.checkpoints.speedometer"):format(speed)
-		elseif mode == 1 then // mph
+		elseif mode == 1 then -- mph
 			text = language.GetPhrase("beatrun.checkpoints.speedometer_miles"):format(speed)
-		elseif mode == 2 then // hu/h
+		elseif mode == 2 then -- hu/h
 			text = language.GetPhrase("beatrun.checkpoints.speedometer_hammerunits"):format(speed)
 		end
 
@@ -372,24 +369,6 @@ function LoadCheckpointTime()
 	return times or nil
 end
 
--- function SaveReplayData()
--- 	local replay = util.Compress(util.TableToJSON(LocalPlayer().ReplayTicks))
--- 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
-
--- 	if not replay then return end
-
--- 	file.CreateDir(dir)
--- 	file.Write(dir .. Course_ID .. ".txt", replay)
--- end
-
--- function LoadReplayData()
--- 	local dir = "beatrun/replays/" .. game.GetMap() .. "/"
--- 	local replay = file.Read(dir .. Course_ID .. ".txt")
--- 	replay = replay and util.JSONToTable(util.Decompress(replay))
-
--- 	return replay or nil
--- end
-
 function StartCourse(spawntime)
 	local faststartmult = LocalPlayer():GetInfoNum("Beatrun_FastStart", 0) > 0 and 0.5 or 1
 
@@ -399,7 +378,7 @@ function StartCourse(spawntime)
 	pbtotal = 0
 
 	if pbtimes then
-		for k, v in pairs(pbtimes) do
+		for _, v in pairs(pbtimes) do
 			pbtotal = pbtotal + v
 		end
 	end

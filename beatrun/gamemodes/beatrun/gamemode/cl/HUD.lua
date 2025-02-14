@@ -131,14 +131,14 @@ local function BeatrunHUD()
 
 	surface.SetFont("DebugFixedSmall")
 
-	local version_text = "v" .. VERSION_GLOBAL
+	local version_text = "v" .. versionGlobal
 	local tw, _ = surface.GetTextSize(version_text)
 	surface.SetTextColor(255, 255, 255, 20)
 	surface.SetTextPos(scrw - tw, 0)
 	surface.DrawText(version_text)
 	surface.SetFont("BeatrunHUD")
 
-	if VERSION_GLOBAL ~= VERSION_LATEST then
+	if versionGlobal ~= versionLatest then
 		local update_text = "Update available!"
 		local notlatest_w, _ = surface.GetTextSize(update_text)
 		surface.SetTextColor(255, 255, 255, 30)
@@ -563,7 +563,7 @@ local function BeatrunReticle()
 
 	local wep = LocalPlayer():GetActiveWeapon()
 
-	if not IsValid(wep) or LocalPlayer():notUsingRH() then return end
+	if not IsValid(wep) or not LocalPlayer():UsingRH() then return end
 
 	surface.SetDrawColor(255, 255, 255)
 	surface.SetMaterial(crosshair_standard)

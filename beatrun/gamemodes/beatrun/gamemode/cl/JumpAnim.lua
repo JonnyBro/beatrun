@@ -1,14 +1,15 @@
 local OldAnims = CreateClientConVar("Beatrun_OldAnims", "0", true, false, "")
-local AutoHandSw = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
+local AutoHandSwitching = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
 
-local requires_arms = { -- animations that use arms for auto hand switching
+-- Animations that use arms for auto hand switching
+local requires_arms = {
 	hang = true,
 	hanghardstartvertical = true,
 	hangheaveup = true,
 	hangfoldedstart = true,
 	hanghardstart2 = true,
 	hangfoldedendhang = true,
-	hangfoldedheaveup= true,
+	hangfoldedheaveup = true,
 	hangstrafeleft = true,
 	hangstraferight = true,
 	hanghardstart = true,
@@ -1162,7 +1163,7 @@ local function CreateBodyAnimArmCopy()
 			BodyAnimArmCopy:SetSkin(BodyAnim:GetSkin())
 		end
 
-		for k, v in ipairs(fingers) do
+		for _, v in ipairs(fingers) do
 			local b = BodyAnimArmCopy:LookupBone(v)
 
 			if b then
@@ -1308,7 +1309,7 @@ local function JumpArmDraw(a, b, c)
 
 		if seq and (not arminterrupts[bac:GetSequenceName(bac:GetSequence())] or bac:GetCycle() >= 1) then
 			if bac:GetSequence() ~= seq then
-				for k, v in ipairs(fingers) do
+				for _, v in ipairs(fingers) do
 					local b = bac:LookupBone(v)
 
 					if b then
@@ -1536,21 +1537,25 @@ end)
 
 local animtr, animtr_result = nil, nil
 local oldnewang = Angle()
---auto hand switching variables
+
 local using_hands = false
 local weapon_before_hands
 
 local function JumpThink()
-	-- auto hand switching code
 	local ply = LocalPlayer()
-	if AutoHandSw:GetBool() and ply:Alive() then
-		if ((ply:GetWallrun() == 1 or ply:GetMantle() > 0 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands) and not ply:UsingRH() then
-			weapon_before_hands = (ply:GetActiveWeapon())
+
+	if AutoHandSwitching:GetBool() and ply:Alive() then -- Auto hand switching part
+		if (ply:GetWallrun() == 1 or ply:GetMantle() > 0 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands and not ply:UsingRH() then
+			weapon_before_hands = ply:GetActiveWeapon()
+
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
+
 			using_hands = true
+
 			if ply:GetWallrun() == 1 then -- 1 = verticaL
 				BodyLimitX = 25 -- fixes a bug where if u look behind u will vault over air
 				BodyLimitY = 70
+
 				BodyAnim:SetSequence("wallrunverticalstart")
 			end
 
@@ -1560,14 +1565,11 @@ local function JumpThink()
 				BodyAnim:SetSequence("vaultkong")
 			end
 
-			if IsValid(ply:GetZipline()) then
-				BodyAnim:SetSequence("zipline")
-			end
+			if IsValid(ply:GetZipline()) then BodyAnim:SetSequence("zipline") end
 		end
+
 		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and not IsValid(ply:GetZipline()) then
-			if IsValid(weapon_before_hands) and ply:UsingRH() then
-				input.SelectWeapon(weapon_before_hands)
-			end
+			if IsValid(weapon_before_hands) and ply:UsingRH() then input.SelectWeapon(weapon_before_hands) end
 
 			using_hands = false
 		end

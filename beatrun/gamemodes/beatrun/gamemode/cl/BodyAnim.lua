@@ -136,7 +136,7 @@ function RemoveBodyAnim(noang)
 	local currentwep = ply:GetActiveWeapon()
 	local vm = ply:GetViewModel()
 
-	if ply:notUsingRH() then
+	if not ply:UsingRH() then
 		if currentwep.PlayViewModelAnimation then
 			currentwep:PlayViewModelAnimation("Draw")
 		else
@@ -383,7 +383,7 @@ function StartBodyAnim(animtable)
 			BodyAnimMDLarm:SetSkin(ply:GetHands():GetSkin())
 		end
 
-		for k, v in ipairs(playermodelbones) do
+		for _, v in ipairs(playermodelbones) do
 			local plybone = BodyAnimMDL:LookupBone(v)
 
 			if plybone then
@@ -671,7 +671,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 			if not ply:ShouldDrawLocalPlayer() and not ply:InVehicle() then
 				local ang = Vector(view.angles:Unpack())
-				local FT = RealFrameTime()
 				ang[1] = 0
 				ang[3] = 0
 

@@ -81,16 +81,6 @@ function playermeta:UsingRH(wep)
 	end
 end
 
-function playermeta:notUsingRH(wep)
-	local activewep = wep or self:GetActiveWeapon()
-
-	if IsValid(activewep) and activewep:GetClass() ~= "runnerhands" then
-		return true
-	else
-		return false
-	end
-end
-
 function Beatrun_GiveAmmo(weapon, ply)
 	if weapon:GetPrimaryAmmoType() ~= -1 then ply:GiveAmmo(10000, weapon:GetPrimaryAmmoType(), true) end
 	if weapon:GetSecondaryAmmoType() ~= -1 then ply:GiveAmmo(5, weapon:GetSecondaryAmmoType(), true) end
@@ -122,7 +112,7 @@ end
 
 function Beatrun_GiveGMWeapon(ply)
 	if GetConVar("Beatrun_RandomMWLoadouts"):GetBool() and not GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() then
-		for i = 0, 1 do
+		for _ = 0, 1 do
 			local swep = Beatrun_getRandomMWBaseSWEP()
 			local w = ply:Give(swep.ClassName)
 
@@ -131,7 +121,7 @@ function Beatrun_GiveGMWeapon(ply)
 			end)
 		end
 	elseif GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() and not GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
-		for i = 0, 1 do
+		for _ = 0, 1 do
 			-- We don't need ammo because ARC9 got the infinite ammo option
 
 			local swep = Beatrun_getRandomARC9SWEP()

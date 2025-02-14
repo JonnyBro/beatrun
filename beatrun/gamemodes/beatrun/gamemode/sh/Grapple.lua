@@ -1,7 +1,6 @@
 if CLIENT then
 	local disable_grapple = CreateClientConVar("Beatrun_DisableGrapple", 0, true, true, language.GetPhrase("beatrun.convars.disablegrapple"), 0, 1)
 
-	local circle = Material("circlesmooth.png", "nocull smooth")
 	local brcross = Material("brcross.png", "nocull smooth")
 
 	local rotate_timer = 0
@@ -13,7 +12,7 @@ if CLIENT then
 		if disable_grapple:GetBool() and Course_Name == "" then return end
 		if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
 		if not ply:Alive() or Course_Name ~= "" then return end
-		if ply:notUsingRH() then return end
+		if not ply:UsingRH() then return end
 		if ply:GetMoveType() == MOVETYPE_NOCLIP then return end
 		if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then return end
 
@@ -119,11 +118,10 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		local ent = ply:GetNW2Entity("grappleEntity")
 
 		local is_ent_invalid = (ent == NULL or ent == nil) and ply:GetNW2Bool("grappledNonCourse")
-		local is_getting_off = (not ply:Alive() or mv:KeyPressed(IN_JUMP) and not grappled and not ply:OnGround() or ply:GetClimbing() ~= 0 or ply:GetMantle() ~= 0 or not usingrh)
+		local is_getting_off = not ply:Alive() or mv:KeyPressed(IN_JUMP) and not grappled and not ply:OnGround() or ply:GetClimbing() ~= 0 or ply:GetMantle() ~= 0 or not usingrh
 		local c_delta = 0
-		if IsValid(ent) and not is_ent_invalid then
-			c_delta = (ent:GetNWVector("gpos", Vector(0,0,0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))):Length()
-		end
+
+		if IsValid(ent) and not is_ent_invalid then c_delta = (ent:GetNWVector("gpos", Vector(0, 0, 0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))):Length() end
 
 		eyepos.z = eyepos.z + 64
 
@@ -165,9 +163,9 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ent:SetNWVector("glastpos", ent:GetNWVector("gpos", ent:GetPos()))
 			ent:SetNWVector("gpos", ent:GetPos())
 
-			local delta = ent:GetNWVector("gpos", Vector(0,0,0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))
+			local delta = ent:GetNWVector("gpos", Vector(0, 0, 0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))
 
-			if game.SinglePlayer() then // this is pretty much impossible to predict, so lets keep it only for sp
+			if game.SinglePlayer() then -- this is pretty much impossible to predict, so lets keep it only for sp
 				ply:SetGrapplePos(ply:GetGrapplePos() + delta)
 			end
 		end
@@ -182,7 +180,6 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetGrappleLength(ply:GetGrappleLength() - FrameTime() * 250)
 		end
 
-		-- local vel = mv:GetVelocity()
 		local ang = cmd:GetViewAngles()
 		ang.x = 0
 
@@ -288,7 +285,7 @@ hook.Add("PostDrawTranslucentRenderables", "GrappleBeam", function()
 		ropelerp = 0
 	end
 
-	for i, ply in ipairs(player.GetAll()) do
+	for _, ply in ipairs(player.GetAll()) do
 		if ply == lp then continue end
 
 		if ply:GetGrappling() then

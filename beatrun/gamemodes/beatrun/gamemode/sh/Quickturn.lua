@@ -38,7 +38,7 @@ function DoJumpTurnStand()
 		VMLegs:Remove()
 	end
 
-	if LocalPlayer():notUsingRH() then
+	if not LocalPlayer():UsingRH() then
 		BodyAnim:SetSequence("jumpturnlandstandgun")
 	else
 		BodyAnim:SetSequence("jumpturnlandstand")
@@ -192,7 +192,7 @@ local function Quickturn(ply, mv, cmd)
 
 		standpunch.x = -math.abs(math.min(CurTime() - ply:GetJumpTurnRecovery() + 0.5, 0))
 
-		if ply:notUsingRH() then
+		if not ply:UsingRH() then
 			standpunch.x = standpunch.x * 0.1
 			standpunch.z = standpunch.x * 10
 		else
