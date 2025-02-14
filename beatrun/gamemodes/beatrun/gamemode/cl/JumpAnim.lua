@@ -1564,8 +1564,8 @@ local function JumpThink()
 				BodyAnim:SetSequence("zipline")
 			end
 		end
-		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and ply:UsingRH() and not IsValid(ply:GetZipline()) then
-			if IsValid(weapon_before_hands) then 
+		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and not IsValid(ply:GetZipline()) then
+			if IsValid(weapon_before_hands) and ply:UsingRH() then
 				input.SelectWeapon(weapon_before_hands)
 			end
 
