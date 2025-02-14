@@ -1543,8 +1543,8 @@ local weapon_before_hands
 local function JumpThink()
 	-- auto hand switching code
 	local ply = LocalPlayer()
-	if AutoHandSw:GetInt() == 1 and ply:Alive() then
-		if (ply:GetWallrun() == 1 or ply:GetMantle() > 0 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands then
+	if AutoHandSw:GetBool() and ply:Alive() then
+		if ((ply:GetWallrun() == 1 or ply:GetMantle() > 0 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands) and not ply:UsingRH() then
 			weapon_before_hands = (ply:GetActiveWeapon())
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
 			using_hands = true
