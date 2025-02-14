@@ -72,9 +72,9 @@ function playermeta:SetWallrunData(wr, wrtime, dir)
 end
 
 function playermeta:UsingRH(wep)
-	local activewep = wep or self:GetActiveWeapon()
+	wep = wep or self:GetActiveWeapon()
 
-	if IsValid(activewep) and activewep:GetClass() == "runnerhands" then
+	if IsValid(wep) and wep:GetClass() == "runnerhands" then
 		return true
 	else
 		return false
