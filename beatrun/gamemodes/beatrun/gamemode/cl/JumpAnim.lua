@@ -1545,7 +1545,7 @@ local function JumpThink()
 	local ply = LocalPlayer()
 
 	if AutoHandSwitching:GetBool() and ply:Alive() then -- Auto hand switching part
-		if (ply:GetWallrun() == 1 or ply:GetMantle() > 0 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands and not ply:UsingRH() then
+		if (ply:GetWallrun() == 1 or ply:GetMantle() > 1 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands and not ply:UsingRH() then
 			weapon_before_hands = ply:GetActiveWeapon()
 
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
@@ -1568,8 +1568,10 @@ local function JumpThink()
 			if IsValid(ply:GetZipline()) then BodyAnim:SetSequence("zipline") end
 		end
 
-		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and not IsValid(ply:GetZipline()) then
-			if IsValid(weapon_before_hands) and ply:UsingRH() then input.SelectWeapon(weapon_before_hands) end
+		if using_hands and not ply:UsingRH() then input.SelectWeapon(ply:GetWeapon("runnerhands")) end --blocks weapon switching
+
+		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and not IsValid(ply:GetZipline()) and ply:UsingRH() then
+			if IsValid(weapon_before_hands) then input.SelectWeapon(weapon_before_hands) end
 
 			using_hands = false
 		end
