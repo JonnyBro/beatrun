@@ -25,7 +25,7 @@ if not isVersionCheched then
 
 			print("Latest version: " .. versionLatest)
 
-			if versionLatest ~= versionGlobal then
+			if versionLatest == versionGlobal then
 				print("You're up to date, nice!")
 			else
 				print("You're not using the latest GitHub version.")
