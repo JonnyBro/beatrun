@@ -12,25 +12,7 @@ local requires_arms = {
 	hangfoldedheaveup = true,
 	hangstrafeleft = true,
 	hangstraferight = true,
-	hanghardstart = true,
-	ladder = true,
-	ladderclimbdownfast = true,
-	ladderclimbhangstart = true,
-	ladderclimbleft = true,
-	ladderclimbright = true,
-	ladderclimbuplefthand = true,
-	ladderclimbuplefthandstill = true,
-	ladderclimbuprighthand = true,
-	ladderclimbuprighthandstill = true,
-	ladderenterbottom = true,
-	ladderenter = true,
-	ladderenterhang = true,
-	ladderexitarm1 = true,
-	ladderexitarm2 = true,
-	ladderexittoplefthand = true,
-	ladderexittoprighthand = true,
-	swingstraight = true,
-	swingjumpoff = true
+	hanghardstart = true
 }
 
 local animtable = {
@@ -1544,8 +1526,8 @@ local weapon_before_hands
 local function JumpThink()
 	local ply = LocalPlayer()
 
-	if AutoHandSwitching:GetBool() and ply:Alive() then -- Auto hand switching part
-		if (ply:GetWallrun() == 1 or ply:GetMantle() > 1 or IsValid(ply:GetZipline()) or requires_arms[BodyAnimString]) and not using_hands and not ply:UsingRH() then
+	if AutoHandSwitching:GetBool() and ply:Alive() and IsValid(ply:GetWeapon("runnerhands")) then -- Auto hand switching part
+		if (ply:GetWallrun() == 1 or ply:GetMantle() > 1 or IsValid(ply:GetZipline()) or IsValid(ply:GetLadder()) or IsValid(ply:GetSwingbar()) or requires_arms[BodyAnimString]) and not using_hands and not ply:UsingRH() then
 			weapon_before_hands = ply:GetActiveWeapon()
 
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
@@ -1570,7 +1552,7 @@ local function JumpThink()
 
 		if using_hands and not ply:UsingRH() then input.SelectWeapon(ply:GetWeapon("runnerhands")) end --blocks weapon switching
 
-		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and using_hands and not IsValid(ply:GetZipline()) and ply:UsingRH() then
+		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and not IsValid(ply:GetLadder()) and not IsValid(ply:GetSwingbar()) and using_hands and not IsValid(ply:GetZipline()) and ply:UsingRH() then
 			if IsValid(weapon_before_hands) then input.SelectWeapon(weapon_before_hands) end
 
 			using_hands = false
