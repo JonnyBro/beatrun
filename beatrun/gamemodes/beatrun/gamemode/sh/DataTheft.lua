@@ -22,7 +22,7 @@ if SERVER then
 				v:Spawn()
 			end
 
-			Beatrun_GiveGMWeapon(v)
+			BeatrunGiveGMLoadout(v)
 		end
 	end
 
@@ -56,7 +56,7 @@ if SERVER then
 			if datacount > 0 then
 				local pos = ply:GetPos() + Vector(0, 0, 32)
 
-				for i = 1, datacount + 1 do
+				for _ = 1, datacount + 1 do
 					local datacube = ents.Create("br_datacube")
 
 					datacube:SetPos(pos)

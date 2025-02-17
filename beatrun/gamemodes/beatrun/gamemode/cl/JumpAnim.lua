@@ -2,7 +2,7 @@ local OldAnims = CreateClientConVar("Beatrun_OldAnims", "0", true, false, "")
 local AutoHandSwitching = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
 
 -- Animations that use arms for auto hand switching
-local requires_arms = {
+local requiresArms = {
 	hang = true,
 	hanghardstartvertical = true,
 	hangheaveup = true,
@@ -1520,22 +1520,22 @@ end)
 local animtr, animtr_result = nil, nil
 local oldnewang = Angle()
 
-local using_hands = false
-local weapon_before_hands
+local usingHands = false
+local lastWeapon
 
 local function JumpThink()
 	local ply = LocalPlayer()
 
 	if AutoHandSwitching:GetBool() and ply:Alive() and IsValid(ply:GetWeapon("runnerhands")) then -- Auto hand switching part
-		if (ply:GetWallrun() == 1 or ply:GetMantle() > 1 or IsValid(ply:GetZipline()) or IsValid(ply:GetLadder()) or IsValid(ply:GetSwingbar()) or requires_arms[BodyAnimString]) and not using_hands and not ply:UsingRH() then
-			weapon_before_hands = ply:GetActiveWeapon()
+		if (ply:GetWallrun() == 1 or ply:GetMantle() > 1 or IsValid(ply:GetZipline()) or IsValid(ply:GetLadder()) or IsValid(ply:GetSwingbar()) or requiresArms[BodyAnimString]) and not usingHands and not ply:UsingRH() then
+			lastWeapon = ply:GetActiveWeapon()
 
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
 
-			using_hands = true
+			usingHands = true
 
 			if ply:GetWallrun() == 1 then -- 1 = verticaL
-				BodyLimitX = 25 -- fixes a bug where if u look behind u will vault over air
+				BodyLimitX = 25 -- Fixes a bug where if u look behind u will vault over air
 				BodyLimitY = 70
 
 				BodyAnim:SetSequence("wallrunverticalstart")
@@ -1550,12 +1550,13 @@ local function JumpThink()
 			if IsValid(ply:GetZipline()) then BodyAnim:SetSequence("zipline") end
 		end
 
-		if using_hands and not ply:UsingRH() then input.SelectWeapon(ply:GetWeapon("runnerhands")) end --blocks weapon switching
+		-- Blocks weapon switching
+		if usingHands and not ply:UsingRH() then input.SelectWeapon(ply:GetWeapon("runnerhands")) end
 
-		if ply:GetWallrun() == 0 and not requires_arms[BodyAnimString] and ply:GetMantle() == 0 and not IsValid(ply:GetLadder()) and not IsValid(ply:GetSwingbar()) and using_hands and not IsValid(ply:GetZipline()) and ply:UsingRH() then
-			if IsValid(weapon_before_hands) then input.SelectWeapon(weapon_before_hands) end
+		if ply:GetWallrun() == 0 and not requiresArms[BodyAnimString] and ply:GetMantle() == 0 and not IsValid(ply:GetLadder()) and not IsValid(ply:GetSwingbar()) and usingHands and not IsValid(ply:GetZipline()) and ply:UsingRH() then
+			if IsValid(lastWeapon) then input.SelectWeapon(lastWeapon) end
 
-			using_hands = false
+			usingHands = false
 		end
 	end
 

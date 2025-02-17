@@ -17,7 +17,7 @@ if SERVER then
 				v:Spawn()
 			end
 
-			Beatrun_GiveGMWeapon(v)
+			BeatrunGiveGMLoadout(v)
 		end
 	end
 

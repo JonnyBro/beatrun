@@ -124,7 +124,7 @@ end
 
 function PLAYER:Loadout()
 	if GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then
-		Beatrun_GiveGMWeapon(self.Player)
+		BeatrunGiveGMLoadout(self.Player)
 	else
 		self.Player:RemoveAllAmmo()
 	end
@@ -275,10 +275,8 @@ hook.Add("IsSpawnpointSuitable", "CheckSpawnPoint", function(ply, spawnpointent,
 end)
 
 hook.Add("SetupMove", "SpawnFreeze", function(ply, mv, cmd)
-	if ply.SpawnFreezeTime and Course_Name ~= "" and Course_StartPos ~= vector_origin then
-		if Course_StartPos and ply.SpawnFreezeTime > CurTime() then
-			mv:SetOrigin(Course_StartPos)
-		end
+	if ply.SpawnFreezeTime and Course_Name ~= "" and Course_StartPos ~= vector_origin and Course_StartPos and ply.SpawnFreezeTime > CurTime() then
+		mv:SetOrigin(Course_StartPos)
 	end
 end)
 

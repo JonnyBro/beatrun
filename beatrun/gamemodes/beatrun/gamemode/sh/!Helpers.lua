@@ -4,8 +4,10 @@ local playermeta = FindMetaTable("Player")
 CreateConVar("Beatrun_RandomMWLoadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 CreateConVar("Beatrun_RandomARC9Loadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
 
+-- Example loadouts. You can put any SWEP's class name here.
 BEATRUN_GAMEMODES_LOADOUTS = {
-	{"weapon_357", "weapon_ar2"}
+	{"weapon_357", "weapon_ar2"},
+	{"weapon_pistol", "weapon_smg1"}
 }
 
 local mtmp = {
@@ -17,9 +19,11 @@ local mtmp = {
 
 function vmatrixmeta:FastToTable(tbl)
 	tbl = tbl or table.Copy(mtmp)
+
 	local tbl1 = tbl[1]
 	local tbl2 = tbl[2]
 	local tbl3 = tbl[3]
+
 	tbl1[1], tbl1[2], tbl1[3], tbl1[4], tbl2[1], tbl2[2], tbl2[3], tbl2[4], tbl3[1], tbl3[2], tbl3[3], tbl3[4] = self:Unpack()
 
 	return tbl
@@ -74,66 +78,63 @@ end
 function playermeta:UsingRH(wep)
 	wep = wep or self:GetActiveWeapon()
 
-	if IsValid(wep) and wep:GetClass() == "runnerhands" then
-		return true
+	if IsValid(wep) and wep:GetClass() == "runnerhands" then return true
+	else return false end
+end
+
+function BeatrunGiveAmmo(ply, wep)
+	if wep:GetPrimaryAmmoType() ~= -1 then ply:GiveAmmo(10000, wep:GetPrimaryAmmoType(), true) end
+	if wep:GetSecondaryAmmoType() ~= -1 then ply:GiveAmmo(5, wep:GetSecondaryAmmoType(), true) end
+end
+
+local depth = 0
+
+function BeatrunGetRandomMWSWEP()
+	local allWeps = weapons.GetList()
+	local swep = allWeps[math.random(#allWeps)]
+
+	if swep.Base == "mg_base" and not swep.AdminOnly then return swep.ClassName
 	else
-		return false
+		if depth > 5 then
+			depth = 0
+			return
+		end
+
+		depth = depth + 1
+		BeatrunGetRandomMWSWEP()
 	end
 end
 
-function Beatrun_GiveAmmo(weapon, ply)
-	if weapon:GetPrimaryAmmoType() ~= -1 then ply:GiveAmmo(10000, weapon:GetPrimaryAmmoType(), true) end
-	if weapon:GetSecondaryAmmoType() ~= -1 then ply:GiveAmmo(5, weapon:GetSecondaryAmmoType(), true) end
-end
+function BeatrunGetRandomARCSWEP()
+	local allWeps = weapons.GetList()
+	local swep = allWeps[math.random(#allWeps)]
 
-function Beatrun_getRandomMWBaseSWEP()
-	local allWep = weapons.GetList()
-	local wepIndex = math.random(#allWep)
-	local wep = allWep[wepIndex]
-
-	if wep.Base == "mg_base" and not wep.AdminOnly then
-		return wep
+	if swep.Base == "arc9_cod2019_base" and not swep.AdminOnly then return swep.ClassName
 	else
-		return Beatrun_getRandomMWBaseSWEP()
+		if depth > 5 then
+			depth = 0
+			return
+		end
+
+		depth = depth + 1
+		BeatrunGetRandomARCSWEP()
 	end
 end
 
-function Beatrun_getRandomARC9SWEP()
-	local allWep = weapons.GetList()
-	local wepIndex = math.random(#allWep)
-	local wep = allWep[wepIndex]
+function BeatrunMakeLoadout()
+	local arc, mw = GetConVar("Beatrun_RandomARC9Loadouts"):GetBool(), GetConVar("Beatrun_RandomMWLoadouts"):GetBool()
 
-	if wep.Base == "arc9_cod2019_base" and not wep.AdminOnly then
-		return wep
-	else
-		return Beatrun_getRandomARC9SWEP()
-	end
+	if arc and not mw then return {BeatrunGetRandomARCSWEP(), BeatrunGetRandomARCSWEP()}
+	elseif not arc and mw then return {BeatrunGetRandomMWSWEP(), BeatrunGetRandomMWSWEP()}
+	elseif not arc and not mw then return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)] end
 end
 
-function Beatrun_GiveGMWeapon(ply)
-	if GetConVar("Beatrun_RandomMWLoadouts"):GetBool() and not GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() then
-		for _ = 0, 1 do
-			local swep = Beatrun_getRandomMWBaseSWEP()
-			local w = ply:Give(swep.ClassName)
+function BeatrunGiveGMLoadout(ply)
+	local loadout = BeatrunMakeLoadout()
 
-			timer.Simple(1, function()
-				Beatrun_GiveAmmo(w, ply)
-			end)
-		end
-	elseif GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() and not GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
-		for _ = 0, 1 do
-			-- We don't need ammo because ARC9 got the infinite ammo option
+	for _, v in pairs(loadout) do
+		local wep = ply:Give(v)
 
-			local swep = Beatrun_getRandomARC9SWEP()
-			ply:Give(swep.ClassName)
-		end
-	elseif not GetConVar("Beatrun_RandomARC9Loadouts"):GetBool() and not GetConVar("Beatrun_RandomMWLoadouts"):GetBool() then
-		for _, b in ipairs(BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]) do
-			local w = ply:Give(b)
-
-			timer.Simple(1, function()
-				Beatrun_GiveAmmo(w, ply)
-			end)
-		end
+		timer.Simple(1, function() BeatrunGiveAmmo(ply, wep) end)
 	end
 end

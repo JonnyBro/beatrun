@@ -11,10 +11,10 @@ local function World_Whitescale()
 	local propmats = ents.FindByClass("prop_dynamic")
 	local dupeprops = {}
 
-	for k, v in pairs(propmats) do
+	for _, v in pairs(propmats) do
 		if dupeprops[v:GetModel()] then continue end
 
-		for k, v in pairs(v:GetMaterials()) do
+		for _, v in pairs(v:GetMaterials()) do
 			table.insert(worldmats, v)
 		end
 

@@ -2,6 +2,7 @@ local meta = FindMetaTable("Player")
 local metavec = FindMetaTable("Vector")
 local PUNCH_DAMPING = 9
 local PUNCH_SPRING_CONSTANT = 120
+
 local viewbob_intensity = CreateClientConVar("Beatrun_ViewbobIntensity", "20", true, true, language.GetPhrase("beatrun.convars.viewbob"), -100, 100)
 local viewbob_stabilized = CreateClientConVar("Beatrun_ViewbobStabilized", "0", true, true, language.GetPhrase("beatrun.convars.viewbobstabilization"), 0, 1)
 
@@ -22,17 +23,17 @@ function metavec:Approach(x, y, z, speed)
 end
 
 local function CLViewPunchThink()
-	local self = LocalPlayer()
+	local plr = LocalPlayer()
 
-	if not self.ViewPunchVelocity then
-		self.ViewPunchVelocity = Angle()
-		self.ViewPunchAngle = Angle()
+	if not plr.ViewPunchVelocity then
+		plr.ViewPunchVelocity = Angle()
+		plr.ViewPunchAngle = Angle()
 	end
 
-	local vpa = self.ViewPunchAngle
-	local vpv = self.ViewPunchVelocity
+	local vpa = plr.ViewPunchAngle
+	local vpv = plr.ViewPunchVelocity
 
-	if not self.ViewPunchDone and lensqr(vpa) + lensqr(vpv) > 1e-06 then
+	if not plr.ViewPunchDone and lensqr(vpa) + lensqr(vpv) > 1e-06 then
 		local FT = FrameTime()
 		vpa = vpa + vpv * FT
 		local damping = 1 - PUNCH_DAMPING * FT
@@ -48,10 +49,10 @@ local function CLViewPunchThink()
 		vpa[1] = math.Clamp(vpa[1], -89.9, 89.9)
 		vpa[2] = math.Clamp(vpa[2], -179.9, 179.9)
 		vpa[3] = math.Clamp(vpa[3], -89.9, 89.9)
-		self.ViewPunchAngle = vpa
-		self.ViewPunchVelocity = vpv
+		plr.ViewPunchAngle = vpa
+		plr.ViewPunchVelocity = vpv
 	else
-		self.ViewPunchDone = true
+		plr.ViewPunchDone = true
 	end
 end
 
