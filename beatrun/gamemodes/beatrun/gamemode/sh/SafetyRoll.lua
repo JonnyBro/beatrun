@@ -6,7 +6,7 @@ local landang = Angle(0, 0, 0)
 local lastGroundSpeed = 0
 local rollspeedloss = CreateConVar("Beatrun_RollSpeedLoss", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 
-local function SafetyRollThink(ply, mv, cmd)
+hook.Add("SetupMove", "SafetyRoll", function(ply, mv, cmd)
 	local speed = mv:GetVelocity().z
 
 	if speed <= -350 and not ply:OnGround() and not ply:GetWasOnGround() and (mv:KeyPressed(IN_DUCK) or mv:KeyPressed(IN_SPEED) or mv:KeyPressed(IN_BULLRUSH)) then
@@ -16,6 +16,7 @@ local function SafetyRollThink(ply, mv, cmd)
 	end
 
 	local isRolling = CurTime() < ply:GetSafetyRollKeyTime()
+
 	if ply:OnGround() and not isRolling then
 		lastGroundSpeed = mv:GetVelocity():Length()
 	end
@@ -51,14 +52,10 @@ local function SafetyRollThink(ply, mv, cmd)
 		end
 	end
 
-	if CLIENT and ply:Alive() and IsValid(ply:GetActiveWeapon()) and CurTime() > ply:GetSafetyRollTime() then
-		if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
-			RunConsoleCommand("mgbase_debug_vmrender", "1")
-		end
+	if ply:Alive() and IsValid(ply:GetActiveWeapon()) and CurTime() > ply:GetSafetyRollTime() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+		RunConsoleCommand("mgbase_debug_vmrender", "1")
 	end
-end
-
-hook.Add("SetupMove", "SafetyRoll", SafetyRollThink)
+end)
 
 local roll = {
 	followplayer = true,
@@ -101,10 +98,8 @@ end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
-		if CLIENT and ply:Alive() and IsValid(ply:GetActiveWeapon()) then
-			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
-				RunConsoleCommand("mgbase_debug_vmrender", "0")
-			end
+		if ply:Alive() and IsValid(ply:GetActiveWeapon()) and CurTime() > ply:GetSafetyRollTime() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+			RunConsoleCommand("mgbase_debug_vmrender", "0")
 		end
 
 		local ang = cmd:GetViewAngles()
@@ -162,16 +157,14 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 	local sang = normal:Angle()
 
 	if sang.x <= 314 and not ply:InOverdrive() and (speed >= 350 or ply:GetDive()) and speed < 800 and (CurTime() < ply:GetSafetyRollKeyTime() and not ply:GetDive() or ply:GetDive() and not ply:KeyDown(IN_DUCK)) and not ply:GetJumpTurn() and (not ply:Crouching() or ply:GetDive()) then
+		if ply:Alive() and IsValid(ply:GetActiveWeapon()) and CurTime() > ply:GetSafetyRollTime() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
+			RunConsoleCommand("mgbase_debug_vmrender", "0")
+		end
+
 		ply:SetCrouchJump(false)
 		ply:SetDive(false)
 
 		ParkourEvent("roll", ply)
-
-		if CLIENT and ply:Alive() and IsValid(ply:GetActiveWeapon()) then
-			if weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
-				RunConsoleCommand("mgbase_debug_vmrender", "0")
-			end
-		end
 
 		local ang = ply:EyeAngles()
 		local land = ply:GetVelocity()
