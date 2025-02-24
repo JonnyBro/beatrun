@@ -1,13 +1,13 @@
 local apikey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.GetPhrase("beatrun.convars.apikey"))
 local domain = CreateClientConVar("Beatrun_Domain", "courses.jonnybro.ru", true, false, language.GetPhrase("beatrun.convars.domain"))
 
-local QueuedArgs = NULL
-local QueuedFunction = NULL
+local QueuedArgs
+local QueuedFunction
 local currentMap = game.GetMap()
 
 concommand.Add("Beatrun_Cancel", function()
-	QueuedArgs = NULL
-	QueuedFunction = NULL
+	QueuedArgs = nil
+	QueuedFunction = nil
 end)
 
 concommand.Add("Beatrun_Confirm", function()
@@ -23,8 +23,8 @@ concommand.Add("Beatrun_Confirm", function()
 		return
 	end
 
-	QueuedArgs = NULL
-	QueuedFunction = NULL
+	QueuedArgs = nil
+	QueuedFunction = nil
 end)
 
 local function GetCurrentMapWorkshopID()
@@ -39,72 +39,81 @@ local function GetCurrentMapWorkshopID()
 	return "no_map_id"
 end
 
-function GetCourse(sharecode)
-	local url = domain:GetString() .. "/api/download"
-
-	http.Fetch(url, function(body, length, headers, code)
+local function FetchCourse(url, headers)
+	http.Fetch(url, function(body, length, _, code)
 		local response = util.JSONToTable(body)
+
+		if BEATRUN_DEBUG then print(body) end
 
 		if response and response.res == 200 then
 			print("Success! | Length: " .. length .. "\nLoading course...")
 
 			local dir = "beatrun/courses/" .. currentMap .. "/"
+
 			file.CreateDir(dir)
+
 			local coursedata = util.Compress(response.file)
 
-			file.Write(dir .. sharecode .. ".txt", coursedata)
+			file.Write(dir .. headers.code .. ".txt", coursedata)
 
 			LoadCourseRaw(coursedata)
 
 			return true
 		elseif not response then
-			print("Can't access the database! Please make sure that domain is correct")
+			print("Can't access the database! Please make sure that domain is correct.")
 
 			return false
 		else
+			print(body)
 			print("Error! | Response: " .. response.message)
 
 			return false
 		end
-	end, function(e)
-		print("An error occurred: " .. e)
-
-		return false
-	end, {
-		authorization = apikey:GetString(),
-		code = sharecode,
-		map = string.Replace(currentMap, " ", "-")
-	})
+	end, function(e) print("An error occurred: " .. e) end, headers)
 end
 
 concommand.Add("Beatrun_LoadCode", function(ply, cmd, args, argstr)
-	GetCourse(args[1])
+	FetchCourse(domain:GetString() .. "/api/download", {
+		authorization = apikey:GetString(),
+		code = args[1],
+		map = string.Replace(currentMap, " ", "-")
+	})
 end)
 
-function UploadCourse()
-	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantuploadfreeplay")) end
-
-	local url = domain:GetString() .. "/api/upload"
-	local data = file.Open("beatrun/courses/" .. currentMap .. "/" .. Course_ID .. ".txt", "rb", "DATA")
-	local filedata = data:Read()
-
-	http.Post(url, NULL, function(body, length, headers, code)
+local function PostCourse(url, course, headers)
+	http.Post(url, {
+		data = course
+	}, function(body, _, _, code)
 		local response = util.JSONToTable(body)
 
-		if response.res == 200 then
+		if BEATRUN_DEBUG then print(body) end
+
+		if response and response.res == 200 then
 			print("Success! | Code: " .. response.code)
 
 			return true
+		elseif not response then
+			print("Can't access the database! Please make sure that domain is correct.")
+
+			return false
 		else
+			print(body)
 			print("An error occurred: " .. response.message)
 
 			return false
 		end
-	end, function(e)
-		print("Unexpected error: " .. e)
-	end, {
+	end, function(e) print("Unexpected error: " .. e) end, headers)
+end
+
+function UploadCourse()
+	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantuploadfreeplay")) end
+
+	local fl = file.Open("beatrun/courses/" .. currentMap .. "/" .. Course_ID .. ".txt", "rb", "DATA")
+	local data = fl:Read()
+
+	PostCourse(domain:GetString() .. "/api/upload", util.Base64Encode(data, true), {
 		authorization = apikey:GetString(),
-		course = util.Base64Encode(filedata, true),
+		course = util.Base64Encode(data, true),
 		map = string.Replace(currentMap, " ", "-"),
 		mapid = GetCurrentMapWorkshopID()
 	})
@@ -120,28 +129,13 @@ end)
 function UpdateCourse(course_code)
 	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantuploadfreeplay")) end
 
-	local url = domain:GetString() .. "/api/update"
-	local data = file.Open("beatrun/courses/" .. currentMap .. "/" .. Course_ID .. ".txt", "rb", "DATA")
-	local filedata = data:Read()
+	local fl = file.Open("beatrun/courses/" .. currentMap .. "/" .. Course_ID .. ".txt", "rb", "DATA")
+	local data = fl:Read()
 
-	http.Post(url, NULL, function(body, length, headers, code)
-		local response = util.JSONToTable(body)
-
-		if response.res == 200 then
-			print("Success! | Code: " .. response.code)
-
-			return true
-		else
-			print("An error occurred: " .. response.message)
-
-			return false
-		end
-	end, function(e)
-		print("Unexpected error: " .. e)
-	end, {
+	PostCourse(domain:GetString() .. "/api/update", data, {
 		authorization = apikey:GetString(),
 		code = course_code,
-		course = util.Base64Encode(filedata, true),
+		course = util.Base64Encode(data, true),
 		map = string.Replace(currentMap, " ", "-")
 	})
 end

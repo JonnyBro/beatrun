@@ -21,11 +21,9 @@ local startx = 0.2
 local starty = 0.75
 
 local debugdata = {"BodyAnim", "BodyAnimCycle", "BodyAnimString", "campos", "camang"}
-
 local debugdata2 = {"BodyAnimArmCopy", "TraceCount"}
 
 local debugoffset = {0, 0, 0}
-
 local debuglist = {debugdata, debugdata2}
 
 TraceLine_o = TraceLine_o or util.TraceLine
@@ -68,13 +66,11 @@ local function DrawDebugInfo()
 			surface.DrawText(text)
 		end
 	end
-
-	local counter = 0
 end
 
 local function RenderTraces()
 	cam.Start3D()
-		for k, v in ipairs(traces) do
+		for _, v in ipairs(traces) do
 			render.DrawLine(v[1], v[2], v[3], true)
 		end
 	cam.End3D()
@@ -84,12 +80,14 @@ local function RenderTraces()
 	table.Empty(traces)
 end
 
-local debugging = false
+BEATRUN_DEBUG = false
 
-concommand.Add("Beatrun_DebugToggle", function()
-	debugging = not debugging
+concommand.Add("Beatrun_Debug", function(ply, cmd, args)
+	BEATRUN_DEBUG = tobool(args[1])
 
-	if debugging then
+	print("Beatrun Debug: " .. tostring(BEATRUN_DEBUG))
+
+	if BEATRUN_DEBUG then
 		hook.Add("HUDPaint", "DrawDebugInfo", DrawDebugInfo)
 		hook.Add("PostRender", "RenderTraces", RenderTraces)
 
