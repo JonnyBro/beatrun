@@ -481,8 +481,7 @@ if SERVER then
 		local selected = net.ReadTable()
 
 		for _, v in pairs(selected) do
-			if v.hr then v.hr = false end
-			if not v.hr then v.hr = true end
+			v.hr = not v.hr
 
 			CustomPropMat(v)
 		end
