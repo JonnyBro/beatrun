@@ -95,7 +95,7 @@ entplacefunc = {
 
 entplacefunc_cl = {
 	tt_cp = function()
-		local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
+		local svec = gui.ScreenToVector(gui.MouseX(), gui.MouseY())
 		local start = LocalPlayer():EyePos()
 
 		svec:Mul(100000)
@@ -301,9 +301,9 @@ end
 local function CustomPropMat(prop)
 	if propmatsblacklist[buildmode_props_index[prop:GetModel()]] then return end
 
-	if prop.hr == true then
+	if prop.hr then
 		prop:SetMaterial("medge/redplainplastervertex")
-	elseif prop.hr == nil or prop.hr == false then
+	else
 		prop:SetMaterial("medge/plainplastervertex")
 	end
 end
@@ -481,7 +481,8 @@ if SERVER then
 		local selected = net.ReadTable()
 
 		for _, v in pairs(selected) do
-			v.hr = not v.hr
+			if v.hr then v.hr = false end
+			if not v.hr then v.hr = true end
 
 			CustomPropMat(v)
 		end
@@ -909,9 +910,9 @@ if CLIENT then
 				local class = v:GetClass()
 
 				if class == "prop_physics" then
-					local hr = v:GetMaterial() == "medge/redplainplastervertex" and true or nil
-
-					if v.buildmode_placed_manually then hr = false end
+					local hr = false
+					if v:GetMaterial() == "medge/redplainplastervertex" then hr = true end
+					//if v.buildmode_placed_manually then hr = false end
 
 					table.insert(save[1], {
 						model = v:GetModel():lower(),
@@ -1085,7 +1086,7 @@ if CLIENT then
 		[KEY_F] = function()
 			if CurTime() < BuildModePlaceDelay then return end
 
-			local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
+			local svec = gui.ScreenToVector(gui.MouseX(), gui.MouseY())
 			svec:Mul(100000)
 
 			local start = LocalPlayer():EyePos()
@@ -1107,7 +1108,7 @@ if CLIENT then
 		[KEY_S] = function()
 			if camcontrol then return end
 
-			local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
+			local svec = gui.ScreenToVector(gui.MouseX(), gui.MouseY())
 			svec:Mul(100000)
 
 			local start = LocalPlayer():EyePos()
@@ -1319,7 +1320,7 @@ if CLIENT then
 			end
 
 			if BuildModeIndex == 0 then
-				local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
+				local svec = gui.ScreenToVector(gui.MouseX(), gui.MouseY()) //util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
 				svec:Mul(100000)
 
 				local start = LocalPlayer():EyePos()
@@ -1488,7 +1489,7 @@ if CLIENT then
 
 	function BuildModeSelect()
 		if dragging then
-			local svec = util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
+			local svec = gui.ScreenToVector(gui.MouseX(), gui.MouseY())
 			dragoffset:Set(svec)
 
 			if not dragorigin then
