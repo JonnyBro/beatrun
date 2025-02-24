@@ -59,10 +59,11 @@ function OpenCourseMenu()
 	local dirsearch = dir .. "*.txt"
 	local files = file.Find(dirsearch, "DATA", "datedesc")
 
-	PrintTable(files)
+	if BEATRUN_DEBUG then PrintTable(files) end
+
 	table.Empty(courselist.elements)
 
-	for k, v in pairs(files) do
+	for _, v in pairs(files) do
 		local data = file.Read(dir .. v, "DATA")
 		local course = util.Decompress(data) or data
 
@@ -75,6 +76,9 @@ function OpenCourseMenu()
 			function courseentry:onclick()
 				LocalPlayer():EmitSound("buttonclick.wav")
 				LoadCourse(filename)
+
+				AEUI:RemovePanel(courselist)
+				AEUI:RemovePanel(coursepanel)
 			end
 
 			courseentry.greyed = sacheck
