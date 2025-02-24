@@ -48,7 +48,7 @@ local function FetchCourse(url, headers)
 		if response and response.res == 200 then
 			print("Success! | Length: " .. length .. "\nLoading course...")
 
-			local dir = "beatrun/courses/" .. currentMap .. "/"
+			local dir = "beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/"
 
 			file.CreateDir(dir)
 
@@ -108,7 +108,7 @@ end
 function UploadCourse()
 	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantuploadfreeplay")) end
 
-	local fl = file.Open("beatrun/courses/" .. currentMap .. "/" .. Course_ID .. ".txt", "rb", "DATA")
+	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
 	local data = fl:Read()
 
 	PostCourse(domain:GetString() .. "/api/upload", util.Base64Encode(data, true), {
@@ -129,7 +129,7 @@ end)
 function UpdateCourse(course_code)
 	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantuploadfreeplay")) end
 
-	local fl = file.Open("beatrun/courses/" .. currentMap .. "/" .. Course_ID .. ".txt", "rb", "DATA")
+	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
 	local data = fl:Read()
 
 	PostCourse(domain:GetString() .. "/api/update", data, {

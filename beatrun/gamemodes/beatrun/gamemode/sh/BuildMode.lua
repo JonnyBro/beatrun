@@ -41,7 +41,7 @@ buildmode_entmodels = {
 
 local misc = {"models/hunter/misc/lift2x2.mdl", "models/hunter/misc/stair1x1.mdl", "models/hunter/misc/stair1x1inside.mdl", "models/hunter/misc/stair1x1outside.mdl", "models/props_combine/combine_barricade_short02a.mdl", "models/props_combine/combine_bridge_b.mdl", "models/props_docks/channelmarker_gib02.mdl", "models/props_docks/channelmarker_gib04.mdl", "models/props_docks/channelmarker_gib03.mdl", "models/props_lab/blastdoor001a.mdl", "models/props_lab/blastdoor001c.mdl", "models/props_wasteland/cargo_container01.mdl", "models/props_wasteland/cargo_container01b.mdl", "models/props_wasteland/cargo_container01c.mdl", "models/props_wasteland/horizontalcoolingtank04.mdl", "models/props_wasteland/laundry_washer001a.mdl", "models/props_wasteland/laundry_washer003.mdl", "models/props_junk/TrashDumpster01a.mdl", "models/props_junk/TrashDumpster02.mdl", "models/props_junk/wood_crate001a.mdl", "models/props_junk/wood_crate002a.mdl", "models/props_junk/wood_pallet001a.mdl", "models/props_c17/fence01a.mdl", "models/props_c17/fence01b.mdl", "models/props_c17/fence02a.mdl", "models/props_c17/fence03a.mdl", "models/props_c17/fence04a.mdl", "models/props_wasteland/interior_fence001g.mdl", "models/props_wasteland/interior_fence002d.mdl", "models/props_wasteland/interior_fence002e.mdl", "models/props_building_details/Storefront_Template001a_Bars.mdl", "models/props_wasteland/wood_fence01a.mdl", "models/props_wasteland/wood_fence02a.mdl", "models/props_c17/concrete_barrier001a.mdl", "models/props_wasteland/medbridge_base01.mdl", "models/props_wasteland/medbridge_post01.mdl", "models/props_wasteland/medbridge_strut01.mdl", "models/props_c17/column02a.mdl", "models/props_junk/iBeam01a_cluster01.mdl", "models/props_junk/iBeam01a.mdl", "models/props_canal/canal_cap001.mdl", "models/props_canal/canal_bridge04.mdl", "models/Mechanics/gears2/pinion_80t3.mdl", "models/props_phx/gears/rack36.mdl", "models/props_phx/gears/rack70.mdl", "models/cranes/crane_frame.mdl", "models/cranes/crane_docks.mdl", "models/props_wasteland/cranemagnet01a.mdl"}
 
-for k, v in ipairs(misc) do
+for _, v in ipairs(misc) do
 	local key = table.insert(buildmode_props, v:lower())
 	propmatsblacklist[key] = true
 end
@@ -901,8 +901,9 @@ if CLIENT then
 		local save = {{}, {}, Course_StartPos, Course_StartAng, name or os.date("%H:%M:%S - %d/%m/%Y", os.time()), {}}
 
 		for _, v in pairs(buildmode_placed) do
-			if not IsValid(v) then -- Nothing
-			elseif v:GetNW2Bool("BRProtected") then
+			if not IsValid(v) then continue end
+
+			if v:GetNW2Bool("BRProtected") then
 				print("ignoring protected ent")
 			else
 				local class = v:GetClass()
@@ -961,7 +962,7 @@ if CLIENT then
 	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)
 		local name = args[1] or os.date("%H:%M:%S - %d/%m/%Y", os.time())
 
-		SaveCourse(name, args[2])
+		SaveCourse(name, tobool(args[2]))
 	end)
 
 	function LoadCourse(id)
@@ -1132,7 +1133,7 @@ if CLIENT then
 				local props = {}
 				local ents = {}
 
-				for k, v in pairs(buildmode_selected) do
+				for k, _ in pairs(buildmode_selected) do
 					if buildmode_ents[k:GetClass()] then
 						table.insert(ents, k)
 					else
@@ -1153,7 +1154,7 @@ if CLIENT then
 			if not dragging then
 				local props = {}
 
-				for k, v in pairs(buildmode_selected) do
+				for k, _ in pairs(buildmode_selected) do
 					table.insert(props, k)
 					buildmode_selected[k] = nil
 				end
@@ -1199,7 +1200,7 @@ if CLIENT then
 			else
 				local f = nil
 
-				for k, v in pairs(buildmode_selected) do
+				for k, _ in pairs(buildmode_selected) do
 					f = k
 
 					break
@@ -1220,7 +1221,7 @@ if CLIENT then
 			local save = {}
 			local startpos = nil
 
-			for k, v in pairs(buildmode_selected) do
+			for k, _ in pairs(buildmode_selected) do
 				startpos = startpos or k:GetPos()
 
 				if not buildmode_props_index[k:GetModel()] then
@@ -1293,7 +1294,7 @@ if CLIENT then
 				dragging = false
 
 				if table.Count(buildmode_selected) > 0 then
-					for k, v in pairs(buildmode_selected) do
+					for k, _ in pairs(buildmode_selected) do
 						if IsValid(k) then
 							selected[k] = {
 								pos = k:GetRenderOrigin(),
@@ -1342,7 +1343,7 @@ if CLIENT then
 		end,
 		[MOUSE_RIGHT] = function()
 			if dragging and table.Count(buildmode_selected) > 0 then
-				for k, v in pairs(buildmode_selected) do
+				for k, _ in pairs(buildmode_selected) do
 					if IsValid(k) then
 						k:SetRenderOrigin(k.dragorigpos)
 						k:SetRenderAngles(k.dragorigang)
@@ -1423,7 +1424,6 @@ if CLIENT then
 		end)
 	end)
 
-
 	local dragorigin = nil
 
 	function BuildModeDrag()
@@ -1457,7 +1457,6 @@ if CLIENT then
 			surface.SetDrawColor(0, 200, 0, 255)
 
 			cam.Start3D()
-
 				for _, v in ipairs(buildmode_placed) do
 					if IsValid(v) and not v:GetNW2Bool("BRProtected") then
 						local pos = v:GetRenderOrigin() or v:GetPos()
@@ -1472,13 +1471,12 @@ if CLIENT then
 						end
 					end
 				end
-
 			cam.End3D()
 
 			if not dragging then
 				dragorigin = nil
 
-				for k, v in pairs(buildmode_selected) do
+				for k, _ in pairs(buildmode_selected) do
 					if IsValid(k) then
 						k.dragorigpos = k:GetPos()
 						k.dragorigang = k:GetAngles()
