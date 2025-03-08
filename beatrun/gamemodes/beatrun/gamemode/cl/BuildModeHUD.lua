@@ -228,7 +228,7 @@ local function BuildModeElements()
 
 	local obsolete = Material("editor/obsolete")
 
-	for k, v in pairs(buildmode_ents) do
+	for k, _ in pairs(buildmode_ents) do
 		local img = AEUI:AddImage(propspanel, buildmode_enticons[k] or obsolete, BMPropClick, 64 * row, 64 * col, 64, 64)
 		img.prop = k
 		img.hover = buildmode_entnames[k] or scripted_ents.GetMember(k, "PrintName")

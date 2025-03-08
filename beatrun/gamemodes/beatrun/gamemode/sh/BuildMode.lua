@@ -336,6 +336,7 @@ if SERVER then
 			net.WriteFloat(Course_StartAng)
 			net.WriteString(Course_Name)
 			net.WriteString(Course_ID)
+			net.WriteInt(Course_Speed, 11)
 		net.Broadcast()
 	end
 
@@ -344,6 +345,11 @@ if SERVER then
 
 		Course_Name = ""
 		Course_ID = ""
+		Course_Speed = 0
+
+		for _, plr in ipairs(player.GetAll()) do
+			plr:ConCommand("Beatrun_SpeedLimit 325")
+		end
 
 		game.CleanUpMap()
 		Course_Sync()
@@ -572,6 +578,8 @@ if SERVER then
 
 		local data = util.Decompress(net.ReadData(len))
 
+		if not data then return print("[BR] Error while loading a course") end
+
 		Beatrun_ReadCourse(data)
 	end
 
@@ -579,29 +587,21 @@ if SERVER then
 		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
 		local save = file.Read(dir .. id .. ".txt", "DATA")
 
-		if not save then
-			print("NON-EXISTENT SAVE", id)
-
-			return
-		end
+		if not save then return print("[BR] Non-existent save with id: " .. tostring(id)) end
 
 		Course_ID = id
-		Beatrun_ReadCourse(save)
+
+		Beatrun_ReadCourse(save, id)
 	end
 
-	function Beatrun_ReadCourse(data)
+	function Beatrun_ReadCourse(data, id)
 		game.CleanUpMap()
 
-		local a = util.Decompress(data) or data
-		local id = util.CRC(a)
-		local data = util.JSONToTable(a)
+		local decompress = util.Decompress(data) or data
+		id = id or util.CRC(decompress)
+		local courseData = util.JSONToTable(decompress)
 
-		local props = data[1]
-		local cp = data[2]
-		local pos = data[3]
-		local ang = data[4]
-		local name = data[5]
-		local entities = data[6]
+		local props, cp, pos, ang, name, entities, speed = unpack(courseData)
 
 		for _, v in pairs(props) do
 			local a = ents.Create("prop_physics")
@@ -665,10 +665,15 @@ if SERVER then
 		Course_StartAng = ang
 		Course_Name = name
 		Course_ID = id
+		Course_Speed = speed
 
 		Course_Sync()
 
 		for _, v in pairs(player.GetAll()) do
+			if Course_Speed and Course_Speed ~= 0 then
+				v:ConCommand("Beatrun_SpeedLimit " .. tostring(Course_Speed))
+			end
+
 			v:SetNW2Float("PBTime", 0)
 			v:SetNW2Int("CPNum", 1)
 			v:SetMoveType(MOVETYPE_WALK)
@@ -897,21 +902,23 @@ if CLIENT then
 		playerstart:DrawModel()
 	end
 
-	function CourseData(name)
-		local save = {{}, {}, Course_StartPos, Course_StartAng, name or os.date("%H:%M:%S - %d/%m/%Y", os.time()), {}}
+	function CourseData(name, speed)
+		-- [1] = Props, [2] = Checkpoints, [3] = Starting pos, [4] = Starting ang, [5] = Name, [6] = Entities, [7] = Restricted player's speed (0 = unrestricted)
+		local save = {{}, {}, Course_StartPos, Course_StartAng, name or os.date("%H:%M:%S - %d/%m/%Y", os.time()), {}, speed or 0}
 
 		for _, v in pairs(buildmode_placed) do
 			if not IsValid(v) then continue end
 
 			if v:GetNW2Bool("BRProtected") then
-				print("ignoring protected ent")
+				print("[BR] Ignoring protected ent")
 			else
 				local class = v:GetClass()
 
 				if class == "prop_physics" then
 					local hr = false
+
 					if v:GetMaterial() == "medge/redplainplastervertex" then hr = true end
-					//if v.buildmode_placed_manually then hr = false end
+					-- if v.buildmode_placed_manually then hr = false end
 
 					table.insert(save[1], {
 						model = v:GetModel():lower(),
@@ -940,21 +947,15 @@ if CLIENT then
 		return save
 	end
 
-	function SaveCourse(name, compress)
-		local save = CourseData(name)
+	function SaveCourse(name, speed)
+		local save = CourseData(name, speed)
 		local jsonsave = util.TableToJSON(save)
 		local id = util.CRC(jsonsave)
 		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
 
-		if compress == nil then compress = true end
-
 		file.CreateDir(dir)
 
-		if compress then
-			file.Write(dir .. id .. ".txt", util.Compress(jsonsave))
-		else
-			file.Write(dir .. id .. ".txt", jsonsave)
-		end
+		file.Write(dir .. id .. ".txt", util.Compress(jsonsave))
 
 		print("Save created: " .. id .. ".txt")
 	end
@@ -962,7 +963,7 @@ if CLIENT then
 	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)
 		local name = args[1] or os.date("%H:%M:%S - %d/%m/%Y", os.time())
 
-		SaveCourse(name, tobool(args[2]))
+		SaveCourse(name, args[2] or 0)
 	end)
 
 	function LoadCourse(id)
@@ -1032,12 +1033,14 @@ if CLIENT then
 		local ang = net.ReadFloat()
 		local name = net.ReadString()
 		local id = net.ReadString()
+		local speed = net.ReadInt(11)
 
 		Course_StartPos:SetUnpacked(x, y, z)
 
 		Course_StartAng = ang
 		Course_Name = name
 		Course_ID = id or Course_ID
+		Course_Speed = speed
 	end)
 
 	buildmodeinputs = {
@@ -1319,7 +1322,7 @@ if CLIENT then
 			end
 
 			if BuildModeIndex == 0 then
-				local svec = gui.ScreenToVector(gui.MouseX(), gui.MouseY()) //util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
+				local svec = gui.ScreenToVector(gui.MouseX(), gui.MouseY()) -- util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
 				svec:Mul(100000)
 
 				local start = LocalPlayer():EyePos()

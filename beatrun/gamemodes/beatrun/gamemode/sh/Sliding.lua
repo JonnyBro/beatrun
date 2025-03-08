@@ -522,7 +522,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		if not slippery and pos.z > ply:GetSlidingLastPos().z + 1 then
 			ply:SetSlidingTime(ply:GetSlidingTime() - 0.025)
 		elseif slippery or slidedelta < 1 and pos.z < ply:GetSlidingLastPos().z - 0.25 then
-			ply:SetSlidingTime(CT + slidetime)                       --[[ GetConVar("Beatrun_SpeedLimit"):GetInt() ]]
+			ply:SetSlidingTime(CT + slidetime)						 --[[ GetConVar("Beatrun_SpeedLimit"):GetInt() ]]
 			ply:SetSlidingVel(math.min(mv:GetVelocity():Length() * 0.865, 450 * ply:GetOverdriveMult()))
 		end
 

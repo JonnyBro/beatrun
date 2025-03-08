@@ -17,6 +17,7 @@ if SERVER then
 				net.WriteFloat(Course_StartAng)
 				net.WriteString(Course_Name)
 				net.WriteString(Course_ID)
+				net.WriteInt(Course_Speed, 11)
 			net.Send(ply)
 
 			ply.Synced = true

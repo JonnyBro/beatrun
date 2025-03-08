@@ -6,6 +6,7 @@ Course_GoTime = 0
 Course_EndTime = 0
 Course_ID = Course_ID or ""
 Course_Name = Course_Name or ""
+Course_Speed = Course_Speed or 0
 local cptimes = {}
 local lastcptime = 0
 local pbtimes = nil
