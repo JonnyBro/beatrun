@@ -55,7 +55,7 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 			local div = startpos:Distance(endpos)
 			local fail = true
 
-			for i = 1, 32 do
+			for _ = 1, 32 do
 				start = start + 25 / div
 				tr.start = LerpVector(start, startpos, endpos)
 				tr.endpos = tr.start
