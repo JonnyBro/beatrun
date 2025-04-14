@@ -60,7 +60,7 @@ local function FetchCourse(url, headers)
 
 			return true
 		elseif not response then
-			print("Can't access the database! Please make sure that domain is correct.")
+			print("Can't access the database! Please make sure that domain is correct.\nCurrent course domain is: " .. GetConVar("beatrun_domain"):GetString())
 
 			return false
 		else
@@ -93,7 +93,7 @@ local function PostCourse(url, course, headers)
 
 			return true
 		elseif not response then
-			print("Can't access the database! Please make sure that domain is correct.")
+			print("Can't access the database! Please make sure that domain is correct.\nCurrent course domain is: " .. GetConVar("beatrun_domain"):GetString())
 
 			return false
 		else
