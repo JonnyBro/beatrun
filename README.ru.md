@@ -53,8 +53,8 @@ irm https://beatrun.jonnybro.ru/install | iex
 
 1. **[Скачать репозиторий](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip)**.
 2. Удалите папку `beatrun` в `путь_к_игре/garrysmod/addons`, если она существует.
-3. Извлеките `beatrun-main/beatrun` в `путь_к_игре/garrysmod/addons`.
-4. *(Опционально)* Для показа статусов в Discord и Steam извлеките `beatrun-main/lua` в `путь_к_игре/garrysmod`.
+3. Извлеките `beatrun-main` в `путь_к_игре/garrysmod/addons`.
+4. *(Опционально)* Для показа статусов в Discord и Steam извлеките `путь_к_игре/garrysmod/addons/beatrun-main/lua` в `путь_к_игре/garrysmod`.
 5. Запустите игру.
 6. Выберите режим `Beatrun` в правом нижнем углу.
 

@@ -53,8 +53,8 @@ irm https://beatrun.jonnybro.ru/install | iex
 
 1. **[Download this repository](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).**
 2. Delete the `beatrun` folder in `your_game_folder/garrysmod/addons`, if it exists.
-3. Extract `beatrun-main/beatrun` into `your_game_folder/garrysmod/addons`.
-4. (Optional) For Discord and Steam Presence, extract `beatrun-main/lua` to `your_game_folder/garrysmod`.
+3. Extract `beatrun-main` into `your_game_folder/garrysmod/addons`.
+4. (Optional) For Discord and Steam Presence, move `your_game_folder/garrysmod/addons/beatrun-main/lua` to `your_game_folder/garrysmod`.
 5. Start the game.
 6. Select the `Beatrun` gamemode in the bottom-right corner.
 
