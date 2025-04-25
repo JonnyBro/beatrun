@@ -31,9 +31,14 @@ It includes various improvements, new features, and enhanced functionality.
 > - Modules are located **[here](https://github.com/JonnyBro/beatrun/tree/main/lua/bin)**.
 > - Refer to the **[Credits](#credits)** section for their source code.
 
----
-
 ## Installation
+
+### VERY Easy Installation
+
+> [!WARNING]
+> Don't forget to delete the Beatrun's folder from the addons.
+
+[Click Here](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024)
 
 ### 🔧 Automatic Installation (Recommended for Windows 10/11)
 
