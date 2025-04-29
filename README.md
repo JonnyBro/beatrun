@@ -13,9 +13,10 @@
 
 ### Please read this README thoroughly before asking questions
 
-### The **only official source** for this fork is this GitHub repository. Workshop versions are outdated and unsupported
+### The **only official source** for this fork is this repository and [my workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024). Other workshop versions are not supported.
 
-### Whoever else that claims to have an "official" repository and does not have a license other than WTFPL is NOT to be trusted. This project is not something legal, so licenses DO NOT apply under any circumstances. This repository is the original one and is maintained by the original people that cracked beatrun
+### Whoever else that claims to have an "official" repository and does not have a license other than WTFPL is NOT to be trusted. This project is not something legal, so licenses DO NOT apply under any circumstances.
+### This repository is the original one and is maintained by the original people that cracked beatrun
 
 ---
 
