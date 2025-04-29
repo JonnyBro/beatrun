@@ -87,54 +87,61 @@ function BeatrunGiveAmmo(ply, wep)
 	if wep:GetSecondaryAmmoType() ~= -1 then ply:GiveAmmo(5, wep:GetSecondaryAmmoType(), true) end
 end
 
-local depth = 0
-
-function BeatrunGetRandomMWSWEP()
-	local allWeps = weapons.GetList()
-	local swep = allWeps[math.random(#allWeps)]
-
-	if swep.Base == "mg_base" and not swep.AdminOnly then return swep.ClassName
-	else
-		if depth > 5 then
-			depth = 0
-			return
-		end
-
-		depth = depth + 1
-		BeatrunGetRandomMWSWEP()
-	end
+local cachedWeapons = nil
+local function GetWeaponList()
+	if not cachedWeapons then cachedWeapons = weapons.GetList() end
+	return cachedWeapons
 end
 
-function BeatrunGetRandomARCSWEP()
-	local allWeps = weapons.GetList()
-	local swep = allWeps[math.random(#allWeps)]
+function BeatrunGetRandomMWSWEP(maxAttempts)
+	maxAttempts = maxAttempts or 10
 
-	if swep.Base == "arc9_cod2019_base" and not swep.AdminOnly then return swep.ClassName
-	else
-		if depth > 5 then
-			depth = 0
-			return
-		end
+	local allWeps = GetWeaponList()
 
-		depth = depth + 1
-		BeatrunGetRandomARCSWEP()
+	for _ = 1, maxAttempts do
+		local wep = allWeps[math.random(#allWeps)]
+		if wep.Base == "mg_base" and not wep.AdminOnly then return wep.ClassName end
 	end
+
+	return "weapon_smg1"
+end
+
+function BeatrunGetRandomARCSWEP(maxAttempts)
+	maxAttempts = maxAttempts or 10
+
+	local allWeps = GetWeaponList()
+
+	for _ = 1, maxAttempts do
+		local wep = allWeps[math.random(#allWeps)]
+		if string.find(wep.Base, "arc9") and not wep.AdminOnly then return wep.ClassName end
+	end
+
+	return "weapon_smg1"
 end
 
 function BeatrunMakeLoadout()
-	local arc, mw = GetConVar("Beatrun_RandomARC9Loadouts"):GetBool(), GetConVar("Beatrun_RandomMWLoadouts"):GetBool()
+	local arc = GetConVar("Beatrun_RandomARC9Loadouts"):GetBool()
+	local mw = GetConVar("Beatrun_RandomMWLoadouts"):GetBool()
 
-	if arc and not mw then return {BeatrunGetRandomARCSWEP(), BeatrunGetRandomARCSWEP()}
-	elseif not arc and mw then return {BeatrunGetRandomMWSWEP(), BeatrunGetRandomMWSWEP()}
-	elseif not arc and not mw then return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)] end
+	if mw then return {BeatrunGetRandomMWSWEP(), BeatrunGetRandomMWSWEP()}
+	elseif arc then return {BeatrunGetRandomARCSWEP(), BeatrunGetRandomARCSWEP()}
+	else return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)] end
 end
 
 function BeatrunGiveGMLoadout(ply)
+	if not IsValid(ply) then return end
+
 	local loadout = BeatrunMakeLoadout()
 
 	for _, v in pairs(loadout) do
 		local wep = ply:Give(v)
 
-		timer.Simple(1, function() BeatrunGiveAmmo(ply, wep) end)
+		if IsValid(wep) then
+			timer.Simple(1, function()
+				if IsValid(ply) and IsValid(wep) then
+					BeatrunGiveAmmo(ply, wep)
+				end
+			end)
+		end
 	end
 end
