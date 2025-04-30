@@ -89,10 +89,10 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			okButton:SetPos(25, 80)
 			okButton:SetSize(250, 25)
 			okButton.DoClick = function()
-				local name = string.Replace(text:GetValue(), " ", "_")
+				local name = text:GetValue()
 				local speed = tostring(slider:GetValue())
 
-				RunConsoleCommand("Beatrun_SaveCourse", name, checkbox:GetChecked() and speed or 0)
+				SaveCourse(name, speed or 0)
 				frame:Close()
 			end
 		end
@@ -313,11 +313,14 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.kickglitch", "Beatrun_KickGlitch")
-		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.kickglitchdesc"))
+		--panel:CheckBox("#beatrun.toolsmenu.moves.kickglitch", "Beatrun_KickGlitch")
+		--panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.kickglitchdesc"))
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.kickglitchversion", "Beatrun_OldKickGlitch")
-		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.kickglitchversiondesc"))
+		local kickglitchdrop = panel:ComboBox("#beatrun.toolsmenu.moves.kickglitch", "Beatrun_Kickglitch")
+		kickglitchdrop:AddChoice("0 - Disabled")
+		kickglitchdrop:AddChoice("1 - datae-style (velocity multiplier)")
+		kickglitchdrop:AddChoice("2 - Mirror's Edge-style (invisible platform)")
+		--kickglitchdrop:SetValue(kickglitchdrop:GetOptionText(GetConVar("Beatrun_Kickglitch"):GetInt()))
 
 		panel:CheckBox("#beatrun.toolsmenu.moves.quakejump", "Beatrun_QuakeJump")
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.quakejumpdesc"))

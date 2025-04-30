@@ -245,7 +245,7 @@ local function BeatrunHUD()
 			surface.DrawText(ply:GetInfo("Beatrun_PuristWallrun") == "1" and "true" or "false")
 			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.06 + vp.x)
 			surface.DrawText("Kick Glitch: ")
-			surface.DrawText(ply:GetInfo("Beatrun_OldKickGlitch") == "1" and "Old" or "New")
+			surface.DrawText(ply:GetInfo("Beatrun_KickGlitch") == "1" and "Old" or "New")
 		end
 
 		if tobool(ply:GetInfo("Beatrun_PuristMode")) then
