@@ -128,7 +128,7 @@ table.insert(conflictpanel.elements, conflictlist)
 local function CheckAddons()
 	addons = 0
 
-	for k, v in pairs(engine.GetAddons()) do
+	for _, v in pairs(engine.GetAddons()) do
 		if v.mounted and (v.tags:find("tool") or v.tags:find("Fun") or v.tags:find("Realism")) and not v.tags:find("map") and not v.tags:find("Weapon") and not v.tags:find("Model") then
 			addons = addons + 1
 		end
