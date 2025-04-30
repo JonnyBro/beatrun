@@ -1,4 +1,4 @@
-local OldAnims = CreateClientConVar("Beatrun_OldAnims", "0", true, false, "")
+local AnimSet = CreateClientConVar("Beatrun_AnimSet", "0", true, false, "")
 local AutoHandSwitching = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
 
 -- Animations that use arms for auto hand switching
@@ -1419,10 +1419,10 @@ end
 function CheckAnims()
 	RemoveBodyAnim()
 
-	if OldAnims:GetBool() then
-		animtable.animmodelstring = "old_climbanim"
-	else
+	if AnimSet:GetInt() == 0 then
 		animtable.animmodelstring = "new_climbanim"
+	else
+		animtable.animmodelstring = "old_climbanim"
 	end
 
 	StartBodyAnim(animtable)
@@ -1442,7 +1442,7 @@ function CheckAnims()
 	end
 end
 
-cvars.AddChangeCallback("Beatrun_OldAnims", function(cvar, vOld, vNew)
+cvars.AddChangeCallback("Beatrun_AnimSet", function(cvar, vOld, vNew)
 	CheckAnims()
 end)
 

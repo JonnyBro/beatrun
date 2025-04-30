@@ -85,10 +85,10 @@ net.Receive("RollAnimSP", function()
 		roll.BodyAnimSpeed = 1.15
 	end
 
-	if GetConVar("Beatrun_OldAnims"):GetBool() then
-		roll.animmodelstring = "old_climbanim"
-	else
+	if GetConVar("Beatrun_AnimSet"):GetInt() == 0 then
 		roll.animmodelstring = "new_climbanim"
+	else
+		roll.animmodelstring = "old_climbanim"
 	end
 
 	CacheBodyAnim()
