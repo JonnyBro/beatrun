@@ -236,6 +236,15 @@ local function BeatrunHUD()
 		surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.9 + vp.x)
 		surface.DrawText(language.GetPhrase("beatrun.hud.lvl"):format(ply:GetLevel()))
 
+		local kickGlitchText = ""
+		if ply:GetInfo("Beatrun_KickGlitch") == "1" then
+			kickGlitchText = "Off"
+		elseif ply:GetInfo("Beatrun_KickGlitch") == "2" then
+			kickGlitchText = "Old"
+		elseif ply:GetInfo("Beatrun_KickGlitch") == "3" then
+			kickGlitchText = "New"
+		end
+
 		if verificationstats:GetBool() then
 			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.02 + vp.x)
 			surface.DrawText("Purist: ")
@@ -245,7 +254,7 @@ local function BeatrunHUD()
 			surface.DrawText(ply:GetInfo("Beatrun_PuristWallrun") == "1" and "true" or "false")
 			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.06 + vp.x)
 			surface.DrawText("Kick Glitch: ")
-			surface.DrawText(ply:GetInfo("Beatrun_KickGlitch") == "1" and "Old" or "New")
+			surface.DrawText(kickGlitchText)
 		end
 
 		if tobool(ply:GetInfo("Beatrun_PuristMode")) then

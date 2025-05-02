@@ -322,9 +322,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(divider)
 
 		local kickglitchdrop = panel:ComboBox("#beatrun.toolsmenu.moves.kickglitch", "Beatrun_Kickglitch")
-		kickglitchdrop:AddChoice("#beatrun.toolsmenu.moves.kickglitch1", 0)
-		kickglitchdrop:AddChoice("#beatrun.toolsmenu.moves.kickglitch2", 1)
-		kickglitchdrop:AddChoice("#beatrun.toolsmenu.moves.kickglitch3", 2)
+		kickglitchdrop:AddChoice("#beatrun.toolsmenu.moves.kickglitch1", 1)
+		kickglitchdrop:AddChoice("#beatrun.toolsmenu.moves.kickglitch2", 2)
+		kickglitchdrop:AddChoice("#beatrun.toolsmenu.moves.kickglitch3", 3)
 
 		panel:CheckBox("#beatrun.toolsmenu.moves.quakejump", "Beatrun_QuakeJump")
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.quakejumpdesc"))

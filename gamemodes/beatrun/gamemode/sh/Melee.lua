@@ -1,4 +1,4 @@
-local kickglitch = CreateConVar("Beatrun_KickGlitch", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Kickglitch mode. 0: disabled, 1: datae-style (velocity multiplier), 2: Mirror's Edge-style (invisible platform)", 0, 2)
+local kickglitch = CreateConVar("Beatrun_KickGlitch", "1", {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Kickglitch mode. 0: disabled, 1: datae-style (velocity multiplier), 2: Mirror's Edge-style (invisible platform)", 1, 3)
 
 local tr = {}
 local tr_result = {}
@@ -270,13 +270,13 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 	end
 
 	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 and ply:GetMelee() >= 5 and not ply:OnGround() then
-		if kickglitch:GetInt() == 1 and mv:KeyDown(IN_JUMP) then
+		if kickglitch:GetInt() == 2 and mv:KeyDown(IN_JUMP) then
 			local vel = mv:GetVelocity()
 			vel:Mul(1.25)
 			vel.z = 300
 
 			mv:SetVelocity(vel)
-		elseif kickglitch:GetInt() == 2 then
+		elseif kickglitch:GetInt() == 3 then
 			if SERVER then
 				local platform = ents.Create("prop_physics")
 
