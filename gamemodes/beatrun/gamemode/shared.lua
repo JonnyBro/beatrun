@@ -1,7 +1,7 @@
 BEATRUN_SHARED = BEATRUN_SHARED or {}
 
-versionGlobal = "1.0.51"
-versionLatest = ""
+installedVersion = "1.0.52"
+latestVersion = ""
 local isVersionCheched
 
 DeriveGamemode("sandbox")
@@ -21,11 +21,11 @@ end
 if not isVersionCheched then
 	http.Fetch("https://raw.githubusercontent.com/JonnyBro/beatrun/main/version.txt", function(body, _, _, code)
 		if code == 200 then
-			versionLatest = body:gsub("[\n\r]", "")
+			latestVersion = body:gsub("[\n\r]", "")
 
-			print("Latest version: " .. versionLatest)
+			print("Latest version: " .. latestVersion)
 
-			if versionLatest == versionGlobal then
+			if latestVersion == installedVersion then
 				print("You're up to date, nice!")
 			else
 				print("You're not using the latest GitHub version.")
