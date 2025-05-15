@@ -64,7 +64,7 @@ local function ClimbingEnd(ply, mv, cmd)
 		tr.output = trout
 		local start = tr.start
 
-		for i = 1, 64 do
+		for _ = 1, 64 do
 			start.z = start.z + 1
 
 			util.TraceHull(tr)
