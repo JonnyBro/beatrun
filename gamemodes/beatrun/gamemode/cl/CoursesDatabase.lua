@@ -14,17 +14,20 @@ concommand.Add("Beatrun_Confirm", function()
 	if QueuedArgs and QueuedFunction then
 		QueuedFunction(QueuedArgs)
 
+		QueuedArgs = nil
+		QueuedFunction = nil
+
 		return
 	end
 
 	if QueuedFunction then
 		QueuedFunction()
 
+		QueuedArgs = nil
+		QueuedFunction = nil
+
 		return
 	end
-
-	QueuedArgs = nil
-	QueuedFunction = nil
 end)
 
 local function GetCurrentMapWorkshopID()
@@ -72,14 +75,6 @@ local function FetchCourse(url, headers)
 	end, function(e) print("An error occurred: " .. e) end, headers)
 end
 
-concommand.Add("Beatrun_LoadCode", function(ply, cmd, args, argstr)
-	FetchCourse(domain:GetString() .. "/api/download", {
-		authorization = apikey:GetString(),
-		code = args[1],
-		map = string.Replace(currentMap, " ", "-")
-	})
-end)
-
 local function PostCourse(url, course, headers)
 	http.Post(url, {
 		data = course
@@ -111,7 +106,7 @@ function UploadCourse()
 	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
 	local data = fl:Read()
 
-	PostCourse(domain:GetString() .. "/api/upload", util.Base64Encode(data, true), {
+	PostCourse("https://" .. domain:GetString() .. "/api/upload", util.Base64Encode(data, true), {
 		authorization = apikey:GetString(),
 		course = util.Base64Encode(data, true),
 		map = string.Replace(currentMap, " ", "-"),
@@ -119,26 +114,34 @@ function UploadCourse()
 	})
 end
 
-concommand.Add("Beatrun_UploadCourse", function()
-	QueuedFunction = UploadCourse
-
-	print(language.GetPhrase("beatrun.coursesdatabase.upload1"):format(Course_Name, currentMap))
-	print(language.GetPhrase("beatrun.coursesdatabase.upload2"))
-end)
-
 function UpdateCourse(course_code)
 	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantuploadfreeplay")) end
 
 	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
 	local data = fl:Read()
 
-	PostCourse(domain:GetString() .. "/api/update", data, {
+	PostCourse("https://" .. domain:GetString() .. "/api/update", data, {
 		authorization = apikey:GetString(),
 		code = course_code,
 		course = util.Base64Encode(data, true),
 		map = string.Replace(currentMap, " ", "-")
 	})
 end
+
+concommand.Add("Beatrun_LoadCode", function(ply, cmd, args, argstr)
+	FetchCourse("https://" .. domain:GetString() .. "/api/download", {
+		authorization = apikey:GetString(),
+		code = args[1],
+		map = string.Replace(currentMap, " ", "-")
+	})
+end)
+
+concommand.Add("Beatrun_UploadCourse", function()
+	QueuedFunction = UploadCourse
+
+	print(language.GetPhrase("beatrun.coursesdatabase.upload1"):format(Course_Name, currentMap))
+	print(language.GetPhrase("beatrun.coursesdatabase.upload2"))
+end)
 
 concommand.Add("Beatrun_UpdateCode", function(ply, cmd, args, argstr)
 	QueuedFunction = UpdateCourse
