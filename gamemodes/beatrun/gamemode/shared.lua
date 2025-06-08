@@ -1,6 +1,6 @@
 BEATRUN_SHARED = BEATRUN_SHARED or {}
 
-installedVersion = "1.0.53"
+installedVersion = "1.0.54"
 latestVersion = ""
 local isVersionCheched
 
