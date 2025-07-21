@@ -1,8 +1,7 @@
 local vmatrixmeta = FindMetaTable("VMatrix")
 local playermeta = FindMetaTable("Player")
 
-CreateConVar("Beatrun_RandomMWLoadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
-CreateConVar("Beatrun_RandomARC9Loadouts", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+CreateConVar("Beatrun_RandomLoadouts", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 1, 4)
 
 -- Example loadouts. You can put any SWEP's class name here.
 BEATRUN_GAMEMODES_LOADOUTS = {
@@ -101,7 +100,7 @@ end
 
 function BeatrunGetRandomMWLoadout(attempts)
 	local allWeps = GetWeaponList()
-	attempts = attempts or math.Round(#allWeps / 10)
+	attempts = attempts or math.Round(#allWeps / 5)
 
 	local tbl = {}
 	local usedClasses = {}
@@ -119,9 +118,9 @@ function BeatrunGetRandomMWLoadout(attempts)
 	return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
 end
 
-function BeatrunGetRandomARCLoudout(attempts)
+function BeatrunGetRandomARC9Loudout(attempts)
 	local allWeps = GetWeaponList()
-	attempts = attempts or math.Round(#allWeps / 10)
+	attempts = attempts or math.Round(#allWeps / 5)
 
 	local tbl = {}
 	local usedClasses = {}
@@ -139,13 +138,38 @@ function BeatrunGetRandomARCLoudout(attempts)
 	return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
 end
 
-function BeatrunMakeLoadout()
-	local arc = GetConVar("Beatrun_RandomARC9Loadouts"):GetBool()
-	local mw = GetConVar("Beatrun_RandomMWLoadouts"):GetBool()
+function BeatrunGetRandomARCCWLoudout(attempts)
+	local allWeps = GetWeaponList()
+	attempts = attempts or math.Round(#allWeps / 5)
 
-	if mw then return BeatrunGetRandomMWLoadout()
-	elseif arc then return BeatrunGetRandomARCLoudout()
-	else return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)] end
+	local tbl = {}
+	local usedClasses = {}
+
+	while #tbl < 2 and attempts > 0 do
+		attempts = attempts - 1
+		local wep = allWeps[math.random(#allWeps)]
+		if not usedClasses[wep.ClassName] and string.find(wep.Base, "arccw") then
+			table.insert(tbl, wep.ClassName)
+			usedClasses[wep.ClassName] = true
+		end
+	end
+
+	if #tbl == 2 then return tbl end
+	return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
+end
+
+function BeatrunMakeLoadout()
+	local selectedLoadouts = GetConVar("Beatrun_RandomLoadouts"):GetInt()
+
+	if selectedLoadouts == 1 then
+		return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
+	elseif selectedLoadouts == 2 then
+		return BeatrunGetRandomMWLoadout()
+	elseif selectedLoadouts == 3 then
+		return BeatrunGetRandomARC9Loudout()
+	elseif selectedLoadouts == 4 then
+		return BeatrunGetRandomARCCWLoudout()
+	end
 end
 
 function BeatrunGiveGMLoadout(ply)

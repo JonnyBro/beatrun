@@ -1,8 +1,8 @@
 BEATRUN_SHARED = BEATRUN_SHARED or {}
 
-installedVersion = "1.0.54"
+installedVersion = "1.0.60"
 latestVersion = ""
-local isVersionCheched
+local checked
 
 DeriveGamemode("sandbox")
 
@@ -18,7 +18,7 @@ for _, v in ipairs(file.Find("gamemodes/beatrun/gamemode/sh/*.lua", "GAME", "nam
 	include("sh/" .. v)
 end
 
-if not isVersionCheched then
+if not checked then
 	http.Fetch("https://raw.githubusercontent.com/JonnyBro/beatrun/main/version.txt", function(body, _, _, code)
 		if code == 200 then
 			latestVersion = body:gsub("[\n\r]", "")
@@ -31,12 +31,12 @@ if not isVersionCheched then
 				print("You're not using the latest GitHub version.")
 			end
 
-			isVersionCheched = true
+			checked = true
 
 			return
 		else
-			print("Error while checking version (not code 200):\n", body)
-			isVersionCheched = true
+			print("Error while checking version:\n", body)
+			checked = true
 
 			return
 		end
