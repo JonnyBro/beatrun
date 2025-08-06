@@ -1,13 +1,15 @@
 local vmatrixmeta = FindMetaTable("VMatrix")
 local playermeta = FindMetaTable("Player")
 
-CreateConVar("Beatrun_RandomLoadouts", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 1, 4)
+CreateConVar("Beatrun_RandomLoadouts", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 1, 5)
 
--- Example loadouts. You can put any SWEP's class name here.
+-- Example loadouts. You can put any SWEP's **class names** here.
 BEATRUN_GAMEMODES_LOADOUTS = {
 	{"weapon_357", "weapon_ar2"},
 	{"weapon_pistol", "weapon_smg1"}
 }
+
+local weaponBases = {"beatrun", "mg_base", "arc9", "arccw", "tfa_"}
 
 local mtmp = {
 	{0, 0, 0, 0},
@@ -87,7 +89,8 @@ function BeatrunGiveAmmo(ply, wep)
 end
 
 local cachedWeapons = nil
-local function GetWeaponList()
+
+function GetWeaponsList()
 	if not cachedWeapons then
 		cachedWeapons = {}
 		for _, wep in pairs(weapons.GetList()) do
@@ -98,9 +101,10 @@ local function GetWeaponList()
 	return cachedWeapons
 end
 
-function BeatrunGetRandomMWLoadout(attempts)
-	local allWeps = GetWeaponList()
+function BeatrunGetRandomLoadout(selected)
+	local allWeps = GetWeaponsList()
 	attempts = attempts or math.Round(#allWeps / 5)
+	local selectedBase = weaponBases[selected]
 
 	local tbl = {}
 	local usedClasses = {}
@@ -108,73 +112,28 @@ function BeatrunGetRandomMWLoadout(attempts)
 	while #tbl < 2 and attempts > 0 do
 		attempts = attempts - 1
 		local wep = allWeps[math.random(#allWeps)]
-		if not usedClasses[wep.ClassName] and wep.Base == "mg_base" then
-			table.insert(tbl, wep.ClassName)
-			usedClasses[wep.ClassName] = true
+
+		if selectedBase == "beatrun" then
+			return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
+		else
+			if string.find(wep.Base, selectedBase) and not string.find(wep.ClassName, "base") and not usedClasses[wep.ClassName] then
+				table.insert(tbl, wep.ClassName)
+				usedClasses[wep.ClassName] = true
+			end
 		end
 	end
 
 	if #tbl == 2 then return tbl end
+
 	return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
-end
-
-function BeatrunGetRandomARC9Loudout(attempts)
-	local allWeps = GetWeaponList()
-	attempts = attempts or math.Round(#allWeps / 5)
-
-	local tbl = {}
-	local usedClasses = {}
-
-	while #tbl < 2 and attempts > 0 do
-		attempts = attempts - 1
-		local wep = allWeps[math.random(#allWeps)]
-		if not usedClasses[wep.ClassName] and string.find(wep.Base, "arc9") and wep.Base ~= "arc9_base" then
-			table.insert(tbl, wep.ClassName)
-			usedClasses[wep.ClassName] = true
-		end
-	end
-
-	if #tbl == 2 then return tbl end
-	return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
-end
-
-function BeatrunGetRandomARCCWLoudout(attempts)
-	local allWeps = GetWeaponList()
-	attempts = attempts or math.Round(#allWeps / 5)
-
-	local tbl = {}
-	local usedClasses = {}
-
-	while #tbl < 2 and attempts > 0 do
-		attempts = attempts - 1
-		local wep = allWeps[math.random(#allWeps)]
-		if not usedClasses[wep.ClassName] and string.find(wep.Base, "arccw") then
-			table.insert(tbl, wep.ClassName)
-			usedClasses[wep.ClassName] = true
-		end
-	end
-
-	if #tbl == 2 then return tbl end
-	return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
-end
-
-function BeatrunMakeLoadout()
-	local selectedLoadouts = GetConVar("Beatrun_RandomLoadouts"):GetInt()
-
-	if selectedLoadouts == 1 then
-		return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
-	elseif selectedLoadouts == 2 then
-		return BeatrunGetRandomMWLoadout()
-	elseif selectedLoadouts == 3 then
-		return BeatrunGetRandomARC9Loudout()
-	elseif selectedLoadouts == 4 then
-		return BeatrunGetRandomARCCWLoudout()
-	end
 end
 
 function BeatrunGiveGMLoadout(ply)
 	if not IsValid(ply) then return end
-	local loadout = BeatrunMakeLoadout()
+
+	local selectedLoadouts = GetConVar("Beatrun_RandomLoadouts"):GetInt()
+	local loadout = BeatrunGetRandomLoadout(selectedLoadouts)
+
 	for _, v in pairs(loadout) do
 		local wep = ply:Give(v)
 		if IsValid(wep) then timer.Simple(1, function() if IsValid(ply) and IsValid(wep) then BeatrunGiveAmmo(ply, wep) end end) end
