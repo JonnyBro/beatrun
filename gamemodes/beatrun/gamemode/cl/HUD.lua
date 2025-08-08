@@ -562,24 +562,3 @@ local function RecordSpeedGraph()
 end
 
 hook.Add("Tick", "SpeedGraph", RecordSpeedGraph)
-
---[[
-local crosshair_unarmed = Material("vgui/hud/crosshair_unarmed")
-local crosshair_standard = Material("vgui/hud/crosshair_standard")
-
-local function BeatrunReticle()
-	if not reticle:GetBool() then return end
-
-	local wep = LocalPlayer():GetActiveWeapon()
-
-	if not IsValid(wep) or not LocalPlayer():UsingRH() then return end
-
-	surface.SetDrawColor(255, 255, 255)
-	surface.SetMaterial(crosshair_standard)
-	surface.DrawTexturedRect(ScrW() * 0.5 - 4, ScrH() * 0.5 - 4, 8, 8)
-	surface.SetMaterial(crosshair_unarmed)
-	surface.DrawTexturedRect(ScrW() * 0.5 - 4, ScrH() * 0.5 - 4, 8, 8)
-end
-
-hook.Add("HUDPaint", "BeatrunReticle", BeatrunReticle)
---]]

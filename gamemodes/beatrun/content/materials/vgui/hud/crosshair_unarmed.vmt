@@ -1,6 +1,0 @@
-"UnlitGeneric"
-{
-	"$basetexture" "vgui/hud/crosshair_unarmed"
-	"$ignorez" 1
-	"$translucent" 1
-}
