@@ -15,9 +15,9 @@
 
 ### The **only official source** for this fork is this repository and [my workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024). Other workshop versions are not supported
 
-### Whoever else that claims to have an "official" repository and does not have a license other than WTFPL is NOT to be trusted. This project is not something legal, so licenses DO NOT apply under any circumstances
+### Whoever else that claims to have an "official" repository and does not have a license other than WTFPL is NOT to be trusted. This project is not that legal, so licenses DO NOT apply under any circumstances
 
-### This repository is the original one and is maintained by the original people that cracked beatrun
+### This repository is the original one and is maintained by the original people that cracked Beatrun
 
 ---
 
@@ -77,6 +77,7 @@ irm https://beatrun.jonnybro.ru/install | iex
 - In-game configuration menu in the Tools menu under **Beatrun**. All settings can be modified here.
 - Localization support in **7 languages**.
 - Enhanced Build Mode: spawn props from the Spawn Menu, and they will save in your course.
+- Random weapon loadouts from MW Base, ARC9, ARCCW and TFA. Or create your own in [!Helpers.lua](./gamemodes/beatrun/gamemode/sh/!Helpers.lua#L7)!
 - Various new abilities:
   - **Roll after ziplines:** Press `+duck` (CTRL by default).
   - **Dismount ladders:** Press `+duck` (CTRL by default).
