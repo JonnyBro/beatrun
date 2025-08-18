@@ -1,3 +1,4 @@
+-- This shit is awful
 local showKeystrokes = CreateClientConVar("Beatrun_ShowKeystrokes", 1, true, true)
 
 local color_white = Color(255, 255, 255)
