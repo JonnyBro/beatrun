@@ -129,7 +129,7 @@ The animations installer has been removed. You can now switch animations directl
 
 - **[All contributors](https://github.com/JonnyBro/beatrun/graphs/contributors)** ❤️
 - [EarthyKiller127/datae](https://www.youtube.com/channel/UCiFqPwGo4x0J65xafIaECDQ) - Original creator of Beatrun.
-- [relaxtakenotes](https://github.com/relaxtakenotes) - Made this project possible.
+- relaxtakenotes - Made this project possible.
 - [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated Project.
 - [Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc) - Discord Rich Presence.
 - [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) - Steam Presence (TFA Base creator).
