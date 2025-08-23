@@ -103,7 +103,7 @@ end
 
 function BeatrunGetRandomLoadout(selected)
 	local allWeps = GetWeaponsList()
-	attempts = attempts or math.Round(#allWeps / 5)
+	local attempts = math.Round(#allWeps / 5)
 	local selectedBase = weaponBases[selected]
 
 	local tbl = {}
