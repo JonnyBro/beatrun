@@ -80,13 +80,8 @@ local function RenderTraces()
 	table.Empty(traces)
 end
 
-BEATRUN_DEBUG = false
 
-concommand.Add("Beatrun_Debug", function(ply, cmd, args)
-	BEATRUN_DEBUG = tobool(args[1])
-
-	print("Beatrun Debug: " .. tostring(BEATRUN_DEBUG))
-
+local function initDebug()
 	if BEATRUN_DEBUG then
 		hook.Add("HUDPaint", "DrawDebugInfo", DrawDebugInfo)
 		hook.Add("PostRender", "RenderTraces", RenderTraces)
@@ -100,4 +95,17 @@ concommand.Add("Beatrun_Debug", function(ply, cmd, args)
 		hook.Remove("PostRender", "RenderTraces")
 		util.TraceLine = TraceLine_o
 	end
+end
+
+if (BEATRUN_DEBUG == nil) then
+	BEATRUN_DEBUG = false
+end
+initDebug() -- First time init
+
+concommand.Add("Beatrun_Debug", function(ply, cmd, args)
+	BEATRUN_DEBUG = tobool(args[1])
+
+	print("Beatrun Debug: " .. tostring(BEATRUN_DEBUG))
+
+	initDebug()
 end)
