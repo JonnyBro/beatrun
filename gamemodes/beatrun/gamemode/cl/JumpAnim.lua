@@ -1,5 +1,6 @@
 local AnimSet = CreateClientConVar("Beatrun_AnimSet", "0", true, false, "")
 local AutoHandSwitching = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
+local CatalystCoil = CreateClientConVar("Beatrun_CatalystCoil","0", true, false)
 
 -- Animations that use arms for auto hand switching
 local requiresArms = {
@@ -45,6 +46,7 @@ fbanims = {
 	jumpzipline = true,
 	springboardleftleg = true,
 	jumpcoilend = true,
+	jumpcoilcatalyst = true,
 	hangstraferight = true,
 	hangfoldedstart = true,
 	jumpslow = true,
@@ -144,6 +146,7 @@ local jumpanims = {
 	jumpidle = true,
 	jumpair = true,
 	jumpcoil = true,
+	jumpcoilcatalyst = true,
 	jumpzipline = true
 }
 
@@ -325,7 +328,8 @@ local armlock = {
 	wallrunright = true,
 	wallrunleft = true,
 	wallrunrightstart = true,
-	wallrunleftstart = true
+	wallrunleftstart = true,
+	jumpcoilcatalyst = true
 }
 
 local stillanims = {
@@ -494,7 +498,8 @@ local ignorezarm = {
 	hangfoldedheaveup = true,
 	wallrunverticalstart = true,
 	diestandlong = true,
-	vaultontohigh = true
+	vaultontohigh = true,
+	jumpcoilcatalyst = true
 }
 
 local nocyclereset = {
@@ -1357,6 +1362,13 @@ hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 end)
 
 local function JumpAnim(event, ply)
+	
+	if CatalystCoil:GetBool() and event == "coil" and ply:UsingRH() then
+		eventslut.coil = "jumpcoilcatalyst"
+	else
+		eventslut.coil = "jumpcoil"
+	end
+	
 	if events[event] then
 		local wasjumpanim = fbanims[BodyAnimString] and IsValid(BodyAnim)
 
