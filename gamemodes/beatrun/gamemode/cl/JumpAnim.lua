@@ -1,6 +1,6 @@
 local AnimSet = CreateClientConVar("Beatrun_AnimSet", "0", true, false, "")
 local AutoHandSwitching = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
-local CatalystCoil = CreateClientConVar("Beatrun_CatalystCoil","0", true, false)
+local CatalystCoil = CreateClientConVar("Beatrun_CatalystCoil", "0", true, false)
 
 -- Animations that use arms for auto hand switching
 local requiresArms = {
@@ -1362,13 +1362,12 @@ hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 end)
 
 local function JumpAnim(event, ply)
-	
 	if CatalystCoil:GetBool() and event == "coil" and ply:UsingRH() then
 		eventslut.coil = "jumpcoilcatalyst"
 	else
 		eventslut.coil = "jumpcoil"
 	end
-	
+
 	if events[event] then
 		local wasjumpanim = fbanims[BodyAnimString] and IsValid(BodyAnim)
 

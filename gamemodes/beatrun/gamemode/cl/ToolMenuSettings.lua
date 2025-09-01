@@ -264,7 +264,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		animsetting:AddChoice("#beatrun.toolsmenu.gameplay.animset1", 0)
 		animsetting:AddChoice("#beatrun.toolsmenu.gameplay.animset2", 1)
 		animsetting:SetSortItems(false)
-		
+
 		panel:CheckBox("#beatrun.toolsmenu.gameplay.catalystcoil", "Beatrun_CatalystCoil")
 		panel:ControlHelp("#beatrun.toolsmenu.gameplay.catalystcoildesc")
 
