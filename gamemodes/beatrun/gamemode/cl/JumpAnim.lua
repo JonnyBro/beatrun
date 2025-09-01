@@ -1,6 +1,26 @@
 local AnimSet = CreateClientConVar("Beatrun_AnimSet", "0", true, false, "")
 local AutoHandSwitching = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
-local CatalystCoil = CreateClientConVar("Beatrun_CatalystCoil", "0", true, false)
+local CatalystCoil = CreateClientConVar("Beatrun_CatalystCoil","0", true, false)
+
+function PlayerCannotStand(ply)
+	if not IsValid(ply) or ply:GetSliding() then return false end
+
+	local mins = Vector(-16, -16, 0)
+	local maxs = Vector(16, 16, 72)
+
+	local startPos = ply:GetPos()
+	local endPos = startPos + Vector(0, 0, 36)
+
+	local tr = util.TraceHull({
+		start = startPos,
+		endpos = endPos,
+		mins = mins,
+		maxs = maxs,
+		filter = ply
+	})
+
+	return tr and tr.Hit or false
+end
 
 -- Animations that use arms for auto hand switching
 local requiresArms = {
@@ -40,12 +60,14 @@ fbanims = {
 	fallinguncontrolled = true,
 	stand = true,
 	meslideend = true,
+	meslideendcrouch = true,
 	walkbalancefwd = true,
 	meleewrleft = true,
 	runfwd = true,
 	jumpzipline = true,
 	springboardleftleg = true,
 	jumpcoilend = true,
+	jumpcoilendcrouch = true,
 	jumpcoilcatalyst = true,
 	hangstraferight = true,
 	hangfoldedstart = true,
@@ -91,6 +113,7 @@ fbanims = {
 	diveslideidle = true,
 	wallrunright = true,
 	diveslideend = true,
+	diveslideendcrouch = true,
 	divestart = true,
 	hangfoldedheaveup = true,
 	ziplinestart = true,
@@ -285,6 +308,7 @@ local eventslut = {
 	diveslidestart = "diveslidestart",
 	landcoil = "jumpcoilend",
 	diveslideend = "diveslideend",
+	diveslideendcrouch = "diveslideendcrouch",
 	hangend = "jumpair",
 	ladderclimbdownfast = "ladderclimbdownfast",
 	swingpiperight = "stand",
@@ -363,6 +387,7 @@ local arminterrupts = {
 local transitionanims = {
 	hanghardstart = "hang",
 	divestart = "diveidle",
+    diveslideendcrouch = "crouchfwd",
 	ladderexittoplefthand = "runfwd",
 	walktostandleft = "stand",
 	fallinguncontrolled = "runfwd",
@@ -416,7 +441,9 @@ local transitionanims = {
 	water_swimright = "runfwd",
 	water_swimleft = "runfwd",
 	water_swimback = "runfwd",
-	water_float = "runfwd"
+	water_float = "runfwd",
+    meslideendcrouch = "crouchfwd",
+    jumpcoilendcrouch = "crouchfwd",
 }
 
 local nospinebend = {
@@ -472,6 +499,7 @@ local worldarm = {
 	diveslideidle = true,
 	ladderexittoplefthand = true,
 	diveslideend = true,
+	diveslideendcrouch = true,
 	hanghardstartvertical = true,
 	hangstraferight = true,
 	hangfoldedstart = true,
@@ -536,6 +564,7 @@ local customarmoffset = {
 	meslidestart45 = Vector(2, 5, 5),
 	meslideloop45 = Vector(2, 5, 5),
 	meslideend = Vector(2, 5, 9.5),
+	meslideendcrouch = Vector(2, 5, 9.5),
 	meslideendprone = Vector(0, 0, 3),
 	meleeslide = Vector(2, 5, 9.5),
 	jumpturnfly = Vector(0, 2.5, 7.5),
@@ -1361,11 +1390,21 @@ hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 	end
 end)
 
+
 local function JumpAnim(event, ply)
+	
 	if CatalystCoil:GetBool() and event == "coil" and ply:UsingRH() then
 		eventslut.coil = "jumpcoilcatalyst"
 	else
 		eventslut.coil = "jumpcoil"
+	end
+	
+	local isInCrawlspace = PlayerCannotStand(ply)
+	local isHoldingCrouch = ply:KeyDown(IN_DUCK)
+
+	-- Jump Coil End
+	if event == "landcoil" then
+		eventslut[event] = (isInCrawlspace or isHoldingCrouch) and "jumpcoilendcrouch" or "jumpcoilend"
 	end
 
 	if events[event] then
