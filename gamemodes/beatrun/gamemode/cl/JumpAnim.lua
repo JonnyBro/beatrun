@@ -1,6 +1,6 @@
 local AnimSet = CreateClientConVar("Beatrun_AnimSet", "0", true, false, "")
 local AutoHandSwitching = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
-local CatalystCoil = CreateClientConVar("Beatrun_CatalystCoil","0", true, false)
+local CatalystCoil = CreateClientConVar("Beatrun_CatalystCoil", "0", true, false)
 
 function PlayerCannotStand(ply)
 	if not IsValid(ply) or ply:GetSliding() then return false end
@@ -388,7 +388,7 @@ local arminterrupts = {
 local transitionanims = {
 	hanghardstart = "hang",
 	divestart = "diveidle",
-    diveslideendcrouch = "crouchfwd",
+	diveslideendcrouch = "crouchfwd",
 	ladderexittoplefthand = "runfwd",
 	walktostandleft = "stand",
 	fallinguncontrolled = "runfwd",
@@ -443,8 +443,8 @@ local transitionanims = {
 	water_swimleft = "runfwd",
 	water_swimback = "runfwd",
 	water_float = "runfwd",
-    meslideendcrouch = "crouchfwd",
-    jumpcoilendcrouch = "crouchfwd",
+	meslideendcrouch = "crouchfwd",
+	jumpcoilendcrouch = "crouchfwd",
 }
 
 local nospinebend = {
@@ -1397,13 +1397,12 @@ end)
 
 
 local function JumpAnim(event, ply)
-	
 	if CatalystCoil:GetBool() and event == "coil" and ply:UsingRH() then
 		eventslut.coil = "jumpcoilcatalyst"
 	else
 		eventslut.coil = "jumpcoil"
 	end
-	
+
 	local isInCrawlspace = PlayerCannotStand(ply)
 	local isHoldingCrouch = ply:KeyDown(IN_DUCK)
 

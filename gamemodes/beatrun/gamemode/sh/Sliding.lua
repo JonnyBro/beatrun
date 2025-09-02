@@ -135,10 +135,12 @@ local function SlidingAnimEnd(slippery, diving)
 		if not ply.DiveSliding and not diving then
 			local crouchEnd = PlayerCannotStand(ply)
 			local endAnim = crouchEnd and "meslideendcrouch" or "meslideend"
+
 			BodyAnimString = endAnim
 			BodyAnim:ResetSequence(endAnim)
 		else
 			ply.DiveSliding = false
+
 			local crouchEnd = PlayerCannotStand(ply)
 			local endAnim = crouchEnd and "diveslideendcrouch" or "diveslideend"
 
@@ -501,7 +503,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		if SERVER and ply.SlideLoopSound then
 			ply.SlideLoopSound:Stop()
 		end
-		
+
 		ply:ConCommand("-duck")
 
 		ply:SetViewOffsetDucked(Vector(0, 0, 32))
