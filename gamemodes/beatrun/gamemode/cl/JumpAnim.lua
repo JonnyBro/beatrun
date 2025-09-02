@@ -9,7 +9,7 @@ function PlayerCannotStand(ply)
 	local maxs = Vector(16, 16, 72)
 
 	local startPos = ply:GetPos()
-	local endPos = startPos + Vector(0, 0, 36)
+	local endPos = startPos + Vector(0, 0, 16)
 
 	local tr = util.TraceHull({
 		start = startPos,
