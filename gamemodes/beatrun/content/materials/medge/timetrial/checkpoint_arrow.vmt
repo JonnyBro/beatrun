@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	$basetexture	"medge/timetrial/arrow_02"
+	$translucent	"1"
+	$vertexcolor	"1"
+	$vertexalpha	"1"
+}

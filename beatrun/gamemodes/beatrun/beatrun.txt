@@ -1,7 +1,0 @@
-"beatrun"
-{
-	"base"		"base"
-	"title"		"Beatrun"
-	"maps"		"^br_"
-	"menusystem"	"1"
-}

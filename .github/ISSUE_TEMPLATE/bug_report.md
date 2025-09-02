@@ -2,7 +2,7 @@
 name: Bug report
 about: Report any issues you have found (don't report anything if you are using custom
   code for speed change or anything else like that)
-title: "[Bug] <Add a title here!>"
+title: "[Bug] Add a title here!"
 labels: bug
 assignees: ''
 
