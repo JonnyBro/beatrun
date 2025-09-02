@@ -119,6 +119,7 @@ fbanims = {
 	ziplinestart = true,
 	dodgejumpleft = true,
 	evaderoll = true,
+	evaderollcrouch = true,
 	hanghardstart2 = true,
 	diestand = true,
 	jumpturnlandstand = true,
@@ -538,8 +539,11 @@ local nocyclereset = {
 
 local ignorebac = {
 	evaderoll = true,
+	evaderollcrouch = true,
 	meroll = true,
-	merollgun = true
+	merollcrouch = true,
+	merollgun = true,
+	merollguncrouch = true
 }
 
 local customspeed = {
@@ -826,6 +830,7 @@ local transitionchecks = {
 		end
 	end
 }
+
 
 fbfunctions = {
 	vaultontohigh = function(ply) return true end,
