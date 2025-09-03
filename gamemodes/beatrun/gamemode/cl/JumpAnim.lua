@@ -1462,8 +1462,6 @@ local function JumpAnim(event, ply)
 		if event == "jump" or event == "jumpfar" or (event:Left(11) == "jumpwallrun" and ply:GetWallrunDir():Dot(ply:EyeAngles():Forward()) < 0.75) then
 			if event == "jumpfar" then
 				animtable.AnimString = "jumpfast"
-			elseif event == "jump" and eventslut[event] == "jumpcrouch" then
-				animtable.AnimString = "jumpcrouch" -- ← override happens here
 			else
 				animtable.AnimString = "jumpslow"
 			end
@@ -1977,5 +1975,6 @@ local function JumpThink()
 		end
 	end
 end
+
 
 hook.Add("Think", "JumpThink", JumpThink)
