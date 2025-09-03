@@ -38,12 +38,16 @@ function DoJumpTurnStand()
 		VMLegs:Remove()
 	end
 
-	if not LocalPlayer():UsingRH() then
-		BodyAnim:SetSequence("jumpturnlandstandgun")
+	if PlayerCannotStand(LocalPlayer()) then
+		BodyAnim:SetSequence("jumpturnlandcrouch")
+		ParkourEvent("jumpturnlandcrouch", LocalPlayer(), game.SinglePlayer())
 	else
-		BodyAnim:SetSequence("jumpturnlandstand")
-
-		ParkourEvent("jumpturnlandstand", LocalPlayer(), game.SinglePlayer())
+		if not LocalPlayer():UsingRH() then
+			BodyAnim:SetSequence("jumpturnlandstandgun")
+		else
+			BodyAnim:SetSequence("jumpturnlandstand")
+			ParkourEvent("jumpturnlandstand", LocalPlayer(), game.SinglePlayer())
+		end
 	end
 
 	BodyAnimCycle = 0

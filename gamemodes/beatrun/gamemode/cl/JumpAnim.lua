@@ -123,6 +123,7 @@ fbanims = {
 	hanghardstart2 = true,
 	diestand = true,
 	jumpturnlandstand = true,
+	jumpturnlandcrouch = true,
 	runbwd = true,
 	hanghardstartvertical = true,
 	walkbalancestill = true,
@@ -269,6 +270,7 @@ local eventslut = {
 	walkbalancefwd = "walkbalancefwd",
 	jumpwallrunleft = "jumpwrright",
 	jumpturnlandstand = "jumpturnlandstand",
+	jumpturnlandcrouch = "jumpturnlandcrouch",
 	swingjump = "swingjumpoff",
 	sidestepleft = "dodgejumpleft",
 	vaulthigh = "vaultoverhigh",
@@ -359,6 +361,7 @@ local armlock = {
 
 local stillanims = {
 	jumpturnlandstandgun = true,
+	jumpturnlandcrouch = true,
 	meslideloop = true,
 	jumpturnlandidle = true,
 	snatchsniper = true,
@@ -417,6 +420,7 @@ local transitionanims = {
 	jumpcoilend = "runfwd",
 	bargeout = "runfwd",
 	jumpturnlandstandgun = "stand",
+	jumpturnlandcrouch = "crouchstill",
 	meleewrright = "jumpair",
 	diveslidestart = "diveslideidle",
 	diveslideend = "runfwd",
@@ -576,6 +580,7 @@ local customarmoffset = {
 	jumpturnland = Vector(0, 2.5, 7.5),
 	jumpturnlandidle = Vector(0, 2.5, 7.5),
 	jumpturnlandstand = Vector(0, 2.5, 7.5),
+	jumpturnlandcrouch = Vector(2, 5, 9.5),
 	jumpturnlandstandgun = Vector(0, 2.5, 7.5),
 	wallrunvertical = Vector(0, 0, 5),
 	wallrunverticalstart = Vector(0, 0, 5),
@@ -602,6 +607,7 @@ local customcamoffset = {
 	jumpturnflyidle = Vector(0, 0, 7.5),
 	jumpturnland = Vector(0, 0, 7.5),
 	jumpturnlandidle = Vector(0, 0, 7.5),
+	jumpturnlandcrouch = Vector(2, 0, 2.5),
 	jumpturnlandstand = Vector(0, 0, 7.5),
 	jumpturnlandstandgun = Vector(0, 0, 7.5),
 	meslideendprone = Vector(0, 0, 7.5),
@@ -727,6 +733,14 @@ local transitionchecks = {
 		end
 	end,
 	jumpturnlandstandgun = function(ply)
+		if BodyAnimCycle >= 0.85 then
+			BodyLimitX = 90
+			BodyLimitY = 180
+
+			return true
+		end
+	end,
+	jumpturnlandcrouch = function(ply)
 		if BodyAnimCycle >= 0.85 then
 			BodyLimitX = 90
 			BodyLimitY = 180
@@ -1799,7 +1813,8 @@ local function JumpThink()
 					ply:FaithVO("Faith.Impact")
 					DoImpactBlur(6)
 				end
-			elseif (BodyAnimString == "jumpturnland" or BodyAnimString == "jumpturnlandidle" or BodyAnimString == "jumpturnlandstand" or BodyAnimString == "jumpturnlandstandgun") and not ply:OnGround() and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:WaterLevel() < 3 then
+
+			elseif (BodyAnimString == "jumpturnland" or BodyAnimString == "jumpturnlandidle" or BodyAnimString == "jumpturnlandstand" or BodyAnimString == "jumpturnlandstandgun" or BodyAnimString == "jumpturnlandcrouch") and not ply:OnGround() and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:WaterLevel() < 3 then
 				BodyAnimCycle = 0
 
 				BodyAnim:SetSequence("jumpturnflyidle")

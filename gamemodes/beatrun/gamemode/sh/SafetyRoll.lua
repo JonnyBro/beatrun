@@ -6,29 +6,6 @@ local landang = Angle(0, 0, 0)
 local lastGroundSpeed = 0
 local rollspeedloss = CreateConVar("Beatrun_RollSpeedLoss", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 
-function CheckRollCrouch(ply, baseAnim, animTime) -- not used?
-	timer.Simple(animTime or 0.633, function()
-		if not IsValid(ply) then return end
-		if PlayerCannotStand(ply) then
-			local crouchAnim
-			if baseAnim == "merollgun" then
-				crouchAnim = "merollguncrouch"
-			elseif baseAnim == "meroll" then
-				crouchAnim = "merollcrouch"
-			elseif baseAnim == "evaderoll" then
-				crouchAnim = "evaderollcrouch"
-			else
-				return
-			end
-
-			roll.AnimString = crouchAnim
-			roll.animmodelstring = "new_climbanim"
-			roll.BodyAnimSpeed = 1
-			roll.usefullbody = true
-		end
-	end)
-end
-
 hook.Add("SetupMove", "SafetyRoll", function(ply, mv, cmd)
 	local speed = mv:GetVelocity().z
 
@@ -105,18 +82,18 @@ net.Receive("RollAnimSP", function()
 			roll.AnimString = ply:UsingRH() and "land" or "landgun"
 		end
 
-		roll.animmodelstring = "new_climbanim"
+		roll.animmodelstring = (LocalPlayer():GetInfoNum("Beatrun_AnimSet", 0) == 0) and "new_climbanim" or "old_climbanim"
 		roll.BodyAnimSpeed = 1
 	elseif evade then
 		roll.AnimString = "evaderoll"
-		roll.animmodelstring = "new_climbanim"
+		roll.animmodelstring = (LocalPlayer():GetInfoNum("Beatrun_AnimSet", 0) == 0) and "new_climbanim" or "old_climbanim"
 		roll.BodyAnimSpeed = 1.5
 
 		-- Delayed check for evade roll crouch
-		timer.Simple(0.633, function()
+		timer.Simple(0.6, function()
 			if IsValid(ply) and PlayerCannotStand(ply) then
 				roll.AnimString = "evaderollcrouch"
-				roll.animmodelstring = "new_climbanim"
+				roll.animmodelstring = (LocalPlayer():GetInfoNum("Beatrun_AnimSet", 0) == 0) and "new_climbanim" or "old_climbanim"
 				roll.BodyAnimSpeed = 1
 
 				CacheBodyAnim()
@@ -130,11 +107,11 @@ net.Receive("RollAnimSP", function()
 		roll.BodyAnimSpeed = 1.15
 
 		-- Delayed check for roll crouch
-		timer.Simple(0.633, function()
+		timer.Simple(0.6, function()
 			if IsValid(ply) and PlayerCannotStand(ply) then
 				local crouchAnim = roll.AnimString == "merollgun" and "merollguncrouch" or "merollcrouch"
 				roll.AnimString = crouchAnim
-				roll.animmodelstring = "new_climbanim"
+				roll.animmodelstring = (LocalPlayer():GetInfoNum("Beatrun_AnimSet", 0) == 0) and "new_climbanim" or "old_climbanim"
 				roll.BodyAnimSpeed = 1
 
 				CacheBodyAnim()
