@@ -55,6 +55,7 @@ fbanims = {
 	ladderexittoplefthand = true,
 	runfwdstart = true,
 	walktostandleft = true,
+	crouchtostandleft = true,
 	wallrunverticalstart = true,
 	meleeair = true,
 	fallinguncontrolled = true,
@@ -72,6 +73,7 @@ fbanims = {
 	hangstraferight = true,
 	hangfoldedstart = true,
 	jumpslow = true,
+	jumpcrouch = true,
 	hangheaveup = true,
 	jumpwrright = true,
 	meleeairhit = true,
@@ -155,6 +157,9 @@ fbanims = {
 	meleeairstill = true,
 	swingjumpoff = true,
 	snatchscar = true,
+	merollguncrouch = true,
+	evaderollcrouch = true,
+	merollcrouch = true,
 	water_swimfwd = true,
 	water_swimright = true,
 	water_swimleft = true,
@@ -172,19 +177,22 @@ local jumpanims = {
 	jumpair = true,
 	jumpcoil = true,
 	jumpcoilcatalyst = true,
-	jumpzipline = true
+	jumpzipline = true,
+	jumpcrouch = true
 }
 
 local jumpanims2 = {
 	jumpfast = true,
 	jumpslow = true,
-	jumpstill = true
+	jumpstill = true,
+	jumpcrouch = true
 }
 
 local runanims = {
 	crouchfwd = true,
 	crouchbwd = true,
 	walktostandleft = true,
+	crouchtostandleft = true,
 	stand = true,
 	runfwd = true,
 	walkfwd = true,
@@ -212,6 +220,7 @@ local events = {
 	jumpfar = true,
 	hangfoldedstart = true,
 	jumpslide = true,
+	jumpcrouch = true,
 	swingpipeleft = true,
 	ladderenterhang = true,
 	disarmsniper = true,
@@ -282,6 +291,7 @@ local eventslut = {
 	vault = "vaultover",
 	disarmsniper = "snatchsniper",
 	jumpstill = "jumpstill",
+	jumpcrouch = "jumpcrouch",
 	climb = "hanghardstartvertical",
 	stepup = "stepuprightleg",
 	springboard = "springboardleftleg",
@@ -330,6 +340,8 @@ local armfollowanims = {
 	vaultoverhigh = true,
 	walkfwd = true,
 	crouchstill = true,
+	crouchtostandleft = true,
+	jumpcrouch = true,
 	crouchfwd = true,
 	crouchbwd = true
 }
@@ -394,6 +406,7 @@ local transitionanims = {
 	diveslideendcrouch = "crouchfwd",
 	ladderexittoplefthand = "runfwd",
 	walktostandleft = "stand",
+	crouchtostandleft = "crouchstill",
 	fallinguncontrolled = "runfwd",
 	hangstrafeleft = "hang",
 	ladderclimbhangstart = "ladderclimbuprighthandstill",
@@ -441,6 +454,8 @@ local transitionanims = {
 	vaultover = "jumpair",
 	vaultkong = "runfwd",
 	vaultontohigh = "runfwd",
+	jumpcrouch = "crouchtostandleft",
+	crouchtostandleft = "crouchstill",
 	snatchscar = "stand",
 	water_swimfwd = "runfwd",
 	water_swimright = "runfwd",
@@ -484,6 +499,8 @@ local nospinebend = {
 	vaultontohigh = true,
 	snatchscar = true,
 	crouchstill = true,
+	crouchtostandleft = true,
+	jumpcrouch = true,
 	crouchfwd = true,
 	crouchbwd = true
 }
@@ -580,7 +597,7 @@ local customarmoffset = {
 	jumpturnland = Vector(0, 2.5, 7.5),
 	jumpturnlandidle = Vector(0, 2.5, 7.5),
 	jumpturnlandstand = Vector(0, 2.5, 7.5),
-	jumpturnlandcrouch = Vector(2, 5, 9.5),
+	jumpturnlandcrouch = Vector(0, 2.5, 7.5),
 	jumpturnlandstandgun = Vector(0, 2.5, 7.5),
 	wallrunvertical = Vector(0, 0, 5),
 	wallrunverticalstart = Vector(0, 0, 5),
@@ -593,7 +610,9 @@ local customarmoffset = {
 	ladderexittoprighthand = Vector(5, 0, 0),
 	ladderclimbhangstart = Vector(-5, 0, 0),
 	ladderenterbottom = Vector(-7.5, 0, 0),
+	jumpcrouch = Vector(-4, 0, -2),
 	crouchstill = Vector(-4, 0, -2),
+	crouchtostandleft = Vector(-4, 0, -2),
 	crouchfwd = Vector(-4, 0, -2),
 	crouchbwd = Vector(-4, 0, -2),
 	walkfwd = Vector(10, 0, -10),
@@ -610,6 +629,7 @@ local customcamoffset = {
 	jumpturnlandcrouch = Vector(2, 0, 2.5),
 	jumpturnlandstand = Vector(0, 0, 7.5),
 	jumpturnlandstandgun = Vector(0, 0, 7.5),
+	jumpcrouch = Vector(2, 0, 2.5),
 	meslideendprone = Vector(0, 0, 7.5),
 	vaultover = Vector(0, 0, -2.5),
 	vaultoverhigh = Vector(0, 0, -7.5),
@@ -620,6 +640,7 @@ local customcamoffset = {
 	hangstraferight = Vector(-2.5, 0, 0),
 	snatchscar = snatchscarcam1,
 	crouchstill = Vector(2, 0, 2.5),
+	crouchtostandleft = Vector(2, 0, 2.5),
 	crouchfwd = Vector(2, 0, 2.5),
 	crouchbwd = Vector(2, 0, 2.5)
 }
@@ -1420,9 +1441,14 @@ local function JumpAnim(event, ply)
 	local isInCrawlspace = PlayerCannotStand(ply)
 	local isHoldingCrouch = ply:KeyDown(IN_DUCK)
 
-	-- Jump Coil End
+	-- ✅ Jump Coil End
 	if event == "landcoil" then
 		eventslut[event] = (isInCrawlspace or isHoldingCrouch) and "jumpcoilendcrouch" or "jumpcoilend"
+	end
+
+	-- ✅ Jump Crouch
+	if event == "jump" and (isInCrawlspace or ply:Crouching()) then
+		eventslut[event] = "jumpcrouch"
 	end
 
 	if events[event] then
@@ -1432,9 +1458,12 @@ local function JumpAnim(event, ply)
 			RemoveBodyAnim()
 		end
 
-		if event == "jump" or event == "jumpfar" or event:Left(11) == "jumpwallrun" and ply:GetWallrunDir():Dot(ply:EyeAngles():Forward()) < 0.75 then
+		-- ✅ Adjust animtable string based on jump type
+		if event == "jump" or event == "jumpfar" or (event:Left(11) == "jumpwallrun" and ply:GetWallrunDir():Dot(ply:EyeAngles():Forward()) < 0.75) then
 			if event == "jumpfar" then
 				animtable.AnimString = "jumpfast"
+			elseif event == "jump" and eventslut[event] == "jumpcrouch" then
+				animtable.AnimString = "jumpcrouch" -- ← override happens here
 			else
 				animtable.AnimString = "jumpslow"
 			end
@@ -1458,7 +1487,6 @@ local function JumpAnim(event, ply)
 
 		if not wasjumpanim then
 			CheckAnims()
-
 			StartBodyAnim(animtable)
 
 			if not IsValid(BodyAnim) then return end
@@ -1483,6 +1511,7 @@ local function JumpAnim(event, ply)
 		end
 	end
 end
+
 
 function CheckAnims()
 	RemoveBodyAnim()
@@ -1749,7 +1778,7 @@ local function JumpThink()
 					if (BodyAnimString == "stand" or BodyAnimString == "walktostandleft" or BodyAnimString == "jumpcoilend") and ply:Crouching() or BodyAnimString == "crouchfwd" or BodyAnimString == "crouchbwd" then
 						BodyAnimCycle = 0
 
-						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchstill"))
+						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchtostandleft"))
 					end
 				end
 
@@ -1920,7 +1949,7 @@ local function JumpThink()
 				_ang[1] = 0
 				_ang[3] = 0
 
-				if vel_l > 0 or BodyAnimString == "walktostandleft" or ply:Crouching() or IsValid(ply:GetBalanceEntity()) then
+				if vel_l > 0 or BodyAnimString == "walktostandleft" or BodyAnimString == "crouchtostandleft" or ply:Crouching() or IsValid(ply:GetBalanceEntity()) then
 					if newang:Forward():Dot(ang:Forward()) > -0.25 then
 						ply.OrigEyeAng = newang
 
