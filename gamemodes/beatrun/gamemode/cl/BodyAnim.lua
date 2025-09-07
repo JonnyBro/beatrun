@@ -18,6 +18,12 @@ lockang = false
 CamAddAng = false
 CamIgnoreAng = false
 
+if hook.GetTable()["Glide_OnLocalExitVehicle"] then -- check if the hook exists
+	hook.Add( "Glide_OnLocalExitVehicle", "GlideExitBoneFix", function()
+		if IsValid(BodyAnim) then RemoveBodyAnim() end --glide bugs out bodys hand bones so we gotta reset em
+	end)
+end
+
 local tools = {
 	["gmod_tool"] = true,
 	["weapon_physgun"] = true,
@@ -136,7 +142,7 @@ function RemoveBodyAnim(noang)
 	local currentwep = ply:GetActiveWeapon()
 	local vm = ply:GetViewModel()
 
-	if ply:Alive() and not ply:UsingRH() then
+	if ply:Alive() and not ply:UsingRH() and IsValid(currentwep) then
 		if currentwep.PlayViewModelAnimation then
 			currentwep:PlayViewModelAnimation("Draw")
 		else
