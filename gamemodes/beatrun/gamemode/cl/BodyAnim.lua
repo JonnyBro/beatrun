@@ -142,10 +142,10 @@ function RemoveBodyAnim(noang)
 	local currentwep = ply:GetActiveWeapon()
 	local vm = ply:GetViewModel()
 
-	if ply:Alive() and not ply:UsingRH() then
+	if ply:Alive() and not ply:UsingRH() and IsValid(currentwep) then
 		if currentwep.PlayViewModelAnimation then
 			currentwep:PlayViewModelAnimation("Draw")
-		elseif IsValid(currentwep) then
+		else
 			weapontoidle = currentwep
 			currentwep:SendWeaponAnim(ACT_VM_DRAW)
 
