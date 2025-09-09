@@ -1948,7 +1948,7 @@ local function JumpThink()
 				_ang[3] = 0
 
 				if vel_l > 0 or BodyAnimString == "walktostandleft" or BodyAnimString == "crouchtostandleft" or ply:Crouching() or IsValid(ply:GetBalanceEntity()) then
-					if newang:Forward():Dot(ang:Forward()) > -0.25 then
+					if newang:Forward():Dot(ang:Forward()) > -0.25 and ply:GetMoveType() ~= MOVETYPE_LADDER then
 						ply.OrigEyeAng = newang
 
 						BodyAnim:SetAngles(newang)
