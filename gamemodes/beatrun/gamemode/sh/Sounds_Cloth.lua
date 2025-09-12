@@ -17,6 +17,24 @@ sound.Add({
 })
 
 sound.Add({
+	name = "Cloth.MovementWalk",
+	volume = 0.75,
+	level = 30,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Cloth_Movement_Walk_01.wav", "mirrorsedge/Cloth_Movement_Walk_02.wav", "mirrorsedge/Cloth_Movement_Walk_03.wav", "mirrorsedge/Cloth_Movement_Walk_04.wav", "mirrorsedge/Cloth_Movement_Walk_05.wav", "mirrorsedge/Cloth_Movement_Walk_06.wav", "mirrorsedge/Cloth_Movement_Walk_07.wav", "mirrorsedge/Cloth_Movement_Walk_08.wav"}
+})
+
+sound.Add({
+	name = "Cloth.MovementSneak",
+	volume = 0.75,
+	level = 30,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Cloth_Movement_Sneak_01.wav", "mirrorsedge/Cloth_Movement_Sneak_02.wav", "mirrorsedge/Cloth_Movement_Sneak_03.wav", "mirrorsedge/Cloth_Movement_Sneak_04.wav", "mirrorsedge/Cloth_Movement_Sneak_05.wav", "mirrorsedge/Cloth_Movement_Sneak_06.wav", "mirrorsedge/Cloth_Movement_Sneak_07.wav", "mirrorsedge/Cloth_Movement_Sneak_08.wav"}
+})
+
+sound.Add({
 	name = "Cloth.RollLand",
 	volume = 1,
 	level = 35,
