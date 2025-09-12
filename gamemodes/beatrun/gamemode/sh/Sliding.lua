@@ -2,23 +2,27 @@ local qslide_duration = 3
 local qslide_speedmult = 1
 
 local slide_sounds = {
-	[MAT_DIRT] = {"fol/fol_slide_dirt_01.wav", "fol/fol_slide_dirt_02.wav", "fol/fol_slide_dirt_03.wav", "fol/fol_slide_dirt_04.wav"},
+	[MAT_DIRT] = {"fol/fol_slide_dirt_01.wav", "fol/fol_slide_dirt_02.wav", "fol/fol_slide_dirt_03.wav", "fol/fol_slide_dirt_04.wav", "fol/fol_slide_dirt_05.wav", "fol/fol_slide_dirt_06.wav", "fol/fol_slide_dirt_07.wav"},
 	[MAT_SAND] = {"fol/fol_slide_sand_01.wav", "fol/fol_slide_sand_02.wav", "fol/fol_slide_sand_03.wav", "fol/fol_slide_sand_04.wav"},
-	[MAT_METAL] = {"fol/fol_slide_metal_01.wav", "fol/fol_slide_metal_02.wav", "fol/fol_slide_metal_03.wav"},
-	[MAT_GLASS] = {"fol/fol_slide_glass_01.wav", "fol/fol_slide_glass_02.wav", "fol/fol_slide_glass_03.wav", "fol/fol_slide_glass_04.wav"},
-	[MAT_GRATE] = {"fol/fol_slide_grate_01.wav"},
+	[MAT_METAL] = {"fol/fol_slide_metal_01.wav", "fol/fol_slide_metal_02.wav", "fol/fol_slide_metal_03.wav", "fol/fol_slide_metal_04.wav"},
+	[MAT_VENT] = {"fol/fol_slide_duct_01.wav", "fol/fol_slide_duct_02.wav", "fol/fol_slide_duct_03.wav", "fol/fol_slide_duct_04.wav"},
+	[MAT_GLASS] = {"fol/fol_slide_glass_01.wav", "fol/fol_slide_glass_02.wav", "fol/fol_slide_glass_03.wav"},
+	[MAT_GRATE] = {"fol/fol_slide_gantry_01.wav", "fol/fol_slide_gantry_02.wav", "fol/fol_slide_gantry_03.wav", "fol/fol_slide_gantry_04.wav"},
 	[MAT_SLOSH] = {"ambient/water/water_splash1.wav", "ambient/water/water_splash2.wav", "ambient/water/water_splash3.wav"},
-	[MAT_WOOD] = {"fol/fol_slide_generic_01.wav", "fol/fol_slide_generic_02.wav", "fol/fol_slide_generic_03.wav"}
+	[MAT_WOOD] = {"fol/fol_slide_generic_01.wav", "fol/fol_slide_generic_02.wav", "fol/fol_slide_generic_03.wav", "fol/fol_slide_generic_04.wav"}
 }
 
 local slideloop_sounds = {
 	[0] = "mirrorsedge/Slide/ME_FootStep_ConcreteSlideLoop.wav",
-	[MAT_GLASS] = "mirrorsedge/Slide/ME_FootStep_GlassSlideLoop.wav"
+	[MAT_GLASS] = "mirrorsedge/Slide/ME_FootStep_GlassSlideLoop.wav",
+	[MAT_WOOD] = "mirrorsedge/Slide/ME_FootStep_WoodSlideLoop.wav",
+	[MAT_METAL] = "mirrorsedge/Slide/ME_FootStep_MetalSlideLoop.wav",
+	[MAT_GRATE] = "mirrorsedge/Slide/ME_FootStep_GantrySlideLoop.wav",
+	[MAT_VENT] = "mirrorsedge/Slide/ME_FootStep_DuctSlideLoop.wav"
 }
 
 slide_sounds[MAT_GRASS] = slide_sounds[MAT_DIRT]
 slide_sounds[MAT_SNOW] = slide_sounds[MAT_DIRT]
-slide_sounds[MAT_VENT] = slide_sounds[MAT_METAL]
 slide_sounds[0] = slide_sounds[MAT_DIRT]
 
 --[[
@@ -240,7 +244,7 @@ local function SlideLoopSound(ply, pos, mat)
 	local sndtable = slideloop_sounds[mat] or slideloop_sounds[0]
 
 	ply.SlideLoopSound = CreateSound(ply, sndtable)
-	ply.SlideLoopSound:PlayEx(0.05, 100)
+	ply.SlideLoopSound:PlayEx(0.08, 100)
 end
 
 -- local COORD_FRACTIONAL_BITS = 5
