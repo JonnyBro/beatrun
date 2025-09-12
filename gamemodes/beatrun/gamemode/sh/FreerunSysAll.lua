@@ -124,23 +124,21 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 	if not ply:Crouching() and ply:WaterLevel() > 0 then
 		ply:EmitSound("Footsteps.Water")
 	elseif ply:Crouching() and ply:WaterLevel() > 0 then
-	ply:EmitSound("Sneak.Water")
+		ply:EmitSound("Sneak.Water")
 	end
 
-	if ply:InOverdrive() and ply:GetVelocity():Length() > 400 then
-		ply:EmitSound("Footsteps.Spark")
-	end
+	if ply:InOverdrive() and ply:GetVelocity():Length() > 400 then ply:EmitSound("Footsteps.Spark") end
 
 	if (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) and ply:Crouching() then
-	local sneaksound = FOOTSTEPS_SNEAK_LUT[mat]
+		local sneaksound = FOOTSTEPS_SNEAK_LUT[mat]
 
-	sneaksound = sneaksound or "Concrete"
+		sneaksound = sneaksound or "Concrete"
 
-	ply.LastStepMat = sneaksound
+		ply.LastStepMat = sneaksound
 
-	ply:EmitSound("Sneak." .. sneaksound)
-	ply:EmitSound("Cloth.MovementSneak")
-  end
+		ply:EmitSound("Sneak." .. sneaksound)
+		ply:EmitSound("Cloth.MovementSneak")
+	end
 
 	if (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) and ply.FootstepLand then
 		local landsound = FOOTSTEPS_LAND_LUT[mat] or "Concrete"
