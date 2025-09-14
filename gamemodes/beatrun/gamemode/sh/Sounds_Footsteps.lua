@@ -450,7 +450,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease1.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease2.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease3.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease4.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease5.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease6.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease7.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease8.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease9.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease10.wav"}
+	sound = {"mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease1.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease2.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease3.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease4.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease5.wav"}
 })
 
 sound.Add({
