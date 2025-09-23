@@ -1167,7 +1167,7 @@ local function JumpCalcView(view)
 	if not fbanims[BodyAnimString] then
 		hook.Remove("BodyAnimCalcView", "JumpCalcView")
 		hook.Remove("BodyAnimDrawArm", "JumpArmThink")
-		hook.Remove("PostDrawOpaqueRenderables", "JumpArmDraw")
+		hook.Remove("PreDrawViewModels", "JumpArmDraw") -- was PostDrawOpaqueRenderables
 
 		if IsValid(BodyAnimArmCopy) then
 			BodyAnimArmCopy:Remove()
@@ -1263,10 +1263,10 @@ local armoffsetlerp = Vector()
 -- local drawnorigin = false
 local drawnskytime = 0
 
-local function JumpArmDraw(a, b, c)
+local function JumpArmDraw() --(a, b, c)
 	local bac = CreateBodyAnimArmCopy()
 
-	if IsValid(bac) and not LocalPlayer():ShouldDrawLocalPlayer() and IsValid(BodyAnim) and not c then
+	if IsValid(bac) and not LocalPlayer():ShouldDrawLocalPlayer() and IsValid(BodyAnim) then --and not c
 		local ply = LocalPlayer()
 		local ang = ply:EyeAngles()
 		ang.z = 0
@@ -1388,7 +1388,7 @@ local function JumpArmDraw(a, b, c)
 			bac:SetCycle(bac:GetCycle() + FrameTime() / bac:SequenceDuration())
 		end
 
-		if (not b or not skybox3d) and not worldarm[BodyAnimString] then
+		if not worldarm[BodyAnimString] then --(not b or not skybox3d) and 
 			bac:SetRenderOrigin(campos)
 
 			drawnorigin = true
@@ -1401,13 +1401,13 @@ end
 hook.Add("PreRender", "JumpArmOriginVar", function()
 	drawnorigin = false
 end)
-
+--[[
 hook.Add("PostDrawSkyBox", "JumpArm3DSky", function()
 	skybox3d = true
 
 	hook.Remove("PostDrawSkyBox", "JumpArm3DSky")
 end)
-
+--]]
 hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 	if has_tool_equipped then return end
 
@@ -1503,7 +1503,7 @@ local function JumpAnim(event, ply)
 
 			hook.Add("BodyAnimCalcView", "JumpCalcView", JumpCalcView)
 			hook.Add("BodyAnimDrawArm", "JumpArmThink", JumpArmThink)
-			hook.Add("PostDrawOpaqueRenderables", "JumpArmDraw", JumpArmDraw)
+			hook.Add("PreDrawViewModels", "JumpArmDraw", JumpArmDraw) --was PostDrawOpaqueRenderables, changed to fix reflections and viewmodel lag
 		else
 			BodyAnim:ResetSequence(BodyAnim:LookupSequence(BodyAnimString))
 		end
