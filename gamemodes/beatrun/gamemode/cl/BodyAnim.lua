@@ -18,9 +18,10 @@ lockang = false
 CamAddAng = false
 CamIgnoreAng = false
 
-if hook.GetTable()["Glide_OnLocalExitVehicle"] then -- check if the hook exists
-	hook.Add( "Glide_OnLocalExitVehicle", "GlideExitBoneFix", function()
-		if IsValid(BodyAnim) then RemoveBodyAnim() end --glide bugs out bodys hand bones so we gotta reset em
+-- Glide compatibility (idk why)
+if hook.GetTable()["Glide_OnLocalExitVehicle"] then
+	hook.Add("Glide_OnLocalExitVehicle", "GlideExitBoneFix", function()
+		if IsValid(BodyAnim) then RemoveBodyAnim() end -- glide bugs out bodys hand bones so we gotta reset em
 	end)
 end
 
