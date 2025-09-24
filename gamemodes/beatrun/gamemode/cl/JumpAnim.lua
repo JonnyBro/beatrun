@@ -121,7 +121,6 @@ fbanims = {
 	ziplinestart = true,
 	dodgejumpleft = true,
 	evaderoll = true,
-	evaderollcrouch = true,
 	hanghardstart2 = true,
 	diestand = true,
 	jumpturnlandstand = true,
@@ -406,7 +405,6 @@ local transitionanims = {
 	diveslideendcrouch = "crouchfwd",
 	ladderexittoplefthand = "runfwd",
 	walktostandleft = "stand",
-	crouchtostandleft = "crouchstill",
 	fallinguncontrolled = "runfwd",
 	hangstrafeleft = "hang",
 	ladderclimbhangstart = "ladderclimbuprighthandstill",
@@ -1388,7 +1386,7 @@ local function JumpArmDraw() --(a, b, c)
 			bac:SetCycle(bac:GetCycle() + FrameTime() / bac:SequenceDuration())
 		end
 
-		if not worldarm[BodyAnimString] then --(not b or not skybox3d) and 
+		if not worldarm[BodyAnimString] then --(not b or not skybox3d) and
 			bac:SetRenderOrigin(campos)
 
 			drawnorigin = true
@@ -1401,13 +1399,14 @@ end
 hook.Add("PreRender", "JumpArmOriginVar", function()
 	drawnorigin = false
 end)
+
 --[[
 hook.Add("PostDrawSkyBox", "JumpArm3DSky", function()
 	skybox3d = true
 
 	hook.Remove("PostDrawSkyBox", "JumpArm3DSky")
-end)
---]]
+end) --]]
+
 hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 	if has_tool_equipped then return end
 
