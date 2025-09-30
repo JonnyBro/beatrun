@@ -125,7 +125,7 @@ local function SwingpipeThink(ply, mv, cmd)
 		end
 
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-			ply:EmitSound("Handsteps.ConcreteHard")
+			ply:EmitSound("Handsteps.MetalPipeGrab")
 		end
 
 		ply:ViewPunch(Angle(1, 0, 0))
@@ -134,8 +134,10 @@ local function SwingpipeThink(ply, mv, cmd)
 
 		if ply:GetSBDir() then
 			ParkourEvent("swingpipeleft", ply)
+			ply:EmitSound("Cloth.VaultSwish")
 		else
 			ParkourEvent("swingpiperight", ply)
+			ply:EmitSound("Cloth.VaultSwish")
 		end
 
 		ply.SwingHullCheck = true
@@ -177,6 +179,8 @@ local function SwingpipeThink(ply, mv, cmd)
 		ply:SetSwingbarLast(ply:GetSwingpipe())
 		ply:SetSwingpipe(nil)
 		ply:SetSBDelay(CurTime() + 0.5)
+
+		ply:EmitSound("Handsteps.MetalPipeRelease")
 
 		mv:SetVelocity(cmd:GetViewAngles():Forward() * 260 + Vector(0, 0, 150))
 

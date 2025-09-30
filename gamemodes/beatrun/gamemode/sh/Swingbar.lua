@@ -52,7 +52,7 @@ local function SwingbarCheck(ply, mv, cmd)
 		end
 
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-			ply:EmitSound("Handsteps.ConcreteHard")
+			ply:EmitSound("Handsteps.MetalPipeHard")
 		end
 	end
 end
@@ -161,6 +161,7 @@ local function SwingbarThink(ply, mv, cmd)
 
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("Cloth.VaultSwish")
+			ply:EmitSound("Handsteps.MetalPipeRelease")
 		end
 
 		ply:SetMEMoveLimit(GetConVar("Beatrun_SpeedLimit"):GetInt())

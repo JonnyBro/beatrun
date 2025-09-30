@@ -2,28 +2,37 @@ local qslide_duration = 3
 local qslide_speedmult = 1
 
 local slide_sounds = {
-	[MAT_DIRT] = {"fol/fol_slide_dirt_01.wav", "fol/fol_slide_dirt_02.wav", "fol/fol_slide_dirt_03.wav", "fol/fol_slide_dirt_04.wav", "fol/fol_slide_dirt_05.wav", "fol/fol_slide_dirt_06.wav", "fol/fol_slide_dirt_07.wav"},
-	[MAT_SAND] = {"fol/fol_slide_sand_01.wav", "fol/fol_slide_sand_02.wav", "fol/fol_slide_sand_03.wav", "fol/fol_slide_sand_04.wav"},
-	[MAT_METAL] = {"fol/fol_slide_metal_01.wav", "fol/fol_slide_metal_02.wav", "fol/fol_slide_metal_03.wav", "fol/fol_slide_metal_04.wav"},
-	[MAT_VENT] = {"fol/fol_slide_duct_01.wav", "fol/fol_slide_duct_02.wav", "fol/fol_slide_duct_03.wav", "fol/fol_slide_duct_04.wav"},
-	[MAT_GLASS] = {"fol/fol_slide_glass_01.wav", "fol/fol_slide_glass_02.wav", "fol/fol_slide_glass_03.wav"},
-	[MAT_GRATE] = {"fol/fol_slide_gantry_01.wav", "fol/fol_slide_gantry_02.wav", "fol/fol_slide_gantry_03.wav", "fol/fol_slide_gantry_04.wav"},
-	[MAT_SLOSH] = {"ambient/water/water_splash1.wav", "ambient/water/water_splash2.wav", "ambient/water/water_splash3.wav"},
-	[MAT_WOOD] = {"fol/fol_slide_generic_01.wav", "fol/fol_slide_generic_02.wav", "fol/fol_slide_generic_03.wav", "fol/fol_slide_generic_04.wav"}
+	[MAT_CONCRETE] = {"Slide.Concrete"},
+	[MAT_SAND] = {"Slide.Gravel"},
+	[MAT_METAL] = {"Slide.Metal"},
+	[MAT_VENT] = {"Slide.Duct"},
+	[MAT_TILE] = {"Slide.Marble"},
+	[MAT_GLASS] = {"Slide.Glass"},
+	[MAT_GRATE] = {"Slide.Gantry"},
+	[MAT_PLASTIC] = {"Slide.Tarp"},
+	[MAT_SLOSH] = {"Slide.Water"},
+	[MAT_WOOD] = {"Slide.Wood"}
 }
 
 local slideloop_sounds = {
-	[0] = "mirrorsedge/Slide/ME_FootStep_ConcreteSlideLoop.wav",
-	[MAT_GLASS] = "mirrorsedge/Slide/ME_FootStep_GlassSlideLoop.wav",
-	[MAT_WOOD] = "mirrorsedge/Slide/ME_FootStep_WoodSlideLoop.wav",
-	[MAT_METAL] = "mirrorsedge/Slide/ME_FootStep_MetalSlideLoop.wav",
-	[MAT_GRATE] = "mirrorsedge/Slide/ME_FootStep_GantrySlideLoop.wav",
-	[MAT_VENT] = "mirrorsedge/Slide/ME_FootStep_DuctSlideLoop.wav"
+	[0] = "Slide.ConcreteLoop",
+	[MAT_GLASS] = "Slide.GlassLoop",
+	[MAT_WOOD] = "Slide.WoodLoop",
+	[MAT_SAND] = "Slide.GravelLoop",
+	[MAT_METAL] = "Slide.MetalLoop",
+	[MAT_GRATE] = "Slide.GantryLoop",
+	[MAT_PLASTIC] = "Slide.TarpLoop",
+	[MAT_SLOSH] = "Slide.WaterLoop",
+	[MAT_TILE] = "Slide.MarbleLoop",
+	[MAT_VENT] = "Slide.DuctLoop"
 }
 
-slide_sounds[MAT_GRASS] = slide_sounds[MAT_DIRT]
-slide_sounds[MAT_SNOW] = slide_sounds[MAT_DIRT]
-slide_sounds[0] = slide_sounds[MAT_DIRT]
+slide_sounds[MAT_SNOW] = slide_sounds[MAT_SAND]
+slide_sounds[MAT_GRASS] = slide_sounds[MAT_SAND]
+slide_sounds[0] = slide_sounds[MAT_CONCRETE]
+
+slideloop_sounds[MAT_DIRT] = slideloop_sounds[MAT_SAND]
+slideloop_sounds[MAT_GRASS] = slideloop_sounds[MAT_SAND]
 
 --[[
 local animtable = {
@@ -232,9 +241,8 @@ local function SlideSurfaceSound(ply, pos)
 	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
 
 	if ply:WaterLevel() > 0 then
-		sndtable = slide_sounds[MAT_SLOSH]
-
-		ply:EmitSound(sndtable[math.random(#sndtable)])
+	sndtable = slide_sounds[MAT_SLOSH]
+	ply:EmitSound(sndtable[math.random(#sndtable)])
 	end
 
 	return tr.MatType
@@ -593,7 +601,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			end
 		end
 
-		if mv:KeyPressed(IN_BACK) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 then
+		if mv:KeyPressed(IN_BACK) and not mv:KeyDown(IN_ATTACK2) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 then
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				cmd:SetViewAngles(ply:GetSlidingAngle())
 			end

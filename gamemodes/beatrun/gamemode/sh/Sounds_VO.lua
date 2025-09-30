@@ -110,6 +110,15 @@ sound.Add({
 	sound = {"mirrorsedge/VO/Faith/Breath_Medium_Long_Out_01.wav", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_02.wav", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_03.wav", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_04.wav", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_05.wav", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_06.wav", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_07.wav", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_08.wav"}
 })
 
+sound.Add({
+	name = "Faith.ImpactBullet",
+	volume = 1,
+	pitch = 100,
+	level = 85,
+	channel = CHAN_STATIC,
+	sound = {"mirrorsedge/Impact/Bullet_Impact_FaithVocal_01.wav", "mirrorsedge/Impact/Bullet_Impact_FaithVocal_02.wav", "mirrorsedge/Impact/Bullet_Impact_FaithVocal_03.wav", "mirrorsedge/Impact/Bullet_Impact_FaithVocal_04.wav", "mirrorsedge/Impact/Bullet_Impact_FaithVocal_05.wav", "mirrorsedge/Impact/Bullet_Impact_FaithVocal_06.wav", "mirrorsedge/Impact/Bullet_Impact_FaithVocal_07.wav", "mirrorsedge/Impact/Bullet_Impact_FaithVocal_08.wav", "mirrorsedge/Impact/Bullet_Impact_FaithVocal_09.wav"}
+})
+
 function meta:FaithVO(vo)
 	if FaithVO:GetBool() then
 		if CLIENT then

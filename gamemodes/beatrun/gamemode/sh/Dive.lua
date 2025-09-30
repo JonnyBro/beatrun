@@ -32,7 +32,7 @@ local function Dive(ply, mv, cmd)
 		if ply:UsingRH() and ply:GetActiveWeapon():GetQuakeJumping() and totsugeki:GetBool() then
 			if SERVER then
 				if totsugekiaudio:GetBool() then
-					ply:EmitSound("misc/totsugeki" .. math.random(1, 2) .. ".mp3", 60, 100, 1, CHAN_VOICE)
+				ply:EmitSound("Dive.Totsuegki")
 				end
 
 				local vPoint = mv:GetOrigin()

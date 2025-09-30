@@ -67,7 +67,7 @@ function ENT:BRCollisionFunc(ent)
 		dmginfo:SetDamage(math.huge)
 		dmginfo:SetDamageType(DMG_DISSOLVE)
 	ent:TakeDamageInfo(dmginfo)
-	ent:EmitSound("bigspark" .. math.random(1, 2) .. ".wav")
+	ent:EmitSound("TaserImpact.NoBody")
 
 	return false
 end

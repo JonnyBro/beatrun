@@ -225,7 +225,7 @@ function SWEP:Think()
 
 		if insidestep and viewmodel:GetCycle() <= 0.1 and GetConVar("Beatrun_QuakeJump"):GetBool() then
 			if SERVER then
-				ply:EmitSound("quakejump.mp3", 100, 100, 0.2)
+				ply:EmitSound("QuakeJump", 100, 100, 0.2)
 			end
 
 			ply.QuakeJumping = true
@@ -481,14 +481,14 @@ function SWEP:PrimaryAttack()
 
 	util.TraceHull(tr)
 
-	self:EmitSound("mirrorsedge/Melee/armswoosh" .. math.random(1, 6) .. ".wav")
+	self:EmitSound("Melee.ArmSwoosh")
 
 	if ply:IsPlayer() then
 		ply:LagCompensation(false)
 	end
 
 	if tr_result.Hit then
-		self:EmitSound("mirrorsedge/Melee/fist" .. math.random(1, 5) .. ".wav")
+		self:EmitSound("Melee.Fist")
 
 		local ent = tr_result.Entity
 

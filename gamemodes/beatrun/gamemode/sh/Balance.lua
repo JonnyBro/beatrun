@@ -106,6 +106,10 @@ hook.Add("SetupMove", "Balance", function(ply, mv, cmd)
 
 				ParkourEvent(ply:GetBalance() > 0 and "walkbalancefalloffright" or "walkbalancefalloffleft", ply)
 
+        if CLIENT or game.SinglePlayer() then
+				ply:EmitSound("Cloth.Fall")
+			  end
+
 				local bang = ply:GetBalanceEntity():GetAngles()
 				local tr = ply.BalanceTrace
 				local trout = ply.BalanceTraceOut
@@ -154,6 +158,8 @@ local attack2 = false
 
 hook.Add("CreateMove", "Balance", function(cmd)
 	local ply = LocalPlayer()
+
+if ply:Alive() then
 
 	if IsValid(ply:GetBalanceEntity()) and IsValid(BodyAnim) then
 		local ang = cmd:GetViewAngles()
@@ -226,4 +232,5 @@ hook.Add("CreateMove", "Balance", function(cmd)
 		lockang2 = false
 		dircache = nil
 	end
+end
 end)

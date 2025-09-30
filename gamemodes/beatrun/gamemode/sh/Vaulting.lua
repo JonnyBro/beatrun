@@ -232,7 +232,11 @@ local function Vault2(ply, mv, ang, t, h)
 
 		if not hulltr.Hit and not hulltr2.Hit then
 			if t.MatType == MAT_GRATE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-				ply:EmitSound("FenceClimb")
+			ply:EmitSound("FenceClimb")
+		elseif t.MatType == MAT_GLASS or t.MatType == MAT_TILE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer())then
+			ply:EmitSound("Handsteps.GlassHard")
+		  elseif t.MatType == MAT_VENT or t.MatType == MAT_METAL and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer())then
+		  ply:EmitSound("Handsteps.DuctHard")
 			end
 
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 2)
@@ -333,6 +337,10 @@ local function Vault3(ply, mv, ang, t, h)
 		if not hulltr.Hit and not hulltr2.Hit then
 			if t.MatType == MAT_GRATE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
 				ply:EmitSound("FenceClimb")
+			elseif t.MatType == MAT_GLASS or t.MatType == MAT_TILE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer())then
+			ply:EmitSound("Handsteps.GlassHard")
+			elseif t.MatType == MAT_VENT or t.MatType == MAT_METAL and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer())then
+			ply:EmitSound("Handsteps.DuctHard")
 			end
 
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 3)
@@ -446,13 +454,19 @@ function Vault4(ply, mv, ang, t, h)
 		local tsafetyout = util.TraceLine(tsafety)
 
 		if tsafetyout.MatType == MAT_GRATE then
-			ply:EmitSound("FenceClimb")
+			ply:EmitSound("Handsteps.FenceVault")
 
 			timer.Simple(0.45, function()
 				ply:EmitSound("FenceClimbEnd")
 			end)
 		end
+
+	if tsafetyout.MatType == MAT_GLASS or tsafetyout.MatType == MAT_TILE then
+	ply:EmitSound("Handsteps.GlassSoft")
+  elseif tsafetyout.MatType == MAT_VENT or tsafetyout.MatType == MAT_METAL then
+	ply:EmitSound("Handsteps.DuctSoft")
 	end
+end
 
 	return true
 end
@@ -751,8 +765,10 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 						ply:EmitSound("Cloth.VaultSwish")
 					end
 
-					if ply.MantleMatType == 77 or ply.MantleMatType == 86 then
-						ply:EmitSound("Metal.Ringout")
+					if ply.MantleMatType == 77 then
+					ply:EmitSound("Metal.Ringout")
+				  elseif ply.MantleMatType == 86 then
+					ply:EmitSound("Duct.Ringout")
 					end
 
 					hook.Run("PlayerFootstep", ply, mv:GetOrigin(), 1, "Footsteps.Concrete", 1)

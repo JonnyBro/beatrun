@@ -137,7 +137,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetCrouchJumpBlocked(false)
 
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-				ply:EmitSound("mirrorsedge/zipline_detach.wav", 40, 100 + math.random(-25, 10))
+				ply:EmitSound("ZiplineEnd")
 			end
 
 			if mv:KeyPressed(IN_JUMP) then

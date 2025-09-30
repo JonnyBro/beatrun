@@ -1097,6 +1097,18 @@ eventsounds = {
 		[0.035] = "Melee.LegSwoosh",
 		[0.075] = "Faith.StrainHard"
 	},
+	hangstraferight = {
+		[0.1] = "Handsteps.ConcreteSoft",
+		[0.7] = "Handsteps.ConcreteRelease"
+	},
+	hangstrafeleft = {
+		[0.1] = "Handsteps.ConcreteSoft",
+		[0.8] = "Handsteps.ConcreteRelease"
+	},
+	hangheaveup = {
+    [0.1] = "Handsteps.ConcreteHard",
+		[0.5] = "Cloth.MovementRun"
+	},
 	ladderclimbhangstart = {
 		[0] = "Footsteps.LadderHeavy",
 		[0.1] = "Land.Ladder"
@@ -1124,9 +1136,9 @@ eventsounds = {
 		[0.15] = "Handsteps.Ladder"
 	},
 	jumpturnlandstand = {
-		[0.025] = "me_faith_cloth_roll_cloth.wav",
+		[0.01] = "Cloth.BodyRollSwish",
 		[0.25] = "Faith.StrainSoft",
-		[0.3] = "me_body_roll.wav"
+		[0.3] = "Cloth.BodyRoll"
 	}
 }
 
