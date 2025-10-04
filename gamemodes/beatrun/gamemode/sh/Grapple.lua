@@ -261,9 +261,11 @@ hook.Add("PreDrawEffects", "GrappleBeam", function() -- was PostDrawTranslucentR
 		local rhandpos = BA:GetBoneMatrix(rhand):GetTranslation()
 		if not rhandpos then return end
 
-		rhandpos:Sub(BA:GetRight() * 2.5)
-
 		local lhandpos = BA:GetBoneMatrix(lhand):GetTranslation()
+
+		--rhandpos:Sub(BA:GetRight() * 2.5)
+		lhandpos:Sub(BA:GetForward() * 1.1)
+		rhandpos:Sub(BA:GetForward() * 1.1)
 
 		ropetop:Set(lhandpos)
 
