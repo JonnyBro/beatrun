@@ -18,12 +18,6 @@ lockang = false
 CamAddAng = false
 CamIgnoreAng = false
 
--- Glide compatibility (idk why)
-if hook.GetTable()["Glide_OnLocalExitVehicle"] then
-	hook.Add("Glide_OnLocalExitVehicle", "GlideExitBoneFix", function()
-		if IsValid(BodyAnim) then RemoveBodyAnim() end -- glide bugs out bodys hand bones so we gotta reset em
-	end)
-end
 
 local tools = {
 	["gmod_tool"] = true,
@@ -844,4 +838,5 @@ hook.Add("InputMouseApply", "BodyAnim_Mouse", function(cmd)
 	end
 
 	if newvalues then return true end
+
 end)
