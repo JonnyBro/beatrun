@@ -3,6 +3,7 @@ local sway = CreateClientConVar("Beatrun_HUDSway", "1", true, false, language.Ge
 local dynamic = CreateClientConVar("Beatrun_HUDDynamic", "0", true, false, language.GetPhrase("beatrun.convars.huddynamic"), 0, 1)
 local hidden = CreateClientConVar("Beatrun_HUDHidden", "0", true, false, language.GetPhrase("beatrun.convars.hudhidden"), 0, 2)
 local verificationstats = CreateClientConVar("Beatrun_HUDVerification", "0", true, false, "", 0, 1)
+local disableColorModify = CreateClientConVar("Beatrun_DisableColorFilter", "0", true, false, "", 0, 1)
 -- local reticle = CreateClientConVar("Beatrun_HUDReticle", "1", true, false, language.GetPhrase("beatrun.convars.hudreticle"), 0, 1)
 
 CreateClientConVar("Beatrun_HUDTextColor", "255 255 255 255", true, true, language.GetPhrase("beatrun.convars.hudtextcolor"))
@@ -466,7 +467,7 @@ local pp = {
 }
 
 hook.Add("RenderScreenspaceEffects", "FilterPP", function()
-	if render.GetDXLevel() < 90 then return end
+	if render.GetDXLevel() < 90 or disableColorModify:GetBool() then return end
 
 	if not blinded or not blindinverted then
 		DrawColorModify(pp)
