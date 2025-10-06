@@ -1627,21 +1627,23 @@ local function JumpThink()
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
 
 			usingHands = true
+			
+			if IsValid(BodyAnim) then
+				if ply:GetWallrun() == 1 then -- 1 = verticaL
+					BodyLimitX = 25 
+					BodyLimitY = 70
 
-			if ply:GetWallrun() == 1 then -- 1 = verticaL
-				BodyLimitX = 25 -- Fixes a bug where if u look behind u will vault over air
-				BodyLimitY = 70
+					BodyAnim:SetSequence("wallrunverticalstart")
+				end
 
-				BodyAnim:SetSequence("wallrunverticalstart")
+				if ply:GetMantle() == 2 then
+					BodyAnim:SetSequence("vaultover")
+				elseif ply:GetMantle() == 3 then
+					BodyAnim:SetSequence("vaultkong")
+				end
+
+				if IsValid(ply:GetZipline()) then BodyAnim:SetSequence("zipline") end
 			end
-
-			if ply:GetMantle() == 2 then
-				BodyAnim:SetSequence("vaultover")
-			elseif ply:GetMantle() == 3 then
-				BodyAnim:SetSequence("vaultkong")
-			end
-
-			if IsValid(ply:GetZipline()) then BodyAnim:SetSequence("zipline") end
 		end
 
 		-- Blocks weapon switching
