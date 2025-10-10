@@ -120,14 +120,6 @@ if CLIENT and game.SinglePlayer() then
 	end)
 end
 
-if SERVER then
-	hook.Add("OnEntityCreated", "RemoveMirrors", function(ent)
-		if IsValid(ent) and ent:GetClass() == "func_reflective_glass" then
-			SafeRemoveEntityDelayed(ent, 0.1)
-		end
-	end)
-end
-
 if CLIENT then
 	local blur = Material("pp/blurscreen")
 
