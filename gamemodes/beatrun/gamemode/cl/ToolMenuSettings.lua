@@ -15,6 +15,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ClearControls()
 		panel:SetName("#beatrun.toolsmenu.courses.desc")
 
+		panel:CheckBox("#beatrun.toolsmenu.courses.raceyourghost", "Beatrun_CourseGhost")
+		panel:ControlHelp("#beatrun.toolsmenu.courses.raceyourghostdesc")
+
 		panel:CheckBox("#beatrun.toolsmenu.courses.faststart", "Beatrun_FastStart")
 		panel:ControlHelp("#beatrun.toolsmenu.courses.faststartdesc")
 
