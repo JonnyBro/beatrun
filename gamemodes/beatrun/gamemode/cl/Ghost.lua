@@ -59,8 +59,9 @@ function StopGhostRecording(FirstPB, PBhit)
     		Ghost_data[k] = v
 		end
 		if Course_Name ~= "" then -- dont write freeplay recordings
-			local tab = util.TableToJSON(Ghost_data,true) 
-			file.CreateDir( "Beatrun/ghost" )
+			local tab = util.TableToJSON(Ghost_data)
+			tab = util.Compress(tab)
+			file.CreateDir("beatrun/ghost")
 			file.Write( "beatrun/ghost/".. Ghost_data["Cid"] ..".json", tab)
 		end
 	end
@@ -155,6 +156,7 @@ function StartGhostReplay()
 		local ghostFile = "data/beatrun/ghost/" .. Course_ID .. ".json"
 		if file.Exists(ghostFile, "GAME") then
     		local jsonData = file.Read(ghostFile, "GAME")
+			jsonData = util.Decompress(jsonData)
     		Ghost_data = util.JSONToTable(jsonData,true)
 		elseif Course_ID ~= "" then
 			return 
