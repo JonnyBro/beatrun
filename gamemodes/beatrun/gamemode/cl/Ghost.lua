@@ -45,7 +45,7 @@ local function GhostRecording()
 	end
 
 	--print(Record_tickcount)
-	Ghost_dataBuffer[Record_tickcount] = {ply:GetAngles(), ply:GetPos(), ply:GetSequenceName(ply:GetSequence()),ply:GetCycle()}
+	Ghost_dataBuffer[Record_tickcount] = {ply:EyeAngles(), ply:GetPos(), ply:GetSequenceName(ply:GetSequence()),ply:GetCycle()}
 end
 
 function StopGhostRecording(FirstPB, PBhit)
