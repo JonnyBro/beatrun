@@ -78,15 +78,36 @@ local function GhostEntInit()
 
     playerGhost = ClientsideModel(ply:GetModel())
     playerGhost:SetRenderMode(RENDERMODE_TRANSALPHA)
+	playerGhost:SetSequence("idle_all_01") --avoid tpose on spawn
 
     playerGhost.GetPlayerColor = function() --creating this function changes the models clothes color, yeah ¯\_(ツ)_/¯
         return ply:GetPlayerColor()
     end
 
-	local col = playerGhost:GetColor()
-	col.a = 153  --60%
+	for i = 0, ply:GetNumBodyGroups() - 1 do
+		playerGhost:SetBodygroup(i, ply:GetBodygroup(i))
+	end
 
-	playerGhost:SetColor(col)
+	playerGhost:SetupBones() -- we gotta call it to disable the jigglebones
+
+	for i = 0, playerGhost:GetBoneCount() - 1 do
+    	playerGhost:ManipulateBoneJiggle(i, 2) -- disable jigglebones. Why? jigglebones flicker because of the setblend thing
+	end
+
+	playerGhost.RenderOverride = function(self)
+
+		render.OverrideColorWriteEnable( true, false )
+
+		self:DrawModel()
+
+		render.OverrideColorWriteEnable( false, false )
+
+		render.SetBlend(0.50)
+
+		self:DrawModel()
+
+		render.SetBlend(1)
+	end
 end
 
 local function GhostReplay()
@@ -99,7 +120,7 @@ local function GhostReplay()
 	end
 	if (not Ghost_data[Ghost_tickcount]) or Ghost_data["Cid"] ~= Course_ID then -- the added course check makes it so that if we stop the course the ghost dissapears
 		StopGhostReplay() -- self destruct
-		print("Ghost killed")
+		--print("Ghost killed(It finished playing or detected a course change)")
 		return
 	end
 	local ang_ghost = Ghost_data[Ghost_tickcount][1]
@@ -134,7 +155,7 @@ function StartGhostReplay()
 		local ghostFile = "data/beatrun/ghost/" .. Course_ID .. ".json"
 		if file.Exists(ghostFile, "GAME") then
     		local jsonData = file.Read(ghostFile, "GAME")
-    		Ghost_data = util.JSONToTable(jsonData)
+    		Ghost_data = util.JSONToTable(jsonData,true)
 		elseif Course_ID ~= "" then
 			return 
 		end 
