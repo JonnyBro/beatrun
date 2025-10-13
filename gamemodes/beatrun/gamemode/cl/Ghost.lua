@@ -62,7 +62,7 @@ function StopGhostRecording(FirstPB, PBhit)
 			local tab = util.TableToJSON(Ghost_data)
 			tab = util.Compress(tab)
 			file.CreateDir("beatrun/ghost")
-			file.Write( "beatrun/ghost/".. Ghost_data["Cid"] ..".json", tab)
+			file.Write( "beatrun/ghost/".. Ghost_data["Cid"] ..".txt", tab)
 		end
 	end
 	hook.Remove("CreateMove", "GhostRecording")
@@ -153,7 +153,7 @@ end
 
 function StartGhostReplay()
 	if Ghost_data["Cid"] ~= Course_ID then-- if the recorded course doesnt match current course and theres no file for it then dont try to play it
-		local ghostFile = "data/beatrun/ghost/" .. Course_ID .. ".json"
+		local ghostFile = "data/beatrun/ghost/" .. Course_ID .. ".txt"
 		if file.Exists(ghostFile, "GAME") then
     		local jsonData = file.Read(ghostFile, "GAME")
 			jsonData = util.Decompress(jsonData)
