@@ -1,7 +1,8 @@
 --[[
 	A ghost that shows your best course time - globalsl
 	ghost data file is saved to data/beatrun/ghost
--]]
+--]]
+
 CourseGhost = CreateClientConVar("Beatrun_CourseGhost", "1", true, false, "", 0, 1)
 
 local Ghost_data = {}
@@ -17,14 +18,14 @@ local Record_lastTick = 0
 local Ghost_tickcount = 0
 local Ghost_lastTick = 0
 
---for the concommands
+-- for the concommands
 local con_RecordingBool = false
 local con_PlayingBool = false
 
 
 cvars.AddChangeCallback("Beatrun_CourseGhost", function(convar_name, value_old, value_new)
-    if value_new == "0" then
-		StopGhostRecording(false,false)
+	if value_new == "0" then
+		StopGhostRecording(false, false)
 		StopGhostReplay()
 	end
 end)
@@ -33,8 +34,8 @@ local function GhostRecording()
 	local ply = LocalPlayer()
 
 	if engine.TickCount() > Record_lastTick then -- might be a better way to do this idk
-        Record_tickcount = Record_tickcount + 1
-        Record_lastTick = engine.TickCount()
+		Record_tickcount = Record_tickcount + 1
+		Record_lastTick = engine.TickCount()
 	else
 		return
 	end
@@ -44,8 +45,9 @@ local function GhostRecording()
 		WroteRecordingInfo = true
 	end
 
-	--print(Record_tickcount)
-	Ghost_dataBuffer[Record_tickcount] = {ply:EyeAngles(), ply:GetPos(), ply:GetSequenceName(ply:GetSequence()),ply:GetCycle()}
+	-- print(Record_tickcount)
+
+	Ghost_dataBuffer[Record_tickcount] = {ply:EyeAngles(), ply:GetPos(), ply:GetSequenceName(ply:GetSequence()), ply:GetCycle()}
 end
 
 function StopGhostRecording(FirstPB, PBhit)
@@ -53,37 +55,42 @@ function StopGhostRecording(FirstPB, PBhit)
 	Record_lastTick = 0
 	WroteRecordingInfo = false
 
-	if (PBhit or FirstPB) or Course_Name == "" then -- let through freeplay recording
+	if PBhit or FirstPB or Course_Name == "" then -- let through freeplay recording
 		Ghost_data = {}
+
 		for k, v in pairs(Ghost_dataBuffer) do
-    		Ghost_data[k] = v
+			Ghost_data[k] = v
 		end
+
 		if Course_Name ~= "" then -- dont write freeplay recordings
 			local tab = util.TableToJSON(Ghost_data)
+
 			tab = util.Compress(tab)
+
 			file.CreateDir("beatrun/ghost")
-			file.Write( "beatrun/ghost/".. Ghost_data["Cid"] ..".txt", tab)
+			file.Write("beatrun/ghost/" .. Ghost_data["Cid"] .. ".txt", tab)
 		end
 	end
+
 	hook.Remove("CreateMove", "GhostRecording")
 end
 
 function StartGhostRecording()
-    Ghost_dataBuffer = {}
-
+	Ghost_dataBuffer = {}
 	hook.Add("CreateMove", "GhostRecording", GhostRecording)
 end
 
 local function GhostEntInit()
-    local ply = LocalPlayer()
+	local ply = LocalPlayer()
+	playerGhost = ClientsideModel(ply:GetModel())
 
-    playerGhost = ClientsideModel(ply:GetModel())
-    playerGhost:SetRenderMode(RENDERMODE_TRANSALPHA)
-	playerGhost:SetSequence("idle_all_01") --avoid tpose on spawn
+	playerGhost:SetRenderMode(RENDERMODE_TRANSALPHA)
+	playerGhost:SetSequence("idle_all_01") -- avoid tpose on spawn
 
-    playerGhost.GetPlayerColor = function() --creating this function changes the models clothes color, yeah ¯\_(ツ)_/¯
-        return ply:GetPlayerColor()
-    end
+	playerGhost.GetPlayerColor = function()
+		-- creating this function changes the models clothes color, yeah ¯\_(ツ)_/¯
+		return ply:GetPlayerColor()
+	end
 
 	for i = 0, ply:GetNumBodyGroups() - 1 do
 		playerGhost:SetBodygroup(i, ply:GetBodygroup(i))
@@ -92,17 +99,15 @@ local function GhostEntInit()
 	playerGhost:SetupBones() -- we gotta call it to disable the jigglebones
 
 	for i = 0, playerGhost:GetBoneCount() - 1 do
-    	playerGhost:ManipulateBoneJiggle(i, 2) -- disable jigglebones. Why? jigglebones flicker because of the setblend thing
+		playerGhost:ManipulateBoneJiggle(i, 2) -- disable jigglebones. Why? jigglebones flicker because of the setblend thing
 	end
 
 	playerGhost.RenderOverride = function(self)
-
-		render.OverrideColorWriteEnable( true, false )
+		render.OverrideColorWriteEnable(true, false)
 
 		self:DrawModel()
 
-		render.OverrideColorWriteEnable( false, false )
-
+		render.OverrideColorWriteEnable(false, false)
 		render.SetBlend(0.50)
 
 		self:DrawModel()
@@ -113,20 +118,24 @@ end
 
 local function GhostReplay()
 	if not IsValid(playerGhost) then GhostEntInit() end
+
 	if engine.TickCount() > Ghost_lastTick then -- might be a better way to do this idk
-        Ghost_tickcount = Ghost_tickcount + 1
-        Ghost_lastTick = engine.TickCount()
+		Ghost_tickcount = Ghost_tickcount + 1
+		Ghost_lastTick = engine.TickCount()
 	else
-		return -- optimization: Since we dont change the tickcount then we dont need to set new values to our ghost 
+		return -- optimization: Since we dont change the tickcount then we dont need to set new values to our ghost
 	end
-	if (not Ghost_data[Ghost_tickcount]) or Ghost_data["Cid"] ~= Course_ID then -- the added course check makes it so that if we stop the course the ghost dissapears
+
+	if not Ghost_data[Ghost_tickcount] or Ghost_data["Cid"] ~= Course_ID then -- the added course check makes it so that if we stop the course the ghost dissapears
 		StopGhostReplay() -- self destruct
-		--print("Ghost killed(It finished playing or detected a course change)")
+		-- print("Ghost killed(It finished playing or detected a course change)")
 		return
 	end
+
 	local ang_ghost = Ghost_data[Ghost_tickcount][1]
-	ang_ghost.z = 0 
+	ang_ghost.z = 0
 	ang_ghost.x = 0
+
 	playerGhost:SetPos(Ghost_data[Ghost_tickcount][2])
 	playerGhost:SetAngles(ang_ghost)
 	playerGhost:SetSequence(Ghost_data[Ghost_tickcount][3])
@@ -143,51 +152,55 @@ end
 
 function StopGhostReplay()
 	hook.Remove("CreateMove", "GhostReplay")
+
 	Ghost_tickcount = 0
 	Ghost_lastTick = 0
 	con_PlayingBool = false
-	if IsValid(playerGhost) then
-		playerGhost:Remove()
-	end
+
+	if IsValid(playerGhost) then playerGhost:Remove() end
 end
 
 function StartGhostReplay()
-	if Ghost_data["Cid"] ~= Course_ID then-- if the recorded course doesnt match current course and theres no file for it then dont try to play it
+	if Ghost_data["Cid"] ~= Course_ID then -- if the recorded course doesnt match current course and theres no file for it then dont try to play it
 		local ghostFile = "data/beatrun/ghost/" .. Course_ID .. ".txt"
+
 		if file.Exists(ghostFile, "GAME") then
-    		local jsonData = file.Read(ghostFile, "GAME")
+			local jsonData = file.Read(ghostFile, "GAME")
 			jsonData = util.Decompress(jsonData)
-    		Ghost_data = util.JSONToTable(jsonData,true)
+			Ghost_data = util.JSONToTable(jsonData, true)
 		elseif Course_ID ~= "" then
-			return 
-		end 
+			return
+		end
 	end
+
 	hook.Add("CreateMove", "GhostReplay", GhostReplay)
 end
 
-
-concommand.Add("ghost_record", function()
-	if Course_Name ~= "" then 
+concommand.Add("Beatrun_ToggleGhostRecord", function()
+	if Course_Name ~= "" then
 		print("This command is only available in Freeplay")
 		return
 	end
+
 	con_RecordingBool = not con_RecordingBool
-    if con_RecordingBool then
-        print("Recording started.")
-        StartGhostRecording()
-    else
-        print("Recording stopped.")
+
+	if con_RecordingBool then
+		print("Recording started.")
+		StartGhostRecording()
+	else
+		print("Recording stopped.")
 		StopGhostRecording()
-    end
+	end
 end)
 
-
-concommand.Add("ghost_play", function()
-	if Course_Name ~= "" then 
+concommand.Add("Beatrun_ToggleGhostPlay", function()
+	if Course_Name ~= "" then
 		print("This command is only available in Freeplay")
 		return
 	end
+
 	con_PlayingBool = not con_PlayingBool
+
 	if con_PlayingBool then
 		print("Starting Ghost replay")
 		StartGhostReplay()

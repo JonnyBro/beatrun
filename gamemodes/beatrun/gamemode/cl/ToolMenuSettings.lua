@@ -249,10 +249,10 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_camera", "#beatrun.toolsmenu.camera.name", "", "", function(panel)
 		panel:ClearControls()
 		panel:SetName("#beatrun.toolsmenu.camera.desc")
-		
-		panel:CheckBox("#beatrun.toolsmenu.camera.colormodifyfilter","Beatrun_DisableColorFilter")
+
+		panel:CheckBox("#beatrun.toolsmenu.camera.colormodifyfilter", "Beatrun_DisableColorFilter")
 		panel:ControlHelp("#beatrun.toolsmenu.camera.colormodifyfilterdesc")
-		
+
 		panel:CheckBox("#beatrun.toolsmenu.camera.stabilization", "Beatrun_ViewbobStabilized")
 		panel:ControlHelp("#beatrun.toolsmenu.camera.stabilizationdesc")
 
@@ -260,8 +260,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:NumSlider("#beatrun.toolsmenu.camera.fov", "Beatrun_FOV", 90, 120, 0)
 		panel:Help("#beatrun.toolsmenu.camera.fovdesc")
-		
-		
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_gameplay", "#beatrun.toolsmenu.gameplay.name", "", "", function(panel)

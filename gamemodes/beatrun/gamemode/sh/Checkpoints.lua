@@ -146,9 +146,9 @@ if CLIENT then
 
 			LocalPlayer():EmitSound("A_TT_Finish_Negative.wav")
 		end
-		
-		if CourseGhost:GetBool() then StopGhostRecording(pbtotal == 0,totaltime < pbtotal) end
-		
+
+		if CourseGhost:GetBool() then StopGhostRecording(pbtotal == 0, totaltime < pbtotal) end
+
 		net.Start("Checkpoint_Finish")
 			net.WriteFloat(totaltime)
 		net.SendToServer()
@@ -394,10 +394,11 @@ function StartCourse(spawntime)
 		hook.Add("Think", "StartCountdown", StartCountdown)
 		hook.Add("HUDPaint", "StartCountdownHUD", StartCountdownHUD)
 		hook.Add("StartCommand", "StartFreeze", StartFreeze)
+
 		if CourseGhost:GetBool() then
 			StopGhostReplay()
 			StartGhostReplay()
-			StopGhostRecording(false,false)
+			StopGhostRecording(false, false)
 			StartGhostRecording()
 		end
 	else

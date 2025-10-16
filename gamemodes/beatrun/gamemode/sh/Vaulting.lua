@@ -232,11 +232,11 @@ local function Vault2(ply, mv, ang, t, h)
 
 		if not hulltr.Hit and not hulltr2.Hit then
 			if t.MatType == MAT_GRATE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-			ply:EmitSound("FenceClimb")
-		elseif t.MatType == MAT_GLASS or t.MatType == MAT_TILE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer())then
-			ply:EmitSound("Handsteps.GlassHard")
-		  elseif t.MatType == MAT_VENT or t.MatType == MAT_METAL and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer())then
-		  ply:EmitSound("Handsteps.DuctHard")
+				ply:EmitSound("FenceClimb")
+			elseif t.MatType == MAT_GLASS or t.MatType == MAT_TILE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
+				ply:EmitSound("Handsteps.GlassHard")
+			elseif t.MatType == MAT_VENT or t.MatType == MAT_METAL and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
+				ply:EmitSound("Handsteps.DuctHard")
 			end
 
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 2)
@@ -337,10 +337,10 @@ local function Vault3(ply, mv, ang, t, h)
 		if not hulltr.Hit and not hulltr2.Hit then
 			if t.MatType == MAT_GRATE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
 				ply:EmitSound("FenceClimb")
-			elseif t.MatType == MAT_GLASS or t.MatType == MAT_TILE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer())then
-			ply:EmitSound("Handsteps.GlassHard")
-			elseif t.MatType == MAT_VENT or t.MatType == MAT_METAL and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer())then
-			ply:EmitSound("Handsteps.DuctHard")
+			elseif t.MatType == MAT_GLASS or t.MatType == MAT_TILE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
+				ply:EmitSound("Handsteps.GlassHard")
+			elseif t.MatType == MAT_VENT or t.MatType == MAT_METAL and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
+				ply:EmitSound("Handsteps.DuctHard")
 			end
 
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 3)
@@ -377,7 +377,6 @@ function Vault4(ply, mv, ang, t, h)
 	t.StartPos = mv:GetOrigin() + eyevec + ang:Forward() * 50
 
 	local vaultpos = mv:GetOrigin() + ang:Forward() * 65 + vault1vec
-
 	local tsafety = {
 		start = mv:GetOrigin() + hairvec
 	}
@@ -406,6 +405,7 @@ function Vault4(ply, mv, ang, t, h)
 	if not tsafetyout.Hit then return false end
 
 	mins.z = mins.z * 1
+
 	h.start = vaultpos
 	h.endpos = vaultpos
 	h.filter = ply
@@ -415,7 +415,6 @@ function Vault4(ply, mv, ang, t, h)
 	h.mins = mins
 
 	local hsafetyout = util.TraceHull(h)
-
 	if hsafetyout.Hit then return false end
 
 	local startpos = ply:GetWallrun() ~= 1 and mv:GetOrigin() or mv:GetOrigin() + Vector(0, 0, 20) - ang:Forward() * 5
@@ -456,17 +455,15 @@ function Vault4(ply, mv, ang, t, h)
 		if tsafetyout.MatType == MAT_GRATE then
 			ply:EmitSound("Handsteps.FenceVault")
 
-			timer.Simple(0.45, function()
-				ply:EmitSound("FenceClimbEnd")
-			end)
+			timer.Simple(0.45, function() ply:EmitSound("FenceClimbEnd") end)
 		end
 
-	if tsafetyout.MatType == MAT_GLASS or tsafetyout.MatType == MAT_TILE then
-	ply:EmitSound("Handsteps.GlassSoft")
-  elseif tsafetyout.MatType == MAT_VENT or tsafetyout.MatType == MAT_METAL then
-	ply:EmitSound("Handsteps.DuctSoft")
+		if tsafetyout.MatType == MAT_GLASS or tsafetyout.MatType == MAT_TILE then
+			ply:EmitSound("Handsteps.GlassSoft")
+		elseif tsafetyout.MatType == MAT_VENT or tsafetyout.MatType == MAT_METAL then
+			ply:EmitSound("Handsteps.DuctSoft")
+		end
 	end
-end
 
 	return true
 end

@@ -15,14 +15,14 @@ local function sacheck()
 end
 
 local function stopbutton()
-	if CourseGhost:GetBool() then StopGhostRecording(false,false) end
+	if CourseGhost:GetBool() then StopGhostRecording(false, false) end
 	net.Start("Course_Stop")
 	net.SendToServer()
 end
 
 local function buildmodebutton()
 	AEUI:Clear()
-	if CourseGhost:GetBool() then StopGhostRecording(false,false) end
+	if CourseGhost:GetBool() then StopGhostRecording(false, false) end
 	LocalPlayer():ConCommand("buildmode")
 end
 

@@ -104,9 +104,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 	ply.LastStepMat = newsound
 
-	if game.SinglePlayer() then
-		ply:SetNW2String("LastStepMat", newsound)
-	end
+	if game.SinglePlayer() then ply:SetNW2String("LastStepMat", newsound) end
 
 	ply.FootstepReleaseLand = true
 
@@ -114,37 +112,32 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 		ply:EmitSound("Footsteps." .. newsound)
 		ply:EmitSound("Cloth.MovementRun")
 
-		if math.random() > 0.9 then
-			ParkourEvent("step")
-		end
+		if math.random() > 0.9 then ParkourEvent("step") end
 	end
 
 	ply.LastFootstepSound = mat
 
 	if not ply:Crouching() and ply:WaterLevel() > 0 then
-	ply:EmitSound("Footsteps.Water")
+		ply:EmitSound("Footsteps.Water")
 	elseif ply:Crouching() and ply:WaterLevel() > 0 then
-	ply:EmitSound("Sneak.Water")
+		ply:EmitSound("Sneak.Water")
 	end
 
-	if ply:InOverdrive() and ply:GetVelocity():Length() > 400 then
-	ply:EmitSound("Footsteps.Spark")
-	end
+	if ply:InOverdrive() and ply:GetVelocity():Length() > 400 then ply:EmitSound("Footsteps.Spark") end
 
 	if (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) and ply:Crouching() and not IsValid(ply:GetBalanceEntity()) then
-	local sneaksound = FOOTSTEPS_SNEAK_LUT[mat]
+		local sneaksound = FOOTSTEPS_SNEAK_LUT[mat]
+		sneaksound = sneaksound or "Concrete"
 
-	sneaksound = sneaksound or "Concrete"
+		ply.LastStepMat = sneaksound
 
-	ply.LastStepMat = sneaksound
-
-	ply:EmitSound("Sneak." .. sneaksound)
-	ply:EmitSound("Cloth.MovementSneak")
-  end
+		ply:EmitSound("Sneak." .. sneaksound)
+		ply:EmitSound("Cloth.MovementSneak")
+	end
 
 	if (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) and IsValid(ply:GetBalanceEntity()) then
-	ply:EmitSound("Footsteps.MetalPipe")
-	ply:EmitSound("Cloth.MovementWalk")
+		ply:EmitSound("Footsteps.MetalPipe")
+		ply:EmitSound("Cloth.MovementWalk")
 	end
 
 	if (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) and ply.FootstepLand then
