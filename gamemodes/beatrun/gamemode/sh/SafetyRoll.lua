@@ -1,5 +1,5 @@
 if game.SinglePlayer() and SERVER then
-	util.AddNetworkString("RollAnimSP")
+    util.AddNetworkString("RollAnimSP")
 end
 
 local landang = Angle(0, 0, 0)
@@ -99,6 +99,7 @@ net.Receive("RollAnimSP", function()
 				CacheBodyAnim()
 				RemoveBodyAnim()
 				StartBodyAnim(roll)
+				ReapplyBodyScale()
 			end
 		end)
 	else
@@ -117,6 +118,7 @@ net.Receive("RollAnimSP", function()
 				CacheBodyAnim()
 				RemoveBodyAnim()
 				StartBodyAnim(roll)
+				ReapplyBodyScale()
 			end
 		end)
 	end
@@ -132,6 +134,7 @@ net.Receive("RollAnimSP", function()
 	CacheBodyAnim()
 	RemoveBodyAnim()
 	StartBodyAnim(roll)
+	ReapplyBodyScale()
 end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
@@ -174,6 +177,7 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 			CacheBodyAnim()
 			RemoveBodyAnim()
 			StartBodyAnim(roll)
+			ReapplyBodyScale()
 		elseif game.SinglePlayer() then
 			net.Start("RollAnimSP")
 				net.WriteBool(false)
@@ -248,6 +252,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			CacheBodyAnim()
 			RemoveBodyAnim()
 			StartBodyAnim(roll)
+			ReapplyBodyScale()
 		elseif game.SinglePlayer() then
 			net.Start("RollAnimSP")
 				net.WriteBool(land)
