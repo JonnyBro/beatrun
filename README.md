@@ -78,6 +78,7 @@ irm https://beatrun.jonnybro.ru/install | iex
 - Localization support in **7 languages**.
 - Enhanced Build Mode: spawn props from the Spawn Menu, and they will save in your course.
 - Random weapon loadouts from MW Base, ARC9, ARCCW and TFA. Or create your own in [!Helpers.lua](./gamemodes/beatrun/gamemode/sh/!Helpers.lua#L7)!
+- Race your Ghost: a ghost will spawn that will play out your best time in the current course.
 - Various new abilities:
   - **Roll after ziplines:** Press `+duck` (CTRL by default).
   - **Dismount ladders:** Press `+duck` (CTRL by default).
