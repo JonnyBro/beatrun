@@ -1,5 +1,5 @@
 if game.SinglePlayer() and SERVER then
-	util.AddNetworkString("RollAnimSP")
+    util.AddNetworkString("RollAnimSP")
 end
 
 local landang = Angle(0, 0, 0)
