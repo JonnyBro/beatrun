@@ -1,66 +1,56 @@
 local playermodelbones = {"ValveBiped.Bip01_R_Clavicle", "ValveBiped.Bip01_R_UpperArm", "ValveBiped.Bip01_R_Forearm", "ValveBiped.Bip01_R_Hand", "ValveBiped.Bip01_L_Clavicle", "ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_L_Forearm", "ValveBiped.Bip01_L_Hand", "ValveBiped.Bip01_L_Wrist", "ValveBiped.Bip01_R_Wrist", "ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger42", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger32", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger22", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_L_Finger12", "ValveBiped.Bip01_L_Finger0", "ValveBiped.Bip01_L_Finger01", "ValveBiped.Bip01_L_Finger02", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger42", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger32", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger22", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11", "ValveBiped.Bip01_R_Finger12", "ValveBiped.Bip01_R_Finger0", "ValveBiped.Bip01_R_Finger01", "ValveBiped.Bip01_R_Finger02"}
 
 -- Beatrun BodyAnim with Live Body Scale Support
-CreateClientConVar("beatrun_bodyscale", "1", true, false, "Body scale for Beatrun body animations")
-CreateClientConVar("beatrun_armbodyscale", "1", true, false, "Arm scale for Beatrun body animations")
+CreateClientConVar("Beatrun_BodyScale", "1", true, false, "Body scale for Beatrun body animations")
+CreateClientConVar("Beatrun_ArmBodyScale", "1", true, false, "Arm scale for Beatrun body animations")
 
 local function ApplyBodyScale()
-    if not IsValid(BodyAnimMDL) then return end
+	if not IsValid(BodyAnimMDL) then return end
 
-    -- body scale
-    local bodyscale = GetConVar("beatrun_bodyscale"):GetFloat()
-    local bodyscalevec = Vector(bodyscale, bodyscale, bodyscale)
+	-- body scale
+	local bodyscale = GetConVar("Beatrun_BodyScale"):GetFloat()
+	local bodyscalevec = Vector(bodyscale, bodyscale, bodyscale)
 
-    -- arm scale
-    local armscale = GetConVar("beatrun_armbodyscale"):GetFloat()
-    local armscalevec = Vector(armscale, armscale, armscale)
+	-- arm scale
+	local armscale = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
+	local armscalevec = Vector(armscale, armscale, armscale)
 
-    -- scale main body (except arms/fingers)
-    for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
-        local bonename = BodyAnimMDL:GetBoneName(i)
-        if not armbones[bonename] then
-            BodyAnimMDL:ManipulateBoneScale(i, bodyscalevec)
-        end
-    end
+	-- scale main body (except arms/fingers)
+	for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
+		local bonename = BodyAnimMDL:GetBoneName(i)
+		if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, bodyscalevec) end
+	end
 
-    -- scale arm model (if exists)
-    if IsValid(BodyAnimMDLarm) then
-        for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
-            local bonename = BodyAnimMDLarm:GetBoneName(i)
-            BodyAnimMDLarm:ManipulateBoneScale(i, armscalevec)
-        end
-    end
+	-- scale arm model (if exists)
+	if IsValid(BodyAnimMDLarm) then
+		for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
+			BodyAnimMDLarm:ManipulateBoneScale(i, armscalevec)
+		end
+	end
 end
-
 
 -- Apply body scale when animation starts
 ApplyBodyScale()
 
 -- Live update when the convar changes
-cvars.AddChangeCallback("beatrun_bodyscale", function(_, _, value_new)
-    local scale = tonumber(value_new)
-    if not scale or not IsValid(BodyAnimMDL) then return end
-    local scalevec = Vector(scale, scale, scale)
-
-    for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
-        local bonename = BodyAnimMDL:GetBoneName(i)
-        if not armbones[bonename] then
-            BodyAnimMDL:ManipulateBoneScale(i, scalevec)
-        end
-    end
+cvars.AddChangeCallback("Beatrun_BodyScale", function(_, _, value_new)
+	local scale = tonumber(value_new)
+	if not scale or not IsValid(BodyAnimMDL) then return end
+	local scalevec = Vector(scale, scale, scale)
+	for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
+		local bonename = BodyAnimMDL:GetBoneName(i)
+		if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, scalevec) end
+	end
 end, "BeatrunBodyScaleUpdate")
 
-cvars.AddChangeCallback("beatrun_armbodyscale", function(_, _, value_new)
-    local scale = tonumber(value_new)
-    if not scale or not IsValid(BodyAnimMDLarm) then return end
-    local scalevec = Vector(scale, scale, scale)
-
-    for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
-        local bonename = BodyAnimMDLarm:GetBoneName(i)
-        BodyAnimMDLarm:ManipulateBoneScale(i, scalevec)
-    end
+cvars.AddChangeCallback("Beatrun_ArmBodyScale", function(_, _, value_new)
+	local scale = tonumber(value_new)
+	if not scale or not IsValid(BodyAnimMDLarm) then return end
+	local scalevec = Vector(scale, scale, scale)
+	for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
+		BodyAnimMDLarm:ManipulateBoneScale(i, scalevec)
+	end
 end, "BeatrunArmBodyScaleUpdate")
-
 
 BodyAnim = BodyAnim or nil
 BodyAnimMDL = BodyAnimMDL or nil
@@ -144,13 +134,13 @@ local view = {}
 local justremoved = false
 
 local function DisableReflectionsAndShadows(self)
-    local currentRT = render.GetRenderTarget()
-    local name = currentRT and currentRT:GetName()
-    if name == "_rt_waterreflection" or name == "_rt_shadowdummy" then -- _rt_waterreflection is basically every reflection
-        return
-    end
+	local currentRT = render.GetRenderTarget()
+	local name = currentRT and currentRT:GetName()
+	if name == "_rt_waterreflection" or name == "_rt_shadowdummy" then -- _rt_waterreflection is basically every reflection
+		return
+	end
 
-    self:DrawModel()
+	self:DrawModel()
 end
 
 function RemoveBodyAnim(noang)
@@ -520,24 +510,20 @@ function StartBodyAnim(animtable)
 	timer.Simple(0.05, function()
 		if not IsValid(BodyAnimMDL) then return end
 
-		local bodyscale = GetConVar("beatrun_bodyscale"):GetFloat()
-		local armscale = GetConVar("beatrun_armbodyscale"):GetFloat()
-
+		local bodyscale = GetConVar("Beatrun_BodyScale"):GetFloat()
+		local armscale = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
 		local bodyvec = Vector(bodyscale, bodyscale, bodyscale)
 		local armvec = Vector(armscale, armscale, armscale)
 
 		-- Scale main body (skip arms and fingers)
 		for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
 			local bonename = BodyAnimMDL:GetBoneName(i)
-			if not armbones[bonename] then
-				BodyAnimMDL:ManipulateBoneScale(i, bodyvec)
-			end
+			if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, bodyvec) end
 		end
 
 		-- Scale arms if present
 		if IsValid(BodyAnimMDLarm) then
 			for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
-				local bonename = BodyAnimMDLarm:GetBoneName(i)
 				BodyAnimMDLarm:ManipulateBoneScale(i, armvec)
 			end
 		end

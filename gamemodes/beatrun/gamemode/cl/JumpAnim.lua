@@ -1485,7 +1485,6 @@ local function JumpAnim(event, ply)
 		if not wasjumpanim then
 			CheckAnims()
 			StartBodyAnim(animtable)
-			
 
 			if not IsValid(BodyAnim) then return end
 
@@ -1628,10 +1627,10 @@ local function JumpThink()
 			input.SelectWeapon(ply:GetWeapon("runnerhands"))
 
 			usingHands = true
-			
+
 			if IsValid(BodyAnim) then
 				if ply:GetWallrun() == 1 then -- 1 = verticaL
-					BodyLimitX = 25 
+					BodyLimitX = 25
 					BodyLimitY = 70
 
 					BodyAnim:SetSequence("wallrunverticalstart")
