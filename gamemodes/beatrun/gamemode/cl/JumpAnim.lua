@@ -1485,6 +1485,7 @@ local function JumpAnim(event, ply)
 		if not wasjumpanim then
 			CheckAnims()
 			StartBodyAnim(animtable)
+			
 
 			if not IsValid(BodyAnim) then return end
 
