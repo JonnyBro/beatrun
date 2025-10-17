@@ -33,7 +33,7 @@ end)
 local function GhostRecording()
 	local ply = LocalPlayer()
 
-	if engine.TickCount() > Record_lastTick then -- might be a better way to do this idk
+	if engine.TickCount() > Record_lastTick then
 		Record_tickcount = Record_tickcount + 1
 		Record_lastTick = engine.TickCount()
 	else
@@ -46,7 +46,7 @@ local function GhostRecording()
 	end
 
 	-- print(Record_tickcount)
-	Ghost_dataBuffer[Record_tickcount] = {ply:EyeAngles(), ply:GetPos(), ply:GetSequenceName(ply:GetSequence()), ply:GetCycle(), (ply:GetPoseParameter("move_x") * 2) -1, (ply:GetPoseParameter("move_y") * 2) -1}
+	Ghost_dataBuffer[Record_tickcount] = {ply:EyeAngles(), ply:GetPos(), ply:GetSequenceName(ply:GetSequence()), ply:GetCycle(), (ply:GetPoseParameter("move_x") * 2) -1, (ply:GetPoseParameter("move_y") * 2) -1} -- the x*2-1 remaps 0-1 to -1 to 1 without needing to call math.remap
 end
 
 function StopGhostRecording(FirstPB, PBhit)
@@ -118,7 +118,7 @@ end
 local function GhostReplay()
 	if not IsValid(playerGhost) then GhostEntInit() end
 
-	if engine.TickCount() > Ghost_lastTick then -- might be a better way to do this idk
+	if engine.TickCount() > Ghost_lastTick then
 		Ghost_tickcount = Ghost_tickcount + 1
 		Ghost_lastTick = engine.TickCount()
 	else

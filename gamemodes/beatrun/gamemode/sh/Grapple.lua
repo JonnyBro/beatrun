@@ -239,7 +239,7 @@ local ropetop = Vector()
 local ropelerp = 0
 local ropedown = Vector(0, 0, 20)
 
-hook.Add("PreDrawEffects", "GrappleBeam", function() -- was PostDrawTranslucentRenderables
+hook.Add("PreDrawEffects", "GrappleBeam", function() -- was PostDrawTranslucentRenderables NOTE: PreDrawEffects doesnt render in mirrors
 	local lp = LocalPlayer()
 
 	if lp:GetGrappling() and not lp:ShouldDrawLocalPlayer() then
