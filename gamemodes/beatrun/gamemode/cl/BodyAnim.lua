@@ -270,22 +270,6 @@ function CacheBodyAnim()
 	transitionlerp = 0
 end
 
-function ReapplyBodyScale()
-    timer.Simple(0.05, function()
-        if IsValid(BodyAnimMDL) then
-            local scale = GetConVar("beatrun_bodyscale"):GetFloat()
-            local scalevec = Vector(scale, scale, scale)
-            for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
-                local bonename = BodyAnimMDL:GetBoneName(i)
-                -- Skip arms and fingers
-                if not armbones[bonename] then
-                    BodyAnimMDL:ManipulateBoneScale(i, scalevec)
-                end
-            end
-        end
-    end)
-end
-
 function CacheLerpBodyAnim()
 	if not LocalPlayer():Alive() then
 		transition = false
@@ -504,8 +488,24 @@ function StartBodyAnim(animtable)
 	DidDraw = false
 	angclosenuff = false
 
+	-- Apply body scale after model setup, skip arm and finger bones
+	timer.Simple(0.05, function()
+		if IsValid(BodyAnimMDL) then
+			local scale = GetConVar("beatrun_bodyscale"):GetFloat()
+			local scalevec = Vector(scale, scale, scale)
+			for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
+				local bonename = BodyAnimMDL:GetBoneName(i)
+				-- Skip arms and fingers
+				if not armbones[bonename] then
+					BodyAnimMDL:ManipulateBoneScale(i, scalevec)
+				end
+			end
+		end
+	end)
+
 	hook.Run("BodyAnimStart")
 end
+
 
 hook.Add("Think", "BodyAnimThink", function()
 	if not IsValid(BodyAnim) then return end
