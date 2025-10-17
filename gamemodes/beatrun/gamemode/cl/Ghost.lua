@@ -46,8 +46,7 @@ local function GhostRecording()
 	end
 
 	-- print(Record_tickcount)
-
-	Ghost_dataBuffer[Record_tickcount] = {ply:EyeAngles(), ply:GetPos(), ply:GetSequenceName(ply:GetSequence()), ply:GetCycle()}
+	Ghost_dataBuffer[Record_tickcount] = {ply:EyeAngles(), ply:GetPos(), ply:GetSequenceName(ply:GetSequence()), ply:GetCycle(), (ply:GetPoseParameter("move_x") * 2) -1, (ply:GetPoseParameter("move_y") * 2) -1}
 end
 
 function StopGhostRecording(FirstPB, PBhit)
@@ -140,8 +139,8 @@ local function GhostReplay()
 	playerGhost:SetAngles(ang_ghost)
 	playerGhost:SetSequence(Ghost_data[Ghost_tickcount][3])
 	playerGhost:SetCycle(Ghost_data[Ghost_tickcount][4])
-	playerGhost:SetPoseParameter("move_x", 1) -- makes the animations work
-	playerGhost:SetPoseParameter("move_y", 0)
+	playerGhost:SetPoseParameter("move_x", Ghost_data[Ghost_tickcount][5] or 1)
+	playerGhost:SetPoseParameter("move_y", Ghost_data[Ghost_tickcount][6] or 0)
 
 	if playerGhost:GetPos():Distance(LocalPlayer():GetPos()) < 40 then
 		playerGhost:SetNoDraw(true)
@@ -161,7 +160,7 @@ function StopGhostReplay()
 end
 
 function StartGhostReplay()
-	if Ghost_data["Cid"] ~= Course_ID then -- if the recorded course doesnt match current course and theres no file for it then dont try to play it
+	if Ghost_data["Cid"] ~= Course_ID then
 		local ghostFile = "data/beatrun/ghost/" .. Course_ID .. ".txt"
 
 		if file.Exists(ghostFile, "GAME") then
