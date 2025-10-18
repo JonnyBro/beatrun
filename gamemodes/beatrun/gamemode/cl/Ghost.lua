@@ -22,7 +22,6 @@ local Ghost_lastTick = 0
 local con_RecordingBool = false
 local con_PlayingBool = false
 
-
 cvars.AddChangeCallback("Beatrun_CourseGhost", function(convar_name, value_old, value_new)
 	if value_new == "0" then
 		StopGhostRecording(false, false)
@@ -32,7 +31,6 @@ end)
 
 local function GhostRecording()
 	local ply = LocalPlayer()
-
 	if engine.TickCount() > Record_lastTick then
 		Record_tickcount = Record_tickcount + 1
 		Record_lastTick = engine.TickCount()
@@ -46,7 +44,15 @@ local function GhostRecording()
 	end
 
 	-- print(Record_tickcount)
-	Ghost_dataBuffer[Record_tickcount] = {ply:EyeAngles(), ply:GetPos(), ply:GetSequenceName(ply:GetSequence()), ply:GetCycle(), (ply:GetPoseParameter("move_x") * 2) -1, (ply:GetPoseParameter("move_y") * 2) -1} -- the x*2-1 remaps 0-1 to -1 to 1 without needing to call math.remap
+
+	Ghost_dataBuffer[Record_tickcount] = {
+		ply:EyeAngles(),
+		ply:GetPos(),
+		ply:GetSequenceName(ply:GetSequence()),
+		ply:GetCycle(),
+		ply:GetPoseParameter("move_x") * 2 - 1, -- the x*2-1 remaps 0-1 to -1 to 1 without needing to call math.remap
+		ply:GetPoseParameter("move_y") * 2 - 1
+	}
 end
 
 function StopGhostRecording(FirstPB, PBhit)
