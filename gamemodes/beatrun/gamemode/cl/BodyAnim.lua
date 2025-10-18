@@ -357,6 +357,8 @@ function CacheLerpBodyAnim()
 	end
 end
 
+local updatethirdperson = true
+
 function StartBodyAnim(animtable)
 	local prestart = hook.Run("BodyAnimPreStart", animtable)
 
@@ -368,6 +370,8 @@ function StartBodyAnim(animtable)
 	local ply = LocalPlayer()
 
 	if ply:InVehicle() then return end
+
+	updatethirdperson = true
 
 	animmodelstring = animtable.animmodelstring
 	AnimString = animtable.AnimString
@@ -572,7 +576,6 @@ local lerpedpos = Vector()
 local lastlockang = false
 local lastlockangstart = Angle()
 local lasteyeang = Angle()
-local updatethirdperson = true
 
 function BodyAnimCalcView2(ply, pos, angles, fov)
 	if ply:InVehicle() then
@@ -588,7 +591,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		return
 	end
 
-	if IsValid(BodyAnim) and pos:Distance(ply:EyePos()) > 20 then
+	if IsValid(BodyAnim) and ply:ShouldDrawLocalPlayer() then
 		if updatethirdperson then
 			ply:SetNoDraw(false)
 			BodyAnim:SetNoDraw(true)

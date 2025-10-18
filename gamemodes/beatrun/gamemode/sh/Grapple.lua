@@ -239,16 +239,17 @@ local ropetop = Vector()
 local ropelerp = 0
 local ropedown = Vector(0, 0, 20)
 
-hook.Add("PreDrawEffects", "GrappleBeam", function() -- was PostDrawTranslucentRenderables
+hook.Add("PreDrawEffects", "GrappleBeam", function() -- was PostDrawTranslucentRenderables NOTE: PreDrawEffects doesnt render in mirrors
 	local lp = LocalPlayer()
 
-	if lp:GetGrappling() then
+	if lp:GetGrappling() and not lp:ShouldDrawLocalPlayer() then
 		local BA = BodyAnimArmCopy
 
+		--[[
 		if lp:ShouldDrawLocalPlayer() then
 			BA = BodyAnim
 		end
-
+		--]]
 		if not IsValid(BA) then return end
 
 		BA:SetupBones()
@@ -287,12 +288,13 @@ hook.Add("PreDrawEffects", "GrappleBeam", function() -- was PostDrawTranslucentR
 		ropelerp = 0
 	end
 
-	for _, ply in ipairs(player.GetAll()) do
-		if ply == lp then continue end
+	for _, ply in player.Iterator() do
+		if ply == lp and not lp:ShouldDrawLocalPlayer() then continue end
 
 		if ply:GetGrappling() then
 			local pos = ply:GetPos()
-			pos.z = pos.z + 32
+			pos.z = pos.z + 40
+			render.SetMaterial(cablemat)
 			render.DrawBeam(pos, ply:GetGrapplePos(), 1.5, 0, 1)
 		end
 	end
