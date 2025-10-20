@@ -725,7 +725,7 @@ local function ClimbingCheck(ply, mv, cmd)
 		end
 
 		ply:EmitSound("Handsteps.ConcreteHard")
-		ply:EmitSound("Cloth.RollLand")
+		ply:EmitSound("Cloth.FallShortMedium")
 
 		if CLIENT and IsFirstTimePredicted() then
 			ply.OrigEyeAng = wallang

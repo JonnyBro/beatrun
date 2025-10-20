@@ -1124,9 +1124,9 @@ eventsounds = {
 		[0.15] = "Handsteps.Ladder"
 	},
 	jumpturnlandstand = {
-		[0.025] = "me_faith_cloth_roll_cloth.wav",
+		[0.01] = "Cloth.BodyRollSwish",
 		[0.25] = "Faith.StrainSoft",
-		[0.3] = "me_body_roll.wav"
+		[0.3] = "Cloth.BodyRoll"
 	}
 }
 
