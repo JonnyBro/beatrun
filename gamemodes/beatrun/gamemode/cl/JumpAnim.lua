@@ -1265,6 +1265,8 @@ local function JumpArmDraw() --(a, b, c)
 	local bac = CreateBodyAnimArmCopy()
 
 	if IsValid(bac) and not LocalPlayer():ShouldDrawLocalPlayer() and IsValid(BodyAnim) then --and not c
+		render.SetColorModulation(1, 1, 1) -- fix: some maps turn viewmodel red (wow)
+
 		local ply = LocalPlayer()
 		local ang = ply:EyeAngles()
 		ang.z = 0
