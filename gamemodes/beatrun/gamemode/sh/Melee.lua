@@ -108,7 +108,7 @@ local function KeyMelee(ply, mv)
 end
 
 local function MeleeType(ply, mv, cmd)
-	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder()) then return 0 end
+	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder()) or IsValid(ply:GetSwingbar()) then return 0 end
 
 	if ply:GetWallrun() ~= 0 then
 		if ply:GetWallrun() == 1 then return ply:GetMelee() end
@@ -120,7 +120,7 @@ local function MeleeType(ply, mv, cmd)
 
 		ply:SetMelee(vel:Length() > 100 and MELEE_DROPKICK or MELEE_AIRKICK)
 	else
-		ply:SetMelee(ply:GetSliding() and MELEE_SLIDEKICK or 0)
+		ply:SetMelee(ply:GetSliding() and not ply.DiveSliding and MELEE_SLIDEKICK or 0)
 	end
 
 	return ply:GetMelee()
