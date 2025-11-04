@@ -602,7 +602,7 @@ if SERVER then
 		local courseData = util.JSONToTable(decompress)
 
 		local props, cp, pos, ang, name, entities, speed = unpack(courseData)
-		speed = speed or 0
+		speed = speed or 325
 
 		for _, v in pairs(props) do
 			local a = ents.Create("prop_physics")
