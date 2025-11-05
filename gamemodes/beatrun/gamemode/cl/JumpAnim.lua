@@ -1442,12 +1442,12 @@ local function JumpAnim(event, ply)
 	local isInCrawlspace = PlayerCannotStand(ply)
 	local isHoldingCrouch = ply:KeyDown(IN_DUCK)
 
-	-- ✅ Jump Coil End
+	-- Jump Coil End
 	if event == "landcoil" then
 		eventslut[event] = (isInCrawlspace or isHoldingCrouch) and "jumpcoilendcrouch" or "jumpcoilend"
 	end
 
-	-- ✅ Jump Crouch
+	-- Jump Crouch
 	if event == "jump" and (isInCrawlspace or ply:Crouching()) then
 		eventslut[event] = "jumpcrouch"
 	end
@@ -1459,7 +1459,7 @@ local function JumpAnim(event, ply)
 			RemoveBodyAnim()
 		end
 
-		-- ✅ Adjust animtable string based on jump type
+		-- Adjust animtable string based on jump type
 		if event == "jump" or event == "jumpfar" or (event:Left(11) == "jumpwallrun" and ply:GetWallrunDir():Dot(ply:EyeAngles():Forward()) < 0.75) then
 			if event == "jumpfar" then
 				animtable.AnimString = "jumpfast"
@@ -1504,7 +1504,7 @@ local function JumpAnim(event, ply)
 
 			hook.Add("BodyAnimCalcView", "JumpCalcView", JumpCalcView)
 			hook.Add("BodyAnimDrawArm", "JumpArmThink", JumpArmThink)
-			hook.Add("PreDrawViewModels", "JumpArmDraw", JumpArmDraw) --was PostDrawOpaqueRenderables, changed to fix reflections and viewmodel lag
+			hook.Add("PreDrawViewModels", "JumpArmDraw", JumpArmDraw) -- was PostDrawOpaqueRenderables, changed to fix reflections and viewmodel lag
 		else
 			BodyAnim:ResetSequence(BodyAnim:LookupSequence(BodyAnimString))
 		end
