@@ -774,7 +774,6 @@ local function ClimbingCheck(ply, mv, cmd)
 	mv:SetUpSpeed(0)
 end
 
-
 hook.Add("SetupMove", "Climbing", function(ply, mv, cmd)
 	if ply:GetClimbing() == nil or not ply:Alive() then
 		ply:SetClimbing(0)

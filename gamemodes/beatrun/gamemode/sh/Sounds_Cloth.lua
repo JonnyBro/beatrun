@@ -6,6 +6,7 @@ sound.Add({
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish1.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish10.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish11.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish12.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish2.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish3.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish4.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish5.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish6.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish7.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish8.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Vault_Swish9.wav"}
 })
+
 -- Movement Cloth --
 sound.Add({
 	name = "Cloth.MovementRun",
@@ -33,6 +34,7 @@ sound.Add({
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/Cloth_Movement_Sneak_01.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_02.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_03.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_04.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_05.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_06.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_07.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_08.wav"}
 })
+
 -- Roll Cloth --
 sound.Add({
 	name = "Cloth.RollLand",
@@ -78,6 +80,7 @@ sound.Add({
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/ME_Faith_Cloth_Roll_Swish1.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Roll_Swish2.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Roll_Swish3.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Roll_Swish4.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Roll_Swish5.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Roll_Swish6.wav", "mirrorsedge/Cloth/ME_Faith_Cloth_Roll_Swish7.wav"}
 })
+
 -- Cloth Fall --
 sound.Add({
 	name = "Cloth.FallShortHard",
@@ -114,6 +117,7 @@ sound.Add({
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/Body_Fall_Cloth1.wav", "mirrorsedge/Cloth/Body_Fall_Cloth2.wav", "mirrorsedge/Cloth/Body_Fall_Cloth3.wav", "mirrorsedge/Cloth/Body_Fall_Cloth4.wav"}
 })
+
 -- Cloth Swing --
 --[[sound.Add({
 	name = "Cloth.Swing",
@@ -123,6 +127,7 @@ sound.Add({
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/Cloth_Swing1.wav", "mirrorsedge/Cloth/Cloth_Swing2.wav", "mirrorsedge/Cloth/Cloth_Swing3.wav", "mirrorsedge/Cloth/Cloth_Swing4.wav"}
 })]]
+
 -- Cloth SideStep --
 sound.Add({
 	name = "Cloth.SideStep",
