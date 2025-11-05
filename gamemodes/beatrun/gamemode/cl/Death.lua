@@ -1,4 +1,4 @@
-local stopsound = CreateClientConVar("Beatrun_Death_StopSounds", "1", true, false)
+local stopsound = CreateClientConVar("Beatrun_StopDeathSound", "1", true, false)
 
 net.Receive("DeathStopSound", function()
 	-- NOTE: blinded is never set??
