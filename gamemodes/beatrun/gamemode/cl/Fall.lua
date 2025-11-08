@@ -34,7 +34,7 @@ local function FallCheck()
 			ParkourEvent("falluncontrolled", ply, true)
 		end
 	elseif ply.FallStatic and speed > -800 then
-		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
+		--ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100)) --SetFOV does nothing clientside(networked variable).TODO:Implement this properly
 		ply:StopSound("FallStatic")
 
 		ply.FallStatic = false
@@ -66,7 +66,7 @@ local function FallEffect()
 			blurpass = math.min(blurpass + 0.1, 10)
 		end
 
-		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100) + math.Rand(0, CamShakeMult * 2.5))
+		--ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100) + math.Rand(0, CamShakeMult * 2.5)) --SetFOV does nothing clientside(networked variable).TODO:Implement this properly
 	end
 end
 

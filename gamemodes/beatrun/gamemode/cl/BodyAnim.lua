@@ -56,7 +56,7 @@ BodyAnim = BodyAnim or nil
 BodyAnimMDL = BodyAnimMDL or nil
 BodyAnimMDLarm = BodyAnimMDLarm or nil
 BodyAnimWEPMDL = BodyAnimWEPMDL or nil
-BodyAnimCycle = 0
+BodyAnimCycle = BodyAnimCycle or 0
 BodyAnimEyeAng = Angle(0, 0, 0)
 BodyAnimString = "nil"
 BodyAnimMDLString = "nil"
@@ -826,7 +826,7 @@ hook.Add("CreateMove", "BodyLimitMove", function(cmd)
 	end
 end)
 
-hook.Add("PreDrawViewModels", "IgnoreZBodyAnim", function(depth, sky) --was PostDrawOpaqueRenderables
+hook.Add("PreDrawViewModels", "IgnoreZBodyAnim", function() --(depth, sky) --was PostDrawOpaqueRenderables
 	if IsValid(BodyAnimMDL) then
 		CacheLerpBodyAnim()
 

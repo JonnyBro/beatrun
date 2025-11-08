@@ -32,7 +32,6 @@ local incompatible = {
 	["2027577882"] = true, -- Mantle + Wallrun
 	["1190705063"] = true, -- Lerped View Models
 	["123514260"] = true, -- SharpeYe
-	["2416989205"] = true, -- Quick Slide
 	["2591814455"] = true, -- [PF] Half-Life: Alyx
 	["240159269"] = true, -- S.M.A.R.T.:Smooth Parkour Movement
 	["2230307188"] = true, -- EFT Walk Sounds (Footsteps)

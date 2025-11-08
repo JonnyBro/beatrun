@@ -1574,7 +1574,7 @@ if CLIENT then
 	end
 
 	function BuildModeCommand(ply, ucmd)
-		LocalPlayer():SetFOV(120)
+		--LocalPlayer():SetFOV(120) --SetFOV does nothing clientside(networked variable).TODO:Implement this properly
 
 		if gui.IsGameUIVisible() then return end
 
@@ -1620,7 +1620,7 @@ if CLIENT then
 			hook.Add("HUDPaint", "BuildModeHUDPaint", BuildModeHUDPaint)
 
 			LocalPlayer():DrawViewModel(false)
-			LocalPlayer():SetFOV(120)
+			--LocalPlayer():SetFOV(120) --SetFOV does nothing clientside(networked variable).TODO:Implement this properly
 
 			hook.Run("BuildModeState", true)
 		else
@@ -1637,7 +1637,7 @@ if CLIENT then
 
 			gui.EnableScreenClicker(false)
 
-			LocalPlayer():SetFOV(0)
+			--LocalPlayer():SetFOV(0) --SetFOV does nothing clientside(networked variable).TODO:Implement this properly
 
 			CheckpointNumber = 1
 
