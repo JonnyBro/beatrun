@@ -1610,6 +1610,7 @@ if CLIENT then
 
 	net.Receive("BuildMode", function()
 		BuildMode = net.ReadBool()
+		if CourseGhost:GetBool() then StopGhostRecording(false, false) end
 
 		if BuildMode then
 			hook.Add("PostDrawTranslucentRenderables", "BuildModeGhost", BuildModeGhost)
