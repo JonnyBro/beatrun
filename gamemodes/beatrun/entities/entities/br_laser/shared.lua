@@ -56,7 +56,7 @@ end
 
 function ENT:BRCollisionFunc(ent)
 	if CLIENT then return false end
-	if ent:Health() <= 0 or (ent:IsPlayer() and ent:HasGodMode()) then return false end
+	if ent:Health() <= 0 or (ent:IsPlayer() and (ent:HasGodMode() or cvars.Bool("sbox_godmode", false))) then return false end
 
 	local ang = self:GetAngles()
 

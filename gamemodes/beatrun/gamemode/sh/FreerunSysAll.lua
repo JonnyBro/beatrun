@@ -191,7 +191,7 @@ hook.Add("OnPlayerHitGround", "MELandSound", function(ply, water, floater, speed
 		local vel = ply:GetVelocity()
 		vel.z = 0
 
-		if ply:GetCrouchJumpTime() < CurTime() and vel:GetNormalized():Dot(eyedir) < -0.75 then
+		if ply:GetCrouchJumpTime() < CurTime() and vel:GetNormalized():Dot(eyedir) < -0.75 and not ply:GetDive() then
 			jt = true
 
 			ply:SetJumpTurn(true)
