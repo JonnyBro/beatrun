@@ -22,14 +22,12 @@ local function RollAnimCrouch(land, evade)
 
 	if land then
 		if IsValid(ply) and PlayerCannotStand(ply) then
-			roll.AnimString = ply:UsingRH() and "landcrouch" or "landguncrouch"
-		else
-			roll.AnimString = ply:UsingRH() and "land" or "landgun"
-		end
+			roll.AnimString = roll.AnimString == "landgun" and "landguncrouch" or "landcrouch"
 
-		CacheBodyAnim()
-		RemoveBodyAnim()
-		StartBodyAnim(roll)
+			CacheBodyAnim()
+			RemoveBodyAnim()
+			StartBodyAnim(roll)
+		end
 	elseif evade then
 		timer.Simple(0.6, function()
 			if IsValid(ply) and PlayerCannotStand(ply) then
