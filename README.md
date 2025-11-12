@@ -134,3 +134,13 @@ The animations installer has been removed. You can now switch animations directl
 - [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated Project.
 - [Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc) - Discord Rich Presence.
 - [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) - Steam Presence (TFA Base creator).
+
+## Star History
+
+<a href="https://www.star-history.com/#JonnyBro/beatrun&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=JonnyBro/beatrun&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=JonnyBro/beatrun&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=JonnyBro/beatrun&type=date&legend=top-left" />
+ </picture>
+</a>
