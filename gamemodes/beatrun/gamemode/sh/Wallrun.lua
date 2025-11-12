@@ -346,7 +346,7 @@ local realistic = GetConVar("Beatrun_LeRealisticClimbing")
 
 local function WallrunningCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
-	
+
 	if not ply.WallrunTrace then
 		ply.WallrunTrace = {}
 		ply.WallrunTraceOut = {}

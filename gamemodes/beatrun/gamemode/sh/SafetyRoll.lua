@@ -6,6 +6,53 @@ local landang = Angle(0, 0, 0)
 local lastGroundSpeed = 0
 local rollspeedloss = CreateConVar("Beatrun_RollSpeedLoss", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
 
+local roll = {
+	followplayer = true,
+	animmodelstring = "new_climbanim",
+	showweapon = true,
+	lockang = true,
+	BodyAnimSpeed = 1.15,
+	ignorez = true,
+	deleteonend = true,
+	AnimString = "rollanim"
+}
+
+local function RollAnimCrouch(land, evade)
+	local ply = LocalPlayer()
+
+	if land then
+		if IsValid(ply) and PlayerCannotStand(ply) then
+			roll.AnimString = roll.AnimString == "landgun" and "landguncrouch" or "landcrouch"
+
+			CacheBodyAnim()
+			RemoveBodyAnim()
+			StartBodyAnim(roll)
+		end
+	elseif evade then
+		timer.Simple(0.6, function()
+			if IsValid(ply) and PlayerCannotStand(ply) then
+				roll.AnimString = "evaderollcrouch"
+
+				CacheBodyAnim()
+				RemoveBodyAnim()
+				StartBodyAnim(roll)
+			end
+		end)
+	else
+		timer.Simple(0.6, function()
+			if IsValid(ply) and PlayerCannotStand(ply) then
+				local crouchAnim = roll.AnimString == "merollgun" and "merollguncrouch" or "merollcrouch"
+				roll.AnimString = crouchAnim
+
+				CacheBodyAnim()
+				RemoveBodyAnim()
+				StartBodyAnim(roll)
+			end
+		end)
+	end
+end
+
+
 hook.Add("SetupMove", "SafetyRoll", function(ply, mv, cmd)
 	local speed = mv:GetVelocity().z
 
@@ -57,68 +104,25 @@ hook.Add("SetupMove", "SafetyRoll", function(ply, mv, cmd)
 	end
 end)
 
-local roll = {
-	followplayer = true,
-	animmodelstring = "new_climbanim",
-	showweapon = true,
-	lockang = true,
-	BodyAnimSpeed = 1.15,
-	ignorez = true,
-	deleteonend = true,
-	AnimString = "rollanim"
-}
+
 
 net.Receive("RollAnimSP", function()
 	local ply = LocalPlayer()
 	local land = net.ReadBool()
 	local evade = net.ReadBool()
 
-	-- Determine base animation
 	if land then
-		-- Land animation: immediately switch to crouch if needed
-		if PlayerCannotStand(ply) then
-			roll.AnimString = ply:UsingRH() and "landcrouch" or "landguncrouch"
-		else
-			roll.AnimString = ply:UsingRH() and "land" or "landgun"
-		end
-
-		roll.animmodelstring = (LocalPlayer():GetInfoNum("Beatrun_AnimSet", 0) == 0) and "new_climbanim" or "old_climbanim"
+		roll.AnimString = ply:UsingRH() and "land" or "landgun"
+		roll.animmodelstring = "new_climbanim"
 		roll.BodyAnimSpeed = 1
 	elseif evade then
 		roll.AnimString = "evaderoll"
-		roll.animmodelstring = (LocalPlayer():GetInfoNum("Beatrun_AnimSet", 0) == 0) and "new_climbanim" or "old_climbanim"
+		roll.animmodelstring = "new_climbanim"
 		roll.BodyAnimSpeed = 1.5
-
-		-- Delayed check for evade roll crouch
-		timer.Simple(0.6, function()
-			if IsValid(ply) and PlayerCannotStand(ply) then
-				roll.AnimString = "evaderollcrouch"
-				roll.animmodelstring = (LocalPlayer():GetInfoNum("Beatrun_AnimSet", 0) == 0) and "new_climbanim" or "old_climbanim"
-				roll.BodyAnimSpeed = 1
-
-				CacheBodyAnim()
-				RemoveBodyAnim()
-				StartBodyAnim(roll)
-			end
-		end)
 	else
 		roll.AnimString = ply:UsingRH() and "meroll" or "merollgun"
 		roll.animmodelstring = "new_climbanim"
 		roll.BodyAnimSpeed = 1.15
-
-		-- Delayed check for roll crouch
-		timer.Simple(0.6, function()
-			if IsValid(ply) and PlayerCannotStand(ply) then
-				local crouchAnim = roll.AnimString == "merollgun" and "merollguncrouch" or "merollcrouch"
-				roll.AnimString = crouchAnim
-				roll.animmodelstring = (LocalPlayer():GetInfoNum("Beatrun_AnimSet", 0) == 0) and "new_climbanim" or "old_climbanim"
-				roll.BodyAnimSpeed = 1
-
-				CacheBodyAnim()
-				RemoveBodyAnim()
-				StartBodyAnim(roll)
-			end
-		end)
 	end
 
 	-- Apply selected animation set
@@ -132,6 +136,7 @@ net.Receive("RollAnimSP", function()
 	CacheBodyAnim()
 	RemoveBodyAnim()
 	StartBodyAnim(roll)
+	RollAnimCrouch(land, evade) --we play the crouching anims at the end
 end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
@@ -174,6 +179,7 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 			CacheBodyAnim()
 			RemoveBodyAnim()
 			StartBodyAnim(roll)
+			RollAnimCrouch(false, true) --we play the crouching anims at the end
 		elseif game.SinglePlayer() then
 			net.Start("RollAnimSP")
 				net.WriteBool(false)
@@ -252,6 +258,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			CacheBodyAnim()
 			RemoveBodyAnim()
 			StartBodyAnim(roll)
+			RollAnimCrouch(land, false)
 		elseif game.SinglePlayer() then
 			net.Start("RollAnimSP")
 				net.WriteBool(land)
@@ -275,7 +282,7 @@ if SERVER then
 			return 0
 		end
 
-		if speed >= 800 and not ply:InOverdrive() and not ply:HasGodMode() then
+		if speed >= 800 and not ply:InOverdrive() and not (ply:HasGodMode() or cvars.Bool("sbox_godmode", false)) then
 			if speed < 800 and CurTime() < ply:GetSafetyRollKeyTime() and not ply:GetCrouchJump() and not ply:Crouching() then
 				return 0
 			else

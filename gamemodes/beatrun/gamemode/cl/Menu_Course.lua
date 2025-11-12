@@ -22,7 +22,6 @@ end
 
 local function buildmodebutton()
 	AEUI:Clear()
-	if CourseGhost:GetBool() then StopGhostRecording(false, false) end
 	LocalPlayer():ConCommand("buildmode")
 end
 

@@ -14,6 +14,7 @@ if CLIENT then
 		if not ply:Alive() or Course_Name ~= "" then return end
 		if not ply:UsingRH() then return end
 		if ply:GetMoveType() == MOVETYPE_NOCLIP then return end
+		if ply:GetSBDelay() - 0.9 > CurTime() then return end
 		if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then return end
 
 		if not ply.GrappleHUD_tr then
@@ -61,6 +62,7 @@ local zpunchstart = Angle(2, 0, 0)
 hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
 	if ply:GetInfoNum("Beatrun_DisableGrapple", 0) == 1 and Course_Name == "" then return end
+	if ply:GetSBDelay() - 0.9 > CurTime() then return end
 	if not ply:Alive() or Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 	if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 
@@ -113,7 +115,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		local shmovemul = startshrink and 4 or 1
 
 		local pos = mv:GetOrigin()
-		local eyepos = mv:GetOrigin()
+		--local eyepos = mv:GetOrigin()
 
 		local ent = ply:GetNW2Entity("grappleEntity")
 
@@ -123,7 +125,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 
 		if IsValid(ent) and not is_ent_invalid then c_delta = (ent:GetNWVector("gpos", Vector(0, 0, 0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))):Length() end
 
-		eyepos.z = eyepos.z + 64
+		--eyepos.z = eyepos.z + 64
 
 		if is_getting_off or is_ent_invalid or c_delta > 300 then
 			if IsValid(ent) and ent ~= NULL then
