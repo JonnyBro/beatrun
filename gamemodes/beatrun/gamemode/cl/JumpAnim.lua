@@ -1305,8 +1305,8 @@ local function JumpArmDraw() --(a, b, c)
 			bac:SetRenderOrigin(bac:GetPos())
 		end
 
-		--The ignorebac check is here to fix evaderoll hands being broken caused by the 2025 november update
-		--the root cause is unknown and needs further investigating
+		-- The ignorebac check is here to fix evaderoll hands being broken caused by the 2025 november update
+		-- the root cause is unknown and needs further investigating
 		if not ignorebac[BodyAnimString] then
 			BodyAnimMDLarm:SetParent(bac)
 		end

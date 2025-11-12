@@ -826,7 +826,7 @@ hook.Add("CreateMove", "BodyLimitMove", function(cmd)
 	end
 end)
 
-hook.Add("PostDrawOpaqueRenderables", "IgnoreZBodyAnim", function() --(depth, sky)
+hook.Add("PostDrawOpaqueRenderables", "IgnoreZBodyAnim", function() -- (depth, sky)
 	if IsValid(BodyAnimMDL) then
 		CacheLerpBodyAnim()
 

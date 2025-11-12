@@ -115,7 +115,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		local shmovemul = startshrink and 4 or 1
 
 		local pos = mv:GetOrigin()
-		--local eyepos = mv:GetOrigin()
+		-- local eyepos = mv:GetOrigin()
 
 		local ent = ply:GetNW2Entity("grappleEntity")
 
@@ -125,7 +125,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 
 		if IsValid(ent) and not is_ent_invalid then c_delta = (ent:GetNWVector("gpos", Vector(0, 0, 0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))):Length() end
 
-		--eyepos.z = eyepos.z + 64
+		-- eyepos.z = eyepos.z + 64
 
 		if is_getting_off or is_ent_invalid or c_delta > 300 then
 			if IsValid(ent) and ent ~= NULL then

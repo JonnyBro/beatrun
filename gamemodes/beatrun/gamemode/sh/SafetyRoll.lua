@@ -52,7 +52,6 @@ local function RollAnimCrouch(land, evade)
 	end
 end
 
-
 hook.Add("SetupMove", "SafetyRoll", function(ply, mv, cmd)
 	local speed = mv:GetVelocity().z
 
@@ -104,8 +103,6 @@ hook.Add("SetupMove", "SafetyRoll", function(ply, mv, cmd)
 	end
 end)
 
-
-
 net.Receive("RollAnimSP", function()
 	local ply = LocalPlayer()
 	local land = net.ReadBool()
@@ -136,7 +133,8 @@ net.Receive("RollAnimSP", function()
 	CacheBodyAnim()
 	RemoveBodyAnim()
 	StartBodyAnim(roll)
-	RollAnimCrouch(land, evade) --we play the crouching anims at the end
+
+	RollAnimCrouch(land, evade) -- we play the crouching anims at the end
 end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
@@ -179,7 +177,8 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 			CacheBodyAnim()
 			RemoveBodyAnim()
 			StartBodyAnim(roll)
-			RollAnimCrouch(false, true) --we play the crouching anims at the end
+
+			RollAnimCrouch(false, true) -- we play the crouching anims at the end
 		elseif game.SinglePlayer() then
 			net.Start("RollAnimSP")
 				net.WriteBool(false)
@@ -258,6 +257,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			CacheBodyAnim()
 			RemoveBodyAnim()
 			StartBodyAnim(roll)
+
 			RollAnimCrouch(land, false)
 		elseif game.SinglePlayer() then
 			net.Start("RollAnimSP")
