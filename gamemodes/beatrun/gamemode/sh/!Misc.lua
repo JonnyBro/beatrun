@@ -26,6 +26,7 @@ if CLIENT then
 	CreateClientConVar("Beatrun_CPSave", 1, true, true, language.GetPhrase("beatrun.convars.cpsave"), 0, 1)
 end
 
+--[[ NOTE: Does not detect `:SetMoveType(MOVETYPE_NOCLIP)` (ULX way of doing noclip). wow.
 hook.Add("PlayerNoClip", "BlockNoClip", function(ply, enabled)
 	if enabled and Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 then
 		ply:SetNW2Int("CPNum", -1)
@@ -38,6 +39,16 @@ hook.Add("PlayerNoClip", "BlockNoClip", function(ply, enabled)
 	end
 
 	if enabled and (GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH")) then return false end
+end) --]]
+
+timer.Create("StupidCheckToDetectULXAndNotULXNoClip", .5, 0, function()
+	for _, ply in ipairs(player.GetAll()) do
+		if ply:GetMoveType() == MOVETYPE_NOCLIP and ((Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1) or (GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH"))) then
+				ply:SetNW2Int("CPNum", -1)
+
+				ply:SendLua("notification.AddLegacy(\"#beatrun.misc.noclipdetected\", NOTIFY_ERROR, 4)")
+		end
+	end
 end)
 
 function ParkourEvent(event, ply, ignorepred)
