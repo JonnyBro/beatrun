@@ -71,7 +71,7 @@ irm https://beatrun.jonnybro.ru/install | iex
 
 ### New Features
 
-- **Custom Courses Database** hosted by Jonny_Bro: **[Access Here](https://courses.jonnybro.ru)** (free and **[open source](https://github.com/JonnyBro/beatrun-courses-server)**).
+- **Custom Courses Database** hosted by Jonny_Bro: **[Access Here](https://courses.jbro.top)** (free and **[open source](https://github.com/JonnyBro/beatrun-courses-server)**).
 - **New Gamemode:** Deathmatch.
 - "Proper" Kick Glitch similar to the **[original game](https://www.youtube.com/watch?v=zK5y3NBUStc)**.
 - In-game configuration menu in the Tools menu under **Beatrun**. All settings can be modified here.

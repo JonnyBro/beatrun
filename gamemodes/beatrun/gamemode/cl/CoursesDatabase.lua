@@ -1,5 +1,5 @@
 local apikey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.GetPhrase("beatrun.convars.apikey"))
-local domain = CreateClientConVar("Beatrun_Domain", "courses.jonnybro.ru", true, false, language.GetPhrase("beatrun.convars.domain"))
+local domain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", true, false, language.GetPhrase("beatrun.convars.domain"))
 
 local QueuedArgs
 local QueuedFunction
