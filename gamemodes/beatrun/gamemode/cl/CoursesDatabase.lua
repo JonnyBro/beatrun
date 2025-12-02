@@ -150,3 +150,22 @@ concommand.Add("Beatrun_UpdateCode", function(ply, cmd, args, argstr)
 	print(language.GetPhrase("beatrun.coursesdatabase.update1"):format(QueuedArgs, Course_Name, currentMap))
 	print(language.GetPhrase("beatrun.coursesdatabase.upload2"))
 end)
+
+concommand.Add("beatrun_test", function()
+	local frame = vgui.Create("DFrame")
+	frame:SetSize(300, 200)
+	frame:SetTitle("this is a derma frame with dhtml")
+	frame:SetVisible(true)
+	frame:SetDraggable(true)
+	frame:MakePopup()
+	frame:Center()
+
+	--Fill the form with a html page
+	local html = vgui.Create("DHTML", frame)
+	html:Dock(FILL)
+	html:SetHTML([[
+	<input type='submit' onclick='console.log("RUNLUA:RunConsoleCommand(\"Beatrun_LoadCode\", \"UBFU-NDDN-BLZP\")")' />
+	]])
+	-- Enable the webpage to call lua code.
+	html:SetAllowLua(true)
+end)

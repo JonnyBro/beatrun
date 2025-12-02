@@ -114,7 +114,7 @@ if SERVER then
 
 		local players = player.GetAll()
 
-		for k, v in ipairs(players) do
+		for _, v in ipairs(players) do
 			v:SetNW2Float("PBTime", 0)
 			v:SetNW2Bool("Infected", false)
 		end
@@ -129,7 +129,7 @@ if SERVER then
 		local players = player.GetAll()
 		local numinfected = math.max(math.floor(#players / 4), 1)
 
-		for k, v in pairs(players) do
+		for _, v in pairs(players) do
 			if not v:Alive() then
 				v:Spawn()
 			end
@@ -174,7 +174,7 @@ if SERVER then
 
 		if not didmusic and revealed and timeremaining <= 60 and timeremaining >= 50 and player.GetCount() >= 5 and cachedhumancount == 1 then
 			timer.Simple(0.1, function()
-				for k, v in ipairs(player.GetAll()) do
+				for _, v in ipairs(player.GetAll()) do
 					if v:Alive() and not v:GetNW2Bool("Infected") then
 						net.Start("Infection_LastMan")
 						net.Send(v)
@@ -188,7 +188,7 @@ if SERVER then
 		end
 
 		if Infection_EndTime <= CurTime() and not ended then
-			for k, v in ipairs(player.GetAll()) do
+			for _, v in ipairs(player.GetAll()) do
 				if v:GetNW2Float("PBTime") == 0 and not v:GetNW2Bool("Infected") then
 					v:SetNW2Float("PBTime", Infection_EndTime - Infection_StartTime)
 				end
@@ -227,7 +227,7 @@ if SERVER then
 
 		local players = player.GetAll()
 
-		for k, v in ipairs(players) do
+		for _, v in ipairs(players) do
 			v:SetNW2Float("PBTime", 0)
 			v:SetNW2Bool("Infected", false)
 			v:SelectWeapon("runnerhands")
@@ -389,7 +389,7 @@ if CLIENT then
 		endtime = net.ReadFloat()
 
 		timer.Simple(0.5, function()
-			for k, v in ipairs(player.GetAll()) do
+			for _, v in ipairs(player.GetAll()) do
 				if not v:GetNW2Bool("Infected") then
 					survivors = survivors .. v:Nick() .. ", "
 
