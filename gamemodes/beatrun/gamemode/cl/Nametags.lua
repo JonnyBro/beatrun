@@ -7,9 +7,10 @@ local function HideNearby(ply)
 	if GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then return end
 
 	ply.distfromlocal = LocalPlayer():GetPos():Distance(ply:GetPos())
-	local Distance = ply.distfromlocal or 40000
 
-	if Distance < 20000 and NametagsEnable:GetBool() then
+	local dist = ply.distfromlocal or 60000
+
+	if NametagsEnable:GetBool() and dist < 50000 then
 		local infectionmode = GetGlobalBool("GM_INFECTION")
 		local localinfected = LocalPlayer():GetNW2Bool("Infected")
 		local plyinfected = ply:GetNW2Bool("Infected")
@@ -37,7 +38,7 @@ local function HideNearby(ply)
 
 		local pos = nil
 
-		if Distance < 250 then
+		if dist < 250 then
 			local bone = ply:LookupBone("ValveBiped.Bip01_Head1")
 
 			if bone then
@@ -57,10 +58,10 @@ local function HideNearby(ply)
 		ang:RotateAroundAxis(ang:Forward(), 90)
 		ang:RotateAroundAxis(ang:Right(), 90)
 
-		cam.Start3D2D(pos, Angle(0, ang.y, 90), math.max(2.5 * Distance / 2000, 0.5))
-			cam.IgnoreZ(true)
+		cam.Start3D2D(pos, Angle(0, ang.y, ang.z), math.max(2.5 * dist / 2000, 0.5))
+			render.DepthRange(0, 0)
 			draw.DrawText(ply:Nick(), "BeatrunHUD", 2, 2, color, TEXT_ALIGN_CENTER)
-			cam.IgnoreZ(false)
+			render.DepthRange(0, 1)
 		cam.End3D2D()
 
 		return dontdraw
