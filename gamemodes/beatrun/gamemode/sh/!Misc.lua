@@ -26,6 +26,34 @@ if CLIENT then
 	CreateClientConVar("Beatrun_CPSave", 1, true, true, language.GetPhrase("beatrun.convars.cpsave"), 0, 1)
 end
 
+if ulx and ulx.noclip then
+	local oldUlxNoclip = ulx.noclip
+
+	function ulx.beatrun_noclip(calling_ply, target_plys)
+		for i = 1, #target_plys do
+			local ply = target_plys[i]
+			if ply:IsValid() then
+				if Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 then
+					ply:SetNW2Int("CPNum", -1)
+
+					ULib.tsayError(ply, "Noclip Detected! Respawn to restart the course")
+				end
+			end
+		end
+
+		oldUlxNoclip(calling_ply, target_plys)
+	end
+
+	local noclip = ulx.command("Utility", "ulx noclip", ulx.beatrun_noclip, "!noclip")
+	noclip:addParam{
+		type = ULib.cmds.PlayersArg,
+		ULib.cmds.optional
+	}
+
+	noclip:defaultAccess(ULib.ACCESS_ADMIN)
+	noclip:help("Toggles noclip on target(s).")
+end
+
 hook.Add("PlayerNoClip", "BlockNoClip", function(ply, enabled)
 	if enabled and Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 then
 		ply:SetNW2Int("CPNum", -1)

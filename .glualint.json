@@ -11,7 +11,7 @@
 	"lint_gotos": true,
 	"lint_goto_identifier": true,
 	"lint_doubleNegations": true,
-	"lint_redundantIfStatements": true,
+	"lint_redundantIfStatements": false,
 	"lint_redundantParentheses": true,
 	"lint_duplicateTableKeys": true,
 	"lint_profanity": true,
