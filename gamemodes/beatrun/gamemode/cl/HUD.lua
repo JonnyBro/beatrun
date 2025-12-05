@@ -364,11 +364,12 @@ local function sortleaderboard(a, b)
 end
 
 function BeatrunLeaderboard(forced)
-	if not forced and Course_Name == "" and not GetGlobalBool("GM_INFECTION") and not GetGlobalBool("GM_DATATHEFT") and not GetGlobalBool("GM_DEATHMATCH") then return end
+	if not forced and Course_Name == "" and not GetGlobalBool("GM_INFECTION") and not GetGlobalBool("GM_DATATHEFT") and not GetGlobalBool("GM_DEATHMATCH") and not GetGlobalBool("GM_EVENTMODE") then return end
 
 	local isinfection = GetGlobalBool("GM_INFECTION")
 	local isdatatheft = GetGlobalBool("GM_DATATHEFT")
 	local isdeathmatch = GetGlobalBool("GM_DEATHMATCH")
+	local iseventmode = GetGlobalBool("GM_EVENTMODE")
 	local ply = LocalPlayer()
 	local vp = ply:GetViewPunchAngles()
 	local scrh = ScrH()
@@ -399,8 +400,31 @@ function BeatrunLeaderboard(forced)
 	surface.SetTextColor(255, 255, 255, math.max(255 - hidealpha, 2))
 
 	local i = 0
+	local displayPlayers = {}
 
-	for k, v in ipairs(allply) do
+	for _, p in ipairs(allply) do
+    	if GetGlobalBool("GM_EVENTMODE") then
+        	local sk = p:GetNW2String("EPlayerStatus", "Member")
+        	if sk == "Manager" then continue end
+    	end
+    	table.insert(displayPlayers, p)
+	end
+
+	if GetGlobalBool("GM_EVENTMODE") then
+    	table.sort(displayPlayers, function(a, b)
+        	local sa = a:GetNW2String("EPlayerStatus", "Member")
+        	local sb = b:GetNW2String("EPlayerStatus", "Member")
+
+        	local order = {
+            	Member = 1,
+            	Suspended = 2
+        	}
+
+        	return (order[sa] or 99) < (order[sb] or 99)
+    	end)
+	end
+
+	for k, v in ipairs(displayPlayers) do
 		if IsValid(v) then
 			i = i + 1
 
@@ -430,6 +454,16 @@ function BeatrunLeaderboard(forced)
 			if isinfection and pbtimenum == 0 and v:GetNW2Bool("Infected") then
 				surface.SetTextColor(infectorcolor)
 				surface.DrawText(" | " .. language.GetPhrase("beatrun.hud.infector"))
+			elseif iseventmode then
+				local statusKey = v:GetNW2String("EPlayerStatus", "Member")
+    			local sdata = GetStatusData(statusKey)
+
+    			if sdata.key == "Manager" then
+        			i = i - 1
+    			else
+					surface.SetTextColor(sdata.color or Color(255,255,255))
+					surface.DrawText(" | " .. language.GetPhrase(sdata.label_key))
+    			end
 			else
 				surface.DrawText(" | " .. pbtime)
 			end

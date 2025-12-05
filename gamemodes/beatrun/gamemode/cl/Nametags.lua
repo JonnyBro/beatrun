@@ -10,7 +10,7 @@ local function HideNearby(ply)
 
 	local dist = ply.distfromlocal or 60000
 
-	if NametagsEnable:GetBool() and dist < 50000 then
+	if NametagsEnable:GetBool() and not GetGlobalBool("EM_HideNametags") and dist < 50000 then
 		local infectionmode = GetGlobalBool("GM_INFECTION")
 		local localinfected = LocalPlayer():GetNW2Bool("Infected")
 		local plyinfected = ply:GetNW2Bool("Infected")

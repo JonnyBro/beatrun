@@ -380,7 +380,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.infection")
 		InfectionButton:SetSize(0, 20)
 		InfectionButton.DoClick = function()
-			if GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_DATATHEFT") then
+			if GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_EVENTMODE") then
 				InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.error")
 
 				timer.Simple(2, function()
@@ -393,6 +393,24 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			ToggleGamemode("infection")
 		end
 		panel:AddItem(InfectionButton)
+
+		local EventmodeButton = vgui.Create("DButton", panel)
+		EventmodeButton:SetText("#beatrun.toolsmenu.gamemodes.eventmode")
+		EventmodeButton:SetSize(0, 20)
+		EventmodeButton.DoClick = function()
+			if GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_INFECTION") then
+				EventmodeButton:SetText("#beatrun.toolsmenu.gamemodes.error")
+
+				timer.Simple(2, function()
+					EventmodeButton:SetText("#beatrun.toolsmenu.gamemodes.eventmode")
+				end)
+
+				return
+			end
+
+			ToggleGamemode("eventmode")
+		end
+		panel:AddItem(EventmodeButton)
 
 		local loadouts = panel:ComboBox("#beatrun.randomloadouts", "Beatrun_RandomLoadouts")
 		loadouts:AddChoice("#beatrun.randombeatrunloadouts", 1)
@@ -407,7 +425,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		DatatheftButton:SetText("#beatrun.toolsmenu.gamemodes.datatheft")
 		DatatheftButton:SetSize(0, 20)
 		DatatheftButton.DoClick = function()
-			if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DEATHMATCH") then
+			if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_EVENTMODE") then
 				DatatheftButton:SetText("#beatrun.toolsmenu.gamemodes.error")
 
 				timer.Simple(2, function()
@@ -425,7 +443,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		DeathmatchButton:SetText("#beatrun.toolsmenu.gamemodes.deathmatch")
 		DeathmatchButton:SetSize(0, 20)
 		DeathmatchButton.DoClick = function()
-			if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") then
+			if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_EVENTMODE") then
 				DeathmatchButton:SetText("#beatrun.toolsmenu.gamemodes.error")
 
 				timer.Simple(2, function()
