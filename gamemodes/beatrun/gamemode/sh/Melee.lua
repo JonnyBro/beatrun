@@ -188,7 +188,7 @@ local function MeleeThink(ply, mv, cmd)
 
 			local ent = tr_result.Entity
 
-			if SERVER and IsValid(ent) and (not ent:IsPlayer() or Course_Name == "" and not GetGlobalBool("GM_INFECTION") and GetConVar("sbox_playershurtplayers"):GetBool()) then
+			if SERVER and IsValid(ent) and (not ent:IsPlayer() or Course_Name == "" and not GetGlobalBool("GM_INFECTION") and not GetGlobalBool("EM_NoMeleeDamage") and GetConVar("sbox_playershurtplayers"):GetBool()) then
 				local d = DamageInfo()
 					d:SetDamage(meleedata[ply:GetMelee()][6])
 					d:SetAttacker(ply)
