@@ -25,7 +25,7 @@ hook.Add("Tick", "NPCBehavior", function()
 	local CT = CurTime()
 	if updatetime > CT then return end
 
-	for k, npc in ipairs(npctbl) do
+	for _, npc in ipairs(npctbl) do
 		if not IsValid(npc) then continue end
 
 		local enemy = npc:GetEnemy()
