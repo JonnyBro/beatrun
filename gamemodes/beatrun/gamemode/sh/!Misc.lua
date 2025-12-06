@@ -1,57 +1,89 @@
 local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", {FCVAR_ARCHIVE})
 local allowWeaponSpawn = CreateConVar("Beatrun_AllowWeaponSpawn", "0", {FCVAR_ARCHIVE})
+local debugSpawnLogs = CreateConVar("Beatrun_DebugSpawnLogs", "0", {FCVAR_ARCHIVE})
 
 if SERVER then
 	util.AddNetworkString("SPParkourEvent")
 
-	local weaponEvents = {"PlayerGiveSWEP", "PlayerSpawnSWEP"}
-	local blockedNonPropEvents = {"PlayerSpawnEffect", "PlayerSpawnNPC", "PlayerSpawnObject", "PlayerSpawnRagdoll", "PlayerSpawnSENT", "PlayerSpawnVehicle"}
-	local allowedPropEvent = "PlayerSpawnProp"
+	local function logSpawnDecision(ply, kind, allowed, reason)
+		if not debugSpawnLogs:GetBool() then return end
+
+		local name = IsValid(ply) and ply:Nick() or "<invalid>"
+
+		print("[Beatrun Spawn Logs] " .. kind .. " | player: " .. name .. " | allowed: " .. tostring(allowed) .. " | reason: " .. reason)
+	end
 
 	local function CanPlayerSpawnProps(ply)
-		if game.SinglePlayer() or IsValid(ply) and ply:IsAdmin() then return true end
-		if GetGlobalBool("GM_EVENTMODE", false) and ply:GetNW2String("EPlayerStatus") ~= "Suspended" then return GetGlobalBool("EM_AllowProps", false) end
+		if not IsValid(ply) then return false end
 
-		return allowPropSpawn:GetBool()
+		if ply:IsAdmin() then
+			logSpawnDecision(ply, "prop", true, "admin")
+			return true
+		end
+
+		if allowPropSpawn:GetBool() then
+			logSpawnDecision(ply, "prop", true, "Beatrun_AllowPropSpawn")
+			return true
+		end
+
+		if not GetGlobalBool("GM_EVENTMODE", false) then
+			logSpawnDecision(ply, "prop", false, "eventmode_off")
+			return false
+		end
+
+		if not GetGlobalBool("EM_AllowProps", false) then
+			logSpawnDecision(ply, "prop", false, "EM_AllowProps_off")
+			return false
+		end
+
+		logSpawnDecision(ply, "prop", true, "eventmode_ok")
+		return true
 	end
 
 	local function CanPlayerSpawnWeapons(ply)
-		if game.SinglePlayer() or IsValid(ply) and ply:IsAdmin() then return true end
-		if GetGlobalBool("GM_EVENTMODE", false) and ply:GetNW2String("EPlayerStatus") ~= "Suspended" then return GetGlobalBool("EM_AllowWeapons", false) end
+		if not IsValid(ply) then return false end
 
-		return allowWeaponSpawn:GetBool()
+		if ply:IsAdmin() then
+			logSpawnDecision(ply, "weapon", true, "admin")
+			return true
+		end
+
+		if allowWeaponSpawn:GetBool() then
+			logSpawnDecision(ply, "weapon", true, "Beatrun_AllowWeaponSpawn")
+			return true
+		end
+
+		if not GetGlobalBool("GM_EVENTMODE", false) then
+			logSpawnDecision(ply, "weapon", false, "eventmode_off")
+			return false
+		end
+
+		if not GetGlobalBool("EM_AllowWeapons", false) then
+			logSpawnDecision(ply, "weapon", false, "EM_AllowWeapons_off")
+			return false
+		end
+
+		logSpawnDecision(ply, "weapon", true, "eventmode_ok")
+		return true
 	end
 
-	local function BlockSpawnProp(ply, ...)
-		if CanPlayerSpawnProps(ply) then return true end
+	hook.Add("PlayerSpawnProp", "Beatrun_Event_Prop1", function(ply) return CanPlayerSpawnProps(ply) end)
+	hook.Add("PlayerSpawnObject", "Beatrun_Event_Prop2", function(ply) return CanPlayerSpawnProps(ply) end)
 
-		return false
+	hook.Add("PlayerGiveSWEP", "Beatrun_Event_SWEP1", function(ply) return CanPlayerSpawnWeapons(ply) end)
+	hook.Add("PlayerSpawnSWEP", "Beatrun_Event_SWEP2", function(ply) return CanPlayerSpawnWeapons(ply) end)
+
+	local function OnlyAdmins(ply)
+		return IsValid(ply) and ply:IsAdmin()
 	end
 
-	local function BlockSpawnWeapon(ply, ...)
-		if CanPlayerSpawnWeapons(ply) then return true end
+	hook.Add("PlayerSpawnNPC", "Beatrun_BlockNPC", OnlyAdmins)
+	hook.Add("PlayerSpawnVehicle", "Beatrun_BlockVehicle", OnlyAdmins)
+	hook.Add("PlayerSpawnSENT", "Beatrun_BlockSENT", OnlyAdmins)
+	hook.Add("PlayerSpawnRagdoll", "Beatrun_BlockRagdoll", OnlyAdmins)
+	hook.Add("PlayerSpawnEffect", "Beatrun_BlockEffect", OnlyAdmins)
 
-		return false
-	end
-
-	local function BlockNonPropSpawn(ply, ...)
-		if game.SinglePlayer() or IsValid(ply) and ply:IsAdmin() then return true end
-
-		return false
-	end
-
-	for _, ev in ipairs(weaponEvents) do
-		hook.Add(ev, "Beatrun_BlockSpawn_Weapon_" .. ev, BlockSpawnWeapon)
-	end
-
-	hook.Add(allowedPropEvent, "Beatrun_BlockSpawn_Prop_" .. allowedPropEvent, BlockSpawnProp)
-
-	for _, ev in ipairs(blockedNonPropEvents) do
-		hook.Add(ev, "Beatrun_BlockSpawn_NonProp_" .. ev, BlockNonPropSpawn)
-	end
-
-	hook.Add("IsSpawnpointSuitable", "Beatrun_NoSpawnFrag", function(ply) return true end)
-	hook.Add("AllowPlayerPickup", "Beatrun_AllowAdminsPickUp", function(ply, ent) if IsValid(ply) and ply:IsAdmin() then return true end end)
+	hook.Add("AllowPlayerPickup", "Beatrun_AllowPickupAdmin", function(ply) return ply:IsAdmin() end)
 end
 
 if CLIENT then

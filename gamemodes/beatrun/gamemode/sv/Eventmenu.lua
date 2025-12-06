@@ -3,13 +3,6 @@ util.AddNetworkString("Eventmode_ToggleVar")
 util.AddNetworkString("Eventmode_BringMembers")
 util.AddNetworkString("Eventmode_TeleportMembersToPoint")
 
-SetGlobalBool("EM_SuspendOnDeath", false)
-SetGlobalBool("EM_NewPlayersSuspended", false)
-SetGlobalBool("EM_AllowProps", false)
-SetGlobalBool("EM_AllowWeapons", false)
-SetGlobalBool("EM_HideNametags", false)
-SetGlobalBool("EM_NoMeleeDamage", false)
-
 local spawnPos = nil
 
 net.Receive("Eventmode_SetSpawn", function(len, ply)

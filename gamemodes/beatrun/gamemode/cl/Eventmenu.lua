@@ -78,9 +78,9 @@ local function RebuildPlayersPanel()
 			local st = ply:GetNW2String("EPlayerStatus", "Member")
 
 			if st == "Suspended" then
-				RunConsoleCommand("Beatrun_Eventmode_Unsuspend", ply:EntIndex())
+				RunConsoleCommand("Beatrun_Eventmode_Unsuspend", ply:SteamID())
 			else
-				RunConsoleCommand("Beatrun_Eventmode_Suspend", ply:EntIndex())
+				RunConsoleCommand("Beatrun_Eventmode_Suspend", ply:SteamID())
 			end
 
 			timer.Simple(.2, function() if MainPanel and CurrentTab == "players" then RebuildPlayersPanel() end end)

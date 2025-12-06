@@ -48,7 +48,7 @@ if SERVER then
 		if not arg then return nil end
 
 		for _, p in ipairs(player.GetAll()) do
-			if p:SteamID() == arg then return p end
+			if p:SteamID() == arg or p:SteamID64() then return p end
 		end
 
 		local num = tonumber(arg)
@@ -67,8 +67,8 @@ if SERVER then
 		return nil
 	end
 
-	concommand.Add("Beatrun_Eventmode_Suspend", function(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+	concommand.Add("Beatrun_Eventmode_Suspend", function(admin, cmd, args)
+		if not IsValid(admin) or not admin:IsAdmin() then return end
 
 		local tgt = FindPlayer(args[1])
 		if not IsValid(tgt) then return end
@@ -76,8 +76,8 @@ if SERVER then
 		SetPlayerEventStatus(tgt, "Suspended")
 	end)
 
-	concommand.Add("Beatrun_Eventmode_Unsuspend", function(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+	concommand.Add("Beatrun_Eventmode_Unsuspend", function(admin, cmd, args)
+		if not IsValid(admin) or not admin:IsAdmin() then return end
 
 		local tgt = FindPlayer(args[1])
 		if not IsValid(tgt) then return end
@@ -85,14 +85,14 @@ if SERVER then
 		SetPlayerEventStatus(tgt, "Member")
 	end)
 
-	concommand.Add("Beatrun_Eventmode_SuspendAll", function(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+	concommand.Add("Beatrun_Eventmode_SuspendAll", function(admin, cmd, args)
+		if not IsValid(admin) or not admin:IsAdmin() then return end
 
 		local count = 0
 
 		for _, ply in ipairs(player.GetAll()) do
 			if IsValid(ply) and ply:IsPlayer() then
-				if not ply:IsAdmin() then
+				if ply:GetNW2String("EPlayerStatus", "Member") ~= "Manager" then
 					SetPlayerEventStatus(ply, "Suspended")
 
 					count = count + 1
@@ -101,14 +101,14 @@ if SERVER then
 		end
 	end)
 
-	concommand.Add("Beatrun_Eventmode_UnsuspendAll", function(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsAdmin() then return end
+	concommand.Add("Beatrun_Eventmode_UnsuspendAll", function(admin, cmd, args)
+		if not IsValid(admin) or not admin:IsAdmin() then return end
 
 		local count = 0
 
 		for _, ply in ipairs(player.GetAll()) do
 			if IsValid(ply) and ply:IsPlayer() then
-				if not ply:IsAdmin() then
+				if ply:GetNW2String("EPlayerStatus", "Member") ~= "Manager" then
 					SetPlayerEventStatus(ply, "Member")
 
 					count = count + 1
@@ -117,21 +117,35 @@ if SERVER then
 		end
 	end)
 
-	function Beatrun_StartEventmode()
+	function Beatrun_StartEventmode(manager)
 		if GetGlobalBool("GM_EVENTMODE") then return end
 		if Course_Name ~= "" then return end
 		if player.GetCount() < 2 then return end
 
 		SetGlobalBool("GM_EVENTMODE", true)
 
+		local specificManager = IsValid(manager) and manager:IsPlayer() and manager or nil
+
 		for _, ply in ipairs(player.GetAll()) do
-			if ply:IsAdmin() then
-				SetPlayerEventStatus(ply, "Manager")
-			else
-				if GetGlobalBool("EM_NewPlayersSuspended") then
-					SetPlayerEventStatus(ply, "Suspended")
+			if specificManager then
+				if ply == specificManager then
+					SetPlayerEventStatus(ply, "Manager")
 				else
-					SetPlayerEventStatus(ply, "Member")
+					if GetGlobalBool("EM_NewPlayersSuspended") then
+						SetPlayerEventStatus(ply, "Suspended")
+					else
+						SetPlayerEventStatus(ply, "Member")
+					end
+				end
+			else
+				if ply:IsAdmin() then
+					SetPlayerEventStatus(ply, "Manager")
+				else
+					if GetGlobalBool("EM_NewPlayersSuspended") then
+						SetPlayerEventStatus(ply, "Suspended")
+					else
+						SetPlayerEventStatus(ply, "Member")
+					end
 				end
 			end
 		end
@@ -142,6 +156,14 @@ if SERVER then
 
 	function Beatrun_StopEventmode()
 		SetGlobalBool("GM_EVENTMODE", false)
+		SetGlobalBool("EM_SuspendOnDeath", false)
+		SetGlobalBool("EM_NewPlayersSuspended", false)
+		SetGlobalBool("EM_AllowProps", false)
+		SetGlobalBool("EM_AllowWeapons", false)
+		SetGlobalBool("EM_HideNametags", false)
+		SetGlobalBool("EM_NoMeleeDamage", false)
+
+		game.CleanUpMap()
 
 		for _, ply in ipairs(player.GetAll()) do
 			ply:SetNW2String("EPlayerStatus", "")
@@ -180,6 +202,7 @@ if SERVER then
 	end
 
 	hook.Add("PlayerSpawn", "EventmodeSync", EventmodeSync)
+
 	hook.Add("PlayerInitialSpawn", "EventMode_NewPlayerAssign", function(ply)
 		if not GetGlobalBool("GM_EVENTMODE") then return end
 
@@ -196,6 +219,7 @@ if SERVER then
 
 	hook.Add("PlayerDeath", "EventMode_AutoSuspend", function(victim)
 		if not IsValid(victim) then return end
+		if victim:GetNW2String("EPlayerStatus", "Member") == "Manager" then return end
 		if GetGlobalBool("GM_EVENTMODE") and GetGlobalBool("EM_SuspendOnDeath") then SetPlayerEventStatus(victim, "Suspended") end
 	end)
 end
@@ -206,7 +230,7 @@ if CLIENT then
 
 		surface.SetFont("BeatrunHUD")
 
-		local text = language.GetPhrase("#beatrun.eventmode.name")
+		local text = language.GetPhrase("beatrun.eventmode.name")
 		local tw, _ = surface.GetTextSize(text)
 
 		surface.SetTextPos(ScrW() * 0.5 - tw * 0.5, ScrH() * 0.25)
@@ -231,7 +255,7 @@ if CLIENT then
 
 		LocalPlayer():EmitSound("mirrorsedge/ui/ME_UI_hud_select.wav")
 
-		chat.AddText(Color(95, 245, 130), language.GetPhrase("#beatrun.eventmode.start"))
+		chat.AddText(Color(95, 245, 130), language.GetPhrase("beatrun.eventmode.start"))
 	end)
 
 	net.Receive("Eventmode_Sync", function() hook.Add("BeatrunHUDCourse", "EventmodeHUDName", EventmodeHUDName) end)

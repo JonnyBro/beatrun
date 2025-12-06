@@ -404,7 +404,9 @@ function BeatrunLeaderboard(forced)
 	local displayPlayers = {}
 
 	for _, p in ipairs(allply) do
-		if GetGlobalBool("GM_EVENTMODE") then
+		if not IsValid(p) then continue end
+
+		if iseventmode then
 			local sk = p:GetNW2String("EPlayerStatus", "Member")
 			if sk == "Manager" then continue end
 		end
@@ -412,8 +414,11 @@ function BeatrunLeaderboard(forced)
 		table.insert(displayPlayers, p)
 	end
 
-	if GetGlobalBool("GM_EVENTMODE") then
+	if iseventmode then
 		table.sort(displayPlayers, function(a, b)
+			if not IsValid(a) then return false end
+			if not IsValid(b) then return true end
+
 			local sa = a:GetNW2String("EPlayerStatus", "Member")
 			local sb = b:GetNW2String("EPlayerStatus", "Member")
 
