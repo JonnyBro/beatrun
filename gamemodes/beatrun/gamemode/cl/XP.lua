@@ -69,16 +69,13 @@ function meta:SetLevel(level)
 end
 
 function meta:LevelUp()
-	local i = 0
-
 	while self:GetLevelRatio() >= 1 do
 		self:SetLevel(self:GetLevel() + 1)
 
-		i = i + 1
-		if i > 1000 then break end
+		-- if i > 1000 then break end -- why were they capped?
 	end
 
-	if i > 0 then
+	if self:GetLevel() > 0 then
 		self:EmitSound("mirrorsedge/UI/ME_UI_challenge_end_success.wav", 35, 100 + math.random(-5, 5))
 	end
 end
