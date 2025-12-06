@@ -306,6 +306,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.toolsmenu.misc.propspawn", "Beatrun_AllowPropSpawn")
 		panel:ControlHelp("#beatrun.toolsmenu.misc.propspawndesc")
 
+		panel:CheckBox("#beatrun.toolsmenu.misc.weaponspawn", "Beatrun_AllowWeaponSpawn")
+		panel:ControlHelp("#beatrun.toolsmenu.misc.weaponspawndesc")
+
 		panel:CheckBox("#beatrun.toolsmenu.misc.overdrivemp", "Beatrun_AllowOverdriveInMultiplayer")
 		panel:ControlHelp("#beatrun.toolsmenu.misc.overdrivempdesc")
 

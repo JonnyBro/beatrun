@@ -370,6 +370,7 @@ function BeatrunLeaderboard(forced)
 	local isdatatheft = GetGlobalBool("GM_DATATHEFT")
 	local isdeathmatch = GetGlobalBool("GM_DEATHMATCH")
 	local iseventmode = GetGlobalBool("GM_EVENTMODE")
+
 	local ply = LocalPlayer()
 	local vp = ply:GetViewPunchAngles()
 	local scrh = ScrH()
@@ -403,25 +404,31 @@ function BeatrunLeaderboard(forced)
 	local displayPlayers = {}
 
 	for _, p in ipairs(allply) do
-    	if GetGlobalBool("GM_EVENTMODE") then
-        	local sk = p:GetNW2String("EPlayerStatus", "Member")
-        	if sk == "Manager" then continue end
-    	end
-    	table.insert(displayPlayers, p)
+		if not IsValid(p) then continue end
+
+		if iseventmode then
+			local sk = p:GetNW2String("EPlayerStatus", "Member")
+			if sk == "Manager" then continue end
+		end
+
+		table.insert(displayPlayers, p)
 	end
 
-	if GetGlobalBool("GM_EVENTMODE") then
-    	table.sort(displayPlayers, function(a, b)
-        	local sa = a:GetNW2String("EPlayerStatus", "Member")
-        	local sb = b:GetNW2String("EPlayerStatus", "Member")
+	if iseventmode then
+		table.sort(displayPlayers, function(a, b)
+			if not IsValid(a) then return false end
+			if not IsValid(b) then return true end
 
-        	local order = {
-            	Member = 1,
-            	Suspended = 2
-        	}
+			local sa = a:GetNW2String("EPlayerStatus", "Member")
+			local sb = b:GetNW2String("EPlayerStatus", "Member")
 
-        	return (order[sa] or 99) < (order[sb] or 99)
-    	end)
+			local order = {
+				Member = 1,
+				Suspended = 2
+			}
+
+			return (order[sa] or 99) < (order[sb] or 99)
+		end)
 	end
 
 	for k, v in ipairs(displayPlayers) do
@@ -434,10 +441,12 @@ function BeatrunLeaderboard(forced)
 			if isdatatheft then
 				pbtimenum = v:GetNW2Int("DataBanked", 0)
 				pbtime = pbtimenum
+
 				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
 			elseif isdeathmatch then
 				pbtimenum = v:GetNW2Int("DeathmatchKills", 0)
 				pbtime = pbtimenum
+
 				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
 			else
 				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
@@ -456,14 +465,14 @@ function BeatrunLeaderboard(forced)
 				surface.DrawText(" | " .. language.GetPhrase("beatrun.hud.infector"))
 			elseif iseventmode then
 				local statusKey = v:GetNW2String("EPlayerStatus", "Member")
-    			local sdata = GetStatusData(statusKey)
+				local sdata = GetStatusData(statusKey)
 
-    			if sdata.key == "Manager" then
-        			i = i - 1
-    			else
-					surface.SetTextColor(sdata.color or Color(255,255,255))
+				if sdata.key == "Manager" then
+					i = i - 1
+				else
+					surface.SetTextColor(sdata.color or Color(255, 255, 255))
 					surface.DrawText(" | " .. language.GetPhrase(sdata.label_key))
-    			end
+				end
 			else
 				surface.DrawText(" | " .. pbtime)
 			end

@@ -15,7 +15,7 @@ if CLIENT then
 		if not ply:UsingRH() then return end
 		if ply:GetMoveType() == MOVETYPE_NOCLIP then return end
 		if ply:GetSBDelay() - 0.9 > CurTime() then return end
-		if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then return end
+		if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_EVENTMODE") then return end
 
 		if not ply.GrappleHUD_tr then
 			ply.GrappleHUD_tr = {}
@@ -64,7 +64,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if ply:GetInfoNum("Beatrun_DisableGrapple", 0) == 1 and Course_Name == "" then return end
 	if ply:GetSBDelay() - 0.9 > CurTime() then return end
 	if not ply:Alive() or Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
-	if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
+	if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_EVENTMODE") and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 
 	if FrameTime() <= 0 then return end
 

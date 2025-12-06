@@ -23,9 +23,9 @@ local timealpha = 1000
 local timecolor = color_neutral
 
 if CLIENT then
-	CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("#beatrun.convars.showspeedometer"), 0, 1)
+	CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("beatrun.convars.showspeedometer"), 0, 1)
 	CreateClientConVar("Beatrun_HUDStats", "0", true, false, "", 0, 1)
-	CreateClientConVar("Beatrun_SpeedometerMode", 1, true, true, language.GetPhrase("#beatrun.convars.speedometermode"), 1, 3)
+	CreateClientConVar("Beatrun_SpeedometerMode", 1, true, true, language.GetPhrase("beatrun.convars.speedometermode"), 1, 3)
 end
 
 if SERVER then
