@@ -665,6 +665,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 			attachId = BodyAnim:LookupAttachment(camjoint)
 			attach = BodyAnim:GetAttachment(attachId) or attach
+			if BodyAnim:IsMarkedForDeletion() then attach = nil end --x64 roll bug view fix
 
 			if lerpchangeatt < 1 then
 				local attachId = BodyAnim:LookupAttachment(savedatt)
