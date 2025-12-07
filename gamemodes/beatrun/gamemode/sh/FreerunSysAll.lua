@@ -349,7 +349,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 				ply:PlayStepSound(1)
 			end
 		end
-	elseif usingrh and activewep.GetSideStep and activewep:GetSideStep() then
+	elseif usingrh and activewep.GetSideStep and activewep:GetSideStep() and activewep.SideStepDir then
 		local forwarddelta = activewep.SideStepDir:Dot(ang:Forward())
 
 		if forwarddelta > 0.35 then
