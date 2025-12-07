@@ -126,7 +126,6 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		local c_delta = 0
 
 		if IsValid(ent) and not is_ent_invalid then c_delta = (ent:GetNWVector("gpos", Vector(0, 0, 0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))):Length() end
-		if (in_grapple_blocked_gamemode and not ply:GetNW2Entity("Swingrope"):IsValid()) and CLIENT then BodyAnim:SetSequence("jumpair") end
 
 		-- eyepos.z = eyepos.z + 64
 
