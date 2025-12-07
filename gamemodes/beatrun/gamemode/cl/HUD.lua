@@ -249,7 +249,7 @@ local function BeatrunHUD()
 		if verificationstats:GetBool() then
 			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.02 + vp.x)
 			surface.DrawText("Purist: ")
-			surface.DrawText(ply:GetInfo("Beatrun_PuristMode") == "1" and "true" or "false")
+			surface.DrawText((ply:GetInfo("Beatrun_PuristMode") == "1" or GetConVar("Beatrun_PuristModeForce"):GetBool()) and "true" or "false")
 			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.04 + vp.x)
 			surface.DrawText("Purist Wallrun: ")
 			surface.DrawText(ply:GetInfo("Beatrun_PuristWallrun") == "1" and "true" or "false")
@@ -258,7 +258,7 @@ local function BeatrunHUD()
 			surface.DrawText(kickGlitchText)
 		end
 
-		if tobool(ply:GetInfo("Beatrun_PuristMode")) then
+		if tobool(ply:GetInfo("Beatrun_PuristMode")) or GetConVar("Beatrun_PuristModeForce"):GetBool() then
 			surface.SetDrawColor(230, 230, 230)
 			surface.SetMaterial(MELogo)
 			surface.DrawTexturedRect(scrw * 0.00125 + vp.z, scrh * 0.9 + vp.x + SScaleY(16) * 0.25, SScaleX(16), SScaleY(16))

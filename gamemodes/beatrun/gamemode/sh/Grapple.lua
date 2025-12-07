@@ -65,7 +65,8 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if ply:GetInfoNum("Beatrun_DisableGrapple", 0) == 1 and Course_Name == "" and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 	if ply:GetSBDelay() - 0.9 > CurTime() then return end
 	if not ply:Alive() or Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
-	if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
+	local in_grapple_blocked_gamemode = GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH")
+	if (in_grapple_blocked_gamemode and not ply:GetNW2Entity("Swingrope"):IsValid()) and not ply:GetGrappling() then return end -- we dont return if the player is grappling so we can "ungrapple"
 
 	if FrameTime() <= 0 then return end
 
@@ -125,10 +126,11 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 		local c_delta = 0
 
 		if IsValid(ent) and not is_ent_invalid then c_delta = (ent:GetNWVector("gpos", Vector(0, 0, 0)) - ent:GetNWVector("glastpos", Vector(0, 0, 0))):Length() end
+		if (in_grapple_blocked_gamemode and not ply:GetNW2Entity("Swingrope"):IsValid()) and CLIENT then BodyAnim:SetSequence("jumpair") end
 
 		-- eyepos.z = eyepos.z + 64
 
-		if is_getting_off or is_ent_invalid or c_delta > 300 then
+		if is_getting_off or is_ent_invalid or c_delta > 300 or (in_grapple_blocked_gamemode and not ply:GetNW2Entity("Swingrope"):IsValid()) then
 			if IsValid(ent) and ent ~= NULL then
 				ent:SetNWVector("glastpos", nil)
 				ent:SetNWVector("gpos", nil)

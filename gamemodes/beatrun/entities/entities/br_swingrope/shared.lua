@@ -80,7 +80,12 @@ function ENT:Draw()
 	if LocalPlayer():GetGrappling() then
 		local grapplepos = LocalPlayer():GetGrapplePos()
 
-		if grapplepos == self:GetStartPos() or grapplepos == self:GetEndPos() then return end
+		if game.SinglePlayer() then
+			if grapplepos == self:GetStartPos() or grapplepos == self:GetEndPos() then return end
+		else
+			if grapplepos:DistToSqr(self:GetStartPos()) < 0.001 or grapplepos:DistToSqr(self:GetEndPos()) < 0.001 then return end
+			--networked vectors loose precision, this doesnt happen in courses tho for some reason ??
+		end
 	end
 
 	local mins, maxs = self:GetCollisionBounds()
