@@ -2,6 +2,7 @@ util.AddNetworkString("DisarmStart")
 local cvardisarm = CreateConVar("Beatrun_Disarm", 1, FCVAR_ARCHIVE, "", 0, 1)
 
 local function Disarm_Init(ply, victim)
+	if ply:GetSliding() or ply:GetWallrun() > 0 or ply:GetDive() then return end --prevents animation bugs and lua errors
 	victim:NextThink(CurTime() + 100)
 	victim.InDisarm = true
 	victim:DropWeapon()
