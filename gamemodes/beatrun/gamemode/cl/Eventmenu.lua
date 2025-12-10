@@ -11,6 +11,7 @@ local CurrentTab = "players"
 local PANEL_W = 720
 local PANEL_H = 560
 local PADDING = 20
+local menuIsActive = false
 
 local function CloseMenu()
 	if PlayersPanel then
@@ -23,6 +24,7 @@ local function CloseMenu()
 		MainPanel = nil
 	end
 
+	menuIsActive = false
 	hook.Remove("Think", "EventMenu_EscapeClose")
 end
 
@@ -99,6 +101,7 @@ local function RebuildPlayersPanel()
 end
 
 local function RebuildMainPanel()
+	if not menuIsActive then return end
 	if MainPanel then AEUI:RemovePanel(MainPanel) end
 
 	if PlayersPanel then
@@ -251,6 +254,8 @@ local function RebuildMainPanel()
 end
 
 local function OpenMenu()
+	if not MainPanel and #AEUI.Panels > 0 then return end
+
 	if MainPanel then
 		CloseMenu()
 		return
@@ -258,15 +263,15 @@ local function OpenMenu()
 
 	if not GetGlobalBool("GM_EVENTMODE", false) then return end
 	if LocalPlayer():GetNW2String("EPlayerStatus", "Member") ~= "Manager" then return end
-
+	menuIsActive = true
 	RebuildMainPanel()
 
 	hook.Add("Think", "EventMenu_EscapeClose", function()
+		if not GetGlobalBool("GM_EVENTMODE", false) or LocalPlayer():GetNW2String("EPlayerStatus", "Member") ~= "Manager" then CloseMenu() end
 		if input.IsKeyDown(KEY_ESCAPE) then CloseMenu() end
 	end)
 end
 
-concommand.Add("Beatrun_Eventmenu", OpenMenu)
 
 net.Receive("Eventmode_UpdatePlayerStatus", function()
 	timer.Simple(.1, function()
@@ -276,3 +281,11 @@ end)
 
 hook.Add("ShutDown", "EventMenu_ShutdownRemove", CloseMenu)
 hook.Add("InitPostEntity", "EventMenu_Init", function() end)
+
+local lastPress = 0
+hook.Add("Think", "EventMenu_Open", function()
+	if input.IsKeyDown(KEY_F2) and CurTime() > lastPress + 0.2 then
+		OpenMenu()
+		lastPress = CurTime()
+	end
+end)

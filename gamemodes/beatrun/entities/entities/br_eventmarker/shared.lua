@@ -1,4 +1,3 @@
--- shared.lua
 ENT.Type = "anim"
 ENT.Base = "base_entity"
 ENT.PrintName = "Event Marker"
