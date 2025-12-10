@@ -12,23 +12,20 @@ AddCSLuaFile()
 local minb, maxb = Vector(-40, -40, 0), Vector(40, 40, 64)
 
 function ENT:SetupDataTables()
-    self:NetworkVar("Int", 0, "Score")
+	self:NetworkVar("Int", 0, "Score")
 end
 
 if SERVER then
-    function ENT:Initialize()
-        self:SetModel("models/hunter/blocks/cube025x025x025.mdl")
-        self:DrawShadow(false)
+	function ENT:Initialize()
+		self:SetModel("models/hunter/blocks/cube025x025x025.mdl")
+		self:DrawShadow(false)
+		self:SetMoveType(MOVETYPE_NONE)
+		self:SetSolid(SOLID_BBOX)
+		self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
+		self:SetCollisionBounds(minb, maxb)
+		self:SetTrigger(true)
+	end
 
-        self:SetMoveType(MOVETYPE_NONE)
-        self:SetSolid(SOLID_BBOX)
-        self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
-        self:SetCollisionBounds(minb, maxb)
-
-        self:SetTrigger(true)
-    end
-
-    function ENT:StartTouch(ent)
-    	--on touch
-    end
+	function ENT:StartTouch(ent) -- nothing
+	end
 end

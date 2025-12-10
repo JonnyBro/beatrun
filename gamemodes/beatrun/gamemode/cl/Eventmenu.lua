@@ -1,5 +1,3 @@
-if not CLIENT then return end
-
 if not AEUI then
 	ErrorNoHalt("[EventMenu] AEUI not found! Make sure !UI.lua is loaded before this file.\n")
 	return
@@ -52,13 +50,17 @@ local function RebuildPlayersPanel()
 	local players = player.GetAll()
 
 	table.sort(players, function(a, b)
-		local order = { Member = 1, Suspended = 2, Manager = 3 }
+		local order = {
+			Member = 1,
+			Suspended = 2,
+			Manager = 3
+		}
 
 		local sa = a:GetNW2String("EPlayerStatus", "Member")
 		local sb = b:GetNW2String("EPlayerStatus", "Member")
-
 		local oa = order[sa] or 99
 		local ob = order[sb] or 99
+
 		if oa ~= ob then return oa < ob end
 
 		return string.lower(a:Nick()) < string.lower(b:Nick())
@@ -86,9 +88,7 @@ local function RebuildPlayersPanel()
 				net.SendToServer()
 			end
 
-			timer.Simple(.2, function()
-				if MainPanel and CurrentTab == "players" then RebuildPlayersPanel() end
-			end)
+			timer.Simple(.2, function() if MainPanel and CurrentTab == "players" then RebuildPlayersPanel() end end)
 		end, "AEUIDefault", 8, y_offset, false, sdata.color)
 
 		if btn then
@@ -130,6 +130,7 @@ local function RebuildMainPanel()
 	AEUI:Text(MainPanel, "Event Mode Manager", "AEUIVeryLarge", MainPanel.w * 0.5, 37.5, true, color_white)
 
 	surface.SetFont("AEUIVeryLarge")
+
 	local _, th_title = surface.GetTextSize("Event Mode Manager")
 	local line_gap = 12
 	local line_thickness = 2
@@ -139,20 +140,26 @@ local function RebuildMainPanel()
 	local line1_y = 30 + th_title * 0.5 + line_gap
 
 	surface.SetFont("AEUILarge")
+
 	local _, th_tab = surface.GetTextSize("PLAYERS")
 	local tab_y = line1_y + line_thickness + 35
 
 	local tabs = {
-		{ name = "PLAYERS", id = "players" },
-		{ name = "ACTIONS", id = "actions" },
-		{ name = "SETTINGS", id = "settings" }
+		{
+			name = "PLAYERS",
+			id = "players"
+		},
+		{
+			name = "ACTIONS",
+			id = "actions"
+		},
+		{
+			name = "SETTINGS",
+			id = "settings"
+		}
 	}
 
-	local centers = {
-		20 + 140 * 0.5,
-		MainPanel.w * 0.5,
-		MainPanel.w - 20 - 140 * 0.5
-	}
+	local centers = {20 + 140 * 0.5, MainPanel.w * 0.5, MainPanel.w - 20 - 140 * 0.5}
 
 	for i, tab in ipairs(tabs) do
 		local btn = AEUI:AddButton(MainPanel, tab.name, function()
@@ -175,58 +182,52 @@ local function RebuildMainPanel()
 
 	if CurrentTab == "players" then
 		AEUI:Text(MainPanel, "Players:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
-		RebuildPlayersPanel()
 
+		RebuildPlayersPanel()
 	elseif CurrentTab == "actions" then
 		AEUI:Text(MainPanel, "Actions:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
 
 		local y = MainPanel.content_y + 45
 
 		local function AddAction(label, send)
-			local btn = AEUI:AddButton(MainPanel, label, function()
-				if send then send() end
-			end, "AEUIDefault", 20, y, false, color_white)
-
+			local btn = AEUI:AddButton(MainPanel, label, function() if send then send() end end, "AEUIDefault", 20, y, false, color_white)
 			if btn then
 				btn.w = MainPanel.w - PADDING * 2
 				btn.h = 28
 			end
+
 			y = y + 30
 		end
 
 		AddAction("Bring members", function()
-			net.Start("Eventmode_BringMembers") net.SendToServer()
+			net.Start("Eventmode_BringMembers")
+			net.SendToServer()
 		end)
 
 		AddAction("Set members point", function()
-			net.Start("Eventmode_SetSpawn") net.SendToServer()
+			net.Start("Eventmode_SetSpawn")
+			net.SendToServer()
 		end)
 
 		AddAction("Teleport members to point", function()
-			net.Start("Eventmode_TeleportMembersToPoint") net.SendToServer()
+			net.Start("Eventmode_TeleportMembersToPoint")
+			net.SendToServer()
 		end)
 
 		AddAction("Unsuspend all players", function()
-			net.Start("Eventmode_UnsuspendAll") net.SendToServer()
+			net.Start("Eventmode_UnsuspendAll")
+			net.SendToServer()
 		end)
 
 		AddAction("Suspend all players", function()
-			net.Start("Eventmode_SuspendAll") net.SendToServer()
+			net.Start("Eventmode_SuspendAll")
+			net.SendToServer()
 		end)
-
 	elseif CurrentTab == "settings" then
 		AEUI:Text(MainPanel, "Settings:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
 
 		local y = MainPanel.content_y + 45
-
-		local toggles = {
-			{"Allow members prop spawning", "EM_AllowProps"},
-			{"Allow members gun spawning", "EM_AllowWeapons"},
-			{"New players suspended", "EM_NewPlayersSuspended"},
-			{"Suspend at death", "EM_SuspendOnDeath"},
-			{"No melee damage", "EM_NoMeleeDamage"},
-			{"Hide nametags", "EM_HideNametags"}
-		}
+		local toggles = {{"Allow members prop spawning", "EM_AllowProps"}, {"Allow members gun spawning", "EM_AllowWeapons"}, {"New players suspended", "EM_NewPlayersSuspended"}, {"Suspend at death", "EM_SuspendOnDeath"}, {"No melee damage", "EM_NoMeleeDamage"}, {"Hide nametags", "EM_HideNametags"}}
 
 		for _, t in ipairs(toggles) do
 			local name, var = t[1], t[2]
@@ -238,9 +239,7 @@ local function RebuildMainPanel()
 					net.WriteString(var)
 				net.SendToServer()
 
-				timer.Simple(0.2, function()
-					if MainPanel and CurrentTab == "settings" then RebuildMainPanel() end
-				end)
+				timer.Simple(0.2, function() if MainPanel and CurrentTab == "settings" then RebuildMainPanel() end end)
 			end, "AEUIDefault", 20, y, false, color_white)
 
 			if btn then
@@ -263,7 +262,9 @@ local function OpenMenu()
 
 	if not GetGlobalBool("GM_EVENTMODE", false) then return end
 	if LocalPlayer():GetNW2String("EPlayerStatus", "Member") ~= "Manager" then return end
+
 	menuIsActive = true
+
 	RebuildMainPanel()
 
 	hook.Add("Think", "EventMenu_EscapeClose", function()
@@ -272,12 +273,7 @@ local function OpenMenu()
 	end)
 end
 
-
-net.Receive("Eventmode_UpdatePlayerStatus", function()
-	timer.Simple(.1, function()
-		if MainPanel then RebuildMainPanel() end
-	end)
-end)
+net.Receive("Eventmode_UpdatePlayerStatus", function() timer.Simple(.1, function() if MainPanel then RebuildMainPanel() end end) end)
 
 hook.Add("ShutDown", "EventMenu_ShutdownRemove", CloseMenu)
 hook.Add("InitPostEntity", "EventMenu_Init", function() end)
