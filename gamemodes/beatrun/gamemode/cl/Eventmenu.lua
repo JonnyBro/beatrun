@@ -75,7 +75,7 @@ local function RebuildPlayersPanel()
 		local sdata = GetStatusData(status)
 		local label = ply:Nick() .. " - " .. status
 
-		local btn = AEUI:AddButton(PlayersPanel, label, function()
+		local playerBtn = AEUI:AddButton(PlayersPanel, label, function()
 			local st = ply:GetNW2String("EPlayerStatus", "Member")
 
 			if st == "Suspended" then
@@ -91,11 +91,25 @@ local function RebuildPlayersPanel()
 			timer.Simple(.2, function() if MainPanel and CurrentTab == "players" then RebuildPlayersPanel() end end)
 		end, "AEUIDefault", 8, y_offset, false, sdata.color)
 
-		if btn then
-			btn.w = PlayersPanel.w - 16
-			btn.h = 24
+		if playerBtn then
+			playerBtn.w = PlayersPanel.w - 16
+			playerBtn.h = 24
 		end
 
+		if ply:IsAdmin() then
+			local managerBtn = AEUI:AddButton(PlayersPanel, " ♛ ", function()
+				net.Start("Eventmode_Manager")
+					net.WriteEntity(ply)
+				net.SendToServer()
+			end, "AEUIDefault", 0, y_offset, false, EPlayerStatus.Manager.color)
+
+			if managerBtn then
+    			managerBtn.h = 24
+    			managerBtn.x = playerBtn.x + playerBtn.w - 30
+    			managerBtn.y = playerBtn.y
+			end
+		end
+		
 		y_offset = y_offset + 30
 	end
 end
