@@ -30,8 +30,10 @@ if SERVER then
 	util.AddNetworkString("Eventmode_Sync")
 	util.AddNetworkString("Eventmode_UpdatePlayerStatus")
 	util.AddNetworkString("Eventmode_GlobalSettings")
+	util.AddNetworkString("Eventmode_SetGoal")
 
 	util.AddNetworkString("Eventmode_Suspend")
+	util.AddNetworkString("Eventmode_Manager")
 	util.AddNetworkString("Eventmode_Unsuspend")
 	util.AddNetworkString("Eventmode_SuspendAll")
 	util.AddNetworkString("Eventmode_UnsuspendAll")
@@ -77,6 +79,12 @@ if SERVER then
 		if not IsValid(admin) or not admin:IsAdmin() then return end
 		local ply = net.ReadEntity()
 		if IsValid(ply) then SetPlayerEventStatus(ply, "Member") end
+	end)
+
+	net.Receive("Eventmode_Manager", function(_, admin)
+		if not IsValid(admin) or not admin:IsAdmin() then return end
+		local ply = net.ReadEntity()
+		if IsValid(ply) and ply:IsAdmin() then SetPlayerEventStatus(ply, "Manager") end
 	end)
 
 	net.Receive("Eventmode_SuspendAll", function(_, admin)
@@ -145,6 +153,10 @@ if SERVER then
 
 		game.CleanUpMap()
 
+		net.Start("Eventmode_SetGoal")
+			net.WriteString("")
+		net.Broadcast()
+
 		for _, ply in ipairs(player.GetAll()) do
 			ply:SetNW2String("EPlayerStatus", "")
 
@@ -209,12 +221,14 @@ if SERVER then
 end
 
 if CLIENT then
+	local goal = nil
+
 	local function EventmodeHUD()
 		if not GetGlobalBool("GM_EVENTMODE") then return end
 
 		surface.SetFont("BeatrunHUD")
 
-		local text = language.GetPhrase("beatrun.eventmode.name")
+		local text = goal or language.GetPhrase("beatrun.eventmode.name")
 		local tw, _ = surface.GetTextSize(text)
 
 		surface.SetTextPos(ScrW() * 0.5 - tw * 0.5, ScrH() * 0.25)
@@ -259,6 +273,18 @@ if CLIENT then
 			allply = player.GetAll()
 			table.sort(allply, sortleaderboard)
 			allplytimer = 0
+		end
+	end)
+
+	net.Receive("Eventmode_SetGoal", function()
+		local st = net.ReadString()
+		local lp = LocalPlayer()
+
+		if st ~= "" then
+			lp:EmitSound("mirrorsedge/ui/ME_UI_hud_select.wav")
+			goal = st
+		else
+			goal = nil
 		end
 	end)
 end
