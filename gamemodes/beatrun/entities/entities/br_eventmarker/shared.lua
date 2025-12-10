@@ -1,4 +1,3 @@
--- shared.lua
 ENT.Type = "anim"
 ENT.Base = "base_entity"
 ENT.PrintName = "Event Marker"
@@ -19,6 +18,7 @@ end
 if SERVER then
     function ENT:Initialize()
         self:SetModel("models/hunter/blocks/cube025x025x025.mdl")
+        self:DrawModel()
         self:DrawShadow(false)
 
         self:SetMoveType(MOVETYPE_NONE)
