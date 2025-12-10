@@ -12,6 +12,7 @@ local function HideNearby(ply)
 
 	if NametagsEnable:GetBool() and not GetGlobalBool("EM_HideNametags") and dist < 50000 then
 		local infectionmode = GetGlobalBool("GM_INFECTION")
+		local eventmode = GetGlobalBool("GM_EVENTMODE")
 		local localinfected = LocalPlayer():GetNW2Bool("Infected")
 		local plyinfected = ply:GetNW2Bool("Infected")
 		local ang = LocalPlayer():EyeAngles()
@@ -28,6 +29,12 @@ local function HideNearby(ply)
 			end
 
 			dontdraw = true
+		end
+
+		if eventmode then
+			local statusKey = ply:GetNW2String("EPlayerStatus", "Member")
+			local sdata = GetStatusData(statusKey)
+			color = sdata.color
 		end
 
 		if infectionmode and localinfected and not plyinfected or not localinfected and plyinfected then
