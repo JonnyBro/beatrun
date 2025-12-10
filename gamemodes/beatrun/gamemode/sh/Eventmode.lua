@@ -5,7 +5,7 @@ EPlayerStatus = {
 		hud_key = "#beatrun.eventmode.memberhud",
 		color = Color(95, 245, 130)
 	},
-	Suspended = {
+ 	Suspended = {
 		key = "Suspended",
 		label_key = "#beatrun.eventmode.suspendedlabel",
 		hud_key = "#beatrun.eventmode.suspendedhud",
@@ -22,7 +22,6 @@ EPlayerStatus = {
 function GetStatusData(s)
 	if not s then return EPlayerStatus.Member end
 	if type(s) == "table" and s.key then return s end
-
 	return EPlayerStatus[s] or EPlayerStatus.Member
 end
 
@@ -31,6 +30,30 @@ if SERVER then
 	util.AddNetworkString("Eventmode_Sync")
 	util.AddNetworkString("Eventmode_UpdatePlayerStatus")
 	util.AddNetworkString("Eventmode_GlobalSettings")
+
+	util.AddNetworkString("Eventmode_Suspend")
+	util.AddNetworkString("Eventmode_Unsuspend")
+	util.AddNetworkString("Eventmode_SuspendAll")
+	util.AddNetworkString("Eventmode_UnsuspendAll")
+
+	if ULib and ulx then
+		local BLOCKED_IN_EVENTMODE = {
+			["ulx votemap"] = true,
+			["ulx votemap2"] = true,
+			["ulx votekick"] = true,
+			["ulx voteban"] = true
+		}
+
+		hook.Add("ULibCommandCalled", "Eventmode_BlockULXCommands", function(ply, cmd, args)
+			if not GetGlobalBool("GM_EVENTMODE") then return end
+			if BLOCKED_IN_EVENTMODE[cmd] then
+				if IsValid(ply) then
+					ply:ChatPrint("[Eventmode] '" .. cmd .. "' IS DISABLED.")
+				end
+				return false
+			end
+		end)
+	end
 
 	function SetPlayerEventStatus(ply, statusKey)
 		if not IsValid(ply) then return end
@@ -44,75 +67,32 @@ if SERVER then
 		net.Broadcast()
 	end
 
-	local function FindPlayer(arg)
-		if not arg then return nil end
-
-		for _, p in ipairs(player.GetAll()) do
-			if p:SteamID() == arg or p:SteamID64() then return p end
-		end
-
-		local num = tonumber(arg)
-		if num then
-			for _, p in ipairs(player.GetAll()) do
-				if p:UserID() == num or p:EntIndex() == num then return p end
-			end
-		end
-
-		arg = string.lower(arg)
-
-		for _, p in ipairs(player.GetAll()) do
-			if string.find(string.lower(p:Nick()), arg, 1, true) then return p end
-		end
-
-		return nil
-	end
-
-	concommand.Add("Beatrun_Eventmode_Suspend", function(admin, cmd, args)
+	net.Receive("Eventmode_Suspend", function(_, admin)
 		if not IsValid(admin) or not admin:IsAdmin() then return end
-
-		local tgt = FindPlayer(args[1])
-		if not IsValid(tgt) then return end
-
-		SetPlayerEventStatus(tgt, "Suspended")
+		local ply = net.ReadEntity()
+		if IsValid(ply) then SetPlayerEventStatus(ply, "Suspended") end
 	end)
 
-	concommand.Add("Beatrun_Eventmode_Unsuspend", function(admin, cmd, args)
+	net.Receive("Eventmode_Unsuspend", function(_, admin)
 		if not IsValid(admin) or not admin:IsAdmin() then return end
-
-		local tgt = FindPlayer(args[1])
-		if not IsValid(tgt) then return end
-
-		SetPlayerEventStatus(tgt, "Member")
+		local ply = net.ReadEntity()
+		if IsValid(ply) then SetPlayerEventStatus(ply, "Member") end
 	end)
 
-	concommand.Add("Beatrun_Eventmode_SuspendAll", function(admin, cmd, args)
+	net.Receive("Eventmode_SuspendAll", function(_, admin)
 		if not IsValid(admin) or not admin:IsAdmin() then return end
-
-		local count = 0
-
 		for _, ply in ipairs(player.GetAll()) do
-			if IsValid(ply) and ply:IsPlayer() then
-				if ply:GetNW2String("EPlayerStatus", "Member") ~= "Manager" then
-					SetPlayerEventStatus(ply, "Suspended")
-
-					count = count + 1
-				end
+			if ply:GetNW2String("EPlayerStatus") ~= "Manager" then
+				SetPlayerEventStatus(ply, "Suspended")
 			end
 		end
 	end)
 
-	concommand.Add("Beatrun_Eventmode_UnsuspendAll", function(admin, cmd, args)
+	net.Receive("Eventmode_UnsuspendAll", function(_, admin)
 		if not IsValid(admin) or not admin:IsAdmin() then return end
-
-		local count = 0
-
 		for _, ply in ipairs(player.GetAll()) do
-			if IsValid(ply) and ply:IsPlayer() then
-				if ply:GetNW2String("EPlayerStatus", "Member") ~= "Manager" then
-					SetPlayerEventStatus(ply, "Member")
-
-					count = count + 1
-				end
+			if ply:GetNW2String("EPlayerStatus") ~= "Manager" then
+				SetPlayerEventStatus(ply, "Member")
 			end
 		end
 	end)
@@ -178,23 +158,21 @@ if SERVER then
 	local function EventmodeSync(ply)
 		if not GetGlobalBool("GM_EVENTMODE") then return end
 
-		if ply:IsAdmin() then
-			SetPlayerEventStatus(ply, "Manager")
-		else
-			local cur = ply:GetNW2String("EPlayerStatus", "")
+		if ply:GetNW2String("EPlayerStatus", "Member") == "Manager" then return end
 
-			if cur == "" then
-				if GetGlobalBool("EM_NewPlayersSuspended") then
-					SetPlayerEventStatus(ply, "Suspended")
-				else
-					SetPlayerEventStatus(ply, "Member")
-				end
+		local cur = ply:GetNW2String("EPlayerStatus", "")
+
+		if cur == "" then
+			if GetGlobalBool("EM_NewPlayersSuspended") then
+				SetPlayerEventStatus(ply, "Suspended")
 			else
-				net.Start("Eventmode_UpdatePlayerStatus")
-					net.WriteEntity(ply)
-					net.WriteString(cur)
-				net.Send(ply)
+				SetPlayerEventStatus(ply, "Member")
 			end
+		else
+			net.Start("Eventmode_UpdatePlayerStatus")
+				net.WriteEntity(ply)
+				net.WriteString(cur)
+			net.Send(ply)
 		end
 
 		net.Start("Eventmode_Sync")
@@ -206,21 +184,27 @@ if SERVER then
 	hook.Add("PlayerInitialSpawn", "EventMode_NewPlayerAssign", function(ply)
 		if not GetGlobalBool("GM_EVENTMODE") then return end
 
-		if ply:IsAdmin() then
-			SetPlayerEventStatus(ply, "Manager")
+		if ply:GetNW2String("EPlayerStatus", "Member") == "Manager" then return end
+
+		if GetGlobalBool("EM_NewPlayersSuspended") then
+			SetPlayerEventStatus(ply, "Suspended")
 		else
-			if GetGlobalBool("EM_NewPlayersSuspended") then
-				SetPlayerEventStatus(ply, "Suspended")
-			else
-				SetPlayerEventStatus(ply, "Member")
-			end
+			SetPlayerEventStatus(ply, "Member")
+		end
+	end)
+
+	hook.Add("CanPlayerSuicide", "EventMode_AllowSuicide", function(ply)
+		if GetGlobalBool("GM_EVENTMODE") then
+			return false
 		end
 	end)
 
 	hook.Add("PlayerDeath", "EventMode_AutoSuspend", function(victim)
 		if not IsValid(victim) then return end
 		if victim:GetNW2String("EPlayerStatus", "Member") == "Manager" then return end
-		if GetGlobalBool("GM_EVENTMODE") and GetGlobalBool("EM_SuspendOnDeath") then SetPlayerEventStatus(victim, "Suspended") end
+		if GetGlobalBool("GM_EVENTMODE") and GetGlobalBool("EM_SuspendOnDeath") then
+			SetPlayerEventStatus(victim, "Suspended")
+		end
 	end)
 end
 
@@ -258,15 +242,23 @@ if CLIENT then
 		chat.AddText(Color(95, 245, 130), language.GetPhrase("beatrun.eventmode.start"))
 	end)
 
-	net.Receive("Eventmode_Sync", function() hook.Add("BeatrunHUDCourse", "EventmodeHUDName", EventmodeHUDName) end)
+	net.Receive("Eventmode_Sync", function()
+		hook.Add("BeatrunHUDCourse", "EventmodeHUDName", EventmodeHUDName)
+	end)
 
 	net.Receive("Eventmode_UpdatePlayerStatus", function()
 		local ply = net.ReadEntity()
-		local st = net.ReadString()
+		local st  = net.ReadString()
 
 		if IsValid(ply) then
 			ply.EPlayerStatus = st
 			ply:SetNW2String("EPlayerStatus", st)
+		end
+
+		if allply then
+			allply = player.GetAll()
+			table.sort(allply, sortleaderboard)
+			allplytimer = 0
 		end
 	end)
 end

@@ -50,11 +50,7 @@ local function RebuildPlayersPanel()
 	local players = player.GetAll()
 
 	table.sort(players, function(a, b)
-		local order = {
-			Member = 1,
-			Suspended = 2,
-			Manager = 3
-		}
+		local order = { Member = 1, Suspended = 2, Manager = 3 }
 
 		local sa = a:GetNW2String("EPlayerStatus", "Member")
 		local sb = b:GetNW2String("EPlayerStatus", "Member")
@@ -74,16 +70,23 @@ local function RebuildPlayersPanel()
 
 		local sdata = GetStatusData(status)
 		local label = ply:Nick() .. " - " .. status
+
 		local btn = AEUI:AddButton(PlayersPanel, label, function()
 			local st = ply:GetNW2String("EPlayerStatus", "Member")
 
 			if st == "Suspended" then
-				RunConsoleCommand("Beatrun_Eventmode_Unsuspend", ply:SteamID())
-			else
-				RunConsoleCommand("Beatrun_Eventmode_Suspend", ply:SteamID())
+				net.Start("Eventmode_Unsuspend")
+					net.WriteEntity(ply)
+				net.SendToServer()
+			elseif st == "Member" then
+				net.Start("Eventmode_Suspend")
+					net.WriteEntity(ply)
+				net.SendToServer()
 			end
 
-			timer.Simple(.2, function() if MainPanel and CurrentTab == "players" then RebuildPlayersPanel() end end)
+			timer.Simple(.2, function()
+				if MainPanel and CurrentTab == "players" then RebuildPlayersPanel() end
+			end)
 		end, "AEUIDefault", 8, y_offset, false, sdata.color)
 
 		if btn then
@@ -121,151 +124,120 @@ local function RebuildMainPanel()
 
 	AEUI:AddPanel(MainPanel)
 
-	local title_text = "Event Mode Manager"
-
-	AEUI:Text(MainPanel, title_text, "AEUIVeryLarge", MainPanel.w * 0.5, 37.5, true, color_white)
+	AEUI:Text(MainPanel, "Event Mode Manager", "AEUIVeryLarge", MainPanel.w * 0.5, 37.5, true, color_white)
 
 	surface.SetFont("AEUIVeryLarge")
-
-	local _, th_title = surface.GetTextSize(title_text)
+	local _, th_title = surface.GetTextSize("Event Mode Manager")
 	local line_gap = 12
 	local line_thickness = 2
-	local line_color = Color(255, 255, 255)
+
+	AEUI:AddImage(MainPanel, Material("vgui/white"), nil, 20, 30 + th_title * 0.5 + line_gap, MainPanel.w - 40, line_thickness, color_white)
+
 	local line1_y = 30 + th_title * 0.5 + line_gap
 
-	AEUI:AddImage(MainPanel, Material("vgui/white"), nil, 20, line1_y, MainPanel.w - 40, line_thickness, line_color)
-
 	surface.SetFont("AEUILarge")
-
-	local _, th_tab = surface.GetTextSize("Игроки")
+	local _, th_tab = surface.GetTextSize("PLAYERS")
 	local tab_y = line1_y + line_thickness + 35
+
 	local tabs = {
-		{
-			name = "PLAYERS",
-			id = "players"
-		},
-		{
-			name = "ACTIONS",
-			id = "actions"
-		},
-		{
-			name = "SETTINGS",
-			id = "settings"
-		}
+		{ name = "PLAYERS", id = "players" },
+		{ name = "ACTIONS", id = "actions" },
+		{ name = "SETTINGS", id = "settings" }
 	}
 
-	local widths = {}
-	for i, tab in ipairs(tabs) do
-		local tw, _ = surface.GetTextSize(tab.name)
-		widths[i] = tw
-	end
-
-	local left_center = 20 + widths[1] * 0.5
-	local right_center = MainPanel.w - 20 - widths[3] * 0.5
-	local middle_center = (left_center + right_center) * 0.5
-	local centers = {left_center, middle_center, right_center}
+	local centers = {
+		20 + 140 * 0.5,
+		MainPanel.w * 0.5,
+		MainPanel.w - 20 - 140 * 0.5
+	}
 
 	for i, tab in ipairs(tabs) do
-		local tx = centers[i]
-
 		local btn = AEUI:AddButton(MainPanel, tab.name, function()
 			CurrentTab = tab.id
-
 			RebuildMainPanel()
-		end, "AEUILarge", tx, tab_y, true, color_white)
+		end, "AEUILarge", centers[i], tab_y, true, color_white)
 
 		if btn then
 			btn.w = 140
 			btn.h = 28
+			if tab.id == CurrentTab then btn.color = Color(0, 200, 0) end
 		end
-
-		if tab.id == CurrentTab then btn.color = Color(0, 200, 0) end
 	end
 
 	local line2_y = tab_y + th_tab * 0.5 + line_gap
 
-	AEUI:AddImage(MainPanel, Material("vgui/white"), nil, 20, line2_y, MainPanel.w - 40, line_thickness, line_color)
+	AEUI:AddImage(MainPanel, Material("vgui/white"), nil, 20, line2_y, MainPanel.w - 40, line_thickness, color_white)
 
-	local header_y = line2_y + line_thickness + 12
-
-	MainPanel.content_y = header_y
+	MainPanel.content_y = line2_y + line_thickness + 12
 
 	if CurrentTab == "players" then
-		AEUI:Text(MainPanel, "Players:", "AEUILarge", 20, header_y, false, color_white)
-
+		AEUI:Text(MainPanel, "Players:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
 		RebuildPlayersPanel()
+
 	elseif CurrentTab == "actions" then
-		AEUI:Text(MainPanel, "Actions:", "AEUILarge", 20, header_y, false, color_white)
+		AEUI:Text(MainPanel, "Actions:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
 
-		local y = header_y + 45
+		local y = MainPanel.content_y + 45
 
-		local btn1 = AEUI:AddButton(MainPanel, "Bring members", function()
-			net.Start("Eventmode_BringMembers")
-			net.SendToServer()
-		end, "AEUIDefault", 20, y, false, color_white)
+		local function AddAction(label, send)
+			local btn = AEUI:AddButton(MainPanel, label, function()
+				if send then send() end
+			end, "AEUIDefault", 20, y, false, color_white)
 
-		if btn1 then
-			btn1.w = MainPanel.w - PADDING * 2
-			btn1.h = 28
+			if btn then
+				btn.w = MainPanel.w - PADDING * 2
+				btn.h = 28
+			end
+			y = y + 30
 		end
 
-		y = y + 30
+		AddAction("Bring members", function()
+			net.Start("Eventmode_BringMembers") net.SendToServer()
+		end)
 
-		local btn2 = AEUI:AddButton(MainPanel, "Set members point", function()
-			net.Start("Eventmode_SetSpawn")
-			net.SendToServer()
-		end, "AEUIDefault", 20, y, false, color_white)
+		AddAction("Set members point", function()
+			net.Start("Eventmode_SetSpawn") net.SendToServer()
+		end)
 
-		if btn2 then
-			btn2.w = MainPanel.w - PADDING * 2
-			btn2.h = 28
-		end
+		AddAction("Teleport members to point", function()
+			net.Start("Eventmode_TeleportMembersToPoint") net.SendToServer()
+		end)
 
-		y = y + 30
+		AddAction("Unsuspend all players", function()
+			net.Start("Eventmode_UnsuspendAll") net.SendToServer()
+		end)
 
-		local btn3 = AEUI:AddButton(MainPanel, "Teleport members to point", function()
-			net.Start("Eventmode_TeleportMembersToPoint")
-			net.SendToServer()
-		end, "AEUIDefault", 20, y, false, color_white)
+		AddAction("Suspend all players", function()
+			net.Start("Eventmode_SuspendAll") net.SendToServer()
+		end)
 
-		if btn3 then
-			btn3.w = MainPanel.w - PADDING * 2
-			btn3.h = 28
-		end
-
-		y = y + 30
-
-		local btn4 = AEUI:AddButton(MainPanel, "Unsuspend all players", function() RunConsoleCommand("Beatrun_Eventmode_UnsuspendAll") end, "AEUIDefault", 20, y, false, color_white)
-
-		if btn4 then
-			btn4.w = MainPanel.w - PADDING * 2
-			btn4.h = 28
-		end
-
-		y = y + 30
-
-		local btn5 = AEUI:AddButton(MainPanel, "Suspend all players", function() RunConsoleCommand("Beatrun_Eventmode_SuspendAll") end, "AEUIDefault", 20, y, false, color_white)
-
-		if btn5 then
-			btn5.w = MainPanel.w - PADDING * 2
-			btn5.h = 28
-		end
 	elseif CurrentTab == "settings" then
-		AEUI:Text(MainPanel, "Settings:", "AEUILarge", 20, header_y, false, color_white)
+		AEUI:Text(MainPanel, "Settings:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
 
-		local y = header_y + 45
-		local toggles = {{"Allow members prop spawning", "EM_AllowProps"}, {"Allow members gun spawning", "EM_AllowWeapons"}, {"New players suspended", "EM_NewPlayersSuspended"}, {"Suspend at death", "EM_SuspendOnDeath"}, {"No melee damage", "EM_NoMeleeDamage"}, {"Hide nametags", "EM_HideNametags"}}
+		local y = MainPanel.content_y + 45
+
+		local toggles = {
+			{"Allow members prop spawning", "EM_AllowProps"},
+			{"Allow members gun spawning", "EM_AllowWeapons"},
+			{"New players suspended", "EM_NewPlayersSuspended"},
+			{"Suspend at death", "EM_SuspendOnDeath"},
+			{"No melee damage", "EM_NoMeleeDamage"},
+			{"Hide nametags", "EM_HideNametags"}
+		}
 
 		for _, t in ipairs(toggles) do
 			local name, var = t[1], t[2]
 			local current = GetGlobalBool(var, false)
 			local label = string.format("%s: %s", name, current and "YES" or "NO")
+
 			local btn = AEUI:AddButton(MainPanel, label, function()
 				net.Start("Eventmode_ToggleVar")
 					net.WriteString(var)
 				net.SendToServer()
 
-				timer.Simple(0.2, function() if MainPanel and CurrentTab == "settings" then RebuildMainPanel() end end)
+				timer.Simple(0.2, function()
+					if MainPanel and CurrentTab == "settings" then RebuildMainPanel() end
+				end)
 			end, "AEUIDefault", 20, y, false, color_white)
 
 			if btn then
@@ -289,16 +261,16 @@ local function OpenMenu()
 
 	RebuildMainPanel()
 
-	hook.Add("Think", "EventMenu_EscapeClose", function() if input.IsKeyDown(KEY_ESCAPE) then CloseMenu() end end)
+	hook.Add("Think", "EventMenu_EscapeClose", function()
+		if input.IsKeyDown(KEY_ESCAPE) then CloseMenu() end
+	end)
 end
 
 concommand.Add("Beatrun_Eventmenu", OpenMenu)
 
 net.Receive("Eventmode_UpdatePlayerStatus", function()
 	timer.Simple(.1, function()
-		if MainPanel then
-			RebuildMainPanel()
-		end
+		if MainPanel then RebuildMainPanel() end
 	end)
 end)
 
