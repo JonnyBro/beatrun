@@ -88,7 +88,7 @@ function meta:GetXP()
 end
 
 function meta:SetXP(xp)
-	self.XP = math.Round(xp)
+	self.XP = xp
 
 	XP_ratiocache = nil
 
@@ -112,12 +112,13 @@ end
 local function SaveXP()
 	local xp = util.TableToJSON({LocalPlayer().XP or 0, LocalPlayer().Level or 1})
 
+	--[[
 	local xpold = file.Read("beatrun/local/xp.txt", "DATA")
 
 	if xpold then
 		xpold = util.Decompress(xpold)
 		if LocalPlayer().XP < util.JSONToTable(xpold)[1] then return end
-	end
+	end --]]
 
 	local xp = util.Compress(xp)
 
