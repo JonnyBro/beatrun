@@ -1,6 +1,22 @@
+-- format: multiline
+local loadoutValues = {
+	"#beatrun.randombeatrunloadouts",
+	"#beatrun.randommwloadouts",
+	"#beatrun.randomarc9loadouts",
+	"#beatrun.randomarccwloadouts",
+	"#beatrun.randomtfaloadouts",
+}
+
 local function ToggleGamemode(gm)
 	net.Start("Beatrun_ToggleGamemode")
 		net.WriteString(gm)
+	net.SendToServer()
+end
+
+local function ChangeConvar(convar, value)
+	net.Start("Beatrun_ChangeConvar")
+		net.WriteString(convar)
+		net.WriteString(tostring(value))
 	net.SendToServer()
 end
 
@@ -12,7 +28,7 @@ end)
 
 hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_courses", language.GetPhrase("beatrun.toolsmenu.courses.name"), "", "", function(panel)
-		panel:ClearControls()
+		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.courses.desc")
 
 		panel:CheckBox("#beatrun.toolsmenu.courses.raceyourghost", "Beatrun_CourseGhost")
@@ -166,7 +182,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_hud", "#beatrun.toolsmenu.hud.name", "", "", function(panel)
-		panel:ClearControls()
+		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.hud.desc")
 
 		panel:CheckBox("#beatrun.toolsmenu.hud.dynamic", "Beatrun_HUDDynamic")
@@ -247,7 +263,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_camera", "#beatrun.toolsmenu.camera.name", "", "", function(panel)
-		panel:ClearControls()
+		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.camera.desc")
 
 		panel:CheckBox("#beatrun.toolsmenu.camera.colormodifyfilter", "Beatrun_DisableColorFilter")
@@ -263,7 +279,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_gameplay", "#beatrun.toolsmenu.gameplay.name", "", "", function(panel)
-		panel:ClearControls()
+		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.gameplay.desc")
 
 		local animsetting = panel:ComboBox("#beatrun.toolsmenu.gameplay.animset", "Beatrun_AnimSet")
@@ -300,55 +316,140 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_misc", "#beatrun.toolsmenu.misc.name", "", "", function(panel)
-		panel:ClearControls()
+		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.misc.desc")
 
-		panel:CheckBox("#beatrun.toolsmenu.misc.propspawn", "Beatrun_AllowPropSpawn")
+		local propSpawnToggle = vgui.Create("DCheckBoxLabel")
+		propSpawnToggle:SetText("#beatrun.toolsmenu.misc.propspawn")
+		propSpawnToggle:SetDark(true)
+		propSpawnToggle:SetChecked(GetConVar("Beatrun_AllowPropSpawn"):GetBool())
+		propSpawnToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_AllowPropSpawn", value and 1 or 0)
+		end
+		panel:AddItem(propSpawnToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.misc.propspawndesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.misc.weaponspawn", "Beatrun_AllowWeaponSpawn")
+		local weaponSpawnToggle = vgui.Create("DCheckBoxLabel")
+		weaponSpawnToggle:SetText("#beatrun.toolsmenu.misc.weaponspawn")
+		weaponSpawnToggle:SetDark(true)
+		weaponSpawnToggle:SetChecked(GetConVar("Beatrun_AllowWeaponSpawn"):GetBool())
+		weaponSpawnToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_AllowWeaponSpawn", value and 1 or 0)
+		end
+		panel:AddItem(weaponSpawnToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.misc.weaponspawndesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.misc.overdrivemp", "Beatrun_AllowOverdriveInMultiplayer")
+		local overdriveMpToggle = vgui.Create("DCheckBoxLabel")
+		overdriveMpToggle:SetText("#beatrun.toolsmenu.misc.overdrivemp")
+		overdriveMpToggle:SetDark(true)
+		overdriveMpToggle:SetChecked(GetConVar("Beatrun_AllowOverdriveInMultiplayer"):GetBool())
+		overdriveMpToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_AllowOverdriveInMultiplayer", value and 1 or 0)
+		end
+		panel:AddItem(overdriveMpToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.misc.overdrivempdesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.misc.healthregen", "Beatrun_HealthRegen")
+		local healthRegenToggle = vgui.Create("DCheckBoxLabel")
+		healthRegenToggle:SetText("#beatrun.toolsmenu.misc.healthregen")
+		healthRegenToggle:SetDark(true)
+		healthRegenToggle:SetChecked(GetConVar("Beatrun_HealthRegen"):GetBool())
+		healthRegenToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_HealthRegen", value and 1 or 0)
+		end
+		panel:AddItem(healthRegenToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.misc.healthregendesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.misc.lerealisticclimbing", "Beatrun_LeRealisticClimbing")
+		local realisticClimbingToggle = vgui.Create("DCheckBoxLabel")
+		realisticClimbingToggle:SetText("#beatrun.toolsmenu.misc.lerealisticclimbing")
+		realisticClimbingToggle:SetDark(true)
+		realisticClimbingToggle:SetChecked(GetConVar("Beatrun_LeRealisticClimbing"):GetBool())
+		realisticClimbingToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_LeRealisticClimbing", value and 1 or 0)
+		end
+		panel:AddItem(realisticClimbingToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.misc.lerealisticclimbingdesc")
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_moves", "#beatrun.toolsmenu.moves.name", "", "", function(panel)
-		panel:ClearControls()
+		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.moves.desc")
 		panel:Help(language.GetPhrase("beatrun.toolsmenu.moves.help"))
 
-		panel:NumSlider("#beatrun.toolsmenu.moves.speedlimit", "Beatrun_SpeedLimit", 325, 1000, 0)
+		local speedLimitSlider = vgui.Create("DNumSlider")
+		speedLimitSlider:SetText("#beatrun.toolsmenu.moves.speedlimit")
+		speedLimitSlider:SetDark(true)
+		speedLimitSlider:SetMinMax(325, 1000)
+		speedLimitSlider:SetDecimals(0)
+		speedLimitSlider:SetValue(GetConVar("Beatrun_SpeedLimit"):GetInt())
+		speedLimitSlider.OnValueChanged = function(value)
+			ChangeConvar("Beatrun_SpeedLimit", math.Truncate(value, 0))
+		end
+		panel:AddItem(speedLimitSlider)
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.speedlimitdesc"))
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.forcepuristmode", "Beatrun_PuristModeForce")
+		local forcePuristModeToggle = vgui.Create("DCheckBoxLabel")
+		forcePuristModeToggle:SetText("#beatrun.toolsmenu.moves.forcepuristmode")
+		forcePuristModeToggle:SetDark(true)
+		forcePuristModeToggle:SetChecked(GetConVar("Beatrun_PuristModeForce"):GetBool())
+		forcePuristModeToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_PuristModeForce", value and 1 or 0)
+		end
+		panel:AddItem(forcePuristModeToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.moves.forcepuristmodedesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.realisticwallrunning", "Beatrun_PuristWallrun")
+		local puristWallrunToggle = vgui.Create("DCheckBoxLabel")
+		puristWallrunToggle:SetText("#beatrun.toolsmenu.moves.realisticwallrunning")
+		puristWallrunToggle:SetDark(true)
+		puristWallrunToggle:SetChecked(GetConVar("Beatrun_PuristWallrun"):GetBool())
+		puristWallrunToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_PuristWallrun", value and 1 or 0)
+		end
+		panel:AddItem(puristWallrunToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.moves.realisticwallrunningdesc")
 
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
 
-		local kickglitchdrop = panel:ComboBox("#beatrun.toolsmenu.moves.kickglitch", "Beatrun_Kickglitch")
-		kickglitchdrop:AddChoice("#beatrun.toolsmenu.moves.kickglitch1", 1)
-		kickglitchdrop:AddChoice("#beatrun.toolsmenu.moves.kickglitch2", 2)
-		kickglitchdrop:AddChoice("#beatrun.toolsmenu.moves.kickglitch3", 3)
-		kickglitchdrop:SetSortItems(false)
+		panel:Help("#beatrun.toolsmenu.moves.kickglitch")
+		local kickGlitchSelect = vgui.Create("DComboBox")
+		kickGlitchSelect:SetValue("#beatrun.toolsmenu.moves.kickglitch" .. GetConVar("Beatrun_Kickglitch"):GetInt())
+		kickGlitchSelect:AddChoice("#beatrun.toolsmenu.moves.kickglitch1", 1)
+		kickGlitchSelect:AddChoice("#beatrun.toolsmenu.moves.kickglitch2", 2)
+		kickGlitchSelect:AddChoice("#beatrun.toolsmenu.moves.kickglitch3", 3)
+		kickGlitchSelect:SetSortItems(false)
+		kickGlitchSelect.OnSelect = function(_, _, _, value)
+			ChangeConvar("Beatrun_Kickglitch", value)
+		end
+		panel:AddItem(kickGlitchSelect)
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.quakejump", "Beatrun_QuakeJump")
+		local quakeJumpToggle = vgui.Create("DCheckBoxLabel")
+		quakeJumpToggle:SetText("#beatrun.toolsmenu.moves.quakejump")
+		quakeJumpToggle:SetDark(true)
+		quakeJumpToggle:SetChecked(GetConVar("Beatrun_QuakeJump"):GetBool())
+		quakeJumpToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_QuakeJump", value and 1 or 0)
+		end
+		panel:AddItem(quakeJumpToggle)
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.quakejumpdesc"))
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.sidestep", "Beatrun_SideStep")
+		local quakeJumpToggle = vgui.Create("DCheckBoxLabel")
+		quakeJumpToggle:SetText("#beatrun.toolsmenu.moves.sidestep")
+		quakeJumpToggle:SetDark(true)
+		quakeJumpToggle:SetChecked(GetConVar("Beatrun_SideStep"):GetBool())
+		quakeJumpToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_SideStep", value and 1 or 0)
+		end
+		panel:AddItem(quakeJumpToggle)
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.sidestepdesc"))
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.disarm", "Beatrun_Disarm")
+		local quakeJumpToggle = vgui.Create("DCheckBoxLabel")
+		quakeJumpToggle:SetText("#beatrun.toolsmenu.moves.disarm")
+		quakeJumpToggle:SetDark(true)
+		quakeJumpToggle:SetChecked(GetConVar("Beatrun_Disarm"):GetBool())
+		quakeJumpToggle.OnChange = function(value)
+			ChangeConvar("Beatrun_Disarm", value and 1 or 0)
+		end
+		panel:AddItem(quakeJumpToggle)
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.disarmdesc"))
 
 		local divider = vgui.Create("DHorizontalDivider")
@@ -370,13 +471,31 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_gamemodes", "#beatrun.toolsmenu.gamemodes.name", "", "", function(panel)
-		panel:ClearControls()
+		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.gamemodes.desc")
 
-		panel:NumSlider("#beatrun.toolsmenu.gamemodes.infectionstarttime", "Beatrun_InfectionStartTime", 1, 30, 0)
+		local infectionStartTimeSlider = vgui.Create("DNumSlider")
+		infectionStartTimeSlider:SetText("#beatrun.toolsmenu.gamemodes.infectionstarttime")
+		infectionStartTimeSlider:SetDark(true)
+		infectionStartTimeSlider:SetMinMax(1, 30)
+		infectionStartTimeSlider:SetDecimals(0)
+		infectionStartTimeSlider:SetValue(GetConVar("Beatrun_InfectionStartTime"):GetInt())
+		infectionStartTimeSlider.OnValueChanged = function(value)
+			ChangeConvar("Beatrun_InfectionStartTime", math.Truncate(value, 0))
+		end
+		panel:AddItem(infectionStartTimeSlider)
 		panel:Help("#beatrun.toolsmenu.gamemodes.infectiontime")
 
-		panel:NumSlider("#beatrun.toolsmenu.gamemodes.infectiongametime", "Beatrun_InfectionGameTime", 10, 1200, 0)
+		local infectionGameTimeSlider = vgui.Create("DNumSlider")
+		infectionGameTimeSlider:SetText("#beatrun.toolsmenu.gamemodes.infectiongametime")
+		infectionGameTimeSlider:SetDark(true)
+		infectionGameTimeSlider:SetMinMax(10, 1200)
+		infectionGameTimeSlider:SetDecimals(0)
+		infectionGameTimeSlider:SetValue(GetConVar("Beatrun_InfectionGameTime"):GetInt())
+		infectionGameTimeSlider.OnValueChanged = function(value)
+			ChangeConvar("Beatrun_InfectionGameTime", math.Truncate(value, 0))
+		end
+		panel:AddItem(infectionGameTimeSlider)
 		panel:Help("#beatrun.toolsmenu.gamemodes.infectiontime")
 
 		local InfectionButton = vgui.Create("DButton", panel)
@@ -415,13 +534,20 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		end
 		panel:AddItem(EventmodeButton)
 
-		local loadouts = panel:ComboBox("#beatrun.randomloadouts", "Beatrun_RandomLoadouts")
-		loadouts:AddChoice("#beatrun.randombeatrunloadouts", 1)
-		loadouts:AddChoice("#beatrun.randommwloadouts", 2)
-		loadouts:AddChoice("#beatrun.randomarc9loadouts", 3)
-		loadouts:AddChoice("#beatrun.randomarccwloadouts", 4)
-		loadouts:AddChoice("#beatrun.randomtfaloadouts", 5)
-		loadouts:SetSortItems(false)
+		panel:Help("#beatrun.randomloadouts")
+		local value = loadoutValues[GetConVar("Beatrun_RandomLoadouts"):GetInt()]
+		local loadoutSelect = vgui.Create("DComboBox")
+		loadoutSelect:SetValue(value)
+		loadoutSelect:AddChoice("#beatrun.randombeatrunloadouts", 1)
+		loadoutSelect:AddChoice("#beatrun.randommwloadouts", 2)
+		loadoutSelect:AddChoice("#beatrun.randomarc9loadouts", 3)
+		loadoutSelect:AddChoice("#beatrun.randomarccwloadouts", 4)
+		loadoutSelect:AddChoice("#beatrun.randomtfaloadouts", 5)
+		loadoutSelect:SetSortItems(false)
+		loadoutSelect.OnSelect = function(_, _, _, value)
+			ChangeConvar("Beatrun_RandomLoadouts", value)
+		end
+		panel:AddItem(loadoutSelect)
 		panel:ControlHelp("#beatrun.randomloadoutsdesc")
 
 		local DatatheftButton = vgui.Create("DButton", panel)
@@ -462,7 +588,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Extra", "beatrun_extra", "#beatrun.toolsmenu.extra.name", "", "", function(panel)
-		panel:ClearControls()
+		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.extra.desc")
 
 		panel:CheckBox("#beatrun.toolsmenu.extra.stats", "Beatrun_HUDStats")
