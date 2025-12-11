@@ -1,4 +1,4 @@
-local FaithVO = CreateConVar("Beatrun_FaithVO", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE})
+local FaithVO = CreateConVar("Beatrun_FaithVO", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 local meta = FindMetaTable("Player")
 

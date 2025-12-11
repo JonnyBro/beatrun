@@ -373,10 +373,10 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:ClearControls()
 		panel:SetName("#beatrun.toolsmenu.gamemodes.desc")
 
-		panel:NumSlider("#beatrun.toolsmenu.gamemodes.infectionstarttime", "Beatrun_InfectionStartTime", 5, 20, 0)
+		panel:NumSlider("#beatrun.toolsmenu.gamemodes.infectionstarttime", "Beatrun_InfectionStartTime", 1, 30, 0)
 		panel:Help("#beatrun.toolsmenu.gamemodes.infectiontime")
 
-		panel:NumSlider("#beatrun.toolsmenu.gamemodes.infectiongametime", "Beatrun_InfectionGameTime", 30, 600, 0)
+		panel:NumSlider("#beatrun.toolsmenu.gamemodes.infectiongametime", "Beatrun_InfectionGameTime", 10, 1200, 0)
 		panel:Help("#beatrun.toolsmenu.gamemodes.infectiontime")
 
 		local InfectionButton = vgui.Create("DButton", panel)

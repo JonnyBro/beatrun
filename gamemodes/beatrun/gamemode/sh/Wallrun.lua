@@ -3,7 +3,7 @@ local hwrtime = 1.5
 tiltdir = 1
 local tilt = 0
 
-PuristWallrun = CreateConVar("Beatrun_PuristWallrun", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "'Realistic' wallrunning", 0, 1)
+PuristWallrun = CreateConVar("Beatrun_PuristWallrun", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "'Realistic' wallrunning", 0, 1)
 
 function WallrunningTilt(ply, pos, ang, fov)
 	local wr = ply:GetWallrun()
