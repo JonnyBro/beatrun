@@ -6,7 +6,7 @@ else
 	end)
 end
 
-hook.Add("ScalePlayerDamage", "MissedMe", function(ply, hitgroup, dmginfo)
+hook.Add("ScalePlayerDamage", "Beatrun_MissedMe", function(ply, hitgroup, dmginfo)
 	if IsValid(dmginfo:GetAttacker()) and dmginfo:GetAttacker():IsPlayer() then return end
 
 	local vel = ply:GetVelocity()
@@ -15,8 +15,8 @@ hook.Add("ScalePlayerDamage", "MissedMe", function(ply, hitgroup, dmginfo)
 	if vel_len > 310 or ply:GetSliding() and vel_len > 100 or ply:GetWallrun() > 0 and vel_len > 200 or ply:GetJumpTurn() and not ply:OnGround() then return true end
 end)
 
-hook.Add("EntityTakeDamage", "MissedMe", function(victim, dmginfo)
-	if not victim:IsPlayer() then return end
+hook.Add("EntityTakeDamage", "Beatrun_MissedMe", function(victim, dmginfo)
+	if dmginfo:GetAttacker():IsPlayer() and victim:IsPlayer() then return end
 
 	local dmgtype = dmginfo:GetDamageType()
 
@@ -69,8 +69,10 @@ if CLIENT then
 
 		surface.SetMaterial(radial)
 		surface.SetDrawColor(0, 0, 0, dmgalpha * 0.85)
+
 		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
 		surface.DrawTexturedRectRotated(ScrW() * 0.5, ScrH() * 0.5, ScrW(), ScrH(), 180)
+
 		surface.SetDrawColor(255, 25, 25, dmgalpha * math.max(0, math.sin(CurTime() * 6) * 0.045))
 		surface.DrawTexturedRect(0, 0, w, h)
 	end)
@@ -95,6 +97,7 @@ if SERVER then
 
 		if ply:Alive() and ply.RegenTime < CurTime() and ply:Health() < ply:GetMaxHealth() then
 			ply:SetHealth(math.Approach(ply:Health(), ply:GetMaxHealth(), 1))
+
 			ply.RegenTime = CurTime() + 0.05
 		end
 
