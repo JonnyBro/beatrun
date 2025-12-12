@@ -1,16 +1,90 @@
 local CATEGORY_NAME = "Beatrun"
+-- format: multiline
+local beatrunGamemodes = {
+	"Freeplay",
+	"fp",
 
--- !votemode
-function ulx.votemode(calling_ply, mode)
-	if GetGlobalBool("GM_EVENTMODE") then return end
-	
-	if voteStarted then
-		ULib.tsayError(calling_ply, "There is already a vote in progress. Please wait for the current one to end.", true)
-		return
+	"Infection",
+	"infect",
+
+	"Deathmatch",
+	"dm",
+
+	"Data Theft",
+	"dt"
+}
+
+local function isValidGamemode(mode)
+	mode = string.lower(mode)
+
+	for _, v in ipairs(beatrunGamemodes) do
+		if string.lower(v) == mode then return true end
 	end
 
-	if CurTime() < nextVoteTime then
-		ULib.tsayError(calling_ply, "Vote is on cooldown. Please wait.", true)
+	return false
+end
+
+local function ChangeGamemode(mode)
+	mode = string.lower(mode)
+
+	if GetGlobalBool("GM_DATATHEFT") then
+		Beatrun_StopDataTheft()
+	elseif GetGlobalBool("GM_INFECTION") then
+		Beatrun_StopInfection()
+	elseif GetGlobalBool("GM_DEATHMATCH") then
+		Beatrun_StopDeathmatch()
+	end
+
+	if mode == "infection" or mode == "infect" then
+		if not GetGlobalBool("GM_INFECTION") then
+			Beatrun_StartInfection()
+		else
+			Beatrun_StopInfection()
+		end
+	elseif mode == "deathmatch" or mode == "dm" then
+		if not GetGlobalBool("GM_DEATHMATCH") then
+			Beatrun_StartDeathmatch()
+		else
+			Beatrun_StopDeathmatch()
+		end
+	elseif mode == "data theft" or mode == "dt" then
+		if not GetGlobalBool("GM_DATATHEFT") then
+			Beatrun_StartEventmode(ply)
+		else
+			Beatrun_StopEventmode()
+		end
+	end
+end
+
+-- !votemode
+local function voteDone(t, mode, ply)
+	local results = t.results
+	local winner
+	local winnernum = 0
+
+	for id, numvotes in pairs(results) do
+		if numvotes > winnernum then
+			winner = id
+			winnernum = numvotes
+		end
+	end
+
+	local str
+	if not winner then
+		str = "Vote ended! No one voted or not enough votes."
+	else
+		str = "Vote successful! (" .. winnernum .. "/" .. t.voters .. ")\nStarting \"" .. mode .. "\"..."
+	end
+
+	ChangeGamemode(mode)
+
+	ULib.tsay(_, str)
+	ulx.logString(str)
+end
+
+function ulx.votemode(calling_ply, mode)
+	if ulx.voteInProgress then
+		ULib.tsayError(calling_ply, "There is already a vote in progress. Please wait for the current one to end.", true)
 		return
 	end
 
@@ -19,11 +93,11 @@ function ulx.votemode(calling_ply, mode)
 		return
 	end
 
-	StartVote(mode, calling_ply)
+	ulx.doVote("Change gamemode to " .. mode .. "?", {"Yes", "No"}, voteDone, _, _, _, mode, calling_ply)
 	ulx.fancyLogAdmin(calling_ply, "#A started a votemode for #s", mode)
 end
 
-local votemode = ulx.command(CATEGORY_NAME, "ulx votemode", ulx.votemode, "!ulxvotemode")
+local votemode = ulx.command(CATEGORY_NAME, "ulx votemode", ulx.votemode, "!votemode")
 votemode:addParam{
 	type = ULib.cmds.StringArg,
 	completes = beatrunGamemodes,
