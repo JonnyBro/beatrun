@@ -83,3 +83,5 @@ function GM:PlayerSpawn(ply, transition)
 		enableBabyGod(ply)
 	end
 end
+
+hook.Add("KeyPress", "DisableBabyGodOnAttack", function(ply, key) if key == IN_ATTACK and ply.Babygod then disableBabyGod(ply) end end)
