@@ -1,22 +1,28 @@
 local CATEGORY_NAME = "Beatrun"
 -- format: multiline
-local beatrunGamemodesCompletes = {
+local beatrunGamemodes = {
 	"Freeplay",
-	"freeplay",
 	"fp",
 
 	"Infection",
-	"infection",
 	"infect",
 
 	"Deathmatch",
-	"deathmatch",
 	"dm",
 
 	"Data Theft",
-	"data theft",
-	"dt",
+	"dt"
 }
+
+local function isValidGamemode(mode)
+	mode = string.lower(mode)
+
+	for _, v in ipairs(beatrunGamemodes) do
+		if string.lower(v) == mode then return true end
+	end
+
+	return false
+end
 
 local function ChangeGamemode(mode)
 	mode = string.lower(mode)
@@ -82,6 +88,11 @@ function ulx.votemode(calling_ply, mode)
 		return
 	end
 
+	if not isValidGamemode(mode) then
+		ULib.tsayError(calling_ply, "Invalid gamemode \"" .. mode .. "\".\nAvailable modes (alias):\n- Freeplay (fp)\n- Deathmatch (dm)\n- Infection (infect)\n- Data Theft (dt)", true)
+		return
+	end
+
 	ulx.doVote("Change gamemode to " .. mode .. "?", {"Yes", "No"}, voteDone, _, _, _, mode, calling_ply)
 	ulx.fancyLogAdmin(calling_ply, "#A started a votemode for #s", mode)
 end
@@ -89,15 +100,14 @@ end
 local votemode = ulx.command(CATEGORY_NAME, "ulx votemode", ulx.votemode, "!votemode")
 votemode:addParam{
 	type = ULib.cmds.StringArg,
-	completes = beatrunGamemodesCompletes,
+	completes = beatrunGamemodes,
 	hint = "gamemode",
-	error = "invalid gamemode \"%s\" specified\nAvailable modes (alias):\n- Freeplay (fp): Stops all gamemodes\n- Deathmatch (dm)\n- Infection (infect)\n- Data Theft (dt)",
-	ULib.cmds.restrictToCompletes,
+	error = "Invalid gamemode \"%s\" specified\nAvailable modes (alias):\n- Freeplay (fp): Stops all gamemodes\n- Deathmatch (dm)\n- Infection (infect)\n- Data Theft (dt)",
 	ULib.cmds.takeRestOfLine
 }
 
 votemode:defaultAccess(ULib.ACCESS_ALL)
-votemode:help("Starts a Beatrun gamemode vote.")
+votemode:help("Starts a Beatrun gamemode vote.\nAvailable modes (alias, case-insensitive):\n- Freeplay (fp): Stops all gamemodes\n- Deathmatch (dm)\n- Infection (infect)\n- Data Theft (dt)")
 
 -- !setlevel
 function ulx.setlevel(calling_ply, target_plys, level)
