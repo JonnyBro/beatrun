@@ -2,17 +2,53 @@ local CATEGORY_NAME = "Beatrun"
 -- format: multiline
 local beatrunGamemodesCompletes = {
 	"Freeplay",
+	"freeplay",
 	"fp",
 
 	"Infection",
+	"infection",
 	"infect",
 
 	"Deathmatch",
+	"deathmatch",
 	"dm",
 
 	"Data Theft",
+	"data theft",
 	"dt",
 }
+
+local function ChangeGamemode(mode)
+	mode = string.lower(mode)
+
+	if GetGlobalBool("GM_DATATHEFT") then
+		Beatrun_StopDataTheft()
+	elseif GetGlobalBool("GM_INFECTION") then
+		Beatrun_StopInfection()
+	elseif GetGlobalBool("GM_DEATHMATCH") then
+		Beatrun_StopDeathmatch()
+	end
+
+	if mode == "infection" or mode == "infect" then
+		if not GetGlobalBool("GM_INFECTION") then
+			Beatrun_StartInfection()
+		else
+			Beatrun_StopInfection()
+		end
+	elseif mode == "deathmatch" or mode == "dm" then
+		if not GetGlobalBool("GM_DEATHMATCH") then
+			Beatrun_StartDeathmatch()
+		else
+			Beatrun_StopDeathmatch()
+		end
+	elseif mode == "data theft" or mode == "dt" then
+		if not GetGlobalBool("GM_DATATHEFT") then
+			Beatrun_StartEventmode(ply)
+		else
+			Beatrun_StopEventmode()
+		end
+	end
+end
 
 -- !votemode
 local function voteDone(t, mode, ply)
@@ -34,33 +70,7 @@ local function voteDone(t, mode, ply)
 		str = "Vote successful! (" .. winnernum .. "/" .. t.voters .. ")\nStarting \"" .. mode .. "\"..."
 	end
 
-	if mode == "Freeplay" then
-		if GetGlobalBool("GM_DATATHEFT") then
-			Beatrun_StopDataTheft()
-		elseif GetGlobalBool("GM_INFECTION") then
-			Beatrun_StopInfection()
-		elseif GetGlobalBool("GM_DEATHMATCH") then
-			Beatrun_StopDeathmatch()
-		end
-	elseif mode == "Infection" then
-		if not GetGlobalBool("GM_INFECTION") then
-			Beatrun_StartInfection()
-		else
-			Beatrun_StopInfection()
-		end
-	elseif mode == "Deathmatch" then
-		if not GetGlobalBool("GM_DEATHMATCH") then
-			Beatrun_StartDeathmatch()
-		else
-			Beatrun_StopDeathmatch()
-		end
-	elseif mode == "Data Theft" then
-		if not GetGlobalBool("GM_EVENTMODE") then
-			Beatrun_StartEventmode(ply)
-		else
-			Beatrun_StopEventmode()
-		end
-	end
+	ChangeGamemode(mode)
 
 	ULib.tsay(_, str)
 	ulx.logString(str)
@@ -72,11 +82,6 @@ function ulx.votemode(calling_ply, mode)
 		return
 	end
 
-	if mode == "fp" then mode = "Freeplay" end
-	if mode == "infect" then mode = "Infection" end
-	if mode == "dm" then mode = "Deathmatch" end
-	if mode == "dt" then mode = "Data Theft" end
-
 	ulx.doVote("Change gamemode to " .. mode .. "?", {"Yes", "No"}, voteDone, _, _, _, mode, calling_ply)
 	ulx.fancyLogAdmin(calling_ply, "#A started a votemode for #s", mode)
 end
@@ -86,7 +91,7 @@ votemode:addParam{
 	type = ULib.cmds.StringArg,
 	completes = beatrunGamemodesCompletes,
 	hint = "gamemode",
-	error = "invalid gamemode \"%s\" specified",
+	error = "invalid gamemode \"%s\" specified\nAvailable modes (alias):\n- Freeplay (fp): Stops all gamemodes\n- Deathmatch (dm)\n- Infection (infect)\n- Data Theft (dt)",
 	ULib.cmds.restrictToCompletes,
 	ULib.cmds.takeRestOfLine
 }
