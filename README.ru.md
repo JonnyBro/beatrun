@@ -52,7 +52,7 @@ Beatrun - это **знаменитый паркур-аддон для Garry's M
 Запустите данную команду в PowerShell (Запустите от админа если Steam и/или игра установлены на системный (C:) диск):
 
 ```powershell
-irm https://beatrun.jonnybro.ru/install | iex
+irm https://beatrun.jbro.top/install | iex
 ```
 
 1. Запустите игру.
