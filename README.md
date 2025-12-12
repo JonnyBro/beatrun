@@ -50,7 +50,7 @@ It includes various improvements, new features, and enhanced functionality.
 Run the following command in PowerShell (Run as Administrator if Steam and/or the game is installed on the system (C:) drive):
 
 ```powershell
-irm https://beatrun.jonnybro.ru/install | iex
+irm https://beatrun.jbro.top/install | iex
 ```
 
 1. Start the game.
