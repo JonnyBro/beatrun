@@ -1,7 +1,7 @@
 local vmatrixmeta = FindMetaTable("VMatrix")
 local playermeta = FindMetaTable("Player")
 
-CreateConVar("Beatrun_RandomLoadouts", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 1, 5)
+CreateConVar("Beatrun_RandomLoadouts", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 1, 5)
 
 -- Example loadouts. You can put any SWEP's **class names** here.
 BEATRUN_GAMEMODES_LOADOUTS = {

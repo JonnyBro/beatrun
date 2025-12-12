@@ -2,7 +2,7 @@ if CLIENT then
 	CreateClientConVar("Beatrun_PuristMode", "1", true, true, language.GetPhrase("beatrun.convars.puristmode"))
 end
 
-local PuristModeForce = CreateConVar("Beatrun_PuristModeForce", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
+local PuristModeForce = CreateConVar("Beatrun_PuristModeForce", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 0, 1)
 
 local function PuristMove(ply, mv, cmd)
 	if not ply:OnGround() and not ply:GetGrappling() and (tobool(ply:GetInfo("Beatrun_PuristMode")) or PuristModeForce:GetBool()) and ply:WaterLevel() == 0 then

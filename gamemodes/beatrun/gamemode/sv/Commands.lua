@@ -17,9 +17,7 @@ local function ParseArgs(str)
 		end
 	end
 
-	if current ~= "" then
-		table.insert(args, current)
-	end
+	if current ~= "" then table.insert(args, current) end
 
 	return args
 end
@@ -29,7 +27,7 @@ local function ParseFlags(args)
 	local clean = {}
 
 	for _, v in ipairs(args) do
-		if v:sub(1,1) == "-" then
+		if v:sub(1, 1) == "-" then
 			flags[v] = true
 		else
 			table.insert(clean, v)
@@ -46,11 +44,12 @@ local function AddCommand(cmd, func)
 end
 
 hook.Add("PlayerSay", "BeatrunChatCmd", function(ply, text)
-	if text:sub(1,1) ~= "!" then return end
+	if text:sub(1, 1) ~= "!" then return end
 
 	local raw = text:sub(2)
 	local args = ParseArgs(raw)
 	local cmd = string.lower(args[1])
+
 	table.remove(args, 1)
 
 	local clean, flags = ParseFlags(args)
@@ -65,10 +64,11 @@ end)
 
 AddCommand("em_goal", function(ply, args, flags)
 	if not GetGlobalBool("GM_EVENTDATA") and ply:GetNW2String("EPlayerStatus", "Member") ~= "Manager" then return end
+
 	local msg = table.concat(args, " ")
 	msg = string.upper(msg)
 
-	if msg ~= "" then msg = "["..msg.."]" end
+	if msg ~= "" then msg = "[" .. msg .. "]" end
 
 	net.Start("Eventmode_SetGoal")
 		net.WriteString(msg)

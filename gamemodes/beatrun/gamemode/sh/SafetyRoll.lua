@@ -4,7 +4,7 @@ end
 
 local landang = Angle(0, 0, 0)
 local lastGroundSpeed = 0
-local rollspeedloss = CreateConVar("Beatrun_RollSpeedLoss", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "", 0, 1)
+local rollspeedloss = CreateConVar("Beatrun_RollSpeedLoss", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 0, 1)
 
 local roll = {
 	followplayer = true,

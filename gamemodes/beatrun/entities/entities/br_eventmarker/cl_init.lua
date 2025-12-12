@@ -16,35 +16,39 @@ end
 
 local function DrawMarkerText()
 	local markers = ents.FindByClass(ENT_CLASS)
-	
+
 	for _, ent in ipairs(markers) do
 		if not ShouldDrawMarker(ent) then continue end
-		
+
 		local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 		local pos = ent:GetPos() + Vector(0, 0, circleup.Z * 1.15)
+
 		local ang = LocalPlayer():EyeAngles()
 		ang:RotateAroundAxis(ang:Forward(), 90)
 		ang:RotateAroundAxis(ang:Right(), 90)
-		
+
 		local scale = math.Clamp(2.5 * dist / 2000, 0.75, 5)
-		
-		cam.IgnoreZ(true)
+
 		cam.Start3D2D(pos, Angle(0, ang.y, ang.z), scale)
+			cam.IgnoreZ(true)
 			render.DepthRange(0, 0)
 			draw.SimpleText("OVER HERE", "BeatrunHUD", 0, 0, TEXT_COLOR, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			render.DepthRange(0, 1)
+			cam.IgnoreZ(false)
 		cam.End3D2D()
-		cam.IgnoreZ(false)
 	end
 end
+
 hook.Add("PostDrawOpaqueRenderables", "BeatrunEventMarkers_Text", DrawMarkerText)
 
 local function DrawMarkerBeams()
 	local markers = ents.FindByClass(ENT_CLASS)
+
 	for _, ent in ipairs(markers) do
 		if not ShouldDrawMarker(ent) then continue end
-		
+
 		render.SetColorMaterial()
+
 		local count = 16
 		local offset = CurTime() * 0.5 % (math.pi * 2)
 
@@ -57,6 +61,7 @@ local function DrawMarkerBeams()
 		end
 	end
 end
+
 hook.Add("PostDrawTranslucentRenderables", "BeatrunEventMarkers_Beams", DrawMarkerBeams)
 
 function ENT:Initialize()

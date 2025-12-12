@@ -5,7 +5,7 @@ EPlayerStatus = {
 		hud_key = "#beatrun.eventmode.memberhud",
 		color = Color(95, 245, 130)
 	},
- 	Suspended = {
+	Suspended = {
 		key = "Suspended",
 		label_key = "#beatrun.eventmode.suspendedlabel",
 		hud_key = "#beatrun.eventmode.suspendedhud",
