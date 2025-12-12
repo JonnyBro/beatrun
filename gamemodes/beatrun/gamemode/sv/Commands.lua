@@ -79,7 +79,7 @@ end)
 
 AddCommand("votemode", function(ply, args, flags)
 	if GetGlobalBool("GM_EVENTMODE") then return end
-	
+
 	if voteStarted then
 		ply:ChatPrint("There is already a vote in progress. Please wait for the current one to end.")
 		return
@@ -97,5 +97,6 @@ AddCommand("votemode", function(ply, args, flags)
 	end
 
 	StartVote(mode, ply)
+
 	ply:ChatPrint("Started vote for gamemode: " .. mode)
 end)
