@@ -110,6 +110,20 @@ local function RebuildPlayersPanel()
 			end
 		end
 
+		if ply:IsAdmin() then
+			local managerBtn = AEUI:AddButton(PlayersPanel, " ♛ ", function()
+				net.Start("Eventmode_Manager")
+					net.WriteEntity(ply)
+				net.SendToServer()
+			end, "AEUIDefault", 0, y_offset, false, EPlayerStatus.Manager.color)
+
+			if managerBtn then
+    			managerBtn.h = 24
+    			managerBtn.x = playerBtn.x + playerBtn.w - 30
+    			managerBtn.y = playerBtn.y
+			end
+		end
+		
 		y_offset = y_offset + 30
 	end
 end

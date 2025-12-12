@@ -76,3 +76,26 @@ AddCommand("em_goal", function(ply, args, flags)
 		net.WriteString(msg)
 	net.Broadcast()
 end)
+
+AddCommand("votemode", function(ply, args, flags)
+	if GetGlobalBool("GM_EVENTMODE") then return end
+	
+	if voteStarted then
+		ply:ChatPrint("There is already a vote in progress. Please wait for the current one to end.")
+		return
+	end
+
+	if CurTime() < nextVoteTime then
+		ply:ChatPrint("Vote is on cooldown. Please wait.")
+		return
+	end
+
+	local mode = args[1] or ""
+	if not isValidGamemode(mode) then
+		ply:ChatPrint("Invalid gamemode \"" .. mode .. "\".\nAvailable modes (alias):\n- Freeplay (fp)\n- Deathmatch (dm)\n- Infection (infect)\n- Data Theft (dt)")
+		return
+	end
+
+	StartVote(mode, ply)
+	ply:ChatPrint("Started vote for gamemode: " .. mode)
+end)
