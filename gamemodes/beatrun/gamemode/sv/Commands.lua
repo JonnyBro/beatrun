@@ -48,6 +48,8 @@ hook.Add("PlayerSay", "BeatrunChatCmd", function(ply, text)
 
 	local raw = text:sub(2)
 	local args = ParseArgs(raw)
+	if not args[1] then return end
+
 	local cmd = string.lower(args[1])
 
 	table.remove(args, 1)
