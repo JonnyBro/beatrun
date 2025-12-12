@@ -83,7 +83,7 @@ function ENT:Draw()
 		if game.SinglePlayer() then
 			if grapplepos == self:GetStartPos() or grapplepos == self:GetEndPos() then return end
 		else
-			-- networked vectors loose precision, this doesnt happen in courses tho for some reason ??
+			-- in multiplayer grapplepos seems to be more precise than the 2 other vectors. this is not the case in courses tho??
 			if grapplepos:DistToSqr(self:GetStartPos()) < 0.001 or grapplepos:DistToSqr(self:GetEndPos()) < 0.001 then return end
 		end
 	end
