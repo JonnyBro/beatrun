@@ -410,18 +410,20 @@ if CLIENT then
 			chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.end"):format(survivors, _time))
 		end)
 
-		if music and music.Stop then
+		if IsValid(music) and music.Stop then
 			music:Stop()
 		end
 	end)
 
 	net.Receive("Infection_LastMan", function()
-		sound.PlayFile("sound/music/infection_countdown.mp3", "", function(station, errCode, errStr)
-			if IsValid(station) then
-				station:SetVolume(0.5)
-				station:Play()
+		sound.PlayFile("sound/music/infection_countdown.mp3", "", function(channel, errorID, errorName)
+			if IsValid(channel) then
+				channel:SetVolume(0.5)
+				channel:Play()
 
-				music = station
+				music = channel
+			else
+				print("Failed to play Infection_LastMan: ", errorID, errorName)
 			end
 		end)
 	end)
