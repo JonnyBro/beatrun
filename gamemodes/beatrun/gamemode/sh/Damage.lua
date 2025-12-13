@@ -16,7 +16,7 @@ hook.Add("ScalePlayerDamage", "Beatrun_MissedMe", function(ply, hitgroup, dmginf
 end)
 
 hook.Add("EntityTakeDamage", "Beatrun_MissedMe", function(victim, dmginfo)
-	if dmginfo:GetAttacker():IsPlayer() and victim:IsPlayer() then return end
+	if not victim:IsPlayer() then return end
 
 	local dmgtype = dmginfo:GetDamageType()
 
