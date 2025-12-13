@@ -334,9 +334,9 @@ hook.Add("EntityFireBullets", "thisengineismadebyacrackhead", function(ent, data
 	end)
 end)
 
-hook.Add("PhysgunPickup", "AllowPlayerPickup", function(ply, ent)
-	if ply:IsSuperAdmin() and ent:IsPlayer() then return true end
-end)
+-- hook.Add("PhysgunPickup", "AllowPlayerPickup", function(ply, ent)
+-- 	if ply:IsSuperAdmin() and ent:IsPlayer() then return true end
+-- end)
 
 function PLAYER:ShouldDrawLocal()
 	if self.TauntCam:ShouldDrawLocalPlayer(self.Player, self.Player:IsPlayingTaunt()) then return true end
