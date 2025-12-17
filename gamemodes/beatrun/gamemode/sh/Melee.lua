@@ -271,13 +271,13 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 	end
 
 	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 and ply:GetMelee() >= 5 and not ply:OnGround() then
-		if kickglitch:GetInt() == 2 and mv:KeyDown(IN_JUMP) then
+		if kickglitch:GetInt() == 1 and mv:KeyDown(IN_JUMP) then
 			local vel = mv:GetVelocity()
 			vel:Mul(1.25)
 			vel.z = 300
 
 			mv:SetVelocity(vel)
-		elseif kickglitch:GetInt() == 3 then
+		elseif kickglitch:GetInt() == 2 then
 			if SERVER then
 				local platform = ents.Create("prop_physics")
 
@@ -293,7 +293,7 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 				local phys = platform:GetPhysicsObject()
 				phys:EnableMotion(false)
 
-				timer.Simple(0.3, function() SafeRemoveEntity(platform) end)
+				timer.Simple(.5, function() SafeRemoveEntity(platform) end)
 			end
 
 			ParkourEvent("jumpslow", ply)
