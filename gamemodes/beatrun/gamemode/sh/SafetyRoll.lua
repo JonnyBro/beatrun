@@ -1,4 +1,4 @@
-if game.SinglePlayer() or SERVER then
+if game.SinglePlayer() and SERVER then
 	util.AddNetworkString("RollAnimSP")
 end
 
