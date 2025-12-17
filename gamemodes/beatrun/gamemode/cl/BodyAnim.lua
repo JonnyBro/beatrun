@@ -70,7 +70,6 @@ lockang = false
 CamAddAng = false
 CamIgnoreAng = false
 
-
 local tools = {
 	["gmod_tool"] = true,
 	["weapon_physgun"] = true,
@@ -928,5 +927,4 @@ hook.Add("InputMouseApply", "BodyAnim_Mouse", function(cmd)
 	end
 
 	if newvalues then return true end
-
 end)

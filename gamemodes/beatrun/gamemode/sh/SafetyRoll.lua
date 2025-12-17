@@ -1,4 +1,4 @@
-if game.SinglePlayer() and SERVER then
+if game.SinglePlayer() or SERVER then
 	util.AddNetworkString("RollAnimSP")
 end
 
@@ -141,6 +141,8 @@ end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
+		ply:DrawViewModel(false)
+
 		if ply:Alive() and IsValid(ply:GetActiveWeapon()) and CurTime() > ply:GetSafetyRollTime() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
 			RunConsoleCommand("mgbase_debug_vmrender", "0")
 		end
@@ -187,6 +189,10 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 				net.WriteBool(true)
 			net.Send(ply)
 		end
+
+		timer.Simple(.85, function()
+			ply:DrawViewModel(true)
+		end)
 	end
 end)
 
@@ -276,10 +282,10 @@ if SERVER then
 	}
 
 	hook.Add("GetFallDamage", "SafetyRoll", function(ply, speed)
-		local groundent = ply:GetGroundEntity()
+		local groundEnt = ply:GetGroundEntity()
 
-		if IsValid(groundent) and safelandents[groundent:GetClass()] then
-			groundent:EmitSound("mirrorsedge/GameplayObjects/Landing_01.ogg", 80, 100 + math.random(-30, 10))
+		if IsValid(groundEnt) and safelandents[groundEnt:GetClass()] then
+			groundEnt:EmitSound("mirrorsedge/GameplayObjects/Landing_01.ogg", 80, 100 + math.random(-30, 10))
 
 			return 0
 		end
