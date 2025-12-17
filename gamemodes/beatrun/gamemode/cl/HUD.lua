@@ -238,11 +238,11 @@ local function BeatrunHUD()
 		surface.DrawText(language.GetPhrase("beatrun.hud.lvl"):format(ply:GetLevel()))
 
 		local kickGlitchText = ""
-		if ply:GetInfo("Beatrun_KickGlitch") == "1" then
+		if ply:GetInfo("Beatrun_KickGlitch") == "0" then
 			kickGlitchText = "Off"
-		elseif ply:GetInfo("Beatrun_KickGlitch") == "2" then
+		elseif ply:GetInfo("Beatrun_KickGlitch") == "1" then
 			kickGlitchText = "Old"
-		elseif ply:GetInfo("Beatrun_KickGlitch") == "3" then
+		elseif ply:GetInfo("Beatrun_KickGlitch") == "2" then
 			kickGlitchText = "New"
 		end
 

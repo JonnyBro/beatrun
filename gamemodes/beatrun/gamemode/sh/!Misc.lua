@@ -1,6 +1,6 @@
-local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
-local allowWeaponSpawn = CreateConVar("Beatrun_AllowWeaponSpawn", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
-local debugSpawnLogs = CreateConVar("Beatrun_DebugSpawnLogs", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local allowWeaponSpawn = CreateConVar("Beatrun_AllowWeaponSpawn", "0", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local debugSpawnLogs = CreateConVar("Beatrun_DebugSpawnLogs", "0", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 if SERVER then
 	util.AddNetworkString("SPParkourEvent")

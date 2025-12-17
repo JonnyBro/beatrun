@@ -1,6 +1,6 @@
 util.AddNetworkString("Beatrun_ChangeConvar")
 
-local replicated_convars = {
+local replicatedConvars = {
 	["Beatrun_AllowPropSpawn"] = true,
 	["Beatrun_AllowWeaponSpawn"] = true,
 	["Beatrun_AllowOverdriveInMultiplayer"] = true,
@@ -25,10 +25,10 @@ local replicated_convars = {
 net.Receive("Beatrun_ChangeConvar", function(len, ply)
 	if not ply:IsAdmin() then return end
 
-	local convar_name = net.ReadString()
-	local convar_value = net.ReadString()
+	local convarName = net.ReadString()
+	local convarValue = net.ReadString()
 
-	if not replicated_convars[convar_name] then return end
+	if not replicatedConvars[convarName] then return end
 
-	GetConVar(convar_name):SetString(convar_value)
+	GetConVar(convarName):SetString(convarValue)
 end)

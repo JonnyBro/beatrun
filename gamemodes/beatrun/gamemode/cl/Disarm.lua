@@ -153,6 +153,7 @@ function Disarm_Init(victim)
 
 	hook.Add("Think", "Disarm_Think", Disarm_Think)
 	hook.Add("CreateMove", "Disarm_BlockMove", Disarm_BlockMove)
+
 	victimanim.RenderOverride = Disarm_Render
 
 	timer.Simple(0.001, function()
@@ -182,7 +183,6 @@ hook.Add("CreateClientsideRagdoll", "Disarm_Ragdoll", function(ent, oldrag)
 			rag:SetBodygroup(i, bodyg)
 		end
 
-		-- local vel = Vector()
 		local num = rag:GetPhysicsObjectCount() - 1
 
 		for i = 0, num do

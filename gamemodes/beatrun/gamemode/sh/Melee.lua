@@ -1,7 +1,8 @@
-local kickglitch = CreateConVar("Beatrun_KickGlitch", "3", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Kickglitch mode. 0: disabled, 1: datae-style (velocity multiplier), 2: Mirror's Edge-style (invisible platform)", 1, 3)
+local kickglitch = CreateConVar("Beatrun_KickGlitch", "2", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Kickglitch mode. 0: disabled, 1: datae-style (velocity multiplier), 2: Mirror's Edge-style (invisible platform)", 0, 2)
 
 local tr = {}
 local tr_result = {}
+
 MELEE_WRRIGHT = 6
 MELEE_WRLEFT = 5
 MELEE_DROPKICK = 4

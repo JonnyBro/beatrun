@@ -1,9 +1,8 @@
 util.AddNetworkString("DisarmStart")
 
-local disarm = CreateConVar("Beatrun_Disarm", 1, {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 0, 1)
-
 local function Disarm_Init(ply, victim)
-	if ply:GetSliding() or ply:GetWallrun() > 0 or ply:GetDive() then return end --prevents animation bugs and lua errors
+	if ply:GetSliding() or ply:GetWallrun() > 0 or ply:GetDive() then return end -- prevents animation bugs and lua errors
+
 	victim:NextThink(CurTime() + 100)
 	victim.InDisarm = true
 	victim:DropWeapon()
@@ -20,7 +19,7 @@ local function Disarm_Init(ply, victim)
 end
 
 local function Disarm(ply, ent)
-	if not disarm:GetBool() then return end
+	if not GetConVar("Beatrun_Disarm"):GetBool() then return end
 
 	if ent:IsNPC() and not ent.InDisarm then
 		if ply:KeyPressed(IN_USE) then

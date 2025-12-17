@@ -414,7 +414,7 @@ end
 local tr = {}
 local tr_result = {}
 
-local allow_overdrive = CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local overdriveInMP = GetConVar("Beatrun_AllowOverdriveInMultiplayer")
 
 function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
@@ -427,7 +427,7 @@ function SWEP:PrimaryAttack()
 		end
 	end
 
-	if ply:KeyDown(IN_USE) and (game.SinglePlayer() or allow_overdrive:GetBool()) then
+	if ply:KeyDown(IN_USE) and (game.SinglePlayer() or overdriveInMP:GetBool()) then
 		local mult = (ply:InOverdrive() and 1) or 1.25
 		local fovmult = (mult == 1 and 1) or 1.1
 

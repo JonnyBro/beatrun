@@ -2,7 +2,7 @@ Infection_StartTime = 0
 Infection_EndTime = 0
 
 local startTime = CreateConVar("Beatrun_InfectionStartTime", 10, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 5, 20)
-local gameTime = CreateConVar("Beatrun_InfectionGameTime", 190, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 30, 600)
+local gameTime = CreateConVar("Beatrun_InfectionGameTime", 180, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 30, 600)
 
 function table.Shuffle(t)
 	local n = #t
