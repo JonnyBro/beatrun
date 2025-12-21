@@ -305,7 +305,14 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:CheckBox("#beatrun.toolsmenu.gameplay.disablegrapple", "Beatrun_DisableGrapple")
 		panel:ControlHelp("#beatrun.toolsmenu.gameplay.disablegrappledesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.gameplay.rollspeedloss", "Beatrun_RollSpeedLoss")
+		local rollSpeedLossToggle = vgui.Create("DCheckBoxLabel")
+		rollSpeedLossToggle:SetText("#beatrun.toolsmenu.gameplay.rollspeedloss")
+		rollSpeedLossToggle:SetDark(true)
+		rollSpeedLossToggle:SetChecked(GetConVar("Beatrun_RollSpeedLoss"):GetBool())
+		function rollSpeedLossToggle:OnChange(value)
+			ChangeConvar("Beatrun_RollSpeedLoss", value and 1 or 0)
+		end
+		panel:AddItem(rollSpeedLossToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.gameplay.rollspeedlossdesc")
 
 		panel:CheckBox("#beatrun.toolsmenu.moves.totsugekiaudio", "Beatrun_TotsugekiAudio")
@@ -452,24 +459,52 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			ChangeConvar("Beatrun_Disarm", value and 1 or 0)
 		end
 		panel:AddItem(disarmToggle)
-		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.disarmdesc"))
+		panel:ControlHelp("#beatrun.toolsmenu.moves.disarmdesc")
 
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
 
 		panel:Help("#beatrun.toolsmenu.moves.divesettings")
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.totsugeki", "Beatrun_Totsugeki")
-		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.totsugekidesc"))
+		local totsugekiToggle = vgui.Create("DCheckBoxLabel")
+		totsugekiToggle:SetText("#beatrun.toolsmenu.moves.totsugeki")
+		totsugekiToggle:SetDark(true)
+		totsugekiToggle:SetChecked(GetConVar("Beatrun_Totsugeki"):GetBool())
+		function totsugekiToggle:OnChange(value)
+			ChangeConvar("Beatrun_Totsugeki", value and 1 or 0)
+		end
+		panel:AddItem(totsugekiToggle)
+		panel:ControlHelp("#beatrun.toolsmenu.moves.totsugekidesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.totsugekispam", "Beatrun_TotsugekiSpam")
+		local totsugekiSpamToggle = vgui.Create("DCheckBoxLabel")
+		totsugekiSpamToggle:SetText("#beatrun.toolsmenu.moves.totsugekispam")
+		totsugekiSpamToggle:SetDark(true)
+		totsugekiSpamToggle:SetChecked(GetConVar("Beatrun_TotsugekiSpam"):GetBool())
+		function totsugekiSpamToggle:OnChange(value)
+			ChangeConvar("Beatrun_TotsugekiSpam", value and 1 or 0)
+		end
+		panel:AddItem(totsugekiSpamToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.moves.totsugekispamdesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.totsugekiheading", "Beatrun_TotsugekiHeading")
+		local totsugekiHeadingToggle = vgui.Create("DCheckBoxLabel")
+		totsugekiHeadingToggle:SetText("#beatrun.toolsmenu.moves.totsugekiheading")
+		totsugekiHeadingToggle:SetDark(true)
+		totsugekiHeadingToggle:SetChecked(GetConVar("Beatrun_TotsugekiHeading"):GetBool())
+		function totsugekiHeadingToggle:OnChange(value)
+			ChangeConvar("Beatrun_TotsugekiHeading", value and 1 or 0)
+		end
+		panel:AddItem(totsugekiHeadingToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.moves.totsugekiheadingdesc")
 
-		panel:CheckBox("#beatrun.toolsmenu.moves.totsugekidirection", "Beatrun_TotsugekiDir")
-		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.moves.totsugekidirectiondesc"))
+		local totsugekiDirToggle = vgui.Create("DCheckBoxLabel")
+		totsugekiDirToggle:SetText("#beatrun.toolsmenu.moves.totsugekidirection")
+		totsugekiDirToggle:SetDark(true)
+		totsugekiDirToggle:SetChecked(GetConVar("Beatrun_TotsugekiDir"):GetBool())
+		function totsugekiDirToggle:OnChange(value)
+			ChangeConvar("Beatrun_TotsugekiDir", value and 1 or 0)
+		end
+		panel:AddItem(totsugekiDirToggle)
+		panel:ControlHelp("#beatrun.toolsmenu.moves.totsugekidirectiondesc")
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_gamemodes", "#beatrun.toolsmenu.gamemodes.name", "", "", function(panel)
