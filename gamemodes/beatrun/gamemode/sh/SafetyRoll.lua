@@ -141,7 +141,9 @@ end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
-		ply:DrawViewModel(false)
+		if SERVER then
+			ply:DrawViewModel(false)
+		end
 
 		if ply:Alive() and IsValid(ply:GetActiveWeapon()) and CurTime() > ply:GetSafetyRollTime() and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
 			RunConsoleCommand("mgbase_debug_vmrender", "0")
@@ -191,7 +193,9 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 		end
 
 		timer.Simple(.85, function()
-			ply:DrawViewModel(true)
+			if SERVER then
+				ply:DrawViewModel(true)
+			end
 		end)
 	end
 end)
