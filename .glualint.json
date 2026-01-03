@@ -18,7 +18,7 @@
 	"lint_unusedVars": true,
 	"lint_unusedParameters": false,
 	"lint_unusedLoopVars": true,
-	"lint_ignoreFiles": ["C:\\Temp\\glua-enchanced\\**.lua"],
+	"lint_ignoreFiles": ["C:\\Temp\\**.lua"],
 	"lint_inconsistentVariableStyle": false,
 	"lint_spaceBetweenParens": true,
 	"lint_spaceBetweenBrackets": true,
