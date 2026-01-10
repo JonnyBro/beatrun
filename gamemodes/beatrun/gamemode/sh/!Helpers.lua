@@ -4,12 +4,26 @@ local playermeta = FindMetaTable("Player")
 CreateConVar("Beatrun_RandomLoadouts", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 1, 5)
 
 -- Example loadouts. You can put any SWEP's **class names** here.
+-- format: multiline
 BEATRUN_GAMEMODES_LOADOUTS = {
-	{"weapon_357", "weapon_ar2"},
-	{"weapon_pistol", "weapon_smg1"}
+	{
+		"weapon_357",
+		"weapon_ar2"
+	},
+	{
+		"weapon_pistol",
+		"weapon_smg1"
+	}
 }
 
-local weaponBases = {"beatrun", "mg_base", "arc9", "arccw", "tfa_"}
+-- format: multiline
+local weaponBases = {
+	"beatrun", -- 1
+	"mg_base", -- 2
+	"arc9", -- 3
+	"arccw", -- 4
+	"tfa_" -- 5
+}
 
 local mtmp = {
 	{0, 0, 0, 0},
