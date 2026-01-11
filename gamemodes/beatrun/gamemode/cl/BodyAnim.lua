@@ -132,7 +132,7 @@ local BodyAnimStartPos = Vector()
 local view = {}
 local justremoved = false
 
-local function DisableReflectionsAndShadows(self)
+function BaDisableReflectionsAndShadows(self)
 	local currentRT = render.GetRenderTarget()
 	local name = currentRT and currentRT:GetName()
 	if name == "_rt_waterreflection" or name == "_rt_shadowdummy" then -- _rt_waterreflection is basically every reflection
@@ -427,7 +427,6 @@ function StartBodyAnim(animtable)
 
 	if usefullbody == 2 then
 		BodyAnimMDL = ClientsideModel(playermodel, RENDERGROUP_BOTH)
-		BodyAnimMDL.RenderOverride = DisableReflectionsAndShadows
 
 		function BodyAnimMDL.GetPlayerColor()
 			return LocalPlayer():GetPlayerColor()
@@ -435,7 +434,6 @@ function StartBodyAnim(animtable)
 
 		BodyAnimMDL:SnatchModelInstance(ply)
 		BodyAnimMDLarm = ClientsideModel(handsmodel, RENDERGROUP_BOTH)
-		BodyAnimMDLarm.RenderOverride = DisableReflectionsAndShadows
 
 		function BodyAnimMDLarm.GetPlayerColor()
 			return LocalPlayer():GetPlayerColor()
@@ -477,6 +475,10 @@ function StartBodyAnim(animtable)
 
 		plymodel = ply:GetHands()
 	end
+
+	BodyAnimMDL.RenderOverride = BaDisableReflectionsAndShadows
+	BodyAnimMDLarm.RenderOverride = BaDisableReflectionsAndShadows
+
 
 	for num, _ in pairs(plymodel:GetBodyGroups()) do
 		BodyAnimMDL:SetBodygroup(num - 1, plymodel:GetBodygroup(num - 1))
