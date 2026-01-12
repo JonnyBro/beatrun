@@ -348,8 +348,8 @@ if CLIENT then
 
 				LocalPlayer():DrawViewModel(true)
 
-				BodyAnimMDL.RenderOverride = nil
-				BodyAnimMDLarm.RenderOverride = nil
+				BodyAnimMDL.RenderOverride = BaDisableReflectionsAndShadows
+				BodyAnimMDLarm.RenderOverride = BaDisableReflectionsAndShadows
 			end
 		elseif CurTime() > Infection_StartTime + 1 then
 			if IsValid(BodyAnimMDL) then

@@ -63,7 +63,9 @@ end
 
 hook.Add("PrePlayerDraw", "HideNearby", HideNearby)
 
-local function DrawNametags()
+local function DrawNametags(bDrawingDepth, bDrawingSkybox)
+	if bDrawingSkybox then return end
+
 	for _, ply in ipairs(player.GetAll()) do
 		local color = GetNametagColor(ply)
 		if not color or not ply:Alive() then continue end
@@ -100,4 +102,4 @@ local function DrawNametags()
 	end
 end
 
-hook.Add("PostDrawOpaqueRenderables", "BeatrunNametags", DrawNametags)
+hook.Add("PostDrawTranslucentRenderables", "BeatrunNametags", DrawNametags)
