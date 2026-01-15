@@ -1,6 +1,6 @@
 BEATRUN_SHARED = BEATRUN_SHARED or {}
 
-installedVersion = "1.2.10"
+installedVersion = "1.2.11"
 latestVersion = ""
 checkedVersion = false
 
