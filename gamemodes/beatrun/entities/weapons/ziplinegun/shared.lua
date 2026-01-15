@@ -64,17 +64,19 @@ function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
 
 	if SERVER then
-		local zip = CreateZipline(ply:EyePos(), ply:GetEyeTrace().HitPos)
+		local zip = CreateZipline(ply:EyePos(), ply:GetEyeTrace().HitPos, true)
 
-		zip:SetTwoWay(true)
-
-		table.insert(self.ziplines, zip)
+		if IsValid(zip) then
+			table.insert(self.ziplines, zip)
+		end
 	end
 end
 
 function SWEP:SecondaryAttack()
 	for _, v in pairs(self.ziplines) do
-		v:Remove()
+		if IsValid(v) then
+			v:Remove()
+		end
 	end
 
 	table.Empty(self.ziplines)

@@ -262,20 +262,26 @@ end
 
 hook.Add("SetupMove", "Zipline", Zipline)
 
-function CreateZipline(startpos, endpos)
+function CreateZipline(startpos, endpos, isTwoWay)
 	if startpos and endpos then
 		local zipline = ents.Create("br_zipline")
+
+		if not IsValid(zipline) then return end
 
 		zipline:SetStartPos(startpos)
 		zipline:SetEndPos(endpos)
 		zipline:Spawn()
+
+		if isTwoWay ~= nil then
+			zipline:SetTwoWay(isTwoWay)
+		end
 
 		return zipline
 	end
 end
 
 if CLIENT then
-	hook.Add("Think", "ZiplineSoundFix", function()
+	hook.Add("Think", "Beatrun_ZiplineSoundFix", function()
 		if not IsValid(LocalPlayer():GetZipline()) then
 			LocalPlayer():StopSound("ZiplineLoop")
 		end
