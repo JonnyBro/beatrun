@@ -33,6 +33,7 @@ if SERVER then
 	util.AddNetworkString("Checkpoint_Finish")
 else
 	surface.CreateFont("BeatrunHUD", {
+		font = "Roboto",
 		shadow = true,
 		blursize = 0,
 		underline = false,
@@ -42,7 +43,6 @@ else
 		antialias = true,
 		extended = false,
 		scanlines = 0,
-		font = "Roboto",
 		italic = false,
 		outline = false,
 		symbol = false,

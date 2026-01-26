@@ -64,6 +64,7 @@ hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function()
 end)
 
 surface.CreateFont("BeatrunHUD", {
+	font = "x14y24pxHeadUpDaisy",
 	shadow = true,
 	blursize = 0,
 	underline = false,
@@ -73,7 +74,6 @@ surface.CreateFont("BeatrunHUD", {
 	antialias = false,
 	extended = false,
 	scanlines = 2,
-	font = "x14y24pxHeadUpDaisy",
 	italic = false,
 	outline = false,
 	symbol = false,
@@ -82,6 +82,7 @@ surface.CreateFont("BeatrunHUD", {
 })
 
 surface.CreateFont("BeatrunHUDSmall", {
+	font = "x14y24pxHeadUpDaisy",
 	shadow = true,
 	blursize = 0,
 	underline = false,
@@ -91,7 +92,6 @@ surface.CreateFont("BeatrunHUDSmall", {
 	antialias = false,
 	extended = false,
 	scanlines = 2,
-	font = "x14y24pxHeadUpDaisy",
 	italic = false,
 	outline = false,
 	symbol = false,
@@ -232,6 +232,7 @@ local function BeatrunHUD()
 
 		surface.SetDrawColor(corner_color)
 		surface.DrawOutlinedRect(20 + vp.z, scrh * 0.895 + vp.x, SScaleX(bgpadding), SScaleY(85))
+
 		surface.SetFont("BeatrunHUD")
 		surface.SetTextColor(text_color)
 		surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.9 + vp.x)
@@ -250,9 +251,11 @@ local function BeatrunHUD()
 			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.02 + vp.x)
 			surface.DrawText("Purist: ")
 			surface.DrawText((ply:GetInfo("Beatrun_PuristMode") == "1" or GetConVar("Beatrun_PuristModeForce"):GetBool()) and "true" or "false")
+
 			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.04 + vp.x)
 			surface.DrawText("Purist Wallrun: ")
 			surface.DrawText(ply:GetInfo("Beatrun_PuristWallrun") == "1" and "true" or "false")
+
 			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.06 + vp.x)
 			surface.DrawText("Kick Glitch: ")
 			surface.DrawText(kickGlitchText)
@@ -270,8 +273,10 @@ local function BeatrunHUD()
 		surface.SetFont("BeatrunHUDSmall")
 		surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.92 + vp.x)
 		surface.DrawText(nicktext)
+
 		surface.SetDrawColor(25, 25, 25, math.max(255 - hidealpha, 2))
 		surface.DrawRect(scrw * 0.015 + vp.z, scrh * 0.94 + 1 + vp.x, SScaleX(150), SScaleY(4))
+
 		surface.SetDrawColor(string.ToColor(ply:GetInfo("Beatrun_HUDTextColor")), math.max(255 - hidealpha, 2))
 		surface.DrawRect(scrw * 0.015 + vp.z, scrh * 0.94 + vp.x, SScaleX(150 * math.min(ply:GetLevelRatio(), 1)), SScaleY(5))
 

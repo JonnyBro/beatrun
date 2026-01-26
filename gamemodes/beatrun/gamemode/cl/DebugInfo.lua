@@ -1,4 +1,5 @@
 surface.CreateFont("BeatrunDebug", {
+	font = "ProFontWindows",
 	shadow = false,
 	blursize = 0,
 	underline = false,
@@ -8,7 +9,6 @@ surface.CreateFont("BeatrunDebug", {
 	antialias = false,
 	extended = false,
 	scanlines = 0,
-	font = "ProFontWindows",
 	italic = false,
 	outline = false,
 	symbol = false,

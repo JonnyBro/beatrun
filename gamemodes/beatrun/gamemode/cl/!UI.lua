@@ -26,6 +26,7 @@ local SScaleY = SScaleY
 
 function AEUIFonts()
 	surface.CreateFont("AEUIDefault", {
+		font = "D-DIN",
 		shadow = false,
 		blursize = 0,
 		underline = false,
@@ -35,7 +36,6 @@ function AEUIFonts()
 		antialias = true,
 		extended = false,
 		scanlines = 0,
-		font = "D-DIN",
 		italic = false,
 		outline = false,
 		symbol = false,
@@ -44,6 +44,7 @@ function AEUIFonts()
 	})
 
 	surface.CreateFont("AEUILarge", {
+		font = "D-DIN",
 		shadow = false,
 		blursize = 0,
 		underline = false,
@@ -53,7 +54,6 @@ function AEUIFonts()
 		antialias = true,
 		extended = false,
 		scanlines = 0,
-		font = "D-DIN",
 		italic = false,
 		outline = false,
 		symbol = false,
@@ -62,6 +62,7 @@ function AEUIFonts()
 	})
 
 	surface.CreateFont("AEUIVeryLarge", {
+		font = "D-DIN",
 		shadow = false,
 		blursize = 0,
 		underline = false,
@@ -71,7 +72,6 @@ function AEUIFonts()
 		antialias = true,
 		extended = false,
 		scanlines = 0,
-		font = "D-DIN",
 		italic = false,
 		outline = false,
 		symbol = false,

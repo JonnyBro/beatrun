@@ -748,6 +748,7 @@ if CLIENT then
 	local placedistance = 1000
 
 	surface.CreateFont("BuildMode", {
+		font = "D-DIN",
 		shadow = false,
 		blursize = 0,
 		underline = false,
@@ -757,7 +758,6 @@ if CLIENT then
 		antialias = true,
 		extended = false,
 		scanlines = 0,
-		font = "D-DIN",
 		italic = false,
 		outline = false,
 		symbol = false,
