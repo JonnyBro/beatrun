@@ -23,7 +23,7 @@
 
 ## About
 
-Beatrun is an **infamous parkour addon for Garry's Mod**, now fully open-sourced and maintained by the community.
+Beatrun is an **infamous parkour gamemode for Garry's Mod**, now fully open-sourced and maintained by the community.
 It includes various improvements, new features, and enhanced functionality.
 
 > [!WARNING]
@@ -137,6 +137,7 @@ The animations installer has been removed. You can now switch animations directl
 
 ## Star History
 
+<!-- markdownlint-disable MD033 -->
 <a href="https://www.star-history.com/#JonnyBro/beatrun&type=date&legend=top-left">
  <picture>
    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=JonnyBro/beatrun&type=date&theme=dark&legend=top-left" />
