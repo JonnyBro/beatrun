@@ -1,6 +1,0 @@
-VertexLitGeneric
-{
-	"$basetexture"	"medge/PLAINPLASTER"
-	"$basetexturetransform" "center .5 .5 scale 0.5 0.5 rotate 0 translate 0 0"
-	"$color2" "[0.75 0.75 0.75]"
-}
