@@ -1,3 +1,5 @@
+if not ULib or engine.ActiveGamemode() ~= "beatrun" then return end
+
 local CATEGORY_NAME = "Beatrun"
 
 -- !setlevel
