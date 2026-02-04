@@ -256,10 +256,13 @@ function CourseHUD()
 
 		local mode = GetConVar("Beatrun_SpeedometerMode"):GetInt()
 
+		-- NOTE: Calculations that I found on Valve's wiki, under "Source Engine Scale Calculations"
+		-- https://developer.valvesoftware.com/wiki/Dimensions_(Half-Life_2_and_Counter-Strike:_Source)
+
 		if mode == 1 then -- km/h
-			speed = math.Round(ply:GetVelocity():Length() * 0.06858125)
+			speed = math.Round(ply:GetVelocity():Length() * 0.068573863636364) -- 12069 / 176000
 		elseif mode == 2 then -- mph
-			speed = math.Round(ply:GetVelocity():Length() * 0.11037055)
+			speed = math.Round(ply:GetVelocity():Length() * 0.042613636363636) -- 15 / 352
 		elseif mode == 3 then -- hu/h
 			speed = math.Round(ply:GetVelocity():Length())
 		end
