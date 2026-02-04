@@ -136,6 +136,12 @@ The animations installer has been removed. You can now switch animations directl
 - [Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc) - Discord Rich Presence.
 - [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) - Steam Presence (TFA Base creator).
 
+### Fonts
+> They could be wrong, I tried to searh for the original sources.
+- [x14y24pxHeadUpDaisy](https://hicchicc.github.io/00ff/)
+- [Datto D-DIN](https://github.com/amcchord/datto-d-din)
+- [ProFontWindows](https://github.com/chrissimpkins/codeface/tree/master/fonts/pro-font-windows)
+
 ## Star History
 
 <!-- markdownlint-disable MD033 -->
