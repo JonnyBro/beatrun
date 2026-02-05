@@ -292,7 +292,7 @@ function OpenDBMenu()
 		return
 	end
 
-	http.Fetch("http://100.86.126.63:6547/game/courses/list", function(body, size, _, code)
+	http.Fetch("http://100.86.126.63:6547/courses/list", function(body, size, _, code)
 		local response = util.JSONToTable(body)
 
 		if response and response.code == 200 then
@@ -335,7 +335,8 @@ function OpenDBMenu()
 			return false
 		end
 	end, function(e) print("An error occurred: " .. e) end, {
-		mapname = currentMap
+		mapname = currentMap,
+		game = "yes"
 	})
 end
 
