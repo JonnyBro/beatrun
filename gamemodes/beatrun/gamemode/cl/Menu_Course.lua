@@ -1,14 +1,14 @@
 local coursepanel = {
 	w = 900,
-	h = 650
+	h = 650,
+	bgcolor = Color(32, 32, 32),
+	outlinecolor = Color(54, 55, 56),
+	alpha = 0.9,
+	elements = {}
 }
 
 coursepanel.x = 950 - coursepanel.w * 0.5
 coursepanel.y = 550 - coursepanel.h * 0.5
-coursepanel.bgcolor = Color(32, 32, 32)
-coursepanel.outlinecolor = Color(54, 55, 56)
-coursepanel.alpha = 0.9
-coursepanel.elements = {}
 
 local function sacheck()
 	return not LocalPlayer():IsSuperAdmin()
