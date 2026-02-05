@@ -206,38 +206,94 @@ end
 
 AEUI:AddButton(coursesPanel, "  X  ", closebutton, "AEUILarge", coursesPanel.w - 47, 0)
 
+-- Caching and pagination
+
+local CachedCourses = nil
+local CachedAt = 0
+local CACHE_LIFETIME = 1 -- seconds
+
+local PAGE_SIZE = 5
+local CurrentPage = 1
+local TotalPages = 1
+
+local function IsCacheValid()
+	return CachedCourses and (CurTime() - CachedAt) < CACHE_LIFETIME
+end
+
+local function PopulateCoursesList(courses)
+	table.Empty(coursesList.elements)
+
+	local startIndex = (CurrentPage - 1) * PAGE_SIZE + 1
+	local endIndex = math.min(startIndex + PAGE_SIZE - 1, #courses)
+
+	for i = startIndex, endIndex do
+		local v = courses[i]
+		if not v then continue end
+
+		local text = string.format("Course: %s (%s)\nUploaded By: %s\nUploaded At: %s", v.name, v.code, v.uploadedBy.username, v.uploadedAt)
+		local courseentry = AEUI:Text(coursesList, text, "AEUILarge", 10, 120 * #coursesList.elements)
+
+		function courseentry:onclick()
+			LocalPlayer():EmitSound("buttonclick.wav")
+
+			LoadCourseRaw(util.Base64Decode(v.data))
+
+			AEUI:RemovePanel(coursesList)
+			AEUI:RemovePanel(coursesPanel)
+		end
+	end
+end
+
 -- UI Functions
 
 function OpenDBMenu()
+	CurrentPage = 1
+	TotalPages = 1
+
+	table.Empty(coursesList.elements)
+
 	AEUI:AddPanel(coursesPanel)
 	AEUI:AddPanel(coursesList)
 
-	local headers = {
-		mapname = currentMap
-	}
+	local pages = AEUI:Text(coursesPanel, CurrentPage .. " / " .. TotalPages, nil, coursesPanel.w / 2, coursesPanel.h - 40)
+
+	AEUI:AddButton(coursesPanel, "< Prev", function()
+		if CurrentPage > 1 then
+			CurrentPage = CurrentPage - 1
+			TotalPages = math.ceil(#CachedCourses / PAGE_SIZE)
+			CurrentPage = math.Clamp(CurrentPage, 1, TotalPages)
+
+			pages.string = CurrentPage .. " / " .. TotalPages
+
+			PopulateCoursesList(CachedCourses)
+		end
+	end, nil, coursesPanel.w / 2 - 80, coursesPanel.h - 40)
+
+	AEUI:AddButton(coursesPanel, "Next >", function()
+		if CachedCourses and CurrentPage * PAGE_SIZE < #CachedCourses then
+			CurrentPage = CurrentPage + 1
+			TotalPages = math.ceil(#CachedCourses / PAGE_SIZE)
+			CurrentPage = math.Clamp(CurrentPage, 1, TotalPages)
+
+			pages.string = CurrentPage .. " / " .. TotalPages
+
+			PopulateCoursesList(CachedCourses)
+		end
+	end, nil, coursesPanel.w / 2 + 60, coursesPanel.h - 40)
+
+	if IsCacheValid() then
+		TotalPages = math.ceil(#CachedCourses / PAGE_SIZE)
+		CurrentPage = math.Clamp(CurrentPage, 1, TotalPages)
+
+		pages.string = CurrentPage .. " / " .. TotalPages
+
+		PopulateCoursesList(CachedCourses)
+
+		return
+	end
 
 	http.Fetch("http://100.86.126.63:6547/game/courses/list", function(body, size, _, code)
 		local response = util.JSONToTable(body)
-		--[[
-		["code"] = 200
-		["data"]:
-			[1]:
-				["_id"] = 69843432d7ea1b166b2022bf
-				["code"] = O3V-OJM
-				["data"] = GxwBAKyKd4EkY3r+kRUbvpKPNmxcitRsqTGbsr1pFpr+cQKDbvP6dxvld0dIlPUUCfrVbmMwc4ulK3Vw+nRyoAcMNCCsJRJonmccaBhhJHkOPT45Namd+Y9ug1/gy7JXjnKaj9g7qIlyaKKMCZknexmRRIv3Q9oNrJ4/b+sS73epoYs/7jy4L06L3F57s7G7DXYLzUmTQzWJqUZ0oLTiP0WkX07dHKd8PjjyMaqaL0l2O1GhGCEZHg==
-				["downloadCount"] = 2
-				["elementsCount"] = 2
-				["mapId"] = 0
-				["mapImg"]	=
-				["mapName"] = gm_construct
-				["name"] = 123
-				["uploadedAt"] = 1770271794860
-				["uploadedBy"]:
-					["_id"] = 69842e62d7ea1b166b2022be
-					["createdAt"] = 1770270306023
-					["steamId"] = 76561198198170143
-					["username"] = Jonny_Bro
-		--]]
 
 		if response and response.code == 200 then
 			local fetchedCourses = {}
@@ -252,7 +308,7 @@ function OpenDBMenu()
 					mapImg = course.mapImg,
 					mapName = course.mapName,
 					name = course.name,
-					uploadedAt = course.uploadedAt,
+					uploadedAt = os.date("%Y-%m-%d %H:%M", course.uploadedAt / 1000),
 					uploadedBy = {
 						createdAt = course.uploadedBy.createdAt,
 						steamId = course.uploadedBy.steamId,
@@ -261,32 +317,15 @@ function OpenDBMenu()
 				})
 			end
 
-			table.Empty(coursesList.elements)
+			CachedCourses = fetchedCourses
+			CachedAt = CurTime()
 
-			PrintTable(fetchedCourses)
-			print("\n\n\n")
+			TotalPages = math.ceil(#fetchedCourses / PAGE_SIZE)
+			CurrentPage = math.Clamp(CurrentPage, 1, TotalPages)
 
-			for _, v in ipairs(fetchedCourses) do
-				-- format: multiline
-				local text = string.format(
-					"Course: %s (%s)\nUploaded By: %s\nUpload Time: %s",
-					v.name,
-					v.code,
-					v.uploadedBy.username,
-					tostring(v.uploadedAt)
-				)
+			pages.string = CurrentPage .. " / " .. TotalPages
 
-				local courseentry = AEUI:Text(coursesList, text, "AEUILarge", 10, 120 * #coursesList.elements)
-
-				function courseentry:onclick()
-					LocalPlayer():EmitSound("buttonclick.wav")
-
-					LoadCourseRaw(util.Base64Decode(v.data))
-
-					AEUI:RemovePanel(coursesList)
-					AEUI:RemovePanel(coursesPanel)
-				end
-			end
+			PopulateCoursesList(fetchedCourses)
 		elseif not response then
 			print("Can't access the database! Please make sure that domain is correct.")
 			return false
@@ -295,7 +334,9 @@ function OpenDBMenu()
 			print("Error! | Response: " .. response.message)
 			return false
 		end
-	end, function(e) print("An error occurred: " .. e) end, headers)
+	end, function(e) print("An error occurred: " .. e) end, {
+		mapname = currentMap
+	})
 end
 
 concommand.Add("Beatrun_CoursesDatabase", OpenDBMenu)
