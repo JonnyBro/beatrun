@@ -206,32 +206,53 @@ end)
 local ScreenH, ScreenW = ScrH(), ScrW()
 local PAGE_SIZE = 5
 local CurrentPage, TotalPages = 1, 1
+local isCurrentMapOnly = false
 
 -- Global caches
 Beatrun_MapImageCache = Beatrun_MapImageCache or {}
-Beatrun_CoursesCache = Beatrun_CoursesCache or { data = nil, at = 0, loading = false }
+Beatrun_CoursesCache = Beatrun_CoursesCache or {
+	all = nil,
+	filtered = nil,
+	at = 0,
+	loading = false
+}
 
 local CACHE_LIFETIME = 5
 local Frame, List, PageLabel
 
-local function GetPreviewImage(id)
+local function CacheMapPreview(id)
+	if not id then return nil end
+	if id == "0" then id = currentMap end
 
+	if tonumber(id) == nil or steamworks.IsSubscribed(id) then
+		Beatrun_MapImageCache[id] = Material("maps/thumb/" .. id .. ".png", "smooth")
+	else
+		steamworks.FileInfo(id, function(result)
+			steamworks.Download(result.previewid, true, function(name)
+				Beatrun_MapImageCache[id] = AddonMaterial(name)
+			end)
+		end)
+	end
+
+	return Beatrun_MapImageCache[id]
 end
 
 local function IsCoursesCacheValid()
-	return Beatrun_CoursesCache.data and CurTime() - Beatrun_CoursesCache.at < CACHE_LIFETIME
+	return Beatrun_CoursesCache.all and CurTime() - Beatrun_CoursesCache.at < CACHE_LIFETIME
 end
 
 local function PopulateCoursesList()
 	if not IsValid(List) then return end
+	if not Beatrun_CoursesCache.filtered then return end
 
 	List:Clear()
 
+	local courses = Beatrun_CoursesCache.filtered
 	local startIndex = (CurrentPage - 1) * PAGE_SIZE + 1
-	local endIndex = math.min(startIndex + PAGE_SIZE - 1, #Beatrun_CoursesCache.data)
+	local endIndex = math.min(startIndex + PAGE_SIZE - 1, #courses)
 
 	for i = startIndex, endIndex do
-		local v = Beatrun_CoursesCache.data[i]
+		local v = courses[i]
 		if not v then continue end
 
 		local entry = List:Add("DPanel")
@@ -243,13 +264,7 @@ local function PopulateCoursesList()
 			draw.RoundedBox(4, 0, 0, w, h, Color(60, 60, 60))
 
 			local mapId = v.workshopId ~= "0" and v.workshopId or currentMap
-			local MapMaterial
-
-			if tonumber(MapId) == nil or steamworks.IsSubscribed(mapId) then
-				MapMaterial = Material("maps/thumb/" .. mapId .. ".png", "smooth")
-			else
-				MapMaterial = Beatrun_MapImageCache[mapId]
-			end
+			local MapMaterial = Beatrun_MapImageCache[mapId]
 
 			if MapMaterial and not MapMaterial:IsError() then
 				surface.SetMaterial(MapMaterial)
@@ -311,6 +326,47 @@ local function PopulateCoursesList()
 		end
 
 		loadBtn.DoClick = function()
+			if not steamworks.IsSubscribed(v.workshopId) then
+				local loadWarn = vgui.Create("DFrame")
+				loadWarn:SetTitle("")
+				loadWarn:SetSize(360, 140)
+				loadWarn:Center()
+				loadWarn:MakePopup()
+				loadWarn:SetDeleteOnClose(true)
+
+				local label = vgui.Create("DLabel", loadWarn)
+				label:SetText("You're not subscribed to this map. If you start the course you may become stuck. Would you like to subscribe?")
+				label:SetWrap(true)
+				label:SetSize(330, 60)
+				label:SetPos(15, 35)
+
+				local workshop = vgui.Create("DButton", loadWarn)
+				workshop:SetText("Open Workshop")
+				workshop:SetSize(150, 30)
+				workshop:SetPos(20, 95)
+				workshop:SetEnabled(v.workshopId ~= "0")
+				workshop.DoClick = function()
+					gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId)
+
+					if IsValid(loadWarn) then loadWarn:Close() end
+				end
+
+				local iKnowWhatImDoing = vgui.Create("DButton", loadWarn)
+				iKnowWhatImDoing:SetText("I know, start anyway")
+				iKnowWhatImDoing:SetSize(150, 30)
+				iKnowWhatImDoing:SetPos(190, 95)
+				iKnowWhatImDoing.DoClick = function()
+					LocalPlayer():EmitSound("ui/buttonclickrelease.wav")
+
+					LoadCourseRaw(util.Base64Decode(v.data))
+
+					if IsValid(Frame) then Frame:Close() end
+					if IsValid(loadWarn) then loadWarn:Close() end
+				end
+
+				return
+			end
+
 			LocalPlayer():EmitSound("ui/buttonclickrelease.wav")
 
 			LoadCourseRaw(util.Base64Decode(v.data))
@@ -321,14 +377,33 @@ local function PopulateCoursesList()
 end
 
 local function UpdatePagination()
-	if not Beatrun_CoursesCache.data then return end
+	if not Beatrun_CoursesCache.filtered then return end
 
-	TotalPages = math.max(1, math.ceil(#Beatrun_CoursesCache.data / PAGE_SIZE))
+	TotalPages = math.max(1, math.ceil(#Beatrun_CoursesCache.filtered / PAGE_SIZE))
 	CurrentPage = math.Clamp(CurrentPage, 1, TotalPages)
 
 	if IsValid(PageLabel) then PageLabel:SetText("Page: " .. CurrentPage .. "/" .. TotalPages) end
 
 	PopulateCoursesList()
+end
+
+local function ApplyCourseFilter()
+	if not Beatrun_CoursesCache.all then return end
+
+	if not isCurrentMapOnly then
+		Beatrun_CoursesCache.filtered = Beatrun_CoursesCache.all
+	else
+		local filtered = {}
+
+		for _, course in ipairs(Beatrun_CoursesCache.all) do
+			if course.mapName == currentMap then filtered[#filtered + 1] = course end
+		end
+
+		Beatrun_CoursesCache.filtered = filtered
+	end
+
+	CurrentPage = 1
+	UpdatePagination()
 end
 
 function OpenDBMenu()
@@ -368,11 +443,21 @@ function OpenDBMenu()
 	Next:SetSize(80, 30)
 	Next:SetPos(math.Round(Frame:GetWide()) / 2 + 80, ScreenH / 1.15)
 	Next.DoClick = function()
-		if Beatrun_CoursesCache.data and CurrentPage < TotalPages then
+		if Beatrun_CoursesCache.all and CurrentPage < TotalPages then
 			CurrentPage = CurrentPage + 1
 
 			UpdatePagination()
 		end
+	end
+
+	local currentMapOnly = vgui.Create("DCheckBoxLabel", Frame)
+	currentMapOnly:SetPos(math.Round(Frame:GetWide()) / 2 + 170, ScreenH / 1.15)
+	currentMapOnly:SetText("Current map only")
+	currentMapOnly:SetChecked(isCurrentMapOnly)
+	currentMapOnly:SizeToContents()
+	function currentMapOnly:OnChange(state)
+		isCurrentMapOnly = state
+		ApplyCourseFilter()
 	end
 
 	if IsCoursesCacheValid() then
@@ -386,6 +471,11 @@ function OpenDBMenu()
 	Beatrun_CoursesCache.loading = true
 
 	-- Fetch courses
+	local headers = {
+		mapname = "",
+		game = "yes"
+	}
+
 	http.Fetch("http://100.86.126.63:6547/courses/list", function(body)
 		Beatrun_CoursesCache.loading = false
 
@@ -411,13 +501,14 @@ function OpenDBMenu()
 			}
 		end
 
-		Beatrun_CoursesCache.data = fetchedCourses
+		Beatrun_CoursesCache.all = fetchedCourses
+		Beatrun_CoursesCache.filtered = fetchedCourses
 		Beatrun_CoursesCache.at = CurTime()
 
-		for _, course in ipairs(Beatrun_CoursesCache.data) do
-			print("Loading map preview: " .. course.workshopId)
+		ApplyCourseFilter()
 
-			GetPreviewImage(course.workshopId)
+		for _, course in ipairs(Beatrun_CoursesCache.all) do
+			CacheMapPreview(course.workshopId)
 		end
 
 		UpdatePagination()
@@ -425,10 +516,7 @@ function OpenDBMenu()
 		Beatrun_CoursesCache.loading = false
 
 		print("Courses fetch error:", err)
-	end, {
-		mapname = currentMap,
-		game = "yes"
-	})
+	end, headers)
 end
 
 concommand.Add("Beatrun_CoursesDatabase", OpenDBMenu)
