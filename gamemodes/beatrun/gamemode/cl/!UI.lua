@@ -108,15 +108,14 @@ function AEUI:AddPanel(panel)
 	if table.HasValue(AEUI.Panels, panel) then return end
 
 	table.insert(AEUI.Panels, panel)
+
 	gui.EnableScreenClicker(true)
 end
 
 function AEUI:RemovePanel(panel)
 	table.RemoveByValue(AEUI.Panels, panel)
 
-	if #AEUI.Panels <= 0 then
-		gui.EnableScreenClicker(false)
-	end
+	if #AEUI.Panels <= 0 then gui.EnableScreenClicker(false) end
 end
 
 function AEUI:Text(panel, str, font, x, y, centered, color)

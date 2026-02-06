@@ -10,29 +10,6 @@ local coursepanel = {
 coursepanel.x = 950 - coursepanel.w * 0.5
 coursepanel.y = 550 - coursepanel.h * 0.5
 
-local function sacheck()
-	return not LocalPlayer():IsSuperAdmin()
-end
-
-local function stopbutton()
-	if CourseGhost:GetBool() then StopGhostRecording(false, false) end
-	net.Start("Course_Stop")
-	net.SendToServer()
-end
-
-local function buildmodebutton()
-	AEUI:Clear()
-	LocalPlayer():ConCommand("buildmode")
-end
-
-AEUI:Text(coursepanel, language.GetPhrase("beatrun.coursemenu.trials"):format(string.Replace(game.GetMap(), " ", "-")), "AEUIVeryLarge", 20, 30)
-
-local buildmodebutton = AEUI:AddButton(coursepanel, "#beatrun.coursemenu.buildmode", buildmodebutton, "AEUILarge", coursepanel.w - 400, coursepanel.h - 50)
-buildmodebutton.greyed = sacheck
-
-local stopbutton = AEUI:AddButton(coursepanel, "#beatrun.coursemenu.freeplay", stopbutton, "AEUILarge", coursepanel.w - 750, coursepanel.h - 50)
-stopbutton.greyed = sacheck
-
 local courselist = {
 	w = 800,
 	h = 450,
@@ -44,12 +21,41 @@ local courselist = {
 	elements = {}
 }
 
+local function sacheck()
+	return LocalPlayer():IsSuperAdmin()
+end
+
+local function stopbutton()
+	if CourseGhost:GetBool() then StopGhostRecording(false, false) end
+
+	net.Start("Course_Stop")
+	net.SendToServer()
+
+	AEUI:RemovePanel(courselist)
+	AEUI:RemovePanel(coursepanel)
+end
+
+local function buildmodebutton()
+	AEUI:RemovePanel(courselist)
+	AEUI:RemovePanel(coursepanel)
+
+	LocalPlayer():ConCommand("buildmode")
+end
+
 local function closebutton()
 	AEUI:RemovePanel(courselist)
 	AEUI:RemovePanel(coursepanel)
 end
 
+AEUI:Text(coursepanel, language.GetPhrase("beatrun.coursemenu.trials"):format(string.Replace(game.GetMap(), " ", "-")), "AEUIVeryLarge", 20, 30)
+
 AEUI:AddButton(coursepanel, "  X  ", closebutton, "AEUILarge", coursepanel.w - 47, 0)
+
+local buildmodebutton = AEUI:AddButton(coursepanel, "#beatrun.coursemenu.buildmode", buildmodebutton, "AEUILarge", coursepanel.w - 400, coursepanel.h - 50)
+buildmodebutton.greyed = not sacheck
+
+local stopbutton = AEUI:AddButton(coursepanel, "#beatrun.coursemenu.freeplay", stopbutton, "AEUILarge", coursepanel.w - 750, coursepanel.h - 50)
+stopbutton.greyed = not sacheck
 
 function OpenCourseMenu()
 	AEUI:AddPanel(coursepanel)
@@ -81,7 +87,7 @@ function OpenCourseMenu()
 				AEUI:RemovePanel(coursepanel)
 			end
 
-			courseentry.greyed = sacheck
+			courseentry.greyed = not sacheck
 		end
 	end
 end
