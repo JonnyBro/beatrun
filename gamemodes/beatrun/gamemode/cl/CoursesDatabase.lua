@@ -162,7 +162,7 @@ function UploadCourse()
 		authorization = apikey:GetString(),
 		course = util.Base64Encode(data, true),
 		map = string.Replace(currentMap, " ", "-"),
-		mapid = GetCurrentMapWorkshopID()
+		workshopid = GetCurrentMapWorkshopID()
 	})
 end
 
@@ -214,6 +214,10 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or { data = nil, at = 0, loading = f
 local CACHE_LIFETIME = 5
 local Frame, List, PageLabel
 
+local function GetPreviewImage(id)
+
+end
+
 local function IsCoursesCacheValid()
 	return Beatrun_CoursesCache.data and CurTime() - Beatrun_CoursesCache.at < CACHE_LIFETIME
 end
@@ -238,13 +242,13 @@ local function PopulateCoursesList()
 		entry.Paint = function(self, w, h)
 			draw.RoundedBox(4, 0, 0, w, h, Color(60, 60, 60))
 
-			local MapId = v.mapId ~= "0" and v.mapId ~= "" and v.mapId or currentMap
+			local mapId = v.workshopId ~= "0" and v.workshopId or currentMap
 			local MapMaterial
 
-			if tonumber(MapId) == nil then
-				MapMaterial = Material("maps/thumb/" .. MapId .. ".png", "smooth")
+			if tonumber(MapId) == nil or steamworks.IsSubscribed(mapId) then
+				MapMaterial = Material("maps/thumb/" .. mapId .. ".png", "smooth")
 			else
-				MapMaterial = Beatrun_MapImageCache[MapId]
+				MapMaterial = Beatrun_MapImageCache[mapId]
 			end
 
 			if MapMaterial and not MapMaterial:IsError() then
@@ -283,13 +287,13 @@ local function PopulateCoursesList()
 		mapBtn:SetFont("AEUIDefault")
 		mapBtn:SetPos(176, 68)
 		mapBtn:SizeToContents()
-		mapBtn:SetCursor(v.mapId == "0" and "arrow" or "hand")
+		mapBtn:SetCursor(v.workshopId == "0" and "arrow" or "hand")
 		mapBtn:SetTextColor(Color(180, 180, 180))
 		mapBtn:SetPaintBackground(false)
 
-		mapBtn.DoClick = function() if v.mapId ~= "0" then gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.mapId) end end
-		mapBtn.OnCursorEntered = function(self) if v.mapId ~= "0" then self:SetTextColor(Color(255, 0, 0)) end end
-		mapBtn.OnCursorExited = function(self) if v.mapId ~= "0" then self:SetTextColor(Color(180, 180, 180)) end end
+		mapBtn.DoClick = function() if v.workshopId ~= "0" then gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end end
+		mapBtn.OnCursorEntered = function(self) if v.workshopId ~= "0" then self:SetTextColor(Color(255, 0, 0)) end end
+		mapBtn.OnCursorExited = function(self) if v.workshopId ~= "0" then self:SetTextColor(Color(180, 180, 180)) end end
 
 		local loadBtn = vgui.Create("DButton", entry)
 		loadBtn:SetText("Load Course")
@@ -396,7 +400,7 @@ function OpenDBMenu()
 				data = course.data,
 				downloadCount = course.downloadCount,
 				elementsCount = course.elementsCount,
-				mapId = course.mapId,
+				workshopId = course.workshopId,
 				mapName = course.mapName,
 				name = course.name,
 				uploadedAt = os.date("%Y-%m-%d %H:%M", course.uploadedAt / 1000),
@@ -410,19 +414,11 @@ function OpenDBMenu()
 		Beatrun_CoursesCache.data = fetchedCourses
 		Beatrun_CoursesCache.at = CurTime()
 
-		-- for _, course in ipairs(Beatrun_CoursesCache.data) do
-		-- 	if course.mapId ~= "" and course.mapId ~= "0" and not Beatrun_MapImageCache[course.mapId] then
-		-- 		steamworks.FileInfo(course.mapId, function(info)
-		-- 			if info then
-		-- 				steamworks.Download(info.previewid, true, function(filename)
-		-- 					Beatrun_MapImageCache[course.mapId] = AddonMaterial(filename, "smooth")
+		for _, course in ipairs(Beatrun_CoursesCache.data) do
+			print("Loading map preview: " .. course.workshopId)
 
-		-- 					List:InvalidateLayout(true)
-		-- 				end)
-		-- 			end
-		-- 		end)
-		-- 	end
-		-- end
+			GetPreviewImage(course.workshopId)
+		end
 
 		UpdatePagination()
 	end, function(err)
