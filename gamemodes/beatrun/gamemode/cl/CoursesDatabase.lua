@@ -247,7 +247,7 @@ local function PopulateCoursesList()
 				MapMaterial = Beatrun_MapImageCache[MapId]
 			end
 
-			if MapMaterial then
+			if MapMaterial and not MapMaterial:IsError() then
 				surface.SetMaterial(MapMaterial)
 				surface.SetDrawColor(255, 255, 255)
 				surface.DrawTexturedRect(5, 10, 160, 98)
