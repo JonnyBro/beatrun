@@ -86,7 +86,7 @@ local function GetCurrentMapWorkshopID()
 		if file.Exists("maps/" .. currentMap .. ".bsp", addon.title) then return addon.wsid end
 	end
 
-	return "no_map_id"
+	return "0"
 end
 
 local function FetchCourse(url, headers)
@@ -218,81 +218,91 @@ local function IsCoursesCacheValid()
 	return Beatrun_CoursesCache.data and CurTime() - Beatrun_CoursesCache.at < CACHE_LIFETIME
 end
 
-local function PopulateCoursesList(courses)
+local function PopulateCoursesList()
 	if not IsValid(List) then return end
 
 	List:Clear()
 
 	local startIndex = (CurrentPage - 1) * PAGE_SIZE + 1
-	local endIndex = math.min(startIndex + PAGE_SIZE - 1, #courses)
+	local endIndex = math.min(startIndex + PAGE_SIZE - 1, #Beatrun_CoursesCache.data)
 
 	for i = startIndex, endIndex do
-		local v = courses[i]
+		local v = Beatrun_CoursesCache.data[i]
 		if not v then continue end
 
 		local entry = List:Add("DPanel")
 		entry:SetTall(120)
 		entry:Dock(TOP)
-		entry:DockMargin(0, 0, 0, 8)
-		entry:SetCursor("arrow")
+		entry:DockMargin(0, 0, 0, 5)
+
+		entry.Paint = function(self, w, h)
+			draw.RoundedBox(4, 0, 0, w, h, Color(60, 60, 60))
+
+			local MapId = v.mapId ~= "0" and v.mapId ~= "" and v.mapId or currentMap
+			local MapMaterial
+
+			if tonumber(MapId) == nil then
+				MapMaterial = Material("maps/thumb/" .. MapId .. ".png", "smooth")
+			else
+				MapMaterial = Beatrun_MapImageCache[MapId]
+			end
+
+			if MapMaterial then
+				surface.SetMaterial(MapMaterial)
+				surface.SetDrawColor(255, 255, 255)
+				surface.DrawTexturedRect(5, 10, 160, 98)
+			else
+				draw.RoundedBox(4, 5, 10, 160, 98, Color(40, 40, 40))
+				draw.SimpleText("No image", "AEUIDefault", 86, 59, Color(120, 120, 120), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
+			draw.SimpleText(v.name .. " (" .. v.code .. ")", "AEUILarge", 180, 10, color_white)
+			draw.SimpleText("Uploaded At: " .. v.uploadedAt, "AEUIDefault", 180, 92, Color(180, 180, 180))
+		end
 
 		local avatar = vgui.Create("AvatarImage", entry)
 		avatar:SetSize(24, 24)
-		avatar:SetPos(180, 54)
+		avatar:SetPos(182, 46)
 		avatar:SetSteamID(v.uploadedBy.steamId, 32)
 
 		local nameBtn = vgui.Create("DButton", entry)
 		nameBtn:SetText(v.uploadedBy.username)
 		nameBtn:SetFont("AEUIDefault")
-		nameBtn:SetPos(210, 56)
+		nameBtn:SetPos(210, 46)
 		nameBtn:SizeToContents()
 		nameBtn:SetCursor("hand")
 		nameBtn:SetTextColor(Color(180, 180, 180))
 		nameBtn:SetPaintBackground(false)
 
 		nameBtn.DoClick = function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end
-		nameBtn.OnCursorEntered = function(self) self:SetTextColor(Color(0, 255, 0)) end
+		nameBtn.OnCursorEntered = function(self) self:SetTextColor(Color(255, 0, 0)) end
 		nameBtn.OnCursorExited = function(self) self:SetTextColor(Color(180, 180, 180)) end
 
-		entry.Paint = function(self, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, Color(60, 60, 60))
+		local mapBtn = vgui.Create("DButton", entry)
+		mapBtn:SetText("Map: " .. v.mapName)
+		mapBtn:SetFont("AEUIDefault")
+		mapBtn:SetPos(176, 68)
+		mapBtn:SizeToContents()
+		mapBtn:SetCursor(v.mapId == "0" and "arrow" or "hand")
+		mapBtn:SetTextColor(Color(180, 180, 180))
+		mapBtn:SetPaintBackground(false)
 
-			local mat = Beatrun_MapImageCache[v.mapId]
-
-			if mat and not mat:IsError() then
-				surface.SetMaterial(mat)
-				surface.SetDrawColor(255, 255, 255)
-				surface.DrawTexturedRect(6, 6, 160, 98)
-			else
-				draw.RoundedBox(4, 6, 6, 160, 98, Color(40, 40, 40))
-				draw.SimpleText("No image", "AEUIDefault", 86, 55, Color(120, 120, 120), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			end
-
-			local x = 180
-
-			draw.SimpleText(v.name .. " (" .. v.code .. ")", "AEUILarge", x, 10, color_white)
-			draw.SimpleText("Map: " .. v.mapName, "AEUIDefault", x, 36, Color(180, 180, 180))
-			draw.SimpleText(v.uploadedAt, "AEUIDefault", x, 76, Color(150, 150, 150))
-		end
-
-		-- entry.OnMousePressed = function()
-		-- 	LocalPlayer():EmitSound("ui/buttonclickrelease.wav")
-
-		-- 	LoadCourseRaw(util.Base64Decode(v.data))
-
-		-- 	if IsValid(Frame) then Frame:Close() end
-		-- end
+		mapBtn.DoClick = function() if v.mapId ~= "0" then gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.mapId) end end
+		mapBtn.OnCursorEntered = function(self) if v.mapId ~= "0" then self:SetTextColor(Color(255, 0, 0)) end end
+		mapBtn.OnCursorExited = function(self) if v.mapId ~= "0" then self:SetTextColor(Color(180, 180, 180)) end end
 
 		local loadBtn = vgui.Create("DButton", entry)
 		loadBtn:SetText("Load Course")
 		loadBtn:SetFont("AEUIDefault")
-		loadBtn:SetSize(100, 24)
+		loadBtn:SetSize(120, 26)
 		loadBtn:SetPos(400, 56)
 		loadBtn:SetCursor("hand")
 		loadBtn:SetTextColor(Color(255, 255, 255))
 
 		loadBtn.Paint = function(self, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, Color(80, 80, 80))
+			local bgColor = self:IsHovered() and Color(100, 100, 100) or Color(80, 80, 80)
+
+			draw.RoundedBox(4, 0, 0, w, h, bgColor)
 			draw.SimpleText(self:GetText(), "AEUIDefault", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
@@ -314,7 +324,7 @@ local function UpdatePagination()
 
 	if IsValid(PageLabel) then PageLabel:SetText("Page: " .. CurrentPage .. "/" .. TotalPages) end
 
-	PopulateCoursesList(Beatrun_CoursesCache.data)
+	PopulateCoursesList()
 end
 
 function OpenDBMenu()
@@ -335,26 +345,28 @@ function OpenDBMenu()
 	local Prev = vgui.Create("DButton", Frame)
 	Prev:SetText("< Prev")
 	Prev:SetSize(80, 30)
-	Prev:SetPos(300, 585)
+	Prev:SetPos(math.Round(Frame:GetWide()) / 2 - 80, ScreenH / 1.15)
 	Prev.DoClick = function()
 		if CurrentPage > 1 then
 			CurrentPage = CurrentPage - 1
+
 			UpdatePagination()
 		end
 	end
 
 	PageLabel = vgui.Create("DLabel", Frame)
-	PageLabel:SetText("Page: 0/0")
+	PageLabel:SetText("Page: 1/1")
+	PageLabel:SetPos(math.Round(Frame:GetWide()) / 2 + 15, ScreenH / 1.143)
 	PageLabel:SizeToContents()
-	PageLabel:SetPos(420, 590)
 
 	local Next = vgui.Create("DButton", Frame)
 	Next:SetText("Next >")
 	Next:SetSize(80, 30)
-	Next:SetPos(520, 585)
+	Next:SetPos(math.Round(Frame:GetWide()) / 2 + 80, ScreenH / 1.15)
 	Next.DoClick = function()
 		if Beatrun_CoursesCache.data and CurrentPage < TotalPages then
 			CurrentPage = CurrentPage + 1
+
 			UpdatePagination()
 		end
 	end
@@ -398,19 +410,19 @@ function OpenDBMenu()
 		Beatrun_CoursesCache.data = fetchedCourses
 		Beatrun_CoursesCache.at = CurTime()
 
-		for _, course in ipairs(Beatrun_CoursesCache.data) do
-			if course.mapId ~= "" and course.mapId ~= "0" and not Beatrun_MapImageCache[course.mapId] then
-				steamworks.FileInfo(course.mapId, function(info)
-					if info then
-						steamworks.Download(info.previewid, true, function(filename)
-							Beatrun_MapImageCache[course.mapId] = AddonMaterial(filename, "smooth")
+		-- for _, course in ipairs(Beatrun_CoursesCache.data) do
+		-- 	if course.mapId ~= "" and course.mapId ~= "0" and not Beatrun_MapImageCache[course.mapId] then
+		-- 		steamworks.FileInfo(course.mapId, function(info)
+		-- 			if info then
+		-- 				steamworks.Download(info.previewid, true, function(filename)
+		-- 					Beatrun_MapImageCache[course.mapId] = AddonMaterial(filename, "smooth")
 
-							List:InvalidateLayout(true) -- redraw list
-						end)
-					end
-				end)
-			end
-		end
+		-- 					List:InvalidateLayout(true)
+		-- 				end)
+		-- 			end
+		-- 		end)
+		-- 	end
+		-- end
 
 		UpdatePagination()
 	end, function(err)
