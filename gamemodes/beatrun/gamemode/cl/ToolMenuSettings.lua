@@ -31,6 +31,8 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.courses.desc")
 
+		panel:Help("Courses gameplay related settings")
+
 		panel:CheckBox("#beatrun.toolsmenu.courses.raceyourghost", "Beatrun_CourseGhost")
 		panel:ControlHelp("#beatrun.toolsmenu.courses.raceyourghostdesc")
 
@@ -42,6 +44,8 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
+
+		panel:Help("Online database related settings")
 
 		panel:TextEntry("#beatrun.toolsmenu.courses.database", "Beatrun_Domain")
 		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.courses.databasedesc"))
@@ -80,6 +84,8 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		saveCourseButton:SetText("#beatrun.toolsmenu.courses.savecourse")
 		saveCourseButton:SetSize(0, 20)
 		saveCourseButton.DoClick = function()
+			if Course_Name == "" or Course_ID == "" then return notification.AddLegacy(language.GetPhrase("beatrun.coursesdatabase.cantdoinfreeplay"), NOTIFY_HINT, 5) end
+
 			local frame = vgui.Create("DFrame")
 			frame:SetTitle("#beatrun.toolsmenu.courses.namesavecourse")
 			frame:SetSize(300, 110)
@@ -106,7 +112,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			local okButton = vgui.Create("DButton", frame)
 			okButton:SetText("#beatrun.misc.ok")
 			okButton:SetPos(25, 80)
-			okButton:SetSize(250, 25)
+			-- okButton:SetSize(250, 25)
+			okButton:Dock(BOTTOM)
+
 			okButton.DoClick = function()
 				local name = text:GetValue()
 				local speed = tostring(slider:GetValue())
@@ -138,7 +146,12 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			okButton.DoClick = function()
 				local code = string.Replace(TextEntry:GetValue(), " ", "")
 
-				RunConsoleCommand("Beatrun_LoadCode", code)
+				FetchCourse("https://" .. domain:GetString() .. "/api/download", {
+					authorization = apikey:GetString(),
+					code = code,
+					map = string.Replace(currentMap, " ", "-")
+				})
+
 				frame:Close()
 			end
 		end
@@ -148,7 +161,15 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		uploadCourseButton:SetText("#beatrun.toolsmenu.courses.uploadcourse")
 		uploadCourseButton:SetSize(0, 20)
 		uploadCourseButton.DoClick = function()
-			RunConsoleCommand("Beatrun_UploadCourse")
+			if Course_Name == "" or Course_ID == "" then return notification.AddLegacy(language.GetPhrase("beatrun.coursesdatabase.cantdoinfreeplay"), NOTIFY_HINT, 5) end
+
+			local msg = string.format(language.GetPhrase("beatrun.coursesdatabase.upload1"), Course_Name, currentMap)
+
+			OpenConfirmPopup("#beatrun.toolsmenu.courses.uploadcourse", msg, function()
+				UploadCourse()
+
+				notification.AddLegacy("#beatrun.misc.checkconsole", NOTIFY_HINT, 5)
+			end)
 		end
 		panel:AddItem(uploadCourseButton)
 
@@ -156,7 +177,9 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		updateCourseButton:SetText("#beatrun.toolsmenu.courses.updatecourse")
 		updateCourseButton:SetSize(0, 20)
 		updateCourseButton.DoClick = function()
-			RunConsoleCommand("Beatrun_UpdateCode")
+			if Course_Name == "" or Course_ID == "" then return notification.AddLegacy(language.GetPhrase("beatrun.coursesdatabase.cantdoinfreeplay"), NOTIFY_HINT, 5) end
+
+			OpenUpdatePopup()
 		end
 		panel:AddItem(updateCourseButton)
 		panel:Help("#beatrun.toolsmenu.courses.updatecoursehelp")

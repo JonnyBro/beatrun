@@ -2,7 +2,7 @@ local apikey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.G
 local domain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", true, false, language.GetPhrase("beatrun.convars.domain"))
 local currentMap = game.GetMap()
 
-local function OpenConfirmPopup(title, message, onConfirm)
+function OpenConfirmPopup(title, message, onConfirm)
 	local frame = vgui.Create("DFrame")
 	frame:SetTitle(title)
 	frame:SetSize(360, 140)
@@ -33,7 +33,7 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	cancel.DoClick = function() frame:Close() end
 end
 
-local function OpenUpdatePopup()
+function OpenUpdatePopup()
 	local frame = vgui.Create("DFrame")
 	frame:SetTitle("#beatrun.toolsmenu.courses.updatecourse")
 	frame:SetSize(360, 160)
@@ -77,7 +77,7 @@ local function OpenUpdatePopup()
 	end
 end
 
-local function GetCurrentMapWorkshopID()
+function GetCurrentMapWorkshopID()
 	for _, addon in pairs(engine.GetAddons()) do
 		if not addon or not addon.title or not addon.wsid or not addon.mounted or not addon.downloaded then continue end
 
@@ -89,7 +89,7 @@ local function GetCurrentMapWorkshopID()
 	return "0"
 end
 
-local function FetchCourse(url, headers)
+function FetchCourse(url, headers)
 	if not LocalPlayer():IsSuperAdmin() then
 		print("You must be a Super Admin to load courses")
 		return
@@ -127,7 +127,7 @@ local function FetchCourse(url, headers)
 	end, function(e) print("An error occurred: " .. e) end, headers)
 end
 
-local function PostCourse(url, course, headers)
+function PostCourse(url, course, headers)
 	http.Post(url, {
 		data = course
 	}, function(body, _, _, code)
@@ -153,7 +153,7 @@ local function PostCourse(url, course, headers)
 end
 
 function UploadCourse()
-	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantuploadfreeplay")) end
+	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantdoinfreeplay")) end
 
 	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
 	local data = fl:Read()
@@ -167,7 +167,7 @@ function UploadCourse()
 end
 
 function UpdateCourse(course_code)
-	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantuploadfreeplay")) end
+	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantdoinfreeplay")) end
 
 	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
 	local data = fl:Read()
@@ -179,28 +179,6 @@ function UpdateCourse(course_code)
 		map = string.Replace(currentMap, " ", "-")
 	})
 end
-
-concommand.Add("Beatrun_LoadCode", function(ply, cmd, args, argstr)
-	FetchCourse("https://" .. domain:GetString() .. "/api/download", {
-		authorization = apikey:GetString(),
-		code = args[1],
-		map = string.Replace(currentMap, " ", "-")
-	})
-end)
-
-concommand.Add("Beatrun_UploadCourse", function()
-	local msg = string.format(language.GetPhrase("beatrun.coursesdatabase.upload1"), Course_Name, currentMap)
-
-	OpenConfirmPopup("#beatrun.toolsmenu.courses.uploadcourse", msg, function()
-		UploadCourse()
-
-		notification.AddLegacy("#beatrun.misc.checkconsole", NOTIFY_HINT, 5)
-	end)
-end)
-
-concommand.Add("Beatrun_UpdateCode", function(ply, cmd, args, argstr)
-	OpenUpdatePopup()
-end)
 
 -- Database UI
 local ScreenH, ScreenW = ScrH(), ScrW()
@@ -223,6 +201,8 @@ local Frame, List, PageLabel
 local function CacheMapPreview(id)
 	if not id then return nil end
 	if id == "0" then id = currentMap end
+
+	if Beatrun_MapImageCache[id] then return Beatrun_MapImageCache[id] end
 
 	if tonumber(id) == nil or steamworks.IsSubscribed(id) then
 		Beatrun_MapImageCache[id] = Material("maps/thumb/" .. id .. ".png", "smooth")
