@@ -182,8 +182,6 @@ end
 
 -- Database UI
 local ScreenH, ScreenW = ScrH(), ScrW()
-local PAGE_SIZE = 5
-local CurrentPage, TotalPages = 1, 1
 local isCurrentMapOnly = false
 
 -- Global caches
@@ -196,7 +194,7 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or {
 }
 
 local CACHE_LIFETIME = 5
-local Frame, List, PageLabel
+local Frame, Header, List
 
 local function CacheMapPreview(id)
 	if not id then return nil end
@@ -227,14 +225,7 @@ local function PopulateCoursesList()
 
 	List:Clear()
 
-	local courses = Beatrun_CoursesCache.filtered
-	local startIndex = (CurrentPage - 1) * PAGE_SIZE + 1
-	local endIndex = math.min(startIndex + PAGE_SIZE - 1, #courses)
-
-	for i = startIndex, endIndex do
-		local v = courses[i]
-		if not v then continue end
-
+	for _, v in ipairs(Beatrun_CoursesCache.filtered) do
 		local entry = List:Add("DPanel")
 		entry:SetTall(120)
 		entry:Dock(TOP)
@@ -244,10 +235,10 @@ local function PopulateCoursesList()
 			draw.RoundedBox(4, 0, 0, w, h, Color(60, 60, 60))
 
 			local mapId = v.workshopId ~= "0" and v.workshopId or currentMap
-			local MapMaterial = Beatrun_MapImageCache[mapId]
+			local mapMaterial = Beatrun_MapImageCache[mapId]
 
-			if MapMaterial and not MapMaterial:IsError() then
-				surface.SetMaterial(MapMaterial)
+			if mapMaterial and not mapMaterial:IsError() then
+				surface.SetMaterial(mapMaterial)
 				surface.SetDrawColor(255, 255, 255)
 				surface.DrawTexturedRect(5, 10, 160, 98)
 			else
@@ -356,17 +347,6 @@ local function PopulateCoursesList()
 	end
 end
 
-local function UpdatePagination()
-	if not Beatrun_CoursesCache.filtered then return end
-
-	TotalPages = math.max(1, math.ceil(#Beatrun_CoursesCache.filtered / PAGE_SIZE))
-	CurrentPage = math.Clamp(CurrentPage, 1, TotalPages)
-
-	if IsValid(PageLabel) then PageLabel:SetText("Page: " .. CurrentPage .. "/" .. TotalPages) end
-
-	PopulateCoursesList()
-end
-
 local function ApplyCourseFilter()
 	if not Beatrun_CoursesCache.all then return end
 
@@ -382,13 +362,10 @@ local function ApplyCourseFilter()
 		Beatrun_CoursesCache.filtered = filtered
 	end
 
-	CurrentPage = 1
-	UpdatePagination()
+	PopulateCoursesList()
 end
 
 function OpenDBMenu()
-	CurrentPage, TotalPages = 1, 1
-
 	if IsValid(Frame) then Frame:Remove() end
 
 	Frame = vgui.Create("DFrame")
@@ -397,42 +374,14 @@ function OpenDBMenu()
 	Frame:SetTitle(string.format("Beatrun Courses Database (%s)", domain:GetString()))
 	Frame:MakePopup()
 
-	List = vgui.Create("DScrollPanel", Frame)
-	List:SetPos(20, 40)
-	List:Dock(FILL)
+	Header = vgui.Create("DPanel", Frame)
+	Header:SetBackgroundColor(Color(160, 160, 160))
+	Header:Dock(TOP)
 
-	local Prev = vgui.Create("DButton", Frame)
-	Prev:SetText("< Prev")
-	Prev:SetSize(80, 30)
-	Prev:SetPos(math.Round(Frame:GetWide()) / 2 - 80, ScreenH / 1.15)
-	Prev.DoClick = function()
-		if CurrentPage > 1 then
-			CurrentPage = CurrentPage - 1
-
-			UpdatePagination()
-		end
-	end
-
-	PageLabel = vgui.Create("DLabel", Frame)
-	PageLabel:SetText("Page: 1/1")
-	PageLabel:SetPos(math.Round(Frame:GetWide()) / 2 + 15, ScreenH / 1.143)
-	PageLabel:SizeToContents()
-
-	local Next = vgui.Create("DButton", Frame)
-	Next:SetText("Next >")
-	Next:SetSize(80, 30)
-	Next:SetPos(math.Round(Frame:GetWide()) / 2 + 80, ScreenH / 1.15)
-	Next.DoClick = function()
-		if Beatrun_CoursesCache.all and CurrentPage < TotalPages then
-			CurrentPage = CurrentPage + 1
-
-			UpdatePagination()
-		end
-	end
-
-	local currentMapOnly = vgui.Create("DCheckBoxLabel", Frame)
-	currentMapOnly:SetPos(math.Round(Frame:GetWide()) / 2 + 170, ScreenH / 1.15)
+	local currentMapOnly = vgui.Create("DCheckBoxLabel", Header)
+	-- currentMapOnly:SetPos(0, 0)
 	currentMapOnly:SetText("Current map only")
+	currentMapOnly:SetTextColor(color_white)
 	currentMapOnly:SetChecked(isCurrentMapOnly)
 	currentMapOnly:SizeToContents()
 	function currentMapOnly:OnChange(state)
@@ -440,23 +389,27 @@ function OpenDBMenu()
 		ApplyCourseFilter()
 	end
 
+	List = vgui.Create("DScrollPanel", Frame)
+	List:Dock(FILL)
+
 	if IsCoursesCacheValid() then
-		UpdatePagination()
+		PopulateCoursesList()
 
 		return
 	end
 
 	-- Prevent duplicate fetch
 	if Beatrun_CoursesCache.loading then return end
+
 	Beatrun_CoursesCache.loading = true
 
 	-- Fetch courses
 	local headers = {
-		mapname = "",
+		-- mapname = "",
 		game = "yes"
 	}
 
-	http.Fetch("http://100.86.126.63:6547/courses/list", function(body)
+	http.Fetch("http://" .. domain:GetString() .. "/courses/list", function(body)
 		Beatrun_CoursesCache.loading = false
 
 		local response = util.JSONToTable(body)
@@ -486,12 +439,11 @@ function OpenDBMenu()
 		Beatrun_CoursesCache.at = CurTime()
 
 		ApplyCourseFilter()
+		PopulateCoursesList()
 
 		for _, course in ipairs(Beatrun_CoursesCache.all) do
 			CacheMapPreview(course.workshopId)
 		end
-
-		UpdatePagination()
 	end, function(err)
 		Beatrun_CoursesCache.loading = false
 

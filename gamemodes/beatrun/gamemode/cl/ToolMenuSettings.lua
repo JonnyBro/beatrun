@@ -7,6 +7,8 @@ local loadoutValues = {
 	"#beatrun.randomtfaloadouts",
 }
 
+local currentMap = game.GetMap()
+
 local function ToggleGamemode(gm)
 	net.Start("Beatrun_ToggleGamemode")
 		net.WriteString(gm)
@@ -112,7 +114,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			local okButton = vgui.Create("DButton", frame)
 			okButton:SetText("#beatrun.misc.ok")
 			okButton:SetPos(25, 80)
-			-- okButton:SetSize(250, 25)
 			okButton:Dock(BOTTOM)
 
 			okButton.DoClick = function()
@@ -146,8 +147,8 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			okButton.DoClick = function()
 				local code = string.Replace(TextEntry:GetValue(), " ", "")
 
-				FetchCourse("https://" .. domain:GetString() .. "/api/download", {
-					authorization = apikey:GetString(),
+				FetchCourse("https://" .. GetConVar("Beatrun_Domain"):GetString() .. "/api/download", {
+					authorization = GetConVar("Beatrun_ApiKey"):GetString(),
 					code = code,
 					map = string.Replace(currentMap, " ", "-")
 				})

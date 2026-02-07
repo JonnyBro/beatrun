@@ -39,7 +39,7 @@ local function buildmodebutton()
 	AEUI:RemovePanel(courselist)
 	AEUI:RemovePanel(coursepanel)
 
-	LocalPlayer():ConCommand("buildmode")
+	LocalPlayer():ConCommand("Beatrun_BuildMode")
 end
 
 local function closebutton()

@@ -39,7 +39,57 @@ buildmode_entmodels = {
 	br_swingbar = "models/hunter/plates/plate2.mdl"
 }
 
-local misc = {"models/hunter/misc/lift2x2.mdl", "models/hunter/misc/stair1x1.mdl", "models/hunter/misc/stair1x1inside.mdl", "models/hunter/misc/stair1x1outside.mdl", "models/props_combine/combine_barricade_short02a.mdl", "models/props_combine/combine_bridge_b.mdl", "models/props_docks/channelmarker_gib02.mdl", "models/props_docks/channelmarker_gib04.mdl", "models/props_docks/channelmarker_gib03.mdl", "models/props_lab/blastdoor001a.mdl", "models/props_lab/blastdoor001c.mdl", "models/props_wasteland/cargo_container01.mdl", "models/props_wasteland/cargo_container01b.mdl", "models/props_wasteland/cargo_container01c.mdl", "models/props_wasteland/horizontalcoolingtank04.mdl", "models/props_wasteland/laundry_washer001a.mdl", "models/props_wasteland/laundry_washer003.mdl", "models/props_junk/TrashDumpster01a.mdl", "models/props_junk/TrashDumpster02.mdl", "models/props_junk/wood_crate001a.mdl", "models/props_junk/wood_crate002a.mdl", "models/props_junk/wood_pallet001a.mdl", "models/props_c17/fence01a.mdl", "models/props_c17/fence01b.mdl", "models/props_c17/fence02a.mdl", "models/props_c17/fence03a.mdl", "models/props_c17/fence04a.mdl", "models/props_wasteland/interior_fence001g.mdl", "models/props_wasteland/interior_fence002d.mdl", "models/props_wasteland/interior_fence002e.mdl", "models/props_building_details/Storefront_Template001a_Bars.mdl", "models/props_wasteland/wood_fence01a.mdl", "models/props_wasteland/wood_fence02a.mdl", "models/props_c17/concrete_barrier001a.mdl", "models/props_wasteland/medbridge_base01.mdl", "models/props_wasteland/medbridge_post01.mdl", "models/props_wasteland/medbridge_strut01.mdl", "models/props_c17/column02a.mdl", "models/props_junk/iBeam01a_cluster01.mdl", "models/props_junk/iBeam01a.mdl", "models/props_canal/canal_cap001.mdl", "models/props_canal/canal_bridge04.mdl", "models/Mechanics/gears2/pinion_80t3.mdl", "models/props_phx/gears/rack36.mdl", "models/props_phx/gears/rack70.mdl", "models/cranes/crane_frame.mdl", "models/cranes/crane_docks.mdl", "models/props_wasteland/cranemagnet01a.mdl"}
+-- format: multiline
+local misc = {
+	"models/hunter/misc/lift2x2.mdl",
+	"models/hunter/misc/stair1x1.mdl",
+	"models/hunter/misc/stair1x1inside.mdl",
+	"models/hunter/misc/stair1x1outside.mdl",
+	"models/props_combine/combine_barricade_short02a.mdl",
+	"models/props_combine/combine_bridge_b.mdl",
+	"models/props_docks/channelmarker_gib02.mdl",
+	"models/props_docks/channelmarker_gib04.mdl",
+	"models/props_docks/channelmarker_gib03.mdl",
+	"models/props_lab/blastdoor001a.mdl",
+	"models/props_lab/blastdoor001c.mdl",
+	"models/props_wasteland/cargo_container01.mdl",
+	"models/props_wasteland/cargo_container01b.mdl",
+	"models/props_wasteland/cargo_container01c.mdl",
+	"models/props_wasteland/horizontalcoolingtank04.mdl",
+	"models/props_wasteland/laundry_washer001a.mdl",
+	"models/props_wasteland/laundry_washer003.mdl",
+	"models/props_junk/TrashDumpster01a.mdl",
+	"models/props_junk/TrashDumpster02.mdl",
+	"models/props_junk/wood_crate001a.mdl",
+	"models/props_junk/wood_crate002a.mdl",
+	"models/props_junk/wood_pallet001a.mdl",
+	"models/props_c17/fence01a.mdl",
+	"models/props_c17/fence01b.mdl",
+	"models/props_c17/fence02a.mdl",
+	"models/props_c17/fence03a.mdl",
+	"models/props_c17/fence04a.mdl",
+	"models/props_wasteland/interior_fence001g.mdl",
+	"models/props_wasteland/interior_fence002d.mdl",
+	"models/props_wasteland/interior_fence002e.mdl",
+	"models/props_building_details/Storefront_Template001a_Bars.mdl",
+	"models/props_wasteland/wood_fence01a.mdl",
+	"models/props_wasteland/wood_fence02a.mdl",
+	"models/props_c17/concrete_barrier001a.mdl",
+	"models/props_wasteland/medbridge_base01.mdl",
+	"models/props_wasteland/medbridge_post01.mdl",
+	"models/props_wasteland/medbridge_strut01.mdl",
+	"models/props_c17/column02a.mdl",
+	"models/props_junk/iBeam01a_cluster01.mdl",
+	"models/props_junk/iBeam01a.mdl",
+	"models/props_canal/canal_cap001.mdl",
+	"models/props_canal/canal_bridge04.mdl",
+	"models/Mechanics/gears2/pinion_80t3.mdl",
+	"models/props_phx/gears/rack36.mdl",
+	"models/props_phx/gears/rack70.mdl",
+	"models/cranes/crane_frame.mdl",
+	"models/cranes/crane_docks.mdl",
+	"models/props_wasteland/cranemagnet01a.mdl"
+}
 
 for _, v in ipairs(misc) do
 	local key = table.insert(buildmode_props, v:lower())
@@ -376,7 +426,7 @@ if SERVER then
 		net.Send(ply)
 	end
 
-	concommand.Add("buildmode", function(ply, cmd, args)
+	concommand.Add("Beatrun_BuildMode", function(ply, cmd, args)
 		BuildMode_Toggle(ply)
 	end)
 
@@ -711,9 +761,8 @@ if CLIENT then
 	local mousedown = false
 	local axislock = 0
 
-	local axislist = {"x", "y", "z"}
-
-	local axiscolors = {Color(255, 0, 0), Color(0, 255, 0), Color(0, 0, 255)}
+	local axislist = { "x", "y", "z" }
+	local axiscolors = { Color(255, 0, 0), Color(0, 255, 0), Color(0, 0, 255) }
 
 	local axisdisplay1 = Vector()
 	local axisdisplay2 = Vector()
@@ -904,8 +953,17 @@ if CLIENT then
 	end
 
 	function CourseData(name, speed)
-		-- [1] = Props, [2] = Checkpoints, [3] = Starting pos, [4] = Starting ang, [5] = Name, [6] = Entities, [7] = Restricted player's speed (0 = unrestricted)
-		local save = {{}, {}, Course_StartPos, Course_StartAng, name or os.date("%H:%M:%S - %d/%m/%Y", os.time()), {}, speed or 0}
+		-- [1] = Props, [2] = Checkpoints, [3] = Starting pos, [4] = Starting angle, [5] = Name, [6] = Entities, [7] = Restricted player's speed (0 = unrestricted)
+		-- format: multiline
+		local save = {
+			{},
+			{},
+			Course_StartPos,
+			Course_StartAng,
+			name or os.date("%H:%M:%S - %Y/%m/%d", os.time()),
+			{},
+			speed or 0
+		}
 
 		for _, v in pairs(buildmode_placed) do
 			if not IsValid(v) then continue end
@@ -1413,7 +1471,7 @@ if CLIENT then
 	}
 
 	function BuildModeInput(ply, bind, pressed, code)
-		if bind ~= "buildmode" and not camcontrol then return true end
+		if bind ~= "Beatrun_BuildMode" and not camcontrol then return true end
 	end
 
 	hook.Add("InitPostEntity", "buildmode_create_hook", function()
