@@ -217,7 +217,7 @@ local function CacheMapPreview(course)
 end
 
 local function GetMapPreview(course)
-	return Beatrun_MapImageCache[course.workshopId == "0" and course.mapName or course.workshopId]
+	return Beatrun_MapImageCache[course.workshopId ~= "0" and course.workshopId or course.mapName]
 end
 
 local function PopulateCoursesList()
