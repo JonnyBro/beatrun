@@ -1,30 +1,12 @@
-surface.CreateFont("BeatrunDebug", {
-	font = "ProFontWindows",
-	shadow = false,
-	blursize = 0,
-	underline = false,
-	rotary = false,
-	strikeout = false,
-	additive = false,
-	antialias = false,
-	extended = false,
-	scanlines = 0,
-	italic = false,
-	outline = false,
-	symbol = false,
-	weight = 50,
-	size = ScreenScale(6)
-})
-
 local color_red = Color(220, 20, 20)
 local startx = 0.2
 local starty = 0.75
 
-local debugdata = {"BodyAnim", "BodyAnimCycle", "BodyAnimString", "campos", "camang"}
-local debugdata2 = {"BodyAnimArmCopy", "TraceCount"}
+local debugdata = { "BodyAnim", "BodyAnimCycle", "BodyAnimString", "campos", "camang" }
+local debugdata2 = { "BodyAnimArmCopy", "TraceCount" }
 
-local debugoffset = {0, 0, 0}
-local debuglist = {debugdata, debugdata2}
+local debugoffset = { 0, 0, 0 }
+local debuglist = { debugdata, debugdata2 }
 
 TraceLine_o = TraceLine_o or util.TraceLine
 local TraceLine_o = TraceLine_o
@@ -34,7 +16,7 @@ TraceCount = 0
 function TraceLine_d(data)
 	local result = TraceLine_o(data)
 
-	table.insert(traces, {Vector(data.start), Vector(data.endpos), result.Hit and color_red or color_white})
+	table.insert(traces, { Vector(data.start), Vector(data.endpos), result.Hit and color_red or color_white })
 
 	return result
 end
@@ -44,7 +26,7 @@ local function DrawDebugInfo()
 	local sy = ScrH() * starty
 	-- local htw = 0
 
-	surface.SetFont("BeatrunDebug")
+	surface.SetFont("AEUIDefault")
 	surface.SetTextPos(sx, sy)
 	surface.SetTextColor(255, 255, 255)
 

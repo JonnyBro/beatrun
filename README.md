@@ -142,7 +142,6 @@ The animations installer has been removed. You can now switch animations directl
 
 - [x14y24pxHeadUpDaisy](https://hicchicc.github.io/00ff/)
 - [Datto D-DIN](https://github.com/amcchord/datto-d-din)
-- [ProFontWindows](https://github.com/chrissimpkins/codeface/tree/master/fonts/pro-font-windows)
 
 ## Star History
 
