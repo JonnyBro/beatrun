@@ -201,15 +201,19 @@ local function IsCoursesCacheValid()
 end
 
 local function CacheMapPreview(course)
-	if tonumber(course.workshopId) == nil or file.Size("maps/thumb/" .. course.mapName .. ".png", "GAME") > 0 then
+	if file.Size("maps/thumb/" .. course.mapName .. ".png", "GAME") > 0 then
 		Beatrun_MapImageCache[course.mapName] = Material("maps/thumb/" .. course.mapName .. ".png", "smooth")
 
 		return
 	end
 
 	steamworks.FileInfo(course.workshopId, function(result)
+		if not result then return end
+
 		steamworks.Download(result.previewid, true, function(name)
-			Beatrun_MapImageCache[course.workshopId] = AddonMaterial(name)
+			if not name then return end
+
+			Beatrun_MapImageCache[course.mapName] = AddonMaterial(name)
 
 			return
 		end)
@@ -217,7 +221,7 @@ local function CacheMapPreview(course)
 end
 
 local function GetMapPreview(course)
-	return Beatrun_MapImageCache[course.workshopId ~= "0" and course.workshopId or course.mapName]
+	return Beatrun_MapImageCache[course.mapName]
 end
 
 local function PopulateCoursesList()
@@ -444,11 +448,7 @@ function OpenDBMenu()
 
 	CurrentMapBtn.Paint = function(self, w, h)
 		local text = isCurrentMapOnly and "Current Map Only" or "All Courses"
-		local col = Color(80, 80, 80)
-
-		if self:IsHovered() then
-			col = Color(col.r + 15, col.g + 15, col.b + 15)
-		end
+		local col = self:IsHovered() and Color(95, 95, 95) or Color(80, 80, 80)
 
 		draw.RoundedBox(6, 0, 0, w, h, col)
 
