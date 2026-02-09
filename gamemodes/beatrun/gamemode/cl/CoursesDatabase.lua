@@ -196,27 +196,28 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or {
 local CACHE_LIFETIME = 5
 local Frame, Header, List
 
-local function CacheMapPreview(id)
-	if not id then return nil end
-	if id == "0" then id = currentMap end
-
-	if Beatrun_MapImageCache[id] then return Beatrun_MapImageCache[id] end
-
-	if tonumber(id) == nil or steamworks.IsSubscribed(id) then
-		Beatrun_MapImageCache[id] = Material("maps/thumb/" .. id .. ".png", "smooth")
-	else
-		steamworks.FileInfo(id, function(result)
-			steamworks.Download(result.previewid, true, function(name)
-				Beatrun_MapImageCache[id] = AddonMaterial(name)
-			end)
-		end)
-	end
-
-	return Beatrun_MapImageCache[id]
-end
-
 local function IsCoursesCacheValid()
 	return Beatrun_CoursesCache.all and CurTime() - Beatrun_CoursesCache.at < CACHE_LIFETIME
+end
+
+local function CacheMapPreview(course)
+	if tonumber(course.workshopId) == nil or file.Size("maps/thumb/" .. course.mapName .. ".png", "GAME") > 0 then
+		Beatrun_MapImageCache[course.mapName] = Material("maps/thumb/" .. course.mapName .. ".png", "smooth")
+
+		return
+	end
+
+	steamworks.FileInfo(course.workshopId, function(result)
+		steamworks.Download(result.previewid, true, function(name)
+			Beatrun_MapImageCache[course.workshopId] = AddonMaterial(name)
+
+			return
+		end)
+	end)
+end
+
+local function GetMapPreview(course)
+	return Beatrun_MapImageCache[course.workshopId == "0" and course.mapName or course.workshopId]
 end
 
 local function PopulateCoursesList()
@@ -235,8 +236,7 @@ local function PopulateCoursesList()
 			local col = self:IsHovered() and Color(70, 70, 70) or Color(60, 60, 60)
 			draw.RoundedBox(6, 0, 0, w, h, col)
 
-			local mapId = v.workshopId ~= "0" and v.workshopId or currentMap
-			local mapMaterial = Beatrun_MapImageCache[mapId]
+			local mapMaterial = GetMapPreview(v)
 
 			if mapMaterial and not mapMaterial:IsError() then
 				surface.SetMaterial(mapMaterial)
@@ -541,8 +541,8 @@ function OpenDBMenu()
 		ApplyCourseFilter()
 		PopulateCoursesList()
 
-		for _, course in ipairs(Beatrun_CoursesCache.all) do
-			CacheMapPreview(course.workshopId)
+		for _, v in ipairs(Beatrun_CoursesCache.all) do
+			CacheMapPreview(v)
 		end
 	end, function(err)
 		Beatrun_CoursesCache.loading = false
