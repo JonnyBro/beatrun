@@ -229,10 +229,11 @@ local function PopulateCoursesList()
 		local entry = List:Add("DPanel")
 		entry:SetTall(120)
 		entry:Dock(TOP)
-		entry:DockMargin(0, 0, 0, 5)
+		entry:DockMargin(10, 10, 10, 0)
 
 		entry.Paint = function(self, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, Color(60, 60, 60))
+			local col = self:IsHovered() and Color(70, 70, 70) or Color(60, 60, 60)
+			draw.RoundedBox(6, 0, 0, w, h, col)
 
 			local mapId = v.workshopId ~= "0" and v.workshopId or currentMap
 			local mapMaterial = Beatrun_MapImageCache[mapId]
@@ -240,38 +241,20 @@ local function PopulateCoursesList()
 			if mapMaterial and not mapMaterial:IsError() then
 				surface.SetMaterial(mapMaterial)
 				surface.SetDrawColor(255, 255, 255)
-				surface.DrawTexturedRect(5, 10, 160, 98)
+				surface.DrawTexturedRect(10, 10, 160, 98)
 			else
-				draw.RoundedBox(4, 5, 10, 160, 98, Color(40, 40, 40))
+				draw.RoundedBox(4, 10, 10, 160, 98, Color(40, 40, 40))
 				draw.SimpleText("No image", "AEUIDefault", 86, 59, Color(120, 120, 120), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
-			draw.SimpleText(v.name .. " (" .. v.code .. ")", "AEUILarge", 180, 10, color_white)
-			draw.SimpleText("Uploaded At: " .. v.uploadedAt, "AEUIDefault", 180, 92, Color(180, 180, 180))
+			draw.SimpleText(v.name, "AEUILarge", 180, 5, color_white)
+			draw.SimpleText("Uploaded: " .. v.uploadedAt, "AEUIDefault", 184, 85, Color(180, 180, 180))
 		end
 
-		local avatar = vgui.Create("AvatarImage", entry)
-		avatar:SetSize(24, 24)
-		avatar:SetPos(182, 46)
-		avatar:SetSteamID(v.uploadedBy.steamId, 32)
-
-		local nameBtn = vgui.Create("DButton", entry)
-		nameBtn:SetText(v.uploadedBy.username)
-		nameBtn:SetFont("AEUIDefault")
-		nameBtn:SetPos(210, 46)
-		nameBtn:SizeToContents()
-		nameBtn:SetCursor("hand")
-		nameBtn:SetTextColor(Color(180, 180, 180))
-		nameBtn:SetPaintBackground(false)
-
-		nameBtn.DoClick = function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end
-		nameBtn.OnCursorEntered = function(self) self:SetTextColor(Color(255, 0, 0)) end
-		nameBtn.OnCursorExited = function(self) self:SetTextColor(Color(180, 180, 180)) end
-
 		local mapBtn = vgui.Create("DButton", entry)
-		mapBtn:SetText("Map: " .. v.mapName)
+		mapBtn:SetText(v.mapName)
 		mapBtn:SetFont("AEUIDefault")
-		mapBtn:SetPos(176, 68)
+		mapBtn:SetPos(180, 63)
 		mapBtn:SizeToContents()
 		mapBtn:SetCursor(v.workshopId == "0" and "arrow" or "hand")
 		mapBtn:SetTextColor(Color(180, 180, 180))
@@ -281,11 +264,72 @@ local function PopulateCoursesList()
 		mapBtn.OnCursorEntered = function(self) if v.workshopId ~= "0" then self:SetTextColor(Color(255, 0, 0)) end end
 		mapBtn.OnCursorExited = function(self) if v.workshopId ~= "0" then self:SetTextColor(Color(180, 180, 180)) end end
 
-		local loadBtn = vgui.Create("DButton", entry)
+		local codeBtn = vgui.Create("DButton", entry)
+		codeBtn:SetText(v.code)
+		codeBtn:SetFont("AEUIDefault")
+		codeBtn:SetPos(180, 35)
+		codeBtn:SizeToContents()
+		codeBtn:SetCursor("hand")
+		codeBtn:SetTextColor(Color(150, 150, 150))
+		codeBtn:SetPaintBackground(false)
+
+		codeBtn.DoClick = function(self)
+			SetClipboardText(v.code)
+
+			if IsValid(self) then self:SetText("Copied code to clipboard") end
+			if IsValid(self) then self:SizeToContents() end
+
+			timer.Simple(2, function()
+				if IsValid(self) then self:SetText(v.code) end
+				if IsValid(self) then self:SizeToContents() end
+			end)
+		end
+		codeBtn.OnCursorEntered = function(self) self:SetTextColor(Color(255, 0, 0)) end
+		codeBtn.OnCursorExited = function(self) self:SetTextColor(Color(180, 180, 180)) end
+
+		local rightPanel = vgui.Create("DPanel", entry)
+		rightPanel:Dock(RIGHT)
+		rightPanel:SetWide(170)
+		rightPanel:DockMargin(0, 8, 10, 8)
+		rightPanel.Paint = function(self, w, h)
+			surface.SetDrawColor(80, 80, 80)
+			surface.DrawLine(0, 0, 0, h)
+		end
+
+		local authorPanel = vgui.Create("DPanel", rightPanel)
+		authorPanel:Dock(TOP)
+		authorPanel:SetTall(28)
+		authorPanel.Paint = nil
+
+		local avatar = vgui.Create("AvatarImage", authorPanel)
+		avatar:SetSize(24, 24)
+		avatar:Dock(LEFT)
+		avatar:DockMargin(10, 2, 6, 2)
+		avatar:SetSteamID(v.uploadedBy.steamId, 32)
+
+		local nameBtn = vgui.Create("DButton", authorPanel)
+		nameBtn:SetText(v.uploadedBy.username)
+		nameBtn:SetFont("AEUIDefault")
+		nameBtn:Dock(FILL)
+		nameBtn:SetCursor("hand")
+		nameBtn:SetContentAlignment(4)
+		nameBtn:SetTextColor(Color(180, 180, 180))
+		nameBtn:SetPaintBackground(false)
+
+		nameBtn.DoClick = function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end
+		nameBtn.OnCursorEntered = function(self) self:SetTextColor(Color(255, 0, 0)) end
+		nameBtn.OnCursorExited = function(self) self:SetTextColor(Color(180, 180, 180)) end
+
+		local loadPanel = vgui.Create("DPanel", rightPanel)
+		loadPanel:SetTall(36)
+		loadPanel:Dock(BOTTOM)
+		loadPanel:DockMargin(10, 0, 0, 4)
+		loadPanel.Paint = nil
+
+		local loadBtn = vgui.Create("DButton", loadPanel)
 		loadBtn:SetText("Load Course")
 		loadBtn:SetFont("AEUIDefault")
-		loadBtn:SetSize(120, 26)
-		loadBtn:SetPos(400, 56)
+		loadBtn:Dock(FILL)
 		loadBtn:SetCursor("hand")
 		loadBtn:SetTextColor(Color(255, 255, 255))
 
@@ -293,7 +337,6 @@ local function PopulateCoursesList()
 			local bgColor = self:IsHovered() and Color(100, 100, 100) or Color(80, 80, 80)
 
 			draw.RoundedBox(4, 0, 0, w, h, bgColor)
-			draw.SimpleText(self:GetText(), "AEUIDefault", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		loadBtn.DoClick = function()
@@ -347,21 +390,20 @@ local function PopulateCoursesList()
 	end
 end
 
-local function ApplyCourseFilter()
+local function ApplyCourseFilter(newText)
 	if not Beatrun_CoursesCache.all then return end
 
-	if not isCurrentMapOnly then
-		Beatrun_CoursesCache.filtered = Beatrun_CoursesCache.all
-	else
-		local filtered = {}
+	local text = string.lower(newText or "")
+	local filtered = {}
 
-		for _, course in ipairs(Beatrun_CoursesCache.all) do
-			if course.mapName == currentMap then filtered[#filtered + 1] = course end
-		end
+	for _, course in ipairs(Beatrun_CoursesCache.all) do
+		if isCurrentMapOnly and course.mapName ~= currentMap then continue end
+		if text ~= "" and not string.find(string.lower(course.name), text, 1, true) then continue end
 
-		Beatrun_CoursesCache.filtered = filtered
+		filtered[#filtered + 1] = course
 	end
 
+	Beatrun_CoursesCache.filtered = filtered
 	PopulateCoursesList()
 end
 
@@ -374,23 +416,83 @@ function OpenDBMenu()
 	Frame:SetTitle(string.format("Beatrun Courses Database (%s)", domain:GetString()))
 	Frame:MakePopup()
 
-	Header = vgui.Create("DPanel", Frame)
-	Header:SetBackgroundColor(Color(160, 160, 160))
-	Header:Dock(TOP)
+	local Sheet = vgui.Create("DPropertySheet", Frame)
+	Sheet:Dock(FILL)
 
-	local currentMapOnly = vgui.Create("DCheckBoxLabel", Header)
-	-- currentMapOnly:SetPos(0, 0)
-	currentMapOnly:SetText("Current map only")
-	currentMapOnly:SetTextColor(color_white)
-	currentMapOnly:SetChecked(isCurrentMapOnly)
-	currentMapOnly:SizeToContents()
-	function currentMapOnly:OnChange(state)
-		isCurrentMapOnly = state
+	-- Browse page
+	local BrowsePanel = vgui.Create("DPanel", Sheet)
+	BrowsePanel:Dock(FILL)
+	BrowsePanel:DockPadding(0, 0, 0, 0)
+	BrowsePanel:SetBackgroundColor(Color(45, 45, 45))
+
+	Sheet:AddSheet("Browse Courses", BrowsePanel, "icon16/folder.png")
+
+	Header = vgui.Create("DPanel", BrowsePanel)
+	Header:Dock(TOP)
+	Header:SetTall(40)
+	Header:DockPadding(10, 8, 10, 8)
+	Header.Paint = function(self, w, h)
+		draw.RoundedBox(0, 0, 0, w, h, Color(55, 55, 55))
+	end
+
+	local CurrentMapBtn = vgui.Create("DButton", Header)
+	CurrentMapBtn:SetText("placeholder")
+	CurrentMapBtn:SetTextColor(color_white)
+	CurrentMapBtn:SetSize(120, 24)
+	CurrentMapBtn:Dock(LEFT)
+	CurrentMapBtn:DockMargin(0, 0, 8, 0)
+
+	CurrentMapBtn.Paint = function(self, w, h)
+		local text = isCurrentMapOnly and "Current Map Only" or "All Courses"
+		local col = Color(80, 80, 80)
+
+		if self:IsHovered() then
+			col = Color(col.r + 15, col.g + 15, col.b + 15)
+		end
+
+		draw.RoundedBox(6, 0, 0, w, h, col)
+
+		self:SetText(text)
+	end
+
+	CurrentMapBtn.DoClick = function()
+		isCurrentMapOnly = not isCurrentMapOnly
 		ApplyCourseFilter()
 	end
 
-	List = vgui.Create("DScrollPanel", Frame)
+	local Search = vgui.Create("DTextEntry", Header)
+	Search:Dock(FILL)
+	Search:SetPlaceholderText("Search courses...")
+	Search:SetUpdateOnType(true)
+	function Search:OnValueChange(text)
+		ApplyCourseFilter(text)
+	end
+
+	List = vgui.Create("DScrollPanel", BrowsePanel)
 	List:Dock(FILL)
+	-- List:DockMargin(10, 10, 10, 10)
+
+	-- Upload page
+	local UploadPanel = vgui.Create("DPanel", Sheet)
+	UploadPanel:Dock(FILL)
+	UploadPanel:DockPadding(20, 20, 20, 20)
+
+	UploadPanel.Paint = function(self, w, h)
+		draw.SimpleText("there will be ui...", "AEUILarge", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
+	Sheet:AddSheet("Upload Course", UploadPanel, "icon16/arrow_up.png")
+
+	-- Download page
+	local DownloadPanel = vgui.Create("DPanel", Sheet)
+	DownloadPanel:Dock(FILL)
+	DownloadPanel:DockPadding(20, 20, 20, 20)
+
+	DownloadPanel.Paint = function(self, w, h)
+		draw.SimpleText("there will be ui...", "AEUILarge", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
+	Sheet:AddSheet("Download Courses", DownloadPanel, "icon16/arrow_down.png")
 
 	if IsCoursesCacheValid() then
 		PopulateCoursesList()
@@ -398,12 +500,10 @@ function OpenDBMenu()
 		return
 	end
 
-	-- Prevent duplicate fetch
 	if Beatrun_CoursesCache.loading then return end
 
 	Beatrun_CoursesCache.loading = true
 
-	-- Fetch courses
 	local headers = {
 		-- mapname = "",
 		game = "yes"
