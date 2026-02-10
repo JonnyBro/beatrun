@@ -1,188 +1,19 @@
-local apikey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.GetPhrase("beatrun.convars.apikey"))
-local domain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", true, false, language.GetPhrase("beatrun.convars.domain"))
-local currentMap = game.GetMap()
+--[[ TODO
+	- Replace "http" with "https" for release
+	- Localization
+	- Rewrite all the functions for the new database backend
+	- Make course commands (upload, load, etc) obsolete
+	- Everything will be in the UI, no more commands (maybe there will be for automation or power users :shrug:)
+--]]
 
-function OpenConfirmPopup(title, message, onConfirm)
-	local frame = vgui.Create("DFrame")
-	frame:SetTitle(title)
-	frame:SetSize(360, 140)
-	frame:Center()
-	frame:MakePopup()
-	frame:SetDeleteOnClose(true)
-
-	local label = vgui.Create("DLabel", frame)
-	label:SetText(message)
-	label:SetWrap(true)
-	label:SetSize(330, 60)
-	label:SetPos(15, 35)
-
-	local confirm = vgui.Create("DButton", frame)
-	confirm:SetText("#beatrun.misc.ok")
-	confirm:SetSize(150, 30)
-	confirm:SetPos(20, 95)
-
-	confirm.DoClick = function()
-		if onConfirm then onConfirm() end
-		frame:Close()
-	end
-
-	local cancel = vgui.Create("DButton", frame)
-	cancel:SetText("#beatrun.misc.cancel")
-	cancel:SetSize(150, 30)
-	cancel:SetPos(190, 95)
-	cancel.DoClick = function() frame:Close() end
-end
-
-function OpenUpdatePopup()
-	local frame = vgui.Create("DFrame")
-	frame:SetTitle("#beatrun.toolsmenu.courses.updatecourse")
-	frame:SetSize(360, 160)
-	frame:Center()
-	frame:MakePopup()
-	frame:SetDeleteOnClose(true)
-
-	local label = vgui.Create("DLabel", frame)
-	label:SetText("#beatrun.toolsmenu.courses.enterloadcourse")
-	label:SetPos(15, 35)
-	label:SizeToContents()
-
-	local entry = vgui.Create("DTextEntry", frame)
-	entry:SetPos(15, 55)
-	entry:SetSize(330, 22)
-	entry:SetPlaceholderText("XXXX-XXXX-XXXX")
-
-	local confirm = vgui.Create("DButton", frame)
-	confirm:SetText("#beatrun.misc.ok")
-	confirm:SetSize(150, 30)
-	confirm:SetPos(20, 115)
-	confirm.DoClick = function()
-		local code = string.Trim(entry:GetValue())
-		if code == "" then return end
-
-		OpenConfirmPopup("#beatrun.toolsmenu.courses.updatecourse", string.format(language.GetPhrase("beatrun.coursesdatabase.update1"), code, Course_Name, currentMap), function()
-			UpdateCourse(code)
-
-			notification.AddLegacy("#beatrun.misc.checkconsole", NOTIFY_HINT, 5)
-		end)
-
-		frame:Close()
-	end
-
-	local cancel = vgui.Create("DButton", frame)
-	cancel:SetText("#beatrun.misc.cancel")
-	cancel:SetSize(150, 30)
-	cancel:SetPos(190, 115)
-	cancel.DoClick = function()
-		frame:Close()
-	end
-end
-
-function GetCurrentMapWorkshopID()
-	for _, addon in pairs(engine.GetAddons()) do
-		if not addon or not addon.title or not addon.wsid or not addon.mounted or not addon.downloaded then continue end
-
-		_, addon_folders = file.Find("*", addon.title)
-
-		if file.Exists("maps/" .. currentMap .. ".bsp", addon.title) then return addon.wsid end
-	end
-
-	return "0"
-end
-
-function FetchCourse(url, headers)
-	if not LocalPlayer():IsSuperAdmin() then
-		print("You must be a Super Admin to load courses")
-		return
-	end
-
-	http.Fetch(url, function(body, length, _, code)
-		local response = util.JSONToTable(body)
-
-		if BEATRUN_DEBUG then print(body) end
-
-		if response and response.res == 200 then
-			print("Success! | Length: " .. length .. "\nLoading course...")
-
-			local dir = "beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/"
-
-			file.CreateDir(dir)
-
-			local coursedata = util.Compress(response.file)
-
-			file.Write(dir .. headers.code .. ".txt", coursedata)
-
-			LoadCourseRaw(coursedata)
-
-			return true
-		elseif not response then
-			print("Can't access the database! Please make sure that domain is correct.")
-
-			return false
-		else
-			print(body)
-			print("Error! | Response: " .. response.message)
-
-			return false
-		end
-	end, function(e) print("An error occurred: " .. e) end, headers)
-end
-
-function PostCourse(url, course, headers)
-	http.Post(url, {
-		data = course
-	}, function(body, _, _, code)
-		local response = util.JSONToTable(body)
-
-		if BEATRUN_DEBUG then print(body) end
-
-		if response and response.res == 200 then
-			print("Success! | Code: " .. response.code)
-
-			return true
-		elseif not response then
-			print("Can't access the database! Please make sure that domain is correct.")
-
-			return false
-		else
-			print(body)
-			print("An error occurred: " .. response.message)
-
-			return false
-		end
-	end, function(e) print("Unexpected error: " .. e) end, headers)
-end
-
-function UploadCourse()
-	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantdoinfreeplay")) end
-
-	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
-	local data = fl:Read()
-
-	PostCourse("https://" .. domain:GetString() .. "/api/upload", util.Base64Encode(data, true), {
-		authorization = apikey:GetString(),
-		course = util.Base64Encode(data, true),
-		map = string.Replace(currentMap, " ", "-"),
-		workshopid = GetCurrentMapWorkshopID()
-	})
-end
-
-function UpdateCourse(course_code)
-	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantdoinfreeplay")) end
-
-	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
-	local data = fl:Read()
-
-	PostCourse("https://" .. domain:GetString() .. "/api/update", data, {
-		authorization = apikey:GetString(),
-		code = course_code,
-		course = util.Base64Encode(data, true),
-		map = string.Replace(currentMap, " ", "-")
-	})
-end
+-- ConVars
+local databaseApiKey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.GetPhrase("beatrun.convars.apikey"))
+local databaseDomain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", true, false, language.GetPhrase("beatrun.convars.domain"))
 
 -- Database UI
 local ScreenH, ScreenW = ScrH(), ScrW()
 local isCurrentMapOnly = false
+local currentMap = game.GetMap()
 
 -- Global caches
 Beatrun_MapImageCache = Beatrun_MapImageCache or {}
@@ -194,8 +25,9 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or {
 }
 
 local CACHE_LIFETIME = 5
-local Frame, Header, List
+local Frame, Header, Sheet, List, BrowsePanel, UploadPanel
 
+-- Helpers
 local function IsCoursesCacheValid()
 	return Beatrun_CoursesCache.all and CurTime() - Beatrun_CoursesCache.at < CACHE_LIFETIME
 end
@@ -220,8 +52,64 @@ local function CacheMapPreview(course)
 	end)
 end
 
-local function GetMapPreview(course)
-	return Beatrun_MapImageCache[course.mapName]
+function GetCurrentMapWorkshopID()
+	for _, addon in ipairs(engine.GetAddons()) do
+		if not addon.mounted or not addon.downloaded or not addon.wsid then continue end
+
+		if file.Exists("maps/" .. currentMap .. ".bsp", addon.title) then
+			return addon.wsid
+		end
+	end
+
+	return nil
+end
+
+local function SanitizeString(str)
+	str = string.lower(str)
+	str = string.gsub(str, "[^%w_%-]", "_")
+
+	return str
+end
+
+local function SaveCourse(mapName, code, data)
+	mapName = SanitizeString(mapName)
+	code = SanitizeString(code)
+
+	file.CreateDir("beatrun/courses/" .. mapName)
+
+	local path = "beatrun/courses/" .. mapName .. "/" .. code .. ".txt"
+	local success = file.Write(path, data)
+
+	return success and path or nil
+end
+
+local function DownloadCourse(course)
+	local headers = {
+		code = course.code
+	}
+
+	http.Fetch("http://" .. databaseDomain:GetString() .. "/courses/download", function(body, size, _, code)
+		if code ~= 200 or not body or body == "" then
+			notification.AddLegacy("Failed to download course", NOTIFY_ERROR, 4)
+
+			return
+		end
+
+		local path = SaveCourse(course.mapName, course.code, util.Base64Decode(body))
+
+		if not path then
+			notification.AddLegacy("Save failed", NOTIFY_ERROR, 4)
+
+			return
+		end
+
+		notification.AddLegacy("Saved to data/" .. path, NOTIFY_GENERIC, 4)
+
+		surface.PlaySound("ui/buttonclickrelease.wav")
+	end, function(err)
+		notification.AddLegacy("Check console", NOTIFY_ERROR, 4)
+		print("HTTP error: " .. err)
+	end, headers)
 end
 
 local function PopulateCoursesList()
@@ -240,7 +128,7 @@ local function PopulateCoursesList()
 			local col = self:IsHovered() and Color(70, 70, 70) or Color(60, 60, 60)
 			draw.RoundedBox(6, 0, 0, w, h, col)
 
-			local mapMaterial = GetMapPreview(v)
+			local mapMaterial = Beatrun_MapImageCache[v.mapName]
 
 			if mapMaterial and not mapMaterial:IsError() then
 				surface.SetMaterial(mapMaterial)
@@ -317,15 +205,15 @@ local function PopulateCoursesList()
 		nameBtn:Dock(FILL)
 		nameBtn:SetCursor("hand")
 		nameBtn:SetContentAlignment(4)
-		nameBtn:SetTextColor(Color(180, 180, 180))
+		nameBtn:SetTextColor(color_white)
 		nameBtn:SetPaintBackground(false)
 
 		nameBtn.DoClick = function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end
 		nameBtn.OnCursorEntered = function(self) self:SetTextColor(Color(255, 0, 0)) end
-		nameBtn.OnCursorExited = function(self) self:SetTextColor(Color(180, 180, 180)) end
+		nameBtn.OnCursorExited = function(self) self:SetTextColor(color_white) end
 
 		local loadPanel = vgui.Create("DPanel", rightPanel)
-		loadPanel:SetTall(36)
+		loadPanel:SetTall(70)
 		loadPanel:Dock(BOTTOM)
 		loadPanel:DockMargin(10, 0, 0, 4)
 		loadPanel.Paint = nil
@@ -344,7 +232,7 @@ local function PopulateCoursesList()
 		end
 
 		loadBtn.DoClick = function()
-			if not steamworks.IsSubscribed(v.workshopId) then
+			if not steamworks.IsSubscribed(v.workshopId) or v.workshopId ~= "0" then
 				local loadWarn = vgui.Create("DFrame")
 				loadWarn:SetTitle("")
 				loadWarn:SetSize(360, 140)
@@ -391,6 +279,31 @@ local function PopulateCoursesList()
 
 			if IsValid(Frame) then Frame:Close() end
 		end
+
+		local downloadBtn = vgui.Create("DButton", loadPanel)
+		downloadBtn:SetText("Download")
+		downloadBtn:SetFont("AEUIDefault")
+		downloadBtn:Dock(BOTTOM)
+		downloadBtn:SetTall(28)
+		downloadBtn:DockMargin(0, 6, 0, 0)
+		downloadBtn:SetCursor("hand")
+		downloadBtn:SetTextColor(color_white)
+
+		downloadBtn.Paint = function(self, w, h)
+			local bg = self:IsHovered() and Color(60, 160, 60) or Color(60, 130, 50)
+			local savedPath = "beatrun/courses/" .. SanitizeString(v.mapName) .. "/" .. SanitizeString(v.code) .. ".txt"
+
+			if file.Exists(savedPath, "DATA") then
+				bg = self:IsHovered() and Color(160, 60, 60) or Color(130, 50, 50)
+				self:SetText("Overwrite?")
+
+			end
+
+			draw.RoundedBox(4, 0, 0, w, h, bg)
+		end
+
+		-- NOTE: I know that we have all the course data, but the database needs to update the download couter
+		downloadBtn.DoClick = function() DownloadCourse(v) end
 	end
 end
 
@@ -417,19 +330,19 @@ function OpenDBMenu()
 	Frame = vgui.Create("DFrame")
 	Frame:SetSize(ScreenW / 1.1, ScreenH / 1.1)
 	Frame:Center()
-	Frame:SetTitle(string.format("Beatrun Courses Database (%s)", domain:GetString()))
+	Frame:SetTitle(string.format("Online Courses Database (%s)", databaseDomain:GetString()))
 	Frame:MakePopup()
 
-	local Sheet = vgui.Create("DPropertySheet", Frame)
+	Sheet = vgui.Create("DPropertySheet", Frame)
 	Sheet:Dock(FILL)
 
 	-- Browse page
-	local BrowsePanel = vgui.Create("DPanel", Sheet)
+	BrowsePanel = vgui.Create("DPanel", Sheet)
 	BrowsePanel:Dock(FILL)
 	BrowsePanel:DockPadding(0, 0, 0, 0)
 	BrowsePanel:SetBackgroundColor(Color(45, 45, 45))
 
-	Sheet:AddSheet("Browse Courses", BrowsePanel, "icon16/folder.png")
+	Sheet:AddSheet("Browse", BrowsePanel, "icon16/folder.png")
 
 	Header = vgui.Create("DPanel", BrowsePanel)
 	Header:Dock(TOP)
@@ -470,10 +383,9 @@ function OpenDBMenu()
 
 	List = vgui.Create("DScrollPanel", BrowsePanel)
 	List:Dock(FILL)
-	-- List:DockMargin(10, 10, 10, 10)
 
 	-- Upload page
-	local UploadPanel = vgui.Create("DPanel", Sheet)
+	UploadPanel = vgui.Create("DPanel", Sheet)
 	UploadPanel:Dock(FILL)
 	UploadPanel:DockPadding(20, 20, 20, 20)
 
@@ -481,18 +393,7 @@ function OpenDBMenu()
 		draw.SimpleText("there will be ui...", "AEUILarge", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
-	Sheet:AddSheet("Upload Course", UploadPanel, "icon16/arrow_up.png")
-
-	-- Download page
-	local DownloadPanel = vgui.Create("DPanel", Sheet)
-	DownloadPanel:Dock(FILL)
-	DownloadPanel:DockPadding(20, 20, 20, 20)
-
-	DownloadPanel.Paint = function(self, w, h)
-		draw.SimpleText("there will be ui...", "AEUILarge", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	end
-
-	Sheet:AddSheet("Download Courses", DownloadPanel, "icon16/arrow_down.png")
+	Sheet:AddSheet("Upload", UploadPanel, "icon16/arrow_up.png")
 
 	if IsCoursesCacheValid() then
 		PopulateCoursesList()
@@ -509,7 +410,7 @@ function OpenDBMenu()
 		game = "yes"
 	}
 
-	http.Fetch("http://" .. domain:GetString() .. "/courses/list", function(body)
+	http.Fetch("http://" .. databaseDomain:GetString() .. "/courses/list", function(body)
 		Beatrun_CoursesCache.loading = false
 
 		local response = util.JSONToTable(body)
@@ -552,3 +453,159 @@ function OpenDBMenu()
 end
 
 concommand.Add("Beatrun_CoursesDatabase", OpenDBMenu)
+
+
+-- FIXME: rewrite for new version!
+
+function OpenConfirmPopup(title, message, onConfirm)
+	local frame = vgui.Create("DFrame")
+	frame:SetTitle(title)
+	frame:SetSize(360, 140)
+	frame:Center()
+	frame:MakePopup()
+	frame:SetDeleteOnClose(true)
+
+	local label = vgui.Create("DLabel", frame)
+	label:SetText(message)
+	label:SetWrap(true)
+	label:SetSize(330, 60)
+	label:SetPos(15, 35)
+
+	local confirm = vgui.Create("DButton", frame)
+	confirm:SetText("#beatrun.misc.ok")
+	confirm:SetSize(150, 30)
+	confirm:SetPos(20, 95)
+
+	confirm.DoClick = function()
+		if onConfirm then onConfirm() end
+		frame:Close()
+	end
+
+	local cancel = vgui.Create("DButton", frame)
+	cancel:SetText("#beatrun.misc.cancel")
+	cancel:SetSize(150, 30)
+	cancel:SetPos(190, 95)
+	cancel.DoClick = function() frame:Close() end
+end
+
+function OpenUpdatePopup()
+	local frame = vgui.Create("DFrame")
+	frame:SetTitle("#beatrun.toolsmenu.courses.updatecourse")
+	frame:SetSize(360, 160)
+	frame:Center()
+	frame:MakePopup()
+	frame:SetDeleteOnClose(true)
+
+	local label = vgui.Create("DLabel", frame)
+	label:SetText("#beatrun.toolsmenu.courses.enterloadcourse")
+	label:SetPos(15, 35)
+	label:SizeToContents()
+
+	local entry = vgui.Create("DTextEntry", frame)
+	entry:SetPos(15, 55)
+	entry:SetSize(330, 22)
+	entry:SetPlaceholderText("XXXX-XXXX-XXXX")
+
+	local confirm = vgui.Create("DButton", frame)
+	confirm:SetText("#beatrun.misc.ok")
+	confirm:SetSize(150, 30)
+	confirm:SetPos(20, 115)
+	confirm.DoClick = function()
+		local code = string.Trim(entry:GetValue())
+		if code == "" then return end
+
+		OpenConfirmPopup("#beatrun.toolsmenu.courses.updatecourse", string.format(language.GetPhrase("beatrun.coursesdatabase.update1"), code, Course_Name, currentMap), function()
+			UpdateCourse(code)
+
+			notification.AddLegacy("#beatrun.misc.checkconsole", NOTIFY_HINT, 5)
+		end)
+
+		frame:Close()
+	end
+
+	local cancel = vgui.Create("DButton", frame)
+	cancel:SetText("#beatrun.misc.cancel")
+	cancel:SetSize(150, 30)
+	cancel:SetPos(190, 115)
+	cancel.DoClick = function()
+		frame:Close()
+	end
+end
+
+--[[ NOTE: To be rewritten
+function FetchCourse(url, headers)
+	if not LocalPlayer():IsSuperAdmin() then
+		print("You must be a Super Admin to load courses")
+		return
+	end
+
+	http.Fetch(url, function(body, length, _, code)
+		local response = util.JSONToTable(body)
+
+		if BEATRUN_DEBUG then print(body) end
+
+		if response and response.res == 200 then
+			print("Success! | Length: " .. length .. "\nLoading course...")
+
+			local dir = "beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/"
+
+			file.CreateDir(dir)
+
+			local coursedata = util.Compress(response.file)
+
+			file.Write(dir .. headers.code .. ".txt", coursedata)
+
+			LoadCourseRaw(coursedata)
+
+			return true
+		elseif not response then
+			print("Can't access the database! Please make sure that domain is correct.")
+
+			return false
+		else
+			print(body)
+			print("Error! | Response: " .. response.message)
+
+			return false
+		end
+	end, function(e) print("An error occurred: " .. e) end, headers)
+end
+
+function PostCourse(url, course, headers)
+	http.Post(url, {
+		data = course
+	}, function(body, _, _, code)
+		local response = util.JSONToTable(body)
+
+		if BEATRUN_DEBUG then print(body) end
+
+		if response and response.res == 200 then
+			print("Success! | Code: " .. response.code)
+
+			return true
+		elseif not response then
+			print("Can't access the database! Please make sure that domain is correct.")
+
+			return false
+		else
+			print(body)
+			print("An error occurred: " .. response.message)
+
+			return false
+		end
+	end, function(e) print("Unexpected error: " .. e) end, headers)
+end
+
+function UploadCourse()
+	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantdoinfreeplay")) end
+
+	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
+	local data = fl:Read()
+
+	PostCourse("https://" .. databaseDomain:GetString() .. "/api/upload", util.Base64Encode(data, true), {
+		authorization = databaseApiKey:GetString(),
+		course = util.Base64Encode(data, true),
+		map = currentMap,
+		workshopid = GetCurrentMapWorkshopID()
+	})
+end --]]
