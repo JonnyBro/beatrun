@@ -835,79 +835,47 @@ end
 
 concommand.Add("Beatrun_CoursesDatabase", OpenDBMenu)
 
-
--- FIXME: rewrite for new version!
-
 function OpenConfirmPopup(title, message, onConfirm)
+	local frameW = math.Clamp(ScreenW * 0.25, 320, 600)
+	local frameH = math.Clamp(ScreenH * 0.18, 140, 260)
+
 	local frame = vgui.Create("DFrame")
 	frame:SetTitle(title)
-	frame:SetSize(360, 140)
+	frame:SetSize(frameW, frameH)
 	frame:Center()
 	frame:MakePopup()
 	frame:SetDeleteOnClose(true)
+	frame:DockPadding(20, 40, 20, 20)
+
+	frame.Paint = function(self, w, h) draw.RoundedBox(8, 0, 0, w, h, Color(45, 45, 45)) end
 
 	local label = vgui.Create("DLabel", frame)
-	label:SetText(message)
+	label:Dock(FILL)
 	label:SetWrap(true)
-	label:SetSize(330, 60)
-	label:SetPos(15, 35)
+	label:SetText(message)
+	label:SetContentAlignment(5)
+	label:SetAutoStretchVertical(true)
 
-	local confirm = vgui.Create("DButton", frame)
+	local buttonRow = vgui.Create("DPanel", frame)
+	buttonRow:Dock(BOTTOM)
+	buttonRow:SetTall(frameH * 0.28)
+	buttonRow.Paint = nil
+
+	local confirm = vgui.Create("DButton", buttonRow)
+	confirm:Dock(LEFT)
+	confirm:DockMargin(0, 0, 10, 0)
+	confirm:SetWide(frameW * 0.5 - 25)
 	confirm:SetText("#beatrun.misc.ok")
-	confirm:SetSize(150, 30)
-	confirm:SetPos(20, 95)
 
 	confirm.DoClick = function()
 		if onConfirm then onConfirm() end
 		frame:Close()
 	end
 
-	local cancel = vgui.Create("DButton", frame)
+	local cancel = vgui.Create("DButton", buttonRow)
+	cancel:Dock(FILL)
 	cancel:SetText("#beatrun.misc.cancel")
-	cancel:SetSize(150, 30)
-	cancel:SetPos(190, 95)
-	cancel.DoClick = function() frame:Close() end
-end
 
-function OpenUpdatePopup()
-	local frame = vgui.Create("DFrame")
-	frame:SetTitle("#beatrun.toolsmenu.courses.updatecourse")
-	frame:SetSize(360, 160)
-	frame:Center()
-	frame:MakePopup()
-	frame:SetDeleteOnClose(true)
-
-	local label = vgui.Create("DLabel", frame)
-	label:SetText("#beatrun.toolsmenu.courses.enterloadcourse")
-	label:SetPos(15, 35)
-	label:SizeToContents()
-
-	local entry = vgui.Create("DTextEntry", frame)
-	entry:SetPos(15, 55)
-	entry:SetSize(330, 22)
-	entry:SetPlaceholderText("XXXX-XXXX-XXXX")
-
-	local confirm = vgui.Create("DButton", frame)
-	confirm:SetText("#beatrun.misc.ok")
-	confirm:SetSize(150, 30)
-	confirm:SetPos(20, 115)
-	confirm.DoClick = function()
-		local code = string.Trim(entry:GetValue())
-		if code == "" then return end
-
-		OpenConfirmPopup("#beatrun.toolsmenu.courses.updatecourse", string.format(language.GetPhrase("beatrun.coursesdatabase.update1"), code, Course_Name, currentMap), function()
-			UpdateCourse(code)
-
-			notification.AddLegacy("#beatrun.misc.checkconsole", NOTIFY_HINT, 5)
-		end)
-
-		frame:Close()
-	end
-
-	local cancel = vgui.Create("DButton", frame)
-	cancel:SetText("#beatrun.misc.cancel")
-	cancel:SetSize(150, 30)
-	cancel:SetPos(190, 115)
 	cancel.DoClick = function()
 		frame:Close()
 	end
