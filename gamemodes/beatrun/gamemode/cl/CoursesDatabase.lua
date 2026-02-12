@@ -5,6 +5,7 @@
 	- Make course commands (upload, load, etc) obsolete
 	- Everything will be in the UI, no more commands (maybe there will be for automation or power users :shrug:)
 	- Replace hardcoded colors with custom themes?
+	- Validate api key with the server
 --]]
 
 -- ConVars
@@ -26,7 +27,7 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or {
 }
 
 local CACHE_LIFETIME = 5
-local Frame, Header, Sheet, List, BrowsePanel, UploadPanel
+local Frame, Header, Sheet, List, BrowsePanel, UploadPanel, ProfilePanel
 
 -- Helpers
 local function IsCoursesCacheValid()
@@ -89,7 +90,7 @@ local function DownloadCourse(course)
 		code = course.code
 	}
 
-	http.Fetch("http://" .. databaseDomain:GetString() .. "/courses/download", function(body, size, _, code)
+	http.Fetch("http://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, code)
 		if code ~= 200 or not body or body == "" then
 			notification.AddLegacy("Failed to download course", NOTIFY_ERROR, 4)
 
@@ -135,7 +136,7 @@ local function UploadCourseFile(course)
 		workshopId = GetCurrentMapWorkshopID()
 	}
 
-	http.Post("http://" .. databaseDomain:GetString() .. "/courses/upload", {
+	http.Post("http://" .. databaseDomain:GetString() .. "/api/courses/upload", {
 		data = encoded
 	}, function(body, size, headers, code)
 		body = util.JSONToTable(body)
@@ -396,6 +397,209 @@ local function GetCoursesForCurrentMap()
 	return result
 end
 
+local function BuildProfilePage()
+	if not IsValid(ProfilePanel) then return end
+
+	ProfilePanel:Clear()
+
+	local apiKey = databaseApiKey:GetString()
+	local hasKey = apiKey and apiKey ~= "0" and apiKey ~= ""
+
+	if not hasKey then
+		local msg = vgui.Create("DLabel", ProfilePanel)
+		msg:SetFont("AEUILarge")
+		msg:SetText("You need an API key to upload courses\nButton below will send your SteamID and Username to the database!\nWe do not collect any other info!")
+		msg:SetTextColor(color_white)
+		msg:SizeToContents()
+		msg:Dock(TOP)
+		msg:DockMargin(0, 60, 0, 20)
+		msg:SetContentAlignment(5)
+
+		local registerBtn = vgui.Create("DButton", ProfilePanel)
+		registerBtn:SetText("Register/Get API Key")
+		registerBtn:SetTall(40)
+		registerBtn:Dock(TOP)
+		registerBtn:DockMargin(200, 0, 200, 0)
+		registerBtn:SetTextColor(color_white)
+		registerBtn.Paint = function(self, w, h) draw.RoundedBox(6, 0, 0, w, h, self:IsHovered() and Color(80, 120, 80) or Color(60, 100, 60)) end
+		registerBtn.DoClick = function()
+			local headers = {
+				steamid = LocalPlayer():SteamID64(),
+				username = LocalPlayer():Nick()
+			}
+
+			http.Post("http://" .. databaseDomain:GetString() .. "/api/users/register", {}, function(body, _, _, code)
+				body = util.JSONToTable(body)
+
+				if code ~= 200 then
+					notification.AddLegacy("API key error (check console)", NOTIFY_ERROR, 4)
+
+					print("Code: " .. body.code)
+					print("Reply: " .. body.message)
+
+					return
+				end
+
+				print("Updated Beatrun API key to " .. body.data.key)
+
+				databaseApiKey:SetString(body.data.key)
+
+				BuildProfilePage()
+
+				surface.PlaySound("ui/buttonclickrelease.wav")
+			end, function(err)
+				print("API key error:", err)
+				notification.AddLegacy("API key error (check console)", NOTIFY_ERROR, 4)
+			end, headers)
+		end
+
+		return
+	end
+
+	local header = vgui.Create("DPanel", ProfilePanel)
+	header:SetTall(90)
+	header:Dock(TOP)
+	header.Paint = nil
+
+	local avatar = vgui.Create("AvatarImage", header)
+	avatar:SetSize(64, 64)
+	avatar:Dock(LEFT)
+	avatar:DockMargin(0, 10, 15, 10)
+	avatar:SetSteamID(LocalPlayer():SteamID64(), 64)
+
+	local name = vgui.Create("DLabel", header)
+	name:SetFont("AEUILarge")
+	name:SetText(LocalPlayer():Nick())
+	name:SetTextColor(color_white)
+	name:Dock(TOP)
+	name:SizeToContents()
+
+	local keyRow = vgui.Create("DPanel", header)
+	keyRow:Dock(TOP)
+	keyRow:DockMargin(0, 6, 0, 0)
+	keyRow:SetTall(26)
+	keyRow.Paint = nil
+
+	local masked = string.rep("*", math.max(#apiKey - 4, 0)) .. string.sub(apiKey, -4)
+
+	local keyLabel = vgui.Create("DLabel", keyRow)
+	keyLabel:SetFont("AEUIDefault")
+	keyLabel:SetText("API Key: " .. masked)
+	keyLabel:SetTextColor(Color(180, 180, 180))
+	keyLabel:Dock(LEFT)
+	keyLabel:SizeToContents()
+
+	local changeBtn = vgui.Create("DButton", keyRow)
+	changeBtn:SetText("Change")
+	changeBtn:SetFont("AEUIDefault")
+	changeBtn:Dock(LEFT)
+	changeBtn:DockMargin(10, 0, 0, 0)
+	changeBtn:SizeToContents()
+	changeBtn:SetTextColor(color_white)
+	changeBtn:SetCursor("hand")
+
+	changeBtn.Paint = function(self, w, h)
+		draw.RoundedBox(4, 0, 0, w, h, self:IsHovered() and Color(120, 80, 60) or Color(90, 60, 45))
+	end
+
+	changeBtn.DoClick = function()
+		local frame = vgui.Create("DFrame")
+		frame:SetSize(360, 150)
+		frame:Center()
+		frame:MakePopup()
+		frame:SetTitle("Change API Key")
+
+		local entry = vgui.Create("DTextEntry", frame)
+		entry:Dock(TOP)
+		entry:DockMargin(20, 40, 20, 0)
+		entry:SetTall(28)
+		entry:SetPlaceholderText("Enter new API key...")
+		entry:SetText(databaseApiKey:GetString())
+
+		local saveBtn = vgui.Create("DButton", frame)
+		saveBtn:Dock(BOTTOM)
+		saveBtn:DockMargin(20, 0, 20, 20)
+		saveBtn:SetTall(32)
+		saveBtn:SetText("Save")
+		saveBtn:SetTextColor(color_white)
+
+		saveBtn.Paint = function(self, w, h)
+			draw.RoundedBox(4, 0, 0, w, h, self:IsHovered() and Color(70, 120, 70) or Color(60, 100, 60))
+		end
+
+		saveBtn.DoClick = function()
+			local newKey = string.Trim(entry:GetValue())
+
+			if newKey == "" then return end
+
+			databaseApiKey:SetString(newKey)
+
+			frame:Close()
+			BuildProfilePage()
+		end
+	end
+
+	-- Stats block
+	local statsPanel = vgui.Create("DPanel", ProfilePanel)
+	statsPanel:SetTall(60)
+	statsPanel:Dock(TOP)
+	statsPanel:DockMargin(0, 15, 0, 15)
+	statsPanel.Paint = function(self, w, h) draw.RoundedBox(6, 0, 0, w, h, Color(60, 60, 60)) end
+
+	local statsLabel = vgui.Create("DLabel", statsPanel)
+	statsLabel:SetFont("AEUIDefault")
+	statsLabel:SetTextColor(color_white)
+	statsLabel:SetContentAlignment(5)
+	statsLabel:Dock(FILL)
+
+	local myCourses = {}
+
+	local totalDownloads = 0
+
+	if Beatrun_CoursesCache.all then
+		local myId = LocalPlayer():SteamID64()
+
+		for _, v in ipairs(Beatrun_CoursesCache.all) do
+			if v.uploadedBy and v.uploadedBy.steamId == myId then
+				myCourses[#myCourses + 1] = v
+				totalDownloads = totalDownloads + (v.downloadCount or 0)
+			end
+		end
+	end
+
+	statsLabel:SetText("Uploads: " .. #myCourses .. "    |    Total Downloads: " .. totalDownloads)
+
+	local myList = vgui.Create("DScrollPanel", ProfilePanel)
+	myList:Dock(FILL)
+
+	if #myCourses == 0 then
+		local empty = vgui.Create("DLabel", myList)
+		empty:SetText("You have not uploaded any courses yet.")
+		empty:SetTextColor(Color(180, 180, 180))
+		empty:Dock(TOP)
+		empty:DockMargin(0, 5, 0, 0)
+		empty:SizeToContents()
+
+		return
+	end
+
+	for _, v in ipairs(Beatrun_CoursesCache.all or {}) do
+		if not (v.uploadedBy and v.uploadedBy.steamId == LocalPlayer():SteamID64()) then continue end
+
+		local entry = myList:Add("DPanel")
+		entry:SetTall(60)
+		entry:Dock(TOP)
+		entry:DockMargin(0, 0, 0, 8)
+
+		entry.Paint = function(self, w, h)
+			draw.RoundedBox(6, 0, 0, w, h, Color(55, 55, 55))
+			draw.SimpleText(v.name, "AEUIDefault", 10, 8, color_white)
+			draw.SimpleText("Downloads: " .. v.downloadCount, "AEUIDefault", 10, 26, Color(180, 180, 180))
+			draw.SimpleText("Uploaded: " .. v.uploadedAt, "AEUIDefault", 10, 42, Color(140, 140, 140))
+		end
+	end
+end
+
 function OpenDBMenu()
 	if IsValid(Frame) then Frame:Remove() end
 
@@ -546,19 +750,28 @@ function OpenDBMenu()
 			return
 		end
 
-		OpenConfirmPopup(
-			"Upload Course",
-			"Upload course '" .. selectedCourse.name .. "' to database?",
-			function()
-				UploadCourseFile(selectedCourse)
-			end
-		)
+		OpenConfirmPopup("Upload Course", "Upload course '" .. selectedCourse.name .. "' to database?", function() UploadCourseFile(selectedCourse) end)
 	end
 
 	PopulateLocalCourses()
 
 	Sheet:AddSheet("Upload", UploadPanel, "icon16/arrow_up.png")
 
+	-- Profile page
+	ProfilePanel = vgui.Create("DPanel", Sheet)
+	ProfilePanel:Dock(FILL)
+	ProfilePanel:DockPadding(20, 20, 20, 20)
+	ProfilePanel:SetBackgroundColor(Color(45, 45, 45))
+
+	Sheet.OnActiveTabChanged = function(self, old, new)
+		if new:GetText() == "Profile" then
+			BuildProfilePage()
+		end
+	end
+
+	Sheet:AddSheet("Profile", ProfilePanel, "icon16/user.png")
+
+	-- Fetch courses
 	if IsCoursesCacheValid() then
 		PopulateCoursesList()
 
@@ -574,7 +787,7 @@ function OpenDBMenu()
 		game = "yes"
 	}
 
-	http.Fetch("http://" .. databaseDomain:GetString() .. "/courses/list", function(body)
+	http.Fetch("http://" .. databaseDomain:GetString() .. "/api/courses/list", function(body)
 		Beatrun_CoursesCache.loading = false
 
 		local response = util.JSONToTable(body)
@@ -605,6 +818,10 @@ function OpenDBMenu()
 
 		ApplyCourseFilter()
 		PopulateCoursesList()
+
+		if IsValid(ProfilePanel) then
+			BuildProfilePage()
+		end
 
 		for _, v in ipairs(Beatrun_CoursesCache.all) do
 			CacheMapPreview(v)
