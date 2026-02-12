@@ -4,6 +4,7 @@
 	- Rewrite all the functions for the new database backend
 	- Make course commands (upload, load, etc) obsolete
 	- Everything will be in the UI, no more commands (maybe there will be for automation or power users :shrug:)
+	- Replace hardcoded colors with custom themes?
 --]]
 
 -- ConVars
@@ -112,6 +113,44 @@ local function DownloadCourse(course)
 	end, headers)
 end
 
+local function UploadCourseFile(course)
+	if not databaseApiKey:GetString() or databaseApiKey:GetString() == "0" then
+		notification.AddLegacy("API key missing", NOTIFY_ERROR, 4)
+
+		return
+	end
+
+	local raw = file.Read(course.path, "DATA")
+	if not raw then
+		notification.AddLegacy("Failed to read/open file", NOTIFY_ERROR, 4)
+
+		return
+	end
+
+	local encoded = util.Base64Encode(raw, true)
+
+	local headers = {
+		authorization = databaseApiKey:GetString(),
+		mapName = currentMap,
+		workshopId = GetCurrentMapWorkshopID()
+	}
+
+	http.Post("http://" .. databaseDomain:GetString() .. "/courses/upload", {
+		data = encoded
+	}, function(body, size, headers, code)
+		if code ~= 200 then
+			notification.AddLegacy("Upload failed", NOTIFY_ERROR, 4)
+			return
+		end
+
+		notification.AddLegacy("Upload successful", NOTIFY_GENERIC, 4)
+		surface.PlaySound("ui/buttonclickrelease.wav")
+	end, function(err)
+		print("Upload error:", err)
+		notification.AddLegacy("Upload error (check console)", NOTIFY_ERROR, 4)
+	end, headers)
+end
+
 local function PopulateCoursesList()
 	if not IsValid(List) then return end
 	if not Beatrun_CoursesCache.filtered then return end
@@ -148,13 +187,13 @@ local function PopulateCoursesList()
 		mapBtn:SetFont("AEUIDefault")
 		mapBtn:SetPos(180, 63)
 		mapBtn:SizeToContents()
-		mapBtn:SetCursor(v.workshopId == "0" and "arrow" or "hand")
+		mapBtn:SetCursor(v.workshopId and "hand" or "arrow")
 		mapBtn:SetTextColor(Color(180, 180, 180))
 		mapBtn:SetPaintBackground(false)
 
-		mapBtn.DoClick = function() if v.workshopId ~= "0" then gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end end
-		mapBtn.OnCursorEntered = function(self) if v.workshopId ~= "0" then self:SetTextColor(Color(255, 0, 0)) end end
-		mapBtn.OnCursorExited = function(self) if v.workshopId ~= "0" then self:SetTextColor(Color(180, 180, 180)) end end
+		mapBtn.DoClick = function() if v.workshopId then gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end end
+		mapBtn.OnCursorEntered = function(self) if v.workshopId then self:SetTextColor(Color(255, 0, 0)) end end
+		mapBtn.OnCursorExited = function(self) if v.workshopId then self:SetTextColor(Color(180, 180, 180)) end end
 
 		local codeBtn = vgui.Create("DButton", entry)
 		codeBtn:SetText(v.code)
@@ -232,7 +271,7 @@ local function PopulateCoursesList()
 		end
 
 		loadBtn.DoClick = function()
-			if not steamworks.IsSubscribed(v.workshopId) or v.workshopId ~= "0" then
+			if v.workshopId and not steamworks.IsSubscribed(v.workshopId) then
 				local loadWarn = vgui.Create("DFrame")
 				loadWarn:SetTitle("")
 				loadWarn:SetSize(360, 140)
@@ -250,7 +289,7 @@ local function PopulateCoursesList()
 				workshop:SetText("Open Workshop")
 				workshop:SetSize(150, 30)
 				workshop:SetPos(20, 95)
-				workshop:SetEnabled(v.workshopId ~= "0")
+				workshop:SetEnabled(v.workshopId ~= nil)
 				workshop.DoClick = function()
 					gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId)
 
@@ -324,6 +363,29 @@ local function ApplyCourseFilter(newText)
 	PopulateCoursesList()
 end
 
+local function GetCoursesForCurrentMap()
+	local map = SanitizeString(currentMap)
+	local dir = "beatrun/courses/" .. map .. "/"
+	if not file.Exists(dir, "DATA") then return {} end
+
+	local files = file.Find(dir .. "*.txt", "DATA")
+	local result = {}
+
+	for _, v in ipairs(files or {}) do
+		local data = file.Read(dir .. v, "DATA")
+		local course = util.JSONToTable(util.Decompress(data) or data)
+		local time = file.Time(dir .. v, "DATA")
+
+		result[#result + 1] = {
+			name = course[5],
+			time,
+			path = dir .. v
+		}
+	end
+
+	return result
+end
+
 function OpenDBMenu()
 	if IsValid(Frame) then Frame:Remove() end
 
@@ -388,10 +450,102 @@ function OpenDBMenu()
 	UploadPanel = vgui.Create("DPanel", Sheet)
 	UploadPanel:Dock(FILL)
 	UploadPanel:DockPadding(20, 20, 20, 20)
+	UploadPanel:SetBackgroundColor(Color(45, 45, 45))
 
-	UploadPanel.Paint = function(self, w, h)
-		draw.SimpleText("there will be ui...", "AEUILarge", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	local title = vgui.Create("DLabel", UploadPanel)
+	title:SetText("Upload Course (Current Map: " .. currentMap .. ")")
+	title:SetFont("AEUILarge")
+	title:Dock(TOP)
+	title:DockMargin(0, 0, 0, 12)
+	title:SetTextColor(color_white)
+	title:SizeToContents()
+
+	local refreshBtn = vgui.Create("DButton", UploadPanel)
+	refreshBtn:SetText("Refresh")
+	refreshBtn:Dock(TOP)
+	refreshBtn:SetTall(28)
+	refreshBtn:DockMargin(0, 0, 0, 10)
+
+	local courseList = vgui.Create("DScrollPanel", UploadPanel)
+	courseList:Dock(FILL)
+
+	local selectedCourse = nil
+
+	local function PopulateLocalCourses()
+		courseList:Clear()
+		selectedCourse = nil
+
+		local courses = GetCoursesForCurrentMap()
+
+		if #courses == 0 then
+			local empty = vgui.Create("DLabel", courseList)
+			empty:SetText("No saved courses found for this map")
+			empty:SetTextColor(Color(180, 180, 180))
+			empty:Dock(TOP)
+			empty:DockMargin(0, 4, 0, 0)
+			empty:SizeToContents()
+
+			return
+		end
+
+		for _, course in ipairs(courses) do
+			local btn = vgui.Create("DButton", courseList)
+			btn:SetText(course.name .. " (Created: " .. os.date("%Y-%m-%d %H:%M", course.time) .. ")")
+			btn:SetTall(32)
+			btn:Dock(TOP)
+			btn:DockMargin(0, 0, 0, 6)
+			btn:SetTextColor(color_white)
+
+			btn.Paint = function(self, w, h)
+				local col
+
+				if selectedCourse == course then
+					col = Color(70, 120, 70)
+				elseif self:IsHovered() then
+					col = Color(80, 80, 80)
+				else
+					col = Color(60, 60, 60)
+				end
+
+				draw.RoundedBox(6, 0, 0, w, h, col)
+			end
+
+			btn.DoClick = function()
+				selectedCourse = course
+			end
+		end
 	end
+
+	refreshBtn.DoClick = PopulateLocalCourses
+
+	local uploadBtn = vgui.Create("DButton", UploadPanel)
+	uploadBtn:SetText("Upload Selected")
+	uploadBtn:Dock(BOTTOM)
+	uploadBtn:SetTall(36)
+	uploadBtn:SetTextColor(color_white)
+
+	uploadBtn.Paint = function(self, w, h)
+		local col = self:IsHovered() and Color(100, 100, 100) or Color(80, 80, 80)
+		draw.RoundedBox(6, 0, 0, w, h, col)
+	end
+
+	uploadBtn.DoClick = function()
+		if not selectedCourse then
+			notification.AddLegacy("No course selected", NOTIFY_ERROR, 3)
+
+			return
+		end
+
+		OpenConfirmPopup(
+			"Upload Course",
+			"Upload course '" .. selectedCourse.name .. "' to database?",
+			function()
+				UploadCourseFile(selectedCourse)
+			end
+		)
+	end
+
+	PopulateLocalCourses()
 
 	Sheet:AddSheet("Upload", UploadPanel, "icon16/arrow_up.png")
 
@@ -531,81 +685,3 @@ function OpenUpdatePopup()
 		frame:Close()
 	end
 end
-
---[[ NOTE: To be rewritten
-function FetchCourse(url, headers)
-	if not LocalPlayer():IsSuperAdmin() then
-		print("You must be a Super Admin to load courses")
-		return
-	end
-
-	http.Fetch(url, function(body, length, _, code)
-		local response = util.JSONToTable(body)
-
-		if BEATRUN_DEBUG then print(body) end
-
-		if response and response.res == 200 then
-			print("Success! | Length: " .. length .. "\nLoading course...")
-
-			local dir = "beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/"
-
-			file.CreateDir(dir)
-
-			local coursedata = util.Compress(response.file)
-
-			file.Write(dir .. headers.code .. ".txt", coursedata)
-
-			LoadCourseRaw(coursedata)
-
-			return true
-		elseif not response then
-			print("Can't access the database! Please make sure that domain is correct.")
-
-			return false
-		else
-			print(body)
-			print("Error! | Response: " .. response.message)
-
-			return false
-		end
-	end, function(e) print("An error occurred: " .. e) end, headers)
-end
-
-function PostCourse(url, course, headers)
-	http.Post(url, {
-		data = course
-	}, function(body, _, _, code)
-		local response = util.JSONToTable(body)
-
-		if BEATRUN_DEBUG then print(body) end
-
-		if response and response.res == 200 then
-			print("Success! | Code: " .. response.code)
-
-			return true
-		elseif not response then
-			print("Can't access the database! Please make sure that domain is correct.")
-
-			return false
-		else
-			print(body)
-			print("An error occurred: " .. response.message)
-
-			return false
-		end
-	end, function(e) print("Unexpected error: " .. e) end, headers)
-end
-
-function UploadCourse()
-	if Course_Name == "" or Course_ID == "" then return print(language.GetPhrase("beatrun.coursesdatabase.cantdoinfreeplay")) end
-
-	local fl = file.Open("beatrun/courses/" .. string.Replace(currentMap, " ", "-") .. "/" .. Course_ID .. ".txt", "rb", "DATA")
-	local data = fl:Read()
-
-	PostCourse("https://" .. databaseDomain:GetString() .. "/api/upload", util.Base64Encode(data, true), {
-		authorization = databaseApiKey:GetString(),
-		course = util.Base64Encode(data, true),
-		map = currentMap,
-		workshopid = GetCurrentMapWorkshopID()
-	})
-end --]]
