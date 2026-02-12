@@ -138,12 +138,22 @@ local function UploadCourseFile(course)
 	http.Post("http://" .. databaseDomain:GetString() .. "/courses/upload", {
 		data = encoded
 	}, function(body, size, headers, code)
+		body = util.JSONToTable(body)
+
 		if code ~= 200 then
-			notification.AddLegacy("Upload failed", NOTIFY_ERROR, 4)
+			notification.AddLegacy("Upload failed, check console", NOTIFY_ERROR, 4)
+
+			print("Code: " .. body.code)
+			print("Reply: " .. body.message)
+
 			return
 		end
 
-		notification.AddLegacy("Upload successful", NOTIFY_GENERIC, 4)
+		notification.AddLegacy("Upload successful, check console for code", NOTIFY_GENERIC, 4)
+
+		print("Code: " .. body.code)
+		print("Reply: " .. body.message)
+
 		surface.PlaySound("ui/buttonclickrelease.wav")
 	end, function(err)
 		print("Upload error:", err)
