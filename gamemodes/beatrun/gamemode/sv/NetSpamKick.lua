@@ -1,3 +1,5 @@
+if SERVER then return end -- epic
+--[[
 if game.SinglePlayer() then return end
 
 local maxmsgcount = 100
@@ -30,4 +32,4 @@ local netIncoming_detour = function(length, ply)
 	func(length, ply)
 end
 
-net.Incoming = netIncoming_detour
+net.Incoming = netIncoming_detour --]]
