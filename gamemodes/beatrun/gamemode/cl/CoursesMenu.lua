@@ -30,16 +30,19 @@ local THEME = {
 		},
 		buttons = {
 			primary = {
+				t = color_white,
 				n = Color(75, 75, 75),
 				h = Color(95, 95, 95),
 				d = Color(110, 110, 110),
 			},
 			green = {
+				t = color_white,
 				n = Color(46, 125, 50),
 				h = Color(56, 142, 60),
 				d = Color(67, 160, 71),
 			},
 			red = {
+				t = color_white,
 				n = Color(183, 28, 28),
 				h = Color(198, 40, 40),
 				d = Color(211, 47, 47),
@@ -53,28 +56,31 @@ local THEME = {
 	light = {
 		accent = Color(33, 150, 243),
 		bg = Color(245, 247, 250),
-		cursor = Color(20, 20, 20),
+		cursor = color_black,
 		header = Color(230, 233, 238),
 		primary = Color(210, 214, 220),
 		search = Color(25, 118, 210),
 		secondary = Color(225, 229, 235),
 		text = {
-			primary = Color(25, 25, 25),
+			primary = color_black,
 			muted = Color(110, 110, 110),
 			dark = Color(70, 70, 70),
 		},
 		buttons = {
 			primary = {
+				t = color_black,
 				n = Color(215, 219, 225),
 				h = Color(200, 210, 220),
 				d = Color(185, 198, 212),
 			},
 			green = {
+				t = color_white,
 				n = Color(76, 175, 80),
 				h = Color(67, 160, 71),
 				d = Color(56, 142, 60),
 			},
 			red = {
+				t = color_white,
 				n = Color(229, 57, 53),
 				h = Color(211, 47, 47),
 				d = Color(198, 40, 40),
@@ -97,7 +103,7 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or {
 }
 
 local CACHE_LIFETIME = 5 -- TODO: up the number for production
-local Frame, Header, Sheet, List, LocalPanel, BrowsePanel, UploadPanel, ProfilePanel
+local Frame, Header, Sheet, List, LocalPanel, BrowsePanel, ProfilePanel
 
 -- Helpers
 local function SanitizeString(str)
@@ -191,9 +197,9 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	local close = vgui.Create("DButton", frame)
 	close:SetSize(28, 28)
 	close:SetPos(frame:GetWide() - 28, 0)
-	close:SetText("✕")
+	close:SetText("X")
 	close:SetFont("AEUIDefault")
-	close:SetTextColor(CurrentTheme().text.primary)
+	close:SetTextColor(CurrentTheme().buttons.red.t)
 
 	close.Paint = function(self, w, h)
 		ApplyButtonTheme(self, w, h, "red")
@@ -220,7 +226,7 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	confirm:SetWide(frameW * 0.5 - 25)
 	confirm:SetText("#beatrun.misc.ok")
 	confirm:SetFont("AEUIDefault")
-	confirm:SetTextColor(CurrentTheme().text.primary)
+	confirm:SetTextColor(CurrentTheme().buttons.green.t)
 
 	confirm.Paint = function(self, w, h)
 		ApplyButtonTheme(self, w, h, "green")
@@ -236,7 +242,7 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	cancel:Dock(FILL)
 	cancel:SetText("#beatrun.misc.cancel")
 	cancel:SetFont("AEUIDefault")
-	cancel:SetTextColor(CurrentTheme().text.primary)
+	cancel:SetTextColor(CurrentTheme().buttons.red.t)
 
 	cancel.Paint = function(self, w, h)
 		ApplyButtonTheme(self, w, h, "red")
@@ -309,7 +315,7 @@ local function UploadCourseFile(course)
 		return
 	end
 
-	local raw = file.Read(course.path, "DATA")
+	local raw = file.Read(course, "DATA")
 	if not raw then
 		notification.AddLegacy("Failed to read/open file", NOTIFY_ERROR, 4)
 
@@ -348,26 +354,6 @@ local function UploadCourseFile(course)
 	end, headers)
 end
 
-local function GetCoursesForCurrentMap()
-	local dir = string.format("beatrun/courses/%s/", currentMap)
-	if not file.Exists(dir, "DATA") then return {} end
-
-	local files = file.Find(dir .. "*.txt", "DATA")
-	local result = {}
-
-	for _, v in ipairs(files or {}) do
-		local data = file.Read(dir .. v, "DATA")
-		local course = util.JSONToTable(util.Decompress(data) or data)
-
-		result[#result + 1] = {
-			name = course[5],
-			path = dir .. v
-		}
-	end
-
-	return result
-end
-
 local function BuildLocalPage()
 	if not IsValid(LocalPanel) then return end
 
@@ -384,7 +370,7 @@ local function BuildLocalPage()
 	exitBtn:DockMargin(0, 0, 15, 0)
 	exitBtn:SetText("Exit Current Course")
 	exitBtn:SetFont("AEUISmall")
-	exitBtn:SetTextColor(CurrentTheme().text.primary)
+	exitBtn:SetTextColor(CurrentTheme().buttons.red.t)
 	exitBtn:SizeToContentsX()
 
 	exitBtn.Paint = function(self, w, h)
@@ -402,7 +388,7 @@ local function BuildLocalPage()
 	buildBtn:Dock(LEFT)
 	buildBtn:SetText("Toggle Build Mode")
 	buildBtn:SetFont("AEUISmall")
-	buildBtn:SetTextColor(CurrentTheme().text.primary)
+	buildBtn:SetTextColor(CurrentTheme().buttons.green.t)
 	buildBtn:SizeToContentsX()
 
 	buildBtn.Paint = function(self, w, h)
@@ -474,13 +460,51 @@ local function BuildLocalPage()
 		loadBtn:DockMargin(0, 10, 10, 10)
 		loadBtn:SetText("Start")
 		loadBtn:SetFont("AEUIDefault")
-		loadBtn:SetTextColor(CurrentTheme().text.primary)
+		loadBtn:SetTextColor(CurrentTheme().buttons.green.t)
 
 		loadBtn.Paint = function(self, w, h)
 			ApplyButtonTheme(self, w, h, "green")
 		end
 
 		loadBtn.DoClick = function() LoadCourse(filename) end
+
+		local uploadBtn = vgui.Create("DButton", entry)
+		uploadBtn:Dock(RIGHT)
+		uploadBtn:SetWide(90)
+		uploadBtn:DockMargin(0, 10, 10, 10)
+		uploadBtn:SetText("Upload")
+		uploadBtn:SetFont("AEUIDefault")
+		uploadBtn:SetTextColor(CurrentTheme().buttons.green.t)
+
+		uploadBtn.Paint = function(self, w, h)
+			ApplyButtonTheme(self, w, h, "green")
+		end
+
+		uploadBtn.DoClick = function()
+			OpenConfirmPopup("Upload Course", "Are you sure you want to upload this course to the database?", function()
+				UploadCourseFile(path .. filename)
+			end)
+		end
+
+		local deleteBtn = vgui.Create("DButton", entry)
+		deleteBtn:Dock(RIGHT)
+		deleteBtn:SetWide(90)
+		deleteBtn:DockMargin(0, 10, 10, 10)
+		deleteBtn:SetText("Delete")
+		deleteBtn:SetFont("AEUIDefault")
+		deleteBtn:SetTextColor(CurrentTheme().buttons.red.t)
+
+		deleteBtn.Paint = function(self, w, h)
+			ApplyButtonTheme(self, w, h, "red")
+		end
+
+		deleteBtn.DoClick = function()
+			OpenConfirmPopup("Delete Course", "Are you sure you want to delete this course?", function()
+				file.Delete(path .. filename, "DATA")
+
+				BuildLocalPage()
+			end)
+		end
 	end
 end
 
@@ -508,7 +532,7 @@ local function BuildProfilePage()
 		registerBtn:SetTall(40)
 		registerBtn:Dock(TOP)
 		registerBtn:DockMargin(200, 0, 200, 0)
-		registerBtn:SetTextColor(CurrentTheme().text.primary)
+		registerBtn:SetTextColor(CurrentTheme().buttons.green.t)
 
 		registerBtn.Paint = function(self, w, h)
 			ApplyButtonTheme(self, w, h, "green")
@@ -581,11 +605,11 @@ local function BuildProfilePage()
 	local changeBtn = vgui.Create("DButton", keyRow)
 	changeBtn:SetText("Change")
 	changeBtn:SetFont("AEUIDefault")
+	changeBtn:SetCursor("hand")
 	changeBtn:Dock(LEFT)
 	changeBtn:DockMargin(10, 0, 0, 0)
 	changeBtn:SizeToContents()
-	changeBtn:SetTextColor(CurrentTheme().text.primary)
-	changeBtn:SetCursor("hand")
+	changeBtn:SetTextColor(CurrentTheme().buttons.green.t)
 
 	changeBtn.Paint = function(self, w, h)
 		ApplyButtonTheme(self, w, h, "green")
@@ -608,9 +632,9 @@ local function BuildProfilePage()
 		local close = vgui.Create("DButton", frame)
 		close:SetSize(28, 28)
 		close:SetPos(frame:GetWide() - 28, 0)
-		close:SetText("✕")
+		close:SetText("X")
 		close:SetFont("AEUIDefault")
-		close:SetTextColor(CurrentTheme().text.primary)
+		close:SetTextColor(CurrentTheme().buttons.red.t)
 
 		close.Paint = function(self, w, h)
 			ApplyButtonTheme(self, w, h, "red")
@@ -716,6 +740,39 @@ local function BuildProfilePage()
 			draw.SimpleText(v.name, "AEUIDefault", 10, 5, CurrentTheme().text.primary)
 			draw.SimpleText("Downloads: " .. v.downloadCount, "AEUIDefault", 10, 22, CurrentTheme().text.muted)
 			draw.SimpleText("Uploaded: " .. v.uploadedAt, "AEUIDefault", 10, 38, CurrentTheme().text.muted)
+		end
+
+		local deleteBtn = vgui.Create("DButton", entry)
+		deleteBtn:Dock(RIGHT)
+		deleteBtn:SetWide(90)
+		deleteBtn:DockMargin(0, 10, 10, 10)
+		deleteBtn:SetText("Delete")
+		deleteBtn:SetFont("AEUIDefault")
+		deleteBtn:SetTextColor(CurrentTheme().buttons.red.t)
+
+		deleteBtn.Paint = function(self, w, h)
+			ApplyButtonTheme(self, w, h, "red")
+		end
+
+		deleteBtn.DoClick = function()
+			OpenConfirmPopup("Delete Course", "Are you sure you want to delete this course from the database?", function()
+				HTTP({
+					method = "DELETE",
+					url = "http://" .. databaseDomain:GetString() .. "/api/courses/delete",
+					headers = {
+						authorization = databaseApiKey:GetString(),
+						code = v.code,
+					},
+					success = function(code, body)
+						notification.AddLegacy("Course deleted successfully!", NOTIFY_GENERIC, 4)
+
+						print(body)
+					end,
+					failed = function(err)
+						print("> /api/courses/delete\nError: ", err)
+					end
+				})
+			end)
 		end
 	end
 end
@@ -836,6 +893,7 @@ local function PopulateCoursesList()
 		mapBtn:SetPaintBackground(false)
 
 		mapBtn.DoClick = function() if v.workshopId then gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end end
+
 		mapBtn.OnCursorEntered = function(self) if v.workshopId then self:SetTextColor(CurrentTheme().accent) end end
 		mapBtn.OnCursorExited = function(self) if v.workshopId then self:SetTextColor(CurrentTheme().text.muted) end end
 
@@ -863,6 +921,7 @@ local function PopulateCoursesList()
 				end
 			end)
 		end
+
 		codeBtn.OnCursorEntered = function(self) self:SetTextColor(CurrentTheme().accent) end
 		codeBtn.OnCursorExited = function(self) self:SetTextColor(CurrentTheme().text.muted) end
 
@@ -870,6 +929,7 @@ local function PopulateCoursesList()
 		rightPanel:Dock(RIGHT)
 		rightPanel:SetWide(170)
 		rightPanel:DockMargin(0, 8, 10, 8)
+
 		rightPanel.Paint = function(self, w, h)
 			surface.SetDrawColor(CurrentTheme().secondary:Unpack())
 			surface.DrawLine(0, 0, 0, h)
@@ -896,6 +956,7 @@ local function PopulateCoursesList()
 		nameBtn:SetPaintBackground(false)
 
 		nameBtn.DoClick = function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end
+
 		nameBtn.OnCursorEntered = function(self) self:SetTextColor(CurrentTheme().accent) end
 		nameBtn.OnCursorExited = function(self) self:SetTextColor(CurrentTheme().text.primary) end
 
@@ -910,7 +971,7 @@ local function PopulateCoursesList()
 		loadBtn:SetFont("AEUIDefault")
 		loadBtn:Dock(FILL)
 		loadBtn:SetCursor("hand")
-		loadBtn:SetTextColor(CurrentTheme().text.primary)
+		loadBtn:SetTextColor(CurrentTheme().buttons.primary.t)
 
 		loadBtn.Paint = function(self, w, h)
 			ApplyButtonTheme(self, w, h, "primary")
@@ -935,9 +996,9 @@ local function PopulateCoursesList()
 				local close = vgui.Create("DButton", loadWarn)
 				close:SetSize(28, 28)
 				close:SetPos(loadWarn:GetWide() - 28, 0)
-				close:SetText("✕")
+				close:SetText("X")
 				close:SetFont("AEUIDefault")
-				close:SetTextColor(CurrentTheme().text.primary)
+				close:SetTextColor(CurrentTheme().buttons.red.t)
 
 				close.Paint = function(self, w, h)
 					ApplyButtonTheme(self, w, h, "red")
@@ -957,7 +1018,7 @@ local function PopulateCoursesList()
 				workshop:SetFont("AEUIDefault")
 				workshop:SetSize(150, 30)
 				workshop:SetPos(20, 95)
-				workshop:SetTextColor(CurrentTheme().text.primary)
+				workshop:SetTextColor(CurrentTheme().buttons.green.t)
 				workshop:SetEnabled(v.workshopId ~= nil)
 
 				workshop.Paint = function(self, w, h)
@@ -975,7 +1036,7 @@ local function PopulateCoursesList()
 				iKnowWhatImDoing:SetFont("AEUISmall")
 				iKnowWhatImDoing:SetSize(150, 30)
 				iKnowWhatImDoing:SetPos(190, 95)
-				iKnowWhatImDoing:SetTextColor(CurrentTheme().text.primary)
+				iKnowWhatImDoing:SetTextColor(CurrentTheme().buttons.red.t)
 
 				iKnowWhatImDoing.Paint = function(self, w, h)
 					ApplyButtonTheme(self, w, h, "red")
@@ -1003,19 +1064,18 @@ local function PopulateCoursesList()
 		downloadBtn:SetTall(28)
 		downloadBtn:DockMargin(0, 6, 0, 0)
 		downloadBtn:SetCursor("hand")
-		downloadBtn:SetTextColor(CurrentTheme().text.primary)
+		downloadBtn:SetTextColor(CurrentTheme().buttons.primary.t)
 
 		local code = string.lower(v.code)
 		local courseDoesExist = file.Exists(string.format("beatrun/courses/%s/%s.txt", v.mapName, code), "DATA")
 
 		downloadBtn.Paint = function(self, w, h)
-			local theme = CurrentTheme().buttons
-			local bg = self:IsHovered() and theme.green.h or theme.green.n
-			local isDown = self:IsDown() and theme.green.d
+			local bg = self:IsHovered() and CurrentTheme().buttons.green.h or CurrentTheme().buttons.green.n
+			local isDown = self:IsDown() and CurrentTheme().buttons.green.d
 
 			if courseDoesExist then
-				bg = self:IsHovered() and theme.red.h or theme.red.n
-				isDown = self:IsDown() and theme.red.d
+				bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+				isDown = self:IsDown() and CurrentTheme().buttons.red.d
 
 				self:SetText("Overwrite?")
 			end
@@ -1058,7 +1118,7 @@ function OpenDBMenu()
 	close:SetFont("AEUIDefault")
 	close:SetSize(24, 24)
 	close:SetPos(Frame:GetWide() - 24, 0)
-	close:SetTextColor(CurrentTheme().text.primary)
+	close:SetTextColor(CurrentTheme().buttons.red.t)
 
 	close.Paint = function(self, w, h)
 		ApplyButtonTheme(self, w, h, "red")
@@ -1103,8 +1163,6 @@ function OpenDBMenu()
 		elseif name == "Online" then
 			ApplyCourseFilter()
 			PopulateCoursesList()
-		elseif name == "Upload" then
-			PopulateLocalCourses()
 		elseif name == "Profile" then
 			BuildProfilePage()
 		end
@@ -1136,8 +1194,9 @@ function OpenDBMenu()
 
 	local CurrentMapBtn = vgui.Create("DButton", Header)
 	CurrentMapBtn:SetText("placeholder")
-	CurrentMapBtn:SetTextColor(CurrentTheme().text.primary)
-	CurrentMapBtn:SetSize(120, 24)
+	CurrentMapBtn:SetFont("AEUISmall")
+	CurrentMapBtn:SetTextColor(CurrentTheme().buttons.primary.t)
+	CurrentMapBtn:SizeToContentsX()
 	CurrentMapBtn:Dock(LEFT)
 	CurrentMapBtn:DockMargin(0, 0, 8, 0)
 
@@ -1146,6 +1205,7 @@ function OpenDBMenu()
 		ApplyButtonTheme(self, w, h, "primary")
 
 		self:SetText(text)
+		self:SizeToContentsX()
 	end
 
 	CurrentMapBtn.DoClick = function()
@@ -1195,109 +1255,6 @@ function OpenDBMenu()
 
 	ApplyScrollTheme(List)
 
-	-- Upload page
-	UploadPanel = vgui.Create("DPanel", Sheet)
-	UploadPanel:Dock(FILL)
-	UploadPanel:DockPadding(20, 20, 20, 20)
-	UploadPanel:SetBackgroundColor(CurrentTheme().bg)
-
-	local title = vgui.Create("DLabel", UploadPanel)
-	title:SetText("Upload Course (Current Map: " .. currentMap .. ")")
-	title:SetFont("AEUILarge")
-	title:Dock(TOP)
-	title:DockMargin(0, 0, 0, 12)
-	title:SetTextColor(CurrentTheme().text.primary)
-	title:SizeToContents()
-
-	local refreshBtn = vgui.Create("DButton", UploadPanel)
-	refreshBtn:SetText("Refresh")
-	refreshBtn:SetFont("AEUIDefault")
-	refreshBtn:SetTextColor(CurrentTheme().text.primary)
-	refreshBtn:Dock(TOP)
-	refreshBtn:SetTall(28)
-	refreshBtn:DockMargin(0, 0, 0, 10)
-
-	refreshBtn.Paint = function(self, w, h)
-		ApplyButtonTheme(self, w, h, "primary")
-	end
-
-	local courseList = vgui.Create("DScrollPanel", UploadPanel)
-	courseList:Dock(FILL)
-
-	ApplyScrollTheme(courseList)
-
-	local selectedCourse = nil
-
-	function PopulateLocalCourses()
-		courseList:Clear()
-
-		selectedCourse = nil
-
-		local courses = GetCoursesForCurrentMap()
-
-		if #courses == 0 then
-			local empty = vgui.Create("DLabel", courseList)
-			empty:SetText("No saved courses found for this map")
-			empty:SetFont("AEUIDefault")
-			empty:SetTextColor(CurrentTheme().text.muted)
-			empty:Dock(TOP)
-			empty:DockMargin(0, 4, 0, 0)
-			empty:SizeToContents()
-
-			return
-		end
-
-		for _, course in ipairs(courses) do
-			local btn = vgui.Create("DButton", courseList)
-			btn:SetText(course.name)
-			btn:SetFont("AEUIDefault")
-			btn:SetTall(32)
-			btn:Dock(TOP)
-			btn:DockMargin(5, 0, 5, 6)
-			btn:SetTextColor(CurrentTheme().text.primary)
-
-			btn.Paint = function(self, w, h)
-				local col
-				if selectedCourse == course then
-					col = CurrentTheme().buttons.green.n
-				elseif self:IsHovered() then
-					col = CurrentTheme().buttons.primary.h
-				else
-					col = CurrentTheme().buttons.primary.n
-				end
-
-				draw.RoundedBox(6, 0, 0, w, h, col)
-			end
-
-			btn.DoClick = function() selectedCourse = course end
-		end
-	end
-
-	refreshBtn.DoClick = PopulateLocalCourses
-
-	local uploadBtn = vgui.Create("DButton", UploadPanel)
-	uploadBtn:SetText("Upload Selected")
-	uploadBtn:SetFont("AEUIDefault")
-	uploadBtn:Dock(BOTTOM)
-	uploadBtn:SetTall(36)
-	uploadBtn:SetTextColor(CurrentTheme().text.primary)
-
-	uploadBtn.Paint = function(self, w, h)
-		ApplyButtonTheme(self, w, h, "primary")
-	end
-
-	uploadBtn.DoClick = function()
-		if not selectedCourse then
-			notification.AddLegacy("No course selected", NOTIFY_ERROR, 3)
-
-			return
-		end
-
-		OpenConfirmPopup("Upload Course", "Upload course '" .. selectedCourse.name .. "' to database?", function() UploadCourseFile(selectedCourse) end)
-	end
-
-	Sheet:AddSheet("Upload", UploadPanel, "icon16/arrow_up.png")
-
 	-- Profile page
 	ProfilePanel = vgui.Create("DPanel", Sheet)
 	ProfilePanel:Dock(FILL)
@@ -1329,7 +1286,7 @@ function OpenDBMenu()
 			end
 		end
 
-		tab.Tab:SetTextColor(CurrentTheme().text.primary)
+		tab.Tab:SetTextColor(CurrentTheme().buttons.primary.t)
 	end
 
 	BuildLocalPage()

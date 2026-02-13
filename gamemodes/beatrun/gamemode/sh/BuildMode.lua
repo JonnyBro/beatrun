@@ -1019,18 +1019,13 @@ if CLIENT then
 		print("Save created: " .. id .. ".txt")
 	end
 
-	concommand.Add("Beatrun_SaveCourse", function(ply, cmd, args, argstr)
-		local name = args[1] or os.date("%H:%M:%S - %d/%m/%Y", os.time())
-
-		SaveCourse(name, args[2] or 0)
-	end)
-
-	function LoadCourse(id)
-		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
-		local save = util.Compress(file.Read(dir .. id .. ".txt", "DATA"))
+	function LoadCourse(filename)
+		local dir = string.format("beatrun/courses/%s/", game.GetMap())
+		local raw = file.Read(dir .. filename, "DATA")
+		local save = util.Compress(raw)
 
 		if not save then
-			print("NON-EXISTENT SAVE: ", id)
+			print("NON-EXISTENT SAVE: ", filename)
 
 			return
 		end
@@ -1041,18 +1036,6 @@ if CLIENT then
 
 		LoadCheckpoints()
 	end
-
-	concommand.Add("Beatrun_LoadCourse", function(ply, cmd, args, argstr)
-		local id = args[1]
-
-		if not id then
-			print("Supply course name")
-
-			return
-		end
-
-		LoadCourse(id)
-	end)
 
 	function LoadCourseRaw(data)
 		if not data then
@@ -1069,21 +1052,6 @@ if CLIENT then
 
 		Course_ID = id
 	end
-
-	--[[
-	concommand.Add("Beatrun_PrintCourse", function(ply, cmd, args, argstr)
-		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
-		local save = file.Read(dir .. args[1] .. ".txt", "DATA")
-
-		if not save then
-			print("NON-EXISTENT SAVE: ", args[1])
-
-			return
-		end
-
-		print(save)
-	end)
-	--]]
 
 	net.Receive("BuildMode_Sync", function()
 		local x = net.ReadFloat()
