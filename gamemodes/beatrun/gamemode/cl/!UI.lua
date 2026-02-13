@@ -25,6 +25,24 @@ local SScaleX = SScaleX
 local SScaleY = SScaleY
 
 function AEUIFonts()
+	surface.CreateFont("AEUISmall", {
+		font = "D-DIN",
+		shadow = false,
+		blursize = 0,
+		underline = false,
+		rotary = false,
+		strikeout = false,
+		additive = false,
+		antialias = true,
+		extended = false,
+		scanlines = 0,
+		italic = false,
+		outline = false,
+		symbol = false,
+		weight = 500,
+		size = ScreenScale(5)
+	})
+
 	surface.CreateFont("AEUIDefault", {
 		font = "D-DIN",
 		shadow = false,
