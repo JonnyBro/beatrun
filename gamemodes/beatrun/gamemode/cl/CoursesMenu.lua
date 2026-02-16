@@ -368,7 +368,7 @@ local function BuildLocalPage()
 	local exitBtn = vgui.Create("DButton", top)
 	exitBtn:Dock(LEFT)
 	exitBtn:DockMargin(0, 0, 15, 0)
-	exitBtn:SetText("Exit Current Course")
+	exitBtn:SetText("Return to Freeplay")
 	exitBtn:SetFont("AEUISmall")
 	exitBtn:SetTextColor(CurrentTheme().buttons.red.t)
 	exitBtn:SizeToContentsX()
@@ -740,6 +740,22 @@ local function BuildProfilePage()
 			draw.SimpleText(v.name, "AEUIDefault", 10, 5, CurrentTheme().text.primary)
 			draw.SimpleText("Downloads: " .. v.downloadCount, "AEUIDefault", 10, 22, CurrentTheme().text.muted)
 			draw.SimpleText("Uploaded: " .. v.uploadedAt, "AEUIDefault", 10, 38, CurrentTheme().text.muted)
+		end
+
+		local startBtn = vgui.Create("DButton", entry)
+		startBtn:Dock(RIGHT)
+		startBtn:SetWide(90)
+		startBtn:DockMargin(0, 10, 10, 10)
+		startBtn:SetText("Start")
+		startBtn:SetFont("AEUIDefault")
+		startBtn:SetTextColor(CurrentTheme().buttons.green.t)
+
+		startBtn.Paint = function(self, w, h)
+			ApplyButtonTheme(self, w, h, "green")
+		end
+
+		startBtn.DoClick = function()
+			FetchAndStartCourse(v.code)
 		end
 
 		local deleteBtn = vgui.Create("DButton", entry)
