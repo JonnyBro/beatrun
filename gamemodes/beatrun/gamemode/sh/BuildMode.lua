@@ -1010,13 +1010,13 @@ if CLIENT then
 		local save = CourseData(name, speed)
 		local jsonsave = util.TableToJSON(save)
 		local id = util.CRC(jsonsave)
-		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
+		local dir = string.format("beatrun/courses/%s/", game.GetMap())
 
 		file.CreateDir(dir)
 
-		file.Write(dir .. id .. ".txt", util.Compress(jsonsave))
+		local saved = file.Write(dir .. id .. ".txt", util.Compress(jsonsave))
 
-		print("Save created: " .. id .. ".txt")
+		return saved and id or nil
 	end
 
 	function LoadCourse(filename)
