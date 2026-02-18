@@ -1,7 +1,6 @@
 --[[ TODO
 	- Replace "http" with "https" for release
 	- Localization
-	- Validate api key with the server
 --]]
 
 -- ConVars
@@ -401,7 +400,7 @@ local function FetchAndStartCourse(code)
 
 		LoadCourseRaw(util.Base64Decode(body))
 	end, function(err)
-		notification.AddLegacy("Check console", NOTIFY_ERROR, 4)
+		notification.AddLegacy("Error! Check console", NOTIFY_ERROR, 4)
 		print("HTTP error: " .. err)
 	end, headers)
 end
@@ -614,272 +613,280 @@ local function BuildProfilePage()
 	ProfilePanel:Clear()
 
 	local apiKey = databaseApiKey:GetString()
-	local hasKey = apiKey and apiKey ~= "0" and apiKey ~= ""
+	local headers = {
+		key = apiKey ~= "" and apiKey or "0"
+	}
 
-	if not hasKey then
-		local msg = vgui.Create("DLabel", ProfilePanel)
-		msg:SetFont("AEUILarge")
-		msg:SetText("You need an API key to upload courses\nButton below will send your SteamID and Username to the database!\nWe do not collect any other info!")
-		msg:SetTextColor(CurrentTheme().text.primary)
-		msg:SizeToContents()
-		msg:Dock(TOP)
-		msg:DockMargin(0, 60, 0, 20)
-		msg:SetContentAlignment(5)
+	http.Fetch("http://" .. databaseDomain:GetString() .. "/api/key/validate", function(body, _, _, code)
+		if code ~= 200 or not body or body == "" then
+			notification.AddLegacy("Failed to validate key", NOTIFY_ERROR, 4)
+			return
+		end
 
-		local registerBtn = vgui.Create("DButton", ProfilePanel)
-		registerBtn:SetText("Register/Get API Key")
-		registerBtn:SetFont("AEUIDefault")
-		registerBtn:SetTall(40)
-		registerBtn:Dock(TOP)
-		registerBtn:DockMargin(200, 0, 200, 0)
-		registerBtn:SetTextColor(CurrentTheme().buttons.green.t)
+		local valid = util.JSONToTable(body).data
 
-		registerBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+		if not valid then
+			local msg = vgui.Create("DLabel", ProfilePanel)
+			msg:SetFont("AEUILarge")
+			msg:SetText("You need an API key to upload courses\nButton below will send your SteamID and Username to the database!\nWe do not collect any other info!")
+			msg:SetTextColor(CurrentTheme().text.primary)
+			msg:SizeToContents()
+			msg:Dock(TOP)
+			msg:DockMargin(0, 60, 0, 20)
+			msg:SetContentAlignment(5)
 
-		registerBtn.DoClick = function()
-			local headers = {
-				steamid = LocalPlayer():SteamID64(),
-				username = LocalPlayer():Nick()
-			}
+			local registerBtn = vgui.Create("DButton", ProfilePanel)
+			registerBtn:SetText("Register/Get API Key")
+			registerBtn:SetFont("AEUIDefault")
+			registerBtn:SetTall(40)
+			registerBtn:Dock(TOP)
+			registerBtn:DockMargin(200, 0, 200, 0)
+			registerBtn:SetTextColor(CurrentTheme().buttons.green.t)
 
-			http.Post("http://" .. databaseDomain:GetString() .. "/api/users/register", {}, function(body, _, _, code)
-				body = util.JSONToTable(body)
+			registerBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
-				if code ~= 200 then
+			registerBtn.DoClick = function()
+				local headers = {
+					steamid = LocalPlayer():SteamID64(),
+					username = LocalPlayer():Nick()
+				}
+
+				http.Post("http://" .. databaseDomain:GetString() .. "/api/users/register", {}, function(body, _, _, code)
+					body = util.JSONToTable(body)
+
+					if code ~= 200 then
+						notification.AddLegacy("API key error (check console)", NOTIFY_ERROR, 4)
+						print("> Code: " .. body.code .. "\n> Reply: " .. body.message)
+						return
+					end
+
+					print("Updated Beatrun API key to " .. body.data.key)
+
+					databaseApiKey:SetString(body.data.key)
+
+					BuildProfilePage()
+				end, function(err)
+					print("API key error:", err)
 					notification.AddLegacy("API key error (check console)", NOTIFY_ERROR, 4)
+				end, headers)
+			end
+			return
+		end
 
-					print("> Code: " .. body.code .. "\n> Reply: " .. body.message)
+		local header = vgui.Create("DPanel", ProfilePanel)
+		header:SetTall(90)
+		header:Dock(TOP)
+		header.Paint = nil
 
-					return
+		local avatar = vgui.Create("AvatarImage", header)
+		avatar:SetSize(64, 64)
+		avatar:Dock(LEFT)
+		avatar:DockMargin(0, 10, 15, 10)
+		avatar:SetSteamID(LocalPlayer():SteamID64(), 64)
+
+		local name = vgui.Create("DLabel", header)
+		name:SetFont("AEUILarge")
+		name:SetText(LocalPlayer():Nick())
+		name:SetTextColor(CurrentTheme().text.primary)
+		name:Dock(TOP)
+		name:SizeToContents()
+
+		local keyRow = vgui.Create("DPanel", header)
+		keyRow:Dock(TOP)
+		keyRow:DockMargin(0, 6, 0, 0)
+		keyRow:SetTall(26)
+		keyRow.Paint = nil
+
+		local masked = string.rep("*", math.max(#apiKey - 4, 0)) .. string.sub(apiKey, -4)
+		local keyLabel = vgui.Create("DLabel", keyRow)
+		keyLabel:SetFont("AEUIDefault")
+		keyLabel:SetText("API Key: " .. masked)
+		keyLabel:SetTextColor(CurrentTheme().text.muted)
+		keyLabel:Dock(LEFT)
+		keyLabel:SizeToContents()
+
+		local changeBtn = vgui.Create("DButton", keyRow)
+		changeBtn:SetText("Change")
+		changeBtn:SetFont("AEUIDefault")
+		changeBtn:SetCursor("hand")
+		changeBtn:Dock(LEFT)
+		changeBtn:DockMargin(10, 0, 0, 0)
+		changeBtn:SizeToContents()
+		changeBtn:SetTextColor(CurrentTheme().buttons.green.t)
+
+		changeBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+
+		changeBtn.DoClick = function()
+			local frame = vgui.Create("DFrame")
+			frame:SetSize(360, 150)
+			frame:Center()
+			frame:SetTitle("")
+			frame:ShowCloseButton(false)
+			frame:MakePopup()
+
+			frame.Paint = function(self, w, h)
+				draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
+				draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
+				draw.SimpleText("Change API Key", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
+
+			local close = vgui.Create("DButton", frame)
+			close:SetSize(24, 24)
+			close:SetPos(frame:GetWide() - 24, 0)
+			close:SetText("X")
+			close:SetFont("AEUIDefault")
+			close:SetTextColor(CurrentTheme().buttons.red.t)
+
+			close.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+			close.DoClick = function() frame:Close() end
+
+			local entry = vgui.Create("DTextEntry", frame)
+			entry:SetFont("AEUIDefault")
+			entry:SetPlaceholderText("Enter new API key...")
+			entry:SetTall(32)
+			entry:Dock(TOP)
+			entry:DockMargin(0, 20, 0, 0)
+			entry:SetPaintBackground(false)
+
+			entry.Paint = function(self, w, h)
+				surface.SetDrawColor(CurrentTheme().text.muted)
+				surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+				self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
+
+				if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
+
+				if self:HasFocus() then
+					surface.SetDrawColor(CurrentTheme().search:Unpack())
+					surface.DrawOutlinedRect(0, 0, w, h, 1)
 				end
+			end
 
-				print("Updated Beatrun API key to " .. body.data.key)
+			local save = vgui.Create("DButton", frame)
+			save:Dock(BOTTOM)
+			save:SetTall(32)
+			save:SetText("Save")
+			save:SetFont("AEUIDefault")
+			save:SetTextColor(CurrentTheme().buttons.green.t)
 
-				databaseApiKey:SetString(body.data.key)
+			save.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+
+			save.DoClick = function()
+				local newKey = string.Trim(entry:GetValue())
+				if newKey == "" then return end
+
+				databaseApiKey:SetString(newKey)
+
+				frame:Close()
 
 				BuildProfilePage()
-			end, function(err)
-				print("API key error:", err)
-				notification.AddLegacy("API key error (check console)", NOTIFY_ERROR, 4)
-			end, headers)
-		end
-
-		return
-	end
-
-	local header = vgui.Create("DPanel", ProfilePanel)
-	header:SetTall(90)
-	header:Dock(TOP)
-	header.Paint = nil
-
-	local avatar = vgui.Create("AvatarImage", header)
-	avatar:SetSize(64, 64)
-	avatar:Dock(LEFT)
-	avatar:DockMargin(0, 10, 15, 10)
-	avatar:SetSteamID(LocalPlayer():SteamID64(), 64)
-
-	local name = vgui.Create("DLabel", header)
-	name:SetFont("AEUILarge")
-	name:SetText(LocalPlayer():Nick())
-	name:SetTextColor(CurrentTheme().text.primary)
-	name:Dock(TOP)
-	name:SizeToContents()
-
-	local keyRow = vgui.Create("DPanel", header)
-	keyRow:Dock(TOP)
-	keyRow:DockMargin(0, 6, 0, 0)
-	keyRow:SetTall(26)
-	keyRow.Paint = nil
-
-	local masked = string.rep("*", math.max(#apiKey - 4, 0)) .. string.sub(apiKey, -4)
-
-	local keyLabel = vgui.Create("DLabel", keyRow)
-	keyLabel:SetFont("AEUIDefault")
-	keyLabel:SetText("API Key: " .. masked)
-	keyLabel:SetTextColor(CurrentTheme().text.muted)
-	keyLabel:Dock(LEFT)
-	keyLabel:SizeToContents()
-
-	local changeBtn = vgui.Create("DButton", keyRow)
-	changeBtn:SetText("Change")
-	changeBtn:SetFont("AEUIDefault")
-	changeBtn:SetCursor("hand")
-	changeBtn:Dock(LEFT)
-	changeBtn:DockMargin(10, 0, 0, 0)
-	changeBtn:SizeToContents()
-	changeBtn:SetTextColor(CurrentTheme().buttons.green.t)
-
-	changeBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
-
-	changeBtn.DoClick = function()
-		local frame = vgui.Create("DFrame")
-		frame:SetSize(360, 150)
-		frame:Center()
-		frame:SetTitle("")
-		frame:ShowCloseButton(false)
-		frame:MakePopup()
-
-		frame.Paint = function(self, w, h)
-			draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
-			draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
-			draw.SimpleText("Change API Key", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		end
-
-		local close = vgui.Create("DButton", frame)
-		close:SetSize(24, 24)
-		close:SetPos(frame:GetWide() - 24, 0)
-		close:SetText("X")
-		close:SetFont("AEUIDefault")
-		close:SetTextColor(CurrentTheme().buttons.red.t)
-
-		close.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
-		close.DoClick = function() frame:Close() end
-
-		local entry = vgui.Create("DTextEntry", frame)
-		entry:SetFont("AEUIDefault")
-		entry:SetPlaceholderText("Enter new API key...")
-		entry:SetTall(32)
-		entry:Dock(TOP)
-		entry:DockMargin(0, 20, 0, 0)
-		entry:SetPaintBackground(false)
-
-		entry.Paint = function(self, w, h)
-			surface.SetDrawColor(CurrentTheme().text.muted)
-			surface.DrawOutlinedRect(0, 0, w, h, 1)
-
-			self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
-
-			if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
-
-			if self:HasFocus() then
-				surface.SetDrawColor(CurrentTheme().search:Unpack())
-				surface.DrawOutlinedRect(0, 0, w, h, 1)
 			end
 		end
 
-		local save = vgui.Create("DButton", frame)
-		save:Dock(BOTTOM)
-		save:SetTall(32)
-		save:SetText("Save")
-		save:SetFont("AEUIDefault")
-		save:SetTextColor(CurrentTheme().buttons.green.t)
+		local statsPanel = vgui.Create("DPanel", ProfilePanel)
+		statsPanel:SetTall(60)
+		statsPanel:Dock(TOP)
+		statsPanel:DockMargin(0, 15, 0, 15)
 
-		save.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+		statsPanel.Paint = function(self, w, h) draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.secondary) end
 
-		save.DoClick = function()
-			local newKey = string.Trim(entry:GetValue())
+		local statsLabel = vgui.Create("DLabel", statsPanel)
+		statsLabel:SetFont("AEUIDefault")
+		statsLabel:SetTextColor(CurrentTheme().text.primary)
+		statsLabel:SetContentAlignment(5)
+		statsLabel:Dock(FILL)
 
-			if newKey == "" then return end
+		local myCourses = {}
+		local totalDownloads = 0
 
-			databaseApiKey:SetString(newKey)
+		if Beatrun_CoursesCache.all then
+			local myId = LocalPlayer():SteamID64()
 
-			frame:Close()
-
-			BuildProfilePage()
-		end
-	end
-
-	local statsPanel = vgui.Create("DPanel", ProfilePanel)
-	statsPanel:SetTall(60)
-	statsPanel:Dock(TOP)
-	statsPanel:DockMargin(0, 15, 0, 15)
-	statsPanel.Paint = function(self, w, h) draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.secondary) end
-
-	local statsLabel = vgui.Create("DLabel", statsPanel)
-	statsLabel:SetFont("AEUIDefault")
-	statsLabel:SetTextColor(CurrentTheme().text.primary)
-	statsLabel:SetContentAlignment(5)
-	statsLabel:Dock(FILL)
-
-	local myCourses = {}
-
-	local totalDownloads = 0
-
-	if Beatrun_CoursesCache.all then
-		local myId = LocalPlayer():SteamID64()
-
-		for _, v in ipairs(Beatrun_CoursesCache.all) do
-			if v.uploadedBy and v.uploadedBy.steamId == myId then
-				myCourses[#myCourses + 1] = v
-				totalDownloads = totalDownloads + (v.downloadCount or 0)
+			for _, v in ipairs(Beatrun_CoursesCache.all) do
+				if v.uploadedBy and v.uploadedBy.steamId == myId then
+					myCourses[#myCourses + 1] = v
+					totalDownloads = totalDownloads + (v.downloadCount or 0)
+				end
 			end
 		end
-	end
 
-	statsLabel:SetText("Your Uploads: " .. #myCourses .. " | Total Downloads: " .. totalDownloads)
+		statsLabel:SetText("Your Uploads: " .. #myCourses .. " | Total Downloads: " .. totalDownloads)
 
-	local myList = vgui.Create("DScrollPanel", ProfilePanel)
-	myList:Dock(FILL)
+		local myList = vgui.Create("DScrollPanel", ProfilePanel)
+		myList:Dock(FILL)
 
-	ApplyScrollTheme(myList)
+		ApplyScrollTheme(myList)
 
-	if #myCourses == 0 then
-		local empty = vgui.Create("DLabel", myList)
-		empty:SetText("You have not uploaded any courses yet.")
-		empty:SetFont("AEUIDefault")
-		empty:SetTextColor(CurrentTheme().text.muted)
-		empty:Dock(TOP)
-		empty:DockMargin(0, 5, 0, 0)
-		empty:SizeToContents()
+		if #myCourses == 0 then
+			local empty = vgui.Create("DLabel", myList)
+			empty:SetText("You have not uploaded any courses yet.")
+			empty:SetFont("AEUIDefault")
+			empty:SetTextColor(CurrentTheme().text.muted)
+			empty:Dock(TOP)
+			empty:DockMargin(0, 5, 0, 0)
+			empty:SizeToContents()
 
-		return
-	end
-
-	for _, v in ipairs(myCourses) do
-		local entry = myList:Add("DPanel")
-		entry:SetTall(60)
-		entry:Dock(TOP)
-		entry:DockMargin(0, 0, 0, 8)
-
-		entry.Paint = function(self, w, h)
-			draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.secondary)
-			draw.SimpleText(v.name, "AEUIDefault", 10, 5, CurrentTheme().text.primary)
-			draw.SimpleText("Downloads: " .. v.downloadCount, "AEUIDefault", 10, 22, CurrentTheme().text.muted)
-			draw.SimpleText("Uploaded: " .. v.uploadedAt, "AEUIDefault", 10, 38, CurrentTheme().text.muted)
+			return
 		end
 
-		local startBtn = vgui.Create("DButton", entry)
-		startBtn:Dock(RIGHT)
-		startBtn:SetWide(90)
-		startBtn:DockMargin(0, 10, 10, 10)
-		startBtn:SetText("Start")
-		startBtn:SetFont("AEUIDefault")
-		startBtn:SetTextColor(CurrentTheme().buttons.green.t)
+		for _, v in ipairs(myCourses) do
+			local entry = myList:Add("DPanel")
+			entry:SetTall(60)
+			entry:Dock(TOP)
+			entry:DockMargin(0, 0, 0, 8)
 
-		startBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
-		startBtn.DoClick = function() FetchAndStartCourse(v.code) end
+			entry.Paint = function(self, w, h)
+				draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.secondary)
+				draw.SimpleText(v.name, "AEUIDefault", 10, 5, CurrentTheme().text.primary)
+				draw.SimpleText("Downloads: " .. v.downloadCount, "AEUIDefault", 10, 22, CurrentTheme().text.muted)
+				draw.SimpleText("Uploaded: " .. v.uploadedAt, "AEUIDefault", 10, 38, CurrentTheme().text.muted)
+			end
 
-		local deleteBtn = vgui.Create("DButton", entry)
-		deleteBtn:Dock(RIGHT)
-		deleteBtn:SetWide(90)
-		deleteBtn:DockMargin(0, 10, 10, 10)
-		deleteBtn:SetText("Delete")
-		deleteBtn:SetFont("AEUIDefault")
-		deleteBtn:SetTextColor(CurrentTheme().buttons.red.t)
+			local startBtn = vgui.Create("DButton", entry)
+			startBtn:Dock(RIGHT)
+			startBtn:SetWide(90)
+			startBtn:DockMargin(0, 10, 10, 10)
+			startBtn:SetText("Start")
+			startBtn:SetFont("AEUIDefault")
+			startBtn:SetTextColor(CurrentTheme().buttons.green.t)
 
-		deleteBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+			startBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+			startBtn.DoClick = function() FetchAndStartCourse(v.code) end
 
-		deleteBtn.DoClick = function()
-			OpenConfirmPopup("Delete Course", "Are you sure you want to delete this course from the database?", function()
-				HTTP({
-					method = "DELETE",
-					url = "http://" .. databaseDomain:GetString() .. "/api/courses/delete",
-					headers = {
-						authorization = databaseApiKey:GetString(),
-						code = v.code,
-					},
-					success = function(code, body)
-						notification.AddLegacy("Course deleted successfully!", NOTIFY_GENERIC, 4)
+			local deleteBtn = vgui.Create("DButton", entry)
+			deleteBtn:Dock(RIGHT)
+			deleteBtn:SetWide(90)
+			deleteBtn:DockMargin(0, 10, 10, 10)
+			deleteBtn:SetText("Delete")
+			deleteBtn:SetFont("AEUIDefault")
+			deleteBtn:SetTextColor(CurrentTheme().buttons.red.t)
 
-						print(body)
-					end,
-					failed = function(err)
-						print("> /api/courses/delete\nError: ", err)
-					end
-				})
-			end)
+			deleteBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+
+			deleteBtn.DoClick = function()
+				OpenConfirmPopup("Delete Course", "Are you sure you want to delete this course from the database?", function()
+					HTTP({
+						method = "DELETE",
+						url = "http://" .. databaseDomain:GetString() .. "/api/courses/delete",
+						headers = {
+							authorization = databaseApiKey:GetString(),
+							code = v.code,
+						},
+						success = function(code, body)
+							notification.AddLegacy("Course deleted successfully!", NOTIFY_GENERIC, 4)
+							print(body)
+						end,
+						failed = function(err) print("> /api/courses/delete\nError: ", err) end
+					})
+
+					BuildProfilePage()
+				end)
+			end
 		end
-	end
+	end, function(err)
+		notification.AddLegacy("Error! Check console", NOTIFY_ERROR, 4)
+		print("HTTP error: " .. err)
+	end, headers)
 end
 
 local function ApplyCourseFilter(newText)
