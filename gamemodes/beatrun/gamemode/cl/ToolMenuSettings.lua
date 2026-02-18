@@ -39,9 +39,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 
 		panel:CheckBox("#beatrun.toolsmenu.courses.checkpointsave", "Beatrun_CPSave")
 		panel:ControlHelp("#beatrun.toolsmenu.courses.checkpointsavedesc")
-
-		local divider = vgui.Create("DHorizontalDivider")
-		panel:AddItem(divider)
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_hud", "#beatrun.toolsmenu.hud.name", "", "", function(panel)

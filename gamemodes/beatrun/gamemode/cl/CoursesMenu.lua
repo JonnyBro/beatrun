@@ -18,8 +18,8 @@ local THEME = {
 		cursor = color_white,
 		header = Color(50, 50, 50),
 		primary = Color(70, 70, 70),
-		search = Color(220, 60, 60),
 		secondary = Color(80, 80, 80),
+		search = Color(220, 60, 60), -- Color around active text box
 		text = {
 			primary = color_white,
 			muted = Color(180, 180, 180),
@@ -27,10 +27,10 @@ local THEME = {
 		},
 		buttons = {
 			primary = {
-				t = color_white,
-				n = Color(75, 75, 75),
-				h = Color(95, 95, 95),
-				d = Color(110, 110, 110),
+				t = color_white, -- Text color
+				n = Color(75, 75, 75), -- Normal state
+				h = Color(95, 95, 95), -- Hovered state
+				d = Color(110, 110, 110), -- Pressed state (isDown)
 			},
 			green = {
 				t = color_white,
@@ -56,8 +56,8 @@ local THEME = {
 		cursor = color_black,
 		header = Color(230, 233, 238),
 		primary = Color(210, 214, 220),
-		search = Color(25, 118, 210),
 		secondary = Color(225, 229, 235),
+		search = Color(25, 118, 210),
 		text = {
 			primary = color_black,
 			muted = Color(110, 110, 110),
@@ -90,7 +90,7 @@ local THEME = {
 	}
 }
 
--- Global caches
+-- Cache
 Beatrun_MapImageCache = Beatrun_MapImageCache or {}
 Beatrun_CoursesCache = Beatrun_CoursesCache or {
 	all = nil,
@@ -99,7 +99,7 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or {
 	loading = false
 }
 
-local CACHE_LIFETIME = 5 -- TODO: up the number for production
+local CACHE_LIFETIME = 60
 local Frame, Header, Sheet, List, LocalPanel, BrowsePanel, ProfilePanel
 
 -- Helpers
@@ -185,8 +185,8 @@ local function OpenCourseSaveMenu()
 
 	frame.Paint = function(self, w, h)
 		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
-		draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
-		draw.SimpleText("Save Course", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
+		draw.SimpleText("#beatrun.coursesmenu.savecourse", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	local close = vgui.Create("DButton", frame)
@@ -196,7 +196,13 @@ local function OpenCourseSaveMenu()
 	close:SetFont("AEUIDefault")
 	close:SetTextColor(CurrentTheme().buttons.red.t)
 
-	close.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+	close.Paint = function(self, w, h)
+		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+		local isDown = self:IsDown() and CurrentTheme().buttons.red.d
+
+		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
+	end
+
 	close.DoClick = function() frame:Close() end
 
 	local content = vgui.Create("DPanel", frame)
@@ -207,7 +213,7 @@ local function OpenCourseSaveMenu()
 	entry:Dock(TOP)
 	entry:SetTall(32)
 	entry:SetFont("AEUIDefault")
-	entry:SetPlaceholderText("Enter a course name...")
+	entry:SetPlaceholderText("#beatrun.coursesmenu.save.placeholder")
 	entry:SetPaintBackground(false)
 
 	entry.Paint = function(self, w, h)
@@ -237,13 +243,14 @@ local function OpenCourseSaveMenu()
 
 	checkbox.Paint = function(self, w, h)
 		draw.RoundedBox(4, 0, 0, w, h, CurrentTheme().panels.secondary)
+
 		if self:GetChecked() then draw.RoundedBox(4, 4, 4, w - 8, h - 8, CurrentTheme().accent) end
 	end
 
 	local slider = vgui.Create("DNumSlider", speedRow)
 	slider:Dock(FILL)
 	slider:DockMargin(8, 0, 0, 0)
-	slider:SetText("#beatrun.toolsmenu.courses.savesetspeed")
+	slider:SetText("#beatrun.coursesmenu.save.maxspeedlock")
 	slider:SetMin(325)
 	slider:SetMax(1000)
 	slider:SetDecimals(0)
@@ -260,7 +267,7 @@ local function OpenCourseSaveMenu()
 	local save = vgui.Create("DButton", content)
 	save:Dock(BOTTOM)
 	save:SetTall(32)
-	save:SetText("Save")
+	save:SetText("#beatrun.coursesmenu.save")
 	save:SetFont("AEUIDefault")
 	save:SetTextColor(CurrentTheme().buttons.green.t)
 
@@ -275,7 +282,8 @@ local function OpenCourseSaveMenu()
 		local saved = SaveCourse(name, speed)
 
 		if saved then
-			notification.AddLegacy(string.format("Course saved successfully to data/beatrun/%s/%s.txt", currentMap, saved), NOTIFY_GENERIC, 6)
+			local text = language.GetPhrase("beatrun.coursesmenu.notification.save.success"):format("beatrun/" .. currentMap .. "/" .. saved .. ".txt")
+			notification.AddLegacy(text, NOTIFY_GENERIC, 6)
 		end
 
 		frame:Close()
@@ -297,7 +305,7 @@ local function OpenConfirmPopup(title, message, onConfirm)
 
 	frame.Paint = function(self, w, h)
 		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
-		draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
+		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
 		draw.SimpleText(title, "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
@@ -308,7 +316,13 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	close:SetFont("AEUIDefault")
 	close:SetTextColor(CurrentTheme().buttons.red.t)
 
-	close.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+	close.Paint = function(self, w, h)
+		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+		local isDown = self:IsDown() and CurrentTheme().buttons.red.d
+
+		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
+	end
+
 	close.DoClick = function() frame:Close() end
 
 	local label = vgui.Create("DLabel", frame)
@@ -367,23 +381,36 @@ local function FetchAndSaveCourse(course)
 	}
 
 	http.Fetch("http://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, code)
-		if code ~= 200 or not body or body == "" then
-			notification.AddLegacy("Failed to download course", NOTIFY_ERROR, 4)
+		if code ~= 200 then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+			if BEATRUN_DEBUG then
+				print(code)
+				print(body)
+			end
+		end
+
+		body = util.JSONToTable(body)
+
+		if body.code ~= 200 then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+			print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
 
 			return
 		end
 
 		local path = SaveCourseToFile(course.mapName, course.code, util.Base64Decode(body))
-		if not path then
-			notification.AddLegacy("Save failed", NOTIFY_ERROR, 4)
 
+		if not path then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.save.failed", NOTIFY_ERROR, 4)
 			return
 		end
 
-		notification.AddLegacy("Saved to data/" .. path, NOTIFY_GENERIC, 4)
+		notification.AddLegacy(language.GetPhrase("#beatrun.coursesmenu.notification.save.success"):format(path), NOTIFY_GENERIC, 4)
 	end, function(err)
-		notification.AddLegacy("Check console", NOTIFY_ERROR, 4)
-		print("HTTP error: " .. err)
+		notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
+		print("> /api/courses/download\nError: ", err)
 	end, headers)
 end
 
@@ -393,28 +420,44 @@ local function FetchAndStartCourse(code)
 	}
 
 	http.Fetch("http://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, code)
-		if code ~= 200 or not body or body == "" then
-			notification.AddLegacy("Failed to fetch course", NOTIFY_ERROR, 4)
+		if code ~= 200 then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+			if BEATRUN_DEBUG then
+				print(code)
+				print(body)
+			end
+		end
+
+		body = util.JSONToTable(body)
+
+		if body.code ~= 200 then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+			print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+
 			return
 		end
 
 		LoadCourseRaw(util.Base64Decode(body))
+
+		notification.AddLegacy(language.GetPhrase("#beatrun.coursesmenu.notification.startingcourse"):format(code), NOTIFY_GENERIC, 4)
 	end, function(err)
-		notification.AddLegacy("Error! Check console", NOTIFY_ERROR, 4)
-		print("HTTP error: " .. err)
+		notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
+		print("> /api/courses/download\nError: ", err)
 	end, headers)
 end
 
 local function UploadCourseFile(course)
 	if not databaseApiKey:GetString() or databaseApiKey:GetString() == "0" or databaseApiKey:GetString() == "" then
-		notification.AddLegacy("API key missing", NOTIFY_ERROR, 4)
+		notification.AddLegacy("#beatrun.coursesmenu.notification.nokey", NOTIFY_ERROR, 4)
 
 		return
 	end
 
 	local raw = file.Read(course, "DATA")
 	if not raw then
-		notification.AddLegacy("Failed to read/open file", NOTIFY_ERROR, 4)
+		notification.AddLegacy("#beatrun.coursesmenu.notification.read.failed", NOTIFY_ERROR, 4)
 
 		return
 	end
@@ -429,25 +472,32 @@ local function UploadCourseFile(course)
 
 	http.Post("http://" .. databaseDomain:GetString() .. "/api/courses/upload", {
 		data = encoded
-	}, function(body, size, headers, code)
+	}, function(body, _, _, code)
+		if code ~= 200 then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+			if BEATRUN_DEBUG then
+				print(code)
+				print(body)
+			end
+		end
+
 		body = util.JSONToTable(body)
 
-		if code ~= 200 then
-			notification.AddLegacy("Upload failed, check console", NOTIFY_ERROR, 4)
+		if body.code ~= 200 then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-			print("Code: " .. body.code)
-			print("Reply: " .. body.message)
+			print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
 
 			return
 		end
 
-		notification.AddLegacy("Upload successful, check console for code", NOTIFY_GENERIC, 4)
+		notification.AddLegacy("#beatrun.coursesmenu.notification.upload.success", NOTIFY_GENERIC, 4)
 
-		print("Code: " .. body.code)
-		print("Reply: " .. body.message)
+		print("> Code: " .. body.code .. "\n> Reply: " .. body.message)
 	end, function(err)
-		print("Upload error:", err)
-		notification.AddLegacy("Upload error (check console)", NOTIFY_ERROR, 4)
+		notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
+		print("> /api/courses/upload\nError: ", err)
 	end, headers)
 end
 
@@ -466,7 +516,7 @@ local function BuildLocalPage()
 	saveBtn:Dock(LEFT)
 	saveBtn:DockMargin(0, 0, 15, 0)
 	saveBtn:SetTall(28)
-	saveBtn:SetText("Save Course")
+	saveBtn:SetText("#beatrun.coursesmenu.localpage.savecourse")
 	saveBtn:SetFont("AEUISmall")
 	saveBtn:SetTextColor(CurrentTheme().buttons.green.t)
 	saveBtn:SizeToContentsX()
@@ -477,10 +527,11 @@ local function BuildLocalPage()
 	local buildBtn = vgui.Create("DButton", top)
 	buildBtn:Dock(LEFT)
 	buildBtn:DockMargin(0, 0, 15, 0)
-	buildBtn:SetText("Toggle Build Mode")
+	buildBtn:SetText("#beatrun.coursesmenu.localpage.buildmode")
 	buildBtn:SetFont("AEUISmall")
 	buildBtn:SetTextColor(CurrentTheme().buttons.green.t)
 	buildBtn:SizeToContentsX()
+	buildBtn:SetEnabled(LocalPlayer():IsSuperAdmin())
 
 	buildBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
@@ -493,10 +544,11 @@ local function BuildLocalPage()
 	local exitBtn = vgui.Create("DButton", top)
 	exitBtn:Dock(LEFT)
 	exitBtn:DockMargin(0, 0, 15, 0)
-	exitBtn:SetText("Return to Freeplay")
+	exitBtn:SetText("#beatrun.coursesmenu.localpage.freeplay")
 	exitBtn:SetFont("AEUISmall")
 	exitBtn:SetTextColor(CurrentTheme().buttons.red.t)
 	exitBtn:SizeToContentsX()
+	exitBtn:SetEnabled(LocalPlayer():IsSuperAdmin())
 
 	exitBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
 
@@ -517,7 +569,7 @@ local function BuildLocalPage()
 	end
 
 	local title = vgui.Create("DLabel", LocalPanel)
-	title:SetText("Saved Courses for: " .. currentMap)
+	title:SetText(language.GetPhrase("beatrun.coursesmenu.localpage.savedcourses"):format(currentMap))
 	title:SetFont("AEUILarge")
 	title:SetTextColor(CurrentTheme().text.primary)
 	title:Dock(TOP)
@@ -535,7 +587,7 @@ local function BuildLocalPage()
 
 	if not files or #files == 0 then
 		local empty = vgui.Create("DLabel", scroll)
-		empty:SetText("No saved courses found.")
+		empty:SetText("#beatrun.coursesmenu.localpage.nosavedcourses")
 		empty:SetFont("AEUIDefault")
 		empty:SetTextColor(CurrentTheme().text.muted)
 		empty:Dock(TOP)
@@ -555,6 +607,7 @@ local function BuildLocalPage()
 		entry:SetTall(55)
 		entry:Dock(TOP)
 		entry:DockMargin(0, 0, 0, 8)
+
 		entry.Paint = function(self, w, h)
 			draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.primary)
 			draw.SimpleText(string.format("%s (%s)", tbl[5], courseId), "AEUIDefault", 15, h / 2, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -564,25 +617,31 @@ local function BuildLocalPage()
 		loadBtn:Dock(RIGHT)
 		loadBtn:SetWide(90)
 		loadBtn:DockMargin(0, 10, 10, 10)
-		loadBtn:SetText("Start")
+		loadBtn:SetText("#beatrun.coursesmenu.start")
 		loadBtn:SetFont("AEUIDefault")
 		loadBtn:SetTextColor(CurrentTheme().buttons.green.t)
+		loadBtn:SetEnabled(LocalPlayer():IsSuperAdmin())
 
 		loadBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
-		loadBtn.DoClick = function() LoadCourse(filename) end
+
+		loadBtn.DoClick = function()
+			LoadCourse(filename)
+
+			Frame:Close()
+		end
 
 		local uploadBtn = vgui.Create("DButton", entry)
 		uploadBtn:Dock(RIGHT)
 		uploadBtn:SetWide(90)
 		uploadBtn:DockMargin(0, 10, 10, 10)
-		uploadBtn:SetText("Upload")
+		uploadBtn:SetText("#beatrun.coursesmenu.upload")
 		uploadBtn:SetFont("AEUIDefault")
 		uploadBtn:SetTextColor(CurrentTheme().buttons.green.t)
 
 		uploadBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
 		uploadBtn.DoClick = function()
-			OpenConfirmPopup("Upload Course", "Are you sure you want to upload this course to the database?", function()
+			OpenConfirmPopup("#beatrun.coursesmenu.upload", "#beatrun.coursesmenu.upload.confirm", function()
 				UploadCourseFile(path .. filename)
 			end)
 		end
@@ -591,17 +650,17 @@ local function BuildLocalPage()
 		deleteBtn:Dock(RIGHT)
 		deleteBtn:SetWide(90)
 		deleteBtn:DockMargin(0, 10, 10, 10)
-		deleteBtn:SetText("Delete")
+		deleteBtn:SetText("#beatrun.coursesmenu.delete")
 		deleteBtn:SetFont("AEUIDefault")
 		deleteBtn:SetTextColor(CurrentTheme().buttons.red.t)
 
 		deleteBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
 
 		deleteBtn.DoClick = function()
-			OpenConfirmPopup("Delete Course", "Are you sure you want to delete this course?", function()
-				file.Delete(path .. filename, "DATA")
+			OpenConfirmPopup("#beatrun.coursesmenu.delete", "#beatrun.coursesmenu.delete.confirm", function()
+				local deleted = file.Delete(path .. filename, "DATA")
 
-				BuildLocalPage()
+				if deleted then BuildLocalPage() end
 			end)
 		end
 	end
@@ -618,17 +677,31 @@ local function BuildProfilePage()
 	}
 
 	http.Fetch("http://" .. databaseDomain:GetString() .. "/api/key/validate", function(body, _, _, code)
-		if code ~= 200 or not body or body == "" then
-			notification.AddLegacy("Failed to validate key", NOTIFY_ERROR, 4)
+		if code ~= 200 then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+			if BEATRUN_DEBUG then
+				print(code)
+				print(body)
+			end
+		end
+
+		body = util.JSONToTable(body)
+
+		if body.code ~= 200 then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+			print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+
 			return
 		end
 
-		local valid = util.JSONToTable(body).data
+		local valid = body.data
 
 		if not valid then
 			local msg = vgui.Create("DLabel", ProfilePanel)
 			msg:SetFont("AEUILarge")
-			msg:SetText("You need an API key to upload courses\nButton below will send your SteamID and Username to the database!\nWe do not collect any other info!")
+			msg:SetText("#beatrun.coursesmenu.profilepage.message")
 			msg:SetTextColor(CurrentTheme().text.primary)
 			msg:SizeToContents()
 			msg:Dock(TOP)
@@ -636,7 +709,7 @@ local function BuildProfilePage()
 			msg:SetContentAlignment(5)
 
 			local registerBtn = vgui.Create("DButton", ProfilePanel)
-			registerBtn:SetText("Register/Get API Key")
+			registerBtn:SetText("#beatrun.coursesmenu.profilepage.register")
 			registerBtn:SetFont("AEUIDefault")
 			registerBtn:SetTall(40)
 			registerBtn:Dock(TOP)
@@ -652,11 +725,22 @@ local function BuildProfilePage()
 				}
 
 				http.Post("http://" .. databaseDomain:GetString() .. "/api/users/register", {}, function(body, _, _, code)
+					if code ~= 200 then
+						notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+						if BEATRUN_DEBUG then
+							print(code)
+							print(body)
+						end
+					end
+
 					body = util.JSONToTable(body)
 
-					if code ~= 200 then
-						notification.AddLegacy("API key error (check console)", NOTIFY_ERROR, 4)
-						print("> Code: " .. body.code .. "\n> Reply: " .. body.message)
+					if body.code ~= 200 then
+						notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+						print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+
 						return
 					end
 
@@ -666,10 +750,11 @@ local function BuildProfilePage()
 
 					BuildProfilePage()
 				end, function(err)
-					print("API key error:", err)
-					notification.AddLegacy("API key error (check console)", NOTIFY_ERROR, 4)
+					notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
+					print("> /api/users/register\nError: ", err)
 				end, headers)
 			end
+
 			return
 		end
 
@@ -700,19 +785,19 @@ local function BuildProfilePage()
 		local masked = string.rep("*", math.max(#apiKey - 4, 0)) .. string.sub(apiKey, -4)
 		local keyLabel = vgui.Create("DLabel", keyRow)
 		keyLabel:SetFont("AEUIDefault")
-		keyLabel:SetText("API Key: " .. masked)
+		keyLabel:SetText(language.GetPhrase("beatrun.coursesmenu.profilepage.key"):format(masked))
 		keyLabel:SetTextColor(CurrentTheme().text.muted)
 		keyLabel:Dock(LEFT)
 		keyLabel:SizeToContents()
 
 		local changeBtn = vgui.Create("DButton", keyRow)
-		changeBtn:SetText("Change")
+		changeBtn:SetText("#beatrun.coursesmenu.profilepage.changekey")
+		changeBtn:SetTextColor(CurrentTheme().buttons.green.t)
 		changeBtn:SetFont("AEUIDefault")
 		changeBtn:SetCursor("hand")
 		changeBtn:Dock(LEFT)
 		changeBtn:DockMargin(10, 0, 0, 0)
 		changeBtn:SizeToContents()
-		changeBtn:SetTextColor(CurrentTheme().buttons.green.t)
 
 		changeBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
@@ -727,7 +812,7 @@ local function BuildProfilePage()
 			frame.Paint = function(self, w, h)
 				draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
 				draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
-				draw.SimpleText("Change API Key", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				draw.SimpleText("#beatrun.coursesmenu.profilepage.changekey", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 
 			local close = vgui.Create("DButton", frame)
@@ -737,12 +822,18 @@ local function BuildProfilePage()
 			close:SetFont("AEUIDefault")
 			close:SetTextColor(CurrentTheme().buttons.red.t)
 
-			close.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+			close.Paint = function(self, w, h)
+				local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+				local isDown = self:IsDown() and CurrentTheme().buttons.red.d
+
+				draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
+			end
+
 			close.DoClick = function() frame:Close() end
 
 			local entry = vgui.Create("DTextEntry", frame)
 			entry:SetFont("AEUIDefault")
-			entry:SetPlaceholderText("Enter new API key...")
+			entry:SetPlaceholderText("#beatrun.coursesmenu.profilepage.changekey.placeholder")
 			entry:SetTall(32)
 			entry:Dock(TOP)
 			entry:DockMargin(0, 20, 0, 0)
@@ -765,7 +856,7 @@ local function BuildProfilePage()
 			local save = vgui.Create("DButton", frame)
 			save:Dock(BOTTOM)
 			save:SetTall(32)
-			save:SetText("Save")
+			save:SetText("#beatrun.coursesmenu.save")
 			save:SetFont("AEUIDefault")
 			save:SetTextColor(CurrentTheme().buttons.green.t)
 
@@ -810,7 +901,7 @@ local function BuildProfilePage()
 			end
 		end
 
-		statsLabel:SetText("Your Uploads: " .. #myCourses .. " | Total Downloads: " .. totalDownloads)
+		statsLabel:SetText(language.GetPhrase("beatrun.coursesmenu.profilepage.stats"):format(#myCourses, totalDownloads))
 
 		local myList = vgui.Create("DScrollPanel", ProfilePanel)
 		myList:Dock(FILL)
@@ -819,7 +910,7 @@ local function BuildProfilePage()
 
 		if #myCourses == 0 then
 			local empty = vgui.Create("DLabel", myList)
-			empty:SetText("You have not uploaded any courses yet.")
+			empty:SetText("#beatrun.coursesmenu.profilepage.nouploadedcourses")
 			empty:SetFont("AEUIDefault")
 			empty:SetTextColor(CurrentTheme().text.muted)
 			empty:Dock(TOP)
@@ -838,8 +929,8 @@ local function BuildProfilePage()
 			entry.Paint = function(self, w, h)
 				draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.secondary)
 				draw.SimpleText(v.name, "AEUIDefault", 10, 5, CurrentTheme().text.primary)
-				draw.SimpleText("Downloads: " .. v.downloadCount, "AEUIDefault", 10, 22, CurrentTheme().text.muted)
-				draw.SimpleText("Uploaded: " .. v.uploadedAt, "AEUIDefault", 10, 38, CurrentTheme().text.muted)
+				draw.SimpleText(language.GetPhrase("beatrun.coursesmenu.downloads"):format(v.downloadCount), "AEUIDefault", 10, 22, CurrentTheme().text.muted)
+				draw.SimpleText(language.GetPhrase("beatrun.coursesmenu.uploadedat"):format(v.uploadedAt), "AEUIDefault", 10, 38, CurrentTheme().text.muted)
 			end
 
 			local startBtn = vgui.Create("DButton", entry)
@@ -857,14 +948,14 @@ local function BuildProfilePage()
 			deleteBtn:Dock(RIGHT)
 			deleteBtn:SetWide(90)
 			deleteBtn:DockMargin(0, 10, 10, 10)
-			deleteBtn:SetText("Delete")
+			deleteBtn:SetText("#beatrun.coursesmenu.delete")
 			deleteBtn:SetFont("AEUIDefault")
 			deleteBtn:SetTextColor(CurrentTheme().buttons.red.t)
 
 			deleteBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
 
 			deleteBtn.DoClick = function()
-				OpenConfirmPopup("Delete Course", "Are you sure you want to delete this course from the database?", function()
+				OpenConfirmPopup("#beatrun.coursesmenu.delete", "#beatrun.coursesmenu.delete.confirm", function()
 					HTTP({
 						method = "DELETE",
 						url = "http://" .. databaseDomain:GetString() .. "/api/courses/delete",
@@ -873,8 +964,24 @@ local function BuildProfilePage()
 							code = v.code,
 						},
 						success = function(code, body)
-							notification.AddLegacy("Course deleted successfully!", NOTIFY_GENERIC, 4)
-							print(body)
+							if code ~= 200 then
+								notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+								if BEATRUN_DEBUG then
+									print(code)
+									print(body)
+								end
+							end
+
+							body = util.JSONToTable(body)
+
+							if body.code ~= 200 then
+								notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+								print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+
+								return
+							end
 						end,
 						failed = function(err) print("> /api/courses/delete\nError: ", err) end
 					})
@@ -884,8 +991,8 @@ local function BuildProfilePage()
 			end
 		end
 	end, function(err)
-		notification.AddLegacy("Error! Check console", NOTIFY_ERROR, 4)
-		print("HTTP error: " .. err)
+		notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
+		print("> /api/key/validate\nError: ", err)
 	end, headers)
 end
 
@@ -918,19 +1025,34 @@ local function PopulateCoursesList()
 		Beatrun_CoursesCache.loading = true
 
 		local headers = {
-			-- mapname = "",
 			game = "yes"
 		}
 
-		http.Fetch("http://" .. databaseDomain:GetString() .. "/api/courses/list", function(body)
+		http.Fetch("http://" .. databaseDomain:GetString() .. "/api/courses/list", function(body, _, _, code)
 			Beatrun_CoursesCache.loading = false
 
-			local response = util.JSONToTable(body)
-			if not response or response.code ~= 200 then return end
+			if code ~= 200 then
+				notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+				if BEATRUN_DEBUG then
+					print(code)
+					print(body)
+				end
+			end
+
+			body = util.JSONToTable(body)
+
+			if body.code ~= 200 then
+				notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+
+				print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+
+				return
+			end
 
 			local fetchedCourses = {}
 
-			for _, course in ipairs(response.data) do
+			for _, course in ipairs(body.data) do
 				fetchedCourses[#fetchedCourses + 1] = {
 					code = course.code,
 					data = course.data,
@@ -962,9 +1084,8 @@ local function PopulateCoursesList()
 		end, function(err)
 			Beatrun_CoursesCache.loading = false
 
-			notification.AddLegacy("Fetch error! Check console", NOTIFY_ERROR, 4)
-
-			print("> /api/courses/list\nError:", err)
+			notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
+			print("> /api/courses/list\nError: ", err)
 		end, headers)
 
 		return
@@ -992,7 +1113,7 @@ local function PopulateCoursesList()
 			end
 
 			draw.SimpleText(v.name, "AEUILarge", 180, 5, CurrentTheme().text.primary)
-			draw.SimpleText("Uploaded: " .. v.uploadedAt, "AEUIDefault", 184, 85, CurrentTheme().text.muted)
+			draw.SimpleText(language.GetPhrase("beatrun.coursesmenu.uploadedat"):format(v.uploadedAt), "AEUIDefault", 184, 85, CurrentTheme().text.muted)
 		end
 
 		local mapBtn = vgui.Create("DButton", entry)
@@ -1022,7 +1143,7 @@ local function PopulateCoursesList()
 			SetClipboardText(v.code)
 
 			if IsValid(self) then
-				self:SetText("Copied code to clipboard")
+				self:SetText("#beatrun.coursesmenu.copied")
 				self:SizeToContents()
 			end
 
@@ -1079,7 +1200,7 @@ local function PopulateCoursesList()
 		loadPanel.Paint = nil
 
 		local loadBtn = vgui.Create("DButton", loadPanel)
-		loadBtn:SetText("Load Course")
+		loadBtn:SetText("#beatrun.coursesmenu.onlinepage.start")
 		loadBtn:SetFont("AEUIDefault")
 		loadBtn:Dock(FILL)
 		loadBtn:SetCursor("hand")
@@ -1100,7 +1221,7 @@ local function PopulateCoursesList()
 				loadWarn.Paint = function(self, w, h)
 					draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
 					draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
-					draw.SimpleText("Load Course", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+					draw.SimpleText("#beatrun.coursesmenu.onlinepage.start", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
 				local close = vgui.Create("DButton", loadWarn)
@@ -1110,18 +1231,24 @@ local function PopulateCoursesList()
 				close:SetFont("AEUIDefault")
 				close:SetTextColor(CurrentTheme().buttons.red.t)
 
-				close.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+				close.Paint = function(self, w, h)
+					local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+					local isDown = self:IsDown() and CurrentTheme().buttons.red.d
+
+					draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
+				end
+
 				close.DoClick = function() loadWarn:Close() end
 
 				local label = vgui.Create("DLabel", loadWarn)
-				label:SetText("You're not subscribed to this map. If you start the course you may become stuck. Would you like to subscribe?")
+				label:SetText("#beatrun.coursesmenu.onlinepage.start.message")
 				label:SetFont("AEUISmall")
 				label:SetWrap(true)
 				label:SetSize(330, 60)
 				label:SetPos(15, 35)
 
 				local workshop = vgui.Create("DButton", loadWarn)
-				workshop:SetText("Open Workshop")
+				workshop:SetText("#beatrun.coursesmenu.onlinepage.openworkshop")
 				workshop:SetFont("AEUIDefault")
 				workshop:SetSize(150, 30)
 				workshop:SetPos(20, 95)
@@ -1137,7 +1264,7 @@ local function PopulateCoursesList()
 				end
 
 				local iKnowWhatImDoing = vgui.Create("DButton", loadWarn)
-				iKnowWhatImDoing:SetText("I know, start anyway")
+				iKnowWhatImDoing:SetText("#beatrun.coursesmenu.onlinepage.iknowwhatimdoing")
 				iKnowWhatImDoing:SetFont("AEUISmall")
 				iKnowWhatImDoing:SetSize(150, 30)
 				iKnowWhatImDoing:SetPos(190, 95)
@@ -1161,7 +1288,7 @@ local function PopulateCoursesList()
 		end
 
 		local downloadBtn = vgui.Create("DButton", loadPanel)
-		downloadBtn:SetText("Download")
+		downloadBtn:SetText("#beatrun.coursesmenu.onlinepage.download")
 		downloadBtn:SetFont("AEUIDefault")
 		downloadBtn:Dock(BOTTOM)
 		downloadBtn:SetTall(28)
@@ -1180,7 +1307,7 @@ local function PopulateCoursesList()
 				bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
 				isDown = self:IsDown() and CurrentTheme().buttons.red.d
 
-				self:SetText("Overwrite?")
+				self:SetText("#beatrun.coursesmenu.onlinepage.overwrite")
 				self:SetTextColor(CurrentTheme().buttons.red.t)
 			end
 
@@ -1189,7 +1316,7 @@ local function PopulateCoursesList()
 
 		downloadBtn.DoClick = function()
 			if courseDoesExist then
-				OpenConfirmPopup("Overwrite Course", "This course already exists. Overwrite?", function()
+				OpenConfirmPopup("#beatrun.coursesmenu.onlinepage.overwrite", "#beatrun.coursesmenu.onlinepage.overwrite.confirm", function()
 					FetchAndSaveCourse(v)
 				end)
 
@@ -1213,7 +1340,7 @@ function OpenDBMenu()
 
 	Frame.Paint = function(self, w, h)
 		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
-		draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
+		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
 		draw.SimpleText(string.format("Epic Courses Menu (%s)", databaseDomain:GetString()), "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
@@ -1224,7 +1351,13 @@ function OpenDBMenu()
 	close:SetPos(Frame:GetWide() - 24, 0)
 	close:SetTextColor(CurrentTheme().buttons.red.t)
 
-	close.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+	close.Paint = function(self, w, h)
+		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+		local isDown = self:IsDown() and CurrentTheme().buttons.red.d
+
+		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
+	end
+
 	close.DoClick = function() Frame:Close() end
 
 	local ThemeToggle = vgui.Create("DButton", Frame)
@@ -1236,7 +1369,7 @@ function OpenDBMenu()
 	ThemeToggle.Paint = function(self, w, h)
 		local col = self:IsHovered() and CurrentTheme().primary or CurrentTheme().secondary
 
-		draw.RoundedBox(6, 0, 0, w, h, col)
+		draw.RoundedBox(0, 0, 0, w, h, col)
 
 		surface.SetDrawColor(CurrentTheme().text.primary:Unpack())
 		surface.DrawCircle(w / 2, h / 2, 6, CurrentTheme().text.primary)
@@ -1257,14 +1390,14 @@ function OpenDBMenu()
 	Sheet:Dock(FILL)
 
 	Sheet.OnActiveTabChanged = function(self, old, new)
-		local name = new:GetText()
+		local img = new.Image:GetImage()
 
-		if name == "Local" then
+		if string.match(img, "/folder_user") then
 			BuildLocalPage()
-		elseif name == "Online" then
+		elseif string.match(img, "/folder_database") then
 			ApplyCourseFilter()
 			PopulateCoursesList()
-		elseif name == "Profile" then
+		elseif string.match(img, "/user") then
 			BuildProfilePage()
 		end
 	end
@@ -1275,7 +1408,7 @@ function OpenDBMenu()
 	LocalPanel:DockPadding(0, 0, 0, 0)
 	LocalPanel:SetBackgroundColor(CurrentTheme().bg)
 
-	Sheet:AddSheet("Local", LocalPanel, "icon16/folder_user.png")
+	Sheet:AddSheet("#beatrun.coursesmenu.localpage", LocalPanel, "icon16/folder_user.png")
 
 	-- Browse page
 	BrowsePanel = vgui.Create("DPanel", Sheet)
@@ -1283,7 +1416,7 @@ function OpenDBMenu()
 	BrowsePanel:DockPadding(0, 0, 0, 0)
 	BrowsePanel:SetBackgroundColor(CurrentTheme().bg)
 
-	Sheet:AddSheet("Online", BrowsePanel, "icon16/folder_database.png")
+	Sheet:AddSheet("#beatrun.coursesmenu.onlinepage", BrowsePanel, "icon16/folder_database.png")
 
 	Header = vgui.Create("DPanel", BrowsePanel)
 	Header:Dock(TOP)
@@ -1302,7 +1435,7 @@ function OpenDBMenu()
 	CurrentMapBtn:DockMargin(0, 0, 8, 0)
 
 	CurrentMapBtn.Paint = function(self, w, h)
-		local text = isCurrentMapOnly and "Current Map Only" or "All Courses"
+		local text = isCurrentMapOnly and "#beatrun.coursesmenu.onlinepage.currentmap" or "#beatrun.coursesmenu.onlinepage.notcurrentmap"
 
 		ApplyButtonTheme(self, w, h, "primary")
 
@@ -1319,7 +1452,7 @@ function OpenDBMenu()
 
 	local Search = vgui.Create("DTextEntry", Header)
 	Search:Dock(FILL)
-	Search:SetPlaceholderText("Search courses...")
+	Search:SetPlaceholderText("#beatrun.coursesmenu.onlinepage.search.placeholder")
 	Search:SetUpdateOnType(true)
 	Search:SetFont("AEUIDefault")
 	Search:SetPaintBackground(false)
@@ -1338,10 +1471,9 @@ function OpenDBMenu()
 		end
 	end
 
-	local searchTimer
+	local searchTimer = "Beatrun_CourseSearchDebounce"
 	function Search:OnValueChange(text)
-		if searchTimer then timer.Remove(searchTimer) end
-		searchTimer = "CourseSearchDebounce"
+		if timer.Exists(searchTimer) then timer.Remove(searchTimer) end
 
 		timer.Create(searchTimer, .25, 1, function()
 			ApplyCourseFilter(text)
@@ -1360,7 +1492,7 @@ function OpenDBMenu()
 	ProfilePanel:DockPadding(20, 20, 20, 20)
 	ProfilePanel:SetBackgroundColor(CurrentTheme().bg)
 
-	Sheet:AddSheet("Profile", ProfilePanel, "icon16/user.png")
+	Sheet:AddSheet("beatrun.coursesmenu.profilepage", ProfilePanel, "icon16/user.png")
 
 	Sheet.Paint = function(self, w, h) draw.RoundedBox(0, 0, 0, w, h, CurrentTheme().bg) end
 
