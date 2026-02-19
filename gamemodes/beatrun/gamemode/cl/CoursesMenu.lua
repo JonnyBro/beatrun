@@ -1332,65 +1332,13 @@ function BuildSettingsPage()
 	title:DockMargin(0, 0, 0, 15)
 	title:SizeToContents()
 
-	local domainLabel = vgui.Create("DLabel", SettingsPanel)
-	domainLabel:Dock(TOP)
-	domainLabel:SetText("#beatrun.coursesmenu.settings.domain")
-	domainLabel:SetFont("AEUIDefault")
-	domainLabel:SetTextColor(CurrentTheme().text.primary)
-	domainLabel:DockMargin(0, 0, 0, 5)
-
-	local domainEntry = vgui.Create("DTextEntry", SettingsPanel)
-	domainEntry:Dock(TOP)
-	domainEntry:SetTall(30)
-	domainEntry:SetPlaceholderText(databaseDomain:GetString())
-	domainEntry:DockMargin(0, 0, Frame:GetWide() - 500, 15)
-	domainEntry:SetPaintBackground(false)
-
-	domainEntry.Paint = function(self, w, h)
-		surface.SetDrawColor(CurrentTheme().text.muted)
-		surface.DrawOutlinedRect(0, 0, w, h, 1)
-
-		self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
-
-		if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
-
-		if self:HasFocus() then
-			surface.SetDrawColor(CurrentTheme().search:Unpack())
-			surface.DrawOutlinedRect(0, 0, w, h, 1)
-		end
-	end
-
-	function domainEntry:OnLoseFocus()
-		local val = string.Trim(self:GetValue())
-
-		if not val or val == "" then
-			val = databaseDomain:GetDefault()
-		end
-
-		val = string.gsub(val, "^https?://", "")
-		val = string.gsub(val, "/+$", "")
-
-		databaseDomain:SetString(val)
-
-		self:SetText(val)
-	end
-
-	function domainEntry:OnEnter(value)
-		local val = string.Trim(value)
-		val = string.gsub(val, "^https?://", "")
-		val = string.gsub(val, "/+$", "")
-
-		databaseDomain:SetString(val)
-
-		self:SetText(val)
-	end
-
 	local themeLabel = vgui.Create("DLabel", SettingsPanel)
 	themeLabel:Dock(TOP)
 	themeLabel:SetText("#beatrun.coursesmenu.settings.theme")
 	themeLabel:SetFont("AEUIDefault")
 	themeLabel:SetTextColor(CurrentTheme().text.primary)
 	themeLabel:DockMargin(0, 0, 0, 5)
+	themeLabel:SizeToContents()
 
 	local themeSelect = vgui.Create("DComboBox", SettingsPanel)
 	themeSelect:Dock(TOP)
@@ -1401,6 +1349,7 @@ function BuildSettingsPage()
 	themeSelect:SetValue(language.GetPhrase("beatrun.coursesmenu.themes." .. string.lower(uiTheme:GetString())))
 	themeSelect:SetPaintBackground(false)
 	themeSelect:SetTextInset(8, 0)
+	themeSelect:SizeToContents()
 
 	themeSelect.DropButton:SetVisible(false)
 
@@ -1457,6 +1406,61 @@ function BuildSettingsPage()
 		timer.Simple(.1, function()
 			RunConsoleCommand("Beatrun_CoursesMenu")
 		end)
+	end
+
+	local domainLabel = vgui.Create("DLabel", SettingsPanel)
+	domainLabel:Dock(TOP)
+	domainLabel:SetText("#beatrun.coursesmenu.settings.domain")
+	domainLabel:SetFont("AEUIDefault")
+	domainLabel:SetTextColor(CurrentTheme().text.primary)
+	domainLabel:DockMargin(0, 0, 0, 5)
+	domainLabel:SizeToContents()
+
+	local domainEntry = vgui.Create("DTextEntry", SettingsPanel)
+	domainEntry:Dock(TOP)
+	domainEntry:SetTall(30)
+	domainEntry:SetPlaceholderText(databaseDomain:GetString())
+	domainEntry:DockMargin(0, 0, Frame:GetWide() - 500, 15)
+	domainEntry:SetPaintBackground(false)
+	domainEntry:SizeToContents()
+
+	domainEntry.Paint = function(self, w, h)
+		surface.SetDrawColor(CurrentTheme().text.muted)
+		surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+		self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
+
+		if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
+
+		if self:HasFocus() then
+			surface.SetDrawColor(CurrentTheme().search:Unpack())
+			surface.DrawOutlinedRect(0, 0, w, h, 1)
+		end
+	end
+
+	function domainEntry:OnLoseFocus()
+		local val = string.Trim(self:GetValue())
+
+		if not val or val == "" then
+			val = databaseDomain:GetDefault()
+		end
+
+		val = string.gsub(val, "^https?://", "")
+		val = string.gsub(val, "/+$", "")
+
+		databaseDomain:SetString(val)
+
+		self:SetText(val)
+	end
+
+	function domainEntry:OnEnter(value)
+		local val = string.Trim(value)
+		val = string.gsub(val, "^https?://", "")
+		val = string.gsub(val, "/+$", "")
+
+		databaseDomain:SetString(val)
+
+		self:SetText(val)
 	end
 end
 
