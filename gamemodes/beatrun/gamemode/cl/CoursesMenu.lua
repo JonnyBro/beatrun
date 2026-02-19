@@ -1,7 +1,7 @@
 -- ConVars
 local databaseApiKey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.GetPhrase("beatrun.convars.apikey"))
 local databaseDomain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", true, false, language.GetPhrase("beatrun.convars.domain"))
-local currentTheme = CreateClientConVar("Beatrun_CoursesMenu_Theme", "dark", true, false, language.GetPhrase("beatrun.convars.theme"))
+local uiTheme = CreateClientConVar("Beatrun_CoursesMenu_Theme", "dark", true, false, language.GetPhrase("beatrun.convars.theme"))
 
 -- Database UI
 local isCurrentMapOnly = false
@@ -110,7 +110,7 @@ local function IsCoursesCacheValid()
 end
 
 local function CurrentTheme()
-	return THEME[currentTheme:GetString()] or THEME.dark
+	return THEME[string.lower(uiTheme:GetString())] or THEME.dark
 end
 
 local function CacheMapPreview(course)
@@ -381,10 +381,9 @@ local function FetchAndSaveCourse(course)
 		if code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-			if BEATRUN_DEBUG then
-				print(code)
-				print(body)
-			end
+			print("> Code: " .. code or "null" .. "\n> Reply: " .. body or "null")
+
+			return
 		end
 
 		body = util.JSONToTable(body)
@@ -420,10 +419,9 @@ local function FetchAndStartCourse(code)
 		if code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-			if BEATRUN_DEBUG then
-				print(code)
-				print(body)
-			end
+			print("> Code: " .. code or "null" .. "\n> Reply: " .. body or "null")
+
+			return
 		end
 
 		local res = util.JSONToTable(body)
@@ -473,10 +471,9 @@ local function UploadCourseFile(course)
 		if code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-			if BEATRUN_DEBUG then
-				print(code)
-				print(body)
-			end
+			print("> Code: " .. code or "null" .. "\n> Reply: " .. body or "null")
+
+			return
 		end
 
 		body = util.JSONToTable(body)
@@ -678,10 +675,9 @@ local function BuildProfilePage()
 		if code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-			if BEATRUN_DEBUG then
-				print(code)
-				print(body)
-			end
+			print("> Code: " .. code or "null" .. "\n> Reply: " .. body or "null")
+
+			return
 		end
 
 		body = util.JSONToTable(body)
@@ -726,10 +722,9 @@ local function BuildProfilePage()
 					if code ~= 200 then
 						notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-						if BEATRUN_DEBUG then
-							print(code)
-							print(body)
-						end
+						print("> Code: " .. code or "null" .. "\n> Reply: " .. body or "null")
+
+						return
 					end
 
 					body = util.JSONToTable(body)
@@ -965,10 +960,9 @@ local function BuildProfilePage()
 							if code ~= 200 then
 								notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-								if BEATRUN_DEBUG then
-									print(code)
-									print(body)
-								end
+								print("> Code: " .. code or "null" .. "\n> Reply: " .. body or "null")
+
+								return
 							end
 
 							body = util.JSONToTable(body)
@@ -1032,10 +1026,9 @@ local function BuildOnlinePage()
 			if code ~= 200 then
 				notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-				if BEATRUN_DEBUG then
-					print(code)
-					print(body)
-				end
+				print("> Code: " .. code or "null" .. "\n> Reply: " .. body or "null")
+
+				return
 			end
 
 			body = util.JSONToTable(body)
@@ -1326,6 +1319,147 @@ local function BuildOnlinePage()
 	end
 end
 
+function BuildSettingsPage()
+	if not IsValid(SettingsPanel) then return end
+
+	SettingsPanel:Clear()
+
+	local title = vgui.Create("DLabel", SettingsPanel)
+	title:Dock(TOP)
+	title:SetText("#beatrun.coursesmenu.settings")
+	title:SetFont("AEUILarge")
+	title:SetTextColor(CurrentTheme().text.primary)
+	title:DockMargin(0, 0, 0, 15)
+	title:SizeToContents()
+
+	local domainLabel = vgui.Create("DLabel", SettingsPanel)
+	domainLabel:Dock(TOP)
+	domainLabel:SetText("#beatrun.coursesmenu.settings.domain")
+	domainLabel:SetFont("AEUIDefault")
+	domainLabel:SetTextColor(CurrentTheme().text.primary)
+	domainLabel:DockMargin(0, 0, 0, 5)
+
+	local domainEntry = vgui.Create("DTextEntry", SettingsPanel)
+	domainEntry:Dock(TOP)
+	domainEntry:SetTall(30)
+	domainEntry:SetPlaceholderText(databaseDomain:GetString())
+	domainEntry:DockMargin(0, 0, Frame:GetWide() - 500, 15)
+	domainEntry:SetPaintBackground(false)
+
+	domainEntry.Paint = function(self, w, h)
+		surface.SetDrawColor(CurrentTheme().text.muted)
+		surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+		self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
+
+		if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
+
+		if self:HasFocus() then
+			surface.SetDrawColor(CurrentTheme().search:Unpack())
+			surface.DrawOutlinedRect(0, 0, w, h, 1)
+		end
+	end
+
+	function domainEntry:OnLoseFocus()
+		local val = string.Trim(self:GetValue())
+
+		if not val or val == "" then
+			val = databaseDomain:GetDefault()
+		end
+
+		val = string.gsub(val, "^https?://", "")
+		val = string.gsub(val, "/+$", "")
+
+		databaseDomain:SetString(val)
+
+		self:SetText(val)
+	end
+
+	function domainEntry:OnEnter(value)
+		local val = string.Trim(value)
+		val = string.gsub(val, "^https?://", "")
+		val = string.gsub(val, "/+$", "")
+
+		databaseDomain:SetString(val)
+
+		self:SetText(val)
+	end
+
+	local themeLabel = vgui.Create("DLabel", SettingsPanel)
+	themeLabel:Dock(TOP)
+	themeLabel:SetText("#beatrun.coursesmenu.settings.theme")
+	themeLabel:SetFont("AEUIDefault")
+	themeLabel:SetTextColor(CurrentTheme().text.primary)
+	themeLabel:DockMargin(0, 0, 0, 5)
+
+	local themeSelect = vgui.Create("DComboBox", SettingsPanel)
+	themeSelect:Dock(TOP)
+	themeSelect:SetTall(30)
+	themeSelect:DockMargin(0, 0, Frame:GetWide() - 500, 20)
+	themeSelect:SetFont("AEUIDefault")
+	themeSelect:SetTextColor(CurrentTheme().text.primary)
+	themeSelect:SetValue(language.GetPhrase("beatrun.coursesmenu.themes." .. string.lower(uiTheme:GetString())))
+	themeSelect:SetPaintBackground(false)
+	themeSelect:SetTextInset(8, 0)
+
+	themeSelect.DropButton:SetVisible(false)
+
+	themeSelect.Paint = function(self, w, h)
+		draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.secondary)
+
+		if self:IsHovered() or self:IsMenuOpen() then
+			surface.SetDrawColor(CurrentTheme().accent)
+		else
+			surface.SetDrawColor(CurrentTheme().text.muted)
+		end
+
+		surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+		local arrow = self:IsMenuOpen() and "◂" or "▾"
+		local selected = themeSelect:GetValue()
+
+		surface.SetFont("AEUISmall")
+		draw.SimpleText(selected, "AEUISmall", surface.GetTextSize(selected), h / 2, CurrentTheme().text.primary, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(arrow, "AEUISmall", w - 18, h / 2, CurrentTheme().text.primary, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+		return true
+	end
+
+	function themeSelect:OpenMenu()
+		DComboBox.OpenMenu(self)
+
+		if not IsValid(self.Menu) then return end
+
+		self.Menu.Paint = function(s, w, h)
+			draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().bg)
+			surface.SetDrawColor(CurrentTheme().text.muted)
+			surface.DrawOutlinedRect(0, 0, w, h, 1)
+		end
+
+		for _, option in pairs(self.Menu:GetCanvas():GetChildren()) do
+			option:SetTextColor(CurrentTheme().text.primary)
+
+			option.Paint = function(s, w, h) if s:IsHovered() then draw.RoundedBox(0, 0, 0, w, h, CurrentTheme().panels.secondary) end end
+		end
+	end
+
+	for _, v in pairs(table.GetKeys(THEME)) do
+		themeSelect:AddChoice(language.GetPhrase("beatrun.coursesmenu.themes." .. v), v)
+	end
+
+	function themeSelect:OnSelect(_, _, data)
+		if uiTheme:GetString() == data then return end
+
+		uiTheme:SetString(data)
+
+		if IsValid(Frame) then Frame:Close() end
+
+		timer.Simple(.1, function()
+			RunConsoleCommand("Beatrun_CoursesMenu")
+		end)
+	end
+end
+
 function OpenDBMenu()
 	if IsValid(Frame) then Frame:Remove() end
 
@@ -1358,135 +1492,6 @@ function OpenDBMenu()
 
 	close.DoClick = function() if IsValid(Frame) then Frame:Close() end end
 
-	local ThemeToggle = vgui.Create("DButton", Frame)
-	ThemeToggle:SetSize(24, 24)
-	ThemeToggle:SetText("")
-	ThemeToggle:SetPos(Frame:GetWide() - 60, 0)
-	ThemeToggle:SetCursor("hand")
-
-	ThemeToggle.Paint = function(self, w, h)
-		local col = self:IsHovered() and CurrentTheme().primary or CurrentTheme().secondary
-
-		draw.RoundedBox(0, 0, 0, w, h, col)
-
-		surface.SetDrawColor(CurrentTheme().text.primary:Unpack())
-		surface.DrawCircle(w / 2, h / 2, 6, CurrentTheme().text.primary)
-	end
-
-	ThemeToggle.DoClick = function()
-		currentTheme:SetString(currentTheme:GetString() == "dark" and "light" or "dark")
-
-		-- Quick hack because derma is funny
-		if IsValid(Frame) then Frame:Close() end
-
-		timer.Simple(.1, function()
-			RunConsoleCommand("Beatrun_CoursesMenu")
-		end)
-	end
-
-	local domainChanger = vgui.Create("DButton", Frame)
-	domainChanger:SetHeight(24)
-	domainChanger:SetText("#beatrun.coursesmenu.domain.change")
-	domainChanger:SetFont("AEUIDefault")
-	domainChanger:SetTextColor(CurrentTheme().buttons.primary.t)
-	domainChanger:SetCursor("hand")
-	domainChanger:SizeToContentsX()
-	domainChanger:SetPos(Frame:GetWide() - domainChanger:GetWide() - 72, 0)
-
-	domainChanger.Paint = function(self, w, h)
-		local col = self:IsHovered() and CurrentTheme().primary or CurrentTheme().secondary
-
-		draw.RoundedBox(0, 0, 0, w, h, col)
-	end
-
-	domainChanger.DoClick = function()
-		local frameW = math.Clamp(ScrW() * 0.25, 320, 600)
-		local frameH = math.Clamp(ScrH() * 0.18, 140, 260)
-
-		local frame = vgui.Create("DFrame")
-		frame:SetTitle("")
-		frame:SetSize(frameW, frameH)
-		frame:Center()
-		frame:DockPadding(20, 40, 20, 20)
-		frame:ShowCloseButton(false)
-		frame:SetDeleteOnClose(true)
-		frame:MakePopup()
-
-		frame.Paint = function(self, w, h)
-			draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
-			draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
-			draw.SimpleText("#beatrun.coursesmenu.domain.change", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		end
-
-		local close = vgui.Create("DButton", frame)
-		close:SetSize(24, 24)
-		close:SetPos(frame:GetWide() - 24, 0)
-		close:SetText("✕")
-		close:SetFont("AEUIDefault")
-		close:SetTextColor(CurrentTheme().buttons.red.t)
-
-		close.Paint = function(self, w, h)
-			local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
-			local isDown = self:IsDown() and CurrentTheme().buttons.red.d
-
-			draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
-		end
-
-		close.DoClick = function() if IsValid(frame) then frame:Close() end end
-
-		local content = vgui.Create("DPanel", frame)
-		content:Dock(FILL)
-		content.Paint = nil
-
-		local entry = vgui.Create("DTextEntry", content)
-		entry:Dock(TOP)
-		entry:SetTall(32)
-		entry:SetFont("AEUIDefault")
-		entry:SetPlaceholderText("#beatrun.coursesmenu.domain.change.placeholder")
-		entry:SetPaintBackground(false)
-
-		entry.Paint = function(self, w, h)
-			surface.SetDrawColor(CurrentTheme().text.muted)
-			surface.DrawOutlinedRect(0, 0, w, h, 1)
-
-			self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
-
-			if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
-
-			if self:HasFocus() then
-				surface.SetDrawColor(CurrentTheme().search:Unpack())
-				surface.DrawOutlinedRect(0, 0, w, h, 1)
-			end
-		end
-
-		local save = vgui.Create("DButton", content)
-		save:Dock(BOTTOM)
-		save:SetTall(32)
-		save:SetText("#beatrun.coursesmenu.save")
-		save:SetFont("AEUIDefault")
-		save:SetTextColor(CurrentTheme().buttons.green.t)
-
-		save.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
-
-		save.DoClick = function()
-			local value = string.Trim(entry:GetValue())
-			value = string.gsub(value, "^https?://", "")
-			value = string.gsub(value, "/+$", "")
-
-			print(entry:GetValue())
-			print(value)
-
-			databaseDomain:SetString(value)
-
-			if IsValid(frame) then frame:Close() end
-			if IsValid(Frame) then Frame:Close() end
-
-			timer.Simple(.1, function()
-				RunConsoleCommand("Beatrun_CoursesMenu")
-			end)
-		end
-	end
-
 	Sheet = vgui.Create("DPropertySheet", Frame)
 	Sheet:Dock(FILL)
 
@@ -1500,6 +1505,8 @@ function OpenDBMenu()
 			BuildOnlinePage()
 		elseif string.match(img, "/user") then
 			BuildProfilePage()
+		elseif string.match(img, "/cog") then
+			BuildSettingsPage()
 		end
 	end
 
@@ -1523,6 +1530,7 @@ function OpenDBMenu()
 	Header:Dock(TOP)
 	Header:SetTall(40)
 	Header:DockPadding(10, 8, 10, 8)
+
 	Header.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, CurrentTheme().header)
 	end
@@ -1595,6 +1603,15 @@ function OpenDBMenu()
 
 	Sheet:AddSheet("#beatrun.coursesmenu.profilepage", ProfilePanel, "icon16/user.png")
 
+	-- Settings page
+	SettingsPanel = vgui.Create("DPanel", Sheet)
+	SettingsPanel:Dock(FILL)
+	SettingsPanel:DockPadding(20, 20, 20, 20)
+	SettingsPanel:SetBackgroundColor(CurrentTheme().bg)
+
+	Sheet:AddSheet("#beatrun.coursesmenu.settings", SettingsPanel, "icon16/cog.png")
+
+	-- NOTE: Add sheets (pages) before this (or they will not be themed!)
 	Sheet.Paint = function(self, w, h) draw.RoundedBox(0, 0, 0, w, h, CurrentTheme().bg) end
 
 	for _, tab in pairs(Sheet.Items) do
