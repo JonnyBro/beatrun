@@ -1,8 +1,3 @@
---[[ TODO
-	- Replace "http" with "https" for release
-	- Localization
---]]
-
 -- ConVars
 local databaseApiKey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.GetPhrase("beatrun.convars.apikey"))
 local databaseDomain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", true, false, language.GetPhrase("beatrun.convars.domain"))
@@ -186,7 +181,7 @@ local function OpenCourseSaveMenu()
 	frame.Paint = function(self, w, h)
 		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
 		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
-		draw.SimpleText("#beatrun.coursesmenu.savecourse", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("#beatrun.coursesmenu.localpage.savecourse", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	local close = vgui.Create("DButton", frame)
@@ -380,7 +375,7 @@ local function FetchAndSaveCourse(course)
 		code = course.code
 	}
 
-	http.Fetch("http://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, code)
+	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, code)
 		if code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
@@ -419,7 +414,7 @@ local function FetchAndStartCourse(code)
 		code = code
 	}
 
-	http.Fetch("http://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, code)
+	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, code)
 		if code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
@@ -429,12 +424,12 @@ local function FetchAndStartCourse(code)
 			end
 		end
 
-		body = util.JSONToTable(body)
+		local res = util.JSONToTable(body)
 
-		if body.code ~= 200 then
+		if res and res.code and res.code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-			print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+			print("> Code: " .. res.code or code or "null" .. "\n> Reply: " .. res.message or "null" .. "\n> Data: " .. res.data or "null")
 
 			return
 		end
@@ -470,7 +465,7 @@ local function UploadCourseFile(course)
 		workshopId = GetCurrentMapWorkshopID()
 	}
 
-	http.Post("http://" .. databaseDomain:GetString() .. "/api/courses/upload", {
+	http.Post("https://" .. databaseDomain:GetString() .. "/api/courses/upload", {
 		data = encoded
 	}, function(body, _, _, code)
 		if code ~= 200 then
@@ -676,7 +671,7 @@ local function BuildProfilePage()
 		key = apiKey ~= "" and apiKey or "0"
 	}
 
-	http.Fetch("http://" .. databaseDomain:GetString() .. "/api/key/validate", function(body, _, _, code)
+	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/key/validate", function(body, _, _, code)
 		if code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
@@ -724,7 +719,7 @@ local function BuildProfilePage()
 					username = LocalPlayer():Nick()
 				}
 
-				http.Post("http://" .. databaseDomain:GetString() .. "/api/users/register", {}, function(body, _, _, code)
+				http.Post("https://" .. databaseDomain:GetString() .. "/api/users/register", {}, function(body, _, _, code)
 					if code ~= 200 then
 						notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
@@ -958,7 +953,7 @@ local function BuildProfilePage()
 				OpenConfirmPopup("#beatrun.coursesmenu.delete", "#beatrun.coursesmenu.delete.confirm", function()
 					HTTP({
 						method = "DELETE",
-						url = "http://" .. databaseDomain:GetString() .. "/api/courses/delete",
+						url = "https://" .. databaseDomain:GetString() .. "/api/courses/delete",
 						headers = {
 							authorization = databaseApiKey:GetString(),
 							code = v.code,
@@ -1028,7 +1023,7 @@ local function PopulateCoursesList()
 			game = "yes"
 		}
 
-		http.Fetch("http://" .. databaseDomain:GetString() .. "/api/courses/list", function(body, _, _, code)
+		http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/list", function(body, _, _, code)
 			Beatrun_CoursesCache.loading = false
 
 			if code ~= 200 then
@@ -1492,7 +1487,7 @@ function OpenDBMenu()
 	ProfilePanel:DockPadding(20, 20, 20, 20)
 	ProfilePanel:SetBackgroundColor(CurrentTheme().bg)
 
-	Sheet:AddSheet("beatrun.coursesmenu.profilepage", ProfilePanel, "icon16/user.png")
+	Sheet:AddSheet("#beatrun.coursesmenu.profilepage", ProfilePanel, "icon16/user.png")
 
 	Sheet.Paint = function(self, w, h) draw.RoundedBox(0, 0, 0, w, h, CurrentTheme().bg) end
 
