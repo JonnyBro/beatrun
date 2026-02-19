@@ -144,6 +144,7 @@ local function GetCurrentMapWorkshopID()
 	return nil
 end
 
+-- UI helpers
 local function ApplyScrollTheme(panel)
 	local bar = panel:GetVBar()
 
@@ -187,7 +188,7 @@ local function OpenCourseSaveMenu()
 	local close = vgui.Create("DButton", frame)
 	close:SetSize(24, 24)
 	close:SetPos(frame:GetWide() - 24, 0)
-	close:SetText("X")
+	close:SetText("✕")
 	close:SetFont("AEUIDefault")
 	close:SetTextColor(CurrentTheme().buttons.red.t)
 
@@ -198,7 +199,7 @@ local function OpenCourseSaveMenu()
 		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
 	end
 
-	close.DoClick = function() frame:Close() end
+	close.DoClick = function() if IsValid(frame) then frame:Close() end end
 
 	local content = vgui.Create("DPanel", frame)
 	content:Dock(FILL)
@@ -281,7 +282,7 @@ local function OpenCourseSaveMenu()
 			notification.AddLegacy(text, NOTIFY_GENERIC, 6)
 		end
 
-		frame:Close()
+		if IsValid(frame) then frame:Close() end
 	end
 end
 
@@ -307,7 +308,7 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	local close = vgui.Create("DButton", frame)
 	close:SetSize(24, 24)
 	close:SetPos(frame:GetWide() - 24, 0)
-	close:SetText("X")
+	close:SetText("✕")
 	close:SetFont("AEUIDefault")
 	close:SetTextColor(CurrentTheme().buttons.red.t)
 
@@ -318,7 +319,7 @@ local function OpenConfirmPopup(title, message, onConfirm)
 		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
 	end
 
-	close.DoClick = function() frame:Close() end
+	close.DoClick = function() if IsValid(frame) then frame:Close() end end
 
 	local label = vgui.Create("DLabel", frame)
 	label:SetText(message)
@@ -346,7 +347,7 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	confirm.DoClick = function()
 		if onConfirm then onConfirm() end
 
-		frame:Close()
+		if IsValid(frame) then frame:Close() end
 	end
 
 	local cancel = vgui.Create("DButton", buttonRow)
@@ -356,9 +357,10 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	cancel:SetTextColor(CurrentTheme().buttons.red.t)
 
 	cancel.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
-	cancel.DoClick = function() frame:Close() end
+	cancel.DoClick = function() if IsValid(frame) then frame:Close() end end
 end
 
+-- Save/load/upload functions
 local function SaveCourseToFile(mapName, code, data)
 	code = SanitizeString(code)
 
@@ -496,6 +498,7 @@ local function UploadCourseFile(course)
 	end, headers)
 end
 
+-- Pages
 local function BuildLocalPage()
 	if not IsValid(LocalPanel) then return end
 
@@ -533,7 +536,7 @@ local function BuildLocalPage()
 	buildBtn.DoClick = function()
 		LocalPlayer():ConCommand("Beatrun_BuildMode")
 
-		Frame:Close()
+		if IsValid(Frame) then Frame:Close() end
 	end
 
 	local exitBtn = vgui.Create("DButton", top)
@@ -622,7 +625,7 @@ local function BuildLocalPage()
 		loadBtn.DoClick = function()
 			LoadCourse(filename)
 
-			Frame:Close()
+			if IsValid(Frame) then Frame:Close() end
 		end
 
 		local uploadBtn = vgui.Create("DButton", entry)
@@ -813,7 +816,7 @@ local function BuildProfilePage()
 			local close = vgui.Create("DButton", frame)
 			close:SetSize(24, 24)
 			close:SetPos(frame:GetWide() - 24, 0)
-			close:SetText("X")
+			close:SetText("✕")
 			close:SetFont("AEUIDefault")
 			close:SetTextColor(CurrentTheme().buttons.red.t)
 
@@ -824,7 +827,7 @@ local function BuildProfilePage()
 				draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
 			end
 
-			close.DoClick = function() frame:Close() end
+			close.DoClick = function() if IsValid(frame) then frame:Close() end end
 
 			local entry = vgui.Create("DTextEntry", frame)
 			entry:SetFont("AEUIDefault")
@@ -863,7 +866,7 @@ local function BuildProfilePage()
 
 				databaseApiKey:SetString(newKey)
 
-				frame:Close()
+				if IsValid(frame) then frame:Close() end
 
 				BuildProfilePage()
 			end
@@ -1009,7 +1012,7 @@ local function ApplyCourseFilter(newText)
 	Beatrun_CoursesCache.filtered = filtered
 end
 
-local function PopulateCoursesList()
+local function BuildOnlinePage()
 	if not IsValid(List) then return end
 
 	List:Clear()
@@ -1069,7 +1072,7 @@ local function PopulateCoursesList()
 			Beatrun_CoursesCache.at = CurTime()
 
 			ApplyCourseFilter()
-			PopulateCoursesList()
+			BuildOnlinePage()
 
 			if IsValid(ProfilePanel) then BuildProfilePage() end
 
@@ -1222,7 +1225,7 @@ local function PopulateCoursesList()
 				local close = vgui.Create("DButton", loadWarn)
 				close:SetSize(24, 24)
 				close:SetPos(loadWarn:GetWide() - 24, 0)
-				close:SetText("X")
+				close:SetText("✕")
 				close:SetFont("AEUIDefault")
 				close:SetTextColor(CurrentTheme().buttons.red.t)
 
@@ -1233,7 +1236,7 @@ local function PopulateCoursesList()
 					draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
 				end
 
-				close.DoClick = function() loadWarn:Close() end
+				close.DoClick = function() if IsValid(loadWarn) then loadWarn:Close() end end
 
 				local label = vgui.Create("DLabel", loadWarn)
 				label:SetText("#beatrun.coursesmenu.onlinepage.start.message")
@@ -1340,7 +1343,7 @@ function OpenDBMenu()
 	end
 
 	local close = vgui.Create("DButton", Frame)
-	close:SetText("X")
+	close:SetText("✕")
 	close:SetFont("AEUIDefault")
 	close:SetSize(24, 24)
 	close:SetPos(Frame:GetWide() - 24, 0)
@@ -1353,7 +1356,7 @@ function OpenDBMenu()
 		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
 	end
 
-	close.DoClick = function() Frame:Close() end
+	close.DoClick = function() if IsValid(Frame) then Frame:Close() end end
 
 	local ThemeToggle = vgui.Create("DButton", Frame)
 	ThemeToggle:SetSize(24, 24)
@@ -1373,12 +1376,115 @@ function OpenDBMenu()
 	ThemeToggle.DoClick = function()
 		currentTheme:SetString(currentTheme:GetString() == "dark" and "light" or "dark")
 
-		Frame:Close()
-
 		-- Quick hack because derma is funny
+		if IsValid(Frame) then Frame:Close() end
+
 		timer.Simple(.1, function()
 			RunConsoleCommand("Beatrun_CoursesMenu")
 		end)
+	end
+
+	local domainChanger = vgui.Create("DButton", Frame)
+	domainChanger:SetHeight(24)
+	domainChanger:SetText("#beatrun.coursesmenu.domain.change")
+	domainChanger:SetFont("AEUIDefault")
+	domainChanger:SetTextColor(CurrentTheme().buttons.primary.t)
+	domainChanger:SetCursor("hand")
+	domainChanger:SizeToContentsX()
+	domainChanger:SetPos(Frame:GetWide() - domainChanger:GetWide() - 72, 0)
+
+	domainChanger.Paint = function(self, w, h)
+		local col = self:IsHovered() and CurrentTheme().primary or CurrentTheme().secondary
+
+		draw.RoundedBox(0, 0, 0, w, h, col)
+	end
+
+	domainChanger.DoClick = function()
+		local frameW = math.Clamp(ScrW() * 0.25, 320, 600)
+		local frameH = math.Clamp(ScrH() * 0.18, 140, 260)
+
+		local frame = vgui.Create("DFrame")
+		frame:SetTitle("")
+		frame:SetSize(frameW, frameH)
+		frame:Center()
+		frame:DockPadding(20, 40, 20, 20)
+		frame:ShowCloseButton(false)
+		frame:SetDeleteOnClose(true)
+		frame:MakePopup()
+
+		frame.Paint = function(self, w, h)
+			draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
+			draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
+			draw.SimpleText("#beatrun.coursesmenu.domain.change", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+
+		local close = vgui.Create("DButton", frame)
+		close:SetSize(24, 24)
+		close:SetPos(frame:GetWide() - 24, 0)
+		close:SetText("✕")
+		close:SetFont("AEUIDefault")
+		close:SetTextColor(CurrentTheme().buttons.red.t)
+
+		close.Paint = function(self, w, h)
+			local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+			local isDown = self:IsDown() and CurrentTheme().buttons.red.d
+
+			draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
+		end
+
+		close.DoClick = function() if IsValid(frame) then frame:Close() end end
+
+		local content = vgui.Create("DPanel", frame)
+		content:Dock(FILL)
+		content.Paint = nil
+
+		local entry = vgui.Create("DTextEntry", content)
+		entry:Dock(TOP)
+		entry:SetTall(32)
+		entry:SetFont("AEUIDefault")
+		entry:SetPlaceholderText("#beatrun.coursesmenu.domain.change.placeholder")
+		entry:SetPaintBackground(false)
+
+		entry.Paint = function(self, w, h)
+			surface.SetDrawColor(CurrentTheme().text.muted)
+			surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+			self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
+
+			if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
+
+			if self:HasFocus() then
+				surface.SetDrawColor(CurrentTheme().search:Unpack())
+				surface.DrawOutlinedRect(0, 0, w, h, 1)
+			end
+		end
+
+		local save = vgui.Create("DButton", content)
+		save:Dock(BOTTOM)
+		save:SetTall(32)
+		save:SetText("#beatrun.coursesmenu.save")
+		save:SetFont("AEUIDefault")
+		save:SetTextColor(CurrentTheme().buttons.green.t)
+
+		save.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+
+		save.DoClick = function()
+			local value = string.Trim(entry:GetValue())
+			value = string.gsub(value, "^https?://", "")
+			value = string.gsub(value, "/+$", "")
+
+			print(entry:GetValue())
+			print(value)
+
+			databaseDomain:SetString(value)
+
+			if IsValid(frame) then frame:Close() end
+			if IsValid(Frame) then Frame:Close() end
+
+			timer.Simple(.1, function()
+				RunConsoleCommand("Beatrun_CoursesMenu")
+			end)
+		end
 	end
 
 	Sheet = vgui.Create("DPropertySheet", Frame)
@@ -1391,7 +1497,7 @@ function OpenDBMenu()
 			BuildLocalPage()
 		elseif string.match(img, "/folder_database") then
 			ApplyCourseFilter()
-			PopulateCoursesList()
+			BuildOnlinePage()
 		elseif string.match(img, "/user") then
 			BuildProfilePage()
 		end
@@ -1442,7 +1548,7 @@ function OpenDBMenu()
 		isCurrentMapOnly = not isCurrentMapOnly
 
 		ApplyCourseFilter()
-		PopulateCoursesList()
+		BuildOnlinePage()
 	end
 
 	local Search = vgui.Create("DTextEntry", Header)
@@ -1472,7 +1578,7 @@ function OpenDBMenu()
 
 		timer.Create(searchTimer, .25, 1, function()
 			ApplyCourseFilter(text)
-			PopulateCoursesList()
+			BuildOnlinePage()
 		end)
 	end
 
