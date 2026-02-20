@@ -73,6 +73,7 @@ irm https://beatrun.jbro.top/install | iex
 ### New Features
 
 - **Custom Courses Database** hosted by Jonny_Bro: **[Access Here](https://courses.jbro.top)** (free and **[open source](https://github.com/JonnyBro/beatrun-courses-server)**).
+  - **Brand new courses menu that allows you to download and upload courses without leaving the game!**
 - **New Gamemode:** Deathmatch.
 - "Proper" Kick Glitch similar to the **[original game](https://www.youtube.com/watch?v=zK5y3NBUStc)**.
 - In-game configuration menu in the Tools menu under **Beatrun**. All settings can be modified here.
