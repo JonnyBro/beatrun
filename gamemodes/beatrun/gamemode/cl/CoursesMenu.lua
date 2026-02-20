@@ -38,6 +38,12 @@ local THEME = {
 				n = Color(183, 28, 28),
 				h = Color(198, 40, 40),
 				d = Color(211, 47, 47),
+			},
+			disabled = {
+				t = color_white,
+				n = Color(45, 45, 45),
+				h = Color(65, 65, 65),
+				d = Color(100, 100, 100),
 			}
 		},
 		panels = {
@@ -76,7 +82,13 @@ local THEME = {
 				n = Color(229, 57, 53),
 				h = Color(211, 47, 47),
 				d = Color(198, 40, 40),
-			}
+			},
+			disabled = {
+				t = color_black,
+				n = Color(150, 150, 150),
+				h = Color(170, 170, 170),
+				d = Color(200, 200, 200),
+			},
 		},
 		panels = {
 			primary = Color(255, 255, 255),
@@ -160,6 +172,12 @@ local function ApplyScrollTheme(panel)
 end
 
 local function ApplyButtonTheme(self, w, h, style)
+	if not self:IsEnabled() then
+		self:SetCursor("arrow")
+
+		style = "disabled"
+	end
+
 	local bg = self:IsHovered() and CurrentTheme().buttons[style].h or CurrentTheme().buttons[style].n
 	local isDown = self:IsDown() and CurrentTheme().buttons[style].d
 
@@ -175,8 +193,8 @@ local function OpenCourseSaveMenu()
 	frame:SetSize(frameW, frameH)
 	frame:Center()
 	frame:DockPadding(20, 40, 20, 20)
-	frame:ShowCloseButton(false)
 	frame:SetDeleteOnClose(true)
+	frame:ShowCloseButton(false)
 	frame:MakePopup()
 
 	frame.Paint = function(self, w, h)
@@ -186,11 +204,11 @@ local function OpenCourseSaveMenu()
 	end
 
 	local close = vgui.Create("DButton", frame)
-	close:SetSize(24, 24)
-	close:SetPos(frame:GetWide() - 24, 0)
 	close:SetText("✕")
 	close:SetFont("AEUIDefault")
 	close:SetTextColor(CurrentTheme().buttons.red.t)
+	close:SetSize(24, 24)
+	close:SetPos(frame:GetWide() - 24, 0)
 
 	close.Paint = function(self, w, h)
 		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
@@ -206,10 +224,10 @@ local function OpenCourseSaveMenu()
 	content.Paint = nil
 
 	local entry = vgui.Create("DTextEntry", content)
-	entry:Dock(TOP)
-	entry:SetTall(32)
-	entry:SetFont("AEUIDefault")
 	entry:SetPlaceholderText("#beatrun.coursesmenu.save.placeholder")
+	entry:SetFont("AEUIDefault")
+	entry:SetTall(32)
+	entry:Dock(TOP)
 	entry:SetPaintBackground(false)
 
 	entry.Paint = function(self, w, h)
@@ -227,14 +245,14 @@ local function OpenCourseSaveMenu()
 	end
 
 	local speedRow = vgui.Create("DPanel", content)
+	speedRow:SetTall(24)
 	speedRow:Dock(TOP)
 	speedRow:DockMargin(0, 12, 0, 0)
-	speedRow:SetTall(24)
 	speedRow.Paint = nil
 
 	local checkbox = vgui.Create("DCheckBox", speedRow)
-	checkbox:Dock(LEFT)
 	checkbox:SetWide(24)
+	checkbox:Dock(LEFT)
 	checkbox:SetValue(false)
 
 	checkbox.Paint = function(self, w, h)
@@ -244,9 +262,9 @@ local function OpenCourseSaveMenu()
 	end
 
 	local slider = vgui.Create("DNumSlider", speedRow)
+	slider:SetText("#beatrun.coursesmenu.save.maxspeedlock")
 	slider:Dock(FILL)
 	slider:DockMargin(8, 0, 0, 0)
-	slider:SetText("#beatrun.coursesmenu.save.maxspeedlock")
 	slider:SetMin(325)
 	slider:SetMax(1000)
 	slider:SetDecimals(0)
@@ -261,11 +279,11 @@ local function OpenCourseSaveMenu()
 	slider.Slider.Knob.Paint = function(self, w, h) draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().accent) end
 
 	local save = vgui.Create("DButton", content)
-	save:Dock(BOTTOM)
-	save:SetTall(32)
 	save:SetText("#beatrun.coursesmenu.save")
 	save:SetFont("AEUIDefault")
 	save:SetTextColor(CurrentTheme().buttons.green.t)
+	save:SetTall(32)
+	save:Dock(BOTTOM)
 
 	save.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
@@ -295,8 +313,8 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	frame:SetSize(frameW, frameH)
 	frame:Center()
 	frame:DockPadding(20, 40, 20, 20)
-	frame:ShowCloseButton(false)
 	frame:SetDeleteOnClose(true)
+	frame:ShowCloseButton(false)
 	frame:MakePopup()
 
 	frame.Paint = function(self, w, h)
@@ -306,11 +324,11 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	end
 
 	local close = vgui.Create("DButton", frame)
-	close:SetSize(24, 24)
-	close:SetPos(frame:GetWide() - 24, 0)
 	close:SetText("✕")
 	close:SetFont("AEUIDefault")
 	close:SetTextColor(CurrentTheme().buttons.red.t)
+	close:SetSize(24, 24)
+	close:SetPos(frame:GetWide() - 24, 0)
 
 	close.Paint = function(self, w, h)
 		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
@@ -335,12 +353,12 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	buttonRow.Paint = nil
 
 	local confirm = vgui.Create("DButton", buttonRow)
-	confirm:Dock(LEFT)
-	confirm:DockMargin(0, 0, 10, 0)
-	confirm:SetWide(frameW * 0.5 - 25)
 	confirm:SetText("#beatrun.misc.ok")
 	confirm:SetFont("AEUIDefault")
 	confirm:SetTextColor(CurrentTheme().buttons.green.t)
+	confirm:SetWide(frameW * 0.5 - 25)
+	confirm:Dock(LEFT)
+	confirm:DockMargin(0, 0, 10, 0)
 
 	confirm.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
@@ -351,10 +369,10 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	end
 
 	local cancel = vgui.Create("DButton", buttonRow)
-	cancel:Dock(FILL)
 	cancel:SetText("#beatrun.misc.cancel")
 	cancel:SetFont("AEUIDefault")
 	cancel:SetTextColor(CurrentTheme().buttons.red.t)
+	cancel:Dock(FILL)
 
 	cancel.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
 	cancel.DoClick = function() if IsValid(frame) then frame:Close() end end
@@ -502,29 +520,29 @@ local function BuildLocalPage()
 	LocalPanel:Clear()
 
 	local top = vgui.Create("DPanel", LocalPanel)
-	top:Dock(TOP)
 	top:SetTall(60)
+	top:Dock(TOP)
 	top:DockPadding(20, 20, 20, 10)
 	top.Paint = nil
 
 	local saveBtn = vgui.Create("DButton", top)
-	saveBtn:Dock(LEFT)
-	saveBtn:DockMargin(0, 0, 15, 0)
-	saveBtn:SetTall(28)
 	saveBtn:SetText("#beatrun.coursesmenu.localpage.savecourse")
 	saveBtn:SetFont("AEUISmall")
 	saveBtn:SetTextColor(CurrentTheme().buttons.green.t)
+	saveBtn:SetTall(28)
+	saveBtn:Dock(LEFT)
+	saveBtn:DockMargin(0, 0, 15, 0)
 	saveBtn:SizeToContentsX()
 
 	saveBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 	saveBtn.DoClick = function() OpenCourseSaveMenu() end
 
 	local buildBtn = vgui.Create("DButton", top)
-	buildBtn:Dock(LEFT)
-	buildBtn:DockMargin(0, 0, 15, 0)
 	buildBtn:SetText("#beatrun.coursesmenu.localpage.buildmode")
 	buildBtn:SetFont("AEUISmall")
 	buildBtn:SetTextColor(CurrentTheme().buttons.green.t)
+	buildBtn:Dock(LEFT)
+	buildBtn:DockMargin(0, 0, 15, 0)
 	buildBtn:SizeToContentsX()
 	buildBtn:SetEnabled(LocalPlayer():IsSuperAdmin())
 
@@ -537,11 +555,11 @@ local function BuildLocalPage()
 	end
 
 	local exitBtn = vgui.Create("DButton", top)
-	exitBtn:Dock(LEFT)
-	exitBtn:DockMargin(0, 0, 15, 0)
 	exitBtn:SetText("#beatrun.coursesmenu.localpage.freeplay")
 	exitBtn:SetFont("AEUISmall")
 	exitBtn:SetTextColor(CurrentTheme().buttons.red.t)
+	exitBtn:Dock(LEFT)
+	exitBtn:DockMargin(0, 0, 15, 0)
 	exitBtn:SizeToContentsX()
 	exitBtn:SetEnabled(LocalPlayer():IsSuperAdmin())
 
@@ -555,9 +573,10 @@ local function BuildLocalPage()
 	end
 
 	local divider = vgui.Create("DPanel", LocalPanel)
-	divider:Dock(TOP)
 	divider:SetTall(1)
+	divider:Dock(TOP)
 	divider:DockMargin(0, 10, 0, 10)
+
 	divider.Paint = function(self, w, h)
 		surface.SetDrawColor(CurrentTheme().primary:Unpack())
 		surface.DrawRect(0, 0, w, h)
@@ -609,12 +628,12 @@ local function BuildLocalPage()
 		end
 
 		local loadBtn = vgui.Create("DButton", entry)
-		loadBtn:Dock(RIGHT)
-		loadBtn:SetWide(90)
-		loadBtn:DockMargin(0, 10, 10, 10)
 		loadBtn:SetText("#beatrun.coursesmenu.start")
 		loadBtn:SetFont("AEUIDefault")
 		loadBtn:SetTextColor(CurrentTheme().buttons.green.t)
+		loadBtn:Dock(RIGHT)
+		loadBtn:SetWide(90)
+		loadBtn:DockMargin(0, 10, 10, 10)
 		loadBtn:SetEnabled(LocalPlayer():IsSuperAdmin())
 
 		loadBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
@@ -626,12 +645,12 @@ local function BuildLocalPage()
 		end
 
 		local uploadBtn = vgui.Create("DButton", entry)
-		uploadBtn:Dock(RIGHT)
-		uploadBtn:SetWide(90)
-		uploadBtn:DockMargin(0, 10, 10, 10)
 		uploadBtn:SetText("#beatrun.coursesmenu.upload")
 		uploadBtn:SetFont("AEUIDefault")
 		uploadBtn:SetTextColor(CurrentTheme().buttons.green.t)
+		uploadBtn:SetWide(90)
+		uploadBtn:Dock(RIGHT)
+		uploadBtn:DockMargin(0, 10, 10, 10)
 
 		uploadBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
@@ -642,12 +661,12 @@ local function BuildLocalPage()
 		end
 
 		local deleteBtn = vgui.Create("DButton", entry)
-		deleteBtn:Dock(RIGHT)
-		deleteBtn:SetWide(90)
-		deleteBtn:DockMargin(0, 10, 10, 10)
 		deleteBtn:SetText("#beatrun.coursesmenu.delete")
 		deleteBtn:SetFont("AEUIDefault")
 		deleteBtn:SetTextColor(CurrentTheme().buttons.red.t)
+		deleteBtn:SetWide(90)
+		deleteBtn:Dock(RIGHT)
+		deleteBtn:DockMargin(0, 10, 10, 10)
 
 		deleteBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
 
@@ -694,21 +713,21 @@ local function BuildProfilePage()
 
 		if not valid then
 			local msg = vgui.Create("DLabel", ProfilePanel)
-			msg:SetFont("AEUILarge")
 			msg:SetText("#beatrun.coursesmenu.profilepage.message")
+			msg:SetFont("AEUILarge")
 			msg:SetTextColor(CurrentTheme().text.primary)
-			msg:SizeToContents()
 			msg:Dock(TOP)
 			msg:DockMargin(0, 60, 0, 20)
 			msg:SetContentAlignment(5)
+			msg:SizeToContents()
 
 			local registerBtn = vgui.Create("DButton", ProfilePanel)
 			registerBtn:SetText("#beatrun.coursesmenu.profilepage.register")
 			registerBtn:SetFont("AEUIDefault")
+			registerBtn:SetTextColor(CurrentTheme().buttons.green.t)
 			registerBtn:SetTall(40)
 			registerBtn:Dock(TOP)
 			registerBtn:DockMargin(200, 0, 200, 0)
-			registerBtn:SetTextColor(CurrentTheme().buttons.green.t)
 
 			registerBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
@@ -757,28 +776,28 @@ local function BuildProfilePage()
 		header.Paint = nil
 
 		local avatar = vgui.Create("AvatarImage", header)
+		avatar:SetSteamID(LocalPlayer():SteamID64(), 64)
 		avatar:SetSize(64, 64)
 		avatar:Dock(LEFT)
 		avatar:DockMargin(0, 10, 15, 10)
-		avatar:SetSteamID(LocalPlayer():SteamID64(), 64)
 
 		local name = vgui.Create("DLabel", header)
-		name:SetFont("AEUILarge")
 		name:SetText(LocalPlayer():Nick())
+		name:SetFont("AEUILarge")
 		name:SetTextColor(CurrentTheme().text.primary)
 		name:Dock(TOP)
 		name:SizeToContents()
 
 		local keyRow = vgui.Create("DPanel", header)
+		keyRow:SetTall(26)
 		keyRow:Dock(TOP)
 		keyRow:DockMargin(0, 6, 0, 0)
-		keyRow:SetTall(26)
 		keyRow.Paint = nil
 
 		local masked = string.rep("*", math.max(#apiKey - 4, 0)) .. string.sub(apiKey, -4)
 		local keyLabel = vgui.Create("DLabel", keyRow)
-		keyLabel:SetFont("AEUIDefault")
 		keyLabel:SetText(language.GetPhrase("beatrun.coursesmenu.profilepage.key"):format(masked))
+		keyLabel:SetFont("AEUIDefault")
 		keyLabel:SetTextColor(CurrentTheme().text.muted)
 		keyLabel:Dock(LEFT)
 		keyLabel:SizeToContents()
@@ -787,7 +806,6 @@ local function BuildProfilePage()
 		changeBtn:SetText("#beatrun.coursesmenu.profilepage.changekey")
 		changeBtn:SetTextColor(CurrentTheme().buttons.green.t)
 		changeBtn:SetFont("AEUIDefault")
-		changeBtn:SetCursor("hand")
 		changeBtn:Dock(LEFT)
 		changeBtn:DockMargin(10, 0, 0, 0)
 		changeBtn:SizeToContents()
@@ -796,9 +814,9 @@ local function BuildProfilePage()
 
 		changeBtn.DoClick = function()
 			local frame = vgui.Create("DFrame")
+			frame:SetTitle("")
 			frame:SetSize(360, 150)
 			frame:Center()
-			frame:SetTitle("")
 			frame:ShowCloseButton(false)
 			frame:MakePopup()
 
@@ -809,11 +827,11 @@ local function BuildProfilePage()
 			end
 
 			local close = vgui.Create("DButton", frame)
-			close:SetSize(24, 24)
-			close:SetPos(frame:GetWide() - 24, 0)
 			close:SetText("✕")
 			close:SetFont("AEUIDefault")
 			close:SetTextColor(CurrentTheme().buttons.red.t)
+			close:SetSize(24, 24)
+			close:SetPos(frame:GetWide() - 24, 0)
 
 			close.Paint = function(self, w, h)
 				local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
@@ -825,8 +843,8 @@ local function BuildProfilePage()
 			close.DoClick = function() if IsValid(frame) then frame:Close() end end
 
 			local entry = vgui.Create("DTextEntry", frame)
-			entry:SetFont("AEUIDefault")
 			entry:SetPlaceholderText("#beatrun.coursesmenu.profilepage.changekey.placeholder")
+			entry:SetFont("AEUIDefault")
 			entry:SetTall(32)
 			entry:Dock(TOP)
 			entry:DockMargin(0, 20, 0, 0)
@@ -847,11 +865,11 @@ local function BuildProfilePage()
 			end
 
 			local save = vgui.Create("DButton", frame)
-			save:Dock(BOTTOM)
-			save:SetTall(32)
 			save:SetText("#beatrun.coursesmenu.save")
 			save:SetFont("AEUIDefault")
 			save:SetTextColor(CurrentTheme().buttons.green.t)
+			save:SetTall(32)
+			save:Dock(BOTTOM)
 
 			save.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
@@ -927,23 +945,23 @@ local function BuildProfilePage()
 			end
 
 			local startBtn = vgui.Create("DButton", entry)
-			startBtn:Dock(RIGHT)
-			startBtn:SetWide(90)
-			startBtn:DockMargin(0, 10, 10, 10)
-			startBtn:SetText("Start")
+			startBtn:SetText("#beatrun.coursesmenu.start")
 			startBtn:SetFont("AEUIDefault")
 			startBtn:SetTextColor(CurrentTheme().buttons.green.t)
+			startBtn:SetWide(90)
+			startBtn:Dock(RIGHT)
+			startBtn:DockMargin(0, 10, 10, 10)
 
 			startBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 			startBtn.DoClick = function() FetchAndStartCourse(v.code) end
 
 			local deleteBtn = vgui.Create("DButton", entry)
-			deleteBtn:Dock(RIGHT)
-			deleteBtn:SetWide(90)
-			deleteBtn:DockMargin(0, 10, 10, 10)
 			deleteBtn:SetText("#beatrun.coursesmenu.delete")
 			deleteBtn:SetFont("AEUIDefault")
 			deleteBtn:SetTextColor(CurrentTheme().buttons.red.t)
+			deleteBtn:SetWide(90)
+			deleteBtn:Dock(RIGHT)
+			deleteBtn:DockMargin(0, 10, 10, 10)
 
 			deleteBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
 
@@ -1090,6 +1108,7 @@ local function BuildOnlinePage()
 
 		entry.Paint = function(self, w, h)
 			local col = self:IsHovered() and CurrentTheme().panels.secondary or CurrentTheme().panels.primary
+
 			draw.RoundedBox(6, 0, 0, w, h, col)
 
 			local mapMaterial = Beatrun_MapImageCache[v.mapName]
@@ -1110,11 +1129,11 @@ local function BuildOnlinePage()
 		local mapBtn = vgui.Create("DButton", entry)
 		mapBtn:SetText(v.mapName)
 		mapBtn:SetFont("AEUIDefault")
-		mapBtn:SetPos(180, 63)
-		mapBtn:SizeToContents()
-		mapBtn:SetCursor(v.workshopId and "hand" or "arrow")
 		mapBtn:SetTextColor(CurrentTheme().text.muted)
+		mapBtn:SetPos(180, 63)
+		mapBtn:SetCursor(v.workshopId and "hand" or "arrow")
 		mapBtn:SetPaintBackground(false)
+		mapBtn:SizeToContents()
 
 		mapBtn.DoClick = function() if v.workshopId then gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end end
 
@@ -1124,11 +1143,11 @@ local function BuildOnlinePage()
 		local codeBtn = vgui.Create("DButton", entry)
 		codeBtn:SetText(v.code)
 		codeBtn:SetFont("AEUIDefault")
-		codeBtn:SetPos(180, 35)
-		codeBtn:SizeToContents()
-		codeBtn:SetCursor("hand")
 		codeBtn:SetTextColor(CurrentTheme().text.muted)
+		codeBtn:SetPos(180, 35)
+		codeBtn:SetCursor("hand")
 		codeBtn:SetPaintBackground(false)
+		codeBtn:SizeToContents()
 
 		codeBtn.DoClick = function(self)
 			SetClipboardText(v.code)
@@ -1165,18 +1184,18 @@ local function BuildOnlinePage()
 		authorPanel.Paint = nil
 
 		local avatar = vgui.Create("AvatarImage", authorPanel)
+		avatar:SetSteamID(v.uploadedBy.steamId, 32)
 		avatar:SetSize(24, 24)
 		avatar:Dock(LEFT)
 		avatar:DockMargin(10, 2, 6, 2)
-		avatar:SetSteamID(v.uploadedBy.steamId, 32)
 
 		local nameBtn = vgui.Create("DButton", authorPanel)
 		nameBtn:SetText(v.uploadedBy.username or "Unknown")
 		nameBtn:SetFont("AEUIDefault")
-		nameBtn:Dock(FILL)
-		nameBtn:SetCursor("hand")
-		nameBtn:SetContentAlignment(4)
 		nameBtn:SetTextColor(CurrentTheme().text.primary)
+		nameBtn:SetCursor("hand")
+		nameBtn:Dock(FILL)
+		nameBtn:SetContentAlignment(4)
 		nameBtn:SetPaintBackground(false)
 
 		nameBtn.DoClick = function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end
@@ -1193,9 +1212,9 @@ local function BuildOnlinePage()
 		local loadBtn = vgui.Create("DButton", loadPanel)
 		loadBtn:SetText("#beatrun.coursesmenu.onlinepage.start")
 		loadBtn:SetFont("AEUIDefault")
-		loadBtn:Dock(FILL)
-		loadBtn:SetCursor("hand")
 		loadBtn:SetTextColor(CurrentTheme().buttons.primary.t)
+		loadBtn:SetCursor("hand")
+		loadBtn:Dock(FILL)
 
 		loadBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "primary") end
 
@@ -1216,11 +1235,11 @@ local function BuildOnlinePage()
 				end
 
 				local close = vgui.Create("DButton", loadWarn)
-				close:SetSize(24, 24)
-				close:SetPos(loadWarn:GetWide() - 24, 0)
 				close:SetText("✕")
 				close:SetFont("AEUIDefault")
 				close:SetTextColor(CurrentTheme().buttons.red.t)
+				close:SetSize(24, 24)
+				close:SetPos(loadWarn:GetWide() - 24, 0)
 
 				close.Paint = function(self, w, h)
 					local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
@@ -1241,9 +1260,9 @@ local function BuildOnlinePage()
 				local workshop = vgui.Create("DButton", loadWarn)
 				workshop:SetText("#beatrun.coursesmenu.onlinepage.openworkshop")
 				workshop:SetFont("AEUIDefault")
+				workshop:SetTextColor(CurrentTheme().buttons.green.t)
 				workshop:SetSize(150, 30)
 				workshop:SetPos(20, 95)
-				workshop:SetTextColor(CurrentTheme().buttons.green.t)
 				workshop:SetEnabled(v.workshopId ~= nil)
 
 				workshop.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
@@ -1257,9 +1276,9 @@ local function BuildOnlinePage()
 				local iKnowWhatImDoing = vgui.Create("DButton", loadWarn)
 				iKnowWhatImDoing:SetText("#beatrun.coursesmenu.onlinepage.iknowwhatimdoing")
 				iKnowWhatImDoing:SetFont("AEUISmall")
+				iKnowWhatImDoing:SetTextColor(CurrentTheme().buttons.red.t)
 				iKnowWhatImDoing:SetSize(150, 30)
 				iKnowWhatImDoing:SetPos(190, 95)
-				iKnowWhatImDoing:SetTextColor(CurrentTheme().buttons.red.t)
 
 				iKnowWhatImDoing.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
 
@@ -1281,11 +1300,11 @@ local function BuildOnlinePage()
 		local downloadBtn = vgui.Create("DButton", loadPanel)
 		downloadBtn:SetText("#beatrun.coursesmenu.onlinepage.download")
 		downloadBtn:SetFont("AEUIDefault")
-		downloadBtn:Dock(BOTTOM)
+		downloadBtn:SetTextColor(CurrentTheme().buttons.green.t)
 		downloadBtn:SetTall(28)
 		downloadBtn:DockMargin(0, 6, 0, 0)
 		downloadBtn:SetCursor("hand")
-		downloadBtn:SetTextColor(CurrentTheme().buttons.green.t)
+		downloadBtn:Dock(BOTTOM)
 
 		local code = string.lower(v.code)
 		local courseDoesExist = file.Exists(string.format("beatrun/courses/%s/%s.txt", v.mapName, code), "DATA")
@@ -1325,28 +1344,28 @@ function BuildSettingsPage()
 	SettingsPanel:Clear()
 
 	local title = vgui.Create("DLabel", SettingsPanel)
-	title:Dock(TOP)
 	title:SetText("#beatrun.coursesmenu.settings")
 	title:SetFont("AEUILarge")
 	title:SetTextColor(CurrentTheme().text.primary)
+	title:Dock(TOP)
 	title:DockMargin(0, 0, 0, 15)
 	title:SizeToContents()
 
 	local themeLabel = vgui.Create("DLabel", SettingsPanel)
-	themeLabel:Dock(TOP)
 	themeLabel:SetText("#beatrun.coursesmenu.settings.theme")
 	themeLabel:SetFont("AEUIDefault")
 	themeLabel:SetTextColor(CurrentTheme().text.primary)
+	themeLabel:Dock(TOP)
 	themeLabel:DockMargin(0, 0, 0, 5)
 	themeLabel:SizeToContents()
 
 	local themeSelect = vgui.Create("DComboBox", SettingsPanel)
+	themeSelect:SetFont("AEUIDefault")
 	themeSelect:Dock(TOP)
 	themeSelect:SetTall(30)
 	themeSelect:DockMargin(0, 0, Frame:GetWide() - 500, 20)
-	themeSelect:SetFont("AEUIDefault")
-	themeSelect:SetTextColor(CurrentTheme().text.primary)
 	themeSelect:SetValue(language.GetPhrase("beatrun.coursesmenu.themes." .. string.lower(uiTheme:GetString())))
+	themeSelect:SetTextColor(CurrentTheme().text.primary)
 	themeSelect:SetPaintBackground(false)
 	themeSelect:SetTextInset(8, 0)
 	themeSelect:SizeToContents()
@@ -1409,17 +1428,18 @@ function BuildSettingsPage()
 	end
 
 	local domainLabel = vgui.Create("DLabel", SettingsPanel)
-	domainLabel:Dock(TOP)
 	domainLabel:SetText("#beatrun.coursesmenu.settings.domain")
 	domainLabel:SetFont("AEUIDefault")
 	domainLabel:SetTextColor(CurrentTheme().text.primary)
+	domainLabel:Dock(TOP)
 	domainLabel:DockMargin(0, 0, 0, 5)
 	domainLabel:SizeToContents()
 
 	local domainEntry = vgui.Create("DTextEntry", SettingsPanel)
-	domainEntry:Dock(TOP)
-	domainEntry:SetTall(30)
 	domainEntry:SetPlaceholderText(databaseDomain:GetString())
+	domainEntry:SetFont("AEUIDefault")
+	domainEntry:SetTall(30)
+	domainEntry:Dock(TOP)
 	domainEntry:DockMargin(0, 0, Frame:GetWide() - 500, 15)
 	domainEntry:SetPaintBackground(false)
 	domainEntry:SizeToContents()
@@ -1468,9 +1488,9 @@ function OpenDBMenu()
 	if IsValid(Frame) then Frame:Remove() end
 
 	Frame = vgui.Create("DFrame")
+	Frame:SetTitle("")
 	Frame:SetSize(ScrW() / 1.1, ScrH() / 1.1)
 	Frame:Center()
-	Frame:SetTitle("")
 	Frame:ShowCloseButton(false)
 	Frame:MakePopup()
 
@@ -1483,9 +1503,9 @@ function OpenDBMenu()
 	local close = vgui.Create("DButton", Frame)
 	close:SetText("✕")
 	close:SetFont("AEUIDefault")
+	close:SetTextColor(CurrentTheme().buttons.red.t)
 	close:SetSize(24, 24)
 	close:SetPos(Frame:GetWide() - 24, 0)
-	close:SetTextColor(CurrentTheme().buttons.red.t)
 
 	close.Paint = function(self, w, h)
 		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
@@ -1531,8 +1551,8 @@ function OpenDBMenu()
 	Sheet:AddSheet("#beatrun.coursesmenu.onlinepage", BrowsePanel, "icon16/folder_database.png")
 
 	Header = vgui.Create("DPanel", BrowsePanel)
-	Header:Dock(TOP)
 	Header:SetTall(40)
+	Header:Dock(TOP)
 	Header:DockPadding(10, 8, 10, 8)
 
 	Header.Paint = function(self, w, h)
@@ -1543,9 +1563,9 @@ function OpenDBMenu()
 	CurrentMapBtn:SetText("placeholder")
 	CurrentMapBtn:SetFont("AEUISmall")
 	CurrentMapBtn:SetTextColor(CurrentTheme().buttons.primary.t)
-	CurrentMapBtn:SizeToContentsX()
 	CurrentMapBtn:Dock(LEFT)
 	CurrentMapBtn:DockMargin(0, 0, 8, 0)
+	CurrentMapBtn:SizeToContentsX()
 
 	CurrentMapBtn.Paint = function(self, w, h)
 		local text = isCurrentMapOnly and "#beatrun.coursesmenu.onlinepage.currentmap" or "#beatrun.coursesmenu.onlinepage.notcurrentmap"
@@ -1564,11 +1584,11 @@ function OpenDBMenu()
 	end
 
 	local Search = vgui.Create("DTextEntry", Header)
-	Search:Dock(FILL)
 	Search:SetPlaceholderText("#beatrun.coursesmenu.onlinepage.search.placeholder")
-	Search:SetUpdateOnType(true)
 	Search:SetFont("AEUIDefault")
+	Search:Dock(FILL)
 	Search:SetPaintBackground(false)
+	Search:SetUpdateOnType(true)
 
 	Search.Paint = function(self, w, h)
 		surface.SetDrawColor(CurrentTheme().text.muted)
