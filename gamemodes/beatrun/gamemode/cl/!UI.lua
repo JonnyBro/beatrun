@@ -25,6 +25,24 @@ local SScaleX = SScaleX
 local SScaleY = SScaleY
 
 function AEUIFonts()
+	surface.CreateFont("AEUISmall", {
+		font = "D-DIN",
+		shadow = false,
+		blursize = 0,
+		underline = false,
+		rotary = false,
+		strikeout = false,
+		additive = false,
+		antialias = true,
+		extended = false,
+		scanlines = 0,
+		italic = false,
+		outline = false,
+		symbol = false,
+		weight = 500,
+		size = ScreenScale(5)
+	})
+
 	surface.CreateFont("AEUIDefault", {
 		font = "D-DIN",
 		shadow = false,
@@ -108,15 +126,14 @@ function AEUI:AddPanel(panel)
 	if table.HasValue(AEUI.Panels, panel) then return end
 
 	table.insert(AEUI.Panels, panel)
+
 	gui.EnableScreenClicker(true)
 end
 
 function AEUI:RemovePanel(panel)
 	table.RemoveByValue(AEUI.Panels, panel)
 
-	if #AEUI.Panels <= 0 then
-		gui.EnableScreenClicker(false)
-	end
+	if #AEUI.Panels <= 0 then gui.EnableScreenClicker(false) end
 end
 
 function AEUI:Text(panel, str, font, x, y, centered, color)

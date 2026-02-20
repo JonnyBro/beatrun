@@ -29,7 +29,7 @@
 
 	"prettyprint_spaceBetweenParens": false,
 	"prettyprint_spaceBetweenBrackets": false,
-	"prettyprint_spaceBetweenBraces": false,
+	"prettyprint_spaceBetweenBraces": true,
 	"prettyprint_spaceEmptyParens": false,
 	"prettyprint_spaceEmptyBraces": false,
 	"prettyprint_spaceAfterLabel": false,

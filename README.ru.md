@@ -144,7 +144,6 @@ irm https://beatrun.jbro.top/install | iex
 
 - [x14y24pxHeadUpDaisy](https://hicchicc.github.io/00ff/)
 - [Datto D-DIN](https://github.com/amcchord/datto-d-din)
-- [ProFontWindows](https://github.com/chrissimpkins/codeface/tree/master/fonts/pro-font-windows)
 
 ## Звёздочки
 
