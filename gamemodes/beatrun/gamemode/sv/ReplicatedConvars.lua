@@ -24,12 +24,14 @@ local replicatedConvars = {
 }
 
 net.Receive("Beatrun_ChangeConvar", function(len, ply)
-	if not ply:IsAdmin() then return end
+	if not ply:IsAdmin() then return false end
 
 	local convarName = net.ReadString()
 	local convarValue = net.ReadString()
 
-	if not replicatedConvars[convarName] then return end
+	if not replicatedConvars[convarName] then return false end
 
 	GetConVar(convarName):SetString(convarValue)
+
+	return true
 end)

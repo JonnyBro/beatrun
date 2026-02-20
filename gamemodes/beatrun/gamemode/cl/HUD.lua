@@ -4,7 +4,6 @@ local dynamic = CreateClientConVar("Beatrun_HUDDynamic", "0", true, false, langu
 local hidden = CreateClientConVar("Beatrun_HUDHidden", "0", true, false, language.GetPhrase("beatrun.convars.hudhidden"), 0, 2)
 local verificationstats = CreateClientConVar("Beatrun_HUDVerification", "0", true, false, "", 0, 1)
 local disableColorModify = CreateClientConVar("Beatrun_DisableColorFilter", "0", true, false, "", 0, 1)
--- local reticle = CreateClientConVar("Beatrun_HUDReticle", "1", true, false, language.GetPhrase("beatrun.convars.hudreticle"), 0, 1)
 
 CreateClientConVar("Beatrun_HUDTextColor", "255 255 255 255", true, true, language.GetPhrase("beatrun.convars.hudtextcolor"))
 CreateClientConVar("Beatrun_HUDCornerColor", "20 20 20 100", true, true, language.GetPhrase("beatrun.convars.hudcornercolor"))
@@ -183,7 +182,7 @@ local function BeatrunHUD()
 	local coursename = nil
 	local customname = hook.Run("BeatrunHUDCourse")
 	coursename = customname and customname or Course_Name ~= "" and language.GetPhrase("beatrun.hud.course"):format(Course_Name) or "#beatrun.hud.freeplay"
-	-- local lastxp = ply.LastXP or 0
+
 	local nicktext = nil
 
 	if show_total_xp:GetBool() then
@@ -200,7 +199,6 @@ local function BeatrunHUD()
 
 	local coursew, _ = surface.GetTextSize(coursename)
 	local bgpadw = nickw
-	-- local bgpadh = nickh
 
 	if bgpadw < coursew then
 		bgpadw = coursew
@@ -238,16 +236,17 @@ local function BeatrunHUD()
 		surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.9 + vp.x)
 		surface.DrawText(language.GetPhrase("beatrun.hud.lvl"):format(ply:GetLevel()))
 
-		local kickGlitchText = ""
-		if ply:GetInfo("Beatrun_KickGlitch") == "0" then
-			kickGlitchText = "Off"
-		elseif ply:GetInfo("Beatrun_KickGlitch") == "1" then
-			kickGlitchText = "Old"
-		elseif ply:GetInfo("Beatrun_KickGlitch") == "2" then
-			kickGlitchText = "New"
-		end
-
 		if verificationstats:GetBool() then
+			local kickGlitchText = ""
+
+			if ply:GetInfo("Beatrun_KickGlitch") == "0" then
+				kickGlitchText = "Off"
+			elseif ply:GetInfo("Beatrun_KickGlitch") == "1" then
+				kickGlitchText = "Old"
+			elseif ply:GetInfo("Beatrun_KickGlitch") == "2" then
+				kickGlitchText = "New"
+			end
+
 			surface.SetTextPos(scrw * 0.015 + vp.z, scrh * 0.02 + vp.x)
 			surface.DrawText("Purist: ")
 			surface.DrawText((ply:GetInfo("Beatrun_PuristMode") == "1" or GetConVar("Beatrun_PuristModeForce"):GetBool()) and "true" or "false")
