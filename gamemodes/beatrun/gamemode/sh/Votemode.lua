@@ -346,7 +346,7 @@ if SERVER then
 
 		voteStarted = true
 
-		print("[VoteMenu] " .. init_ply .. " started a vote for " .. validGamemodesMap[lower])
+		print("[VoteMenu] " .. init_ply:Nick() .. " started a vote for " .. validGamemodesMap[lower])
 
 		timer.Simple(voteDuration, function() if voteStarted then EndVote() end end)
 	end
