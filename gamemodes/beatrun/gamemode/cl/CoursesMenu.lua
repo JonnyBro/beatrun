@@ -709,7 +709,7 @@ local function BuildProfilePage()
 			return
 		end
 
-		local valid = body.data
+		local valid = res.data
 
 		if not valid then
 			local msg = vgui.Create("DLabel", ProfilePanel)
@@ -756,9 +756,9 @@ local function BuildProfilePage()
 						return
 					end
 
-					print("Updated Beatrun API key to " .. body.data.key)
+					print("Updated Beatrun API key to " .. res.data.key)
 
-					databaseApiKey:SetString(body.data.key)
+					databaseApiKey:SetString(res.data.key)
 
 					BuildProfilePage()
 				end, function(err)
