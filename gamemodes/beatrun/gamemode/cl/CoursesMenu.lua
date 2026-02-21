@@ -404,12 +404,12 @@ local function FetchAndSaveCourse(course)
 			return
 		end
 
-		body = util.JSONToTable(body)
+		local res = util.JSONToTable(body)
 
-		if body.code ~= 200 then
+		if res and res.code and res.code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-			print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+			print("> Code: " .. res.code or code or "null" .. "\n> Reply: " .. res.message or "null" .. "\n> Data: " .. res.data or "null")
 
 			return
 		end
@@ -494,12 +494,12 @@ local function UploadCourseFile(course)
 			return
 		end
 
-		body = util.JSONToTable(body)
+		local res = util.JSONToTable(body)
 
-		if body.code ~= 200 then
+		if res and res.code and res.code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-			print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+			print("> Code: " .. res.code or code or "null" .. "\n> Reply: " .. res.message or "null" .. "\n> Data: " .. res.data or "null")
 
 			return
 		end
@@ -699,12 +699,12 @@ local function BuildProfilePage()
 			return
 		end
 
-		body = util.JSONToTable(body)
+		local res = util.JSONToTable(body)
 
-		if body.code ~= 200 then
+		if res and res.code and res.code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-			print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+			print("> Code: " .. res.code or code or "null" .. "\n> Reply: " .. res.message or "null" .. "\n> Data: " .. res.data or "null")
 
 			return
 		end
@@ -746,12 +746,12 @@ local function BuildProfilePage()
 						return
 					end
 
-					body = util.JSONToTable(body)
+					local res = util.JSONToTable(body)
 
-					if body.code ~= 200 then
+					if res and res.code and res.code ~= 200 then
 						notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-						print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+						print("> Code: " .. res.code or code or "null" .. "\n> Reply: " .. res.message or "null" .. "\n> Data: " .. res.data or "null")
 
 						return
 					end
@@ -983,12 +983,12 @@ local function BuildProfilePage()
 								return
 							end
 
-							body = util.JSONToTable(body)
+							local res = util.JSONToTable(body)
 
-							if body.code ~= 200 then
+							if res and res.code and res.code ~= 200 then
 								notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-								print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+								print("> Code: " .. res.code or code or "null" .. "\n> Reply: " .. res.message or "null" .. "\n> Data: " .. res.data or "null")
 
 								return
 							end
@@ -1049,19 +1049,19 @@ local function BuildOnlinePage()
 				return
 			end
 
-			body = util.JSONToTable(body)
+			local res = util.JSONToTable(body)
 
-			if body.code ~= 200 then
+			if res and res.code and res.code ~= 200 then
 				notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 
-				print("> Code: " .. body.code or code or "null" .. "\n> Reply: " .. body.message or "null" .. "\n> Data: " .. body.data or "null")
+				print("> Code: " .. res.code or code or "null" .. "\n> Reply: " .. res.message or "null" .. "\n> Data: " .. res.data or "null")
 
 				return
 			end
 
 			local fetchedCourses = {}
 
-			for _, course in ipairs(body.data) do
+			for _, course in ipairs(res.data) do
 				fetchedCourses[#fetchedCourses + 1] = {
 					code = course.code,
 					data = course.data,
