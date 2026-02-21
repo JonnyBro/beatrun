@@ -18,8 +18,8 @@ for _, v in ipairs(file.Find("gamemodes/beatrun/gamemode/sh/*.lua", "GAME", "nam
 	include("sh/" .. v)
 end
 
-if not steamworks.IsSubscribed("3467179024") then
-	if CLIENT and not checkedVersion then
+if CLIENT and not steamworks.IsSubscribed("3467179024") then
+	if not checkedVersion then
 		http.Fetch("https://raw.githubusercontent.com/JonnyBro/beatrun/main/version.txt", function(body, _, _, code)
 			if code == 200 then
 				latestVersion = body:gsub("[\n\r]", "")
