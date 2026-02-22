@@ -346,7 +346,8 @@ if SERVER then
 
 		voteStarted = true
 
-		print("[VoteMenu] " .. init_ply:Nick() .. " started a vote for " .. validGamemodesMap[lower])
+		local str = string.format("[VoteMenu] %s (%s) started a vote for %s", init_ply:Nick(), init_ply:SteamID64(), validGamemodesMap[lower])
+		print(str)
 
 		timer.Simple(voteDuration, function() if voteStarted then EndVote() end end)
 	end
