@@ -33,11 +33,9 @@ local ParkourXP_PosCheck = {
 
 XP_floatingxp = {}
 
-hook.Add("OnParkour", "ParkourXP", function(event)
+hook.Add("OnParkour", "Beatrun_ParkourXP", function(event)
 	local ply = LocalPlayer()
 	if not IsValid(ply) then return end
-
-	-- if ply.InReplay then return end
 
 	local pos = ply:GetPos()
 
@@ -109,10 +107,10 @@ function meta:AddXP(xp)
 	end
 end
 
-local function SaveXP()
-	local xp = util.TableToJSON({LocalPlayer().XP or 0, LocalPlayer().Level or 1})
+function meta:SaveXP()
+	local xp = util.TableToJSON({ LocalPlayer().XP or 0, LocalPlayer().Level or 1 })
 
-	--[[
+	--[[ NOTE: disabled for funnies
 	local xpold = file.Read("beatrun/local/xp.txt", "DATA")
 
 	if xpold then
@@ -126,9 +124,7 @@ local function SaveXP()
 	file.Write("beatrun/local/xp.txt", xp)
 end
 
-hook.Add("ShutDown", "SaveXP", SaveXP)
-
-local function LoadXP()
+function meta:LoadXP()
 	local xp = file.Read("beatrun/local/xp.txt", "DATA")
 
 	if xp then
@@ -142,4 +138,10 @@ local function LoadXP()
 	end
 end
 
-hook.Add("InitPostEntity", "LoadXP", LoadXP)
+hook.Add("InitPostEntity", "LoadXP", function()
+	LocalPlayer():LoadXP()
+end)
+
+hook.Add("ShutDown", "Beatrun_SaveXP", function()
+	LocalPlayer():SaveXP()
+end)
