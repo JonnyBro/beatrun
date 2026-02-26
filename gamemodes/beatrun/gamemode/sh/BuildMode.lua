@@ -1621,15 +1621,15 @@ if CLIENT then
 		if AEUI.HoveredPanel then return end
 		if keytime == CurTime() then return end
 
-		for k, v in pairs(buildmodeinputs) do
-			if input.WasKeyPressed(k) then
-				v()
+		for keybind, func in pairs(buildmodeinputs) do
+			if input.WasKeyPressed(keybind) and not IsCoursesMenuOpen() then
+				func()
 			end
 		end
 
-		for k, v in pairs(buildmodeinputsmouse) do
-			if input.WasMousePressed(k) then
-				v()
+		for keybind, func in pairs(buildmodeinputsmouse) do
+			if input.WasMousePressed(keybind) and not IsCoursesMenuOpen() then
+				func()
 			end
 		end
 

@@ -107,7 +107,7 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or {
 }
 
 local CACHE_LIFETIME = 120
-local Frame, Header, Sheet, List, LocalPanel, BrowsePanel, ProfilePanel
+local Frame, Header, Sheet, List, LocalPanel, BrowsePanel, ProfilePanel, PopupFrame
 
 -- Helpers
 local function SanitizeString(str)
@@ -115,6 +115,10 @@ local function SanitizeString(str)
 	str = string.gsub(str, "[^%w_%-]", "_")
 
 	return str
+end
+
+function IsCoursesMenuOpen()
+	return IsValid(Frame) or IsValid(PopupFrame)
 end
 
 local function IsCoursesCacheValid()
@@ -188,27 +192,27 @@ local function OpenCourseSaveMenu()
 	local frameW = math.Clamp(ScrW() * 0.25, 320, 600)
 	local frameH = math.Clamp(ScrH() * 0.18, 140, 260)
 
-	local frame = vgui.Create("DFrame")
-	frame:SetTitle("")
-	frame:SetSize(frameW, frameH)
-	frame:Center()
-	frame:DockPadding(20, 40, 20, 20)
-	frame:SetDeleteOnClose(true)
-	frame:ShowCloseButton(false)
-	frame:MakePopup()
+	PopupFrame = vgui.Create("DFrame")
+	PopupFrame:SetTitle("")
+	PopupFrame:SetSize(frameW, frameH)
+	PopupFrame:Center()
+	PopupFrame:DockPadding(20, 40, 20, 20)
+	PopupFrame:SetDeleteOnClose(true)
+	PopupFrame:ShowCloseButton(false)
+	PopupFrame:MakePopup()
 
-	frame.Paint = function(self, w, h)
+	PopupFrame.Paint = function(self, w, h)
 		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
 		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
 		draw.SimpleText("#beatrun.coursesmenu.localpage.savecourse", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	local close = vgui.Create("DButton", frame)
+	local close = vgui.Create("DButton", PopupFrame)
 	close:SetText("✕")
 	close:SetFont("AEUIDefault")
 	close:SetTextColor(CurrentTheme().buttons.red.t)
 	close:SetSize(24, 24)
-	close:SetPos(frame:GetWide() - 24, 0)
+	close:SetPos(PopupFrame:GetWide() - 24, 0)
 
 	close.Paint = function(self, w, h)
 		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
@@ -217,9 +221,9 @@ local function OpenCourseSaveMenu()
 		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
 	end
 
-	close.DoClick = function() if IsValid(frame) then frame:Close() end end
+	close.DoClick = function() if IsValid(PopupFrame) then PopupFrame:Close() end end
 
-	local content = vgui.Create("DPanel", frame)
+	local content = vgui.Create("DPanel", PopupFrame)
 	content:Dock(FILL)
 	content.Paint = nil
 
@@ -300,7 +304,7 @@ local function OpenCourseSaveMenu()
 			notification.AddLegacy(text, NOTIFY_GENERIC, 6)
 		end
 
-		if IsValid(frame) then frame:Close() end
+		if IsValid(PopupFrame) then PopupFrame:Close() end
 	end
 end
 
@@ -308,27 +312,27 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	local frameW = math.Clamp(ScrW() * 0.25, 320, 600)
 	local frameH = math.Clamp(ScrH() * 0.18, 140, 260)
 
-	local frame = vgui.Create("DFrame")
-	frame:SetTitle("")
-	frame:SetSize(frameW, frameH)
-	frame:Center()
-	frame:DockPadding(20, 40, 20, 20)
-	frame:SetDeleteOnClose(true)
-	frame:ShowCloseButton(false)
-	frame:MakePopup()
+	PopupFrame = vgui.Create("DFrame")
+	PopupFrame:SetTitle("")
+	PopupFrame:SetSize(frameW, frameH)
+	PopupFrame:Center()
+	PopupFrame:DockPadding(20, 40, 20, 20)
+	PopupFrame:SetDeleteOnClose(true)
+	PopupFrame:ShowCloseButton(false)
+	PopupFrame:MakePopup()
 
-	frame.Paint = function(self, w, h)
+	PopupFrame.Paint = function(self, w, h)
 		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
 		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
 		draw.SimpleText(title, "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	local close = vgui.Create("DButton", frame)
+	local close = vgui.Create("DButton", PopupFrame)
 	close:SetText("✕")
 	close:SetFont("AEUIDefault")
 	close:SetTextColor(CurrentTheme().buttons.red.t)
 	close:SetSize(24, 24)
-	close:SetPos(frame:GetWide() - 24, 0)
+	close:SetPos(PopupFrame:GetWide() - 24, 0)
 
 	close.Paint = function(self, w, h)
 		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
@@ -337,9 +341,9 @@ local function OpenConfirmPopup(title, message, onConfirm)
 		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
 	end
 
-	close.DoClick = function() if IsValid(frame) then frame:Close() end end
+	close.DoClick = function() if IsValid(PopupFrame) then PopupFrame:Close() end end
 
-	local label = vgui.Create("DLabel", frame)
+	local label = vgui.Create("DLabel", PopupFrame)
 	label:SetText(message)
 	label:SetFont("AEUIDefault")
 	label:Dock(FILL)
@@ -347,7 +351,7 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	label:SetContentAlignment(5)
 	label:SetAutoStretchVertical(true)
 
-	local buttonRow = vgui.Create("DPanel", frame)
+	local buttonRow = vgui.Create("DPanel", PopupFrame)
 	buttonRow:Dock(BOTTOM)
 	buttonRow:SetTall(frameH * 0.28)
 	buttonRow.Paint = nil
@@ -365,7 +369,7 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	confirm.DoClick = function()
 		if onConfirm then onConfirm() end
 
-		if IsValid(frame) then frame:Close() end
+		if IsValid(PopupFrame) then PopupFrame:Close() end
 	end
 
 	local cancel = vgui.Create("DButton", buttonRow)
@@ -375,29 +379,30 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	cancel:Dock(FILL)
 
 	cancel.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
-	cancel.DoClick = function() if IsValid(frame) then frame:Close() end end
+	cancel.DoClick = function() if IsValid(PopupFrame) then PopupFrame:Close() end end
 end
 
 local function OpenApiKeyPopup()
-	local frame = vgui.Create("DFrame")
-	frame:SetTitle("")
-	frame:SetSize(360, 150)
-	frame:Center()
-	frame:ShowCloseButton(false)
-	frame:MakePopup()
+	PopupFrame = vgui.Create("DFrame")
+	PopupFrame:SetTitle("")
+	PopupFrame:SetSize(360, 150)
+	PopupFrame:Center()
+	PopupFrame:SetDeleteOnClose(true)
+	PopupFrame:ShowCloseButton(false)
+	PopupFrame:MakePopup()
 
-	frame.Paint = function(self, w, h)
+	PopupFrame.Paint = function(self, w, h)
 		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
 		draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
 		draw.SimpleText("#beatrun.coursesmenu.profilepage.changekey", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	local close = vgui.Create("DButton", frame)
+	local close = vgui.Create("DButton", PopupFrame)
 	close:SetText("✕")
 	close:SetFont("AEUIDefault")
 	close:SetTextColor(CurrentTheme().buttons.red.t)
 	close:SetSize(24, 24)
-	close:SetPos(frame:GetWide() - 24, 0)
+	close:SetPos(PopupFrame:GetWide() - 24, 0)
 
 	close.Paint = function(self, w, h)
 		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
@@ -406,9 +411,9 @@ local function OpenApiKeyPopup()
 		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
 	end
 
-	close.DoClick = function() if IsValid(frame) then frame:Close() end end
+	close.DoClick = function() if IsValid(PopupFrame) then PopupFrame:Close() end end
 
-	local entry = vgui.Create("DTextEntry", frame)
+	local entry = vgui.Create("DTextEntry", PopupFrame)
 	entry:SetPlaceholderText("#beatrun.coursesmenu.profilepage.changekey.placeholder")
 	entry:SetFont("AEUIDefault")
 	entry:SetTall(32)
@@ -430,7 +435,7 @@ local function OpenApiKeyPopup()
 		end
 	end
 
-	local save = vgui.Create("DButton", frame)
+	local save = vgui.Create("DButton", PopupFrame)
 	save:SetText("#beatrun.coursesmenu.save")
 	save:SetFont("AEUIDefault")
 	save:SetTextColor(CurrentTheme().buttons.green.t)
@@ -445,7 +450,7 @@ local function OpenApiKeyPopup()
 
 		databaseApiKey:SetString(newKey)
 
-		if IsValid(frame) then frame:Close() end
+		if IsValid(PopupFrame) then PopupFrame:Close() end
 
 		BuildProfilePage()
 	end
