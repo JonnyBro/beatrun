@@ -106,7 +106,7 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or {
 	loading = false
 }
 
-local CACHE_LIFETIME = 60
+local CACHE_LIFETIME = 120
 local Frame, Header, Sheet, List, LocalPanel, BrowsePanel, ProfilePanel
 
 -- Helpers
@@ -378,6 +378,79 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	cancel.DoClick = function() if IsValid(frame) then frame:Close() end end
 end
 
+local function OpenApiKeyPopup()
+	local frame = vgui.Create("DFrame")
+	frame:SetTitle("")
+	frame:SetSize(360, 150)
+	frame:Center()
+	frame:ShowCloseButton(false)
+	frame:MakePopup()
+
+	frame.Paint = function(self, w, h)
+		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
+		draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
+		draw.SimpleText("#beatrun.coursesmenu.profilepage.changekey", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	end
+
+	local close = vgui.Create("DButton", frame)
+	close:SetText("✕")
+	close:SetFont("AEUIDefault")
+	close:SetTextColor(CurrentTheme().buttons.red.t)
+	close:SetSize(24, 24)
+	close:SetPos(frame:GetWide() - 24, 0)
+
+	close.Paint = function(self, w, h)
+		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+		local isDown = self:IsDown() and CurrentTheme().buttons.red.d
+
+		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
+	end
+
+	close.DoClick = function() if IsValid(frame) then frame:Close() end end
+
+	local entry = vgui.Create("DTextEntry", frame)
+	entry:SetPlaceholderText("#beatrun.coursesmenu.profilepage.changekey.placeholder")
+	entry:SetFont("AEUIDefault")
+	entry:SetTall(32)
+	entry:Dock(TOP)
+	entry:DockMargin(0, 20, 0, 0)
+	entry:SetPaintBackground(false)
+
+	entry.Paint = function(self, w, h)
+		surface.SetDrawColor(CurrentTheme().text.muted)
+		surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+		self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
+
+		if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
+
+		if self:HasFocus() then
+			surface.SetDrawColor(CurrentTheme().search:Unpack())
+			surface.DrawOutlinedRect(0, 0, w, h, 1)
+		end
+	end
+
+	local save = vgui.Create("DButton", frame)
+	save:SetText("#beatrun.coursesmenu.save")
+	save:SetFont("AEUIDefault")
+	save:SetTextColor(CurrentTheme().buttons.green.t)
+	save:SetTall(32)
+	save:Dock(BOTTOM)
+
+	save.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+
+	save.DoClick = function()
+		local newKey = string.Trim(entry:GetValue())
+		if newKey == "" then return end
+
+		databaseApiKey:SetString(newKey)
+
+		if IsValid(frame) then frame:Close() end
+
+		BuildProfilePage()
+	end
+end
+
 -- Save/load/upload functions
 local function SaveCourseToFile(mapName, code, data)
 	code = SanitizeString(code)
@@ -514,7 +587,7 @@ local function UploadCourseFile(course)
 end
 
 -- Pages
-local function BuildLocalPage()
+function BuildLocalPage()
 	if not IsValid(LocalPanel) then return end
 
 	LocalPanel:Clear()
@@ -680,7 +753,7 @@ local function BuildLocalPage()
 	end
 end
 
-local function BuildProfilePage()
+function BuildProfilePage()
 	if not IsValid(ProfilePanel) then return end
 
 	ProfilePanel:Clear()
@@ -721,6 +794,23 @@ local function BuildProfilePage()
 			msg:SetContentAlignment(5)
 			msg:SizeToContents()
 
+			local registerLink = vgui.Create("DButton", ProfilePanel)
+			registerLink:SetText("#beatrun.coursesmenu.profilepage.copylink")
+			registerLink:SetFont("AEUIDefault")
+			registerLink:SetTextColor(CurrentTheme().buttons.green.t)
+			registerLink:SetTall(40)
+			registerLink:Dock(TOP)
+			registerLink:DockMargin(200, 0, 200, 20)
+
+			registerLink.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "primary") end
+
+			registerLink.DoClick = function(self)
+				SetClipboardText(string.format("https://%s/auth", databaseDomain:GetString()))
+				self:SetText("#beatrun.coursesmenu.copied")
+
+				timer.Simple(2, function() if IsValid(self) then self:SetText("#beatrun.coursesmenu.profilepage.copylink") end end)
+			end
+
 			local registerBtn = vgui.Create("DButton", ProfilePanel)
 			registerBtn:SetText("#beatrun.coursesmenu.profilepage.register")
 			registerBtn:SetFont("AEUIDefault")
@@ -732,39 +822,9 @@ local function BuildProfilePage()
 			registerBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
 			registerBtn.DoClick = function()
-				local headers = {
-					steamid = LocalPlayer():SteamID64(),
-					username = LocalPlayer():Nick()
-				}
+				gui.OpenURL(string.format("https://%s/auth", databaseDomain:GetString()))
 
-				http.Post("https://" .. databaseDomain:GetString() .. "/api/users/register", {}, function(body, _, _, code)
-					if code ~= 200 then
-						notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
-
-						print("> Code: " .. code or "null" .. "\n> Reply: " .. body or "null")
-
-						return
-					end
-
-					local res = util.JSONToTable(body)
-
-					if res and res.code and res.code ~= 200 then
-						notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
-
-						print("> Code: " .. res.code or code or "null" .. "\n> Reply: " .. res.message or "null" .. "\n> Data: " .. res.data or "null")
-
-						return
-					end
-
-					print("Updated Beatrun API key to " .. res.data.key)
-
-					databaseApiKey:SetString(res.data.key)
-
-					BuildProfilePage()
-				end, function(err)
-					notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
-					print("> /api/users/register\nError: ", err)
-				end, headers)
+				timer.Simple(.5, OpenApiKeyPopup)
 			end
 
 			return
@@ -813,76 +873,7 @@ local function BuildProfilePage()
 		changeBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
 
 		changeBtn.DoClick = function()
-			local frame = vgui.Create("DFrame")
-			frame:SetTitle("")
-			frame:SetSize(360, 150)
-			frame:Center()
-			frame:ShowCloseButton(false)
-			frame:MakePopup()
-
-			frame.Paint = function(self, w, h)
-				draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
-				draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
-				draw.SimpleText("#beatrun.coursesmenu.profilepage.changekey", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-
-			local close = vgui.Create("DButton", frame)
-			close:SetText("✕")
-			close:SetFont("AEUIDefault")
-			close:SetTextColor(CurrentTheme().buttons.red.t)
-			close:SetSize(24, 24)
-			close:SetPos(frame:GetWide() - 24, 0)
-
-			close.Paint = function(self, w, h)
-				local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
-				local isDown = self:IsDown() and CurrentTheme().buttons.red.d
-
-				draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
-			end
-
-			close.DoClick = function() if IsValid(frame) then frame:Close() end end
-
-			local entry = vgui.Create("DTextEntry", frame)
-			entry:SetPlaceholderText("#beatrun.coursesmenu.profilepage.changekey.placeholder")
-			entry:SetFont("AEUIDefault")
-			entry:SetTall(32)
-			entry:Dock(TOP)
-			entry:DockMargin(0, 20, 0, 0)
-			entry:SetPaintBackground(false)
-
-			entry.Paint = function(self, w, h)
-				surface.SetDrawColor(CurrentTheme().text.muted)
-				surface.DrawOutlinedRect(0, 0, w, h, 1)
-
-				self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
-
-				if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
-
-				if self:HasFocus() then
-					surface.SetDrawColor(CurrentTheme().search:Unpack())
-					surface.DrawOutlinedRect(0, 0, w, h, 1)
-				end
-			end
-
-			local save = vgui.Create("DButton", frame)
-			save:SetText("#beatrun.coursesmenu.save")
-			save:SetFont("AEUIDefault")
-			save:SetTextColor(CurrentTheme().buttons.green.t)
-			save:SetTall(32)
-			save:Dock(BOTTOM)
-
-			save.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
-
-			save.DoClick = function()
-				local newKey = string.Trim(entry:GetValue())
-				if newKey == "" then return end
-
-				databaseApiKey:SetString(newKey)
-
-				if IsValid(frame) then frame:Close() end
-
-				BuildProfilePage()
-			end
+			OpenApiKeyPopup()
 		end
 
 		local statsPanel = vgui.Create("DPanel", ProfilePanel)
@@ -1006,7 +997,7 @@ local function BuildProfilePage()
 	end, headers)
 end
 
-local function ApplyCourseFilter(newText)
+local function ApplyCoursesFilter(newText)
 	if not Beatrun_CoursesCache.all then return end
 
 	local text = string.lower(newText or "")
@@ -1024,7 +1015,7 @@ local function ApplyCourseFilter(newText)
 	Beatrun_CoursesCache.filtered = filtered
 end
 
-local function BuildOnlinePage()
+function BuildOnlinePage()
 	if not IsValid(List) then return end
 
 	List:Clear()
@@ -1082,7 +1073,7 @@ local function BuildOnlinePage()
 			Beatrun_CoursesCache.filtered = fetchedCourses
 			Beatrun_CoursesCache.at = CurTime()
 
-			ApplyCourseFilter()
+			ApplyCoursesFilter()
 			BuildOnlinePage()
 
 			if IsValid(ProfilePanel) then BuildProfilePage() end
@@ -1422,9 +1413,7 @@ function BuildSettingsPage()
 
 		if IsValid(Frame) then Frame:Close() end
 
-		timer.Simple(.1, function()
-			RunConsoleCommand("Beatrun_CoursesMenu")
-		end)
+		timer.Simple(.1, function() RunConsoleCommand("Beatrun_CoursesMenu") end)
 	end
 
 	local domainLabel = vgui.Create("DLabel", SettingsPanel)
@@ -1525,7 +1514,7 @@ function OpenDBMenu()
 		if string.match(img, "/folder_user") then
 			BuildLocalPage()
 		elseif string.match(img, "/folder_database") then
-			ApplyCourseFilter()
+			ApplyCoursesFilter()
 			BuildOnlinePage()
 		elseif string.match(img, "/user") then
 			BuildProfilePage()
@@ -1579,7 +1568,7 @@ function OpenDBMenu()
 	CurrentMapBtn.DoClick = function()
 		isCurrentMapOnly = not isCurrentMapOnly
 
-		ApplyCourseFilter()
+		ApplyCoursesFilter()
 		BuildOnlinePage()
 	end
 
@@ -1609,7 +1598,7 @@ function OpenDBMenu()
 		if timer.Exists(searchTimer) then timer.Remove(searchTimer) end
 
 		timer.Create(searchTimer, .25, 1, function()
-			ApplyCourseFilter(text)
+			ApplyCoursesFilter(text)
 			BuildOnlinePage()
 		end)
 	end
