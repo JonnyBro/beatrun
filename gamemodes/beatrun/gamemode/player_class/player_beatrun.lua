@@ -3,12 +3,12 @@ AddCSLuaFile()
 DEFINE_BASECLASS("player_default")
 
 if CLIENT then
-	CreateConVar("cl_playercolor", "0.24 0.34 0.41", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The value is a Vector - so between 0-1 - not between 0-255")
-	CreateConVar("cl_weaponcolor", "0.30 1.80 2.10", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The value is a Vector - so between 0-1 - not between 0-255")
-	CreateConVar("cl_playerskin", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The skin to use, if the model has any")
-	CreateConVar("cl_playerbodygroups", "0", {FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD}, "The bodygroups to use, if the model has any")
-
 	local lframeswepclass = lframeswepclass or ""
+
+	CreateConVar("cl_playercolor", "0.24 0.34 0.41", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The value is a Vector - so between 0-1 - not between 0-255")
+	CreateConVar("cl_weaponcolor", "0.30 1.80 2.10", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The value is a Vector - so between 0-1 - not between 0-255")
+	CreateConVar("cl_playerskin", "0", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The skin to use, if the model has any")
+	CreateConVar("cl_playerbodygroups", "0", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The bodygroups to use, if the model has any")
 end
 
 local PLAYER = {}
@@ -279,64 +279,6 @@ hook.Add("SetupMove", "SpawnFreeze", function(ply, mv, cmd)
 		mv:SetOrigin(Course_StartPos)
 	end
 end)
-
-hook.Add("ShouldCollide", "NoPlayerCollisions", function(ent1, ent2)
-	if ent1:IsPlayer() and (ent2:IsPlayer() or ent2.NoPlayerCollisions) then
-		if ent2.BRCollisionFunc then
-			return ent2:BRCollisionFunc(ent1)
-		else
-			if (ent1.br_Fired and ent2.br_FiredBy == ent1) or (ent2.br_Fired and ent1.br_FiredBy == ent2) then return true end
-
-			return false
-		end
-	end
-
-	if ent2:IsPlayer() and ent1:IsNPC() then return true end
-end)
-
-local function calc_fov(src, dst)
-	local v_src = src:Forward()
-	local v_dst = dst:Forward()
-	local result = math.deg(math.acos(v_dst:Dot(v_src) / v_dst:Length()))
-
-	if result ~= result or (result == math.huge or result == -math.huge) then
-		result = 0
-	end
-
-	return result
-end
-
--- i was forced
-hook.Add("EntityFireBullets", "thisengineismadebyacrackhead", function(ent, data)
-	if not IsValid(ent) or not isfunction(ent.GetShootPos) or not ent:IsPlayer() then return end
-
-	for _, ply in ipairs(player.GetAll()) do
-		if ply == ent then continue end
-
-		local fov = calc_fov(data.Dir:Angle(), (ply:GetShootPos() - data.Src):Angle())
-		if fov > 60 then continue end
-
-		ply.br_FiredBy = ent
-
-		timer.Simple(engine.TickInterval() * 3, function()
-			if IsValid(ply) then
-				ply.br_FiredBy = nil
-			end
-		end)
-	end
-
-	ent.br_Fired = true
-
-	timer.Simple(engine.TickInterval() * 3, function()
-		if IsValid(ent) then
-			ent.br_Fired = false
-		end
-	end)
-end)
-
--- hook.Add("PhysgunPickup", "AllowPlayerPickup", function(ply, ent)
--- 	if ply:IsSuperAdmin() and ent:IsPlayer() then return true end
--- end)
 
 function PLAYER:ShouldDrawLocal()
 	if self.TauntCam:ShouldDrawLocalPlayer(self.Player, self.Player:IsPlayingTaunt()) then return true end

@@ -16,7 +16,7 @@ ENT.DataCube = true
 function ENT:Initialize()
 	self:SetModel(self.Model)
 	self:SetSolid(SOLID_VPHYSICS)
-	self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+	self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
 	self:SetCollisionBounds(Vector(-20, -20, -15), Vector(20, 20, 30))
 
 	if SERVER then
@@ -30,14 +30,7 @@ function ENT:Initialize()
 	end
 
 	self:SetColor(Color(0, 255, 0))
-	self:SetCustomCollisionCheck(true)
 end
-
-hook.Add("ShouldCollide", "DataCubeCollisions", function(ent1, ent2)
-	if ent1.DataCube and ent2.DataCube then return false end
-end)
-
--- local screencolor = Color(64, 0, 0, 64)
 
 function ENT:StartTouch(ent)
 	if ent:IsPlayer() then

@@ -22,9 +22,6 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Vector", 1, "EndPos")
 end
 
--- local spawntr = {}
--- local spawntrout = {}
-
 function ENT:Initialize()
 	local entstable = player.GetAll()
 	local ang = self:GetAngles()
@@ -43,7 +40,6 @@ function ENT:Initialize()
 	end
 
 	self.NoPlayerCollisions = true
-	self:EnableCustomCollisions(true)
 
 	if CLIENT then
 		self:SetRenderBounds(mins, maxs)
@@ -54,44 +50,28 @@ end
 function ENT:OnRemove()
 end
 
-function ENT:BRCollisionFunc(ent)
-	if CLIENT then return false end
-	if ent:Health() <= 0 or (ent:IsPlayer() and (ent:HasGodMode() or cvars.Bool("sbox_godmode", false))) then return false end
-
-	local ang = self:GetAngles()
-
-	if util.QuickTrace(self:GetPos(), ang:Up() * self.LaserLength, self).Entity ~= ent then return false end
-
-	local dmginfo = DamageInfo()
-		dmginfo:SetAttacker(self)
-		dmginfo:SetDamage(math.huge)
-		dmginfo:SetDamageType(DMG_DISSOLVE)
-	ent:TakeDamageInfo(dmginfo)
-	ent:EmitSound("bigspark" .. math.random(1, 2) .. ".wav")
-
-	return false
-end
-
 function ENT:Think()
 	if CLIENT then return end
 
-	local entstable = player.GetAll()
 	local ang = self:GetAngles()
 
-	entstable[#entstable + 1] = self
+	local tr = util.QuickTrace(self:GetPos(), ang:Up() * self.LaserLength, self)
 
-	local tr = util.QuickTrace(self:GetPos(), ang:Up() * self.LaserLength, entstable)
-	local trpos = tr.HitPos
+	self:SetEndPos(tr.HitPos)
 
-	if trpos ~= self:GetEndPos() then
-		local mins, maxs = Vector(0, -1, -1), Vector(0, 1, self:GetPos():Distance(trpos))
+	local hitEnt = tr.Entity
 
-		self:SetEndPos(trpos)
-		self:PhysicsInitBox(mins, maxs)
-		self:SetSolid(SOLID_VPHYSICS)
-		self.NoPlayerCollisions = true
-		self:EnableCustomCollisions(true)
-		self:GetPhysicsObject():EnableMotion(false)
+	if IsValid(hitEnt) and hitEnt:IsPlayer() then
+		if hitEnt:Health() <= 0 or hitEnt:HasGodMode() or cvars.Bool("sbox_godmode", false) then return end
+
+		local dmginfo = DamageInfo()
+			dmginfo:SetAttacker(self)
+			dmginfo:SetInflictor(self)
+			dmginfo:SetDamage(math.huge)
+			dmginfo:SetDamageType(DMG_DISSOLVE)
+		hitEnt:TakeDamageInfo(dmginfo)
+
+		hitEnt:EmitSound("bigspark" .. math.random(1, 2) .. ".wav")
 	end
 
 	self:NextThink(CurTime() + 5)
