@@ -225,13 +225,14 @@ function PLAYER:Spawn()
 	end
 
 	ply:SetCustomCollisionCheck(true)
+	ply:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR)
 
 	if GetGlobalBool("GM_DATATHEFT") then
 		ply:DataTheft_Bank()
 	end
 
 	ply:SetAvoidPlayers(false)
-	ply:SetLaggedMovementValue(0) --otherwise they drift off
+	ply:SetLaggedMovementValue(0) -- otherwise they drift off
 
 	timer.Simple(0.1, function()
 		ply:SetLaggedMovementValue(1)
@@ -278,6 +279,10 @@ hook.Add("SetupMove", "SpawnFreeze", function(ply, mv, cmd)
 	if ply.SpawnFreezeTime and Course_Name ~= "" and Course_StartPos ~= vector_origin and Course_StartPos and ply.SpawnFreezeTime > CurTime() then
 		mv:SetOrigin(Course_StartPos)
 	end
+end)
+
+hook.Add("ShouldCollide", "Beatrun_NoPlayerCollisions", function(ent1, ent2)
+	if ent1:IsPlayer() and ent2.NoPlayerCollisions then return false end
 end)
 
 function PLAYER:ShouldDrawLocal()
