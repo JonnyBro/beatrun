@@ -74,7 +74,7 @@ function ENT:Think()
 		hitEnt:EmitSound("bigspark" .. math.random(1, 2) .. ".wav")
 	end
 
-	self:NextThink(CurTime() + 5)
+	self:NextThink(CurTime())
 
 	return true
 end
