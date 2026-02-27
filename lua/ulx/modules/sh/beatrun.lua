@@ -7,10 +7,13 @@ function ulx.setlevel(calling_ply, target_plys, level)
 	local affected_plys = {}
 	for i = 1, #target_plys do
 		local ply = target_plys[i]
+		local code = string.format([[
+			LocalPlayer():SetLevel(%d)
+			LocalPlayer():SetXP(XP_nextlevel(%d - 1))
+			LocalPlayer():SaveXP()
+		]], level, level)
 
-		ply:SendLua(string.format("LocalPlayer():SetLevel(%d)", level))
-		ply:SendLua(string.format("local xp = XP_nextlevel(%d - 1); LocalPlayer():SetXP(xp)", level))
-		ply:SendLua("LocalPlayer():SaveXP()")
+		ply:SendLua(code)
 	end
 
 	ulx.fancyLogAdmin(calling_ply, "#A changed #T level to #i", affected_plys, level)

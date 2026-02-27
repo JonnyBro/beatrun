@@ -124,7 +124,7 @@ function meta:SaveXP()
 	file.Write("beatrun/local/xp.txt", xp)
 end
 
-function meta:LoadXP()
+function LoadXP()
 	local xp = file.Read("beatrun/local/xp.txt", "DATA")
 
 	if xp then
@@ -138,9 +138,7 @@ function meta:LoadXP()
 	end
 end
 
-hook.Add("InitPostEntity", "LoadXP", function()
-	LocalPlayer():LoadXP()
-end)
+hook.Add("InitPostEntity", "Beatrun_LoadXP", LoadXP)
 
 hook.Add("ShutDown", "Beatrun_SaveXP", function()
 	LocalPlayer():SaveXP()
