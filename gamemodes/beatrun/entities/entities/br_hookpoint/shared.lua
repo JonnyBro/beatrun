@@ -1,3 +1,5 @@
+-- TODO: Make it work for courses maybe?
+
 ENT.Type = "anim"
 ENT.Base = "base_entity"
 ENT.PrintName = "Hook Point"
@@ -12,8 +14,6 @@ AddCSLuaFile()
 
 ENT.Model = "models/Roller.mdl"
 ENT.HookPoint = true
-
--- local color_green = Color(0, 255, 0)
 
 function ENT:Initialize()
 	self:SetModel(self.Model)

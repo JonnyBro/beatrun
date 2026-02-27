@@ -2,15 +2,29 @@ local replaysdir = "beatrun/gamemode/Maps/TrainingData/"
 TUTORIALMODE = true
 local tutorialcount = 7
 
-local endticks = {300, 300, 350, 500, 500, 230, 800}
+local endticks = { 300, 300, 350, 500, 500, 230, 800 }
 
 tutorials = {}
 curtutorial = 1
 
+-- format: multiline
 local tutorialtext = {
-	"Move towards a wall while in the air to climb it", {"Press [%s] before landing to break your fall", "+speed"},
-	"Jump towards an obstacle to vault over it", {"Hold Jump while holding [%s] and looking at a wall to wallrun\nYou can release either key during the wallrun, you won't fall off", "+forward"},
-	"Press Jump during a wallrun to jump off\nYou can chain wallruns this way", "Hold Jump while moving towards a wall to wallclimb\nYou can release either key afterwards\nYou will automatically climb ledges", {"Press [%s] while moving left or right to sidestep\nSidestep lets you move at max speed immediately\nHold Crouch to slide under the gate", "+attack2"}
+	"Move towards a wall while in the air to climb it",
+	{
+		"Press [%s] before landing to break your fall",
+		"+speed"
+	},
+	"Jump towards an obstacle to vault over it",
+	{
+		"Hold Jump while holding [%s] and looking at a wall to wallrun\nYou can release either key during the wallrun, you won't fall off",
+		"+forward"
+	},
+	"Press Jump during a wallrun to jump off\nYou can chain wallruns this way",
+	"Hold Jump while moving towards a wall to wallclimb\nYou can release either key afterwards\nYou will automatically climb ledges",
+	{
+		"Press [%s] while moving left or right to sidestep\nSidestep lets you move at max speed immediately\nHold Crouch to slide under the gate",
+		"+attack2"
+	}
 }
 
 for i = 1, tutorialcount do
@@ -49,13 +63,13 @@ local eventwhitelist = {
 }
 
 local eventrequired = {
-	{"climb"},
-	{"roll"},
-	{"vault", "vault"},
-	{"wallrunh"},
-	{"wallrunh", "wallrunh"},
-	{"wallrunv", "climb"},
-	{"slide"}
+	{ "climb" },
+	{ "roll" },
+	{ "vault", "vault" },
+	{ "wallrunh" },
+	{ "wallrunh", "wallrunh" },
+	{ "wallrunv", "climb" },
+	{ "slide" }
 }
 
 local eventnicenames = {
@@ -102,7 +116,7 @@ local function DrawTutorialText()
 
 	table.Empty(eventhudtext)
 
-	for k, v in ipairs(curevent) do
+	for _, v in ipairs(curevent) do
 		if not eventwhitelist[v] and eventnicenames[v] then
 			table.insert(eventhudtext, eventnicenames[v])
 		end
@@ -119,7 +133,7 @@ end
 hook.Add("HUDPaint", "TutorialText", DrawTutorialText)
 hook.Add("BeatrunHUDCourse", "TutorialHUD", function() return "Tutorial" end)
 
-local tutorialendpos = {tutorials[2][1], tutorials[3][1], tutorials[4][1], tutorials[5][1], tutorials[6][1], tutorials[7][1], Vector()}
+local tutorialendpos = { tutorials[2][1], tutorials[3][1], tutorials[4][1], tutorials[5][1], tutorials[6][1], tutorials[7][1], Vector() }
 
 local function TutorialLogic()
 	local ply = LocalPlayer()
@@ -134,7 +148,7 @@ local function TutorialLogic()
 	if ply:GetPos():Distance(endpos) < 20 then
 		table.Empty(eventcheck)
 
-		for k, v in ipairs(curevent) do
+		for _, v in ipairs(curevent) do
 			if not eventwhitelist[v] then
 				table.insert(eventcheck, v)
 			end
@@ -201,16 +215,44 @@ end
 
 hook.Add("PostDrawTranslucentRenderables", "TutorialMarker", TutorialMarker)
 
+-- format: multiline
 local creditslist = {
-	{3.25, "Beatrun"},
-	{3.25, "Authored by datae"},
-	{3.25, "Ideas stolen from Mirror's Edge"},
-	{3.75, "Sounds stolen from Mirror's Edge"},
-	{3.25, "Infection music stolen from Dying Light"},
-	{1.75, "Maybe I forgot more?"},
-	{3.25, "Anyways..."},
-	{8.75, "Thanks for playing, %s!"},
-	{7.5, ""},
+	{
+		3.25,
+		"Beatrun"
+	},
+	{
+		3.25,
+		"Authored by datae"
+	},
+	{
+		3.25,
+		"Ideas stolen from Mirror's Edge"
+	},
+	{
+		3.75,
+		"Sounds stolen from Mirror's Edge"
+	},
+	{
+		3.25,
+		"Infection music stolen from Dying Light"
+	},
+	{
+		1.75,
+		"Maybe I forgot more?"
+	},
+	{
+		3.25,
+		"Anyways..."
+	},
+	{
+		8.75,
+		"Thanks for playing, %s!"
+	},
+	{
+		7.5,
+		""
+	},
 }
 
 local creditstime = 0

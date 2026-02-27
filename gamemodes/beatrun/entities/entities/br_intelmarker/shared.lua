@@ -52,8 +52,6 @@ local radius = 35
 local red = Color(100, 255, 0, 125)
 local circlepos = Vector()
 local circleup = Vector(0, 0, 40)
--- local msin = math.sin
--- local mabs = math.abs
 
 function ENT:DrawTranslucent()
 	self:SetRenderBounds(minb, maxb)
@@ -69,14 +67,11 @@ function ENT:DrawTranslucent()
 		render.DrawBeam(newpos, newpos + circleup, 4, 0, 1, red, true)
 	end
 
-	-- local bmin, bmax = self:GetRenderBounds()
 	self.offset = self.offset + 0.00075
 
 	if self.offset >= 180 then
 		self.offset = 0
 	end
-
-	-- render.DrawWireframeBox(self:GetPos(), angle_zero, bmin, bmax)
 end
 
 function ENT:Draw()

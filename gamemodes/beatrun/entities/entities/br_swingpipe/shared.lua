@@ -15,9 +15,6 @@ ENT.Model = "models/parkoursource/pipe_standard.mdl"
 function ENT:SetupDataTables()
 end
 
--- local spawntr = {}
--- local spawntrout = {}
-
 function ENT:Initialize()
 	self:DrawShadow(false)
 	self:SetModel(self.Model)
@@ -37,24 +34,8 @@ function ENT:Initialize()
 		return
 	end
 
-	-- self:SetRenderOrigin(self:GetPos() - self:GetAngles():Forward() * 15)
 	self:SetMaterial("medge/redbrickvertex")
 	self.NoPlayerCollisions = true
-	-- local mins, maxs = self:GetCollisionBounds() * 4
-
-	-- spawntr.start = self:GetPos()
-	-- spawntr.endpos = spawntr.start
-	-- spawntr.filter = self
-	-- spawntr.output = spawntrout
-	-- spawntr.mins, spawntr.maxs = mins, maxs
-
-	-- util.TraceHull(spawntr)
-
-	-- if spawntrout.Hit then
-	-- 	local ang = spawntrout.HitNormal:Angle()
-	-- 	ang.x = 0
-	-- 	self:SetAngles(ang)
-	-- end
 end
 
 function ENT:OnRemove()
@@ -63,11 +44,6 @@ end
 function ENT:Think()
 end
 
--- local matrix
--- local vecscale
-
 function ENT:Draw()
 	self:DrawModel()
-	-- local mins, maxs = self:GetCollisionBounds()
-	-- render.DrawWireframeBox(self:GetPos(), self:GetAngles(), mins, maxs)
 end

@@ -36,8 +36,6 @@ function ENT:Initialize()
 	self:SetPos(self:GetPos() + Vector(-0, -0, 0))
 end
 
--- local screencolor = Color(64, 0, 0, 64)
-
 function ENT:StartTouch(ent)
 	if ent:IsPlayer() and ent:GetNW2Entity("DataBank") == self and ent:GetNW2Int("DataCubes", 0) > 0 then
 		ent:SetNW2Int("DataBanked", ent:GetNW2Int("DataBanked", 0) + math.min(ent:GetNW2Int("DataCubes"), 5))
@@ -84,8 +82,6 @@ function ENT:DrawTranslucent()
 			render.DrawBeam(newpos, newpos + circleup, 8, 0, 1, red, true)
 		end
 
-		-- local bmin, bmax = self:GetRenderBounds()
-		-- render.DrawWireframeBox(self:GetPos(), angle_zero, bmin, bmax)
 		self.offset = self.offset + 0.00075
 
 		if self.offset >= 180 then

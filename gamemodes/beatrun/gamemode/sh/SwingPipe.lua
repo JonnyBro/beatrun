@@ -21,7 +21,6 @@ local function SwingpipeCheck(ply, mv, cmd)
 
 	if IsValid(trout.Entity) and trout.Entity:GetClass() == "br_swingpipe" and (ply:GetSwingbarLast() ~= trout.Entity or ply:GetSBDelay() < CurTime()) then
 		local swingpipe = trout.Entity
-		-- local dot = cmd:GetViewAngles():Forward():Dot(swingpipe:GetAngles():Forward())
 
 		if CLIENT then
 			swingpipe:SetPredictable(true)
@@ -112,7 +111,7 @@ local function SwingpipeThink(ply, mv, cmd)
 		if util.TraceHull({
 			start = spendpos,
 			endpos = spendpos,
-			filter = {ply:GetSwingpipe(), ply},
+			filter = { ply:GetSwingpipe(), ply },
 			mins = minhull,
 			maxs = maxhull
 		}).Hit then

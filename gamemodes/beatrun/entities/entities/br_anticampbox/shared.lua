@@ -28,8 +28,6 @@ function ENT:Initialize()
 	self:SetPos(self:GetPos() + Vector(-0, -0, 0))
 end
 
--- local screencolor = Color(64, 0, 0, 64)
-
 function ENT:StartTouch(ent)
 	if ent:IsPlayer() then
 		ent.MemeTime = CurTime() + 10

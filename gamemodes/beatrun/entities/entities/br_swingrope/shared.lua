@@ -19,9 +19,6 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Vector", 1, "EndPos")
 end
 
--- local spawntr = {}
--- local spawntrout = {}
-
 function ENT:Initialize()
 	self:SetPos(self:GetStartPos())
 	self:SetModel(self.Model)
