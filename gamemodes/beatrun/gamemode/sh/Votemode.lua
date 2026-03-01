@@ -276,7 +276,7 @@ if SERVER then
 		local str
 
 		if success then
-			str = "Vote successful! (" .. yesCount .. "/" .. playersNeeded .. ")\nStarting \"" .. gamemode .. "\"..."
+			str = "[VoteMenu] Vote successful! (" .. yesCount .. "/" .. playersNeeded .. ")\nStarting \"" .. gamemode .. "\"..."
 
 			if GetGlobalBool("GM_DATATHEFT") then
 				Beatrun_StopDataTheft()
@@ -310,11 +310,10 @@ if SERVER then
 				end
 			end
 		else
-			str = "Vote failed! No one voted or not enough votes."
+			str = "[VoteMenu] Vote failed! No one voted or not enough votes."
 		end
 
 		PrintMessage(HUD_PRINTTALK, str)
-		print("[VoteMenu] " .. str)
 
 		voted = {}
 		yesCount = 0
@@ -347,7 +346,7 @@ if SERVER then
 		voteStarted = true
 
 		local str = string.format("[VoteMenu] %s (%s) started a vote for %s", init_ply:Nick(), init_ply:SteamID64(), validGamemodesMap[lower])
-		print(str)
+		PrintMessage(HUD_PRINTTALK, str)
 
 		timer.Simple(voteDuration, function() if voteStarted then EndVote() end end)
 	end
