@@ -16,7 +16,7 @@ Beatrun is an **infamous parkour gamemode for Garry's Mod**, now fully open-sour
 It includes various improvements, new features, and enhanced functionality.
 
 > [!WARNING]
-> This repository contains **optional** modules for showing custom statuses in Discord and Steam.
+> This repository contains **optional** modules for showing custom statuses in Discord and Steam.\
 > They are not required for Beatrun to work.
 >
 > You can find those modules **[here](https://github.com/JonnyBro/beatrun/tree/main/lua/bin)**.\
