@@ -47,7 +47,7 @@ It includes various improvements, new features, and enhanced functionality.
 ## Features and Updates
 
 > [!NOTE]
-> There are plenty of changes and fixes that are not documented here. If you are curious - you are free to read the commits.
+> There are plenty of changes and fixes that are not documented here. If you are interested - feel free to read the commits.
 
 ### New Features
 
