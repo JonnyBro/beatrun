@@ -1,7 +1,7 @@
 local vmatrixmeta = FindMetaTable("VMatrix")
 local playermeta = FindMetaTable("Player")
 
-CreateConVar("Beatrun_RandomLoadouts", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 1, 5)
+CreateConVar("Beatrun_RandomLoadouts", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "", 1, 5)
 
 -- Example loadouts. You can put any SWEP's **class names** here.
 -- format: multiline
@@ -26,10 +26,10 @@ local weaponBases = {
 }
 
 local mtmp = {
-	{0, 0, 0, 0},
-	{0, 0, 0, 0},
-	{0, 0, 0, 0},
-	{0, 0, 0, 1}
+	{ 0, 0, 0, 0 },
+	{ 0, 0, 0, 0 },
+	{ 0, 0, 0, 0 },
+	{ 0, 0, 0, 1 }
 }
 
 function vmatrixmeta:FastToTable(tbl)

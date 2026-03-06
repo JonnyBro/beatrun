@@ -10,86 +10,67 @@
 
 ---
 
-## 🚨 Important Notice
-
-### Please read this README thoroughly before asking questions
-
-### The **only official source** for this fork is this repository and [my workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024). Other workshop versions are not supported
-
-### Whoever else that claims to have an "official" repository and does not have a license other than WTFPL is NOT to be trusted. This project is not that legal, so licenses DO NOT apply under any circumstances
-
-### This repository is the original one and is maintained by the original people that cracked Beatrun
-
----
-
 ## About
 
 Beatrun is an **infamous parkour gamemode for Garry's Mod**, now fully open-sourced and maintained by the community.
 It includes various improvements, new features, and enhanced functionality.
 
 > [!WARNING]
-> **This repository contains no malicious modules.** However, optional modules such as Discord Rich Presence and Steam Presence are available for additional features.
-> These are **completely optional** and can be removed at any time.
+> This repository contains **optional** modules for showing custom statuses in Discord and Steam.
+> They are not required for Beatrun to work.
 >
-> - Modules are located **[here](https://github.com/JonnyBro/beatrun/tree/main/lua/bin)**.
-> - Refer to the **[Credits](#credits)** section for their source code.
+> You can find those modules **[here](https://github.com/JonnyBro/beatrun/tree/main/lua/bin)**.\
+> And you can find their source code in the **[credits](#credits)**.
 
 ## Installation
 
-### VERY Easy Installation
+### Steam Workshop
 
 > [!WARNING]
-> Don't forget to delete the Beatrun's folder from the addons.
+> Don't forget to delete any other Beatrun versions from `garrysmod/addons`!
 
-[Click Here](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024)
-
-### 🔧 Automatic Installation (Recommended for Windows 10/11)
-
-> [!NOTE]
-> Windows 7 and old versions of Windows 10 are not supported. Please update your OS.
-
-Run the following command in PowerShell (Run as Administrator if Steam and/or the game is installed on the system (C:) drive):
-
-```powershell
-irm https://beatrun.jbro.top/install | iex
-```
-
+1. [Subscribe to this addon](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024)
 1. Start the game.
-2. Select the `Beatrun` gamemode in the bottom-right corner.
+1. Select the `Beatrun` gamemode in the bottom-right corner.
 
-### 🛠️ Manual Installation
+### Manual Installation
 
 1. **[Download this repository](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).**
-2. Delete the `beatrun` folder in `your_game_folder/garrysmod/addons`, if it exists.
-3. Extract `beatrun-main` into `your_game_folder/garrysmod/addons`.
-4. (Optional) For Discord and Steam Presence, move `your_game_folder/garrysmod/addons/beatrun-main/lua` to `your_game_folder/garrysmod`.
-5. Start the game.
-6. Select the `Beatrun` gamemode in the bottom-right corner.
+1. Delete the `beatrun` folder in `your_game_folder/garrysmod/addons`, if it exists.
+1. Extract `beatrun-main` into `your_game_folder/garrysmod/addons`.
+   - (Optional) For Discord and Steam Presence, move the contents of `beatrun-main/lua/bin` to your `your_game_folder/garrysmod/lua/bin` (create the folder if it doesn't exists).
+1. Start the game.
+1. Select the `Beatrun` gamemode in the bottom-right corner.
 
 ---
 
 ## Features and Updates
 
+> [!NOTE]
+> There are plenty of changes and fixes that are not documented here. If you are curious - you are free to read the commits.
+
 ### New Features
 
-- **Custom Courses Database** hosted by Jonny_Bro: **[Access Here](https://courses.jbro.top)** (free and **[open source](https://github.com/JonnyBro/beatrun-courses-server)**).
-  - **Brand new courses menu that allows you to download and upload courses without leaving the game!**
-- **New Gamemode:** Deathmatch.
+- **In-game** Courses Database UI.
+  - Accessible by pressing F4 (**[source code](https://github.com/JonnyBro/beatrun-courses-server)**).
+  - Default one is hosted by @JonnyBro.
+- **New Deathmatch gamemode**.
 - "Proper" Kick Glitch similar to the **[original game](https://www.youtube.com/watch?v=zK5y3NBUStc)**.
-- In-game configuration menu in the Tools menu under **Beatrun**. All settings can be modified here.
+- **In-game** configuration in the Tools menu under **Beatrun**. All settings can be changed from there.
 - Localization support in **7 languages**.
 - Enhanced Build Mode: spawn props from the Spawn Menu, and they will save in your course.
-- Random weapon loadouts from MW Base, ARC9, ARCCW and TFA. Or create your own in [!Helpers.lua](./gamemodes/beatrun/gamemode/sh/!Helpers.lua#L7)!
-- Race your Ghost: a ghost will spawn that will play out your best time in the current course.
-- Various new abilities:
+- Random weapon loadouts from **MW Base**, **ARC9**, **ARCCW** and **TFA**. Or create your own in [!Helpers.lua](./gamemodes/beatrun/gamemode/sh/!Helpers.lua#L8)!
+- Race your Ghost: a ghost of your best time in the current course.
+- Various new/fixed abilities:
   - **Roll after ziplines:** Press `+duck` (CTRL by default).
   - **Dismount ladders:** Press `+duck` (CTRL by default).
   - **Remove ziplines created with Zipline Gun:** Press `+attack2` (RMB by default).
-  - **Next checkpoint arrow** for easier navigation.
+  - **Arrow to the next checkpoint** for easier navigation.
 - New server and client configuration variables:
   - Server:
     - `Beatrun_AllowOverdriveInMultiplayer`: Allows Overdrive in multiplayer.
-    - `Beatrun_AllowPropSpawn`: Lets players spawn props and weapons without admin rights.
+    - `Beatrun_AllowPropSpawn`: Lets players spawn props without admin rights.
+    - `Beatrun_AllowWeaponSpawn`: Lets players spawn weapons without admin rights.
     - `Beatrun_HealthRegen`: Toggles health regeneration.
   - Client:
     - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`: Customize HUD colors.
@@ -98,7 +79,7 @@ irm https://beatrun.jbro.top/install | iex
     - `Beatrun_QuickturnHandsOnly`: Restrict QuickTurn to the Runner Hands weapon.
 - Other improvements:
   - Small camera punch effect when diving.
-  - SteamID no longer displayed on screen.
+  - SteamID no longer displayed on your screen.
 
 ### Fixes
 
@@ -139,6 +120,7 @@ The animations installer has been removed. You can now switch animations directl
 
 ### Fonts
 
+> [!NOTE]
 > They could be wrong, I tried to searh for the original sources.
 
 - [x14y24pxHeadUpDaisy](https://hicchicc.github.io/00ff/)
