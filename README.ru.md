@@ -31,7 +31,7 @@ Beatrun - это **небезызвестный паркур режим для G
 > [!WARNING]
 > Не забудьте удалить старый Beatrun из папки `garrysmod/addons`!
 
-1. [Подписаться на аддон](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024)
+1. [Подписаться на аддон](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024).
 1. Запустить игру.
 1. Выбрать режим `Beatrun` в правом нижнем углу в меню.
 

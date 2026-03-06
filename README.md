@@ -29,7 +29,7 @@ It includes various improvements, new features, and enhanced functionality.
 > [!WARNING]
 > Don't forget to delete any other Beatrun versions from `garrysmod/addons`!
 
-1. [Subscribe to this addon](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024)
+1. [Subscribe to this addon](https://steamcommunity.com/sharedfiles/filedetails/?id=3467179024).
 1. Start the game.
 1. Select the `Beatrun` gamemode in the bottom-right corner.
 
