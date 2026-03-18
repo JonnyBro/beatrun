@@ -79,8 +79,11 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		speedomode:AddChoice("#beatrun.toolsmenu.hud.speedometermode3", 3)
 		speedomode:SetSortItems(false)
 
-		panel:NumSlider("#beatrun.toolsmenu.hud.hidden", "Beatrun_HUDHidden", 0, 2, 0)
-		panel:ControlHelp(language.GetPhrase("beatrun.toolsmenu.hud.hiddendesc"))
+		local hidehud = panel:ComboBox("#beatrun.toolsmenu.hud.hidden", "Beatrun_SpeedometerMode")
+		hidehud:AddChoice("#beatrun.toolsmenu.hud.hidden0", 0)
+		hidehud:AddChoice("#beatrun.toolsmenu.hud.hidden1", 1)
+		hidehud:AddChoice("#beatrun.toolsmenu.hud.hidden2", 2)
+		hidehud:SetSortItems(false)
 
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
