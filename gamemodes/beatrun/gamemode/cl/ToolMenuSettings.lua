@@ -79,7 +79,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		speedomode:AddChoice("#beatrun.toolsmenu.hud.speedometermode3", 3)
 		speedomode:SetSortItems(false)
 
-		local hidehud = panel:ComboBox("#beatrun.toolsmenu.hud.hidden", "Beatrun_SpeedometerMode")
+		local hidehud = panel:ComboBox("#beatrun.toolsmenu.hud.hidden", "Beatrun_HUDHidden")
 		hidehud:AddChoice("#beatrun.toolsmenu.hud.hidden0", 0)
 		hidehud:AddChoice("#beatrun.toolsmenu.hud.hidden1", 1)
 		hidehud:AddChoice("#beatrun.toolsmenu.hud.hidden2", 2)
