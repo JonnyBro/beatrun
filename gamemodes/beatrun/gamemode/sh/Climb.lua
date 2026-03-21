@@ -1,26 +1,4 @@
-local ClimbingTimes = {5, 1.25, 1, 1, nil, 2}
-
---[[
-local CLIMB_HANG = 1
-local CLIMB_HEAVEUP = 2
-local CLIMB_STRAFELEFT = 3
-local CLIMB_STRAFERIGHT = 4
-local CLIMB_FOLDEDSTART = 5
-local CLIMB_FOLDEDHEAVEUP = 6
-
-
-local climb1 = {
-	followplayer = false,
-	animmodelstring = "new_climbanim",
-	allowmove = true,
-	lockang = false,
-	ignorez = true,
-	smoothend = true,
-	AnimString = "climb1"
-}
-
-local climbstrings = {"climb1", "climb2"}
-]]
+local ClimbingTimes = { 5, 1.25, 1, 1, nil, 2 }
 
 if game.SinglePlayer() and SERVER then
 	util.AddNetworkString("Climb_SPFix")
@@ -398,7 +376,7 @@ end
 
 hook.Add("StartCommand", "ClimbingRemoveInput", ClimbingRemoveInput)
 
-local realistic = CreateConVar("Beatrun_LeRealisticClimbing", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Makes you be able to climb and wallrun only if you have runnerhands equipped.")
+local realistic = CreateConVar("Beatrun_LeRealisticClimbing", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY }, "Makes you be able to climb and wallrun only if you have runnerhands equipped.")
 
 local function ClimbingCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
