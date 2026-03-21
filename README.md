@@ -35,7 +35,7 @@ It includes various improvements, new features, and enhanced functionality.
 
 ### Manual Installation
 
-1. **[Download this repository](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).**
+1. **[Download the repository](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).**
 1. Delete the `beatrun` folder in `your_game_folder/garrysmod/addons`, if it exists.
 1. Extract `beatrun-main` into `your_game_folder/garrysmod/addons`.
    - (Optional) For Discord and Steam Presence, move the contents of `beatrun-main/lua/bin` to your `your_game_folder/garrysmod/lua/bin` (create the folder if it doesn't exists).
@@ -68,10 +68,10 @@ It includes various improvements, new features, and enhanced functionality.
   - **Arrow to the next checkpoint** for easier navigation.
 - New server and client configuration variables:
   - Server:
-    - `Beatrun_AllowOverdriveInMultiplayer`: Allows Overdrive in multiplayer.
-    - `Beatrun_AllowPropSpawn`: Lets players spawn props without admin rights.
-    - `Beatrun_AllowWeaponSpawn`: Lets players spawn weapons without admin rights.
-    - `Beatrun_HealthRegen`: Toggles health regeneration.
+    - `Beatrun_AllowOverdriveInMultiplayer`: Allow Overdrive in multiplayer.
+    - `Beatrun_AllowPropSpawn`: Let players spawn props without admin rights.
+    - `Beatrun_AllowWeaponSpawn`: Let players spawn weapons without admin rights.
+    - `Beatrun_HealthRegen`: Toggle health regeneration.
   - Client:
     - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`: Customize HUD colors.
     - `Beatrun_DisableGrapple`: Toggle the grapple ability.
@@ -87,13 +87,13 @@ It includes various improvements, new features, and enhanced functionality.
 - Improved leaderboard sorting in gamemodes.
 - Fixed crashes and issues with Data Theft gamemode.
 - Enabled jumping while walking.
-- Grapples now follow moving entities and are visible to other players.
+- Grapple now follows moving entities and visible to other players.
 
 ---
 
 ## Animations
 
-The animations installer has been removed. You can now switch animations directly in the **Tools menu** under the Beatrun category.
+You can now change animations in the **Tools menu** under the Beatrun category.
 
 ---
 
@@ -116,12 +116,12 @@ The animations installer has been removed. You can now switch animations directl
 - relaxtakenotes - Made this project possible.
 - [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated Project.
 - [Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc) - Discord Rich Presence.
-- [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) - Steam Presence (TFA Base creator).
+- [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) - Steam Presence.
 
 ### Fonts
 
 > [!NOTE]
-> They could be wrong, I tried to searh for the original sources.
+> They could be wrong, I tried to find the original sources.
 
 - [x14y24pxHeadUpDaisy](https://hicchicc.github.io/00ff/)
 - [Datto D-DIN](https://github.com/amcchord/datto-d-din)
