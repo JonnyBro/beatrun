@@ -138,15 +138,6 @@ local function BeatrunHUD()
 	surface.DrawText(version_text)
 	surface.SetFont("BeatrunHUD")
 
-	if checkedVersion and installedVersion ~= latestVersion then
-		local update_text = "Update available!"
-		local notlatest_w, _ = surface.GetTextSize(update_text)
-		surface.SetTextColor(255, 255, 255, 100)
-		surface.SetTextPos(scrw - notlatest_w, 10)
-		surface.DrawText(update_text)
-		surface.SetFont("BeatrunHUD")
-	end
-
 	local pl = ply:GetNW2Int("PLoss")
 	local CT = CurTime()
 
