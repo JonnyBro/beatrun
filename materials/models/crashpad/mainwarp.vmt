@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+    "$basetexture" "models/crashpad/mainwarp"
+    "$surfaceprop" "fabric"
+    "$model" "1"  
+    "$color2" "[1 1 1]"
+}
