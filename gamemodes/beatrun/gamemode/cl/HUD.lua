@@ -131,13 +131,6 @@ local function BeatrunHUD()
 
 	surface.SetFont("DebugFixedSmall")
 
-	local version_text = "v" .. installedVersion
-	local tw, _ = surface.GetTextSize(version_text)
-	surface.SetTextColor(255, 255, 255, 50)
-	surface.SetTextPos(scrw - tw, 0)
-	surface.DrawText(version_text)
-	surface.SetFont("BeatrunHUD")
-
 	local pl = ply:GetNW2Int("PLoss")
 	local CT = CurTime()
 
