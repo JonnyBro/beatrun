@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/crashpad/crashpad"
+	"$surfaceprop" "cardboard"
+	"$model" "1"
+}
