@@ -28,13 +28,9 @@ function ENT:Initialize()
 	self:PhysicsInit(SOLID_VPHYSICS)
 
 	local phys = self:GetPhysicsObject()
-	if IsValid(phys) then
-		phys:EnableMotion(false)
-	end
+	if IsValid(phys) then phys:EnableMotion(false) end
 
-	if CLIENT then
-		self:_EnsureTintMaterial()
-	end
+	if CLIENT then self:_EnsureTintMaterial() end
 end
 
 function ENT:Draw()
@@ -43,9 +39,7 @@ end
 
 if CLIENT then
 	function ENT:OnRemove()
-		if self._mainwarpSubMatIndex then
-			self:SetSubMaterial(self._mainwarpSubMatIndex, "")
-		end
+		if self._mainwarpSubMatIndex then self:SetSubMaterial(self._mainwarpSubMatIndex, "") end
 	end
 
 	function ENT:_FindMainwarpSubMaterialIndex()
@@ -54,9 +48,7 @@ if CLIENT then
 
 		for i = 1, #mats do
 			local name = mats[i]
-			if isstring(name) and string.find(string.lower(name), "mainwarp", 1, true) then
-				return i - 1
-			end
+			if isstring(name) and string.find(string.lower(name), "mainwarp", 1, true) then return i - 1 end
 		end
 
 		return nil
@@ -66,21 +58,18 @@ if CLIENT then
 		if self._mainwarpTintMatName and self._mainwarpSubMatIndex ~= nil then return end
 
 		self._mainwarpSubMatIndex = self:_FindMainwarpSubMaterialIndex()
+
 		if self._mainwarpSubMatIndex == nil then
-			timer.Simple(0, function()
-				if IsValid(self) then
-					self:_EnsureTintMaterial()
-				end
-			end)
+			timer.Simple(0, function() if IsValid(self) then self:_EnsureTintMaterial() end end)
 			return
 		end
 
 		local matName = ("br_mat_mainwarp_%d"):format(self:EntIndex())
+
 		self._mainwarpTintMatName = matName
 
 		local base = Material("models/crashpad/mainwarp")
 		local baseTex = base and base:GetTexture("$basetexture")
-
 		local params = {
 			["$model"] = 1,
 			["$surfaceprop"] = "fabric",
@@ -101,13 +90,13 @@ if CLIENT then
 
 	function ENT:Think()
 		self:_EnsureTintMaterial()
+
 		if not self._mainwarpTintMat then return end
 
 		local ply = LocalPlayer()
 		if not IsValid(ply) then return end
 
 		local dist = ply:GetPos():Distance(self:GetPos())
-
 		local t = math.Clamp((dist - start_dist) / (end_dist - start_dist), 0, 1)
 		local col = LerpVector(t, greycolor, redcolor)
 
@@ -115,6 +104,7 @@ if CLIENT then
 		self._mainwarpTintMat:SetVector("$color", col)
 
 		self:NextThink(CurTime() + 0.1)
+
 		return true
 	end
 end
