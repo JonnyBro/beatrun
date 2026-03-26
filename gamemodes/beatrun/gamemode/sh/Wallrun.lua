@@ -3,7 +3,7 @@ local hwrtime = 1.5
 tiltdir = 1
 local tilt = 0
 
-local PuristWallrun = CreateConVar("Beatrun_PuristWallrun", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "\"Realistic\" wallrunning", 0, 1)
+PuristWallrun = CreateConVar("Beatrun_PuristWallrun", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "'Realistic' wallrunning", 0, 1)
 
 function WallrunningTilt(ply, pos, ang, fov)
 	local wr = ply:GetWallrun()
@@ -65,6 +65,10 @@ local wrmins = Vector(-16, -16, 0)
 local wrmaxs = Vector(16, 16, 16)
 
 local function WallrunningThink(ply, mv, cmd)
+
+    local mat = ply.WallRunTraceMat
+	local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[mat] or "Concrete"
+	
 	local wr = ply:GetWallrun()
 
 	if wr ~= 0 and ply:OnGround() then
@@ -160,6 +164,7 @@ local function WallrunningThink(ply, mv, cmd)
 		tr.output = trout
 
 		util.TraceLine(tr)
+		ply.WallRunTraceMat = trout.MatType or MAT_CONCRETE
 
 		if not trout.Hit then
 			ply:SetWallrunTime(0)
@@ -177,7 +182,8 @@ local function WallrunningThink(ply, mv, cmd)
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
-				ply:EmitSound("Wallrun.Concrete")
+				ply:EmitSound("Wallrun.".. wallsound)
+				ply:EmitSound("Cloth.MovementRun")
 			end
 		end
 	end
@@ -212,6 +218,7 @@ local function WallrunningThink(ply, mv, cmd)
 			tr.output = trout
 
 			util.TraceHull(tr)
+			ply.WallRunTraceMat = trout.MatType or MAT_CONCRETE
 		end
 
 		if not ply:GetWallrunElevated() and trout.Hit then
@@ -277,6 +284,7 @@ local function WallrunningThink(ply, mv, cmd)
 				ply:SetWallrunDir(trout.HitNormal)
 			end
 		end
+		ply.WallRunTraceMat = trout.MatType or MAT_CONCRETE
 
 		if mv:KeyPressed(IN_JUMP) and ply:GetWallrunTime() - CurTime() ~= hwrtime then
 			ply:SetQuickturn(false)
@@ -290,7 +298,8 @@ local function WallrunningThink(ply, mv, cmd)
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
-				ply:EmitSound("Wallrun.Concrete")
+				ply:EmitSound("Wallrun.".. wallsound)
+				ply:EmitSound("Cloth.MovementRun")
 			end
 		end
 	end
@@ -306,7 +315,8 @@ local function WallrunningThink(ply, mv, cmd)
 		end
 
 		if SERVER then
-			ply:EmitSound("Wallrun.Concrete")
+			ply:EmitSound("Wallrun.".. wallsound)
+			ply:EmitSound("Cloth.MovementRun")
 
 			timer.Simple(0.025, function()
 				ply:EmitSound("WallrunRelease.Concrete")
@@ -346,7 +356,7 @@ local realistic = GetConVar("Beatrun_LeRealisticClimbing")
 
 local function WallrunningCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
-
+	
 	if not ply.WallrunTrace then
 		ply.WallrunTrace = {}
 		ply.WallrunTraceOut = {}
@@ -406,6 +416,7 @@ local function WallrunningCheck(ply, mv, cmd)
 				tr.output = trout
 
 				util.TraceLine(tr)
+				ply.WallRunTraceMat = trout.MatType or MAT_CONCRETE
 
 				if not trout.Hit then return end
 
@@ -450,6 +461,7 @@ local function WallrunningCheck(ply, mv, cmd)
 		tr.output = trout
 
 		util.TraceLine(tr)
+		ply.WallRunTraceMat = trout.MatType or MAT_CONCRETE
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 
@@ -491,6 +503,7 @@ local function WallrunningCheck(ply, mv, cmd)
 		tr.output = trout
 
 		util.TraceLine(tr)
+		ply.WallRunTraceMat = trout.MatType or MAT_CONCRETE
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 

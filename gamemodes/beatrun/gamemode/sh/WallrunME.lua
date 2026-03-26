@@ -50,10 +50,11 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 				tr.output = trout
 
 				util.TraceLine(tr)
+				ply.WallRunTraceMat = trout.MatType or MAT_CONCRETE
 
 				if not trout.Hit then return end
 
-				if SERVER then
+				if SERVER and ply.WallRunTraceMat == MAT_CONCRETE then
 					ply:EmitSound("Bump.Concrete")
 				end
 
@@ -179,6 +180,10 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 end
 
 function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
+
+    local mat = ply.WallRunTraceMat
+	local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[mat] or "Concrete"
+	
 	if wr == 4 then
 		local ang = cmd:GetViewAngles()
 		ang.x = 0
@@ -208,6 +213,13 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 
 		if mv:KeyPressed(IN_JUMP) then
 			ParkourEvent("jumpwallrun", ply)
+			if SERVER then			   
+			    ply:EmitSound("WallrunRelease.Concrete")
+				timer.Simple(0.025, function()
+				    ply:EmitSound("WallrunRelease.Concrete")
+				end)
+			    ply:EmitSound("Cloth.MovementRun")
+			end
 
 			ply:SetSafetyRollKeyTime(CurTime() + 0.001)
 
@@ -241,36 +253,23 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
 
-		local tr = ply.WallrunTrace
-		local trout = ply.WallrunTraceOut
-		local eyeang = ply.WallrunOrigAng or Angle()
-		eyeang.x = 0
-
-		tr.start = ply:EyePos() - Vector(0, 0, 5)
-		tr.endpos = tr.start + eyeang:Forward() * 40
-		tr.filter = ply
-		tr.collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
-		tr.output = trout
-
-		util.TraceLine(tr)
-
-		if not trout.Hit then
-			ply:SetWallrunTime(0)
-		end
-
 		if mv:KeyPressed(IN_JUMP) and (mv:KeyDown(IN_MOVELEFT) or mv:KeyDown(IN_MOVERIGHT)) then
 			local dir = mv:KeyDown(IN_MOVERIGHT) and 1 or -1
 			local vel = mv:GetVelocity()
 			vel.z = 250
 
-			mv:SetVelocity(vel + eyeang:Right() * 150 * dir)
+			mv:SetVelocity(vel + ply:EyeAngles():Right() * 150 * dir)
 
 			local event = ply:GetWallrun() == 3 and "jumpwallrunright" or "jumpwallrunleft"
 
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
-				ply:EmitSound("Wallrun.Concrete")
+				ply:EmitSound("Wallrun.".. wallsound)
+				timer.Simple(0.025, function()
+				    ply:EmitSound("WallrunRelease.Concrete")
+				end)
+				ply:EmitSound("Cloth.MovementRun")
 			end
 		end
 	end
@@ -370,6 +369,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 				ply:SetWallrunDir(trout.HitNormal)
 			end
 		end
+		ply.WallRunTraceMat = trout.MatType
 
 		if mv:KeyPressed(IN_JUMP) and ply:GetWallrunTime() - CurTime() ~= hwrtime then
 			ply:SetQuickturn(false)
@@ -383,7 +383,11 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
-				ply:EmitSound("Wallrun.Concrete")
+				ply:EmitSound("Wallrun.".. wallsound)
+				timer.Simple(0.025, function()
+				    ply:EmitSound("WallrunRelease.Concrete")
+				end)
+				ply:EmitSound("Cloth.MovementRun")
 			end
 		end
 	end
@@ -399,7 +403,8 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 		end
 
 		if SERVER then
-			ply:EmitSound("Wallrun.Concrete")
+			ply:EmitSound("Wallrun.".. wallsound)
+			ply:EmitSound("Cloth.MovementRun")
 
 			timer.Simple(0.025, function()
 				ply:EmitSound("WallrunRelease.Concrete")
@@ -421,6 +426,12 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			BodyAnimCycle = 0
 
 			BodyAnim:SetSequence("jumpair")
+			if SERVER then			   
+			    ply:EmitSound("WallrunRelease.Concrete")
+			    ply:EmitSound("Cloth.MovementRun")
+			end
+		
+			
 		elseif game.SinglePlayer() and wr == 1 then
 			net.Start("BodyAnimWallrun")
 				net.WriteBool(false)

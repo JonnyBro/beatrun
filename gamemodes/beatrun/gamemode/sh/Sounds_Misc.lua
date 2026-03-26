@@ -36,7 +36,7 @@ sound.Add({
 
 sound.Add({
 	name = "Vault",
-	volume = 1,
+	volume = 0.75,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -77,4 +77,22 @@ sound.Add({
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Ladder/Ladder_Land_01.ogg", "mirrorsedge/Ladder/Ladder_Land_02.ogg", "mirrorsedge/Ladder/Ladder_Land_03.ogg"}
+})
+
+sound.Add({
+	name = "Slide.LadderHands",
+	volume = 1,
+	level = 40,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Ladder/ladder_slide_1a.wav"}
+})
+
+sound.Add({
+	name = "Slide.Ladder",
+	volume = 1,
+	level = 40,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Ladder/ladder_slide_2a.wav"}
 })

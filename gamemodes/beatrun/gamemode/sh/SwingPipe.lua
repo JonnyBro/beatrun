@@ -124,7 +124,9 @@ local function SwingpipeThink(ply, mv, cmd)
 		end
 
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-			ply:EmitSound("Handsteps.ConcreteHard")
+			ply:EmitSound("Handsteps.MetalPipeGrab")
+			ply:EmitSound("Cloth.Swing")
+			ply:EmitSound("Handsteps.MetalPipeSwing")
 		end
 
 		ply:ViewPunch(Angle(1, 0, 0))
@@ -180,6 +182,10 @@ local function SwingpipeThink(ply, mv, cmd)
 		mv:SetVelocity(cmd:GetViewAngles():Forward() * 260 + Vector(0, 0, 150))
 
 		ParkourEvent("jumpfar", ply)
+		ply:StopSound("Cloth.Swing")
+		ply:StopSound("Handsteps.MetalPipeSwing")
+		ply:EmitSound("Handsteps.MetalPipeRelease")
+		ply:EmitSound("Cloth.SideStep")
 	end
 end
 

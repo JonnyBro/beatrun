@@ -11,7 +11,7 @@ sound.Add({
 sound.Add({
 	name = "Cloth.MovementRun",
 	volume = 0.75,
-	level = 30,
+	level = 31,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/ME_Cloth_Movement_Run1.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run2.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run3.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run4.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run5.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run6.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run7.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run8.wav"}
@@ -20,7 +20,7 @@ sound.Add({
 sound.Add({
 	name = "Cloth.MovementWalk",
 	volume = 0.75,
-	level = 50,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/Cloth_Movement_Walk_01.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_02.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_03.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_04.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_05.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_06.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_07.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_08.wav"}
@@ -29,7 +29,7 @@ sound.Add({
 sound.Add({
 	name = "Cloth.MovementSneak",
 	volume = 0.75,
-	level = 50,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/Cloth_Movement_Sneak_01.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_02.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_03.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_04.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_05.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_06.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_07.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_08.wav"}
@@ -112,21 +112,21 @@ sound.Add({
 sound.Add({
 	name = "Cloth.Fall",
 	volume = 0.75,
-	level = 75,
+	level = 42,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/Body_Fall_Cloth1.wav", "mirrorsedge/Cloth/Body_Fall_Cloth2.wav", "mirrorsedge/Cloth/Body_Fall_Cloth3.wav", "mirrorsedge/Cloth/Body_Fall_Cloth4.wav"}
 })
 
 -- Cloth Swing --
---[[sound.Add({
+sound.Add({
 	name = "Cloth.Swing",
 	volume = 0.75,
-	level = 40,
+	level = 60,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"mirrorsedge/Cloth/Cloth_Swing1.wav", "mirrorsedge/Cloth/Cloth_Swing2.wav", "mirrorsedge/Cloth/Cloth_Swing3.wav", "mirrorsedge/Cloth/Cloth_Swing4.wav"}
-})]]
+	sound = {"mirrorsedge/Cloth/cloth_swing_1a.wav", "mirrorsedge/Cloth/cloth_swing_1b.wav", "mirrorsedge/Cloth/cloth_swing_1c.wav", "mirrorsedge/Cloth/cloth_swing_1d.wav"}
+})
 
 -- Cloth SideStep --
 sound.Add({

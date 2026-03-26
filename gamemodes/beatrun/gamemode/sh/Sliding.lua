@@ -10,7 +10,7 @@ local slide_sounds = {
 	[MAT_GLASS] = {"Slide.Glass"},
 	[MAT_GRATE] = {"Slide.Gantry"},
 	[MAT_PLASTIC] = {"Slide.Tarp"},
-	[MAT_SLOSH] = {"Slide.Water"},
+	[MAT_SLOSH] = {"Slide.Concrete"},
 	[MAT_WOOD] = {"Slide.Wood"}
 }
 
@@ -237,23 +237,27 @@ local function SlideSurfaceSound(ply, pos)
 
 	local tr = util.TraceLine(trace_tbl)
 	local sndtable = slide_sounds[tr.MatType] or slide_sounds[0]
-
-	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
-
-	if ply:WaterLevel() > 0 then
-		sndtable = slide_sounds[MAT_SLOSH]
-
-		ply:EmitSound(sndtable[math.random(#sndtable)])
+    
+	if not ply.DiveSliding then
+	    ply:EmitSound("Cloth.FallShortMedium")
+    else
+        ply:EmitSound("Cloth.FallShortHard")
 	end
-
+	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
+	
 	return tr.MatType
 end
 
 local function SlideLoopSound(ply, pos, mat)
-	local sndtable = slideloop_sounds[mat] or slideloop_sounds[0]
+	local sndtable
+	if ply:WaterLevel() > 0 then
+		sndtable = slideloop_sounds[MAT_SLOSH]
+	else
+		sndtable = slideloop_sounds[mat] or slideloop_sounds[0]
+	end
 
 	ply.SlideLoopSound = CreateSound(ply, sndtable)
-	ply.SlideLoopSound:PlayEx(0.08, 100)
+	ply.SlideLoopSound:PlayEx(0.1, 100)
 end
 
 -- local COORD_FRACTIONAL_BITS = 5
