@@ -84,7 +84,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 	end
 
 	if ply:KeyDown(IN_WALK) then
-		steptime = steptime * 1.5
+		steptime = steptime * 1.45
 	end
 
 	if ply:InOverdrive() then
@@ -108,7 +108,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 	if mat == "player/footsteps/ladder" then return end
 
-	ply.LastStepMat = newsound or walksound
+	ply.LastStepMat = newsound or walksound or releasesound
 	if game.SinglePlayer() then ply:SetNW2String("LastStepMat", newsound) end
 
 	ply.FootstepReleaseLand = true
@@ -148,12 +148,11 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 		if ply.FootstepLand and IsFirstTimePredicted() then
 			local landsound = FOOTSTEPS_LAND_LUT[mat] or "Concrete"
 			ply:EmitSound("Land." .. landsound)
+			if ply:WaterLevel() > 0 then
+				ply:EmitSound("Land.Water")
+			end
 			ply.FootstepLand = false
 		end
-	end
-
-	if ply:WaterLevel() > 0 and ply:Crouching() then
-		ply:EmitSound("Sneak.Water")
 	end
 
 	ply.LastFootstepSound = mat
@@ -231,15 +230,15 @@ end)
 
 hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	local usingrh = ply:UsingRH()
-	local ismoving = (mv:KeyDown(IN_FORWARD) or not ply:OnGround() or ply:Crouching()) and ply:Alive() and (mv:GetVelocity():Length() > 50 or ply:GetMantle() ~= 0 or ply:Crouching())
+	local ismoving = (mv:KeyDown(IN_FORWARD) or not ply:OnGround() or ply:Crouching()) and ply:Alive() and (mv:GetVelocity():Length() > 145 or ply:GetMantle() ~= 0 or ply:Crouching())
 
 	if (CLIENT or game.SinglePlayer()) and CurTime() > (ply:GetStepRelease() or 0) and ply.FootstepReleaseLand then
 		local newsound = FOOTSTEPS_RELEASE_LUT[ply.LastFootstepSound] or "Concrete"
 
-		if ply:GetVelocity():Length() > 145 or newsound == "Gantry" then
+		if ply:GetVelocity():Length() > 150 or newsound == "Gantry" or newsound == "Duct" then
 			ply:EmitSound("Release." .. newsound)		
 		elseif ply:WaterLevel() > 0 then
-			ply:EmitSound("Release.Water")		
+			ply:EmitSound("Release.Water")
 		end
 		ply.FootstepReleaseLand = false
 	end
@@ -334,6 +333,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			ParkourEvent("sidestepleft", ply)
 
 			ply:EmitSound("Cloth.SideStep")
+			ply:FaithVO("Faith.StrainSoft")
 
 			activewep.SideStepDir = ang:Forward()
 
@@ -351,6 +351,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			ParkourEvent("sidestepright", ply)
 
 			ply:EmitSound("Cloth.SideStep")
+			ply:FaithVO("Faith.StrainSoft")
 
 			activewep.SideStepDir = ang:Forward()
 

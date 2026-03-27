@@ -1,4 +1,4 @@
-local ClimbingTimes = { 5, 1.25, 1, 1, nil, 2 }
+local ClimbingTimes = {5, 1.25, 1, 1, nil, 2}
 
 if game.SinglePlayer() and SERVER then
 	util.AddNetworkString("Climb_SPFix")
@@ -165,6 +165,7 @@ local function ClimbingThink(ply, mv, cmd)
 			    ply:EmitSound("WallrunRelease.Concrete")
 				timer.Simple(0.025, function()
 				    ply:EmitSound("WallrunRelease.Concrete")
+					ply:EmitSound("Handsteps.ConcreteRelease")
 				end)
 			    ply:EmitSound("Cloth.MovementRun")
 			end
@@ -243,12 +244,9 @@ local function ClimbingThink(ply, mv, cmd)
 					ply:SetClimbing(2)
 					ply.FootstepLand = false
 					ParkourEvent("climbheave", ply)
-					timer.Simple(0.6, function()
-						ply:PlayStepSound(1)
-					end)
-					timer.Simple(1, function()
-						ply:PlayStepSound(1)
-					end)
+					
+					timer.Simple(0.6, function() ply:PlayStepSound(1) end)			
+					timer.Simple(1, function() ply:PlayStepSound(1) end)
 				end
 			end
 		end
@@ -648,6 +646,9 @@ local function ClimbingCheck(ply, mv, cmd)
 		ply:SetWallrun(0)
 		ply:EmitSound("Wallrun." .. wallrun)
 		ply:EmitSound("Cloth.MovementRun")
+		timer.Simple(0.025, function()
+			ply:EmitSound("WallrunRelease.Concrete")
+		end)
 		timer.Simple(0.9, function()
 		    ply:EmitSound("Handsteps." .. handstepsoft)
 		end)
@@ -733,11 +734,9 @@ local function ClimbingCheck(ply, mv, cmd)
 	ply.wallang = wallang
 
 	if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-		if wallmat == MAT_CONCRETE then
-		    timer.Simple(0.05, function()
-				ply:EmitSound("Bump.Concrete")
-			end)
-		end
+		timer.Simple(0.05, function()
+			ply:EmitSound("Bump.Concrete")
+		end)
 
 		ply:EmitSound("Handsteps." .. handstephard)
 		ply:EmitSound("Cloth.FallShortMedium")

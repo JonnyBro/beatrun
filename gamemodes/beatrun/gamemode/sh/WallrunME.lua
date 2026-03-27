@@ -50,11 +50,10 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 				tr.output = trout
 
 				util.TraceLine(tr)
-				ply.WallRunTraceMat = trout.MatType or MAT_CONCRETE
 
 				if not trout.Hit then return end
 
-				if SERVER and ply.WallRunTraceMat == MAT_CONCRETE then
+				if SERVER then
 					ply:EmitSound("Bump.Concrete")
 				end
 
