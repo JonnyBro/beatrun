@@ -1,5 +1,4 @@
 local chestvec = Vector(0, 0, 32)
-local chestvec = Vector(0, 0, 32)
 local thoraxvec = Vector(0, 0, 48)
 local neckvec = Vector(0, 0, 54)
 local neckvecduck = Vector(0, 0, 54)
@@ -54,7 +53,7 @@ local function PlayVaultAnim(ply, ang)
 	end
 
 	if game.SinglePlayer() and SERVER then
-		local ang = ang or ply:EyeAngles()
+		ang = ang or ply:EyeAngles()
 		ang.x = 0
 		ang.z = 0
 
@@ -65,7 +64,7 @@ local function PlayVaultAnim(ply, ang)
 	end
 
 	if CLIENT then
-		local ang = ang or ply:EyeAngles()
+		ang = ang or ply:EyeAngles()
 		ang.x = 0
 		ang.z = 0
 		ply.OrigEyeAng = ang
@@ -126,7 +125,6 @@ local function Vault1(ply, mv, ang, t, h)
 			end
 
 			local mat = t.MatType
-			local start = mv:GetOrigin() + eyevec
 			local vaultendcheck = Vector(vaultend)
 			vaultendcheck.z = vaultendcheck.z + 64
 
@@ -146,7 +144,7 @@ local function Vault1(ply, mv, ang, t, h)
 			ply:ViewPunch(vpunch1)
 			ply.MantleInitVel = mv:GetVelocity()
 			ply.MantleMatType = mat
-			
+
 			local handstepsoft = HANDSTEPS_SOFT_LUT[mat] or "ConcreteSoft"
 
 			if stepup then
@@ -158,12 +156,12 @@ local function Vault1(ply, mv, ang, t, h)
 				ParkourEvent("vaultonto", ply)
 				ply.VaultStepUp = false
 				if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-		            timer.Simple(0.01, function()
-                        ply:EmitSound("Handsteps.".. handstepsoft)
-		            end)
-					timer.Simple(0.1, function()
-				        ply:PlayStepSound(1)						
-					end)
+		        timer.Simple(0.01, function()
+					ply:EmitSound("Handsteps." .. handstepsoft)
+		        end)
+			    timer.Simple(0.1, function()
+					ply:PlayStepSound(1)
+			    end)
 					if t.MatType == MAT_GRATE then
 				        ply:EmitSound("FenceClimb")
 				    end
@@ -212,7 +210,7 @@ local function Vault2(ply, mv, ang, t, h)
 	if t.Hit then
 		local tsafety = {}
 		local tsafetyout = {}
-		local start = nil
+		start = nil
 
 		TraceParkourMask(tsafety)
 		tsafety.output = tsafetyout
@@ -258,14 +256,14 @@ local function Vault2(ply, mv, ang, t, h)
 			ParkourEvent("vault", ply)
 
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-                ply:EmitSound("Handsteps.".. handstephard)
+				ply:EmitSound("Handsteps." .. handstephard)
 				timer.Simple(0.1, function()
 					ply:EmitSound("Cloth.VaultSwish")
-					ply:FaithVO("Faith.StrainSoft")
 					ply:EmitSound("Vault")
+					ply:FaithVO("Faith.StrainSoft")
 				end)
 				if t.MatType == MAT_GRATE then
-				    ply:EmitSound("FenceClimb")
+					ply:EmitSound("FenceClimb")
 				end
 			end
 
@@ -333,7 +331,7 @@ local function Vault3(ply, mv, ang, t, h)
 
 		TraceParkourMask(h)
 		local hulltr = util.TraceHull(h)
-		local mins, maxs = ply:GetHull()
+		mins, maxs = ply:GetHull()
 
 		h.start = vaultpos
 		h.endpos = h.start
@@ -359,16 +357,14 @@ local function Vault3(ply, mv, ang, t, h)
 			ParkourEvent("vaultkong", ply)
 
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-                ply:EmitSound("Handsteps.".. handstephard)
-				timer.Simple(0.025, function()
-				    ply:EmitSound("Handsteps.".. handstephard)
-				end)
+				ply:EmitSound("Handsteps." .. handstephard)
+				timer.Simple(0.025, function() ply:EmitSound("Handsteps." .. handstephard) end)
 				timer.Simple(0.1, function()
 					ply:EmitSound("Cloth.VaultSwish")
 					ply:FaithVO("Faith.StrainSoft")
 				end)
 				if t.MatType == MAT_GRATE then
-				    ply:EmitSound("FenceClimb")
+					ply:EmitSound("FenceClimb")
 				end
 			end
 
@@ -401,14 +397,14 @@ function Vault4(ply, mv, ang, t, h)
 	tsafety.start = mv:GetOrigin() + aircheck + ang:Forward() * 40
 	tsafety.endpos = tsafety.start - hairvec
 
-	local tsafetyout = util.TraceLine(tsafety)
+	tsafetyout = util.TraceLine(tsafety)
 
 	if tsafetyout.Hit then return false end
 
 	tsafety.start = mv:GetOrigin() + chestvec
 	tsafety.endpos = tsafety.start + ang:Forward() * 150
 
-	local tsafetyout = util.TraceLine(tsafety)
+	tsafetyout = util.TraceLine(tsafety)
 
 	if not tsafetyout.Hit then return false end
 
@@ -447,10 +443,8 @@ function Vault4(ply, mv, ang, t, h)
 	end
 
 	if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-		ply:EmitSound("Handsteps.".. handstepsoft)
-		timer.Simple(0.025, function()
-		    ply:EmitSound("Handsteps.".. handstepsoft)
-		end)
+		ply:EmitSound("Handsteps." .. handstepsoft)
+		timer.Simple(0.025, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 		timer.Simple(0.15, function()
 			ply:EmitSound("Cloth.VaultSwish")
 		end)
@@ -470,11 +464,11 @@ function Vault4(ply, mv, ang, t, h)
 		tsafety.start = ply:EyePos()
 		tsafety.endpos = tsafety.start + ang:Forward() * 100
 
-		local tsafetyout = util.TraceLine(tsafety)
+		tsafetyout = util.TraceLine(tsafety)
 
 		if tsafetyout.MatType == MAT_GRATE then
 		    ply:EmitSound("Handsteps.FenceVault")
-		
+
 			timer.Simple(0.45, function() ply:EmitSound("FenceClimbEnd") end)
 		end
 	end
@@ -486,8 +480,8 @@ function Vault5(ply, mv, ang, t, h)
 	if ply:GetWallrun() == 1 and ply:GetWallrunTime() - CurTime() < 0.75 then return false end
 	if mv:GetVelocity().z < (not ply:GetDive() and -100 or -1000) then return false end
 
-	local eyevec = not ply:Crouching() and eyevec or eyevecduck
-	local neckvec = not ply:Crouching() and neckvec or neckvecduck
+	eyevec = not ply:Crouching() and eyevec or eyevecduck
+	neckvec = not ply:Crouching() and neckvec or neckvecduck
 
 	t.start = mv:GetOrigin() + eyevec + ang:Forward() * 70
 	t.endpos = t.start - neckvec
@@ -552,8 +546,8 @@ function Vault5(ply, mv, ang, t, h)
 
 		if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 		    timer.Simple(0.05, function()
-                ply:EmitSound("Handsteps.".. handstephard)
-		    end)
+				ply:EmitSound("Handsteps." .. handstephard)
+			end)
 			timer.Simple(0.45, function()
 				ply:PlayStepSound(1)
 			end)

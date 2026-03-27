@@ -1762,7 +1762,6 @@ local function JumpThink()
 			local vel_l = vel:Length()
 			local moving = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_MOVELEFT) or ply:KeyDown(IN_MOVERIGHT)
 			local back = ply:KeyDown(IN_BACK)
-			local stepmat = ply.LastStepMat or game.SinglePlayer() and ply:GetNW2String("LastStepMat", "Concrete") or "Concrete"
 			vel.z = 0
 
 			if runanims[BodyAnimString] then
@@ -2040,6 +2039,7 @@ local function JumpThink()
 						BodyAnim:SetAngles(oldnewang)
 					end
 				elseif newang:Forward():Dot(ang:Forward()) < 0.25 then
+					local stepmat = ply.LastStepMat or game.SinglePlayer() and ply:GetNW2String("LastStepMat", "Concrete") or "Concrete"
 					BodyAnimCycle = 0
 
 					BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))

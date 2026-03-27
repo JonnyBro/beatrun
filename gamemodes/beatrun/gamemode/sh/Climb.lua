@@ -1,26 +1,4 @@
-local ClimbingTimes = {5, 1.25, 1, 1, nil, 2}
-
---[[
-local CLIMB_HANG = 1
-local CLIMB_HEAVEUP = 2
-local CLIMB_STRAFELEFT = 3
-local CLIMB_STRAFERIGHT = 4
-local CLIMB_FOLDEDSTART = 5
-local CLIMB_FOLDEDHEAVEUP = 6
-
-
-local climb1 = {
-	followplayer = false,
-	animmodelstring = "new_climbanim",
-	allowmove = true,
-	lockang = false,
-	ignorez = true,
-	smoothend = true,
-	AnimString = "climb1"
-}
-
-local climbstrings = {"climb1", "climb2"}
-]]
+local ClimbingTimes = { 5, 1.25, 1, 1, nil, 2 }
 
 if game.SinglePlayer() and SERVER then
 	util.AddNetworkString("Climb_SPFix")
@@ -60,7 +38,7 @@ local function ClimbingEnd(ply, mv, cmd)
 	local trout = util.TraceHull(tr)
 
 	if trout.Hit then
-		local trout = {}
+		trout = {}
 		tr.output = trout
 		local start = tr.start
 
@@ -101,9 +79,8 @@ local function ClimbingThink(ply, mv, cmd)
 		if mv:KeyPressed(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() + 0.65 or mv:KeyDown(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() then
 			ParkourEvent("hangfoldedheaveup", ply)
 			ply.FootstepLand = false
-            timer.Simple(0.35, function()
-			    ply:PlayStepSound(1)
-			end)
+			timer.Simple(0.35, function() ply:PlayStepSound(1) end)
+
 			ply:SetClimbing(6)
 			ply:SetClimbingTime(0)
 		elseif ply:GetClimbingDelay() < CurTime() then
@@ -184,7 +161,7 @@ local function ClimbingThink(ply, mv, cmd)
 			ply:SetClimbing(0)
 			ply:SetSafetyRollKeyTime(CurTime() + 0.1)
 			ParkourEvent("hangjump", ply)
-			if SERVER then			   
+			if SERVER then
 			    ply:EmitSound("WallrunRelease.Concrete")
 				timer.Simple(0.025, function()
 				    ply:EmitSound("WallrunRelease.Concrete")
@@ -198,7 +175,7 @@ local function ClimbingThink(ply, mv, cmd)
 				BodyLimitX = 90
 				BodyLimitY = 180
 
-				local ang = ply:EyeAngles()
+				ang = ply:EyeAngles()
 				ang.x = 0
 				ang.z = 0
 				BodyAnim:SetAngles(ang)
@@ -206,7 +183,7 @@ local function ClimbingThink(ply, mv, cmd)
 				ply:SendLua("lockang2=false lockang=false BodyLimitX=90 BodyLimitY=180 local ang=LocalPlayer():EyeAngles() ang.x=0 ang.z=0 BodyAnim:SetAngles(ang)")
 			end
 
-			local ang = cmd:GetViewAngles()
+			ang = cmd:GetViewAngles()
 			ang.x = math.min(ang.x, 0)
 			ang = ang:Forward()
 			ang:Mul(350)
@@ -267,10 +244,10 @@ local function ClimbingThink(ply, mv, cmd)
 					ply.FootstepLand = false
 					ParkourEvent("climbheave", ply)
 					timer.Simple(0.6, function()
-						ply:PlayStepSound(1)	
+						ply:PlayStepSound(1)
 					end)
 					timer.Simple(1, function()
-						ply:PlayStepSound(1)	
+						ply:PlayStepSound(1)
 					end)
 				end
 			end
@@ -291,7 +268,6 @@ local function ClimbingThink(ply, mv, cmd)
 			local start = mv:GetOrigin() + wallang:Forward() * 20 + Vector(0, 0, 100) + dir
 			local wallmat = trout.MatType
 			local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
-			local handstephard = HANDSTEPS_HARD_LUT[wallmat] or "ConcreteHard"
 
 
 			tr.start = start
@@ -325,36 +301,27 @@ local function ClimbingThink(ply, mv, cmd)
 
 				util.TraceHull(tr)
 
-				if not trout.Hit then
-					ply:SetClimbingEndOld(ply:GetClimbingEnd())
-					ply:SetClimbing(isright and 4 or 3)
-					ply:SetClimbingStart(mv:GetOrigin())
-					ply:SetClimbingEnd(mv:GetOrigin() + dir)
-					ply:SetClimbingTime(0)
+				if trout.Hit then return end
+				ply:SetClimbingEndOld(ply:GetClimbingEnd())
+				ply:SetClimbing(isright and 4 or 3)
+				ply:SetClimbingStart(mv:GetOrigin())
+				ply:SetClimbingEnd(mv:GetOrigin() + dir)
+				ply:SetClimbingTime(0)
 
-					tr.start = mv:GetOrigin() + ply:GetClimbingAngle():Forward() * 20 + Vector(0, 0, 100) + dir
-					tr.endpos = tr.start - Vector(0, 0, 80)
+				tr.start = mv:GetOrigin() + ply:GetClimbingAngle():Forward() * 20 + Vector(0, 0, 100) + dir
+				tr.endpos = tr.start - Vector(0, 0, 80)
 
-					if isright then
-						ParkourEvent("hangstraferight", ply)
-						timer.Simple(0.4, function()				
-		                    ply:EmitSound("Handsteps.".. handstepsoft)
-			            end)
-						timer.Simple(0.9, function()				
-	                        ply:EmitSound("Handsteps.".. handstepsoft)
-			            end)
-					else
-						ParkourEvent("hangstrafeleft", ply)
-						timer.Simple(0.4, function()				
-	                        ply:EmitSound("Handsteps.".. handstepsoft)
-			            end)
-						timer.Simple(0.9, function()				
-	                        ply:EmitSound("Handsteps.".. handstepsoft)
-			            end)
-					end
-
-					ply:SetClimbingDelay(CurTime() + 0.9)
+				if isright then
+					ParkourEvent("hangstraferight", ply)
+					timer.Simple(0.4, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+					timer.Simple(0.9, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+				else
+					ParkourEvent("hangstrafeleft", ply)
+					timer.Simple(0.4, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+					timer.Simple(0.9, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 				end
+
+			    ply:SetClimbingDelay(CurTime() + 0.9)
 			end
 		end
 	end
@@ -488,16 +455,15 @@ local function ClimbingCheck(ply, mv, cmd)
 	if IsValid(trout.Entity) and trout.Entity.NoClimbing then return end
 
 	ply:SetClimbingAngle(wallang)
-	
-    local wallmat = trout.MatType
-	local tr = ply.ClimbingTraceEnd
-	local trout = ply.ClimbingTraceEndOut
+
+	local wallmat = trout.MatType
 	local upvalue = ply:GetWallrun() == 1 and Vector(0, 0, 90) or Vector(0, 0, 65)
 	local plymins, plymaxs = ply:GetHull()
 	local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
 	local handstephard = HANDSTEPS_HARD_LUT[wallmat] or "ConcreteHard"
-	local handsteprelease = HANDSTEPS_RELEASE_LUT[wallmat] or "ConcreteRelease"
 
+	trout = ply.ClimbingTraceEndOut
+	tr = ply.ClimbingTraceEnd
 	tr.start = mv:GetOrigin() + wallang:Forward() * 45 + upvalue
 	tr.endpos = tr.start - Vector(0, 0, 90)
 	tr.maxs = plymaxs
@@ -557,8 +523,8 @@ local function ClimbingCheck(ply, mv, cmd)
 		return
 	end
 
-	local tr = ply.ClimbingTraceSafety
-	local trout = ply.ClimbingTraceSafetyOut
+	tr = ply.ClimbingTraceSafety
+	trout = ply.ClimbingTraceSafetyOut
 
 	tr.filter = ply
 	tr.start = endpos
@@ -585,8 +551,6 @@ local function ClimbingCheck(ply, mv, cmd)
 	if trout.Hit then return end
 
 	-- local steep = trout.HitNormal:Distance(Vector(0, 0, 1)) > 0.01
-	local tr = ply.ClimbingTraceSafety
-	local trout = ply.ClimbingTraceSafetyOut
 
 	tr.start = mv:GetOrigin()
 	tr.endpos = tr.start + Vector(0, 0, 75)
@@ -596,8 +560,6 @@ local function ClimbingCheck(ply, mv, cmd)
 	if trout.Hit then return end
 
 	local origin = mv:GetOrigin()
-	local tr = ply.ClimbingTraceSafety
-	local trout = ply.ClimbingTraceSafetyOut
 
 	tr.start = startpos
 	tr.endpos = startpos
@@ -684,10 +646,10 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	if wr ~= 0 then
 		ply:SetWallrun(0)
-		ply:EmitSound("Wallrun.".. wallrun)
+		ply:EmitSound("Wallrun." .. wallrun)
 		ply:EmitSound("Cloth.MovementRun")
 		timer.Simple(0.9, function()
-		    ply:EmitSound("Handsteps.".. handstepsoft)
+		    ply:EmitSound("Handsteps." .. handstepsoft)
 		end)
 	end
 
@@ -714,9 +676,7 @@ local function ClimbingCheck(ply, mv, cmd)
 	local folded = mv:GetVelocity().z < -400
 
 	if folded then
-		local tr = ply.ClimbingTraceSafety
-		local trout = ply.ClimbingTraceSafetyOut
-		local mins, maxs = ply:GetCollisionBounds()
+		mins, maxs = ply:GetCollisionBounds()
 		mins.z = maxs.z * 0.25
 
 		tr.start = ply:GetClimbingEnd()
@@ -750,26 +710,21 @@ local function ClimbingCheck(ply, mv, cmd)
 
 		if wr == 1 then
 			event = "climb"
-			wallangc.x = -30				
+			wallangc.x = -30
 		elseif lastvel.z < -200 then
 			event = "climbhard2"
-			timer.Simple(0.05, function()				
-	            ply:EmitSound("Handsteps.".. handstephard)
-			end)
-			timer.Simple(0.7, function()				
-	            ply:EmitSound("Handsteps.".. handstepsoft)
-			end)
+			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstephard) end)
+			timer.Simple(0.7, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+
 			if lastvel.z < -250 then
 			    ply:FaithVO("Faith.Impact")
 			else
 			    ply:FaithVO("Faith.ImpactSoft")
 			end
 		else
-		    if event then
-			    timer.Simple(0.2, function()				
-	                ply:EmitSound("Handsteps.".. handstephard)
-			    end)
-			end
+			timer.Simple(0.15, function()
+	            ply:EmitSound("Handsteps." .. handstephard)
+			end)
 		end
 
 		ParkourEvent(event, ply)
@@ -777,23 +732,21 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	ply.wallang = wallang
 
-	if IsFirstTimePredicted() then
-		if CLIENT or game.SinglePlayer() then
-		    if wallmat == MAT_CONCRETE then
-		        timer.Simple(0.05, function()
-				    ply:EmitSound("Bump.Concrete")
-			    end)
-			end
+	if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
+		if wallmat == MAT_CONCRETE then
+		    timer.Simple(0.05, function()
+				ply:EmitSound("Bump.Concrete")
+			end)
 		end
 
-		ply:EmitSound("Handsteps.".. handstephard)
+		ply:EmitSound("Handsteps." .. handstephard)
 		ply:EmitSound("Cloth.FallShortMedium")
 
 		if CLIENT and IsFirstTimePredicted() then
 			ply.OrigEyeAng = wallang
 			lockang2 = true
 
-			if folded then			
+			if folded then
 				DoImpactBlur(8)
 				lockang2 = false
 				lockang = true

@@ -2,16 +2,16 @@ util.AddNetworkString("DeathStopSound")
 
 hook.Add("EntityTakeDamage", "MEHitSounds", function(ply, dmginfo)
 	if not ply:IsPlayer() then return end
-	
-    if not dmginfo:IsFallDamage() then
-        ply:FaithVO("Faith.ImpactHard")
+
+	if not dmginfo:IsFallDamage() then
+		ply:FaithVO("Faith.ImpactHard")
 	end
-	-- ply:ViewPunch(Angle(math.Rand(-10, -5), 0, math.Rand(0, 5))) -- People cried so hard about this
 
 	if dmginfo:IsBulletDamage() then
 		if ply:GetVelocity():Length() > 400 then return true end -- Block damage if they're going very fast
 
 		ply:EmitSound("mirrorsedge/Flesh_0" .. tostring(math.random(1, 9)) .. ".wav")
+		-- ply:ViewPunch(Angle(math.Rand(-10, -5), 0, math.Rand(0, 5))) -- People cried so hard about this
 
 	elseif not (ply:HasGodMode() or cvars.Bool("sbox_godmode", false)) and (dmginfo:IsFallDamage() and ply:Health() - dmginfo:GetDamage() <= 0) then
 		net.Start("DeathStopSound")

@@ -40,7 +40,7 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 				angdir.y = angdir.y - 180
 
 				local wallnormal = trout.HitNormal
-				local eyeang = Angle(angdir)
+			    eyeang = Angle(angdir)
 				eyeang.x = 0
 
 				tr.start = ply:EyePos() - Vector(0, 0, 5)
@@ -181,9 +181,9 @@ end
 
 function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 
-    local mat = ply.WallRunTraceMat
+	local mat = ply.WallRunTraceMat
 	local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[mat] or "Concrete"
-	
+
 	if wr == 4 then
 		local ang = cmd:GetViewAngles()
 		ang.x = 0
@@ -213,7 +213,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 
 		if mv:KeyPressed(IN_JUMP) then
 			ParkourEvent("jumpwallrun", ply)
-			if SERVER then			   
+			if SERVER then
 			    ply:EmitSound("WallrunRelease.Concrete")
 				timer.Simple(0.025, function()
 				    ply:EmitSound("WallrunRelease.Concrete")
@@ -265,7 +265,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
-				ply:EmitSound("Wallrun.".. wallsound)
+				ply:EmitSound("Wallrun." .. wallsound)
 				timer.Simple(0.025, function()
 				    ply:EmitSound("WallrunRelease.Concrete")
 				end)
@@ -383,7 +383,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
-				ply:EmitSound("Wallrun.".. wallsound)
+				ply:EmitSound("Wallrun." .. wallsound)
 				timer.Simple(0.025, function()
 				    ply:EmitSound("WallrunRelease.Concrete")
 				end)
@@ -394,7 +394,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 
 	if ply:GetWallrunSoundTime() < CurTime() then
 		local delay = nil
-		local wr = ply:GetWallrun()
+		wr = ply:GetWallrun()
 
 		if wr == 1 then
 			delay = math.Clamp(math.abs(ply:GetWallrunTime() - CurTime() - 2.75) / vwrtime * 0.165, 0.175, 0.3)
@@ -403,7 +403,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 		end
 
 		if SERVER then
-			ply:EmitSound("Wallrun.".. wallsound)
+			ply:EmitSound("Wallrun." .. wallsound)
 			ply:EmitSound("Cloth.MovementRun")
 
 			timer.Simple(0.025, function()
@@ -426,12 +426,11 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			BodyAnimCycle = 0
 
 			BodyAnim:SetSequence("jumpair")
-			if SERVER then			   
+			if SERVER then
 			    ply:EmitSound("WallrunRelease.Concrete")
 			    ply:EmitSound("Cloth.MovementRun")
 			end
-		
-			
+
 		elseif game.SinglePlayer() and wr == 1 then
 			net.Start("BodyAnimWallrun")
 				net.WriteBool(false)

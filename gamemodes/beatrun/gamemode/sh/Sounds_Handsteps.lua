@@ -45,15 +45,6 @@ sound.Add({
 })
 
 sound.Add({
-	name = "Handsteps.MetalPipeThin",
-	volume = 1,
-	level = 50,
-	channel = CHAN_STATIC,
-	pitch = {90, 110},
-	sound = {"mirrorsedge/Handsteps/Metal/pipethinhandstep_02.wav", "mirrorsedge/Handsteps/Metal/pipethinhandstep_03.wav", "mirrorsedge/Handsteps/Metal/pipethinhandstep_04.wav", "mirrorsedge/Handsteps/Metal/pipethinhandstep_05.wav", "mirrorsedge/Handsteps/Metal/pipethinhandstep_06.wav", "mirrorsedge/Handsteps/Metal/pipethinhandstep_07.wav", "mirrorsedge/Handsteps/Metal/pipethinhandstep_08.wav", "mirrorsedge/Handsteps/Metal/pipethinhandstep_09.wav", "mirrorsedge/Handsteps/Metal/pipethinhandstep_10.wav"}
-})
-
-sound.Add({
 	name = "Handsteps.MetalSoft",
 	volume = 1,
 	level = 40,
@@ -86,7 +77,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release1.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release2.wav"--[[, "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release3.wav"--]]}
+	sound = {"mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release1.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release2.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release3.wav"}
 })
 
 sound.Add({
@@ -161,10 +152,4 @@ HANDSTEPS_HARD_LUT = {
 	[MAT_METAL] = "MetalPipeHard",
 	[MAT_GRATE] = "MetalPipeHard",
 	[MAT_VENT] = "DuctHard"
-}
-
-HANDSTEPS_RELEASE_LUT = {
-	[MAT_CONCRETE] = "ConcreteRelease",
-	[MAT_METAL] = "MetalPipeRelease",
-	[MAT_GRATE] = "MetalPipeRelease"
 }

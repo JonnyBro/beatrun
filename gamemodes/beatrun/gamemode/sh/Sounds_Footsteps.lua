@@ -100,7 +100,7 @@ sound.Add({
 -- Concrete Dirt--
 sound.Add({
 	name = "Walk.ConcreteDirt",
-	volume = 1,
+	volume = 0.5,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -109,7 +109,7 @@ sound.Add({
 
 sound.Add({
 	name = "Sneak.ConcreteDirt",
-	volume = 1,
+	volume = 0.5,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -123,7 +123,7 @@ sound.Add({
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run1.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run2.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run3.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run4.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run5.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run6.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run7.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run8.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run9.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run10.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run11.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run12.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run13.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run14.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run15.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run16.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run17.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run18.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run19.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run20.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run21.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run22.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run23.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run24.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run25.wav"}
-}) 
+})
 
 sound.Add({
 	name = "Walk.ConcreteGrit",
@@ -820,7 +820,7 @@ sound.Add({
 
 sound.Add({
 	name = "Walk.Carpet",
-	volume = 1,
+	volume = 0.5,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -829,7 +829,7 @@ sound.Add({
 
 sound.Add({
 	name = "Sneak.Carpet",
-	volume = 1,
+	volume = 0.5,
 	level = 35,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -945,8 +945,8 @@ FOOTSTEPS_LUT = {
 	["player/footsteps/duct"] = "Duct",
 	["player/footsteps/wood"] = "Wood",
 	["player/footsteps/chainlink"] = "MetalCrane",
-    ["player/footsteps/slosh"] = "Water",
-    ["player/footsteps/wade"] = "Water"
+	["player/footsteps/slosh"] = "Water",
+	["player/footsteps/wade"] = "Water"
 }
 
 FOOTSTEPS_WALK_LUT = {
@@ -973,14 +973,14 @@ FOOTSTEPS_WALK_LUT = {
 }
 
 FOOTSTEPS_SNEAK_LUT = {
-    ["player/footsteps/concrete"] = "Concrete",
+	["player/footsteps/concrete"] = "Concrete",
 	["physics/plaster/drywall_footstep"] = "ConcreteGrit",
 	["physics/wood/wood_box_footstep"] = "WoodPlank",
 	["player/footsteps/woodpanel"] = "WoodPlank",
 	["player/footsteps/wood"] = "Wood",
 	["player/footsteps/duct"] = "Duct",
 	["player/footsteps/grass"] = "Carpet",
-	["player/footsteps/dirt"] = "ConcreteDirt",
+	["player/footsteps/dirt"] = "Carpet",
 	["physics/glass/glass_sheet_step"] = "Glass",
 	["player/footsteps/metal"] = "Metal",
 	["player/footsteps/metalgrate"] = "Gantry",

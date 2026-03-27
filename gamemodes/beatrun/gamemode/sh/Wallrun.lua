@@ -66,9 +66,9 @@ local wrmaxs = Vector(16, 16, 16)
 
 local function WallrunningThink(ply, mv, cmd)
 
-    local mat = ply.WallRunTraceMat
+	mat = ply.WallRunTraceMat
 	local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[mat] or "Concrete"
-	
+
 	local wr = ply:GetWallrun()
 
 	if wr ~= 0 and ply:OnGround() then
@@ -119,7 +119,11 @@ local function WallrunningThink(ply, mv, cmd)
 
 		if mv:KeyPressed(IN_JUMP) then
 			ParkourEvent("jumpwallrun", ply)
-
+			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
+			    ply:EmitSound("WallrunRelease.Concrete")
+				timer.Simple(0.025, function() ply:EmitSound("WallrunRelease.Concrete") end)
+				ply:EmitSound("Cloth.MovementRun")
+			end
 			ply:SetSafetyRollKeyTime(CurTime() + 0.001)
 
 			vel.z = 30
@@ -182,8 +186,9 @@ local function WallrunningThink(ply, mv, cmd)
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
-				ply:EmitSound("Wallrun.".. wallsound)
+				ply:EmitSound("Wallrun." .. wallsound)
 				ply:EmitSound("Cloth.MovementRun")
+				timer.Simple(0.025, function() ply:EmitSound("WallrunRelease.Concrete") end)
 			end
 		end
 	end
@@ -298,15 +303,16 @@ local function WallrunningThink(ply, mv, cmd)
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
-				ply:EmitSound("Wallrun.".. wallsound)
+				ply:EmitSound("Wallrun." .. wallsound)
 				ply:EmitSound("Cloth.MovementRun")
+				timer.Simple(0.025, function() ply:EmitSound("WallrunRelease.Concrete") end)
 			end
 		end
 	end
 
 	if ply:GetWallrunSoundTime() < CurTime() then
 		local delay = nil
-		local wr = ply:GetWallrun()
+		wr = ply:GetWallrun()
 
 		if wr == 1 then
 			delay = math.Clamp(math.abs(ply:GetWallrunTime() - CurTime() - 2.75) / vwrtime * 0.165, 0.175, 0.3)
@@ -315,7 +321,7 @@ local function WallrunningThink(ply, mv, cmd)
 		end
 
 		if SERVER then
-			ply:EmitSound("Wallrun.".. wallsound)
+			ply:EmitSound("Wallrun." .. wallsound)
 			ply:EmitSound("Cloth.MovementRun")
 
 			timer.Simple(0.025, function()
@@ -356,7 +362,7 @@ local realistic = GetConVar("Beatrun_LeRealisticClimbing")
 
 local function WallrunningCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
-	
+
 	if not ply.WallrunTrace then
 		ply.WallrunTrace = {}
 		ply.WallrunTraceOut = {}
@@ -406,7 +412,7 @@ local function WallrunningCheck(ply, mv, cmd)
 				angdir.y = angdir.y - 180
 
 				local wallnormal = trout.HitNormal
-				local eyeang = Angle(angdir)
+				eyeang = Angle(angdir)
 				eyeang.x = 0
 
 				tr.start = ply:EyePos() - Vector(0, 0, 5)

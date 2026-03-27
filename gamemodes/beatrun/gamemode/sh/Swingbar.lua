@@ -48,13 +48,15 @@ local function SwingbarCheck(ply, mv, cmd)
 		if mv:KeyDown(IN_FORWARD) or mv:GetVelocity():Length() > 150 then
 			ply:SetSBOffsetSpeed(2)
 			ply:EmitSound("Handsteps.MetalPipeSwing")
-            ply:EmitSound("Cloth.Swing")
+			ply:EmitSound("Cloth.Swing")
 		else
 			ply:SetSBOffsetSpeed(0)
 		end
 
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-			ply:EmitSound("Handsteps.MetalPipeThin")
+			ply:EmitSound("Handsteps.MetalPipeHard")
+			timer.Simple(0.025, function() ply:EmitSound("Handsteps.MetalPipeHard") end)
+
 			ply:EmitSound("Cloth.MovementSneak")
 		end
 	end
@@ -157,7 +159,7 @@ local function SwingbarThink(ply, mv, cmd)
 			ply:SetSBOffsetSpeed(2.4)
 		end
 
-		local ang = cmd:GetViewAngles()
+		ang = cmd:GetViewAngles()
 		ang.x = 0
 
 		local vel = ang:Forward() * 125 * ply:GetSBOffsetSpeed()

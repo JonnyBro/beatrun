@@ -10,7 +10,7 @@ local slide_sounds = {
 	[MAT_GLASS] = {"Slide.Glass"},
 	[MAT_GRATE] = {"Slide.Gantry"},
 	[MAT_PLASTIC] = {"Slide.Tarp"},
-	[MAT_SLOSH] = {"Slide.Concrete"},
+	[MAT_SLOSH] = {"Slide.Water"},
 	[MAT_WOOD] = {"Slide.Wood"}
 }
 
@@ -237,14 +237,14 @@ local function SlideSurfaceSound(ply, pos)
 
 	local tr = util.TraceLine(trace_tbl)
 	local sndtable = slide_sounds[tr.MatType] or slide_sounds[0]
-    
+
 	if not ply.DiveSliding then
-	    ply:EmitSound("Cloth.FallShortMedium")
-    else
-        ply:EmitSound("Cloth.FallShortHard")
+		ply:EmitSound("Cloth.FallShortMedium")
+	else
+		ply:EmitSound("Cloth.FallShortHard")
 	end
 	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
-	
+
 	return tr.MatType
 end
 
@@ -536,8 +536,8 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		ply:SetViewOffsetDucked(Vector(0, 0, 28) + eyeang * -25)
 		local slidedelta = (ply:GetSlidingTime() - CT) / slidetime
-		local speed = ply:GetSlidingVel() * math.min(1.75, (ply:GetSlidingTime() - CT + 0.5) / slidetime) * qslide_speedmult
 
+		speed = ply:GetSlidingVel() * math.min(1.75, (ply:GetSlidingTime() - CT + 0.5) / slidetime) * qslide_speedmult
 		mv:SetVelocity(ply:GetSlidingAngle():Forward() * speed)
 
 		local pos = mv:GetOrigin()
@@ -567,7 +567,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			mv:SetVelocity(mv:GetVelocity() - ply:GetSlidingAngle():Right() * ply:GetSlidingStrafe())
 
 			if mv:KeyPressed(IN_JUMP) then
-				local vel = mv:GetVelocity()
+				vel = mv:GetVelocity()
 				vel:Mul(math.min(math.max(speed, 300) / 300, 1))
 				vel.z = 175
 
