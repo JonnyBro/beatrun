@@ -153,7 +153,7 @@ sound.Add({
 -- Marble --
 sound.Add({
 	name = "Footsteps.Marble",
-	volume = 0.8,
+	volume = 1,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -162,7 +162,7 @@ sound.Add({
 
 sound.Add({
 	name = "Walk.Marble",
-	volume = 0.75,
+	volume = 0.85,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -1022,7 +1022,6 @@ FOOTSTEPS_LAND_LUT = {
 	["player/footsteps/concrete"] = "Concrete",
 	["player/footsteps/duct"] = "Duct",
 	["player/footsteps/metal"] = "Metal",
-	["player/footsteps/grass"] = "",
 	["physics/metal/metal_box_footstep"] = "Metal",
 	["player/footsteps/chainlink"] = "MetalCrane",
 	["player/footsteps/tile"] = "Marble",
