@@ -1,4 +1,4 @@
-local ClimbingTimes = {5, 1.25, 1, 1, nil, 2}
+local ClimbingTimes = { 5, 1.25, 1, 1, nil, 2 }
 
 if game.SinglePlayer() and SERVER then
 	util.AddNetworkString("Climb_SPFix")
@@ -244,8 +244,8 @@ local function ClimbingThink(ply, mv, cmd)
 					ply:SetClimbing(2)
 					ply.FootstepLand = false
 					ParkourEvent("climbheave", ply)
-					
-					timer.Simple(0.6, function() ply:PlayStepSound(1) end)			
+
+					timer.Simple(0.6, function() ply:PlayStepSound(1) end)
 					timer.Simple(1, function() ply:PlayStepSound(1) end)
 				end
 			end
@@ -396,7 +396,7 @@ end
 
 hook.Add("StartCommand", "ClimbingRemoveInput", ClimbingRemoveInput)
 
-local realistic = CreateConVar("Beatrun_LeRealisticClimbing", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Makes you be able to climb and wallrun only if you have runnerhands equipped.")
+local realistic = CreateConVar("Beatrun_LeRealisticClimbing", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY }, "Makes you be able to climb and wallrun only if you have runnerhands equipped.")
 
 local function ClimbingCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end

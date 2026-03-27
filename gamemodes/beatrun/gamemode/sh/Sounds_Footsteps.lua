@@ -19,8 +19,8 @@ sound.Add({
 
 sound.Add({
 	name = "Sneak.Concrete",
-	volume = 0.75,
-	level = 35,
+	volume = 0.5,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak1.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak2.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak3.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak4.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak5.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak6.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak7.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak8.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak9.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak10.wav"}
@@ -118,7 +118,7 @@ sound.Add({
 -- Concrete Grit --
 sound.Add({
 	name = "Footsteps.ConcreteGrit",
-	volume = 1,
+	volume = 0,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -127,7 +127,7 @@ sound.Add({
 
 sound.Add({
 	name = "Walk.ConcreteGrit",
-	volume = 1,
+	volume = 0.75,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -135,8 +135,8 @@ sound.Add({
 }) -- Reusing quieter running footsteps if no other option is available
 sound.Add({
 	name = "Sneak.ConcreteGrit",
-	volume = 1,
-	level = 35,
+	volume = 0.5,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run1.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run2.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run3.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run4.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run5.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run6.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run7.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run8.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run9.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run10.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run11.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run12.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run13.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run14.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run15.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run16.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run17.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run18.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run19.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run20.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run21.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run22.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run23.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run24.wav", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run25.wav"}
