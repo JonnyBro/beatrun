@@ -53,6 +53,8 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 
 				if not trout.Hit then return end
 
+				ply.WallRunTraceMat = trout.MatType
+
 				if SERVER then
 					ply:EmitSound("Bump.Concrete")
 				end
@@ -180,9 +182,6 @@ end
 
 function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 
-	local mat = ply.WallRunTraceMat
-	local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[mat] or "Concrete"
-
 	if wr == 4 then
 		local ang = cmd:GetViewAngles()
 		ang.x = 0
@@ -252,6 +251,25 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
 
+		do
+			local tr = ply.WallrunTrace
+			local trout = ply.WallrunTraceOut
+			local eyeang = ply:EyeAngles()
+			eyeang.x = 0
+
+			tr.start = ply:EyePos() - Vector(0, 0, 5)
+			tr.endpos = tr.start + eyeang:Forward() * 40
+			tr.filter = ply
+			tr.collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+			tr.output = trout
+
+			util.TraceLine(tr)
+
+			if trout.Hit then
+				ply.WallRunTraceMat = trout.MatType
+			end
+		end
+
 		if mv:KeyPressed(IN_JUMP) and (mv:KeyDown(IN_MOVELEFT) or mv:KeyDown(IN_MOVERIGHT)) then
 			local dir = mv:KeyDown(IN_MOVERIGHT) and 1 or -1
 			local vel = mv:GetVelocity()
@@ -264,6 +282,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
+				local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[ply.WallRunTraceMat] or "Concrete"
 				ply:EmitSound("Wallrun." .. wallsound)
 				timer.Simple(0.025, function()
 				    ply:EmitSound("WallrunRelease.Concrete")
@@ -368,6 +387,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 				ply:SetWallrunDir(trout.HitNormal)
 			end
 		end
+
 		ply.WallRunTraceMat = trout.MatType
 
 		if mv:KeyPressed(IN_JUMP) and ply:GetWallrunTime() - CurTime() ~= hwrtime then
@@ -382,6 +402,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			ParkourEvent(event, ply)
 
 			if IsFirstTimePredicted() then
+				local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[ply.WallRunTraceMat] or "Concrete"
 				ply:EmitSound("Wallrun." .. wallsound)
 				timer.Simple(0.025, function()
 				    ply:EmitSound("WallrunRelease.Concrete")
@@ -402,6 +423,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 		end
 
 		if SERVER then
+			local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[ply.WallRunTraceMat] or "Concrete"
 			ply:EmitSound("Wallrun." .. wallsound)
 			ply:EmitSound("Cloth.MovementRun")
 

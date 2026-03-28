@@ -20,8 +20,6 @@ hook.Add("PlayerUse", "DoorBash", function(ply, ent)
 
 		net.Start("DoorBashAnim")
 		net.Send(ply)
-		ply:ViewPunch(Angle(15, 5, -10))
-		ply:FaithVO("Faith.Impact")
 
 		ent:SetSaveValue("speed", ent.oldspeed * 4)
 		ent:Use(ply)
