@@ -245,8 +245,8 @@ local function ClimbingThink(ply, mv, cmd)
 					ply.FootstepLand = false
 					ParkourEvent("climbheave", ply)
 
-					timer.Simple(0.6, function() ply:PlayStepSound(1) end)
-					timer.Simple(1, function() ply:PlayStepSound(1) end)
+					timer.Simple(0.55, function() ply:PlayStepSound(1) end)
+					timer.Simple(0.95, function() ply:PlayStepSound(1) end)
 				end
 			end
 		end
@@ -649,9 +649,6 @@ local function ClimbingCheck(ply, mv, cmd)
 		timer.Simple(0.025, function()
 			ply:EmitSound("WallrunRelease.Concrete")
 		end)
-		timer.Simple(0.9, function()
-		    ply:EmitSound("Handsteps." .. handstepsoft)
-		end)
 	end
 
 	local climbvalue = 1
@@ -703,20 +700,47 @@ local function ClimbingCheck(ply, mv, cmd)
 	if folded then
 		ply:SetClimbing(5)
 		ply:SetClimbingDelay(CurTime() + 0.8)
+		local dmg
+		local info = DamageInfo()
 
 		ParkourEvent("hangfoldedstart", ply)
+		if lastvel.z < -800 then
+			timer.Simple(0.1, function() ply:FaithVO("Faith.ImpactHard") end)			
+			dmg = ply:Health() * 0.4
+			info:SetDamage(dmg)
+			info:SetDamageType(DMG_FALL)
+			info:SetAttacker(game.GetWorld())
+			info:SetInflictor(game.GetWorld())
+			ply:TakeDamageInfo(info)
+		else
+			timer.Simple(0.1, function() ply:FaithVO("Faith.Impact") end)
+			if lastvel.z < -500 then
+				dmg = ply:Health() * 0.1
+				info:SetDamage(dmg)
+				info:SetDamageType(DMG_FALL)
+				info:SetAttacker(game.GetWorld())
+				info:SetInflictor(game.GetWorld())
+				ply:TakeDamageInfo(info)
+			end
+		end
+		timer.Simple(0.12, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 
 	else
 		local event = "climbhard"
 
 		if wr == 1 then
 			event = "climb"
+			timer.Simple(0.95, function()			
+				if ply:GetClimbing() == 1 or ply:GetClimbing() == 2 then
+					ply:EmitSound("Handsteps." .. handstepsoft)
+				end
+			end)
 			wallangc.x = -30
 		elseif lastvel.z < -200 then
 			event = "climbhard2"
 			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstephard) end)
 			timer.Simple(0.7, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-
+			
 			if lastvel.z < -250 then
 			    ply:FaithVO("Faith.Impact")
 			else

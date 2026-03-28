@@ -1,9 +1,9 @@
-local quakejump = CreateConVar("Beatrun_QuakeJump", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
-local sidestep = CreateConVar("Beatrun_SideStep", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
-local speedLimit = CreateConVar("Beatrun_SpeedLimit", 325, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
+local quakejump = CreateConVar("Beatrun_QuakeJump", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local sidestep = CreateConVar("Beatrun_SideStep", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local speedLimit = CreateConVar("Beatrun_SpeedLimit", 325, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
-CreateConVar("Beatrun_Disarm", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "", 0, 1)
-CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
+CreateConVar("Beatrun_Disarm", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 0, 1)
+CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 local function Hardland(jt)
 	local ply = LocalPlayer()
@@ -84,7 +84,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 	end
 
 	if ply:KeyDown(IN_WALK) then
-		steptime = steptime * 1.45
+		steptime = steptime * 1.5
 	end
 
 	if ply:InOverdrive() then
@@ -108,7 +108,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 	if mat == "player/footsteps/ladder" then return end
 
-	ply.LastStepMat = newsound or walksound
+	ply.LastStepMat = newsound or walksound or releasesound
 	if game.SinglePlayer() then ply:SetNW2String("LastStepMat", newsound) end
 
 	ply.FootstepReleaseLand = true
@@ -230,13 +230,13 @@ end)
 
 hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	local usingrh = ply:UsingRH()
-	local ismoving = (mv:KeyDown(IN_FORWARD) or not ply:OnGround() or ply:Crouching()) and ply:Alive() and (mv:GetVelocity():Length() > 50 or ply:GetMantle() ~= 0 or ply:Crouching())
+	local ismoving = (mv:KeyDown(IN_FORWARD) or not ply:OnGround() or ply:Crouching()) and ply:Alive() and (mv:GetVelocity():Length() > 145 or ply:GetMantle() ~= 0 or ply:Crouching())
 
 	if (CLIENT or game.SinglePlayer()) and CurTime() > (ply:GetStepRelease() or 0) and ply.FootstepReleaseLand then
 		local newsound = FOOTSTEPS_RELEASE_LUT[ply.LastFootstepSound] or "Concrete"
 
 		if ply:GetVelocity():Length() > 150 or newsound == "Gantry" or newsound == "Duct" then
-			ply:EmitSound("Release." .. newsound)
+			ply:EmitSound("Release." .. newsound)		
 		elseif ply:WaterLevel() > 0 then
 			ply:EmitSound("Release.Water")
 		end
