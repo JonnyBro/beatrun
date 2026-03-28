@@ -1063,7 +1063,6 @@ eventsounds = {
 		[0.05] = "Cloth.MovementRun",
 	},
 	hangfoldedstart = {
-		[0.1] = "Faith.Impact",
 		[0.05] = "Cloth.Fall"
 	},
 	hangheaveup = {
@@ -1071,7 +1070,7 @@ eventsounds = {
 		[0.01] = "Cloth.MovementWalk",
 		[0.3] = "WallrunRelease.Concrete",
 		[0.5] = "Cloth.MovementWalk",
-		[0.7] = "WallrunRelease.Concrete"
+		[0.7] = "WallrunRelease.Concrete",
 	},
 	hanghardstart = {
 		[0] = "Faith.Impact",
