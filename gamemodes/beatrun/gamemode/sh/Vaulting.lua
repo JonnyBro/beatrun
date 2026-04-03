@@ -359,10 +359,6 @@ local function Vault3(ply, mv, ang, t, h)
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 				ply:EmitSound("Handsteps." .. handstephard)
 				timer.Simple(0.025, function() ply:EmitSound("Handsteps." .. handstephard) end)
-				timer.Simple(0.1, function()
-					ply:EmitSound("Cloth.VaultSwish")
-					ply:FaithVO("Faith.StrainSoft")
-				end)
 				if t.MatType == MAT_GRATE then
 					ply:EmitSound("FenceClimb")
 				end
@@ -444,20 +440,7 @@ function Vault4(ply, mv, ang, t, h)
 
 	if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 		ply:EmitSound("Handsteps." .. handstephard)
-		timer.Simple(0.025, function() ply:EmitSound("Handsteps." .. handstephard) end)
-		timer.Simple(0.15, function()
-			ply:EmitSound("Cloth.VaultSwish")
-		end)
-		timer.Simple(0.2, function()
-			ply:EmitSound("Vault")
-		end)
-		timer.Simple(0.3, function()
-			ply:EmitSound("Cloth.SideStep")
-		end)
-		timer.Simple(0.45, function()
-			ply:EmitSound("Cloth.MovementWalk")
-		end)
-		ply:FaithVO("Faith.StrainMedium")
+		timer.Simple(0.075, function() ply:EmitSound("Handsteps." .. handstephard) end)
 	end
 
 	if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then

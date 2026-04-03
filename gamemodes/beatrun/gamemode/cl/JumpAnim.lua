@@ -259,6 +259,7 @@ local events = {
 	vaultkong = true,
 	vaultonto = true,
 	vaultover = true,
+	vaulthigh = true,
 	vaultontohigh = true,
 	ladderclimbright = true,
 	meleeairstill = true
@@ -1101,12 +1102,21 @@ eventsounds = {
 		[0.5] = "Cloth.MovementRun",
 		[0.3] = "Cloth.VaultSwish"
 	},
+	vaultoverhigh = {
+		[0.1] = "Vault",
+		[0.05] = "Faith.StrainMedium",
+		[0.2] = "Cloth.VaultSwish",
+		[0.3] = "Cloth.SideStep",
+		[0.4] = "Cloth.MovementRun"
+	},
 	vaultonto = {
-		[0.025] = "Cloth.MovementRun",
-		[0.1] = "Faith.StrainSoft",
+		[0] = "Vault",
+		[0.075] = "Faith.StrainSoft",
 	},
 	vaultkong = {
-		[0.025] = "Vault"
+		[0.025] = "Vault",
+		[0.075] = "Faith.StrainSoft",
+		[0.055] = "Cloth.VaultSwish"
 	},
 	snatchscar = {
 		[0.35] = "Melee.Foot",

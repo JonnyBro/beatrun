@@ -3,7 +3,7 @@ local hwrtime = 1.5
 tiltdir = 1
 local tilt = 0
 
-PuristWallrun = CreateConVar("Beatrun_PuristWallrun", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE }, "'Realistic' wallrunning", 0, 1)
+PuristWallrun = CreateConVar("Beatrun_PuristWallrun", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "'Realistic' wallrunning", 0, 1)
 
 function WallrunningTilt(ply, pos, ang, fov)
 	local wr = ply:GetWallrun()
@@ -121,7 +121,10 @@ local function WallrunningThink(ply, mv, cmd)
 			ParkourEvent("jumpwallrun", ply)
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 			    ply:EmitSound("WallrunRelease.Concrete")
-				timer.Simple(0.025, function() ply:EmitSound("WallrunRelease.Concrete") end)
+				timer.Simple(0.025, function()
+					ply:EmitSound("WallrunRelease.Concrete")
+					ply:EmitSound("Cloth.SideStep")
+				end)
 				ply:EmitSound("Cloth.MovementRun")
 			end
 			ply:SetSafetyRollKeyTime(CurTime() + 0.001)

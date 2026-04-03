@@ -215,6 +215,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			    ply:EmitSound("WallrunRelease.Concrete")
 				timer.Simple(0.025, function()
 				    ply:EmitSound("WallrunRelease.Concrete")
+					ply:EmitSound("Cloth.SideStep")
 				end)
 			    ply:EmitSound("Cloth.MovementRun")
 			end
@@ -447,10 +448,6 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			BodyAnimCycle = 0
 
 			BodyAnim:SetSequence("jumpair")
-			if SERVER then
-			    ply:EmitSound("WallrunRelease.Concrete")
-			    ply:EmitSound("Cloth.MovementRun")
-			end
 
 		elseif game.SinglePlayer() and wr == 1 then
 			net.Start("BodyAnimWallrun")
