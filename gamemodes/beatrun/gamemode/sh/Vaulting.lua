@@ -158,7 +158,6 @@ local function Vault1(ply, mv, ang, t, h)
 				if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 		        timer.Simple(0.01, function()
 					ply:EmitSound("Handsteps." .. handstepsoft)
-					ply:EmitSound("Vault")
 		        end)
 			    timer.Simple(0.1, function()
 					ply:PlayStepSound(1)
