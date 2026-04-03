@@ -1004,7 +1004,7 @@ FOOTSTEPS_RELEASE_LUT = {
 	["player/footsteps/tarp"] = "Tarp",
 	["player/footsteps/metalgrate"] = "Gantry",
 	["player/footsteps/concrete"] = "Concrete",
-	["player/footsteps/metal"] = "MetalBox",
+	["player/footsteps/metal"] = "Metal",
 	["physics/metal/metal_box_footstep"] = "MetalBox",
 	["player/footsteps/tile"] = "Marble",
 	["physics/wood/wood_box_footstep"] = "WoodPlank",
@@ -1018,7 +1018,7 @@ FOOTSTEPS_RELEASE_LUT = {
 
 FOOTSTEPS_LAND_LUT = {
 	["physics/glass/glass_sheet_step"] = "Glass",
-	["player/footsteps/tarp"] = "Tarp",
+	--["physics/rubber/"] = "Tarp",
 	["player/footsteps/concrete"] = "Concrete",
 	["player/footsteps/duct"] = "Duct",
 	["player/footsteps/metal"] = "Metal",

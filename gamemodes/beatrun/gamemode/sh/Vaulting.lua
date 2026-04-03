@@ -158,6 +158,7 @@ local function Vault1(ply, mv, ang, t, h)
 				if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 		        timer.Simple(0.01, function()
 					ply:EmitSound("Handsteps." .. handstepsoft)
+					ply:EmitSound("Vault")
 		        end)
 			    timer.Simple(0.1, function()
 					ply:PlayStepSound(1)
@@ -239,7 +240,7 @@ local function Vault2(ply, mv, ang, t, h)
 		TraceSetData(h, vaultpos, vaultpos, mins, maxs, ply)
 
 		local hulltr2 = util.TraceHull(h)
-		local handstephard = HANDSTEPS_HARD_LUT[t.MatType] or "ConcreteHard"
+		local handstepsoft = HANDSTEPS_SOFT_LUT[t.MatType] or "ConcreteSoft"
 
 		if not hulltr.Hit and not hulltr2.Hit then
 
@@ -256,7 +257,7 @@ local function Vault2(ply, mv, ang, t, h)
 			ParkourEvent("vault", ply)
 
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-				ply:EmitSound("Handsteps." .. handstephard)
+				ply:EmitSound("Handsteps." .. handstepsoft)
 				timer.Simple(0.1, function()
 					ply:EmitSound("Cloth.VaultSwish")
 					ply:EmitSound("Vault")
@@ -432,7 +433,7 @@ function Vault4(ply, mv, ang, t, h)
 	ply.MantleInitVel = mv:GetVelocity()
 	ply.MantleInitVel.z = 0
 	ply.MantleMatType = t.MatType
-	local handstepsoft = HANDSTEPS_SOFT_LUT[tsafetyout.MatType] or "ConcreteSoft"
+	local handstephard = HANDSTEPS_HARD_LUT[tsafetyout.MatType] or "ConcreteHard"
 
 	ParkourEvent("vaulthigh", ply)
 
@@ -443,8 +444,8 @@ function Vault4(ply, mv, ang, t, h)
 	end
 
 	if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-		ply:EmitSound("Handsteps." .. handstepsoft)
-		timer.Simple(0.025, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+		ply:EmitSound("Handsteps." .. handstephard)
+		timer.Simple(0.025, function() ply:EmitSound("Handsteps." .. handstephard) end)
 		timer.Simple(0.15, function()
 			ply:EmitSound("Cloth.VaultSwish")
 		end)
@@ -523,7 +524,7 @@ function Vault5(ply, mv, ang, t, h)
 	h.mins, h.maxs = ply:GetHull()
 
 	local hulltr = util.TraceHull(h)
-	local handstephard = HANDSTEPS_HARD_LUT[t.MatType] or "ConcreteHard"
+	local handstepsoft = HANDSTEPS_SOFT_LUT[t.MatType] or "ConcreteSoft"
 
 	if not hulltr.Hit then
 		if t.HitNormal.x ~= 0 then
@@ -546,7 +547,10 @@ function Vault5(ply, mv, ang, t, h)
 
 		if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 		    timer.Simple(0.05, function()
-				ply:EmitSound("Handsteps." .. handstephard)
+				ply:EmitSound("Handsteps." .. handstepsoft)
+			end)
+			timer.Simple(0.1, function()
+				ply:EmitSound("Handsteps." .. handstepsoft)
 			end)
 			timer.Simple(0.45, function()
 				ply:PlayStepSound(1)

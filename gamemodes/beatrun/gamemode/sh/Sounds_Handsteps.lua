@@ -148,6 +148,7 @@ HANDSTEPS_SOFT_LUT = {
 HANDSTEPS_HARD_LUT = {
 	[MAT_GLASS] = "GlassHard",
 	[MAT_TILE] = "GlassHard",
+	[MAT_WOOD] = "GlassHard",
 	[MAT_CONCRETE] = "ConcreteHard",
 	[MAT_METAL] = "MetalPipeHard",
 	[MAT_GRATE] = "MetalPipeHard",
