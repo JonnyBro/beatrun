@@ -537,7 +537,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		ply:SetViewOffsetDucked(Vector(0, 0, 28) + eyeang * -25)
 		local slidedelta = (ply:GetSlidingTime() - CT) / slidetime
 
-		speed = ply:GetSlidingVel() * math.min(1.75, (ply:GetSlidingTime() - CT + 0.5) / slidetime) * qslide_speedmult
+		local speed = ply:GetSlidingVel() * math.min(1.75, (ply:GetSlidingTime() - CT + 0.5) / slidetime) * qslide_speedmult
 		mv:SetVelocity(ply:GetSlidingAngle():Forward() * speed)
 
 		local pos = mv:GetOrigin()
@@ -567,7 +567,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			mv:SetVelocity(mv:GetVelocity() - ply:GetSlidingAngle():Right() * ply:GetSlidingStrafe())
 
 			if mv:KeyPressed(IN_JUMP) then
-				vel = mv:GetVelocity()
+				local vel = mv:GetVelocity()
 				vel:Mul(math.min(math.max(speed, 300) / 300, 1))
 				vel.z = 175
 
