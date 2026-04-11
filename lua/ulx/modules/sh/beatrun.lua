@@ -5,6 +5,7 @@ local CATEGORY_NAME = "Beatrun"
 -- !setlevel
 function ulx.setlevel(calling_ply, target_plys, level)
 	local affected_plys = {}
+
 	for i = 1, #target_plys do
 		local ply = target_plys[i]
 		local code = string.format([[
@@ -14,9 +15,13 @@ function ulx.setlevel(calling_ply, target_plys, level)
 		]], level, level)
 
 		ply:SendLua(code)
+
+		table.insert(affected_plys, ply)
 	end
 
-	ulx.fancyLogAdmin(calling_ply, "#A changed #T level to #i", affected_plys, level)
+	if #affected_plys > 0 then
+		ulx.fancyLogAdmin(calling_ply, "#A set level of #T to #s", affected_plys, tostring(level))
+	end
 end
 
 local setlevel = ulx.command(CATEGORY_NAME, "ulx setlevel", ulx.setlevel, "!setlevel")
