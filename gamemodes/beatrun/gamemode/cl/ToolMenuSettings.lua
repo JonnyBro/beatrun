@@ -204,8 +204,6 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		weaponSpawnToggle:SetDark(true)
 		weaponSpawnToggle:SetChecked(GetConVar("Beatrun_AllowWeaponSpawn"):GetBool())
 		function weaponSpawnToggle:OnChange(value)
-			print(value)
-			print(value and 1 or 0)
 			ChangeConvar("Beatrun_AllowWeaponSpawn", value and 1 or 0)
 		end
 		panel:AddItem(weaponSpawnToggle)
