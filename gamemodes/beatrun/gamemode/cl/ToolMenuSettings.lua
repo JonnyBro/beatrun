@@ -6,12 +6,6 @@ local loadoutValues = {
 	["tfa_"] = "#beatrun.randomtfaloadouts",
 }
 
-local randomLoadouts = GetConVar("Beatrun_RandomLoadouts")
-
-if not loadoutValues[randomLoadouts:GetString()] then
-	randomLoadouts:SetString("beatrun")
-end
-
 local function ToggleGamemode(gm)
 	net.Start("Beatrun_ToggleGamemode")
 		net.WriteString(gm)
@@ -438,7 +432,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(EventmodeButton)
 
 		local loadoutSelect = vgui.Create("DComboBox")
-		loadoutSelect:SetValue(loadoutValues[randomLoadouts:GetString() or "beatrun"])
+		loadoutSelect:SetValue(loadoutValues[GetConVar("Beatrun_RandomLoadouts"):GetString() or "beatrun"])
 		loadoutSelect:AddChoice("#beatrun.randombeatrunloadouts", "beatrun")
 		loadoutSelect:AddChoice("#beatrun.randommwloadouts", "mg_base")
 		loadoutSelect:AddChoice("#beatrun.randomarc9loadouts", "arc9")
