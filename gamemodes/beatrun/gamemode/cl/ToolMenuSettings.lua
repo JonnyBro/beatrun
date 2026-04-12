@@ -1,11 +1,16 @@
--- format: multiline
 local loadoutValues = {
-	"#beatrun.randombeatrunloadouts",
-	"#beatrun.randommwloadouts",
-	"#beatrun.randomarc9loadouts",
-	"#beatrun.randomarccwloadouts",
-	"#beatrun.randomtfaloadouts",
+	["beatrun"] = "#beatrun.randombeatrunloadouts",
+	["mg_base"] = "#beatrun.randommwloadouts",
+	["arc9"] = "#beatrun.randomarc9loadouts",
+	["arccw"] = "#beatrun.randomarccwloadouts",
+	["tfa_"] = "#beatrun.randomtfaloadouts",
 }
+
+local randomLoadouts = GetConVar("Beatrun_RandomLoadouts")
+
+if not loadoutValues[randomLoadouts:GetString()] then
+	randomLoadouts:SetString("beatrun")
+end
 
 local function ToggleGamemode(gm)
 	net.Start("Beatrun_ToggleGamemode")
@@ -432,14 +437,13 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		end
 		panel:AddItem(EventmodeButton)
 
-		panel:Help("#beatrun.randomloadouts")
 		local loadoutSelect = vgui.Create("DComboBox")
-		loadoutSelect:SetValue(loadoutValues[GetConVar("Beatrun_RandomLoadouts"):GetInt() or 1])
-		loadoutSelect:AddChoice("#beatrun.randombeatrunloadouts", 1)
-		loadoutSelect:AddChoice("#beatrun.randommwloadouts", 2)
-		loadoutSelect:AddChoice("#beatrun.randomarc9loadouts", 3)
-		loadoutSelect:AddChoice("#beatrun.randomarccwloadouts", 4)
-		loadoutSelect:AddChoice("#beatrun.randomtfaloadouts", 5)
+		loadoutSelect:SetValue(loadoutValues[randomLoadouts:GetString() or "beatrun"])
+		loadoutSelect:AddChoice("#beatrun.randombeatrunloadouts", "beatrun")
+		loadoutSelect:AddChoice("#beatrun.randommwloadouts", "mg_base")
+		loadoutSelect:AddChoice("#beatrun.randomarc9loadouts", "arc9")
+		loadoutSelect:AddChoice("#beatrun.randomarccwloadouts", "arccw")
+		loadoutSelect:AddChoice("#beatrun.randomtfaloadouts", "tfa_")
 		loadoutSelect:SetSortItems(false)
 		function loadoutSelect:OnSelect(_, _, value)
 			ChangeConvar("Beatrun_RandomLoadouts", value)
