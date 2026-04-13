@@ -1,4 +1,4 @@
-if game.SinglePlayer() then return end
+if not game.IsDedicated() then return end
 
 local PlayerXP = {} -- [SteamID] = { xp = 0, level = 1 }
 

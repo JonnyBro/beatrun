@@ -11,18 +11,19 @@ local ParkourXP_PosCheck = {
 
 XP_floatingxp = {}
 
+local isSingleOrP2p = not game.IsDedicated()
 local XP_ratiocache = nil
 local parkourevent_lastpos = Vector()
 local meta = FindMetaTable("Player")
 
 function meta:GetLevel()
-	if game.SinglePlayer() then return self.Level or 1 end
+	if isSingleOrP2p then return self.Level or 1 end
 
 	return self:GetNW2Int("Beatrun_Level", 1)
 end
 
 function meta:GetXP()
-	if game.SinglePlayer() then return self.XP or 0 end
+	if isSingleOrP2p then return self.XP or 0 end
 
 	return self:GetNW2Int("Beatrun_XP", 0)
 end
@@ -36,7 +37,7 @@ function meta:GetLevelRatio()
 end
 
 function meta:LevelUp()
-	if not game.SinglePlayer() then return end
+	if not isSingleOrP2p then return end
 
 	local i = 0
 
@@ -52,7 +53,7 @@ function meta:LevelUp()
 end
 
 function meta:SetLevel(level)
-	if game.SinglePlayer() then
+	if isSingleOrP2p then
 		self.Level = level
 		self.XP = CalcXPForNextLevel(level - 1)
 
@@ -61,7 +62,7 @@ function meta:SetLevel(level)
 end
 
 function meta:SetXP(xp)
-	if game.SinglePlayer() then
+	if isSingleOrP2p then
 		self.XP = xp
 
 		XP_ratiocache = nil
@@ -71,7 +72,7 @@ function meta:SetXP(xp)
 end
 
 function meta:AddXP(xp)
-	if game.SinglePlayer() then
+	if isSingleOrP2p then
 		self.XP = math.Round((self.XP or 0) + xp)
 
 		XP_ratiocache = nil
@@ -84,7 +85,7 @@ function meta:AddXP(xp)
 	end
 end
 
-if game.SinglePlayer() then
+if isSingleOrP2p then
 	function SaveXP()
 		local ply = LocalPlayer()
 		local data = util.TableToJSON({ ply.XP or 0, ply.Level or 1 })
