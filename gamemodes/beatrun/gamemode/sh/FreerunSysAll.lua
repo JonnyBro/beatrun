@@ -84,7 +84,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 	end
 
 	if ply:KeyDown(IN_WALK) then
-		steptime = steptime * 1.5
+		steptime = steptime * 1.45
 	end
 
 	if ply:InOverdrive() then
@@ -119,7 +119,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 		if not ply:Crouching() and not isBalancing then
 
-			if currentSpeed < 150 then
+			if currentSpeed < 155 then
 				ply:EmitSound("Walk." .. walksound)
 				ply:EmitSound("Cloth.MovementWalk")
 			else
@@ -235,7 +235,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	if (CLIENT or game.SinglePlayer()) and CurTime() > (ply:GetStepRelease() or 0) and ply.FootstepReleaseLand then
 		local newsound = FOOTSTEPS_RELEASE_LUT[ply.LastFootstepSound] or "Concrete"
 
-		if ply:GetVelocity():Length() > 150 or newsound == "Gantry" or newsound == "Duct" then
+		if ply:GetVelocity():Length() > 140 or newsound == "Gantry" then
 			ply:EmitSound("Release." .. newsound)		
 		elseif ply:WaterLevel() > 0 then
 			ply:EmitSound("Release.Water")

@@ -3,7 +3,7 @@ local hwrtime = 1.5
 tiltdir = 1
 local tilt = 0
 
-PuristWallrun = CreateConVar("Beatrun_PuristWallrun", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "'Realistic' wallrunning", 0, 1)
+local PuristWallrun = CreateConVar("Beatrun_PuristWallrun", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "\"Realistic\" wallrunning", 0, 1)
 
 function WallrunningTilt(ply, pos, ang, fov)
 	local wr = ply:GetWallrun()
@@ -315,7 +315,7 @@ local function WallrunningThink(ply, mv, cmd)
 
 	if ply:GetWallrunSoundTime() < CurTime() then
 		local delay = nil
-		wr = ply:GetWallrun()
+		local wr = ply:GetWallrun()
 
 		if wr == 1 then
 			delay = math.Clamp(math.abs(ply:GetWallrunTime() - CurTime() - 2.75) / vwrtime * 0.165, 0.175, 0.3)
@@ -415,7 +415,7 @@ local function WallrunningCheck(ply, mv, cmd)
 				angdir.y = angdir.y - 180
 
 				local wallnormal = trout.HitNormal
-				eyeang = Angle(angdir)
+				local eyeang = Angle(angdir)
 				eyeang.x = 0
 
 				tr.start = ply:EyePos() - Vector(0, 0, 5)

@@ -3,7 +3,7 @@ util.AddNetworkString("DeathStopSound")
 hook.Add("EntityTakeDamage", "MEHitSounds", function(ply, dmginfo)
 	if not ply:IsPlayer() then return end
 
-	if not dmginfo:IsFallDamage() then
+	if not dmginfo:IsFallDamage() and not (ply:HasGodMode() or cvars.Bool("sbox_godmode", false)) then
 		ply:FaithVO("Faith.ImpactHard")
 	end
 

@@ -518,7 +518,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		ply:SetSlidingDelay(CT + 0.1)
 
 		if SERVER and ply.SlideLoopSound then
-			ply.SlideLoopSound:FadeOut(0.5)
+			ply.SlideLoopSound:FadeOut(0.15)
 		end
 
 		ply:ConCommand("-duck")

@@ -126,7 +126,9 @@ local function SwingpipeThink(ply, mv, cmd)
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("Handsteps.MetalPipeGrab")
 			ply:EmitSound("Cloth.Swing")
+			ply:EmitSound("Cloth.MovementRun")
 			ply:EmitSound("Handsteps.MetalPipeSwing")
+			ply:EmitSound("Handsteps.MetalPipeHard")
 		end
 
 		ply:ViewPunch(Angle(1, 0, 0))
@@ -185,6 +187,7 @@ local function SwingpipeThink(ply, mv, cmd)
 		ply:StopSound("Cloth.Swing")
 		ply:StopSound("Handsteps.MetalPipeSwing")
 		ply:EmitSound("Handsteps.MetalPipeRelease")
+		ply:EmitSound("Handsteps.MetalPipeLetGo")
 		ply:EmitSound("Cloth.SideStep")
 	end
 end

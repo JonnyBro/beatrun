@@ -40,7 +40,7 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 				angdir.y = angdir.y - 180
 
 				local wallnormal = trout.HitNormal
-			    eyeang = Angle(angdir)
+			    local eyeang = Angle(angdir)
 				eyeang.x = 0
 
 				tr.start = ply:EyePos() - Vector(0, 0, 5)
@@ -415,7 +415,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 
 	if ply:GetWallrunSoundTime() < CurTime() then
 		local delay = nil
-		wr = ply:GetWallrun()
+		local wr = ply:GetWallrun()
 
 		if wr == 1 then
 			delay = math.Clamp(math.abs(ply:GetWallrunTime() - CurTime() - 2.75) / vwrtime * 0.165, 0.175, 0.3)

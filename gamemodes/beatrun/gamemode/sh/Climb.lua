@@ -738,14 +738,6 @@ local function ClimbingCheck(ply, mv, cmd)
 			ply:TakeDamageInfo(info)
 		else
 			timer.Simple(0.1, function() ply:FaithVO("Faith.Impact") end)
-			if lastvel.z < -500 then
-				dmg = ply:Health() * 0.1
-				info:SetDamage(dmg)
-				info:SetDamageType(DMG_FALL)
-				info:SetAttacker(game.GetWorld())
-				info:SetInflictor(game.GetWorld())
-				ply:TakeDamageInfo(info)
-			end
 		end
 		timer.Simple(0.13, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 
@@ -767,7 +759,7 @@ local function ClimbingCheck(ply, mv, cmd)
 			wallangc.x = -30
 		elseif lastvel.z < -200 then
 			event = "climbhard2"
-			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstephard) end)
+			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 			timer.Simple(0.7, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 			
 			if lastvel.z < -250 then

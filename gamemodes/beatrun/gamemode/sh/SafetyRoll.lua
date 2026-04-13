@@ -253,16 +253,16 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 		if SERVER and not land then
 			timer.Simple(0.2, function()
-				ply:EmitSound("Cloth.Roll")
+				ply:EmitSound("Cloth.Roll")	
+				ply:EmitSound("Cloth.BodyRoll")				
 				ply:EmitSound("Cloth.BodyRollSwish")
 			end)
 
 			ply:EmitSound("Cloth.RollLand")
+			ply:EmitSound("Cloth.BodyRoll")
 			ply:EmitSound("Cloth.RollCloth")
-			ply:EmitSound("Cloth.FallShortMedium")
 		elseif CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			timer.Simple(0.01, function()
-				ply:EmitSound("Handsteps.ConcreteHard")
 				ply:EmitSound("Cloth.FallShortMedium")
 			end)
 			timer.Simple(0.35, function()

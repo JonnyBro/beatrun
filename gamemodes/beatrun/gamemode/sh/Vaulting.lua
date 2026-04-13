@@ -159,7 +159,7 @@ local function Vault1(ply, mv, ang, t, h)
 		        timer.Simple(0.01, function()
 					ply:EmitSound("Handsteps." .. handstepsoft)
 		        end)
-			    timer.Simple(0.1, function()
+			    timer.Simple(0.15, function()
 					ply:PlayStepSound(1)
 			    end)
 					if t.MatType == MAT_GRATE then
@@ -239,7 +239,7 @@ local function Vault2(ply, mv, ang, t, h)
 		TraceSetData(h, vaultpos, vaultpos, mins, maxs, ply)
 
 		local hulltr2 = util.TraceHull(h)
-		local handstepsoft = HANDSTEPS_SOFT_LUT[t.MatType] or "ConcreteSoft"
+		local handstephard = HANDSTEPS_HARD_LUT[t.MatType] or "ConcreteHard"
 
 		if not hulltr.Hit and not hulltr2.Hit then
 
@@ -256,7 +256,7 @@ local function Vault2(ply, mv, ang, t, h)
 			ParkourEvent("vault", ply)
 
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-				ply:EmitSound("Handsteps." .. handstepsoft)
+				ply:EmitSound("Handsteps." .. handstephard)
 				timer.Simple(0.1, function()
 					ply:EmitSound("Cloth.VaultSwish")
 					ply:EmitSound("Vault")
@@ -509,6 +509,7 @@ function Vault5(ply, mv, ang, t, h)
 
 	local hulltr = util.TraceHull(h)
 	local handstepsoft = HANDSTEPS_SOFT_LUT[t.MatType] or "ConcreteSoft"
+	local handstephard = HANDSTEPS_HARD_LUT[t.MatType] or "ConcreteHard"
 
 	if not hulltr.Hit then
 		if t.HitNormal.x ~= 0 then
@@ -531,7 +532,7 @@ function Vault5(ply, mv, ang, t, h)
 
 		if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 		    timer.Simple(0.05, function()
-				ply:EmitSound("Handsteps." .. handstepsoft)
+				ply:EmitSound("Handsteps." .. handstephard)
 			end)
 			timer.Simple(0.1, function()
 				ply:EmitSound("Handsteps." .. handstepsoft)

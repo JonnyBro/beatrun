@@ -118,7 +118,7 @@ sound.Add({
 -- Concrete Grit --
 sound.Add({
 	name = "Footsteps.ConcreteGrit",
-	volume = 0,
+	volume = 1,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -764,6 +764,15 @@ sound.Add({
 })
 
 sound.Add({
+	name = "Walk.Gravel",
+	volume = 0.5,
+	level = 40,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk1.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk2.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk3.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk4.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk5.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk6.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk7.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk8.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk9.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk10.wav"}
+})
+
+sound.Add({
 	name = "Release.Gravel",
 	volume = 1,
 	level = 30,
@@ -926,7 +935,7 @@ sound.Add({
 -- 	pitch = {90, 110}
 -- })
 FOOTSTEPS_LUT = {
-	["player/footsteps/woodpanel"] = "WoodPanel",
+	["player/footsteps/woodpanel"] = "WoodPlank",
 	["player/footsteps/gravel"] = "Gravel",
 	["player/footsteps/sand"] = "Gravel",
 	["player/footsteps/snow"] = "Gravel",
@@ -1026,6 +1035,7 @@ FOOTSTEPS_LAND_LUT = {
 	["player/footsteps/chainlink"] = "MetalCrane",
 	["player/footsteps/tile"] = "Marble",
 	["player/footsteps/sand"] = "Gravel",
+	["player/footsteps/grass"] = "Gravel",
 	["player/footsteps/metalgrate"] = "MetalCrane",
 	["player/footsteps/gravel"] = "Gravel",
 	["player/footsteps/dirt"] = "Gravel",
