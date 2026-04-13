@@ -1,25 +1,21 @@
-local vmatrixmeta = FindMetaTable("VMatrix")
-local playermeta = FindMetaTable("Player")
+ParkourXP = {
+	roll = 3,
+	sidestep = 1,
+	slide = 1,
+	vault = 2,
+	climb = 4,
+	wallrunh = 2,
+	springboard = 2,
+	wallrunv = 2,
+	coil = 1,
+	swingbar = 4,
+	step = 1
+}
 
 CreateConVar("Beatrun_RandomLoadouts", "beatrun", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "")
 
-local mtmp = {
-	{ 0, 0, 0, 0 },
-	{ 0, 0, 0, 0 },
-	{ 0, 0, 0, 0 },
-	{ 0, 0, 0, 1 }
-}
-
-function vmatrixmeta:FastToTable(tbl)
-	tbl = tbl or table.Copy(mtmp)
-
-	local tbl1 = tbl[1]
-	local tbl2 = tbl[2]
-	local tbl3 = tbl[3]
-
-	tbl1[1], tbl1[2], tbl1[3], tbl1[4], tbl2[1], tbl2[2], tbl2[3], tbl2[4], tbl3[1], tbl3[2], tbl3[3], tbl3[4] = self:Unpack()
-
-	return tbl
+function CalcXPForNextLevel(level)
+	return math.Round(0.25 * level ^ 3 + 0.8 * level ^ 2 + 2 * level)
 end
 
 function LerpL(t, a, b)
@@ -50,6 +46,29 @@ function TraceParkourMask(tbl)
 	tbl.mask = MASK_PLAYERSOLID
 	tbl.collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
 end
+
+local vmatrixmeta = FindMetaTable("VMatrix")
+
+local mtmp = {
+	{ 0, 0, 0, 0 },
+	{ 0, 0, 0, 0 },
+	{ 0, 0, 0, 0 },
+	{ 0, 0, 0, 1 }
+}
+
+function vmatrixmeta:FastToTable(tbl)
+	tbl = tbl or table.Copy(mtmp)
+
+	local tbl1 = tbl[1]
+	local tbl2 = tbl[2]
+	local tbl3 = tbl[3]
+
+	tbl1[1], tbl1[2], tbl1[3], tbl1[4], tbl2[1], tbl2[2], tbl2[3], tbl2[4], tbl3[1], tbl3[2], tbl3[3], tbl3[4] = self:Unpack()
+
+	return tbl
+end
+
+local playermeta = FindMetaTable("Player")
 
 function playermeta:SetMantleData(startpos, endpos, lerp, mantletype)
 	self:SetMantleStartPos(startpos)
