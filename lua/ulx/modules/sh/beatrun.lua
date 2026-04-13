@@ -8,19 +8,24 @@ function ulx.setlevel(calling_ply, target_plys, level)
 
 	for i = 1, #target_plys do
 		local ply = target_plys[i]
-		local code = string.format([[
-			LocalPlayer():SetLevel(%d)
-			LocalPlayer():SetXP(XP_nextlevel(%d - 1))
-			LocalPlayer():SaveXP()
-		]], level, level)
 
-		ply:SendLua(code)
+		if game.SinglePlayer() then
+			local code = string.format([[
+				LocalPlayer():SetLevel(%d)
+				LocalPlayer():SetXP(CalcXPForNextLevel(%d - 1))
+				SaveXP()
+			]], level, level)
+
+			ply:SendLua(code)
+		else
+			ply:SetLevel(level)
+		end
 
 		table.insert(affected_plys, ply)
 	end
 
 	if #affected_plys > 0 then
-		ulx.fancyLogAdmin(calling_ply, "#A set level of #T to #s", affected_plys, tostring(level))
+		ulx.fancyLogAdmin(calling_ply, "#A changed Beatrun level of #T to #s", affected_plys, tostring(level))
 	end
 end
 
@@ -31,12 +36,12 @@ setlevel:addParam({
 
 setlevel:addParam({
 	type = ULib.cmds.NumArg,
-	min = -100000,
+	min = 0,
 	max = 100000,
-	default = 1,
+	default = 0,
 	hint = "Level to set",
 	ULib.cmds.round
 })
 
 setlevel:defaultAccess(ULib.ACCESS_SUPERADMIN)
-setlevel:help("Sets player's local level (calculates proper XP, saves).")
+setlevel:help("Sets player's Beatrun level\n(calculates proper XP\nand saves)")
