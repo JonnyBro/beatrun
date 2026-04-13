@@ -36,9 +36,9 @@ setlevel:addParam({
 
 setlevel:addParam({
 	type = ULib.cmds.NumArg,
-	min = 0,
+	min = 1,
 	max = 100000,
-	default = 0,
+	default = 1,
 	hint = "Level to set",
 	ULib.cmds.round
 })
