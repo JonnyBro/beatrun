@@ -1,6 +1,6 @@
 if game.SinglePlayer() then return end
 
-local PlayerXP = {} -- [SteamID64] = { xp = 0, level = 1 }
+local PlayerXP = {} -- [SteamID] = { xp = 0, level = 1 }
 
 local function SaveAllXP()
 	local data = {}
@@ -14,7 +14,7 @@ local function SaveAllXP()
 end
 
 local function LoadPlayerXP(ply)
-	local sid = ply:SteamID64()
+	local sid = ply:SteamID()
 	if not sid or sid == "0" or ply:IsBot() then return end
 
 	local datafile = file.Read("beatrun/server/xp.json", "DATA")
@@ -38,7 +38,8 @@ local function LoadPlayerXP(ply)
 end
 
 hook.Add("PlayerInitialSpawn", "Beatrun_LoadXP", LoadPlayerXP)
-hook.Add("PlayerDisconnected", "Beatrun_SaveXP", SaveAllXP)
+hook.Add("PlayerDisconnected", "Beatrun_SaveXP_Disconnect", SaveAllXP)
+hook.Add("ShutDown", "Beatrun_SaveXP_Shutdown", SaveAllXP)
 
 timer.Create("Beatrun_SaveXP_Timer", 300, 0, SaveAllXP)
 
@@ -55,7 +56,7 @@ end
 function meta:SetLevel(newlevel)
 	if not IsValid(self) then return end
 
-	local sid = self:SteamID64()
+	local sid = self:SteamID()
 
 	local info = PlayerXP[sid]
 	if not info then return end
@@ -79,7 +80,7 @@ end
 function meta:LevelUp()
 	if not IsValid(self) then return end
 
-	local sid = self:SteamID64()
+	local sid = self:SteamID()
 
 	local info = PlayerXP[sid]
 	if not info then return end
@@ -113,7 +114,7 @@ function meta:LevelUp()
 end
 
 function meta:AddXP(xp)
-	local sid = self:SteamID64()
+	local sid = self:SteamID()
 	local info = PlayerXP[sid] or {
 		xp = 0,
 		level = 1
@@ -142,7 +143,7 @@ util.AddNetworkString("Beatrun_XPUpdate")
 util.AddNetworkString("Beatrun_FloatingXP")
 util.AddNetworkString("Beatrun_LevelUpSound")
 
-local LastEventTime = {} -- [SteamID64] = { event = time }
+local LastEventTime = {} -- [SteamID] = { event = time }
 
 net.Receive("Beatrun_ParkourEvent", function(len, ply)
 	if not IsValid(ply) then return end
@@ -150,7 +151,7 @@ net.Receive("Beatrun_ParkourEvent", function(len, ply)
 	local event = net.ReadString()
 	if not ParkourXP[event] then return end
 
-	local sid = ply:SteamID64()
+	local sid = ply:SteamID()
 
 	LastEventTime[sid] = LastEventTime[sid] or {}
 
