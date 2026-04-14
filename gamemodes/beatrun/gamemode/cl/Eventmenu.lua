@@ -245,12 +245,16 @@ local function RebuildMainPanel()
 		-- format: multiline
 		local toggles = {
 			{
-				"Allow members prop spawning",
+				"Allow members to spawn props",
 				"EM_AllowProps"
 			},
 			{
-				"Allow members gun spawning",
+				"Allow members to spawn weapons",
 				"EM_AllowWeapons"
+			},
+			{
+				"Allow members to spawn vehicles",
+				"EM_AllowVehicles"
 			},
 			{
 				"New players suspended",

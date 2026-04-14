@@ -432,7 +432,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(EventmodeButton)
 
 		local loadoutSelect = vgui.Create("DComboBox")
-		loadoutSelect:SetValue(loadoutValues[GetConVar("Beatrun_RandomLoadouts"):GetString() or "beatrun"])
+		loadoutSelect:SetValue("#beatrun.buildmodehud.select")
 		loadoutSelect:AddChoice("#beatrun.randombeatrunloadouts", "beatrun")
 		loadoutSelect:AddChoice("#beatrun.randommwloadouts", "mg_base")
 		loadoutSelect:AddChoice("#beatrun.randomarc9loadouts", "arc9")
