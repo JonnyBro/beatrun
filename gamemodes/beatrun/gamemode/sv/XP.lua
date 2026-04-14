@@ -20,8 +20,8 @@ local function LoadPlayerXP(ply)
 	local datafile = file.Read("beatrun/server/xp.json", "DATA")
 
 	if datafile then
-		local data = util.JSONToTable(datafile)
-		if data and data[sid] then PlayerXP[sid] = data[sid] end
+		local data = util.JSONToTable(datafile) or {}
+		if data[sid] then PlayerXP[sid] = data[sid] end
 	end
 
 	if not PlayerXP[sid] then
@@ -35,6 +35,13 @@ local function LoadPlayerXP(ply)
 
 	ply:SetNW2Int("Beatrun_XP", info.xp)
 	ply:SetNW2Int("Beatrun_Level", info.level)
+
+	ply:LevelUp()
+
+	net.Start("Beatrun_XPUpdate")
+		net.WriteUInt(info.xp, 32)
+		net.WriteUInt(info.level, 16)
+	net.Send(ply)
 end
 
 hook.Add("PlayerInitialSpawn", "Beatrun_LoadXP", LoadPlayerXP)
