@@ -245,4 +245,3 @@ if CLIENT then
 end
 
 hook.Add("Initialize", "Beaturn_Load_Blacklist", LoadBlacklist)
-hook.Add("Initialize", "Beaturn_Load_Loadouts", LoadLoadouts)
