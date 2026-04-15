@@ -1,8 +1,8 @@
 BEATRUN_WEAPON_BLACKLIST = BEATRUN_WEAPON_BLACKLIST or {}
 BEATRUN_GAMEMODES_LOADOUTS = BEATRUN_GAMEMODES_LOADOUTS or {}
 
-local blacklistFrame
 local loadoutsFrame
+local blacklistFrame
 local SelectedLoadout = 1
 
 local function OpenLoadoutsMenu()
@@ -20,7 +20,7 @@ local function OpenLoadoutsMenu()
 	loadoutsFrame.Paint = function(self, w, h)
 		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
 		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
-		draw.SimpleText("Loadout Editor", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("#beatrun.loadoutseditor.title", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	local close = vgui.Create("DButton", loadoutsFrame)
@@ -94,17 +94,17 @@ local function OpenLoadoutsMenu()
 			label:Dock(FILL)
 			label:DockMargin(10, 0, 0, 0)
 
-			local remove = vgui.Create("DButton", row)
-			remove:SetText("Remove")
-			remove:SetFont("AEUIDefault")
-			remove:SetTextColor(CurrentTheme().buttons.red.t)
-			remove:SetWide(loadoutsFrame:GetWide() / 10)
-			remove:Dock(RIGHT)
-			remove:DockMargin(0, 10, 10, 10)
+			local delete = vgui.Create("DButton", row)
+			delete:SetText("#beatrun.misc.delete")
+			delete:SetFont("AEUIDefault")
+			delete:SetTextColor(CurrentTheme().buttons.red.t)
+			delete:SetWide(loadoutsFrame:GetWide() / 10)
+			delete:Dock(RIGHT)
+			delete:DockMargin(0, 10, 10, 10)
 
-			remove.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+			delete.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
 
-			remove.DoClick = function()
+			delete.DoClick = function()
 				table.RemoveByValue(loadout, class)
 
 				BuildWeapons()
@@ -117,7 +117,7 @@ local function OpenLoadoutsMenu()
 
 		for i, _ in ipairs(BEATRUN_GAMEMODES_LOADOUTS) do
 			local row = loadoutList:Add("DButton")
-			row:SetText("Loadout " .. i)
+			row:SetText(language.GetPhrase("beatrun.loadoutseditor.loadout"):format(i))
 			row:SetFont("AEUIDefault")
 			row:SetTextColor(CurrentTheme().buttons.red.t)
 			row:SetTall(40)
@@ -148,7 +148,7 @@ local function OpenLoadoutsMenu()
 	bottomLeft.Paint = nil
 
 	local add = vgui.Create("DButton", bottomLeft)
-	add:SetText("Add")
+	add:SetText("#beatrun.misc.add")
 	add:SetFont("AEUIDefault")
 	add:SetTextColor(CurrentTheme().buttons.green.t)
 	add:SetTall(40)
@@ -166,7 +166,7 @@ local function OpenLoadoutsMenu()
 	end
 
 	local del = vgui.Create("DButton", bottomLeft)
-	del:SetText("Remove")
+	del:SetText("#beatrun.misc.delete")
 	del:SetFont("AEUIDefault")
 	del:SetTextColor(CurrentTheme().buttons.red.t)
 	del:SetTall(40)
@@ -189,7 +189,7 @@ local function OpenLoadoutsMenu()
 	bottomRight.Paint = nil
 
 	local addWeapon = vgui.Create("DButton", bottomRight)
-	addWeapon:SetText("Add Weapon")
+	addWeapon:SetText("#beatrun.loadoutseditor.addweapon")
 	addWeapon:SetFont("AEUIDefault")
 	addWeapon:SetTextColor(CurrentTheme().buttons.green.t)
 	addWeapon:SetTall(40)
@@ -220,7 +220,7 @@ local function OpenLoadoutsMenu()
 	end
 
 	local save = vgui.Create("DButton", bottomRight)
-	save:SetText("Save")
+	save:SetText("#beatrun.misc.save")
 	save:SetFont("AEUIDefault")
 	save:SetTextColor(CurrentTheme().buttons.green.t)
 	save:SetTall(40)
@@ -262,7 +262,7 @@ local function OpenBlacklistMenu()
 	blacklistFrame.Paint = function(self, w, h)
 		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
 		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
-		draw.SimpleText("Blacklist Editor (for random loadouts)", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("#beatrun.blacklisteditor.title", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	local close = vgui.Create("DButton", blacklistFrame)
@@ -303,8 +303,8 @@ local function OpenBlacklistMenu()
 
 	table.sort(sortedCats)
 
-	for _, cat in ipairs(sortedCats) do
-		local weps = categories[cat]
+	for _, category in ipairs(sortedCats) do
+		local weps = categories[category]
 
 		table.sort(weps, function(a, b) return a.ClassName < b.ClassName end)
 
@@ -315,7 +315,7 @@ local function OpenBlacklistMenu()
 
 		header.Paint = function(self, w, h)
 			draw.RoundedBox(4, 0, 0, w, h, CurrentTheme().header)
-			draw.SimpleText(cat, "AEUIDefault", 10, h / 2, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(category, "AEUIDefault", 10, h / 2, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		for _, wep in ipairs(weps) do
@@ -356,7 +356,7 @@ local function OpenBlacklistMenu()
 
 				ApplyButtonTheme(self, w, h, style)
 
-				draw.SimpleText(BEATRUN_WEAPON_BLACKLIST[class] and "Blacklisted" or "Allowed", "AEUIDefault", w / 2, h / 2, CurrentTheme().buttons[style].t, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(BEATRUN_WEAPON_BLACKLIST[class] and "#beatrun.blacklisteditor.blacklisted" or "#beatrun.blacklisteditor.allowed", "AEUIDefault", w / 2, h / 2, CurrentTheme().buttons[style].t, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 
 			toggle.DoClick = function()
