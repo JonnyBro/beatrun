@@ -14,6 +14,9 @@ ParkourXP = {
 
 CreateConVar("Beatrun_RandomLoadouts", "beatrun", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "")
 
+-- Migrate old vars
+if table.HasValue({ "1", "2", "3", "4", "5" }, GetConVar("Beatrun_RandomLoadouts"):GetString()) then GetConVar("Beatrun_RandomLoadouts"):SetString("beatrun") end
+
 function CalcXPForNextLevel(level)
 	return math.Round(0.25 * level ^ 3 + 0.8 * level ^ 2 + 2 * level)
 end
@@ -498,8 +501,7 @@ if CLIENT then
 		blacklistFrame.Paint = function(self, w, h)
 			draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
 			draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
-
-			draw.SimpleText("Blacklist for Random Loadouts", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText("Blacklist Editor (for random loadouts)", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		local close = vgui.Create("DButton", blacklistFrame)

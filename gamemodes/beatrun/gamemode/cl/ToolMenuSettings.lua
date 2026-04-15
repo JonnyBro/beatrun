@@ -395,44 +395,24 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		panel:AddItem(infectionGameTimeSlider)
 		panel:Help("#beatrun.toolsmenu.gamemodes.infectiontime")
 
-		local InfectionButton = vgui.Create("DButton")
-		InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.infection")
-		InfectionButton:SetSize(0, 20)
-		InfectionButton.DoClick = function()
-			if GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_EVENTMODE") then
-				InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.error")
-
-				timer.Simple(2, function()
-					InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.infection")
-				end)
-
-				return
-			end
-
-			ToggleGamemode("infection")
+		local loadoutsEditor = vgui.Create("DButton")
+		loadoutsEditor:SetText("TRANSLATE ME")
+		loadoutsEditor:SetSize(0, 20)
+		loadoutsEditor.DoClick = function()
+			RunConsoleCommand("beatrun_loadouts_menu")
 		end
-		panel:AddItem(InfectionButton)
+		panel:AddItem(loadoutsEditor)
 
-		local EventmodeButton = vgui.Create("DButton")
-		EventmodeButton:SetText("#beatrun.toolsmenu.gamemodes.eventmode")
-		EventmodeButton:SetSize(0, 20)
-		EventmodeButton.DoClick = function()
-			if GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_INFECTION") then
-				EventmodeButton:SetText("#beatrun.toolsmenu.gamemodes.error")
-
-				timer.Simple(2, function()
-					EventmodeButton:SetText("#beatrun.toolsmenu.gamemodes.eventmode")
-				end)
-
-				return
-			end
-
-			ToggleGamemode("eventmode")
+		local blacklistEditor = vgui.Create("DButton")
+		blacklistEditor:SetText("TRANSLATE ME")
+		blacklistEditor:SetSize(0, 20)
+		blacklistEditor.DoClick = function()
+			RunConsoleCommand("beatrun_blacklist_menu")
 		end
-		panel:AddItem(EventmodeButton)
+		panel:AddItem(blacklistEditor)
 
 		local loadoutSelect = vgui.Create("DComboBox")
-		loadoutSelect:SetValue("#beatrun.buildmodehud.select")
+		loadoutSelect:SetValue(loadoutValues[GetConVar("Beatrun_RandomLoadouts"):GetString()])
 		loadoutSelect:AddChoice("#beatrun.randombeatrunloadouts", "beatrun")
 		loadoutSelect:AddChoice("#beatrun.randommwloadouts", "mg_base")
 		loadoutSelect:AddChoice("#beatrun.randomarc9loadouts", "arc9")
@@ -444,6 +424,11 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		end
 		panel:AddItem(loadoutSelect)
 		panel:ControlHelp("#beatrun.randomloadoutsdesc")
+
+		local divider = vgui.Create("DHorizontalDivider")
+		panel:AddItem(divider)
+
+		panel:Help("#beatrun.toolsmenu.gamemodes.name")
 
 		local DatatheftButton = vgui.Create("DButton")
 		DatatheftButton:SetText("#beatrun.toolsmenu.gamemodes.datatheft")
@@ -480,6 +465,42 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			ToggleGamemode("deathmatch")
 		end
 		panel:AddItem(DeathmatchButton)
+
+		local InfectionButton = vgui.Create("DButton")
+		InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.infection")
+		InfectionButton:SetSize(0, 20)
+		InfectionButton.DoClick = function()
+			if GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_EVENTMODE") then
+				InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.error")
+
+				timer.Simple(2, function()
+					InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.infection")
+				end)
+
+				return
+			end
+
+			ToggleGamemode("infection")
+		end
+		panel:AddItem(InfectionButton)
+
+		local EventmodeButton = vgui.Create("DButton")
+		EventmodeButton:SetText("#beatrun.toolsmenu.gamemodes.eventmode")
+		EventmodeButton:SetSize(0, 20)
+		EventmodeButton.DoClick = function()
+			if GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_INFECTION") then
+				EventmodeButton:SetText("#beatrun.toolsmenu.gamemodes.error")
+
+				timer.Simple(2, function()
+					EventmodeButton:SetText("#beatrun.toolsmenu.gamemodes.eventmode")
+				end)
+
+				return
+			end
+
+			ToggleGamemode("eventmode")
+		end
+		panel:AddItem(EventmodeButton)
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Extra", "beatrun_extra", "#beatrun.toolsmenu.extra.name", "", "", function(panel)
