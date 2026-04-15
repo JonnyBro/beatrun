@@ -240,11 +240,12 @@ end
 concommand.Add("beatrun_loadouts_menu", function()
 	net.Start("Beatrun_RequestLoadouts")
 	net.SendToServer()
+
+	OpenLoadoutsMenu()
 end)
 
 net.Receive("Beatrun_SyncLoadouts", function()
 	BEATRUN_GAMEMODES_LOADOUTS = net.ReadTable()
-	OpenLoadoutsMenu()
 end)
 
 local function OpenBlacklistMenu()
@@ -372,11 +373,12 @@ end
 concommand.Add("beatrun_blacklist_menu", function()
 	net.Start("Beatrun_RequestBlacklist")
 	net.SendToServer()
+
+	OpenBlacklistMenu()
 end)
 
 net.Receive("Beatrun_SyncBlacklist", function()
 	BEATRUN_WEAPON_BLACKLIST = net.ReadTable()
-	OpenBlacklistMenu()
 end)
 
 hook.Add("Initialize", "Beaturn_Load_Blacklist", LoadBlacklist)
