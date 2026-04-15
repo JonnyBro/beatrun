@@ -125,7 +125,7 @@ local function IsCoursesCacheValid()
 	return Beatrun_CoursesCache.all and CurTime() - Beatrun_CoursesCache.at < CACHE_LIFETIME
 end
 
-local function CurrentTheme()
+function CurrentTheme()
 	return THEME[string.lower(uiTheme:GetString())] or THEME.dark
 end
 
@@ -161,7 +161,7 @@ local function GetCurrentMapWorkshopID()
 end
 
 -- UI helpers
-local function ApplyScrollTheme(panel)
+function ApplyScrollTheme(panel)
 	local bar = panel:GetVBar()
 
 	bar.Paint = function() end
@@ -175,7 +175,7 @@ local function ApplyScrollTheme(panel)
 	end
 end
 
-local function ApplyButtonTheme(self, w, h, style)
+function ApplyButtonTheme(self, w, h, style)
 	if not self:IsEnabled() then
 		self:SetCursor("arrow")
 
