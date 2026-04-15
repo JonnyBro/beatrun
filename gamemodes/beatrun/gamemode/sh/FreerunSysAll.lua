@@ -2,7 +2,7 @@ local quakejump = CreateConVar("Beatrun_QuakeJump", 1, {FCVAR_REPLICATED, FCVAR_
 local sidestep = CreateConVar("Beatrun_SideStep", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 local speedLimit = CreateConVar("Beatrun_SpeedLimit", 325, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
-CreateConVar("Beatrun_Disarm", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 0, 1)
+CreateConVar("Beatrun_Disarm", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 0, 1)
 CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 local function Hardland(jt)
