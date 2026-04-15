@@ -300,27 +300,44 @@ if CLIENT then
 			weaponList:Clear()
 
 			local loadout = BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout]
-			if not loadout then return end
+			if not istable(loadout) then return end
 
 			for _, class in ipairs(loadout) do
+				local wep = weapons.GetStored(class)
+
 				local row = weaponList:Add("DPanel")
-				row:SetTall(40)
+				row:SetTall(64)
 				row:Dock(TOP)
-				row:DockMargin(0, 0, 0, 5)
+				row:DockMargin(0, 0, 0, 6)
 
 				row.Paint = function(self, w, h)
 					draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.secondary)
-					draw.SimpleText(class, "AEUIDefault", 10, h / 2, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
+
+				local icon = vgui.Create("SpawnIcon", row)
+				icon:Dock(LEFT)
+				icon:SetWide(64)
+				icon:SetModel(wep.WorldModel or "models/props_junk/watermelon01.mdl")
+				icon:SetTooltip(false)
+				icon:SetMouseInputEnabled(false)
+
+				local label = vgui.Create("DLabel", row)
+				label:Dock(FILL)
+				label:DockMargin(10, 0, 0, 0)
+				label:SetFont("AEUIDefault")
+				label:SetTextColor(CurrentTheme().text.primary)
+
+				label:SetText(string.format("%s\n(%s)", language.GetPhrase(wep.PrintName), class))
 
 				local remove = vgui.Create("DButton", row)
 				remove:Dock(RIGHT)
-				remove:SetWide(80)
-				remove:SetText("Remove")
-				remove:SetTextColor(CurrentTheme().buttons.red.t)
+				remove:SetWide(120)
+				remove:DockMargin(0, 10, 10, 10)
+				remove:SetText("")
 
 				remove.Paint = function(self, w, h)
 					ApplyButtonTheme(self, w, h, "red")
+					draw.SimpleText("Remove", "AEUIDefault", w / 2, h / 2, CurrentTheme().buttons.red.t, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
 				remove.DoClick = function()
@@ -402,10 +419,18 @@ if CLIENT then
 			local menu = DermaMenu()
 
 			local weps = GetWeaponsList()
-			table.sort(weps, function(a, b) return a.ClassName < b.ClassName end)
+
+			table.sort(weps, function(a, b)
+				return a.ClassName < b.ClassName
+			end)
 
 			for _, wep in ipairs(weps) do
-				menu:AddOption(wep.ClassName, function()
+				if string.find(wep.ClassName, "base") then continue end
+				if BEATRUN_WEAPON_BLACKLIST[wep.ClassName] then continue end
+
+				local text = string.format("%s (%s)", wep.PrintName, wep.ClassName)
+
+				menu:AddOption(text, function()
 					table.insert(BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout], wep.ClassName)
 					BuildWeapons()
 				end)
@@ -524,16 +549,28 @@ if CLIENT then
 				local class = wep.ClassName
 
 				local row = scroll:Add("DPanel")
-				row:SetTall(40)
+				row:SetTall(64)
 				row:Dock(TOP)
 				row:DockMargin(0, 0, 0, 6)
 
 				row.Paint = function(self, w, h)
 					local col = self:IsHovered() and CurrentTheme().panels.secondary or CurrentTheme().panels.primary
-
 					draw.RoundedBox(6, 0, 0, w, h, col)
-					draw.SimpleText(string.format("%s (%s)", language.GetPhrase(wep.PrintName), class), "AEUIDefault", 10, h / 2, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
+
+				local icon = vgui.Create("SpawnIcon", row)
+				icon:Dock(LEFT)
+				icon:SetWide(64)
+				icon:SetModel(wep.WorldModel or "models/props_junk/watermelon01.mdl")
+				icon:SetTooltip(false)
+				icon:SetMouseInputEnabled(false)
+
+				local label = vgui.Create("DLabel", row)
+				label:Dock(FILL)
+				label:DockMargin(10, 0, 0, 0)
+				label:SetFont("AEUIDefault")
+				label:SetTextColor(CurrentTheme().text.primary)
+				label:SetText(string.format("%s\n(%s)", language.GetPhrase(wep.PrintName), class))
 
 				local toggle = vgui.Create("DButton", row)
 				toggle:SetText("")
