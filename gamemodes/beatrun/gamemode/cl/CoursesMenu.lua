@@ -352,8 +352,8 @@ local function OpenConfirmPopup(title, message, onConfirm)
 	label:SetAutoStretchVertical(true)
 
 	local buttonRow = vgui.Create("DPanel", PopupFrame)
-	buttonRow:Dock(BOTTOM)
 	buttonRow:SetTall(frameH * 0.28)
+	buttonRow:Dock(BOTTOM)
 	buttonRow.Paint = nil
 
 	local confirm = vgui.Create("DButton", buttonRow)
@@ -709,8 +709,8 @@ function BuildLocalPage()
 		loadBtn:SetText("#beatrun.coursesmenu.start")
 		loadBtn:SetFont("AEUIDefault")
 		loadBtn:SetTextColor(CurrentTheme().buttons.green.t)
-		loadBtn:Dock(RIGHT)
 		loadBtn:SetWide(90)
+		loadBtn:Dock(RIGHT)
 		loadBtn:DockMargin(0, 10, 10, 10)
 		loadBtn:SetEnabled(LocalPlayer():IsSuperAdmin())
 
@@ -1165,8 +1165,8 @@ function BuildOnlinePage()
 		codeBtn.OnCursorExited = function(self) self:SetTextColor(CurrentTheme().text.muted) end
 
 		local rightPanel = vgui.Create("DPanel", entry)
-		rightPanel:Dock(RIGHT)
 		rightPanel:SetWide(170)
+		rightPanel:Dock(RIGHT)
 		rightPanel:DockMargin(0, 8, 10, 8)
 
 		rightPanel.Paint = function(self, w, h)
@@ -1175,8 +1175,8 @@ function BuildOnlinePage()
 		end
 
 		local authorPanel = vgui.Create("DPanel", rightPanel)
-		authorPanel:Dock(TOP)
 		authorPanel:SetTall(28)
+		authorPanel:Dock(TOP)
 		authorPanel.Paint = nil
 
 		local avatar = vgui.Create("AvatarImage", authorPanel)
@@ -1357,8 +1357,8 @@ function BuildSettingsPage()
 
 	local themeSelect = vgui.Create("DComboBox", SettingsPanel)
 	themeSelect:SetFont("AEUIDefault")
-	themeSelect:Dock(TOP)
 	themeSelect:SetTall(30)
+	themeSelect:Dock(TOP)
 	themeSelect:DockMargin(0, 0, Frame:GetWide() - 500, 20)
 	themeSelect:SetValue(language.GetPhrase("beatrun.coursesmenu.themes." .. string.lower(uiTheme:GetString())))
 	themeSelect:SetTextColor(CurrentTheme().text.primary)
