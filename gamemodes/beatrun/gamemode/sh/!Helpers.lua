@@ -115,16 +115,21 @@ if SERVER then
 	util.AddNetworkString("Beatrun_SyncBlacklist")
 	util.AddNetworkString("Beatrun_RequestBlacklist")
 
+	util.AddNetworkString("Beatrun_RequestLoadouts")
+	util.AddNetworkString("Beatrun_SyncLoadouts")
+	util.AddNetworkString("Beatrun_UpdateLoadouts")
+
 	BEATRUN_WEAPON_BLACKLIST = BEATRUN_WEAPON_BLACKLIST or {}
-	BEATRUN_GAMEMODES_LOADOUTS = { { "weapon_357", "weapon_ar2" }, { "weapon_pistol", "weapon_smg1" } }
+	BEATRUN_GAMEMODES_LOADOUTS = BEATRUN_GAMEMODES_LOADOUTS or {}
+	-- { { "weapon_357", "weapon_ar2" }, { "weapon_pistol", "weapon_smg1" } }
 
 	function SaveBlacklist()
 		file.CreateDir("beatrun")
-		file.Write("beatrun/beatrun_loadouts_blacklist.json", util.TableToJSON(BEATRUN_WEAPON_BLACKLIST))
+		file.Write("beatrun/loadouts_blacklist.json", util.TableToJSON(BEATRUN_WEAPON_BLACKLIST))
 	end
 
 	function LoadBlacklist()
-		if file.Exists("beatrun/beatrun_loadouts_blacklist.json", "DATA") then BEATRUN_WEAPON_BLACKLIST = util.JSONToTable(file.Read("beatrun/beatrun_loadouts_blacklist.json", "DATA")) or {} end
+		if file.Exists("beatrun/loadouts_blacklist.json", "DATA") then BEATRUN_WEAPON_BLACKLIST = util.JSONToTable(file.Read("beatrun/loadouts_blacklist.json", "DATA")) or {} end
 	end
 
 	net.Receive("Beatrun_UpdateBlacklist", function(_, ply)
@@ -153,6 +158,36 @@ if SERVER then
 	end)
 
 	hook.Add("Initialize", "Beaturn_Load_Blacklist", LoadBlacklist)
+
+	local function SaveLoadouts()
+		file.CreateDir("beatrun")
+		file.Write("beatrun/loadouts.json", util.TableToJSON(BEATRUN_GAMEMODES_LOADOUTS))
+	end
+
+	local function LoadLoadouts()
+		if file.Exists("beatrun/loadouts.json", "DATA") then
+			BEATRUN_GAMEMODES_LOADOUTS = util.JSONToTable(file.Read("beatrun/loadouts.json", "DATA")) or {}
+		end
+	end
+
+	net.Receive("Beatrun_RequestLoadouts", function(_, ply)
+		net.Start("Beatrun_SyncLoadouts")
+			net.WriteTable(BEATRUN_GAMEMODES_LOADOUTS)
+		net.Send(ply)
+	end)
+
+	net.Receive("Beatrun_UpdateLoadouts", function(_, ply)
+		if not ply:IsAdmin() then return end
+
+		BEATRUN_GAMEMODES_LOADOUTS = net.ReadTable()
+		SaveLoadouts()
+
+		net.Start("Beatrun_SyncLoadouts")
+			net.WriteTable(BEATRUN_GAMEMODES_LOADOUTS)
+		net.Broadcast()
+	end)
+
+	hook.Add("Initialize", "Beatrun_LoadLoadouts", LoadLoadouts)
 
 	function BeatrunGiveAmmo(ply, wep)
 		if wep:GetPrimaryAmmoType() ~= -1 then ply:GiveAmmo(10000, wep:GetPrimaryAmmoType(), true) end
@@ -200,12 +235,216 @@ end
 
 if CLIENT then
 	BEATRUN_WEAPON_BLACKLIST = BEATRUN_WEAPON_BLACKLIST or {}
+	BEATRUN_GAMEMODES_LOADOUTS = BEATRUN_GAMEMODES_LOADOUTS or {}
 
 	local blacklistFrame
+	local loadoutsFrame
+	local SelectedLoadout = 1
 
-	concommand.Add("beatrun_blacklist_menu", function()
-		net.Start("Beatrun_RequestBlacklist")
+	local function OpenLoadoutsMenu()
+		if IsValid(loadoutsFrame) then loadoutsFrame:Remove() end
+
+		loadoutsFrame = vgui.Create("DFrame")
+		loadoutsFrame:SetTitle("")
+		loadoutsFrame:SetSize(ScrW() * 0.6, ScrH() * 0.6)
+		loadoutsFrame:Center()
+		loadoutsFrame:DockPadding(10, 30, 0, 10)
+		loadoutsFrame:SetDeleteOnClose(true)
+		loadoutsFrame:ShowCloseButton(false)
+		loadoutsFrame:MakePopup()
+
+		loadoutsFrame.Paint = function(self, w, h)
+			draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
+			draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
+			draw.SimpleText("Loadout Editor", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+
+		local close = vgui.Create("DButton", loadoutsFrame)
+		close:SetText("✕")
+		close:SetFont("AEUIDefault")
+		close:SetTextColor(CurrentTheme().buttons.red.t)
+		close:SetSize(24, 24)
+		close:SetPos(loadoutsFrame:GetWide() - 24, 0)
+
+		close.Paint = function(self, w, h)
+			local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+			local isDown = self:IsDown() and CurrentTheme().buttons.red.d
+			draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
+		end
+
+		close.DoClick = function() loadoutsFrame:Close() end
+
+		local left = vgui.Create("DPanel", loadoutsFrame)
+		left:Dock(LEFT)
+		left:SetWide(220)
+		left:DockMargin(0, 0, 10, 0)
+		left.Paint = function(self, w, h)
+			draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.primary)
+		end
+
+		local loadoutList = vgui.Create("DScrollPanel", left)
+		loadoutList:Dock(FILL)
+		ApplyScrollTheme(loadoutList)
+
+		local right = vgui.Create("DPanel", loadoutsFrame)
+		right:Dock(FILL)
+		right.Paint = function(self, w, h)
+			draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.primary)
+		end
+
+		local weaponList = vgui.Create("DScrollPanel", right)
+		weaponList:Dock(FILL)
+		ApplyScrollTheme(weaponList)
+
+		local function BuildWeapons()
+			weaponList:Clear()
+
+			local loadout = BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout]
+			if not loadout then return end
+
+			for _, class in ipairs(loadout) do
+				local row = weaponList:Add("DPanel")
+				row:SetTall(40)
+				row:Dock(TOP)
+				row:DockMargin(0, 0, 0, 5)
+
+				row.Paint = function(self, w, h)
+					draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.secondary)
+					draw.SimpleText(class, "AEUIDefault", 10, h / 2, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
+
+				local remove = vgui.Create("DButton", row)
+				remove:Dock(RIGHT)
+				remove:SetWide(80)
+				remove:SetText("Remove")
+				remove:SetTextColor(CurrentTheme().buttons.red.t)
+
+				remove.Paint = function(self, w, h)
+					ApplyButtonTheme(self, w, h, "red")
+				end
+
+				remove.DoClick = function()
+					table.RemoveByValue(loadout, class)
+					BuildWeapons()
+				end
+			end
+		end
+
+		local function BuildLoadouts()
+			loadoutList:Clear()
+
+			for i, _ in ipairs(BEATRUN_GAMEMODES_LOADOUTS) do
+				local row = loadoutList:Add("DButton")
+				row:Dock(TOP)
+				row:SetTall(40)
+				row:SetText("")
+				row:DockMargin(0, 0, 0, 5)
+
+				row.Paint = function(self, w, h)
+					local active = (i == SelectedLoadout)
+					local col = active and CurrentTheme().accent or CurrentTheme().panels.secondary
+					draw.RoundedBox(6, 0, 0, w, h, col)
+
+					draw.SimpleText("Loadout " .. i, "AEUIDefault", 10, h / 2, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				end
+
+				row.DoClick = function()
+					SelectedLoadout = i
+					BuildWeapons()
+				end
+			end
+
+			BuildWeapons()
+		end
+
+		local bottomLeft = vgui.Create("DPanel", left)
+		bottomLeft:Dock(BOTTOM)
+		bottomLeft:SetTall(60)
+		bottomLeft.Paint = nil
+
+		local add = vgui.Create("DButton", bottomLeft)
+		add:Dock(LEFT)
+		add:SetWide(100)
+		add:SetText("+")
+		add:SetTextColor(CurrentTheme().buttons.green.t)
+		add.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+
+		add.DoClick = function()
+			table.insert(BEATRUN_GAMEMODES_LOADOUTS, {})
+			SelectedLoadout = #BEATRUN_GAMEMODES_LOADOUTS
+			BuildLoadouts()
+		end
+
+		local del = vgui.Create("DButton", bottomLeft)
+		del:Dock(RIGHT)
+		del:SetWide(100)
+		del:SetText("-")
+		del:SetTextColor(CurrentTheme().buttons.red.t)
+		del.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+
+		del.DoClick = function()
+			table.remove(BEATRUN_GAMEMODES_LOADOUTS, SelectedLoadout)
+			SelectedLoadout = math.Clamp(SelectedLoadout, 1, #BEATRUN_GAMEMODES_LOADOUTS)
+			BuildLoadouts()
+		end
+
+		local addWeapon = vgui.Create("DButton", right)
+		addWeapon:Dock(BOTTOM)
+		addWeapon:SetTall(40)
+		addWeapon:SetText("Add Weapon")
+		addWeapon:SetTextColor(CurrentTheme().buttons.green.t)
+
+		addWeapon.Paint = function(self, w, h)
+			ApplyButtonTheme(self, w, h, "green")
+		end
+
+		addWeapon.DoClick = function()
+			local menu = DermaMenu()
+
+			local weps = GetWeaponsList()
+			table.sort(weps, function(a, b) return a.ClassName < b.ClassName end)
+
+			for _, wep in ipairs(weps) do
+				menu:AddOption(wep.ClassName, function()
+					table.insert(BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout], wep.ClassName)
+					BuildWeapons()
+				end)
+			end
+
+			menu:Open()
+		end
+
+		local save = vgui.Create("DButton", loadoutsFrame)
+		save:Dock(BOTTOM)
+		save:SetTall(40)
+		save:SetText("Save")
+		save:SetTextColor(CurrentTheme().buttons.green.t)
+
+		save.Paint = function(self, w, h)
+			ApplyButtonTheme(self, w, h, "green")
+		end
+
+		save.DoClick = function()
+			net.Start("Beatrun_UpdateLoadouts")
+				net.WriteTable(BEATRUN_GAMEMODES_LOADOUTS)
+			net.SendToServer()
+		end
+
+		BuildLoadouts()
+	end
+
+	concommand.Add("beatrun_loadouts_menu", function()
+		net.Start("Beatrun_RequestLoadouts")
 		net.SendToServer()
+	end)
+
+	net.Receive("Beatrun_SyncLoadouts", function()
+		BEATRUN_GAMEMODES_LOADOUTS = net.ReadTable()
+		OpenLoadoutsMenu()
+	end)
+
+	local function OpenBlacklistMenu()
+		if IsValid(blacklistFrame) then blacklistFrame:Remove() end
 
 		local frameW = math.Clamp(ScrW() * 0.3, 360, 700)
 		local frameH = math.Clamp(ScrH() * 0.5, 300, 700)
@@ -321,9 +560,17 @@ if CLIENT then
 				end
 			end
 		end
+	end
+
+	concommand.Add("beatrun_blacklist_menu", function()
+		net.Start("Beatrun_RequestBlacklist")
+		net.SendToServer()
 	end)
 
-	net.Receive("Beatrun_SyncBlacklist", function() BEATRUN_WEAPON_BLACKLIST = net.ReadTable() end)
+	net.Receive("Beatrun_SyncBlacklist", function()
+		BEATRUN_WEAPON_BLACKLIST = net.ReadTable()
+		OpenBlacklistMenu()
+	end)
 end
 
 hook.Add("Initialize", "Beaturn_Load_Blacklist", LoadBlacklist)
