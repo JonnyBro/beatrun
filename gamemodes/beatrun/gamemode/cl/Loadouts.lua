@@ -67,6 +67,7 @@ local function OpenLoadoutsMenu()
 		weaponList:Clear()
 
 		local loadout = BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout]
+		if not loadout then return end
 
 		table.sort(loadout, function(a, b) return a < b end)
 
