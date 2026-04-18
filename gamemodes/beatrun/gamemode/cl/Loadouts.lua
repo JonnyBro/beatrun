@@ -381,5 +381,3 @@ end)
 net.Receive("Beatrun_SyncBlacklist", function()
 	BEATRUN_WEAPON_BLACKLIST = net.ReadTable()
 end)
-
-hook.Add("Initialize", "Beaturn_Load_Blacklist", LoadBlacklist)

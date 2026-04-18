@@ -9,12 +9,12 @@ util.AddNetworkString("Beatrun_UpdateLoadouts")
 BEATRUN_WEAPON_BLACKLIST = BEATRUN_WEAPON_BLACKLIST or {}
 BEATRUN_GAMEMODES_LOADOUTS = BEATRUN_GAMEMODES_LOADOUTS or {}
 
-function SaveBlacklist()
+local function SaveBlacklist()
 	file.CreateDir("beatrun")
 	file.Write("beatrun/loadouts_blacklist.json", util.TableToJSON(BEATRUN_WEAPON_BLACKLIST))
 end
 
-function LoadBlacklist()
+local function LoadBlacklist()
 	if file.Exists("beatrun/loadouts_blacklist.json", "DATA") then BEATRUN_WEAPON_BLACKLIST = util.JSONToTable(file.Read("beatrun/loadouts_blacklist.json", "DATA")) or {} end
 end
 
