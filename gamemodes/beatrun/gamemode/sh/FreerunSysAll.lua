@@ -61,7 +61,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 		end
 	end
 
-	if not ply:Crouching() and not ply:KeyDown(IN_WALK) then
+	if not ply:Crouching() and not walking then
 		if game.SinglePlayer() then
 			local intensity = ply:GetInfoNum("Beatrun_ViewbobIntensity", 20) / 20
 
@@ -106,8 +106,11 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 	local newsound = FOOTSTEPS_LUT[mat] or "Concrete"
 
 	if mat == "player/footsteps/ladder" then return end
+	
+	newsound = newsound or "Concrete"
 
 	ply.LastStepMat = newsound
+
 	if game.SinglePlayer() then ply:SetNW2String("LastStepMat", newsound) end
 
 	ply.FootstepReleaseLand = true
@@ -118,17 +121,23 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 		if not ply:Crouching() and not isBalancing then
 
-			if currentSpeed <= 140 and IsFirstTimePredicted() then
+			if currentSpeed <= 140 then
 				local walksound = FOOTSTEPS_WALK_LUT[mat] or "Concrete"
+				walksound = walksound or "Concrete"
+
 				ply.LastStepMat = walksound
+
 				ply:EmitSound("Walk." .. walksound)
 				ply:EmitSound("Cloth.MovementWalk")
 			else
 				ply:EmitSound("Footsteps." .. newsound)
 				ply:EmitSound("Cloth.MovementRun")
+
 				if math.random() > 0.9 then ParkourEvent("step") end
 			end
 		end
+		
+		ply.LastFootstepSound = mat
 
 		if ply:InOverdrive() and currentSpeed > 400 then
 			ply:EmitSound("Footsteps.Spark")
@@ -136,7 +145,10 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 		if ply:Crouching() and not isBalancing and IsFirstTimePredicted() then
 			local sneaksound = FOOTSTEPS_SNEAK_LUT[mat] or "Concrete"
+			sneaksound = sneaksound or "Concrete"
+
 			ply.LastStepMat = sneaksound
+
 			ply:EmitSound("Sneak." .. sneaksound)
 			ply:EmitSound("Cloth.MovementSneak")
 		end
@@ -148,7 +160,9 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 		if ply.FootstepLand and IsFirstTimePredicted() then
 			local landsound = FOOTSTEPS_LAND_LUT[mat] or "Concrete"
+			
 			ply:EmitSound("Land." .. landsound)
+			
 			if ply:WaterLevel() > 0 then
 				ply:EmitSound("Land.Water")
 			end
@@ -236,7 +250,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	if (CLIENT or game.SinglePlayer()) and CurTime() > (ply:GetStepRelease() or 0) and ply.FootstepReleaseLand then
 		local newsound = FOOTSTEPS_RELEASE_LUT[ply.LastFootstepSound] or "Concrete"
 
-		if ply:GetVelocity():Length() >= 140 or newsound == "Gantry" then
+		if mv:GetVelocity():Length() >= 140 or newsound == "Gantry" then
 			ply:EmitSound("Release." .. newsound)		
 		elseif ply:WaterLevel() > 0 then
 			ply:EmitSound("Release.Water")
