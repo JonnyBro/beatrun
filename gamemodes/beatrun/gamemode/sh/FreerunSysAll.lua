@@ -61,7 +61,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 		end
 	end
 
-	if not ply:Crouching() and not walking then
+	if not ply:Crouching() and not ply:KeyDown(IN_WALK) then
 		if game.SinglePlayer() then
 			local intensity = ply:GetInfoNum("Beatrun_ViewbobIntensity", 20) / 20
 
@@ -83,8 +83,8 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 		steptime = steptime * 2
 	end
 
-	if ply:KeyDown(IN_WALK) then
-		steptime = steptime * 1.45
+	if ply:KeyDown(IN_WALK) and not ply:Crouching() then
+		steptime = steptime * 1.4
 	end
 
 	if ply:InOverdrive() then
@@ -104,11 +104,10 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 	local mat = sound:sub(0, -6)
 	local newsound = FOOTSTEPS_LUT[mat] or "Concrete"
-	local walksound = FOOTSTEPS_WALK_LUT[mat] or "Concrete"
 
 	if mat == "player/footsteps/ladder" then return end
 
-	ply.LastStepMat = newsound or walksound or releasesound
+	ply.LastStepMat = newsound
 	if game.SinglePlayer() then ply:SetNW2String("LastStepMat", newsound) end
 
 	ply.FootstepReleaseLand = true
@@ -119,7 +118,9 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 		if not ply:Crouching() and not isBalancing then
 
-			if currentSpeed < 155 then
+			if currentSpeed <= 140 and IsFirstTimePredicted() then
+				local walksound = FOOTSTEPS_WALK_LUT[mat] or "Concrete"
+				ply.LastStepMat = walksound
 				ply:EmitSound("Walk." .. walksound)
 				ply:EmitSound("Cloth.MovementWalk")
 			else
@@ -235,7 +236,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	if (CLIENT or game.SinglePlayer()) and CurTime() > (ply:GetStepRelease() or 0) and ply.FootstepReleaseLand then
 		local newsound = FOOTSTEPS_RELEASE_LUT[ply.LastFootstepSound] or "Concrete"
 
-		if ply:GetVelocity():Length() > 140 or newsound == "Gantry" then
+		if ply:GetVelocity():Length() >= 140 or newsound == "Gantry" then
 			ply:EmitSound("Release." .. newsound)		
 		elseif ply:WaterLevel() > 0 then
 			ply:EmitSound("Release.Water")

@@ -1549,38 +1549,8 @@ local function JumpAnim(event, ply)
 		if event == "jump" or event == "jumpfar" or (event:Left(11) == "jumpwallrun" and ply:GetWallrunDir():Dot(ply:EyeAngles():Forward()) < 0.75) then
 			if event == "jumpfar" then
 				animtable.AnimString = "jumpfast"
-				timer.Simple(0.1, function()
-					if BodyAnimString == "jumpfast" then
-						ply:EmitSound("Cloth.MovementRun")
-					end
-				end)
-				timer.Simple(0.6, function()
-					if BodyAnimString == "jumpfast" then
-						ply:EmitSound("Cloth.MovementRun")
-					end
-				end)
-				timer.Simple(1, function()
-					if BodyAnimString == "jumpfast" then
-						ply:EmitSound("Cloth.MovementRun")
-					end
-				end)
 			else
 				animtable.AnimString = "jumpslow"
-				timer.Simple(0.1, function()
-					if BodyAnimString == "jumpslow" then
-						ply:EmitSound("Cloth.MovementRun")
-					end
-				end)
-				timer.Simple(0.6, function()
-					if BodyAnimString == "jumpslow" then
-						ply:EmitSound("Cloth.MovementRun")
-					end
-				end)
-				timer.Simple(1, function()
-					if BodyAnimString == "jumpslow" then
-						ply:EmitSound("Cloth.MovementRun")
-					end
-				end)
 			end
 
 			lockang = false
@@ -1804,7 +1774,6 @@ local function JumpThink()
 			local vel_l = vel:Length()
 			local moving = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_MOVELEFT) or ply:KeyDown(IN_MOVERIGHT)
 			local back = ply:KeyDown(IN_BACK)
-			local stepmat = ply.LastStepMat or game.SinglePlayer() and ply:GetNW2String("LastStepMat", "Concrete") or "Concrete"
 			vel.z = 0
 
 			if runanims[BodyAnimString] then
@@ -1892,16 +1861,6 @@ local function JumpThink()
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
 						ply:EmitSound("Cloth.MovementWalk")
-						timer.Simple(0.1, function()
-							if BodyAnimString == "walktostandleft" and vel_l < 300 and ply:OnGround() then
-								ply:EmitSound("Walk." .. stepmat)
-							end
-						end)
-						timer.Simple(0.45, function()
-							if BodyAnimString == "walktostandleft" and ply:OnGround() then
-								ply:EmitSound("Sneak." .. stepmat)
-							end
-						end)
 					end
 
 					if (BodyAnimString == "stand" or BodyAnimString == "walktostandleft" or BodyAnimString == "jumpcoilend") and ply:Crouching() or BodyAnimString == "crouchfwd" or BodyAnimString == "crouchbwd" then
@@ -1909,16 +1868,6 @@ local function JumpThink()
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchtostandleft"))
 						ply:EmitSound("Cloth.MovementSneak")
-						timer.Simple(0.1, function()
-							if BodyAnimString == "crouchtostandleft" and vel_l < 50 and ply:OnGround() then
-								ply:EmitSound("Sneak." .. stepmat)
-							end
-						end)
-						timer.Simple(0.4, function()
-							if BodyAnimString == "crouchtostandleft" and ply:OnGround() then
-								ply:EmitSound("Sneak." .. stepmat)
-							end
-						end)
 					end
 				end
 
@@ -1981,7 +1930,7 @@ local function JumpThink()
 					ply:EmitSound("Cloth.FallShortHard")
 					ply:EmitSound("Cloth.Fall")
 					ply:FaithVO("Faith.Impact")
-					--DoImpactBlur(6)
+					DoImpactBlur(6)
 				end
 
 			elseif (BodyAnimString == "jumpturnland" or BodyAnimString == "jumpturnlandidle" or BodyAnimString == "jumpturnlandstand" or BodyAnimString == "jumpturnlandstandgun" or BodyAnimString == "jumpturnlandcrouch") and not ply:OnGround() and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:WaterLevel() < 3 then
@@ -2104,14 +2053,15 @@ local function JumpThink()
 						BodyAnim:SetAngles(oldnewang)
 					end
 				elseif newang:Forward():Dot(ang:Forward()) < 0.25 then
+					local stepmat = ply.LastStepMat or game.SinglePlayer() and ply:GetNW2String("LastStepMat", "Concrete") or "Concrete"
 					BodyAnimCycle = 0
 
 					BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
 					ply:EmitSound("Release." .. stepmat)
-					ply:EmitSound("Cloth.MovementSneak")
+					ply:EmitSound("Cloth.MovementWalk")
 
 					timer.Simple(0.15, function()
-						ply:EmitSound("Sneak." .. stepmat)
+						ply:EmitSound("Walk." .. stepmat)
 					end)
 				end
 			end

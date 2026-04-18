@@ -53,7 +53,7 @@ local function PlayVaultAnim(ply, ang)
 	end
 
 	if game.SinglePlayer() and SERVER then
-		ang = ang or ply:EyeAngles()
+		local ang = ang or ply:EyeAngles()
 		ang.x = 0
 		ang.z = 0
 
@@ -64,7 +64,7 @@ local function PlayVaultAnim(ply, ang)
 	end
 
 	if CLIENT then
-		ang = ang or ply:EyeAngles()
+		local ang = ang or ply:EyeAngles()
 		ang.x = 0
 		ang.z = 0
 		ply.OrigEyeAng = ang
@@ -125,6 +125,7 @@ local function Vault1(ply, mv, ang, t, h)
 			end
 
 			local mat = t.MatType
+			local start = mv:GetOrigin() + eyevec
 			local vaultendcheck = Vector(vaultend)
 			vaultendcheck.z = vaultendcheck.z + 64
 
@@ -210,7 +211,7 @@ local function Vault2(ply, mv, ang, t, h)
 	if t.Hit then
 		local tsafety = {}
 		local tsafetyout = {}
-		start = nil
+		local start = nil
 
 		TraceParkourMask(tsafety)
 		tsafety.output = tsafetyout
@@ -331,7 +332,7 @@ local function Vault3(ply, mv, ang, t, h)
 
 		TraceParkourMask(h)
 		local hulltr = util.TraceHull(h)
-		mins, maxs = ply:GetHull()
+		local mins, maxs = ply:GetHull()
 
 		h.start = vaultpos
 		h.endpos = h.start
@@ -394,14 +395,14 @@ function Vault4(ply, mv, ang, t, h)
 	tsafety.start = mv:GetOrigin() + aircheck + ang:Forward() * 40
 	tsafety.endpos = tsafety.start - hairvec
 
-	tsafetyout = util.TraceLine(tsafety)
+	local tsafetyout = util.TraceLine(tsafety)
 
 	if tsafetyout.Hit then return false end
 
 	tsafety.start = mv:GetOrigin() + chestvec
 	tsafety.endpos = tsafety.start + ang:Forward() * 150
 
-	tsafetyout = util.TraceLine(tsafety)
+	local tsafetyout = util.TraceLine(tsafety)
 
 	if not tsafetyout.Hit then return false end
 
@@ -449,7 +450,7 @@ function Vault4(ply, mv, ang, t, h)
 		tsafety.start = ply:EyePos()
 		tsafety.endpos = tsafety.start + ang:Forward() * 100
 
-		tsafetyout = util.TraceLine(tsafety)
+		local tsafetyout = util.TraceLine(tsafety)
 
 		if tsafetyout.MatType == MAT_GRATE then
 		    ply:EmitSound("Handsteps.FenceVault")
@@ -465,8 +466,8 @@ function Vault5(ply, mv, ang, t, h)
 	if ply:GetWallrun() == 1 and ply:GetWallrunTime() - CurTime() < 0.75 then return false end
 	if mv:GetVelocity().z < (not ply:GetDive() and -100 or -1000) then return false end
 
-	eyevec = not ply:Crouching() and eyevec or eyevecduck
-	neckvec = not ply:Crouching() and neckvec or neckvecduck
+	local eyevec = not ply:Crouching() and eyevec or eyevecduck
+	local neckvec = not ply:Crouching() and neckvec or neckvecduck
 
 	t.start = mv:GetOrigin() + eyevec + ang:Forward() * 70
 	t.endpos = t.start - neckvec
