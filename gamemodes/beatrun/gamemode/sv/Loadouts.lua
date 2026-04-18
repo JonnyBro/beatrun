@@ -102,7 +102,7 @@ function BeatrunGetRandomLoadout(selected)
 
 	if #tbl == 2 then return tbl end
 
-	return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
+	return {}
 end
 
 function BeatrunGiveGMLoadout(ply)
@@ -110,6 +110,7 @@ function BeatrunGiveGMLoadout(ply)
 
 	local selectedLoadouts = GetConVar("Beatrun_RandomLoadouts"):GetString()
 	local loadout = BeatrunGetRandomLoadout(selectedLoadouts)
+	if not loadout or table.IsEmpty(loadout) then return end
 
 	for _, v in pairs(loadout) do
 		local wep = ply:Give(v)

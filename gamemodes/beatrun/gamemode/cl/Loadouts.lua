@@ -203,15 +203,18 @@ local function OpenLoadoutsMenu()
 		local menu = DermaMenu()
 		local weps = GetWeaponsList()
 
+		local loadout = BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout]
+		if not istable(loadout) then return end
+
 		table.sort(weps, function(a, b) return a.ClassName < b.ClassName end)
 
 		for _, wep in ipairs(weps) do
 			if string.find(wep.ClassName, "base") then continue end
 			if BEATRUN_WEAPON_BLACKLIST[wep.ClassName] then continue end
-			if table.HasValue(BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout], wep.ClassName) then continue end
+			if table.HasValue(loadout, wep.ClassName) then continue end
 
 			menu:AddOption(string.format("%s (%s)", wep.PrintName, wep.ClassName), function()
-				table.insert(BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout], wep.ClassName)
+				table.insert(loadout, wep.ClassName)
 
 				BuildWeapons()
 			end)
@@ -247,6 +250,10 @@ end)
 
 net.Receive("Beatrun_SyncLoadouts", function()
 	BEATRUN_GAMEMODES_LOADOUTS = net.ReadTable()
+
+	SelectedLoadout = math.Clamp(SelectedLoadout or 1, 1, #BEATRUN_GAMEMODES_LOADOUTS)
+
+	if IsValid(loadoutsFrame) then OpenLoadoutsMenu() end
 end)
 
 local function OpenBlacklistMenu()
@@ -380,4 +387,6 @@ end)
 
 net.Receive("Beatrun_SyncBlacklist", function()
 	BEATRUN_WEAPON_BLACKLIST = net.ReadTable()
+
+	if IsValid(blacklistFrame) then OpenBlacklistMenu() end
 end)
