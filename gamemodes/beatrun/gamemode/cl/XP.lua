@@ -1,25 +1,3 @@
-local meta = FindMetaTable("Player")
-local XP_ratiocache = nil
-local parkourevent_lastpos = Vector()
-
-function XP_nextlevel(level)
-	return math.Round(0.25 * level ^ 3 + 0.8 * level ^ 2 + 2 * level)
-end
-
-local ParkourXP = {
-	roll = 3,
-	sidestep = 1,
-	slide = 1,
-	vault = 2,
-	climb = 4,
-	wallrunh = 2,
-	springboard = 2,
-	wallrunv = 2,
-	coil = 1,
-	swingbar = 4,
-	step = 1
-}
-
 local ParkourXP_RNG = {
 	sidestep = 0.1
 }
@@ -33,113 +11,145 @@ local ParkourXP_PosCheck = {
 
 XP_floatingxp = {}
 
-hook.Add("OnParkour", "Beatrun_ParkourXP", function(event)
-	local ply = LocalPlayer()
-	if not IsValid(ply) then return end
-
-	local pos = ply:GetPos()
-
-	if math.random() < (ParkourXP_RNG[event] or 1) and (not ParkourXP_PosCheck[event] or parkourevent_lastpos:Distance(pos) > 200) then
-		local xp = (ParkourXP[event] or 0) * math.max(math.Round(ply:GetLevel() * 0.05), 1)
-
-		ply:AddXP(xp)
-
-		if ParkourXP_PosCheck[event] then
-			parkourevent_lastpos:Set(pos)
-		end
-	end
-end)
+local isSingleOrP2p = not game.IsDedicated()
+local XP_ratiocache = nil
+local parkourevent_lastpos = Vector()
+local meta = FindMetaTable("Player")
 
 function meta:GetLevel()
-	return self.Level or 0
+	if isSingleOrP2p then return self.Level or 1 end
+
+	return self:GetNW2Int("Beatrun_Level", 1)
+end
+
+function meta:GetXP()
+	if isSingleOrP2p then return self.XP or 0 end
+
+	return self:GetNW2Int("Beatrun_XP", 0)
 end
 
 function meta:GetLevelRatio()
-	local lastratio = XP_nextlevel(self:GetLevel() - 1)
-	XP_ratiocache = XP_ratiocache or (self:GetXP() - lastratio) / (XP_nextlevel(self:GetLevel()) - lastratio)
+	local lastratio = CalcXPForNextLevel(self:GetLevel() - 1)
+
+	XP_ratiocache = XP_ratiocache or (self:GetXP() - lastratio) / (CalcXPForNextLevel(self:GetLevel()) - lastratio)
 
 	return XP_ratiocache
 end
 
-function meta:SetLevel(level)
-	self.Level = level
-	XP_ratiocache = nil
-end
-
 function meta:LevelUp()
+	if not isSingleOrP2p then return end
+
 	local i = 0
 
 	while self:GetLevelRatio() >= 1 do
 		self:SetLevel(self:GetLevel() + 1)
 
 		i = i + 1
+
 		if i > 1000 then break end
 	end
 
-	if i > 0 then
-		self:EmitSound("mirrorsedge/UI/ME_UI_challenge_end_success.wav", 35, 100 + math.random(-5, 5))
-	end
+	if i > 0 then self:EmitSound("mirrorsedge/UI/ME_UI_challenge_end_success.wav", 35, 100 + math.random(-5, 5)) end
 end
 
-function meta:GetXP()
-	return self.XP or 0
+function meta:SetLevel(level)
+	if isSingleOrP2p then
+		self.Level = level
+		self.XP = CalcXPForNextLevel(level - 1)
+
+		XP_ratiocache = nil
+	end
 end
 
 function meta:SetXP(xp)
-	self.XP = xp
+	if isSingleOrP2p then
+		self.XP = xp
 
-	XP_ratiocache = nil
+		XP_ratiocache = nil
 
-	self:LevelUp()
+		self:LevelUp()
+	end
 end
 
 function meta:AddXP(xp)
-	self.XP = math.Round((self.XP or 0) + xp)
+	if isSingleOrP2p then
+		self.XP = math.Round((self.XP or 0) + xp)
 
-	XP_ratiocache = nil
+		XP_ratiocache = nil
 
-	self:LevelUp()
+		self:LevelUp()
 
-	self.LastXP = CurTime()
+		self.LastXP = CurTime()
 
-	if xp > 0 then
-		XP_floatingxp[CurTime() + 2] = "+" .. xp
+		if xp > 0 then XP_floatingxp[CurTime() + 2] = "+" .. xp end
 	end
 end
 
-function meta:SaveXP()
-	local xp = util.TableToJSON({ LocalPlayer().XP or 0, LocalPlayer().Level or 1 })
+if isSingleOrP2p then
+	function SaveXP()
+		local ply = LocalPlayer()
+		local data = util.TableToJSON({ ply.XP or 0, ply.Level or 1 })
+		local compressed = util.Compress(data)
 
-	--[[ NOTE: disabled for funnies
-	local xpold = file.Read("beatrun/local/xp.txt", "DATA")
-
-	if xpold then
-		xpold = util.Decompress(xpold)
-		if LocalPlayer().XP < util.JSONToTable(xpold)[1] then return end
-	end --]]
-
-	local xp = util.Compress(xp)
-
-	file.CreateDir("beatrun/local")
-	file.Write("beatrun/local/xp.txt", xp)
-end
-
-function LoadXP()
-	local xp = file.Read("beatrun/local/xp.txt", "DATA")
-
-	if xp then
-		xp = util.JSONToTable(util.Decompress(xp))
-
-		LocalPlayer():SetXP(xp[1])
-		LocalPlayer():SetLevel(xp[2])
-	else
-		LocalPlayer():SetXP(0)
-		LocalPlayer():SetLevel(1)
+		file.CreateDir("beatrun/local")
+		file.Write("beatrun/local/xp.txt", compressed)
 	end
+
+	hook.Add("ShutDown", "SaveXP", SaveXP)
+
+	local function LoadXP()
+		local ply = LocalPlayer()
+		local data = file.Read("beatrun/local/xp.txt", "DATA")
+
+		if data then
+			data = util.JSONToTable(util.Decompress(data))
+
+			ply:SetXP(data[1])
+			ply:SetLevel(data[2])
+		else
+			ply:SetXP(0)
+			ply:SetLevel(1)
+		end
+	end
+
+	hook.Add("InitPostEntity", "LoadXP", LoadXP)
+
+	hook.Add("OnParkour", "ParkourXP", function(event)
+		local ply = LocalPlayer()
+		if not IsValid(ply) then return end
+
+		local pos = ply:GetPos()
+
+		if math.random() < (ParkourXP_RNG[event] or 1) and (not ParkourXP_PosCheck[event] or parkourevent_lastpos:Distance(pos) > 200) then
+			local xp = (ParkourXP[event] or 0) * math.max(math.Round(ply:GetLevel() * 0.05), 1)
+
+			ply:AddXP(xp)
+
+			if ParkourXP_PosCheck[event] then parkourevent_lastpos:Set(pos) end
+		end
+	end)
+else
+	hook.Add("OnParkour", "ParkourXP", function(event)
+		local ply = LocalPlayer()
+		if not IsValid(ply) then return end
+
+		local pos = ply:GetPos()
+
+		if math.random() < (ParkourXP_RNG[event] or 1) and (not ParkourXP_PosCheck[event] or parkourevent_lastpos:Distance(pos) > 200) then
+			net.Start("Beatrun_ParkourEvent")
+				net.WriteString(event)
+			net.SendToServer()
+
+			if ParkourXP_PosCheck[event] then parkourevent_lastpos:Set(pos) end
+		end
+	end)
+
+	net.Receive("Beatrun_XPUpdate", function() XP_ratiocache = nil end)
+
+	net.Receive("Beatrun_FloatingXP", function()
+		local xp = net.ReadInt(16)
+		if xp > 0 then XP_floatingxp[CurTime() + 2] = "+" .. xp end
+	end)
+
+	net.Receive("Beatrun_LevelUpSound", function() LocalPlayer():EmitSound("mirrorsedge/UI/ME_UI_challenge_end_success.wav", 35, 100 + math.random(-5, 5)) end)
 end
-
-hook.Add("InitPostEntity", "Beatrun_LoadXP", LoadXP)
-
-hook.Add("ShutDown", "Beatrun_SaveXP", function()
-	LocalPlayer():SaveXP()
-end)

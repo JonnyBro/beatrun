@@ -78,6 +78,7 @@ AddCommand("em_goal", function(ply, args, flags)
 end)
 
 AddCommand("votemode", function(ply, args, flags)
+	if game.SinglePlayer() then return end
 	if GetGlobalBool("GM_EVENTMODE") then return end
 
 	if voteStarted then

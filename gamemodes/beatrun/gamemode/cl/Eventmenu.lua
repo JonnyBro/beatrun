@@ -241,7 +241,38 @@ local function RebuildMainPanel()
 		AEUI:Text(MainPanel, "Settings:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
 
 		local y = MainPanel.content_y + 45
-		local toggles = {{"Allow members prop spawning", "EM_AllowProps"}, {"Allow members gun spawning", "EM_AllowWeapons"}, {"New players suspended", "EM_NewPlayersSuspended"}, {"Suspend at death", "EM_SuspendOnDeath"}, {"No melee damage", "EM_NoMeleeDamage"}, {"Hide nametags", "EM_HideNametags"}}
+
+		-- format: multiline
+		local toggles = {
+			{
+				"Allow members to spawn props",
+				"EM_AllowProps"
+			},
+			{
+				"Allow members to spawn weapons",
+				"EM_AllowWeapons"
+			},
+			{
+				"Allow members to spawn vehicles",
+				"EM_AllowVehicles"
+			},
+			{
+				"New players suspended",
+				"EM_NewPlayersSuspended"
+			},
+			{
+				"Suspend at death",
+				"EM_SuspendOnDeath"
+			},
+			{
+				"No melee damage",
+				"EM_NoMeleeDamage"
+			},
+			{
+				"Hide nametags",
+				"EM_HideNametags"
+			}
+		}
 
 		for _, t in ipairs(toggles) do
 			local name, var = t[1], t[2]

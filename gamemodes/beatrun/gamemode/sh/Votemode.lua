@@ -22,7 +22,6 @@ if CLIENT then
 	local slide = 0
 	local blur = Material("pp/blurscreen")
 	local hoveredButton = nil
-	local clickerActive = false
 	local hasVoted = false
 	local animProgress = 0
 
@@ -98,11 +97,6 @@ if CLIENT then
 
 			if slide < 0.5 then slide = 0 end
 
-			if slide == 0 and clickerActive then
-				gui.EnableScreenClicker(false)
-				clickerActive = false
-			end
-
 			return
 		end
 
@@ -110,11 +104,6 @@ if CLIENT then
 
 		if hasVoted then
 			animProgress = Lerp(FrameTime() * 5, animProgress, 1)
-
-			if clickerActive then
-				gui.EnableScreenClicker(false)
-				clickerActive = false
-			end
 		end
 
 		local L = VoteMenu_GetLayout()
@@ -179,14 +168,38 @@ if CLIENT then
 				surface.DrawText(label)
 			end
 
-			DrawButton("YES", yesX, "yes", Color(70, 220, 90, 220))
-			DrawButton("NO", noX, "no", Color(255, 70, 70, 220))
+			DrawButton("YES (F6)", yesX, "yes", Color(70, 220, 90, 220))
+			DrawButton("NO (F7)", noX, "no", Color(255, 70, 70, 220))
 		end
 
 		if timeLeft <= 0 then
 			voteActive = false
 			hasVoted = false
 			animProgress = 0
+		end
+	end)
+
+	hook.Add("PlayerButtonDown", "VoteMenu_KeyVote", function(ply, key)
+		if CLIENT and not IsFirstTimePredicted() then return end
+		if not voteActive then return end
+		if hasVoted then return end
+
+		if key == KEY_F6 then
+			net.Start("VoteMenu_Response")
+				net.WriteBool(true)
+			net.SendToServer()
+
+			hasVoted = true
+
+			return
+		elseif key == KEY_F7 then
+			net.Start("VoteMenu_Response")
+				net.WriteBool(false)
+			net.SendToServer()
+
+			hasVoted = true
+
+			return
 		end
 	end)
 
@@ -226,10 +239,7 @@ if CLIENT then
 		voteActive = true
 		hasVoted = false
 		animProgress = 0
-		clickerActive = true
 		slide = 0
-
-		gui.EnableScreenClicker(true)
 	end)
 
 	net.Receive("VoteMenu_Stop", function()

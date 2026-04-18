@@ -148,6 +148,7 @@ if SERVER then
 		SetGlobalBool("EM_NewPlayersSuspended", false)
 		SetGlobalBool("EM_AllowProps", false)
 		SetGlobalBool("EM_AllowWeapons", false)
+		SetGlobalBool("EM_AllowVehicles", false)
 		SetGlobalBool("EM_HideNametags", false)
 		SetGlobalBool("EM_NoMeleeDamage", false)
 
