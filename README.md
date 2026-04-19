@@ -57,7 +57,9 @@ It includes various improvements, new features, and enhanced functionality.
 - **New Deathmatch gamemode**.
 - "Proper" Kick Glitch similar to the **[original game](https://www.youtube.com/watch?v=zK5y3NBUStc)**.
 - **In-game** configuration in the Tools menu under **Beatrun**. All settings can be changed from there.
-- Localization support in **7 languages**.
+- Localization support in **8 languages**.
+- UIs for creating loadouts and a blacklist.
+- Serverside and singleplayer/P2P levels.
 - Enhanced Build Mode: spawn props from the Spawn Menu, and they will save in your course.
 - Random weapon loadouts from **MW Base**, **ARC9**, **ARCCW** and **TFA**. Or create your own in [!Helpers.lua](./gamemodes/beatrun/gamemode/sh/!Helpers.lua#L8)!
 - Race your Ghost: a ghost of your best time in the current course.

@@ -52,10 +52,10 @@ SWEP.lastpunch = 1 --1 right 2 left 3 both
 SWEP.lastanimenum = 0
 SWEP.spamcount = 0
 SWEP.spamlast = 0
-SWEP.punchanims = {ACT_DOD_PRIMARYATTACK_PRONE, ACT_DOD_SECONDARYATTACK_PRONE, ACT_DOD_PRIMARYATTACK_KNIFE}
-SWEP.punchanimsfb = {"punchright", "punchleft", "punchmid"}
-SWEP.punchangles = {Angle(2, 1, -2), Angle(2, -1, 2), Angle(2.5, 0, 0)}
-SWEP.punchdelays = {0.165, 0.175, 0.5}
+SWEP.punchanims = { ACT_DOD_PRIMARYATTACK_PRONE, ACT_DOD_SECONDARYATTACK_PRONE, ACT_DOD_PRIMARYATTACK_KNIFE }
+SWEP.punchanimsfb = { "punchright", "punchleft", "punchmid" }
+SWEP.punchangles = { Angle(2, 1, -2), Angle(2, -1, 2), Angle(2.5, 0, 0) }
+SWEP.punchdelays = { 0.165, 0.175, 0.5 }
 SWEP.lastpunchtimer = 0
 SWEP.punching = false
 SWEP.doublepunch = false
@@ -113,7 +113,7 @@ function SWEP:Initialize()
 	self:SetBlockAnims(false)
 end
 
-local jumpseq = {ACT_VM_HAULBACK, ACT_VM_SWINGHARD}
+local jumpseq = { ACT_VM_HAULBACK, ACT_VM_SWINGHARD }
 
 -- local jumptr, jumptrout = {}, {}
 -- local jumpvec = Vector(0, 0, -50)

@@ -67,18 +67,46 @@ if SERVER then
 		return true
 	end
 
+	local function CanPlayerSpawnVehicles(ply)
+		if not IsValid(ply) then return false end
+
+		if ply:IsAdmin() then
+			logSpawnDecision(ply, "weapon", true, "admin")
+			return true
+		end
+
+		if allowWeaponSpawn:GetBool() then
+			logSpawnDecision(ply, "weapon", true, "Beatrun_AllowWeaponSpawn")
+			return true
+		end
+
+		if not GetGlobalBool("GM_EVENTMODE", false) then
+			logSpawnDecision(ply, "weapon", false, "eventmode_off")
+			return false
+		end
+
+		if not GetGlobalBool("EM_AllowVehicles", false) then
+			logSpawnDecision(ply, "weapon", false, "EM_AllowVehicles_off")
+			return false
+		end
+
+		logSpawnDecision(ply, "weapon", true, "eventmode_ok")
+		return true
+	end
+
 	hook.Add("PlayerSpawnProp", "Beatrun_Event_Prop1", function(ply) return CanPlayerSpawnProps(ply) end)
 	hook.Add("PlayerSpawnObject", "Beatrun_Event_Prop2", function(ply) return CanPlayerSpawnProps(ply) end)
 
 	hook.Add("PlayerGiveSWEP", "Beatrun_Event_SWEP1", function(ply) return CanPlayerSpawnWeapons(ply) end)
 	hook.Add("PlayerSpawnSWEP", "Beatrun_Event_SWEP2", function(ply) return CanPlayerSpawnWeapons(ply) end)
 
+	hook.Add("PlayerSpawnVehicle", "Beatrun_BlockVehicle", function(ply) return CanPlayerSpawnVehicles(ply) end)
+
 	local function OnlyAdmins(ply)
 		return IsValid(ply) and ply:IsAdmin()
 	end
 
 	hook.Add("PlayerSpawnNPC", "Beatrun_BlockNPC", OnlyAdmins)
-	hook.Add("PlayerSpawnVehicle", "Beatrun_BlockVehicle", OnlyAdmins)
 	hook.Add("PlayerSpawnSENT", "Beatrun_BlockSENT", OnlyAdmins)
 	hook.Add("PlayerSpawnRagdoll", "Beatrun_BlockRagdoll", OnlyAdmins)
 	hook.Add("PlayerSpawnEffect", "Beatrun_BlockEffect", OnlyAdmins)
