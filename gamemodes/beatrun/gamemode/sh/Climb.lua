@@ -173,9 +173,7 @@ local function ClimbingThink(ply, mv, cmd)
 			ply:SetSafetyRollKeyTime(CurTime() + 0.1)
 			ParkourEvent("hangjump", ply)
 			if SERVER then
-			    ply:EmitSound("WallrunRelease.Concrete")
-				timer.Simple(0.025, function()
-				    ply:EmitSound("WallrunRelease.Concrete")
+				timer.Simple(0.05, function()
 					ply:EmitSound("Cloth.SideStep")
 				end)
 			    ply:EmitSound("Cloth.MovementRun")
@@ -315,22 +313,21 @@ local function ClimbingThink(ply, mv, cmd)
 
 				util.TraceHull(tr)
 
-				if trout.Hit then return end
-				ply:SetClimbingEndOld(ply:GetClimbingEnd())
-				ply:SetClimbing(isright and 4 or 3)
-				ply:SetClimbingStart(mv:GetOrigin())
-				ply:SetClimbingEnd(mv:GetOrigin() + dir)
-				ply:SetClimbingTime(0)
+				if not trout.Hit then
+					ply:SetClimbingEndOld(ply:GetClimbingEnd())
+					ply:SetClimbing(isright and 4 or 3)
+					ply:SetClimbingStart(mv:GetOrigin())
+					ply:SetClimbingEnd(mv:GetOrigin() + dir)
+					ply:SetClimbingTime(0)
 
-				tr.start = mv:GetOrigin() + ply:GetClimbingAngle():Forward() * 20 + Vector(0, 0, 100) + dir
-				tr.endpos = tr.start - Vector(0, 0, 80)
+					tr.start = mv:GetOrigin() + ply:GetClimbingAngle():Forward() * 20 + Vector(0, 0, 100) + dir
+					tr.endpos = tr.start - Vector(0, 0, 80)
 
-				if isright then
-					ParkourEvent("hangstraferight", ply)
-					timer.Simple(0.4, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-					timer.Simple(0.9, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-				else
-					ParkourEvent("hangstrafeleft", ply)
+					if isright then
+						ParkourEvent("hangstraferight", ply)
+					else
+						ParkourEvent("hangstrafeleft", ply)
+					end
 					timer.Simple(0.4, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 					timer.Simple(0.9, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 				end
@@ -413,6 +410,7 @@ end
 hook.Add("StartCommand", "ClimbingRemoveInput", ClimbingRemoveInput)
 
 local realistic = CreateConVar("Beatrun_LeRealisticClimbing", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY }, "Makes you be able to climb and wallrun only if you have runnerhands equipped.")
+local foldedDamage = CreateConVar("Beatrun_LedgeGrabDamage", "0", { FCVAR_ARCHIVE, FCVAR_NOTIFY }, "Deals damage if you catch a ledge after a high or deadly fall.")
 
 local function ClimbingCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
@@ -724,22 +722,37 @@ local function ClimbingCheck(ply, mv, cmd)
 	if folded then
 		ply:SetClimbing(5)
 		ply:SetClimbingDelay(CurTime() + 0.8)
-		local dmg
-		local info = DamageInfo()
 
 		ParkourEvent("hangfoldedstart", ply)
-		if lastvel.z < -800 then
-			timer.Simple(0.1, function() ply:FaithVO("Faith.ImpactHard") end)			
-			dmg = ply:Health() * 0.5
-			info:SetDamage(dmg)
-			info:SetDamageType(DMG_FALL)
-			info:SetAttacker(game.GetWorld())
-			info:SetInflictor(game.GetWorld())
-			ply:TakeDamageInfo(info)
+		if lastvel.z < -750 then
+			timer.Simple(0.1, function() ply:FaithVO("Faith.ImpactHard") end)
 		else
 			timer.Simple(0.1, function() ply:FaithVO("Faith.Impact") end)
 		end
-		timer.Simple(0.13, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+		
+		if foldedDamage:GetBool() then
+			local dmg
+			local dmgpercent = 0
+			local info = DamageInfo()
+			
+			if lastvel.z < -1000 then
+				dmgpercent = 0.6
+			elseif lastvel.z < -800 then
+				dmgpercent = math.Remap(lastvel.z, -800, -999, 0.4, 0.59)
+			elseif lastvel.z < -600 then
+				dmgpercent = math.Remap(lastvel.z, -600, -799, 0.1, 0.39)
+			end
+
+			if dmgpercent > 0 then
+				dmg = ply:Health() * dmgpercent
+				info:SetDamage(dmg)
+				info:SetDamageType(DMG_FALL)
+				info:SetAttacker(game.GetWorld())
+				info:SetInflictor(game.GetWorld())
+				ply:TakeDamageInfo(info)
+			end
+		end
+		timer.Simple(0.15, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 
 	else
 		local event = "climbhard"
