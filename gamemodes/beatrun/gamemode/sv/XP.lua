@@ -43,8 +43,6 @@ local function LoadPlayerXP(ply)
 	ply:LevelUp()
 
 	net.Start("Beatrun_XPUpdate")
-		-- net.WriteUInt(info.xp, 32)
-		-- net.WriteUInt(info.level, 16)
 	net.Send(ply)
 end
 
@@ -82,8 +80,6 @@ function meta:SetLevel(newlevel)
 	self:SetNW2Int("Beatrun_XP", info.xp)
 
 	net.Start("Beatrun_XPUpdate")
-		-- net.WriteUInt(info.xp, 32)
-		-- net.WriteUInt(info.level, 16)
 	net.Send(self)
 
 	SaveAllXP()
@@ -143,8 +139,6 @@ function meta:AddXP(xp)
 	self:LevelUp()
 
 	net.Start("Beatrun_XPUpdate")
-		-- net.WriteUInt(info.xp, 32)
-		-- net.WriteUInt(info.level, 16)
 	net.Send(self)
 
 	if xp > 0 then
