@@ -424,6 +424,15 @@ sound.Add({
 })
 
 sound.Add({
+	name = "Release.Duct",
+	volume = 1,
+	level = 30,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release1.wav", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release2.wav", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release3.wav", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release4.wav", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release5.wav", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release6.wav", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release7.wav", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release8.wav", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release9.wav", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release10.wav"}
+})
+
+sound.Add({
 	name = "Land.Duct",
 	volume = 1,
 	level = 40,
@@ -810,6 +819,15 @@ sound.Add({
 })
 
 sound.Add({
+	name = "Wallrun.Gravel",
+	volume = 0.35,
+	level = 40,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint1.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint10.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint11.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint12.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint13.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint2.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint3.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint4.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint5.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint6.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint7.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint8.wav", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint9.wav"}
+})
+
+sound.Add({
 	name = "Slide.Gravel",
 	volume = 1,
 	level = 42,
@@ -862,6 +880,15 @@ sound.Add({
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk1.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk2.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk3.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk4.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk5.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk6.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk7.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk8.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk9.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk10.wav"}
+})
+
+sound.Add({
+	name = "Wallrun.Carpet",
+	volume = 0.25,
+	level = 45,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run1.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run2.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run3.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run4.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run5.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run6.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run7.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run8.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run9.wav", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run10.wav"}
 })
 -- Tarp --
 -- TODO make the footstep sound system to detect rubber/plastic materials.
@@ -994,7 +1021,7 @@ FOOTSTEPS_WALK_LUT = {
 	["player/footsteps/snow"] = "Carpet",
 	["player/footsteps/tile"] = "Marble",
 	["player/footsteps/mud"] = "Water",
-	["player/footsteps/dirt"] = "ConcreteDirt",
+	["player/footsteps/dirt"] = "Carpet",
 	["player/footsteps/grass"] = "Carpet",
 	["player/footsteps/slosh"] = "Water",
 	["player/footsteps/wade"] = "Water",
@@ -1008,7 +1035,7 @@ FOOTSTEPS_SNEAK_LUT = {
 	["player/footsteps/wood"] = "Wood",
 	["player/footsteps/duct"] = "Duct",
 	["player/footsteps/grass"] = "Carpet",
-	["player/footsteps/dirt"] = "ConcreteDirt",
+	["player/footsteps/dirt"] = "Carpet",
 	["physics/glass/glass_sheet_step"] = "Glass",
 	["player/footsteps/metal"] = "Metal",
 	["player/footsteps/metalgrate"] = "Gantry",
@@ -1055,7 +1082,6 @@ FOOTSTEPS_LAND_LUT = {
 	["player/footsteps/chainlink"] = "MetalCrane",
 	["player/footsteps/tile"] = "Marble",
 	["player/footsteps/sand"] = "Gravel",
-	["player/footsteps/grass"] = "Gravel",
 	["player/footsteps/metalgrate"] = "MetalCrane",
 	["player/footsteps/gravel"] = "Gravel",
 	["player/footsteps/dirt"] = "Gravel",
@@ -1073,5 +1099,8 @@ FOOTSTEPS_MAT_TYPE_TO_STR = {
 	[MAT_VENT] = "Duct",
 	[MAT_PLASTIC] = "ConcreteGrit",
 	[MAT_TILE] = "ConcreteGrit",
-	[MAT_WOOD] = "Wood"
+	[MAT_WOOD] = "Wood",
+	[MAT_DIRT] = "Carpet",
+	[MAT_GRASS] = "Carpet",
+	[MAT_SAND] = "Gravel",
 }

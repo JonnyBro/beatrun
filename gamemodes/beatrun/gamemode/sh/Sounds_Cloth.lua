@@ -10,8 +10,8 @@ sound.Add({
 -- Movement Cloth --
 sound.Add({
 	name = "Cloth.MovementRun",
-	volume = 0.75,
-	level = 31,
+	volume = 1,
+	level = 30,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Cloth/ME_Cloth_Movement_Run1.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run2.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run3.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run4.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run5.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run6.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run7.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run8.wav"}

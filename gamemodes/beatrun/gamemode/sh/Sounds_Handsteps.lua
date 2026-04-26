@@ -56,7 +56,7 @@ sound.Add({
 sound.Add({
 	name = "Handsteps.MetalPipeGrab",
 	volume = 1,
-	level = 45,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab1.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab2.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab3.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab4.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab5.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab6.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab7.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab8.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab9.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab10.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab11.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab12.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab13.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab14.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab15.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab16.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab17.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab18.wav"}
@@ -64,16 +64,16 @@ sound.Add({
 
 sound.Add({
 	name = "Handsteps.MetalPipeRelease",
-	volume = 1,
+	volume = 0.75,
 	level = 40,
 	channel = CHAN_STATIC,
-	pitch = {90, 110},
+	pitch = {80, 100},
 	sound = {"mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release1.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release2.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release3.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release4.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release5.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release6.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release7.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release8.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release9.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release10.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release11.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release12.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release13.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release14.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release15.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release16.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release17.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release18.wav"}
 })
 
 sound.Add({
 	name = "Handsteps.MetalPipeLetGo",
-	volume = 1,
+	volume = 0.5,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -82,7 +82,7 @@ sound.Add({
 
 sound.Add({
 	name = "Handsteps.MetalPipeSwing",
-	volume = 0.5,
+	volume = 0.4,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},

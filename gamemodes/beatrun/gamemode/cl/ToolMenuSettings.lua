@@ -433,7 +433,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		end
 		panel:AddItem(loadoutSelect)
 		panel:ControlHelp("#beatrun.randomloadoutsdesc")
-		
+
 		local divider = vgui.Create("DHorizontalDivider")
 		panel:AddItem(divider)
 
@@ -474,7 +474,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 			ToggleGamemode("deathmatch")
 		end
 		panel:AddItem(DeathmatchButton)
-		
+
 		local InfectionButton = vgui.Create("DButton")
 		InfectionButton:SetText("#beatrun.toolsmenu.gamemodes.infection")
 		InfectionButton:SetSize(0, 20)

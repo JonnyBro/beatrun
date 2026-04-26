@@ -467,13 +467,13 @@ local function ClimbingCheck(ply, mv, cmd)
 	if IsValid(trout.Entity) and trout.Entity.NoClimbing then return end
 
 	ply:SetClimbingAngle(wallang)
-
+	
+	local trout = ply.ClimbingTraceEndOut
+	local tr = ply.ClimbingTraceEnd
 	
 	local upvalue = ply:GetWallrun() == 1 and Vector(0, 0, 90) or Vector(0, 0, 65)
 	local plymins, plymaxs = ply:GetHull()
 
-	local trout = ply.ClimbingTraceEndOut
-	local tr = ply.ClimbingTraceEnd
 	tr.start = mv:GetOrigin() + wallang:Forward() * 45 + upvalue
 	tr.endpos = tr.start - Vector(0, 0, 90)
 	tr.maxs = plymaxs
@@ -764,7 +764,7 @@ local function ClimbingCheck(ply, mv, cmd)
 					ply:EmitSound("Handsteps." .. handstepsoft)						
 				end
 			end)
-			timer.Simple(0.95, function()
+			timer.Simple(1, function()
 				if ply:GetClimbing() == 1 then
 					ply:FaithVO("Faith.StrainSoft")					
 				end

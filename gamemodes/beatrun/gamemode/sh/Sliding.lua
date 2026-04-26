@@ -237,9 +237,11 @@ local function SlideSurfaceSound(ply, pos)
 
 	local tr = util.TraceLine(trace_tbl)
 	local sndtable = slide_sounds[tr.MatType] or slide_sounds[0]
+	local handstep = HANDSTEPS_SOFT_LUT[tr.MatType] or "ConcreteSoft"
 
+	ply:EmitSound("Cloth.FallShortMedium")
 	if not ply.DiveSliding then
-		ply:EmitSound("Cloth.FallShortMedium")
+		ply:EmitSound("Handsteps." .. handstep)
 	else
 		ply:EmitSound("Cloth.FallShortHard")
 	end

@@ -55,8 +55,7 @@ local function SwingbarCheck(ply, mv, cmd)
 
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("Handsteps.MetalPipeGrab")
-			timer.Simple(0.015, function() ply:EmitSound("Handsteps.MetalPipeHard") end)
-
+			ply:EmitSound("Handsteps.MetalPipeHard")
 			ply:EmitSound("Cloth.MovementWalk")
 		end
 	end
@@ -159,7 +158,7 @@ local function SwingbarThink(ply, mv, cmd)
 			ply:SetSBOffsetSpeed(2.4)
 		end
 
-		ang = cmd:GetViewAngles()
+		local ang = cmd:GetViewAngles()
 		ang.x = 0
 
 		local vel = ang:Forward() * 125 * ply:GetSBOffsetSpeed()

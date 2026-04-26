@@ -10,7 +10,7 @@ hook.Add("EntityTakeDamage", "MEHitSounds", function(ply, dmginfo)
 	if dmginfo:IsBulletDamage() then
 		if ply:GetVelocity():Length() > 400 then return true end -- Block damage if they're going very fast
 
-		ply:EmitSound("mirrorsedge/Flesh_0" .. tostring(math.random(1, 9)) .. ".wav")
+		ply:EmitSound("FleshHit")
 		-- ply:ViewPunch(Angle(math.Rand(-10, -5), 0, math.Rand(0, 5))) -- People cried so hard about this
 
 	elseif not (ply:HasGodMode() or cvars.Bool("sbox_godmode", false)) and (dmginfo:IsFallDamage() and ply:Health() - dmginfo:GetDamage() <= 0) then
@@ -19,7 +19,7 @@ hook.Add("EntityTakeDamage", "MEHitSounds", function(ply, dmginfo)
 
 		timer.Simple(0.01, function()
 			if IsValid(ply) then
-				ply:EmitSound("mirrorsedge/DeathFall" .. tostring(math.random(1, 4)) .. ".wav")
+				ply:EmitSound("DeathFall")
 			end
 		end)
 
