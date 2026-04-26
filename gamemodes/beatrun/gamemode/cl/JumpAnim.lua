@@ -1098,11 +1098,10 @@ eventsounds = {
 		[1] = "Cloth.MovementSneak"
 	},
 	hanghardstartvertical = {
-		[0.05] = "Cloth.MovementWalk",
-		[0.2] = "Cloth.MovementSneak",
+		[0.3] = "Cloth.MovementSneak",
 		[0.6] = "Cloth.MovementWalk",
-		[0.9] = "Cloth.MovementWalk",
-		[1.1] = "Cloth.MovementSneak"
+		[0.9] = "Cloth.MovementSneak",
+		[1.05] = "Cloth.MovementWalk"
 	},
 	hangstrafeleft = {
 		[0.1] = "Cloth.MovementSneak",
@@ -1226,19 +1225,21 @@ eventsounds = {
 		[0.25] = "Cloth.MovementSneak"
 	},
 	ladderexittoplefthand = {
+		[0.05] = "Cloth.MovementWalk",
 		[0.1] = "Handsteps.Ladder",
 		[0.15] = "Handsteps.Ladder",
-		[0.2] = "Cloth.MovementWalk",
-		[0.3] = "Cloth.SideStep",
+		[0.25] = "Cloth.VaultSwish",
+		[0.3] = "Cloth.MovementRun",
 		[0.45] = "Release.Ladder",
 		[0.5] = "Release.Ladder",
 		[0.6] = "Cloth.MovementWalk"
 	},
 	ladderexittoprighthand = {
+		[0.05] = "Cloth.MovementWalk",
 		[0.1] = "Handsteps.Ladder",
 		[0.15] = "Handsteps.Ladder",
-		[0.2] = "Cloth.MovementWalk",
-		[0.3] = "Cloth.SideStep",
+		[0.25] = "Cloth.VaultSwish",
+		[0.3] = "Cloth.MovementRun",
 		[0.45] = "Release.Ladder",
 		[0.5] = "Release.Ladder",
 		[0.6] = "Cloth.MovementWalk"

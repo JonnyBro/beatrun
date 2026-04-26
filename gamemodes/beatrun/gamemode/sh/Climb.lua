@@ -658,7 +658,7 @@ local function ClimbingCheck(ply, mv, cmd)
 	end
 
 	local wr = ply:GetWallrun()
-	local wallrun = FOOTSTEPS_MAT_TYPE_TO_STR[wallmat] or "Concrete"
+	local wallrun = FOOTSTEPS_MAT_TYPE_TO_STR[ply.ClimbingTraceOut.MatType] or "Concrete"
 	-- local wrtime = ply:GetWallrunTime() - CurTime()
 	-- local vel = mv:GetVelocity()
 
@@ -759,14 +759,9 @@ local function ClimbingCheck(ply, mv, cmd)
 
 		if wr == 1 then
 			event = "climb"
-			timer.Simple(0.9, function()
-				if ply:GetClimbing() == 1 or ply:GetClimbing() == 2 then
-					ply:EmitSound("Handsteps." .. handstepsoft)						
-				end
-			end)
-			timer.Simple(1, function()
+			timer.Simple(0.93, function()
 				if ply:GetClimbing() == 1 then
-					ply:FaithVO("Faith.StrainSoft")					
+					ply:EmitSound("Handsteps." .. handstepsoft)
 				end
 			end)
 			wallangc.x = -30
