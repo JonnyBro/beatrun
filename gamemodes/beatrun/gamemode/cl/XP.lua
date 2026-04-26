@@ -53,66 +53,65 @@ function meta:LevelUp()
 end
 
 function meta:SetLevel(level)
-	if isSingleOrP2p then
-		self.Level = level
-		self.XP = CalcXPForNextLevel(level - 1)
+	if not isSingleOrP2p then return end
 
-		XP_ratiocache = nil
-	end
+	self.Level = level
+	self.XP = CalcXPForNextLevel(level - 1)
+
+	XP_ratiocache = nil
 end
 
 function meta:SetXP(xp)
-	if isSingleOrP2p then
-		self.XP = xp
+	if not isSingleOrP2p then return end
 
-		XP_ratiocache = nil
+	self.XP = xp
 
-		self:LevelUp()
-	end
+	XP_ratiocache = nil
+
+	self:LevelUp()
 end
 
 function meta:AddXP(xp)
-	if isSingleOrP2p then
-		self.XP = math.Round((self.XP or 0) + xp)
+	if not isSingleOrP2p then return end
 
-		XP_ratiocache = nil
+	self.XP = math.Round((self.XP or 0) + xp)
 
-		self:LevelUp()
+	XP_ratiocache = nil
 
-		self.LastXP = CurTime()
+	self:LevelUp()
 
-		if xp > 0 then XP_floatingxp[CurTime() + 2] = "+" .. xp end
-	end
+	self.LastXP = CurTime()
+
+	if xp > 0 then XP_floatingxp[CurTime() + 2] = "+" .. xp end
 end
 
 if isSingleOrP2p then
-	function SaveXP()
+	function Beatrun_SaveXP()
 		local ply = LocalPlayer()
-		local data = util.TableToJSON({ ply.XP or 0, ply.Level or 1 })
+		local data = util.TableToJSON({ ply:GetXP() or 0, ply:GetLevel() or 1 })
 		local compressed = util.Compress(data)
 
 		file.CreateDir("beatrun/local")
 		file.Write("beatrun/local/xp.txt", compressed)
 	end
 
-	hook.Add("ShutDown", "SaveXP", SaveXP)
-
-	local function LoadXP()
+	function Beatrun_LoadXP()
 		local ply = LocalPlayer()
 		local data = file.Read("beatrun/local/xp.txt", "DATA")
 
 		if data then
 			data = util.JSONToTable(util.Decompress(data))
 
-			ply:SetXP(data[1])
 			ply:SetLevel(data[2])
+			ply:SetXP(data[1])
 		else
-			ply:SetXP(0)
 			ply:SetLevel(1)
+			ply:SetXP(0)
 		end
 	end
 
-	hook.Add("InitPostEntity", "LoadXP", LoadXP)
+	hook.Add("ShutDown", "Beatrun_SaveXP", Beatrun_SaveXP)
+	hook.Add("InitPostEntity", "Beatrun_LoadXP", Beatrun_LoadXP)
 
 	hook.Add("OnParkour", "ParkourXP", function(event)
 		local ply = LocalPlayer()
