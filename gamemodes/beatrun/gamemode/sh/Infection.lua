@@ -1,8 +1,10 @@
 Infection_StartTime = 0
 Infection_EndTime = 0
 
-local startTime = CreateConVar("Beatrun_InfectionStartTime", 10, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 5, 20)
-local gameTime = CreateConVar("Beatrun_InfectionGameTime", 180, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 30, 600)
+local startTime = CreateConVar("Beatrun_InfectionStartTime", 10, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "", 1, 20)
+local gameTime = CreateConVar("Beatrun_InfectionGameTime", 180, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "", 30, 600)
+
+local isSingleOrP2p = not game.IsDedicated()
 
 function table.Shuffle(t)
 	local n = #t
@@ -44,30 +46,50 @@ if SERVER then
 	-- local didgun = false
 	local cachedhumancount = -1
 
-	-- local function GiveLastManGun()
-	-- 	if cachedhumancount == 1 then
-	-- 		for k, v in pairs(player.GetAll()) do
-	-- 			if not didgun and not ended and v:Alive() and not v:GetNW2Bool("Infected") then
-	-- 				hook.Run("Infection_LastManGun", v)
-	-- 				didgun = true
-	-- 				break
-	-- 			end
-	-- 		end
-	-- 	end
-	-- end
+	--[[
+	local function GiveLastManGun()
+		if cachedhumancount == 1 then
+			for k, v in pairs(player.GetAll()) do
+				if not didgun and not ended and v:Alive() and not v:GetNW2Bool("Infected") then
+					hook.Run("Infection_LastManGun", v)
+					didgun = true
+					break
+				end
+			end
+		end
+	end --]]
 
-	net.Receive("Infection_Touch", function(len, ply)
+	net.Receive("Infection_Touch", function(_, attacker)
 		local victim = net.ReadEntity()
 
-		if ended or not ply:Alive() or not ply:GetNW2Bool("Infected") or victim:GetNW2Bool("Infected") then return end
+		if ended or not attacker:Alive() or not attacker:GetNW2Bool("Infected") or victim:GetNW2Bool("Infected") then return end
 
-		if IsValid(victim) and victim:IsPlayer() and ply:GetPos():Distance(victim:GetPos()) < 300 then
+		if IsValid(victim) and victim:IsPlayer() and attacker:GetPos():Distance(victim:GetPos()) < 300 then
 			victim:SetNW2Bool("Infected", true)
 
-			net.Start("Infection_Announce")
-				net.WriteEntity(ply)
-				net.WriteEntity(victim)
-			net.Broadcast()
+			-- it works :shrug:
+			if not isSingleOrP2p then
+				for _, plr in player.Iterator() do
+					if IsValid(attacker) and IsValid(victim) then
+						if attacker == victim then
+							local str = string.format("chat.AddText('%s', Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infected'))", attacker:Nick())
+							plr:SendLua(str)
+						else
+							local str = string.format("chat.AddText('%s', Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infectedby') .. ' ', Color(255, 255, 100), '%s', '!')", attacker:Nick(), victim:Nick())
+							plr:SendLua(str)
+						end
+					end
+
+					attacker.InfectionTouchDelay = CurTime() + 3
+
+					if attacker ~= victim then attacker:AddXP(25) end
+				end
+			else
+				net.Start("Infection_Announce")
+					net.WriteEntity(attacker)
+					net.WriteEntity(victim)
+				net.Broadcast()
+			end
 
 			victim:SetNW2Float("PBTime", CurTime() - Infection_StartTime)
 
@@ -139,18 +161,28 @@ if SERVER then
 			local infected = players[math.random(#players)]
 			infected:SetNW2Bool("Infected", true)
 
-			net.Start("Infection_XPReward")
-				net.WriteBool(false)
-			net.Send(infected)
+			if not isSingleOrP2p then
+				infected:AddXP(100)
+				infected:SendLua("chat.AddText(Color(200, 200, 200), language.GetPhrase('beatrun.infection.awardinfected'))")
+			else
+				net.Start("Infection_XPReward")
+					net.WriteBool(false)
+				net.Send(infected)
+			end
 		else
 			table.Shuffle(players)
 
 			for i = 1, numinfected do
 				players[i]:SetNW2Bool("Infected", true)
 
-				net.Start("Infection_XPReward")
-					net.WriteBool(false)
-				net.Send(players[i])
+				if not isSingleOrP2p then
+					players[i]:AddXP(100)
+					players[i]:SendLua("chat.AddText(Color(200, 200, 200), language.GetPhrase('beatrun.infection.awardinfected'))")
+				else
+					net.Start("Infection_XPReward")
+						net.WriteBool(false)
+					net.Send(players[i])
+				end
 			end
 		end
 	end
