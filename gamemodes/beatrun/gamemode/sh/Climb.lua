@@ -270,7 +270,6 @@ local function ClimbingThink(ply, mv, cmd)
 
 			local tr = ply.ClimbingTraceEnd
 			local trout = ply.ClimbingTraceEndOut
-			local start = mv:GetOrigin() + wallang:Forward() * 20 + Vector(0, 0, 100) + dir
 
 			tr.start = start
 			tr.endpos = start - Vector(0, 0, 80)
@@ -278,6 +277,7 @@ local function ClimbingThink(ply, mv, cmd)
 			util.TraceLine(tr)
 			-- local oldstart = tr.start
 			-- local oldend = tr.endpos
+			local start = mv:GetOrigin() + wallang:Forward() * 20 + Vector(0, 0, 100) + dir
 			local wallmat = trout.MatType
 			local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
 
