@@ -146,16 +146,27 @@ local function Vault1(ply, mv, ang, t, h)
 			ply.MantleInitVel = mv:GetVelocity()
 			ply.MantleMatType = mat
 
+			local handstepsoft = HANDSTEPS_SOFT_LUT[mat] or "ConcreteSoft"
+
 			if stepup then
 				ParkourEvent("stepup", ply)
 				ply.VaultStepUp = true
+				ply.FootstepLand = false
+				ply:PlayStepSound(1)
 			else
 				ParkourEvent("vaultonto", ply)
 				ply.VaultStepUp = false
-			end
-
-			if game.SinglePlayer() then
-				ply:PlayStepSound(1)
+				if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
+		        timer.Simple(0.01, function()
+					ply:EmitSound("Handsteps." .. handstepsoft)
+		        end)
+			    timer.Simple(0.15, function()
+					ply:PlayStepSound(1)
+			    end)
+					if t.MatType == MAT_GRATE then
+				        ply:EmitSound("FenceClimb")
+				    end
+				end
 			end
 
 			return true
@@ -229,15 +240,9 @@ local function Vault2(ply, mv, ang, t, h)
 		TraceSetData(h, vaultpos, vaultpos, mins, maxs, ply)
 
 		local hulltr2 = util.TraceHull(h)
+		local handstephard = HANDSTEPS_HARD_LUT[t.MatType] or "ConcreteHard"
 
 		if not hulltr.Hit and not hulltr2.Hit then
-			if t.MatType == MAT_GRATE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-				ply:EmitSound("FenceClimb")
-			elseif t.MatType == MAT_GLASS or t.MatType == MAT_TILE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-				ply:EmitSound("Handsteps.GlassHard")
-			elseif t.MatType == MAT_VENT or t.MatType == MAT_METAL and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-				ply:EmitSound("Handsteps.DuctHard")
-			end
 
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 2)
 			ply:SetWallrunTime(0)
@@ -252,12 +257,15 @@ local function Vault2(ply, mv, ang, t, h)
 			ParkourEvent("vault", ply)
 
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
+				ply:EmitSound("Handsteps." .. handstephard)
 				timer.Simple(0.1, function()
 					ply:EmitSound("Cloth.VaultSwish")
+					ply:EmitSound("Vault")
 					ply:FaithVO("Faith.StrainSoft")
 				end)
-
-				ply:EmitSound("Handsteps.ConcreteHard")
+				if t.MatType == MAT_GRATE then
+					ply:EmitSound("FenceClimb")
+				end
 			end
 
 			return true
@@ -333,15 +341,10 @@ local function Vault3(ply, mv, ang, t, h)
 		h.mins = mins
 
 		local hulltr2 = util.TraceHull(h)
+		local handstephard = HANDSTEPS_HARD_LUT[t.MatType] or "ConcreteHard"
+		local handstepsoft = HANDSTEPS_SOFT_LUT[tsafetyout.MatType] or "ConcreteSoft"
 
 		if not hulltr.Hit and not hulltr2.Hit then
-			if t.MatType == MAT_GRATE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-				ply:EmitSound("FenceClimb")
-			elseif t.MatType == MAT_GLASS or t.MatType == MAT_TILE and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-				ply:EmitSound("Handsteps.GlassHard")
-			elseif t.MatType == MAT_VENT or t.MatType == MAT_METAL and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-				ply:EmitSound("Handsteps.DuctHard")
-			end
 
 			ply:SetMantleData(mv:GetOrigin(), vaultpos, 0, 3)
 			ply:SetWallrunTime(0)
@@ -356,12 +359,11 @@ local function Vault3(ply, mv, ang, t, h)
 			ParkourEvent("vaultkong", ply)
 
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-				timer.Simple(0.1, function()
-					ply:EmitSound("Cloth.VaultSwish")
-					ply:FaithVO("Faith.StrainSoft")
-				end)
-
-				ply:EmitSound("Handsteps.ConcreteHard")
+				ply:EmitSound("Handsteps." .. handstephard)
+				timer.Simple(0.025, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+				if t.MatType == MAT_GRATE then
+					ply:EmitSound("FenceClimb")
+				end
 			end
 
 			return true
@@ -428,6 +430,8 @@ function Vault4(ply, mv, ang, t, h)
 	ply.MantleInitVel = mv:GetVelocity()
 	ply.MantleInitVel.z = 0
 	ply.MantleMatType = t.MatType
+	local handstephard = HANDSTEPS_HARD_LUT[tsafetyout.MatType] or "ConcreteHard"
+	local handstepsoft = HANDSTEPS_SOFT_LUT[tsafetyout.MatType] or "ConcreteSoft"
 
 	ParkourEvent("vaulthigh", ply)
 
@@ -438,12 +442,8 @@ function Vault4(ply, mv, ang, t, h)
 	end
 
 	if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-		timer.Simple(0.1, function()
-			ply:EmitSound("Cloth.VaultSwish")
-			ply:FaithVO("Faith.StrainSoft")
-		end)
-
-		ply:EmitSound("Handsteps.ConcreteHard")
+		ply:EmitSound("Handsteps." .. handstephard)
+		timer.Simple(0.075, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 	end
 
 	if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
@@ -453,15 +453,9 @@ function Vault4(ply, mv, ang, t, h)
 		local tsafetyout = util.TraceLine(tsafety)
 
 		if tsafetyout.MatType == MAT_GRATE then
-			ply:EmitSound("Handsteps.FenceVault")
+		    ply:EmitSound("Handsteps.FenceVault")
 
 			timer.Simple(0.45, function() ply:EmitSound("FenceClimbEnd") end)
-		end
-
-		if tsafetyout.MatType == MAT_GLASS or tsafetyout.MatType == MAT_TILE then
-			ply:EmitSound("Handsteps.GlassSoft")
-		elseif tsafetyout.MatType == MAT_VENT or tsafetyout.MatType == MAT_METAL then
-			ply:EmitSound("Handsteps.DuctSoft")
 		end
 	end
 
@@ -515,6 +509,8 @@ function Vault5(ply, mv, ang, t, h)
 	h.mins, h.maxs = ply:GetHull()
 
 	local hulltr = util.TraceHull(h)
+	local handstepsoft = HANDSTEPS_SOFT_LUT[t.MatType] or "ConcreteSoft"
+	local handstephard = HANDSTEPS_HARD_LUT[t.MatType] or "ConcreteHard"
 
 	if not hulltr.Hit then
 		if t.HitNormal.x ~= 0 then
@@ -535,7 +531,16 @@ function Vault5(ply, mv, ang, t, h)
 
 		ParkourEvent("vaultontohigh", ply)
 
-		if game.SinglePlayer() then
+		if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
+		    timer.Simple(0.05, function()
+				ply:EmitSound("Handsteps." .. handstephard)
+			end)
+			timer.Simple(0.1, function()
+				ply:EmitSound("Handsteps." .. handstepsoft)
+			end)
+			timer.Simple(0.45, function()
+				ply:PlayStepSound(1)
+			end)
 			ply:PlayStepSound(1)
 		end
 
