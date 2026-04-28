@@ -21,11 +21,6 @@ hook.Add("PlayerUse", "DoorBash", function(ply, ent)
 		net.Start("DoorBashAnim")
 		net.Send(ply)
 
-		if not ply.viewpunchguard or ply.viewpunchguard < CurTime() then
-			ply:ViewPunch(Angle(10, 5, -10))
-			ply.viewpunchguard = CurTime() + 0.5
-		end
-
 		ent:SetSaveValue("speed", ent.oldspeed * 4)
 		ent:Use(ply)
 		ent.bashdelay = CurTime() + 1
