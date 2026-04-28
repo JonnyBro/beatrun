@@ -158,7 +158,7 @@ local function ClimbingThink(ply, mv, cmd)
 				BodyLimitY = 180
 			elseif game.SinglePlayer() then
 				ply:SendLua("lockang2=false lockang=false BodyLimitX=90 BodyLimitY=180")
-			end			
+			end
 
 			return
 		end
