@@ -10,7 +10,7 @@ sound.Add({
 -- Movement Cloth --
 sound.Add({
 	name = "Cloth.MovementRun",
-	volume = 1,
+	volume = 0.75,
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},

@@ -1093,7 +1093,7 @@ eventsounds = {
 		[0.01] = "Cloth.MovementRun",
 		[0.2] = "Cloth.MovementSneak",
 		[0.4] = "Cloth.MovementWalk",
-		[0.56] = "Handsteps.ConcreteRelease",
+		[0.6] = "Handsteps.ConcreteRelease",
 		[0.7] = "Cloth.MovementWalk",
 		[1] = "Cloth.MovementSneak"
 	},
