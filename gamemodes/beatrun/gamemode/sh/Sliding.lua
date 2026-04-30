@@ -242,8 +242,6 @@ local function SlideSurfaceSound(ply, pos)
 	ply:EmitSound("Cloth.FallShortMedium")
 	if not ply.DiveSliding then
 		ply:EmitSound("Handsteps." .. handstep)
-	else
-		ply:EmitSound("Cloth.FallShortHard")
 	end
 	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
 

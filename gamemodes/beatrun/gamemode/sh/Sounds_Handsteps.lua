@@ -31,7 +31,7 @@ sound.Add({
 	volume = 0.5,
 	level = 40,
 	channel = CHAN_STATIC,
-	pitch = {80, 100},
+	pitch = {80, 105},
 	sound = {"mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_01.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_02.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_03.wav"}
 })
 -- Metal Handsteps --
@@ -50,7 +50,7 @@ sound.Add({
 	level = 50,
 	channel = CHAN_STATIC,
 	pitch = {90, 105},
-	sound = {"mirrorsedge/Ladder/LadderHandstep_41.ogg", "mirrorsedge/Ladder/LadderHandstep_42.ogg", "mirrorsedge/Ladder/LadderHandstep_43.ogg", "mirrorsedge/Ladder/LadderHandstep_44.ogg", "mirrorsedge/Ladder/LadderHandstep_45.ogg", "mirrorsedge/Ladder/LadderHandstep_46.ogg", "mirrorsedge/Ladder/LadderHandstep_47.ogg", "mirrorsedge/Ladder/LadderHandstep_49.ogg", "mirrorsedge/Ladder/LadderHandstep_50.ogg"}
+	sound = {"mirrorsedge/Ladder/LadderHandstep_41.ogg", "mirrorsedge/Ladder/LadderHandstep_42.ogg", "mirrorsedge/Ladder/LadderHandstep_43.ogg", "mirrorsedge/Ladder/LadderHandstep_44.ogg", "mirrorsedge/Ladder/LadderHandstep_45.ogg", "mirrorsedge/Ladder/LadderHandstep_46.ogg", "mirrorsedge/Ladder/LadderHandstep_49.ogg", "mirrorsedge/Ladder/LadderHandstep_50.ogg"}
 })
 
 sound.Add({

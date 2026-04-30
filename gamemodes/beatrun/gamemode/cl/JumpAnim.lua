@@ -1092,10 +1092,9 @@ eventsounds = {
 	hanghardstart2 = {
 		[0.01] = "Cloth.MovementRun",
 		[0.2] = "Cloth.MovementSneak",
-		[0.4] = "Cloth.MovementWalk",
-		[0.6] = "Handsteps.ConcreteRelease",
+		[0.5] = "Cloth.MovementWalk",
 		[0.7] = "Cloth.MovementWalk",
-		[1] = "Cloth.MovementSneak"
+		[0.8] = "Cloth.MovementSneak"
 	},
 	hanghardstartvertical = {
 		[0.3] = "Cloth.MovementSneak",
@@ -1118,12 +1117,13 @@ eventsounds = {
 		[0.5] = "Cloth.MovementRun"
 	},
 	vaultoverhigh = {
-		[0.05] = "Faith.StrainMedium",
+		[0] = "Cloth.MovementRun",
+		[0.08] = "Faith.StrainMedium",
 		[0.1] = "Vault",
 		[0.2] = "Cloth.VaultSwish",
 		[0.3] = "Cloth.SideStep",
 		[0.4] = "Cloth.MovementRun",
-		[0.7] = "Cloth.MovementWalk"
+		[0.6] = "Cloth.MovementWalk"
 	},
 	vaultonto = {
 		[0.01] = "Vault",
@@ -1143,8 +1143,8 @@ eventsounds = {
 		[0.15] = "Faith.StrainMedium",
 		[0.35] = "Melee.Foot",
 		[0.45] = "Cloth.MovementRun",
-		[0.7] = "Cloth.MovementWalk",
-		[0.85] = "Faith.StrainSoft",
+		[0.6] = "Cloth.MovementWalk",
+		[0.7] = "Faith.StrainHard",
 		[0.9] = "Cloth.MovementRun",
 		[1.1] = "Cloth.MovementWalk",
 		[1.26] = "Cloth.Fall",
@@ -1160,8 +1160,8 @@ eventsounds = {
 		[0.12] = "Cloth.MovementRun"
 	},
 	meleeairhit = {
-		[0.015] = "Melee.LegSwoosh",
-		[0.01] = "Cloth.MovementRun",
+		[0.01] = "Melee.LegSwoosh",
+		[0.005] = "Cloth.MovementRun",
 		[0] = "Faith.StrainHard",
 		[0.2] = "Cloth.MovementWalk"
 	},
@@ -1179,59 +1179,53 @@ eventsounds = {
 		[0.025] = "Cloth.MovementRun",
 		[0.035] = "Melee.LegSwoosh",
 		[0.075] = "Faith.StrainHard",
-		[0.3] = "Cloth.MovementWalk"
+		[0.25] = "Cloth.MovementWalk"
 	},
 	meleewrright = {
 		[0.025] = "Cloth.MovementRun",
 		[0.035] = "Melee.LegSwoosh",
 		[0.075] = "Faith.StrainHard",
-		[0.3] = "Cloth.MovementWalk"
+		[0.25] = "Cloth.MovementWalk"
 	},
 	ladderenterbottom = {
 		[0.1] = "Cloth.MovementWalk",
 		[0.12] = "Handsteps.Ladder",
-		[0.15] = "Cloth.MovementSneak",
 		[0.25] = "Handsteps.Ladder",
-		[0.28] = "Cloth.MovementSneak",
 		[0.3] = "Footsteps.LadderMedium",
 		[0.35] = "Cloth.MovementWalk",
 		[0.4] = "Footsteps.LadderMedium",
-		[0.5] = "Cloth.MovementSneak"
 	},
 	ladderclimbhangstart = {
 		[0] = "Footsteps.LadderHeavy",
-		[0.01] = "Handsteps.MetalPipeHard",
-		[0.04] = "Cloth.MovementRun",	
-		[0.05] = "Faith.Impact",
-		[0.06] = "Handsteps.Ladder",
-		[0.09] = "Cloth.MovementRun",		
+		[0.01] = "Cloth.MovementRun",
+		[0.05] = "Handsteps.MetalPipeHard",	
+		[0.08] = "Faith.Impact",
 		[0.1] = "Land.Ladder",
 		[0.15] = "Cloth.MovementRun",
 		[0.2] = "Land.Ladder",
-		[0.3] = "Cloth.MovementRun"
+		[0.3] = "Cloth.MovementWalk"
 	},
 	ladderclimbuplefthand = {
 		[0] = "Release.Ladder",
-		[0.05] = "Cloth.MovementWalk",
+		[0.1] = "Cloth.MovementWalk",
 		[0.15] = "Footsteps.LadderMedium",
-		[0.2] = "Handsteps.Ladder",
-		[0.25] = "Cloth.MovementSneak"
+		[0.2] = "Handsteps.Ladder"
 	},
 	ladderclimbuprighthand = {
 		[0] = "Release.Ladder",
-		[0.05] = "Cloth.MovementWalk",
+		[0.1] = "Cloth.MovementWalk",
 		[0.15] = "Footsteps.LadderMedium",
-		[0.2] = "Handsteps.Ladder",
-		[0.25] = "Cloth.MovementSneak"
+		[0.2] = "Handsteps.Ladder"
 	},
 	ladderexittoplefthand = {
 		[0.05] = "Cloth.MovementWalk",
 		[0.1] = "Handsteps.Ladder",
 		[0.15] = "Handsteps.Ladder",
 		[0.25] = "Cloth.VaultSwish",
-		[0.3] = "Cloth.MovementRun",
+		[0.35] = "Cloth.MovementSneak",
 		[0.45] = "Release.Ladder",
 		[0.5] = "Release.Ladder",
+		[0.48] = "Handsteps.MetalPipeRelease",
 		[0.6] = "Cloth.MovementWalk"
 	},
 	ladderexittoprighthand = {
@@ -1239,14 +1233,15 @@ eventsounds = {
 		[0.1] = "Handsteps.Ladder",
 		[0.15] = "Handsteps.Ladder",
 		[0.25] = "Cloth.VaultSwish",
-		[0.3] = "Cloth.MovementRun",
+		[0.35] = "Cloth.MovementSneak",
+		[0.48] = "Handsteps.MetalPipeRelease",
 		[0.45] = "Release.Ladder",
 		[0.5] = "Release.Ladder",
 		[0.6] = "Cloth.MovementWalk"
 	},
 	diveslidestart = {
-		[0.01] = "Cloth.MovementRun",
-	    [0] = "Faith.ImpactSoft"
+		[0] = "Cloth.FallShortHard",
+	    [0.01] = "Faith.ImpactSoft"
 	},
 	jumpturnlandstand = {
 		[0] = "Cloth.RollCloth",

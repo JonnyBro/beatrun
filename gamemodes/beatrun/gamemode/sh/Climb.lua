@@ -75,12 +75,11 @@ local function ClimbingEnd(ply, mv, cmd)
 end
 
 local function ClimbingThink(ply, mv, cmd)
+	local trout = ply.ClimbingTraceEndOut
+	local wallmat = trout and trout.MatType
+	local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
+	local handstephard = HANDSTEPS_HARD_LUT[wallmat] or "ConcreteHard"
 	if ply:GetClimbing() == 5 then
-		local trout = ply.ClimbingTraceEndOut
-		local wallmat = trout and trout.MatType
-		local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
-		local handstephard = HANDSTEPS_HARD_LUT[wallmat] or "ConcreteHard"
-		
 		if mv:KeyPressed(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() + 0.65 or mv:KeyDown(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() then
 			ParkourEvent("hangfoldedheaveup", ply)
 			
@@ -149,7 +148,7 @@ local function ClimbingThink(ply, mv, cmd)
 			ply:SetCrouchJumpBlocked(true)
 
 			ParkourEvent("hangend", ply)
-			ply:EmitSound("Cloth.MovementWalk")
+			ply:EmitSound("Cloth.MovementSneak")
 
 			if CLIENT and IsFirstTimePredicted() then
 				lockang2 = false
@@ -174,10 +173,8 @@ local function ClimbingThink(ply, mv, cmd)
 			ply:SetSafetyRollKeyTime(CurTime() + 0.1)
 			ParkourEvent("hangjump", ply)
 			if SERVER then
-				timer.Simple(0.05, function()
-					ply:EmitSound("Cloth.SideStep")
-				end)
 			    ply:EmitSound("Cloth.MovementRun")
+				ply:EmitSound("WallrunRelease.Concrete")
 			end
 
 			if CLIENT and IsFirstTimePredicted() then
