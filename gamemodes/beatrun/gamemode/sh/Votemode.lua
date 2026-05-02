@@ -324,6 +324,7 @@ if SERVER then
 		end
 
 		PrintMessage(HUD_PRINTTALK, str)
+		print(str)
 
 		voted = {}
 		yesCount = 0
@@ -357,6 +358,7 @@ if SERVER then
 
 		local str = string.format("[VoteMenu] %s (%s) started a vote for %s", init_ply:Nick(), init_ply:SteamID64(), validGamemodesMap[lower])
 		PrintMessage(HUD_PRINTTALK, str)
+		print(str)
 
 		timer.Simple(voteDuration, function() if voteStarted then EndVote() end end)
 	end
