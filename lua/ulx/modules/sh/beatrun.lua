@@ -12,7 +12,7 @@ function ulx.setlevel(calling_ply, target_plys, level)
 		if game.IsDedicated() then
 			ply:SetLevel(level)
 		else
-			local code = string.format([[LocalPlayer():SetLevel(%d); LocalPlayer():SetXP(CalcXPForNextLevel(%d - 1)); SaveXP()]], level, level)
+			local code = string.format([[LocalPlayer():SetLevel(%d); LocalPlayer():SetXP(CalcXPForNextLevel(%d - 1)); Beatrun_SaveXP()]], level, level)
 			ply:SendLua(code)
 		end
 
