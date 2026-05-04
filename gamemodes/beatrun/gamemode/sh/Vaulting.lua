@@ -508,6 +508,13 @@ function Vault5(ply, mv, ang, t, h)
 	h.mins, h.maxs = ply:GetHull()
 
 	local hulltr = util.TraceHull(h)
+	local walltr = util.TraceLine({
+		start  = mv:GetOrigin() + chestvec,
+		endpos = mv:GetOrigin() + chestvec + ang:Forward() * 80,
+		filter = ply,
+		mask   = MASK_PLAYERSOLID,
+		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT,
+	})
 	local handstepsoft = HANDSTEPS_SOFT_LUT[t.MatType] or "ConcreteSoft"
 	local handstephard = HANDSTEPS_HARD_LUT[t.MatType] or "ConcreteHard"
 
@@ -541,7 +548,10 @@ function Vault5(ply, mv, ang, t, h)
 				local step = FOOTSTEPS_MAT_TYPE_LUT[t.MatType] or "Concrete"
 				ply:EmitSound("Footsteps." .. step)
 			end)
-			ply:PlayStepSound(1)
+			local step = FOOTSTEPS_MAT_TYPE_LUT[walltr.MatType] or "Concrete"
+			ply:EmitSound("Footsteps." .. step)
+			ply:EmitSound("Land." .. step)
+			ply:EmitSound("Cloth.MovementRun")
 			ply.FootstepLand = false
 		end
 
