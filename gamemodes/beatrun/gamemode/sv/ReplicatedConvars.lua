@@ -9,6 +9,7 @@ local replicatedConvars = {
 	["Beatrun_InfectionGameTime"] = true,
 	["Beatrun_InfectionStartTime"] = true,
 	["Beatrun_Kickglitch"] = true,
+	["Beatrun_LedgeGrabDamage"] = true,
 	["Beatrun_LeRealisticClimbing"] = true,
 	["Beatrun_PuristModeForce"] = true,
 	["Beatrun_PuristWallrun"] = true,

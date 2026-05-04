@@ -237,23 +237,27 @@ local function SlideSurfaceSound(ply, pos)
 
 	local tr = util.TraceLine(trace_tbl)
 	local sndtable = slide_sounds[tr.MatType] or slide_sounds[0]
+	local handstep = HANDSTEPS_SOFT_LUT[tr.MatType] or "ConcreteSoft"
 
-	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
-
-	if ply:WaterLevel() > 0 then
-		sndtable = slide_sounds[MAT_SLOSH]
-
-		ply:EmitSound(sndtable[math.random(#sndtable)])
+	ply:EmitSound("Cloth.FallShortMedium")
+	if not ply.DiveSliding then
+		ply:EmitSound("Handsteps." .. handstep)
 	end
+	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
 
 	return tr.MatType
 end
 
 local function SlideLoopSound(ply, pos, mat)
-	local sndtable = slideloop_sounds[mat] or slideloop_sounds[0]
+	local sndtable
+	if ply:WaterLevel() > 0 then
+		sndtable = slideloop_sounds[MAT_SLOSH]
+	else
+		sndtable = slideloop_sounds[mat] or slideloop_sounds[0]
+	end
 
 	ply.SlideLoopSound = CreateSound(ply, sndtable)
-	ply.SlideLoopSound:PlayEx(0.08, 100)
+	ply.SlideLoopSound:PlayEx(0.1, 100)
 end
 
 -- local COORD_FRACTIONAL_BITS = 5
@@ -514,7 +518,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		ply:SetSlidingDelay(CT + 0.1)
 
 		if SERVER and ply.SlideLoopSound then
-			ply.SlideLoopSound:Stop()
+			ply.SlideLoopSound:FadeOut(0.15)
 		end
 
 		ply:ConCommand("-duck")
@@ -532,8 +536,8 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		ply:SetViewOffsetDucked(Vector(0, 0, 28) + eyeang * -25)
 		local slidedelta = (ply:GetSlidingTime() - CT) / slidetime
-		local speed = ply:GetSlidingVel() * math.min(1.75, (ply:GetSlidingTime() - CT + 0.5) / slidetime) * qslide_speedmult
 
+		local speed = ply:GetSlidingVel() * math.min(1.75, (ply:GetSlidingTime() - CT + 0.5) / slidetime) * qslide_speedmult
 		mv:SetVelocity(ply:GetSlidingAngle():Forward() * speed)
 
 		local pos = mv:GetOrigin()
@@ -657,7 +661,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			ply:SetSlidingDelay(CT + 0.1)
 
 			if SERVER then
-				ply.SlideLoopSound:Stop()
+				ply.SlideLoopSound:FadeOut(0.15)
 			end
 
 			ply.DiveSliding = false

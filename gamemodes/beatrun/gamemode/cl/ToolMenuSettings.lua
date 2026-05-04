@@ -237,6 +237,15 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		end
 		panel:AddItem(realisticClimbingToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.misc.lerealisticclimbingdesc")
+		local ledgeGrabDamageToggle = vgui.Create("DCheckBoxLabel")
+		ledgeGrabDamageToggle:SetText("#beatrun.toolsmenu.misc.ledgegrabdamage")
+		ledgeGrabDamageToggle:SetDark(true)
+		ledgeGrabDamageToggle:SetChecked(GetConVar("Beatrun_LedgeGrabDamage"):GetBool())
+		function ledgeGrabDamageToggle:OnChange(value)
+			ChangeConvar("Beatrun_LedgeGrabDamage", value and 1 or 0)
+		end
+		panel:AddItem(ledgeGrabDamageToggle)
+		panel:ControlHelp("#beatrun.toolsmenu.misc.ledgegrabdamagedesc")
 	end)
 
 	spawnmenu.AddToolMenuOption("Beatrun", "Server", "beatrun_moves", "#beatrun.toolsmenu.moves.name", "", "", function(panel)

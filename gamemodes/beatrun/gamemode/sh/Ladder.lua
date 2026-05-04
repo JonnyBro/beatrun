@@ -69,7 +69,7 @@ local function LadderCheck(ply, mv, cmd, ladder)
 	ply.LadderHardStart = not ply:OnGround()
 
 	if not ply:OnGround() then
-		ply:ViewPunch(Angle(10, 0, 0))
+		ply:ViewPunch(Angle(15, 5, -15))
 		ply:SetLadderDelay(CurTime() + 0.75)
 		ply:SetLadderHand(false)
 	else
@@ -121,6 +121,8 @@ local function LadderThink(ply, mv, cmd, ladder)
 		ParkourEvent(event, ply)
 
 		ply.LadderDown = false
+		ply:StopSound("Slide.Ladder")
+		ply:StopSound("Slide.LadderHands")
 	elseif mv:KeyDown(IN_BACK) and ply:GetLadderDelay() < CurTime() and ply:GetLadderHeight() > 1 then
 		local pos = mv:GetOrigin()
 
@@ -135,11 +137,16 @@ local function LadderThink(ply, mv, cmd, ladder)
 
 		if not ply.LadderDown then
 			ParkourEvent("ladderclimbdownfast", ply)
+			ply:EmitSound("Slide.LadderHands")
+			ply:EmitSound("Slide.Ladder")
 		end
 
 		ply.LadderDown = true
 	elseif ply.LadderDown and ply:GetLadderDelay() < CurTime() then
 		ply.LadderDown = false
+		ply:EmitSound("Footsteps.LadderMedium")
+		ply:StopSound("Slide.Ladder")
+		ply:StopSound("Slide.LadderHands")
 
 		if CLIENT and IsFirstTimePredicted() then
 			ply:CLViewPunch(Angle(5, 0, 0))
@@ -235,8 +242,12 @@ local function LadderThink(ply, mv, cmd, ladder)
 
 		if CLIENT and IsFirstTimePredicted() then
 			BodyAnim:SetSequence("jumpfast")
+			ply:StopSound("Slide.Ladder")
+			ply:StopSound("Slide.LadderHands")
 		elseif game.SinglePlayer() then
 			ply:SendLua("BodyAnim:SetSequence('jumpfast')")
+			ply:StopSound("Slide.Ladder")
+			ply:StopSound("Slide.LadderHands")
 		end
 
 		ply:SetMoveType(MOVETYPE_WALK)
