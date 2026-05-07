@@ -259,6 +259,7 @@ local events = {
 	vaultkong = true,
 	vaultonto = true,
 	vaultover = true,
+	vaulthigh = true,
 	vaultontohigh = true,
 	ladderclimbright = true,
 	meleeairstill = true
@@ -1049,84 +1050,210 @@ local fingerscustom = {
 
 eventsounds = {
 	hangfoldedendhang = {
-		[0.42] = "Handsteps.ConcreteHard",
-		[0.05] = "Handsteps.ConcreteSoft",
-		[0.25] = "Handsteps.ConcreteRelease",
+		[0.01] = "Cloth.MovementWalk",
+		[0.1] = "Cloth.MovementRun",
 		[0.15] = "Handsteps.ConcreteRelease",
-		[0.5] = "Faith.StrainHard"
+		[0.25] = "Handsteps.ConcreteRelease",
+		[0.4] = "Cloth.MovementRun",
+		[0.5] = "Faith.StrainHard",
+		[0.6] = "Cloth.MovementWalk",
+		[0.8] = "Cloth.MovementSneak"
 	},
 	hangfoldedheaveup = {
-		[0.1] = "Faith.StrainHard"
+		[0] = "Cloth.MovementWalk",
+		[0.1] = "Faith.StrainHard",
+		[0.025] = "Handsteps.ConcreteRelease",
+		[0.05] = "Cloth.MovementRun",
+		[0.15] = "WallrunRelease.Concrete",
+		[0.2] = "Cloth.MovementSneak",
+		[0.4] = "Cloth.MovementWalk"
 	},
 	hangfoldedstart = {
-		[0.1] = "Faith.Impact"
+		[0.02] = "Cloth.Fall",
+		[0] = "Cloth.MovementRun",
+		[0.15] = "Cloth.MovementWalk",
+		[0.2] = "Cloth.MovementSneak"
 	},
 	hangheaveup = {
-		[0] = "Faith.StrainMedium"
+		[0] = "Faith.StrainMedium",
+		[0.01] = "Cloth.MovementWalk",
+		[0.05] = "WallrunRelease.Concrete",
+		[0.1] = "WallrunRelease.Concrete",
+		[0.2] = "Cloth.MovementWalk",
+		[0.4] = "Cloth.MovementSneak",
+		[0.5] = "Cloth.MovementWalk",
+		[0.8] = "Cloth.MovementSneak",
+		[1] = "Cloth.MovementWalk"
+	},
+	hanghardstart = {
+		[0] = "Faith.Impact",
+		[0.05] = "Cloth.MovementRun",
+		[0.1] = "Cloth.MovementRun",
+		[0.3] = "Cloth.MovementWalk",
+		[0.6] = "Cloth.MovementSneak"
+	},
+	hanghardstart2 = {
+		[0.01] = "Cloth.MovementRun",
+		[0.2] = "Cloth.MovementSneak",
+		[0.5] = "Cloth.MovementWalk",
+		[0.7] = "Cloth.MovementWalk",
+		[0.8] = "Cloth.MovementSneak"
+	},
+	hanghardstartvertical = {
+		[0.3] = "Cloth.MovementSneak",
+		[0.6] = "Cloth.MovementWalk",
+		[0.9] = "Cloth.MovementSneak",
+		[1.05] = "Cloth.MovementWalk"
+	},
+	hangstrafeleft = {
+		[0.1] = "Cloth.MovementSneak",
+		[0.5] = "Cloth.MovementSneak"
+	},
+	hangstraferight = {
+		[0.1] = "Cloth.MovementSneak",
+		[0.5] = "Cloth.MovementSneak"
 	},
 	vaultontohigh = {
 		[0.2] = "Vault",
-		[0.05] = "Handsteps.ConcreteHard",
 		[0.25] = "Faith.StrainSoft",
-		[0.45] = "Footsteps.Concrete",
-		[0.5] = "Cloth.MovementRun",
-		[0.3] = "Cloth.VaultSwish"
+		[0.3] = "Cloth.VaultSwish",
+		[0.5] = "Cloth.MovementRun"
+	},
+	vaultoverhigh = {
+		[0] = "Cloth.MovementRun",
+		[0.08] = "Faith.StrainMedium",
+		[0.1] = "Vault",
+		[0.2] = "Cloth.VaultSwish",
+		[0.3] = "Cloth.SideStep",
+		[0.4] = "Cloth.MovementRun",
+		[0.6] = "Cloth.MovementWalk"
 	},
 	vaultonto = {
-		[0.1] = "Footsteps.Concrete",
-		[0.01] = "Handsteps.ConcreteHard",
-		[0.025] = "Cloth.MovementRun"
+		[0] = "Cloth.MovementWalk",
+		[0.01] = "Vault",
+		[0.05] = "Cloth.MovementRun",
+		[0.075] = "Faith.StrainSoft"
 	},
 	vaultkong = {
-		[0.025] = "Vault"
+		[0.025] = "Vault",
+		[0.075] = "Faith.StrainSoft",
+		[0.055] = "Cloth.VaultSwish"
 	},
 	snatchscar = {
-		[0.35] = "Melee.Foot",
+		[0.01] = "Cloth.MovementRun",
 		[0.05] = "Melee.ArmSwoosh",
+		[0.075] = "Cloth.MovementRun",
 		[0.1] = "Melee.LegSwoosh",
-		[0.15] = "Faith.StrainMedium"
+		[0.15] = "Faith.StrainMedium",
+		[0.35] = "Melee.Foot",
+		[0.45] = "Cloth.MovementRun",
+		[0.6] = "Cloth.MovementWalk",
+		[0.7] = "Faith.StrainHard",
+		[0.9] = "Cloth.MovementRun",
+		[1.1] = "Cloth.MovementWalk",
+		[1.26] = "Cloth.Fall",
+		[1.28] = "Cloth.FallShortMedium",
+		[1.3] = "Cloth.FallShortHard",
+		[1.6] = "Cloth.MovementSneak",
+		[1.9] = "Cloth.MovementWalk"
 	},
 	meleeslide = {
-		[0.025] = "Melee.LegSwoosh"
+		[0.015] = "Cloth.MovementRun",
+		[0.025] = "Melee.LegSwoosh",
+		[0.055] = "Faith.StrainMedium",
+		[0.12] = "Cloth.MovementRun"
 	},
-	meleewrleft = {
+	meleeairhit = {
+		[0.01] = "Melee.LegSwoosh",
+		[0.005] = "Cloth.MovementRun",
+		[0] = "Faith.StrainHard",
+		[0.2] = "Cloth.MovementWalk"
+	},
+	meleeair = {
+		[0.01] = "Cloth.MovementRun",
+		[0.25] = "Cloth.MovementWalk"
+	},
+	meleeairstill = {	
+		[0.015] = "Cloth.MovementRun",
+		[0.025] = "Melee.LegSwoosh",
+		[0.065] = "Faith.StrainHard",
+		[0.2] = "Cloth.MovementWalk"
+	},
+	meleewrleft = {		
+		[0.025] = "Cloth.MovementRun",
 		[0.035] = "Melee.LegSwoosh",
-		[0.075] = "Faith.StrainHard"
+		[0.075] = "Faith.StrainHard",
+		[0.25] = "Cloth.MovementWalk"
 	},
 	meleewrright = {
+		[0.025] = "Cloth.MovementRun",
 		[0.035] = "Melee.LegSwoosh",
-		[0.075] = "Faith.StrainHard"
+		[0.075] = "Faith.StrainHard",
+		[0.25] = "Cloth.MovementWalk"
+	},
+	ladderenterbottom = {
+		[0.1] = "Cloth.MovementWalk",
+		[0.12] = "Handsteps.Ladder",
+		[0.25] = "Handsteps.Ladder",
+		[0.3] = "Footsteps.LadderMedium",
+		[0.35] = "Cloth.MovementWalk",
+		[0.4] = "Footsteps.LadderMedium",
 	},
 	ladderclimbhangstart = {
 		[0] = "Footsteps.LadderHeavy",
-		[0.1] = "Land.Ladder"
+		[0.01] = "Cloth.MovementRun",
+		[0.05] = "Handsteps.MetalPipeHard",	
+		[0.08] = "Faith.Impact",
+		[0.1] = "Land.Ladder",
+		[0.15] = "Cloth.MovementRun",
+		[0.2] = "Land.Ladder",
+		[0.3] = "Cloth.MovementWalk"
 	},
 	ladderclimbuplefthand = {
 		[0] = "Release.Ladder",
+		[0.1] = "Cloth.MovementWalk",
 		[0.15] = "Footsteps.LadderMedium",
 		[0.2] = "Handsteps.Ladder"
 	},
 	ladderclimbuprighthand = {
 		[0] = "Release.Ladder",
+		[0.1] = "Cloth.MovementWalk",
 		[0.15] = "Footsteps.LadderMedium",
 		[0.2] = "Handsteps.Ladder"
 	},
 	ladderexittoplefthand = {
-		[0.45] = "Release.Ladder",
+		[0.05] = "Cloth.MovementWalk",
 		[0.1] = "Handsteps.Ladder",
+		[0.15] = "Handsteps.Ladder",
+		[0.25] = "Cloth.VaultSwish",
+		[0.35] = "Cloth.MovementSneak",
+		[0.45] = "Release.Ladder",
 		[0.5] = "Release.Ladder",
-		[0.15] = "Handsteps.Ladder"
+		[0.48] = "Handsteps.MetalPipeRelease",
+		[0.6] = "Cloth.MovementWalk"
 	},
 	ladderexittoprighthand = {
-		[0.45] = "Release.Ladder",
+		[0.05] = "Cloth.MovementWalk",
 		[0.1] = "Handsteps.Ladder",
+		[0.15] = "Handsteps.Ladder",
+		[0.25] = "Cloth.VaultSwish",
+		[0.35] = "Cloth.MovementSneak",
+		[0.48] = "Handsteps.MetalPipeRelease",
+		[0.45] = "Release.Ladder",
 		[0.5] = "Release.Ladder",
-		[0.15] = "Handsteps.Ladder"
+		[0.6] = "Cloth.MovementWalk"
+	},
+	diveslidestart = {
+		[0] = "Cloth.FallShortHard",
+	    [0.01] = "Faith.ImpactSoft"
 	},
 	jumpturnlandstand = {
+		[0] = "Cloth.RollCloth",
 		[0.01] = "Cloth.BodyRollSwish",
 		[0.25] = "Faith.StrainSoft",
-		[0.3] = "Cloth.BodyRoll"
+		[0.3] = "Cloth.Roll",
+		[0.35] = "Cloth.BodyRoll",
+		[0.45] = "Land.Concrete"
 	}
 }
 
@@ -1778,12 +1905,14 @@ local function JumpThink()
 						BodyAnimCycle = 0
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
+						ply:EmitSound("Cloth.MovementWalk")
 					end
 
 					if (BodyAnimString == "stand" or BodyAnimString == "walktostandleft" or BodyAnimString == "jumpcoilend") and ply:Crouching() or BodyAnimString == "crouchfwd" or BodyAnimString == "crouchbwd" then
 						BodyAnimCycle = 0
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchtostandleft"))
+						ply:EmitSound("Cloth.MovementSneak")
 					end
 				end
 
@@ -1844,6 +1973,8 @@ local function JumpThink()
 
 					BodyAnim:SetSequence("jumpturnland")
 					ply:EmitSound("Cloth.FallShortHard")
+					ply:EmitSound("Cloth.FallShortMedium")
+					ply:EmitSound("Cloth.Fall")
 					ply:FaithVO("Faith.Impact")
 					DoImpactBlur(6)
 				end
@@ -1973,9 +2104,10 @@ local function JumpThink()
 
 					BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
 					ply:EmitSound("Release." .. stepmat)
+					ply:EmitSound("Cloth.MovementWalk")
 
 					timer.Simple(0.15, function()
-						ply:EmitSound("Footsteps." .. stepmat)
+						ply:EmitSound("Walk." .. stepmat)
 					end)
 				end
 			end

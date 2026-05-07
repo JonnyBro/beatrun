@@ -115,6 +115,8 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("ZiplineLoop")
 			ply:EmitSound("ZiplineStart")
+			ply:EmitSound("Handsteps.MetalPipeGrab")
+			ply:EmitSound("Handsteps.MetalPipeHard")
 		end
 
 		ParkourEvent("ziplinestart", ply)
@@ -148,6 +150,8 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("ZiplineEnd")
+			ply:EmitSound("Handsteps.MetalPipeRelease")
+			ply:EmitSound("Handsteps.MetalPipeLetGo")
 			ply:StopSound("ZiplineLoop")
 
 			if game.SinglePlayer() then
@@ -188,6 +192,7 @@ local function ZiplineThink(ply, mv, cmd, zipline)
 
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("ZiplineEnd")
+			ply:EmitSound("Handsteps.MetalPipeRelease")
 			ply:StopSound("ZiplineLoop")
 
 			if game.SinglePlayer() then

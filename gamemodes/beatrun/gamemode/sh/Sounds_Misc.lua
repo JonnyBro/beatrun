@@ -36,7 +36,7 @@ sound.Add({
 
 sound.Add({
 	name = "Vault",
-	volume = 1,
+	volume = 0.75,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
@@ -77,4 +77,40 @@ sound.Add({
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Ladder/Ladder_Land_01.ogg", "mirrorsedge/Ladder/Ladder_Land_02.ogg", "mirrorsedge/Ladder/Ladder_Land_03.ogg"}
+})
+
+sound.Add({
+	name = "DeathFall",
+	volume = 1,
+	level = 80,
+	channel = CHAN_STATIC,
+	pitch = {95, 105},
+	sound = {"mirrorsedge/DeathFall1.wav", "mirrorsedge/DeathFall2.wav", "mirrorsedge/DeathFall3.wav", "mirrorsedge/DeathFall4.wav"}
+})
+
+sound.Add({
+	name = "FleshHit",
+	volume = 1,
+	level = 80,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Flesh_01.wav", "mirrorsedge/Flesh_02.wav", "mirrorsedge/Flesh_03.wav", "mirrorsedge/Flesh_04.wav", "mirrorsedge/Flesh_05.wav", "mirrorsedge/Flesh_06.wav", "mirrorsedge/Flesh_07.wav", "mirrorsedge/Flesh_08.wav", "mirrorsedge/Flesh_09.wav"}
+})
+
+sound.Add({
+	name = "Slide.LadderHands",
+	volume = 1,
+	level = 40,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Ladder/Ladder_Slide_1a.wav"}
+})
+
+sound.Add({
+	name = "Slide.Ladder",
+	volume = 1,
+	level = 40,
+	channel = CHAN_STATIC,
+	pitch = {90, 110},
+	sound = {"mirrorsedge/Ladder/Ladder_Slide_2a.wav"}
 })

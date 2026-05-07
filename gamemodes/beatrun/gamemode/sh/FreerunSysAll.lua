@@ -2,7 +2,7 @@ local quakejump = CreateConVar("Beatrun_QuakeJump", 1, {FCVAR_REPLICATED, FCVAR_
 local sidestep = CreateConVar("Beatrun_SideStep", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 local speedLimit = CreateConVar("Beatrun_SpeedLimit", 325, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
-CreateConVar("Beatrun_Disarm", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 0, 1)
+CreateConVar("Beatrun_Disarm", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 0, 1)
 CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 local function Hardland(jt)
@@ -83,6 +83,10 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 		steptime = steptime * 2
 	end
 
+	if ply:KeyDown(IN_WALK) and not ply:Crouching() then
+		steptime = steptime * 1.4
+	end
+
 	if ply:InOverdrive() then
 		steptime = steptime * 0.8
 	end
@@ -99,10 +103,10 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 	if ply:GetMEMoveLimit() < 100 and ply:KeyDown(IN_FORWARD) and not ply.FootstepLand then return true end
 
 	local mat = sound:sub(0, -6)
-	local newsound = FOOTSTEPS_LUT[mat]
+	local newsound = FOOTSTEPS_LUT[mat] or "Concrete"
 
 	if mat == "player/footsteps/ladder" then return end
-
+	
 	newsound = newsound or "Concrete"
 
 	ply.LastStepMat = newsound
@@ -111,46 +115,62 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 	ply.FootstepReleaseLand = true
 
-	if CLIENT or game.SinglePlayer() and not ply:Crouching() and not IsValid(ply:GetBalanceEntity()) then
-		ply:EmitSound("Footsteps." .. newsound)
-		ply:EmitSound("Cloth.MovementRun")
+	if CLIENT or game.SinglePlayer() then
+		local isBalancing = IsValid(ply:GetBalanceEntity())
+		local currentSpeed = ply:GetVelocity():Length()
 
-		if math.random() > 0.9 then ParkourEvent("step") end
+		if not ply:Crouching() and not isBalancing then
+
+			if currentSpeed <= 140 then
+				local walksound = FOOTSTEPS_WALK_LUT[mat] or "Concrete"
+				walksound = walksound or "Concrete"
+
+				ply.LastStepMat = walksound
+
+				ply:EmitSound("Walk." .. walksound)
+				ply:EmitSound("Cloth.MovementWalk")
+			else
+				ply:EmitSound("Footsteps." .. newsound)
+				ply:EmitSound("Cloth.MovementRun")
+
+				if math.random() > 0.9 then ParkourEvent("step") end
+			end
+		end
+		
+		ply.LastFootstepSound = mat
+
+		if ply:InOverdrive() and currentSpeed > 400 then
+			ply:EmitSound("Footsteps.Spark")
+		end
+
+		if ply:Crouching() and not isBalancing and IsFirstTimePredicted() then
+			local sneaksound = FOOTSTEPS_SNEAK_LUT[mat] or "Concrete"
+			sneaksound = sneaksound or "Concrete"
+
+			ply.LastStepMat = sneaksound
+
+			ply:EmitSound("Sneak." .. sneaksound)
+			ply:EmitSound("Cloth.MovementSneak")
+		end
+
+		if isBalancing and IsFirstTimePredicted() then
+			ply:EmitSound("Footsteps.MetalPipe")
+			ply:EmitSound("Cloth.MovementWalk")
+		end
+
+		if ply.FootstepLand and IsFirstTimePredicted() then
+			local landsound = FOOTSTEPS_LAND_LUT[mat] or "Concrete"
+			
+			ply:EmitSound("Land." .. landsound)
+			
+			if ply:WaterLevel() > 0 then
+				ply:EmitSound("Land.Water")
+			end
+			ply.FootstepLand = false
+		end
 	end
 
 	ply.LastFootstepSound = mat
-
-	if not ply:Crouching() and ply:WaterLevel() > 0 then
-		ply:EmitSound("Footsteps.Water")
-	elseif ply:Crouching() and ply:WaterLevel() > 0 then
-		ply:EmitSound("Sneak.Water")
-	end
-
-	if ply:InOverdrive() and ply:GetVelocity():Length() > 400 then ply:EmitSound("Footsteps.Spark") end
-
-	if (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) and ply:Crouching() and not IsValid(ply:GetBalanceEntity()) then
-		local sneaksound = FOOTSTEPS_SNEAK_LUT[mat]
-		sneaksound = sneaksound or "Concrete"
-
-		ply.LastStepMat = sneaksound
-
-		ply:EmitSound("Sneak." .. sneaksound)
-		ply:EmitSound("Cloth.MovementSneak")
-	end
-
-	if (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) and IsValid(ply:GetBalanceEntity()) then
-		ply:EmitSound("Footsteps.MetalPipe")
-		ply:EmitSound("Cloth.MovementWalk")
-	end
-
-	if (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) and ply.FootstepLand then
-		local landsound = FOOTSTEPS_LAND_LUT[mat] or "Concrete"
-
-		ply:EmitSound("Land." .. landsound)
-
-		ply.FootstepLand = false
-	end
-
 	hook.Run("PlayerFootstepME", ply, pos, foot, sound, volume, filter)
 
 	return true
@@ -191,7 +211,7 @@ hook.Add("OnPlayerHitGround", "MELandSound", function(ply, water, floater, speed
 		eyedir.x = 0
 		eyedir = eyedir:Forward()
 
-		local vel = ply:GetVelocity()
+		vel = ply:GetVelocity()
 		vel.z = 0
 
 		if ply:GetCrouchJumpTime() < CurTime() and vel:GetNormalized():Dot(eyedir) < -0.75 and not ply:GetDive() then
@@ -225,16 +245,16 @@ end)
 
 hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	local usingrh = ply:UsingRH()
-	local ismoving = (mv:KeyDown(IN_FORWARD) or not ply:OnGround() or ply:Crouching()) and not mv:KeyDown(IN_BACK) and ply:Alive() and (mv:GetVelocity():Length() > 50 or ply:GetMantle() ~= 0 or ply:Crouching())
+	local ismoving = (mv:KeyDown(IN_FORWARD) or not ply:OnGround() or ply:Crouching()) and ply:Alive() and (mv:GetVelocity():Length() > 145 or ply:GetMantle() ~= 0 or ply:Crouching())
 
 	if (CLIENT or game.SinglePlayer()) and CurTime() > (ply:GetStepRelease() or 0) and ply.FootstepReleaseLand then
 		local newsound = FOOTSTEPS_RELEASE_LUT[ply.LastFootstepSound] or "Concrete"
 
-		if ply:WaterLevel() > 0 then
+		if mv:GetVelocity():Length() >= 140 or newsound == "Gantry" then
+			ply:EmitSound("Release." .. newsound)		
+		elseif ply:WaterLevel() > 0 then
 			ply:EmitSound("Release.Water")
 		end
-
-		ply:EmitSound("Release." .. newsound)
 		ply.FootstepReleaseLand = false
 	end
 
@@ -253,8 +273,8 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	end
 
 	if ply:KeyDown(IN_WALK) then
-		mv:SetForwardSpeed(mv:GetForwardSpeed() * 0.0065)
-		mv:SetSideSpeed(mv:GetSideSpeed() * 0.0065)
+		mv:SetForwardSpeed(mv:GetForwardSpeed() * 0.0095)
+		mv:SetSideSpeed(mv:GetSideSpeed() * 0.0095)
 
 		ply:SetMEMoveLimit(150)
 		ply:SetMESprintDelay(0)
@@ -271,7 +291,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 	local activewep = ply:GetActiveWeapon()
 
 	if not ply:UsingRH() then
-		weaponspeed = speedLimit:GetInt() + math.floor(325 - speedLimit:GetInt())
+		weaponspeed = 150
 	end
 
 	if (ismoving or ply:GetMantle() ~= 0) and ply:GetMESprintDelay() < CurTime() and (cmd:KeyDown(IN_SPEED) or ply:GetMantle() ~= 0 or not ply:OnGround() or (not ply:OnGround() or ply:GetMantle() ~= 0) and mv:GetVelocity().z > -450) then
@@ -328,6 +348,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			ParkourEvent("sidestepleft", ply)
 
 			ply:EmitSound("Cloth.SideStep")
+			ply:FaithVO("Faith.StrainSoft")
 
 			activewep.SideStepDir = ang:Forward()
 
@@ -345,6 +366,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 			ParkourEvent("sidestepright", ply)
 
 			ply:EmitSound("Cloth.SideStep")
+			ply:FaithVO("Faith.StrainSoft")
 
 			activewep.SideStepDir = ang:Forward()
 

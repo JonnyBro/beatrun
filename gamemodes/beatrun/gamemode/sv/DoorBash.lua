@@ -7,7 +7,7 @@ util.AddNetworkString("DoorBashAnim")
 
 hook.Add("PlayerUse", "DoorBash", function(ply, ent)
 	if doors[ent:GetClass()] then
-		if ply:GetVelocity():Length() < 100 or ply:Crouching() then return end
+		if ply:GetVelocity():Length() < 150 or ply:Crouching() then return end
 		if ent.bashdelay and ent.bashdelay > CurTime() then return end
 		if ent:GetInternalVariable("m_bLocked") then return end
 
