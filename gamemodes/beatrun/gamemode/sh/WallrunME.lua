@@ -40,7 +40,7 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 				angdir.y = angdir.y - 180
 
 				local wallnormal = trout.HitNormal
-			    local eyeang = Angle(angdir)
+				local eyeang = Angle(angdir)
 				eyeang.x = 0
 
 				tr.start = ply:EyePos() - Vector(0, 0, 5)
@@ -212,12 +212,12 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 		if mv:KeyPressed(IN_JUMP) then
 			ParkourEvent("jumpwallrun", ply)
 			if SERVER then
-			    ply:EmitSound("WallrunRelease.Concrete")
+				ply:EmitSound("WallrunRelease.Concrete")
 				timer.Simple(0.025, function()
-				    ply:EmitSound("WallrunRelease.Concrete")
+					ply:EmitSound("WallrunRelease.Concrete")
 					ply:EmitSound("Cloth.SideStep")
 				end)
-			    ply:EmitSound("Cloth.MovementRun")
+				ply:EmitSound("Cloth.MovementRun")
 			end
 
 			ply:SetSafetyRollKeyTime(CurTime() + 0.001)
@@ -286,7 +286,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 				local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[ply.WallRunTraceMat] or "Concrete"
 				ply:EmitSound("Wallrun." .. wallsound)
 				timer.Simple(0.025, function()
-				    ply:EmitSound("WallrunRelease.Concrete")
+					ply:EmitSound("WallrunRelease.Concrete")
 				end)
 				ply:EmitSound("Cloth.MovementRun")
 			end
@@ -406,7 +406,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 				local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[ply.WallRunTraceMat] or "Concrete"
 				ply:EmitSound("Wallrun." .. wallsound)
 				timer.Simple(0.025, function()
-				    ply:EmitSound("WallrunRelease.Concrete")
+					ply:EmitSound("WallrunRelease.Concrete")
 				end)
 				ply:EmitSound("Cloth.MovementRun")
 			end

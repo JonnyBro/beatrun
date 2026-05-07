@@ -152,9 +152,9 @@ local function Vault1(ply, mv, ang, t, h)
 
 			if stepup then
 				ParkourEvent("stepup", ply)
-				ply.VaultStepUp = true				
+				ply.VaultStepUp = true
 				ply:EmitSound("Land." .. step)
-				ply:EmitSound("Cloth.MovementWalk")	
+				ply:EmitSound("Cloth.MovementWalk")
 			else
 				ParkourEvent("vaultonto", ply)
 				ply.VaultStepUp = false
@@ -162,7 +162,7 @@ local function Vault1(ply, mv, ang, t, h)
 					timer.Simple(0.01, function()
 						ply:EmitSound("Handsteps." .. handstepsoft)
 					end)
-					timer.Simple(0.1, function()						
+					timer.Simple(0.1, function()
 						ply:EmitSound("Land." .. step)
 					end)
 				end
@@ -452,7 +452,7 @@ function Vault4(ply, mv, ang, t, h)
 		local tsafetyout = util.TraceLine(tsafety)
 
 		if tsafetyout.MatType == MAT_GRATE then
-		    ply:EmitSound("Handsteps.FenceVault")
+			ply:EmitSound("Handsteps.FenceVault")
 
 			timer.Simple(0.45, function() ply:EmitSound("FenceClimbEnd") end)
 		end
@@ -538,7 +538,7 @@ function Vault5(ply, mv, ang, t, h)
 		ParkourEvent("vaultontohigh", ply)
 
 		if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-		    timer.Simple(0.05, function()
+			timer.Simple(0.05, function()
 				ply:EmitSound("Handsteps." .. handstephard)
 			end)
 			timer.Simple(0.1, function()

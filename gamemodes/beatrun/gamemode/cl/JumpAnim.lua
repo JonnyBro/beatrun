@@ -1035,8 +1035,8 @@ fbfunctions = {
 
 local defaultcamoffset = Vector()
 
-local playermodelbones = {"ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_R_UpperArm"}
-local fingers = {"ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11"}
+local playermodelbones = { "ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_R_UpperArm" }
+local fingers = { "ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11" }
 
 local fingerscustom = {
 	["ValveBiped.Bip01_L_Finger4"] = Angle(-10, 10, 0),
@@ -1173,13 +1173,13 @@ eventsounds = {
 		[0.01] = "Cloth.MovementRun",
 		[0.25] = "Cloth.MovementWalk"
 	},
-	meleeairstill = {	
+	meleeairstill = {
 		[0.015] = "Cloth.MovementRun",
 		[0.025] = "Melee.LegSwoosh",
 		[0.065] = "Faith.StrainHard",
 		[0.2] = "Cloth.MovementWalk"
 	},
-	meleewrleft = {		
+	meleewrleft = {
 		[0.025] = "Cloth.MovementRun",
 		[0.035] = "Melee.LegSwoosh",
 		[0.075] = "Faith.StrainHard",
@@ -1202,7 +1202,7 @@ eventsounds = {
 	ladderclimbhangstart = {
 		[0] = "Footsteps.LadderHeavy",
 		[0.01] = "Cloth.MovementRun",
-		[0.05] = "Handsteps.MetalPipeHard",	
+		[0.05] = "Handsteps.MetalPipeHard",
 		[0.08] = "Faith.Impact",
 		[0.1] = "Land.Ladder",
 		[0.15] = "Cloth.MovementRun",
@@ -1245,7 +1245,7 @@ eventsounds = {
 	},
 	diveslidestart = {
 		[0] = "Cloth.FallShortHard",
-	    [0.01] = "Faith.ImpactSoft"
+		[0.01] = "Faith.ImpactSoft"
 	},
 	jumpturnlandstand = {
 		[0] = "Cloth.RollCloth",

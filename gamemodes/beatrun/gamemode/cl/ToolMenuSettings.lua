@@ -237,6 +237,7 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		end
 		panel:AddItem(realisticClimbingToggle)
 		panel:ControlHelp("#beatrun.toolsmenu.misc.lerealisticclimbingdesc")
+
 		local ledgeGrabDamageToggle = vgui.Create("DCheckBoxLabel")
 		ledgeGrabDamageToggle:SetText("#beatrun.toolsmenu.misc.ledgegrabdamage")
 		ledgeGrabDamageToggle:SetDark(true)

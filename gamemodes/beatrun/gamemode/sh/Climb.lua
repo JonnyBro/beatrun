@@ -80,19 +80,22 @@ local function ClimbingThink(ply, mv, cmd)
 	local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
 	local handstephard = HANDSTEPS_HARD_LUT[wallmat] or "ConcreteHard"
 	local step = FOOTSTEPS_MAT_TYPE_LUT[wallmat] or "Concrete"
+
 	if ply:GetClimbing() == 5 then
 		if mv:KeyPressed(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() + 0.65 or mv:KeyDown(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() then
 			ParkourEvent("hangfoldedheaveup", ply)
-			
+
 			ply.FootstepLand = false
+
 			timer.Simple(0.35, function() ply:EmitSound("Walk." .. step) end)
+
 			ply:EmitSound("Handsteps." .. handstepsoft)
 
 			ply:SetClimbing(6)
 			ply:SetClimbingTime(0)
 		elseif ply:GetClimbingDelay() < CurTime() then
 			ParkourEvent("hangfoldedendhang", ply)
-	
+
 			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 			timer.Simple(0.42, function() ply:EmitSound("Handsteps." .. handstephard) end)
 			timer.Simple(0.5, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
@@ -104,6 +107,7 @@ local function ClimbingThink(ply, mv, cmd)
 		mv:SetForwardSpeed(0)
 		mv:SetSideSpeed(0)
 		mv:SetUpSpeed(0)
+
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
 		mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
 
@@ -149,6 +153,7 @@ local function ClimbingThink(ply, mv, cmd)
 			ply:SetCrouchJumpBlocked(true)
 
 			ParkourEvent("hangend", ply)
+
 			ply:EmitSound("Cloth.MovementSneak")
 
 			if CLIENT and IsFirstTimePredicted() then
@@ -168,13 +173,18 @@ local function ClimbingThink(ply, mv, cmd)
 
 		if mv:KeyDown(IN_JUMP) and ang > 42 then
 			mv:SetOrigin(ply:GetClimbingStart() - ply:GetClimbingAngle():Forward() * 0.6)
+
 			ply:SetMoveType(MOVETYPE_WALK)
+
 			mv:SetButtons(0)
+
 			ply:SetClimbing(0)
 			ply:SetSafetyRollKeyTime(CurTime() + 0.1)
+
 			ParkourEvent("hangjump", ply)
+
 			if SERVER then
-			    ply:EmitSound("Cloth.MovementRun")
+				ply:EmitSound("Cloth.MovementRun")
 				ply:EmitSound("WallrunRelease.Concrete")
 			end
 
@@ -187,6 +197,7 @@ local function ClimbingThink(ply, mv, cmd)
 				local ang = ply:EyeAngles()
 				ang.x = 0
 				ang.z = 0
+
 				BodyAnim:SetAngles(ang)
 			elseif game.SinglePlayer() then
 				ply:SendLua("lockang2=false lockang=false BodyLimitX=90 BodyLimitY=180 local ang=LocalPlayer():EyeAngles() ang.x=0 ang.z=0 BodyAnim:SetAngles(ang)")
@@ -207,6 +218,7 @@ local function ClimbingThink(ply, mv, cmd)
 			local tr = ply.ClimbingTraceSafety
 			local trout = ply.ClimbingTraceSafetyOut
 			local mins, maxs = ply:GetHull()
+
 			mins.z = maxs.z * 0.25
 
 			tr.start = ply:GetClimbingEnd()
@@ -251,14 +263,11 @@ local function ClimbingThink(ply, mv, cmd)
 				if not trout.Hit then
 					ply:SetClimbing(2)
 					ply.FootstepLand = false
+
 					ParkourEvent("climbheave", ply)
-					
+
 					timer.Simple(0.65, function() ply:EmitSound("Walk." .. step) end)
-					timer.Simple(1, function() 
-						if not (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVERIGHT)) then
-							ply:EmitSound("Sneak." .. step)
-						end
-					end)
+					timer.Simple(1, function() if not (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVERIGHT)) then ply:EmitSound("Sneak." .. step) end end)
 				end
 			end
 		end
@@ -279,11 +288,9 @@ local function ClimbingThink(ply, mv, cmd)
 			tr.endpos = start - Vector(0, 0, 80)
 
 			util.TraceLine(tr)
-			-- local oldstart = tr.start
-			-- local oldend = tr.endpos
+
 			local wallmat = trout.MatType
 			local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
-
 
 			tr.start = start
 			tr.endpos = start - Vector(0, 0, 80)
@@ -331,11 +338,12 @@ local function ClimbingThink(ply, mv, cmd)
 					else
 						ParkourEvent("hangstrafeleft", ply)
 					end
+
 					timer.Simple(0.4, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 					timer.Simple(0.9, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 				end
 
-			    ply:SetClimbingDelay(CurTime() + 0.9)
+				ply:SetClimbingDelay(CurTime() + 0.9)
 			end
 		end
 	end
@@ -389,9 +397,7 @@ local function ClimbingThink(ply, mv, cmd)
 		local lerp = ply:GetClimbingTime()
 		local lerprate = ClimbingTimes[ply:GetClimbing()]
 
-		if lerp > 0.5 then
-			lerprate = lerprate * 0.75
-		end
+		if lerp > 0.5 then lerprate = lerprate * 0.75 end
 
 		local poslerp = LerpVector(lerp, ply:GetClimbingStart(), ply:GetClimbingEnd())
 
@@ -403,6 +409,7 @@ local function ClimbingThink(ply, mv, cmd)
 	mv:SetForwardSpeed(0)
 	mv:SetSideSpeed(0)
 	mv:SetUpSpeed(0)
+
 	mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
 	mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
 end
@@ -470,10 +477,10 @@ local function ClimbingCheck(ply, mv, cmd)
 	if IsValid(trout.Entity) and trout.Entity.NoClimbing then return end
 
 	ply:SetClimbingAngle(wallang)
-	
+
 	local trout = ply.ClimbingTraceEndOut
 	local tr = ply.ClimbingTraceEnd
-	
+
 	local upvalue = ply:GetWallrun() == 1 and Vector(0, 0, 90) or Vector(0, 0, 65)
 	local plymins, plymaxs = ply:GetHull()
 
@@ -485,7 +492,7 @@ local function ClimbingCheck(ply, mv, cmd)
 	tr.output = trout
 
 	util.TraceLine(tr)
-	
+
 	local wallmat = trout.MatType
 	local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
 	local handstephard = HANDSTEPS_HARD_LUT[wallmat] or "ConcreteHard"
@@ -669,6 +676,7 @@ local function ClimbingCheck(ply, mv, cmd)
 		ply:SetWallrun(0)
 		ply:EmitSound("Wallrun." .. wallrun)
 		ply:EmitSound("Cloth.MovementRun")
+
 		timer.Simple(0.025, function()
 			ply:EmitSound("WallrunRelease.Concrete")
 		end)
@@ -732,12 +740,12 @@ local function ClimbingCheck(ply, mv, cmd)
 		else
 			timer.Simple(0.1, function() ply:FaithVO("Faith.Impact") end)
 		end
-		
+
 		if foldedDamage:GetBool() then
 			local dmg
 			local dmgpercent = 0
 			local info = DamageInfo()
-			
+
 			if lastvel.z < -1000 then
 				dmgpercent = 0.6
 			elseif lastvel.z < -800 then
@@ -772,15 +780,15 @@ local function ClimbingCheck(ply, mv, cmd)
 			event = "climbhard2"
 			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 			timer.Simple(0.7, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-			
+
 			if lastvel.z < -250 then
-			    ply:FaithVO("Faith.Impact")
+				ply:FaithVO("Faith.Impact")
 			else
-			    ply:FaithVO("Faith.ImpactSoft")
+				ply:FaithVO("Faith.ImpactSoft")
 			end
 		else
 			timer.Simple(0.15, function()
-	            ply:EmitSound("Handsteps." .. handstepsoft)
+				ply:EmitSound("Handsteps." .. handstepsoft)
 			end)
 		end
 

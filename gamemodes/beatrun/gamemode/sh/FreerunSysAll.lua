@@ -1,9 +1,9 @@
-local quakejump = CreateConVar("Beatrun_QuakeJump", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
-local sidestep = CreateConVar("Beatrun_SideStep", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
-local speedLimit = CreateConVar("Beatrun_SpeedLimit", 325, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local quakejump = CreateConVar("Beatrun_QuakeJump", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
+local sidestep = CreateConVar("Beatrun_SideStep", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
+local speedLimit = CreateConVar("Beatrun_SpeedLimit", 325, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
-CreateConVar("Beatrun_Disarm", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "", 0, 1)
-CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
+CreateConVar("Beatrun_Disarm", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "", 0, 1)
+CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
 local function Hardland(jt)
 	local ply = LocalPlayer()
@@ -106,7 +106,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 	local newsound = FOOTSTEPS_LUT[mat] or "Concrete"
 
 	if mat == "player/footsteps/ladder" then return end
-	
+
 	newsound = newsound or "Concrete"
 
 	ply.LastStepMat = newsound
@@ -136,7 +136,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 				if math.random() > 0.9 then ParkourEvent("step") end
 			end
 		end
-		
+
 		ply.LastFootstepSound = mat
 
 		if ply:InOverdrive() and currentSpeed > 400 then
@@ -160,9 +160,9 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 		if ply.FootstepLand and IsFirstTimePredicted() then
 			local landsound = FOOTSTEPS_LAND_LUT[mat] or "Concrete"
-			
+
 			ply:EmitSound("Land." .. landsound)
-			
+
 			if ply:WaterLevel() > 0 then
 				ply:EmitSound("Land.Water")
 			end
@@ -251,7 +251,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 		local newsound = FOOTSTEPS_RELEASE_LUT[ply.LastFootstepSound] or "Concrete"
 
 		if mv:GetVelocity():Length() >= 140 or newsound == "Gantry" then
-			ply:EmitSound("Release." .. newsound)		
+			ply:EmitSound("Release." .. newsound)
 		elseif ply:WaterLevel() > 0 then
 			ply:EmitSound("Release.Water")
 		end

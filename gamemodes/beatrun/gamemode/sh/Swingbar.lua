@@ -127,14 +127,14 @@ local function SwingbarThink(ply, mv, cmd)
 	if mv:KeyDown(IN_FORWARD) and ply:GetSBPeak() ~= 1 then
 		ply:SetSBOffsetSpeed(math.Approach(math.max(ply:GetSBOffsetSpeed(), 0), 1 + ply:GetSBOffset() / 50, math.abs(ply:GetSBOffset() / 100 - 1) * 5 * FrameTime()))
 		if mv:KeyPressed(IN_FORWARD) and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-		    ply:StopSound("Handsteps.MetalPipeSwing")
+			ply:StopSound("Handsteps.MetalPipeSwing")
 			ply:EmitSound("Handsteps.MetalPipeSwing")
 			ply:EmitSound("Cloth.Swing")
 		end
 	elseif mv:KeyDown(IN_BACK) and ply:GetSBPeak() ~= 2 then
 		ply:SetSBOffsetSpeed(math.Approach(math.min(ply:GetSBOffsetSpeed(), 0), -1, math.abs(ply:GetSBOffset() / 100 - 1) * 5 * FrameTime()))
 		if mv:KeyPressed(IN_BACK) and (CLIENT and IsFirstTimePredicted() or game.SinglePlayer()) then
-		    ply:StopSound("Handsteps.MetalPipeSwing")
+			ply:StopSound("Handsteps.MetalPipeSwing")
 			ply:EmitSound("Handsteps.MetalPipeSwing")
 			ply:EmitSound("Cloth.Swing")
 		end
@@ -174,7 +174,7 @@ local function SwingbarThink(ply, mv, cmd)
 		ply:SetSBDelay(CurTime() + 1)
 
 		if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-		    ply:StopSound("Handsteps.MetalPipeSwing")
+			ply:StopSound("Handsteps.MetalPipeSwing")
 			ply:StopSound("Cloth.Swing")
 			ply:EmitSound("Handsteps.MetalPipeLetGo")
 			ply:EmitSound("Handsteps.MetalPipeRelease")

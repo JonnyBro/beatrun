@@ -253,8 +253,8 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 		if SERVER and not land then
 			timer.Simple(0.2, function()
-				ply:EmitSound("Cloth.Roll")	
-				ply:EmitSound("Cloth.BodyRoll")				
+				ply:EmitSound("Cloth.Roll")
+				ply:EmitSound("Cloth.BodyRoll")
 				ply:EmitSound("Cloth.BodyRollSwish")
 			end)
 

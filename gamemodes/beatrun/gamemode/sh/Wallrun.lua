@@ -120,7 +120,7 @@ local function WallrunningThink(ply, mv, cmd)
 		if mv:KeyPressed(IN_JUMP) then
 			ParkourEvent("jumpwallrun", ply)
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-			    ply:EmitSound("WallrunRelease.Concrete")
+				ply:EmitSound("WallrunRelease.Concrete")
 				timer.Simple(0.025, function()
 					ply:EmitSound("WallrunRelease.Concrete")
 					ply:EmitSound("Cloth.SideStep")

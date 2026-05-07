@@ -2,16 +2,16 @@ local qslide_duration = 3
 local qslide_speedmult = 1
 
 local slide_sounds = {
-	[MAT_CONCRETE] = {"Slide.Concrete"},
-	[MAT_SAND] = {"Slide.Gravel"},
-	[MAT_METAL] = {"Slide.Metal"},
-	[MAT_VENT] = {"Slide.Duct"},
-	[MAT_TILE] = {"Slide.Marble"},
-	[MAT_GLASS] = {"Slide.Glass"},
-	[MAT_GRATE] = {"Slide.Gantry"},
-	[MAT_PLASTIC] = {"Slide.Tarp"},
-	[MAT_SLOSH] = {"Slide.Water"},
-	[MAT_WOOD] = {"Slide.Wood"}
+	[MAT_CONCRETE] = { "Slide.Concrete" },
+	[MAT_SAND] = { "Slide.Gravel" },
+	[MAT_METAL] = { "Slide.Metal" },
+	[MAT_VENT] = { "Slide.Duct" },
+	[MAT_TILE] = { "Slide.Marble" },
+	[MAT_GLASS] = { "Slide.Glass" },
+	[MAT_GRATE] = { "Slide.Gantry" },
+	[MAT_PLASTIC] = { "Slide.Tarp" },
+	[MAT_SLOSH] = { "Slide.Water" },
+	[MAT_WOOD] = { "Slide.Wood" }
 }
 
 local slideloop_sounds = {
