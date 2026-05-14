@@ -341,7 +341,7 @@ local function Vault3(ply, mv, ang, t, h)
 
 		local hulltr2 = util.TraceHull(h)
 		local handstephard = HANDSTEPS_HARD_LUT[t.MatType] or "ConcreteHard"
-		local handstepsoft = HANDSTEPS_SOFT_LUT[tsafetyout.MatType] or "ConcreteSoft"
+		local handstepsoft = HANDSTEPS_SOFT_LUT[t.MatType] or "ConcreteSoft"
 
 		if not hulltr.Hit and not hulltr2.Hit then
 
