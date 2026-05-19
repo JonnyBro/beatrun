@@ -553,7 +553,7 @@ function StartBodyAnim(animtable)
 		-- Apply SetModelScale to BodyAnim (root entity)
 		if IsValid(BodyAnim) then
 			-- The worst math I've ever written
-			BodyAnim:SetModelScale(modelscale, 0)
+			BodyAnim:SetModelScale(modelscale, 0.001)
 
 			if modelscale < 1 then
 				local offset = Vector(0, 0, (1 - modelscale) * 40)
