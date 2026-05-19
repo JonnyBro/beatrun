@@ -1,8 +1,28 @@
 local playermodelbones = { "ValveBiped.Bip01_R_Clavicle", "ValveBiped.Bip01_R_UpperArm", "ValveBiped.Bip01_R_Forearm", "ValveBiped.Bip01_R_Hand", "ValveBiped.Bip01_L_Clavicle", "ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_L_Forearm", "ValveBiped.Bip01_L_Hand", "ValveBiped.Bip01_L_Wrist", "ValveBiped.Bip01_R_Wrist", "ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger42", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger32", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger22", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_L_Finger12", "ValveBiped.Bip01_L_Finger0", "ValveBiped.Bip01_L_Finger01", "ValveBiped.Bip01_L_Finger02", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger42", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger32", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger22", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11", "ValveBiped.Bip01_R_Finger12", "ValveBiped.Bip01_R_Finger0", "ValveBiped.Bip01_R_Finger01", "ValveBiped.Bip01_R_Finger02" }
 
 -- Beatrun BodyAnim with Live Body Scale Support
+CreateClientConVar("Beatrun_ModelScale", "1", true, true, "Global model scale for Beatrun body animation models")
 CreateClientConVar("Beatrun_BodyScale", "1", true, false, "Body scale for Beatrun body animations")
 CreateClientConVar("Beatrun_ArmBodyScale", "1", true, false, "Arm scale for Beatrun body animations")
+CreateClientConVar("Beatrun_ModelScaleViewOffsetEnable", "0", true, true, "Automatically adjusts some internal stuff to make addons work properly. Disable if you're using a dynamic height addon.")
+
+-- Apply full model scaling using SetModelScale
+timer.Simple(0.05, function()
+	if not IsValid(BodyAnimMDL) then return end
+
+	local modelscale = GetConVar("Beatrun_ModelScale"):GetFloat()
+
+	-- Scale the full models (body + arm)
+	BodyAnimMDL:SetModelScale(modelscale, 0)
+
+	if IsValid(BodyAnimMDLarm) then BodyAnimMDLarm:SetModelScale(modelscale, 0) end
+
+	-- Optional: slightly raise model to prevent clipping with ground
+	-- if modelscale < 1 then
+	-- 	local offset = Vector(0, 0, (1 - modelscale) * 40)
+	-- 	BodyAnim:SetPos(BodyAnim:GetPos() + offset)
+	-- end
+end)
 
 local function ApplyBodyScale()
 	if not IsValid(BodyAnimMDL) then return end
@@ -366,7 +386,7 @@ function StartBodyAnim(animtable)
 	justremoved = false
 	local ply = LocalPlayer()
 
-	if ply:InVehicle() then return end
+	-- if ply:InVehicle() then return end
 
 	updatethirdperson = true
 
@@ -509,25 +529,35 @@ function StartBodyAnim(animtable)
 	DidDraw = false
 	angclosenuff = false
 
-	-- Apply body and arm scale after model setup
-	timer.Simple(0.05, function()
+	-- Apply all scaling systems after model setup
+	timer.Simple(0.5, function()
 		if not IsValid(BodyAnimMDL) then return end
 
-		local bodyscale = GetConVar("Beatrun_BodyScale"):GetFloat()
-		local armscale = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
+		local bodyscale = GetConVar("beatrun_bodyscale"):GetFloat()
+		local armscale = GetConVar("beatrun_armbodyscale"):GetFloat()
+		local modelscale = math.abs((select(1, ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1"))).z - ply:GetPos().z + 1) / 64) * GetConVar("beatrun_modelscale"):GetFloat()
 		local bodyvec = Vector(bodyscale, bodyscale, bodyscale)
 		local armvec = Vector(armscale, armscale, armscale)
 
-		-- Scale main body (skip arms and fingers)
 		for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
 			local bonename = BodyAnimMDL:GetBoneName(i)
 			if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, bodyvec) end
 		end
 
-		-- Scale arms if present
 		if IsValid(BodyAnimMDLarm) then
 			for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
 				BodyAnimMDLarm:ManipulateBoneScale(i, armvec)
+			end
+		end
+
+		-- Apply SetModelScale to BodyAnim (root entity)
+		if IsValid(BodyAnim) then
+			-- The worst math I've ever written
+			BodyAnim:SetModelScale(modelscale, 0)
+
+			if modelscale < 1 then
+				local offset = Vector(0, 0, (1 - modelscale) * 40)
+				BodyAnim:SetPos(BodyAnim:GetPos() + offset)
 			end
 		end
 	end)
@@ -548,15 +578,11 @@ hook.Add("Think", "BodyAnimThink", function()
 
 	BodyAnimCycle = BodyAnimCycle + FrameTime() / BodyAnim:SequenceDuration() * BodyAnimSpeed
 
-	if not customcycle then
-		BodyAnim:SetCycle(BodyAnimCycle)
-	end
+	if not customcycle then BodyAnim:SetCycle(BodyAnimCycle) end
 
 	hook.Run("BodyAnimThink")
 
-	if deleteonend and not customcycle and BodyAnimCycle >= 1 then
-		RemoveBodyAnim()
-	end
+	if deleteonend and not customcycle and BodyAnimCycle >= 1 then RemoveBodyAnim() end
 end)
 
 local BodyAnimPosEase = Vector()
@@ -576,18 +602,57 @@ local lastlockang = false
 local lastlockangstart = Angle()
 local lasteyeang = Angle()
 
-function BodyAnimCalcView2(ply, pos, angles, fov)
-	if ply:InVehicle() then
-		RemoveBodyAnim()
+local calcviewrunning = false
 
-		return
+function BodyAnimCalcView2(ply, pos, angles, fov, ...)
+	if calcviewrunning then return end
+
+	if ply:InVehicle() then
+		if IsValid(BodyAnim) then
+			BodyAnim:SetNoDraw(true)
+			BodyAnim:SetRenderOrigin(pos * 1000)
+		end
+
+		-- if you have a better idea than pasting this bit 3 times lemme know
+		calcviewrunning = true
+
+		local view = hook.Run("CalcView", ply, pos, angles, fov, ...)
+
+		calcviewrunning = false
+
+		if not view then
+			fov = math.Remap(fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+
+			return
+		else
+			view.fov = math.Remap(view.fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+
+			return view
+		end
 	end
 
-	if has_tool_equipped and IsValid(BodyAnim) then
-		BodyAnim:SetNoDraw(true)
-		BodyAnim:SetRenderOrigin(pos * 1000)
+	-- I'd normally comment out all this tool_equipped stuff
+	if has_tool_equipped then
+		if IsValid(BodyAnim) then
+			BodyAnim:SetNoDraw(true)
+			BodyAnim:SetRenderOrigin(pos * 1000)
+		end
 
-		return
+		calcviewrunning = true
+
+		local view = hook.Run("CalcView", ply, pos, angles, fov, ...)
+
+		calcviewrunning = false
+
+		if not view then
+			fov = math.Remap(fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+
+			return
+		else
+			view.fov = math.Remap(view.fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+
+			return view
+		end
 	end
 
 	if IsValid(BodyAnim) and ply:ShouldDrawLocalPlayer() then
@@ -609,18 +674,15 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				local pos = ply:GetPos()
 
 				if BodyAnimCrouchLerp < 1 and (BodyAnimCrouchLerp ~= 0 or math.abs(BodyAnimCrouchLerpZ - pos.z) > 16 or math.abs(ply:GetNW2Float("BodyAnimCrouchLerpZ") - pos.z) > 16) then
-					if ply:OnGround() then
-						BodyAnimCrouchLerp = 1
-					end
+					if ply:OnGround() then BodyAnimCrouchLerp = 1 end
 
 					if ply:Crouching() then
 						local from = BodyAnimCrouchLerpZ
 
-						if ply:UsingRH() then
-							from = ply:EyePos().z - 64
-						end
+						if ply:UsingRH() then from = ply:EyePos().z - 64 end
 
 						pos.z = Lerp(BodyAnimCrouchLerp, from, pos.z)
+
 						BodyAnimCrouchLerp = math.Approach(BodyAnimCrouchLerp, 1, FrameTime() * 5)
 					end
 				end
@@ -628,6 +690,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				if BodyAnimPosEaseLerp < 1 then
 					local easedpos = LerpVector(BodyAnimPosEaseLerp, BodyAnimPosEase, pos)
 					BodyAnimPosEaseLerp = math.Approach(BodyAnimPosEaseLerp, 1, FrameTime() * 5)
+
 					BodyAnim:SetPos(easedpos)
 					BodyAnim:SetRenderOrigin(easedpos)
 				else
@@ -643,13 +706,12 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 			end
 
 			local oldang = BodyAnim:GetAngles()
+
 			local eyeang = ply:EyeAngles()
 			eyeang.x = 0
 			eyeang.z = 0
 
-			if CamIgnoreAng then
-				BodyAnim:SetAngles(eyeang)
-			end
+			if CamIgnoreAng then BodyAnim:SetAngles(eyeang) end
 
 			if lastatt and lastatt ~= camjoint then
 				savedatt = lastatt
@@ -657,10 +719,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 			end
 
 			local head = BodyAnim:LookupBone("ValveBiped.Bip01_Head1")
-
-			if head then
-				BodyAnim:ManipulateBonePosition(head, vector_origin)
-			end
+			if head then BodyAnim:ManipulateBonePosition(head, vector_origin) end
 
 			attachId = BodyAnim:LookupAttachment(camjoint)
 			attach = not BodyAnim:IsMarkedForDeletion() and BodyAnim:GetAttachment(attachId) or attach --IsMarkedForDeletion is here to fix a bug with the roll camera
@@ -675,10 +734,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 			if not ply:ShouldDrawLocalPlayer() then
 				local head = BodyAnim:LookupBone("ValveBiped.Bip01_Head1")
-
-				if head then
-					BodyAnim:ManipulateBonePosition(head, Vector(-1000, 0, 0))
-				end
+				if head then BodyAnim:ManipulateBonePosition(head, Vector(-1000, 0, 0)) end
 			end
 
 			BodyAnim:SetAngles(oldang)
@@ -687,9 +743,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 		if attach ~= nil then
 			view.origin = has_tool_equipped and pos or attach.Pos
 
-			if savedeyeangb == Angle(0, 0, 0) then
-				savedeyeangb = Angle(0, attach.Ang.y, 0)
-			end
+			if savedeyeangb == Angle(0, 0, 0) then savedeyeangb = Angle(0, attach.Ang.y, 0) end
 
 			view.angles = ply:EyeAngles()
 
@@ -708,7 +762,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				lastlockangstart:Set(lasteyeang)
 			end
 
-			if ply:Alive() and (lockang and not has_tool_equipped) then
+			if ply:Alive() and lockang and not has_tool_equipped then
 				local attachId = BodyAnim:LookupAttachment(camjoint)
 				local attach = BodyAnim:GetAttachment(attachId) or attach
 				local ang = attach.Ang
@@ -744,17 +798,14 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				attach.Pos = LerpVector(endlerp, attach.Pos, ply:EyePos())
 				attach.Ang = LerpAngle(endlerp * 2, attach.Ang, ply:EyeAngles() + ply:GetViewPunchAngles() + ply:GetCLViewPunchAngles())
 
-				if IsValid(vm) then
-					vm:SetNoDraw(false)
-				end
+				if IsValid(vm) then vm:SetNoDraw(false) end
 			elseif not IsValid(BodyAnim) and endlerp == 1 then
 				attach = nil
 				endlerp = 0
+
 				hook.Remove("CalcView", "BodyAnimCalcView2")
 
-				if IsValid(vm) then
-					vm:SetNoDraw(false)
-				end
+				if IsValid(vm) then vm:SetNoDraw(false) end
 
 				return
 			end
@@ -772,7 +823,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				local MEAngDiff = math.AngleDifference(viewtiltlerp.y, not lockang and lastangy or ply.OrigEyeAng.y) * 0.15
 
 				ViewTiltAngle = Angle(0, 0, MEAngDiff + viewtiltlerp.z)
-
 				view.angles:Add(ViewTiltAngle)
 
 				ply:SetNoDraw(false)
@@ -783,13 +833,8 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 				pos:Set(view.origin)
 
-				if not has_tool_equipped then
-					angles:Set(view.angles)
-				end
-
-				if lerpchangeatt < 1 then
-					pos:Set(lerpedpos)
-				end
+				if not has_tool_equipped then angles:Set(view.angles) end
+				if lerpchangeatt < 1 then pos:Set(lerpedpos) end
 
 				camang = angles
 				campos = pos
@@ -801,9 +846,24 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 				end
 
 				lastangy = ang.y
+
 				hook.Run("CalcViewBA", ply, pos, angles)
 
-				return
+				calcviewrunning = true
+
+				local view = hook.Run("CalcView", ply, pos, angles, fov, ...)
+
+				calcviewrunning = false
+
+				if view and view.fov then
+					view.fov = math.Remap(view.fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+
+					return view
+				else
+					fov = math.Remap(fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+
+					return
+				end
 			else
 				ply:SetNoDraw(true)
 			end
@@ -811,6 +871,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov)
 
 		if attach == nil or CurTime() < (mantletimer or 0) then
 			view.origin = has_tool_equipped and pos or lastattachpos
+
 			pos:Set(lastattachpos)
 
 			return

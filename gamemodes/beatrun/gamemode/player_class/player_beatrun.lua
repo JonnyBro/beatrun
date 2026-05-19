@@ -134,7 +134,7 @@ function PLAYER:Loadout()
 
 	self.Player:SetJumpPower(230)
 	self.Player:SetCrouchedWalkSpeed(0.5)
-	self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 100))
+	-- self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 100))
 	self.Player:SetCanZoom(false)
 end
 
@@ -188,6 +188,8 @@ function PLAYER:Spawn()
 			ply:SetLocalVelocity(ply.CPSaveVel)
 			ply:LoadParkourState()
 
+			-- ply:SetNW2Float("RetryCount", ply:GetNW2Float("RetryCount", 0) + 1)
+
 			CPSave = true
 		else
 			ply.CPSavePos = nil
@@ -211,6 +213,7 @@ function PLAYER:Spawn()
 
 	if not ply.InReplay and not CPSave then
 		ply:SetNW2Float("CPNum", 1)
+		-- ply:SetNW2Float("RetryCount", 0)
 	end
 
 	if not CPSave then
@@ -294,10 +297,10 @@ function PLAYER:CreateMove(cmd)
 end
 
 function PLAYER:CalcView(view)
-	local mult = (self.Player:InOverdrive() and 1.1) or 1
-	local fov = GetConVar("Beatrun_FOV"):GetInt()
+	-- local mult = (self.Player:InOverdrive() and 1.1) or 1
+	-- local fov = GetConVar("Beatrun_FOV"):GetInt()
 
-	view.fov = fov * mult
+	-- view.fov = fov * mult
 
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
 end
@@ -447,20 +450,10 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 		if transition and IsValid(ply) then
 			ply:ResetParkourTimes()
 			ply:SetJumpPower(230)
-			ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
+			-- ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
 			ply:SetCanZoom(false)
 			ply.ClimbingTrace = nil
 		end
-	end)
-end)
-
-hook.Add("PlayerSwitchWeapon", "BeatrunSwitchARC9FOVFix", function(ply)
-	-- This ENTIRE hook is for dealing with ARC9's stupid FOV reset
-	-- behavior after switching away from an ARC9 SWEP.
-	ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
-
-	timer.Simple(0, function()
-		ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
 	end)
 end)
 

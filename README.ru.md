@@ -120,6 +120,7 @@ Beatrun - это **небезызвестный паркур режим для G
 - [MTB](https://www.youtube.com/@MTB396) - проект Beatrun Reanimated.
 - [Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc) - модуль показа статусов в Discord.
 - [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) - модуль показа статусов в Steam (создатель TFA Base).
+- [\[aka\]bomb's FOV Remap](https://steamcommunity.com/sharedfiles/filedetails/?id=2831115438) - Фикс CalcView (камеры под землёй).
 
 ### Шрифты
 

@@ -119,6 +119,7 @@ You can now change animations in the **Tools menu** under the Beatrun category.
 - [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated Project.
 - [Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc) - Discord Rich Presence.
 - [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) - Steam Presence.
+- [\[aka\]bomb's FOV Remap](https://steamcommunity.com/sharedfiles/filedetails/?id=2831115438) - CalcView fix (camera under map).
 
 ### Fonts
 
