@@ -173,7 +173,7 @@ local function RebuildMainPanel()
 		}
 	}
 
-	local centers = {20 + 140 * 0.5, MainPanel.w * 0.5, MainPanel.w - 20 - 140 * 0.5}
+	local centers = { 20 + 140 * 0.5, MainPanel.w * 0.5, MainPanel.w - 20 - 140 * 0.5 }
 
 	for i, tab in ipairs(tabs) do
 		local btn = AEUI:AddButton(MainPanel, tab.name, function()
