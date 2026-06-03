@@ -79,12 +79,13 @@ local function ClimbingThink(ply, mv, cmd)
 	local wallmat = trout and trout.MatType
 	local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
 	local handstephard = HANDSTEPS_HARD_LUT[wallmat] or "ConcreteHard"
+	local step = FOOTSTEPS_MAT_TYPE_LUT[wallmat] or "Concrete"
 	if ply:GetClimbing() == 5 then
 		if mv:KeyPressed(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() + 0.65 or mv:KeyDown(IN_FORWARD) and ply:GetClimbingDelay() < CurTime() then
 			ParkourEvent("hangfoldedheaveup", ply)
 			
 			ply.FootstepLand = false
-			timer.Simple(0.35, function() ply:PlayStepSound(1) end)
+			timer.Simple(0.35, function() ply:EmitSound("Walk." .. step) end)
 			ply:EmitSound("Handsteps." .. handstepsoft)
 
 			ply:SetClimbing(6)
@@ -94,7 +95,7 @@ local function ClimbingThink(ply, mv, cmd)
 	
 			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 			timer.Simple(0.42, function() ply:EmitSound("Handsteps." .. handstephard) end)
-			timer.Simple(0.53, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+			timer.Simple(0.5, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
 
 			ply:SetClimbing(1)
 			ply:SetClimbingDelay(CurTime() + 1.35)
@@ -251,9 +252,13 @@ local function ClimbingThink(ply, mv, cmd)
 					ply:SetClimbing(2)
 					ply.FootstepLand = false
 					ParkourEvent("climbheave", ply)
-
-					timer.Simple(0.65, function() ply:PlayStepSound(1) end)
-					timer.Simple(0.95, function() ply:PlayStepSound(1) end)
+					
+					timer.Simple(0.65, function() ply:EmitSound("Walk." .. step) end)
+					timer.Simple(1, function() 
+						if not (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVERIGHT)) then
+							ply:EmitSound("Sneak." .. step)
+						end
+					end)
 				end
 			end
 		end

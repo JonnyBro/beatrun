@@ -41,7 +41,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
-	sound = {"mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land1.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land2.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land3.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land4.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land5.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land6.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land7.wav"}
+	sound = {"mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land1.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land2.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land3.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land4.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land5.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land6.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land7.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land8.wav", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land9.wav"}
 })
 
 sound.Add({
@@ -596,7 +596,7 @@ sound.Add({
 sound.Add({
 	name = "Footsteps.Wood",
 	volume = 1,
-	level = 40,
+	level = 41,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant1.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant10.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant11.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant12.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant13.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant14.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant15.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant2.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant3.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant4.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant5.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant6.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant7.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant8.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant9.wav"}
@@ -605,7 +605,7 @@ sound.Add({
 sound.Add({
 	name = "Walk.Wood",
 	volume = 0.75,
-	level = 40,
+	level = 41,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant1.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant10.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant11.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant12.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant13.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant14.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant15.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant2.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant3.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant4.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant5.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant6.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant7.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant8.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant9.wav"}
@@ -614,7 +614,7 @@ sound.Add({
 sound.Add({
 	name = "Sneak.Wood",
 	volume = 0.5,
-	level = 40,
+	level = 41,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant1.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant10.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant11.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant12.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant13.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant14.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant15.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant2.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant3.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant4.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant5.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant6.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant7.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant8.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant9.wav"}
@@ -632,7 +632,7 @@ sound.Add({
 sound.Add({
 	name = "Land.Wood",
 	volume = 1,
-	level = 40,
+	level = 41,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land1.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land2.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land3.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land4.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land5.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land6.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land7.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land8.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land9.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land10.wav"}
@@ -641,7 +641,7 @@ sound.Add({
 sound.Add({
 	name = "WallRun.Wood",
 	volume = 1,
-	level = 40,
+	level = 41,
 	channel = CHAN_STATIC,
 	pitch = {90, 110},
 	sound = {"mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun1.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun2.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun3.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun4.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun5.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun6.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun7.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun8.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun9.wav", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun10.wav"}
@@ -1082,4 +1082,18 @@ FOOTSTEPS_MAT_TYPE_TO_STR = {
 	[MAT_PLASTIC] = "ConcreteGrit",
 	[MAT_TILE] = "ConcreteGrit",
 	[MAT_WOOD] = "Wood"
+}
+
+FOOTSTEPS_MAT_TYPE_LUT = {
+	[MAT_GLASS] = "Glass",
+	[MAT_CONCRETE] = "Concrete",
+	[MAT_GRATE] = "MetalCrane",
+	[MAT_METAL] = "Metal",
+	[MAT_VENT] = "Duct",
+	-- [MAT_PLASTIC] = "Tarp", 
+	[MAT_TILE] = "Marble",
+	[MAT_WOOD] = "Wood",
+	[MAT_DIRT] = "Carpet",
+	[MAT_GRASS] = "Carpet",
+	[MAT_SAND] = "Gravel",
 }

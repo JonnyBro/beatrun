@@ -147,25 +147,24 @@ local function Vault1(ply, mv, ang, t, h)
 			ply.MantleMatType = mat
 
 			local handstepsoft = HANDSTEPS_SOFT_LUT[mat] or "ConcreteSoft"
+			local step = FOOTSTEPS_MAT_TYPE_LUT[mat] or "Concrete"
+			ply.FootstepLand = false
 
 			if stepup then
 				ParkourEvent("stepup", ply)
-				ply.VaultStepUp = true
-				ply.FootstepLand = false
-				ply:PlayStepSound(1)
+				ply.VaultStepUp = true				
+				ply:EmitSound("Land." .. step)
+				ply:EmitSound("Cloth.MovementWalk")	
 			else
 				ParkourEvent("vaultonto", ply)
 				ply.VaultStepUp = false
 				if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-		        timer.Simple(0.01, function()
-					ply:EmitSound("Handsteps." .. handstepsoft)
-		        end)
-			    timer.Simple(0.15, function()
-					ply:PlayStepSound(1)
-			    end)
-					if t.MatType == MAT_GRATE then
-				        ply:EmitSound("FenceClimb")
-				    end
+					timer.Simple(0.01, function()
+						ply:EmitSound("Handsteps." .. handstepsoft)
+					end)
+					timer.Simple(0.1, function()						
+						ply:EmitSound("Land." .. step)
+					end)
 				end
 			end
 
@@ -539,9 +538,11 @@ function Vault5(ply, mv, ang, t, h)
 				ply:EmitSound("Handsteps." .. handstepsoft)
 			end)
 			timer.Simple(0.45, function()
-				ply:PlayStepSound(1)
+				local step = FOOTSTEPS_MAT_TYPE_LUT[t.MatType] or "Concrete"
+				ply:EmitSound("Footsteps." .. step)
 			end)
 			ply:PlayStepSound(1)
+			ply.FootstepLand = false
 		end
 
 		return true

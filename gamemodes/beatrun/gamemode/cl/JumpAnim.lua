@@ -1065,8 +1065,8 @@ eventsounds = {
 		[0.025] = "Handsteps.ConcreteRelease",
 		[0.05] = "Cloth.MovementRun",
 		[0.15] = "WallrunRelease.Concrete",
-		[0.2] = "Cloth.MovementWalk",
-		[0.4] = "Cloth.MovementSneak"
+		[0.2] = "Cloth.MovementSneak",
+		[0.4] = "Cloth.MovementWalk"
 	},
 	hangfoldedstart = {
 		[0.02] = "Cloth.Fall",
@@ -1080,7 +1080,10 @@ eventsounds = {
 		[0.05] = "WallrunRelease.Concrete",
 		[0.1] = "WallrunRelease.Concrete",
 		[0.2] = "Cloth.MovementWalk",
-		[0.5] = "Cloth.MovementWalk"
+		[0.4] = "Cloth.MovementSneak",
+		[0.5] = "Cloth.MovementWalk",
+		[0.8] = "Cloth.MovementSneak",
+		[1] = "Cloth.MovementWalk"
 	},
 	hanghardstart = {
 		[0] = "Faith.Impact",
@@ -1126,8 +1129,9 @@ eventsounds = {
 		[0.6] = "Cloth.MovementWalk"
 	},
 	vaultonto = {
+		[0] = "Cloth.MovementWalk",
 		[0.01] = "Vault",
-		[0.025] = "Cloth.MovementRun",
+		[0.05] = "Cloth.MovementRun",
 		[0.075] = "Faith.StrainSoft"
 	},
 	vaultkong = {
