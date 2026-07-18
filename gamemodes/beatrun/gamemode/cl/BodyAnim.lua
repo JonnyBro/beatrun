@@ -663,14 +663,14 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 			updatethirdperson = false
 		end
 
-		return
+		--return
 	else
 		updatethirdperson = true
 	end
 
 	if IsValid(BodyAnim) or attach ~= nil then
 		if IsValid(BodyAnim) then
-			if followplayer then
+			if followplayer and not ply:ShouldDrawLocalPlayer() then
 				local pos = ply:GetPos()
 
 				if BodyAnimCrouchLerp < 1 and (BodyAnimCrouchLerp ~= 0 or math.abs(BodyAnimCrouchLerpZ - pos.z) > 16 or math.abs(ply:GetNW2Float("BodyAnimCrouchLerpZ") - pos.z) > 16) then
@@ -697,7 +697,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 					BodyAnim:SetPos(pos)
 					BodyAnim:SetRenderOrigin(pos)
 				end
-			elseif BodyAnimPosEaseLerp < 1 then
+			elseif BodyAnimPosEaseLerp < 1 and not ply:ShouldDrawLocalPlayer() then
 				local easedpos = LerpVector(BodyAnimPosEaseLerp, BodyAnimPosEase, BodyAnimStartPos)
 				BodyAnimPosEaseLerp = math.Approach(BodyAnimPosEaseLerp, 1, FrameTime() * 5)
 
@@ -762,7 +762,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				lastlockangstart:Set(lasteyeang)
 			end
 
-			if ply:Alive() and lockang and not has_tool_equipped then
+			if ply:Alive() and lockang and not has_tool_equipped and not ply:ShouldDrawLocalPlayer() then
 				local attachId = BodyAnim:LookupAttachment(camjoint)
 				local attach = BodyAnim:GetAttachment(attachId) or attach
 				local ang = attach.Ang
@@ -864,7 +864,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 
 					return
 				end
-			else
+			elseif not ply:ShouldDrawLocalPlayer() then
 				ply:SetNoDraw(true)
 			end
 		end
