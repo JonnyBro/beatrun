@@ -85,6 +85,8 @@ function StartGhostRecording()
 	hook.Add("CreateMove", "GhostRecording", GhostRecording)
 end
 
+local Ghost_transparency = 0.5
+
 local function GhostEntInit()
 	local ply = LocalPlayer()
 	playerGhost = ClientsideModel(ply:GetModel())
@@ -107,13 +109,29 @@ local function GhostEntInit()
 		playerGhost:ManipulateBoneJiggle(i, 2) -- disable jigglebones. Why? jigglebones flicker because of the setblend thing
 	end
 
+	Ghost_transparency = 0.5
+
+	for _, matPath in ipairs(playerGhost:GetMaterials()) do
+		local mat = Material(matPath)
+		-- gmodwiki.com/IMaterial:GetInt
+		-- Please note that certain material flags such as $alphatest are stored in the $flags variable and cannot be directly set with this function.
+		-- $alphatest = 256
+		if bit.band(mat:GetInt("$flags"), 256) ~= 0 then
+			-- gmodwiki.com/render.SetBlend
+			-- If a material has the $alphatest flag enabled then this function might not behave as expected because alpha will be binary, this has a default cutoff of 0.7
+			Ghost_transparency = 0.7
+			break
+		end
+	end
+
+
 	playerGhost.RenderOverride = function(self)
 		render.OverrideColorWriteEnable(true, false)
 
 		self:DrawModel()
 
 		render.OverrideColorWriteEnable(false, false)
-		render.SetBlend(0.50)
+		render.SetBlend(Ghost_transparency)
 
 		self:DrawModel()
 
