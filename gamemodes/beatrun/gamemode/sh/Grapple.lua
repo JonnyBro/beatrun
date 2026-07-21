@@ -243,6 +243,50 @@ local ropetop = Vector()
 local ropelerp = 0
 local ropedown = Vector(0, 0, 20)
 
+-- format: multiline
+local RIGHT_BONES = {
+	"ValveBiped.Bip01_R_Finger41",
+	"ValveBiped.Bip01_R_Finger4",
+	"ValveBiped.Bip01_R_Finger21",
+	"ValveBiped.Bip01_R_Finger2",
+	"ValveBiped.Bip01_R_Finger31",
+	"ValveBiped.Bip01_R_Finger3",
+	"ValveBiped.Bip01_R_Finger11",
+	"ValveBiped.Bip01_R_Finger1",
+	"ValveBiped.Bip01_R_Hand",
+	"ValveBiped.Bip01_R_Forearm",
+	"ValveBiped.Bip01_R_UpperArm",
+}
+
+-- format: multilined s
+local LEFT_BONES = {
+	"ValveBiped.Bip01_L_Finger21",
+	"ValveBiped.Bip01_L_Finger2",
+	"ValveBiped.Bip01_L_Finger41",
+	"ValveBiped.Bip01_L_Finger4",
+	"ValveBiped.Bip01_L_Finger31",
+	"ValveBiped.Bip01_L_Finger3",
+	"ValveBiped.Bip01_L_Finger11",
+	"ValveBiped.Bip01_L_Finger1",
+	"ValveBiped.Bip01_L_Hand",
+	"ValveBiped.Bip01_L_Forearm",
+	"ValveBiped.Bip01_L_UpperArm",
+}
+
+local function GetBoneMatrixFallback(ent, bonelist)
+	for _, boneName in ipairs(bonelist) do
+		local bone = ent:LookupBone(boneName)
+
+		if bone then
+			local mat = ent:GetBoneMatrix(bone)
+
+			if mat then return mat end
+		end
+	end
+
+	return nil
+end
+
 hook.Add("PreDrawEffects", "GrappleBeam", function()
 	local lp = LocalPlayer()
 
@@ -289,13 +333,19 @@ hook.Add("PreDrawEffects", "GrappleBeam", function()
 
 		ply:SetupBones()
 
-		local lhand = ply:LookupBone("ValveBiped.Bip01_L_Finger21")
-		local rhand = ply:LookupBone("ValveBiped.Bip01_R_Finger41")
-		if not lhand or not rhand then continue end
+		local lmat = GetBoneMatrixFallback(ply, LEFT_BONES)
+		local rmat = GetBoneMatrixFallback(ply, RIGHT_BONES)
 
-		local lmat = ply:GetBoneMatrix(lhand)
-		local rmat = ply:GetBoneMatrix(rhand)
-		if not lmat or not rmat then continue end
+		-- Fallback for models with weird/no finger bones
+		if not lmat or not rmat then
+			local pos = ply:EyePos()
+			pos = pos - ply:GetForward() * 6 - ply:GetRight() * 4
+
+			render.SetMaterial(cablemat)
+			render.DrawBeam(pos, ply:GetGrapplePos(), 1.5, 0, 1)
+
+			continue
+		end
 
 		local lpos = lmat:GetTranslation()
 		local rpos = rmat:GetTranslation()
@@ -304,7 +354,9 @@ hook.Add("PreDrawEffects", "GrappleBeam", function()
 		lpos:Sub(ply:GetForward() * 1.1)
 		rpos:Sub(ply:GetForward() * 1.1)
 
-		local up = (rpos - lpos):Angle():Forward() * 20
+		local up = (rpos - lpos):Angle():Forward()
+		up:Mul(20)
+
 		rpos:Add(up)
 
 		render.SetMaterial(cablemat)
