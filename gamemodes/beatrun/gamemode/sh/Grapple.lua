@@ -243,64 +243,75 @@ local ropetop = Vector()
 local ropelerp = 0
 local ropedown = Vector(0, 0, 20)
 
-hook.Add("PreDrawEffects", "GrappleBeam", function() -- was PostDrawTranslucentRenderables NOTE: PreDrawEffects doesnt render in mirrors
+hook.Add("PreDrawEffects", "GrappleBeam", function()
 	local lp = LocalPlayer()
 
+	-- For bodyanim
 	if lp:GetGrappling() and not lp:ShouldDrawLocalPlayer() then
 		local BA = BodyAnimArmCopy
 
-		--[[
-		if lp:ShouldDrawLocalPlayer() then
-			BA = BodyAnim
+		if IsValid(BA) then
+			BA:SetupBones()
+
+			local rhand = BA:LookupBone("ValveBiped.Bip01_R_Finger41")
+			local lhand = BA:LookupBone("ValveBiped.Bip01_L_Finger21")
+
+			if rhand and lhand and BA:GetBoneMatrix(rhand) and BA:GetBoneMatrix(lhand) then
+				local rhandpos = BA:GetBoneMatrix(rhand):GetTranslation()
+				local lhandpos = BA:GetBoneMatrix(lhand):GetTranslation()
+				lhandpos:Sub(BA:GetForward() * 1.1)
+				rhandpos:Sub(BA:GetForward() * 1.1)
+
+				ropetop:Set(lhandpos)
+
+				render.SetMaterial(cablemat)
+				render.StartBeam(2)
+
+				local up = (rhandpos - lhandpos):Angle():Forward() * 20
+				rhandpos:Add(up)
+
+				render.DrawBeam(LerpVector(ropelerp, lhandpos - ropedown, rhandpos), lhandpos, 1.5, 0, 1)
+				render.DrawBeam(ropetop, lp:GetGrapplePos(), 1.5, 0, 1)
+
+				BodyAnim:SetSequence("grapplecenter")
+			end
 		end
-		--]]
-		if not IsValid(BA) then return end
-
-		BA:SetupBones()
-
-		local rhand = BA:LookupBone("ValveBiped.Bip01_R_Finger41")
-		local lhand = BA:LookupBone("ValveBiped.Bip01_L_Finger21")
-
-		if BA:GetBoneMatrix(rhand) == nil then return end
-
-		local rhandpos = BA:GetBoneMatrix(rhand):GetTranslation()
-		if not rhandpos then return end
-
-		local lhandpos = BA:GetBoneMatrix(lhand):GetTranslation()
-
-		--rhandpos:Sub(BA:GetRight() * 2.5)
-		lhandpos:Sub(BA:GetForward() * 1.1)
-		rhandpos:Sub(BA:GetForward() * 1.1)
-
-		ropetop:Set(lhandpos)
-
-		render.SetMaterial(cablemat)
-		render.StartBeam(2)
-
-		local up = (rhandpos - lhandpos):Angle():Forward()
-		up:Mul(20)
-
-		rhandpos:Add(up)
-
-		render.DrawBeam(LerpVector(ropelerp, lhandpos - ropedown, rhandpos), lhandpos, 1.5, 0, 1)
-		render.DrawBeam(ropetop, lp:GetGrapplePos(), 1.5, 0, 1)
-
-		BodyAnim:SetSequence("grapplecenter")
 
 		ropelerp = math.Approach(ropelerp, 1, FrameTime() * 2)
 	else
 		ropelerp = 0
 	end
 
+	-- For playermodels
 	for _, ply in player.Iterator() do
+		if not ply:GetGrappling() then continue end
 		if ply == lp and not lp:ShouldDrawLocalPlayer() then continue end
 
-		if ply:GetGrappling() then
-			local pos = ply:GetPos()
-			pos.z = pos.z + 40
-			render.SetMaterial(cablemat)
-			render.DrawBeam(pos, ply:GetGrapplePos(), 1.5, 0, 1)
-		end
+		ply:SetupBones()
+
+		local lhand = ply:LookupBone("ValveBiped.Bip01_L_Finger21")
+		local rhand = ply:LookupBone("ValveBiped.Bip01_R_Finger41")
+		if not lhand or not rhand then continue end
+
+		local lmat = ply:GetBoneMatrix(lhand)
+		local rmat = ply:GetBoneMatrix(rhand)
+		if not lmat or not rmat then continue end
+
+		local lpos = lmat:GetTranslation()
+		local rpos = rmat:GetTranslation()
+
+		-- Same offset the original code applies
+		lpos:Sub(ply:GetForward() * 1.1)
+		rpos:Sub(ply:GetForward() * 1.1)
+
+		local up = (rpos - lpos):Angle():Forward() * 20
+		rpos:Add(up)
+
+		render.SetMaterial(cablemat)
+		render.StartBeam(2)
+
+		render.DrawBeam(rpos, lpos, 1.5, 0, 1)
+		render.DrawBeam(lpos, ply:GetGrapplePos(), 1.5, 0, 1)
 	end
 end)
 
