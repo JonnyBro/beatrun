@@ -115,8 +115,6 @@ if CLIENT then
 		LocalPlayer():AddXP(5)
 
 		timealpha = 1000
-
-		print(timetaken, vspb)
 	end)
 
 	net.Receive("Checkpoint_Finish", function()
@@ -245,9 +243,12 @@ function CourseHUD()
 
 	if incourse then
 		local text = string.FormattedTime(totaltime, "%02i:%02i:%02i")
-		local w, _ = surface.GetTextSize(text)
 		surface.SetFont("BeatrunHUD")
+
+		local w, _ = surface.GetTextSize(text)
+
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.075 + vpz)
+		surface.SetDrawColor(255, 255, 255, 255)
 		surface.DrawText(text)
 	end
 
