@@ -81,7 +81,14 @@ local checkheight = Vector(0, 0, 64) -- eyepos diff
 local arrow = Material("medge/timetrial/checkpoint_arrow")
 local asize = 32
 
+local drawingSkybox = false
+
+-- if anyone knows a better way to stop the checkpoint from rendering in the skybox then pls fix
+hook.Add("PreDrawTranslucentRenderables", "CheckForSkyboxRenderCheckPoint", function(_, IsDrawSkybox, IsDraw3DSkybox) drawingSkybox = IsDraw3DSkybox end)
+
 function ENT:DrawTranslucent()
+	if drawingSkybox then return end
+
 	self:SetRenderBounds(minb, maxb)
 
 	if (not BuildMode and CheckpointNumber ~= self:GetCPNum()) and not LocalPlayer().InReplay then return end
@@ -117,8 +124,6 @@ function ENT:DrawTranslucent()
 		render.DrawBeam(pos - fwAng:Forward() * size * .5, pos + fwAng:Forward() * size * .5, size, 1, 0, red)
 	end
 
-	-- local bmin, bmax = self:GetRenderBounds()
-	-- render.DrawWireframeBox(self:GetPos(), angle_zero, bmin, bmax)
 	self.offset = self.offset + 0.00075
 
 	if self.offset >= 180 then
@@ -146,13 +151,10 @@ function ENT:DrawLOC()
 		circlepos:SetUnpacked(math.cos(angle) * radius, math.sin(angle) * radius, 0)
 
 		local newpos = self:GetPos() + circlepos
-		-- render.DrawLine(newpos, newpos+VectorRand()*5, red)
 
 		render.DrawQuadEasy(newpos, f, 6, 6, red)
 	end
 
-	-- local bmin, bmax = self:GetRenderBounds()
-	-- render.DrawWireframeBox(self:GetPos(), angle_zero, bmin, bmax)
 	self.offset = self.offset + 0.00075
 
 	if self.offset >= 180 then
