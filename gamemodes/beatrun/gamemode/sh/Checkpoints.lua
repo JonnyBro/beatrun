@@ -273,6 +273,7 @@ function CourseHUD()
 		end
 
 		local text = speed .. " " .. language.GetPhrase("beatrun.toolsmenu.hud.speedometermode" .. mode)
+		surface.SetFont("BeatrunHUD")
 
 		local w, _ = surface.GetTextSize(text)
 		w = w or 0
@@ -280,7 +281,6 @@ function CourseHUD()
 		local r, g, b, a = string.ToColor(GetConVar("Beatrun_HUDTextColor"):GetString())
 
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetFont("BeatrunHUD")
 		surface.SetTextColor(r, g, b, a)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.85 + vpz)
 		surface.DrawText(text)
@@ -326,22 +326,24 @@ function CourseHUD()
 
 	if incourse and pbtimes then
 		local text = string.FormattedTime(pbtotal, "%02i:%02i:%02i")
+		surface.SetFont("BeatrunHUD")
+
 		local w, h = surface.GetTextSize(text)
 
-		surface.SetFont("BeatrunHUD")
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.075 + h + vpz)
 		surface.SetTextColor(255, 255, 255, 125)
 		surface.DrawText(text)
 	end
 
 	if timealpha > 0 then
+		surface.SetFont("BeatrunHUD")
+
 		local w, _ = surface.GetTextSize(timetext)
 		w = w or 0
 
 		timealpha = math.max(0, timealpha - FrameTime() * 250)
 		timecolor.a = math.min(255, timealpha)
 
-		surface.SetFont("BeatrunHUD")
 		surface.SetTextPos(ScrW() * 0.5 - w * 0.5 + vpx, ScrH() * 0.3 + vpz)
 		surface.SetTextColor(timecolor)
 		surface.DrawText(timetext)
