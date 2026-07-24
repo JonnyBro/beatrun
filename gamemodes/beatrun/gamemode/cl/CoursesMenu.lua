@@ -1248,7 +1248,8 @@ function BuildOnlinePage()
 
 				local label = vgui.Create("DLabel", loadWarn)
 				label:SetText("#beatrun.coursesmenu.onlinepage.start.message")
-				label:SetFont("AEUISmall")
+				label:SetFont("AEUISmall").
+				label:SetTextColor(CurrentTheme().text.primary)
 				label:SetWrap(true)
 				label:SetSize(330, 60)
 				label:SetPos(15, 35)
