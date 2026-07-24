@@ -249,6 +249,7 @@ function CourseHUD()
 
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.075 + vpz)
 		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetTextColor(255, 255, 255, 255)
 		surface.DrawText(text)
 	end
 
