@@ -490,6 +490,17 @@ end
 
 local lastCheckedModel = ""
 local lastCheckedHands = ""
+local lastCheckedSkin = 0
+local lastCheckedBodygroups = ""
+local lastCheckedHandsSkin = 0
+local lastCheckedHandsBodygroups = ""
+
+local function SafeGetNumBodyGroups(ent)
+    if not IsValid(ent) then return 0 end
+    local ok, result = pcall(ent.GetNumBodyGroups, ent)
+    if ok and isnumber(result) then return result end
+    return 0
+end
 
 local function SafeGetBodyGroups(ent)
     if not IsValid(ent) then return nil end
@@ -498,11 +509,17 @@ local function SafeGetBodyGroups(ent)
     return nil
 end
 
-local function SafeGetNumBodyGroups(ent)
-    if not IsValid(ent) then return 0 end
-    local ok, result = pcall(ent.GetNumBodyGroups, ent)
-    if ok and isnumber(result) then return result end
-    return 0
+local function GetBodygroupsString(ent)
+    if not IsValid(ent) then return "" end
+    local num = SafeGetNumBodyGroups(ent)
+    if num <= 0 then return "" end
+    
+    local parts = {}
+    for i = 0, num - 1 do
+        local ok, bg = pcall(ent.GetBodygroup, ent, i)
+        table.insert(parts, tostring(ok and bg or 0))
+    end
+    return table.concat(parts, ",")
 end
 
 hook.Add("Think", "Beatrun_InstantModelUpdate", function()
@@ -515,13 +532,32 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
     local mdl = ply:GetModel() or ""
     local handsEnt = ply:GetHands()
     local hands = IsValid(handsEnt) and handsEnt:GetModel() or ""
+    local skin = ply:GetSkin() or 0
+    local bodygroups = GetBodygroupsString(ply)
+    local handsSkin = IsValid(handsEnt) and handsEnt:GetSkin() or 0
+    local handsBodygroups = GetBodygroupsString(handsEnt)
 
     if mdl == "" then return end
 
-    if mdl ~= lastCheckedModel or hands ~= lastCheckedHands then
-        lastCheckedModel = mdl
-        lastCheckedHands = hands
+    local modelChanged = mdl ~= lastCheckedModel
+    local handsChanged = hands ~= lastCheckedHands
+    local skinChanged = skin ~= lastCheckedSkin
+    local bgChanged = bodygroups ~= lastCheckedBodygroups
+    local handsSkinChanged = handsSkin ~= lastCheckedHandsSkin
+    local handsBgChanged = handsBodygroups ~= lastCheckedHandsBodygroups
 
+    if not modelChanged and not handsChanged and not skinChanged and not bgChanged and not handsSkinChanged and not handsBgChanged then
+        return
+    end
+
+    lastCheckedModel = mdl
+    lastCheckedHands = hands
+    lastCheckedSkin = skin
+    lastCheckedBodygroups = bodygroups
+    lastCheckedHandsSkin = handsSkin
+    lastCheckedHandsBodygroups = handsBodygroups
+
+    if modelChanged then
         local currentMdl = BodyAnimMDL:GetModel() or ""
         if currentMdl ~= mdl then
             local ok = pcall(function()
@@ -533,9 +569,18 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
                 return
             end
         end
-        local bodygroups = SafeGetBodyGroups(ply)
-        if bodygroups then
-            for num, _ in pairs(bodygroups) do
+    end
+
+    if skinChanged or modelChanged then
+        pcall(function()
+            BodyAnimMDL:SetSkin(skin)
+        end)
+    end
+
+    if bgChanged or modelChanged then
+        local bodygroupsTable = SafeGetBodyGroups(ply)
+        if bodygroupsTable then
+            for num, _ in pairs(bodygroupsTable) do
                 local bgValue = 0
                 pcall(function()
                     bgValue = ply:GetBodygroup(num - 1)
@@ -545,12 +590,10 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
                 end)
             end
         end
+    end
 
-        pcall(function()
-            BodyAnimMDL:SetSkin(ply:GetSkin())
-        end)
-
-        if IsValid(BodyAnimMDLarm) and hands ~= "" then
+    if IsValid(BodyAnimMDLarm) and hands ~= "" then
+        if handsChanged then
             local currentHandsMdl = BodyAnimMDLarm:GetModel() or ""
             if currentHandsMdl ~= hands then
                 local ok = pcall(function()
@@ -561,7 +604,15 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
                     return
                 end
             end
+        end
 
+        if handsSkinChanged or handsChanged then
+            pcall(function()
+                BodyAnimMDLarm:SetSkin(handsSkin)
+            end)
+        end
+
+        if handsBgChanged or handsChanged then
             local handBodygroups = SafeGetBodyGroups(handsEnt)
             if handBodygroups then
                 for num, _ in pairs(handBodygroups) do
@@ -574,53 +625,48 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
                     end)
                 end
             end
+        end
+    end
 
+    if modelChanged and playermodelbones then
+        for _, v in ipairs(playermodelbones) do
+            local b = BodyAnimMDL:LookupBone(v)
+            if b then
+                pcall(function()
+                    BodyAnimMDL:ManipulateBoneScale(b, vector_origin)
+                end)
+            end
+        end
+    end
+
+    local bs = GetConVar("Beatrun_BodyScale"):GetFloat()
+    local av = Vector(bs, bs, bs)
+    for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
+        local bonename = BodyAnimMDL:GetBoneName(i)
+        if bonename and not armbones[bonename] then
             pcall(function()
-                BodyAnimMDLarm:SetSkin(handsEnt:GetSkin())
+                BodyAnimMDL:ManipulateBoneScale(i, av)
             end)
         end
+    end
 
-        if playermodelbones then
-			for _, v in ipairs(playermodelbones) do
-				local b = BodyAnimMDL:LookupBone(v)
-
-				if b then
-					pcall(function()
-						BodyAnimMDL:ManipulateBoneScale(b, vector_origin)
-					end)
-				end
-			end
-		end
-
-        local bs = GetConVar("Beatrun_BodyScale"):GetFloat()
-        local av = Vector(bs, bs, bs)
-        for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
-            local bonename = BodyAnimMDL:GetBoneName(i)
-            if bonename and not armbones[bonename] then
-                pcall(function()
-                    BodyAnimMDL:ManipulateBoneScale(i, av)
-                end)
-            end
+    local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
+    local aav = Vector(as, as, as)
+    if IsValid(BodyAnimMDLarm) then
+        for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
+            pcall(function()
+                BodyAnimMDLarm:ManipulateBoneScale(i, aav)
+            end)
         end
+    end
 
-        local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
-        local aav = Vector(as, as, as)
-        if IsValid(BodyAnimMDLarm) then
-            for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
-                pcall(function()
-                    BodyAnimMDLarm:ManipulateBoneScale(i, aav)
-                end)
-            end
-        end
-
+    pcall(function()
+        BodyAnimMDL:InvalidateBoneCache()
+    end)
+    if IsValid(BodyAnimMDLarm) then
         pcall(function()
-            BodyAnimMDL:InvalidateBoneCache()
+            BodyAnimMDLarm:InvalidateBoneCache()
         end)
-        if IsValid(BodyAnimMDLarm) then
-            pcall(function()
-                BodyAnimMDLarm:InvalidateBoneCache()
-            end)
-        end
     end
 end)
 
