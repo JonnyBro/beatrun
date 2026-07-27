@@ -139,26 +139,26 @@ function PLAYER:Loadout()
 end
 
 function PLAYER:SetModel()
-    BaseClass.SetModel(self)
+	BaseClass.SetModel(self)
 
-    local skin = self.Player:GetInfoNum("cl_playerskin", 0)
-    self.Player:SetSkin(skin)
+	local skin = self.Player:GetInfoNum("cl_playerskin", 0)
+	self.Player:SetSkin(skin)
 
-    local groups = self.Player:GetInfo("cl_playerbodygroups")
+	local groups = self.Player:GetInfo("cl_playerbodygroups")
 
-    if groups == nil then
-        groups = ""
-    end
+	if groups == nil then
+		groups = ""
+	end
 
-    local groups = string.Explode(" ", groups)
+	local groups = string.Explode(" ", groups)
 
-    local numBodyGroups = 0
-    local ok, result = pcall(self.Player.GetNumBodyGroups, self.Player)
-    if ok then numBodyGroups = result or 0 end
+	local numBodyGroups = 0
+	local ok, result = pcall(self.Player.GetNumBodyGroups, self.Player)
+	if ok then numBodyGroups = result or 0 end
 
-    for k = 0, numBodyGroups - 1 do
-        self.Player:SetBodygroup(k, tonumber(groups[k + 1]) or 0)
-    end
+	for k = 0, numBodyGroups - 1 do
+		self.Player:SetBodygroup(k, tonumber(groups[k + 1]) or 0)
+	end
 end
 
 if SERVER then
@@ -461,31 +461,30 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 end)
 
 if SERVER then
-    local LastModels = {}
+	local LastModels = {}
 
-    hook.Add("Think", "BeatrunCheckPlayerModelChange", function()
-        for _, ply in ipairs(player.GetAll()) do
-            if not IsValid(ply) then continue end
+	hook.Add("Think", "BeatrunCheckPlayerModelChange", function()
+		for _, ply in ipairs(player.GetAll()) do
+			if not IsValid(ply) then continue end
 
-            local mdl = ply:GetModel() or ""
-            local clModel = ply:GetInfo("cl_playermodel") or ""
-            if LastModels[ply] == nil then
-                LastModels[ply] = mdl
-                continue
-            end
+			local mdl = ply:GetModel() or ""
+			if LastModels[ply] == nil then
+				LastModels[ply] = mdl
+				continue
+			end
 
-            if mdl ~= LastModels[ply] then
-                LastModels[ply] = mdl
+			if mdl ~= LastModels[ply] then
+				LastModels[ply] = mdl
 
-                timer.Simple(0, function()
-                    if not IsValid(ply) then return end
+				timer.Simple(0, function()
+					if not IsValid(ply) then return end
 
-                    player_manager.RunClass(ply, "SetModel")
-                    ply:SetupHands()
-                end)
-            end
-        end
-    end)
+					player_manager.RunClass(ply, "SetModel")
+					ply:SetupHands()
+				end)
+			end
+		end
+	end)
 end
 
 local lastCheckedModel = ""
@@ -496,178 +495,178 @@ local lastCheckedHandsSkin = 0
 local lastCheckedHandsBodygroups = ""
 
 local function SafeGetNumBodyGroups(ent)
-    if not IsValid(ent) then return 0 end
-    local ok, result = pcall(ent.GetNumBodyGroups, ent)
-    if ok and isnumber(result) then return result end
-    return 0
+	if not IsValid(ent) then return 0 end
+	local ok, result = pcall(ent.GetNumBodyGroups, ent)
+	if ok and isnumber(result) then return result end
+	return 0
 end
 
 local function SafeGetBodyGroups(ent)
-    if not IsValid(ent) then return nil end
-    local ok, result = pcall(ent.GetBodyGroups, ent)
-    if ok and istable(result) then return result end
-    return nil
+	if not IsValid(ent) then return nil end
+	local ok, result = pcall(ent.GetBodyGroups, ent)
+	if ok and istable(result) then return result end
+	return nil
 end
 
 local function GetBodygroupsString(ent)
-    if not IsValid(ent) then return "" end
-    local num = SafeGetNumBodyGroups(ent)
-    if num <= 0 then return "" end
-    
-    local parts = {}
-    for i = 0, num - 1 do
-        local ok, bg = pcall(ent.GetBodygroup, ent, i)
-        table.insert(parts, tostring(ok and bg or 0))
-    end
-    return table.concat(parts, ",")
+	if not IsValid(ent) then return "" end
+	local num = SafeGetNumBodyGroups(ent)
+	if num <= 0 then return "" end
+	
+	local parts = {}
+	for i = 0, num - 1 do
+		local ok, bg = pcall(ent.GetBodygroup, ent, i)
+		table.insert(parts, tostring(ok and bg or 0))
+	end
+	return table.concat(parts, ",")
 end
 
 hook.Add("Think", "Beatrun_InstantModelUpdate", function()
-    if not IsValid(BodyAnim) then return end
-    if not IsValid(BodyAnimMDL) then return end
+	if not IsValid(BodyAnim) then return end
+	if not IsValid(BodyAnimMDL) then return end
 
-    local ply = LocalPlayer()
-    if not IsValid(ply) then return end
+	local ply = LocalPlayer()
+	if not IsValid(ply) then return end
 
-    local mdl = ply:GetModel() or ""
-    local handsEnt = ply:GetHands()
-    local hands = IsValid(handsEnt) and handsEnt:GetModel() or ""
-    local skin = ply:GetSkin() or 0
-    local bodygroups = GetBodygroupsString(ply)
-    local handsSkin = IsValid(handsEnt) and handsEnt:GetSkin() or 0
-    local handsBodygroups = GetBodygroupsString(handsEnt)
+	local mdl = ply:GetModel() or ""
+	local handsEnt = ply:GetHands()
+	local hands = IsValid(handsEnt) and handsEnt:GetModel() or ""
+	local skin = ply:GetSkin() or 0
+	local bodygroups = GetBodygroupsString(ply)
+	local handsSkin = IsValid(handsEnt) and handsEnt:GetSkin() or 0
+	local handsBodygroups = GetBodygroupsString(handsEnt)
 
-    if mdl == "" then return end
+	if mdl == "" then return end
 
-    local modelChanged = mdl ~= lastCheckedModel
-    local handsChanged = hands ~= lastCheckedHands
-    local skinChanged = skin ~= lastCheckedSkin
-    local bgChanged = bodygroups ~= lastCheckedBodygroups
-    local handsSkinChanged = handsSkin ~= lastCheckedHandsSkin
-    local handsBgChanged = handsBodygroups ~= lastCheckedHandsBodygroups
+	local modelChanged = mdl ~= lastCheckedModel
+	local handsChanged = hands ~= lastCheckedHands
+	local skinChanged = skin ~= lastCheckedSkin
+	local bgChanged = bodygroups ~= lastCheckedBodygroups
+	local handsSkinChanged = handsSkin ~= lastCheckedHandsSkin
+	local handsBgChanged = handsBodygroups ~= lastCheckedHandsBodygroups
 
-    if not modelChanged and not handsChanged and not skinChanged and not bgChanged and not handsSkinChanged and not handsBgChanged then
-        return
-    end
+	if not modelChanged and not handsChanged and not skinChanged and not bgChanged and not handsSkinChanged and not handsBgChanged then
+		return
+	end
 
-    lastCheckedModel = mdl
-    lastCheckedHands = hands
-    lastCheckedSkin = skin
-    lastCheckedBodygroups = bodygroups
-    lastCheckedHandsSkin = handsSkin
-    lastCheckedHandsBodygroups = handsBodygroups
+	lastCheckedModel = mdl
+	lastCheckedHands = hands
+	lastCheckedSkin = skin
+	lastCheckedBodygroups = bodygroups
+	lastCheckedHandsSkin = handsSkin
+	lastCheckedHandsBodygroups = handsBodygroups
 
-    if modelChanged then
-        local currentMdl = BodyAnimMDL:GetModel() or ""
-        if currentMdl ~= mdl then
-            local ok = pcall(function()
-                BodyAnimMDL:SetModel(mdl)
-                BodyAnimMDL:SnatchModelInstance(ply)
-            end)
-            if not ok then
-                lastCheckedModel = ""
-                return
-            end
-        end
-    end
+	if modelChanged then
+		local currentMdl = BodyAnimMDL:GetModel() or ""
+		if currentMdl ~= mdl then
+			local ok = pcall(function()
+				BodyAnimMDL:SetModel(mdl)
+				BodyAnimMDL:SnatchModelInstance(ply)
+			end)
+			if not ok then
+				lastCheckedModel = ""
+				return
+			end
+		end
+	end
 
-    if skinChanged or modelChanged then
-        pcall(function()
-            BodyAnimMDL:SetSkin(skin)
-        end)
-    end
+	if skinChanged or modelChanged then
+		pcall(function()
+			BodyAnimMDL:SetSkin(skin)
+		end)
+	end
 
-    if bgChanged or modelChanged then
-        local bodygroupsTable = SafeGetBodyGroups(ply)
-        if bodygroupsTable then
-            for num, _ in pairs(bodygroupsTable) do
-                local bgValue = 0
-                pcall(function()
-                    bgValue = ply:GetBodygroup(num - 1)
-                end)
-                pcall(function()
-                    BodyAnimMDL:SetBodygroup(num - 1, bgValue)
-                end)
-            end
-        end
-    end
+	if bgChanged or modelChanged then
+		local bodygroupsTable = SafeGetBodyGroups(ply)
+		if bodygroupsTable then
+			for num, _ in pairs(bodygroupsTable) do
+				local bgValue = 0
+				pcall(function()
+					bgValue = ply:GetBodygroup(num - 1)
+				end)
+				pcall(function()
+					BodyAnimMDL:SetBodygroup(num - 1, bgValue)
+				end)
+			end
+		end
+	end
 
-    if IsValid(BodyAnimMDLarm) and hands ~= "" then
-        if handsChanged then
-            local currentHandsMdl = BodyAnimMDLarm:GetModel() or ""
-            if currentHandsMdl ~= hands then
-                local ok = pcall(function()
-                    BodyAnimMDLarm:SetModel(hands)
-                end)
-                if not ok then
-                    lastCheckedHands = ""
-                    return
-                end
-            end
-        end
+	if IsValid(BodyAnimMDLarm) and hands ~= "" then
+		if handsChanged then
+			local currentHandsMdl = BodyAnimMDLarm:GetModel() or ""
+			if currentHandsMdl ~= hands then
+				local ok = pcall(function()
+					BodyAnimMDLarm:SetModel(hands)
+				end)
+				if not ok then
+					lastCheckedHands = ""
+					return
+				end
+			end
+		end
 
-        if handsSkinChanged or handsChanged then
-            pcall(function()
-                BodyAnimMDLarm:SetSkin(handsSkin)
-            end)
-        end
+		if handsSkinChanged or handsChanged then
+			pcall(function()
+				BodyAnimMDLarm:SetSkin(handsSkin)
+			end)
+		end
 
-        if handsBgChanged or handsChanged then
-            local handBodygroups = SafeGetBodyGroups(handsEnt)
-            if handBodygroups then
-                for num, _ in pairs(handBodygroups) do
-                    local bgValue = 0
-                    pcall(function()
-                        bgValue = handsEnt:GetBodygroup(num - 1)
-                    end)
-                    pcall(function()
-                        BodyAnimMDLarm:SetBodygroup(num - 1, bgValue)
-                    end)
-                end
-            end
-        end
-    end
+		if handsBgChanged or handsChanged then
+			local handBodygroups = SafeGetBodyGroups(handsEnt)
+			if handBodygroups then
+				for num, _ in pairs(handBodygroups) do
+					local bgValue = 0
+					pcall(function()
+						bgValue = handsEnt:GetBodygroup(num - 1)
+					end)
+					pcall(function()
+						BodyAnimMDLarm:SetBodygroup(num - 1, bgValue)
+					end)
+				end
+			end
+		end
+	end
 
-    if modelChanged and playermodelbones then
-        for _, v in ipairs(playermodelbones) do
-            local b = BodyAnimMDL:LookupBone(v)
-            if b then
-                pcall(function()
-                    BodyAnimMDL:ManipulateBoneScale(b, vector_origin)
-                end)
-            end
-        end
-    end
+	if modelChanged and playermodelbones then
+		for _, v in ipairs(playermodelbones) do
+			local b = BodyAnimMDL:LookupBone(v)
+			if b then
+				pcall(function()
+					BodyAnimMDL:ManipulateBoneScale(b, vector_origin)
+				end)
+			end
+		end
+	end
 
-    local bs = GetConVar("Beatrun_BodyScale"):GetFloat()
-    local av = Vector(bs, bs, bs)
-    for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
-        local bonename = BodyAnimMDL:GetBoneName(i)
-        if bonename and not armbones[bonename] then
-            pcall(function()
-                BodyAnimMDL:ManipulateBoneScale(i, av)
-            end)
-        end
-    end
+	local bs = GetConVar("Beatrun_BodyScale"):GetFloat()
+	local av = Vector(bs, bs, bs)
+	for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
+		local bonename = BodyAnimMDL:GetBoneName(i)
+		if bonename and not armbones[bonename] then
+			pcall(function()
+				BodyAnimMDL:ManipulateBoneScale(i, av)
+			end)
+		end
+	end
 
-    local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
-    local aav = Vector(as, as, as)
-    if IsValid(BodyAnimMDLarm) then
-        for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
-            pcall(function()
-                BodyAnimMDLarm:ManipulateBoneScale(i, aav)
-            end)
-        end
-    end
+	local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
+	local aav = Vector(as, as, as)
+	if IsValid(BodyAnimMDLarm) then
+		for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
+			pcall(function()
+				BodyAnimMDLarm:ManipulateBoneScale(i, aav)
+			end)
+		end
+	end
 
-    pcall(function()
-        BodyAnimMDL:InvalidateBoneCache()
-    end)
-    if IsValid(BodyAnimMDLarm) then
-        pcall(function()
-            BodyAnimMDLarm:InvalidateBoneCache()
-        end)
-    end
+	pcall(function()
+		BodyAnimMDL:InvalidateBoneCache()
+	end)
+	if IsValid(BodyAnimMDLarm) then
+		pcall(function()
+			BodyAnimMDLarm:InvalidateBoneCache()
+		end)
+	end
 end)
 
 player_manager.RegisterClass("player_beatrun", PLAYER, "player_default")
