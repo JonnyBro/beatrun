@@ -1,7 +1,10 @@
 ﻿AddCSLuaFile()
-DEFINE_BASECLASS("player_default")
+
+DEFINE_BASECLASS("playr_default")
+
 if CLIENT then
 	local lframeswepclass = lframeswepclass or ""
+
 	CreateConVar("cl_playercolor", "0.24 0.34 0.41", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The value is a Vector - so between 0-1 - not between 0-255")
 	CreateConVar("cl_weaponcolor", "0.30 1.80 2.10", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The value is a Vector - so between 0-1 - not between 0-255")
 	CreateConVar("cl_playerskin", "0", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The skin to use, if the model has any")
@@ -9,16 +12,22 @@ if CLIENT then
 end
 
 local PLAYER = {}
+
 PLAYER.DuckSpeed = 0.01 -- How fast to go from not ducking, to ducking
 PLAYER.UnDuckSpeed = 0.01 -- How fast to go from ducking, to not ducking
+
 PLAYER.TauntCam = TauntCamera()
+
 PLAYER.WalkSpeed = 200
 PLAYER.RunSpeed = 400
+
 function PLAYER:SetupDataTables()
 	BaseClass.SetupDataTables(self)
+
 	self.Player:NetworkVar("Float", 0, "MEMoveLimit")
 	self.Player:NetworkVar("Float", 1, "MESprintDelay")
 	self.Player:NetworkVar("Float", 2, "MEAng")
+
 	self.Player:NetworkVar("Int", 0, "Climbing")
 	self.Player:NetworkVar("Float", 3, "ClimbingTime")
 	self.Player:NetworkVar("Vector", 0, "ClimbingStart")
@@ -26,12 +35,14 @@ function PLAYER:SetupDataTables()
 	self.Player:NetworkVar("Vector", 7, "ClimbingEndOld")
 	self.Player:NetworkVar("Float", 24, "ClimbingDelay")
 	self.Player:NetworkVar("Angle", 3, "ClimbingAngle")
+
 	self.Player:NetworkVar("Int", 1, "Wallrun")
 	self.Player:NetworkVar("Float", 4, "WallrunTime")
 	self.Player:NetworkVar("Float", 5, "WallrunSoundTime")
 	self.Player:NetworkVar("Vector", 2, "WallrunDir")
 	self.Player:NetworkVar("Vector", 8, "WallrunOrigVel")
 	self.Player:NetworkVar("Int", 4, "WallrunCount")
+
 	self.Player:NetworkVar("Bool", 0, "Sliding")
 	self.Player:NetworkVar("Float", 6, "SlidingTime")
 	self.Player:NetworkVar("Float", 7, "SlidingDelay")
@@ -41,22 +52,30 @@ function PLAYER:SetupDataTables()
 	self.Player:NetworkVar("Bool", 9, "SlidingSlippery")
 	self.Player:NetworkVar("Float", 20, "SlidingSlipperyUpdate")
 	self.Player:NetworkVar("Angle", 2, "SlidingAngle")
+
 	self.Player:NetworkVar("Bool", 1, "StepRight")
 	self.Player:NetworkVar("Float", 8, "StepRelease")
+
 	self.Player:NetworkVar("Bool", 2, "Grappling")
 	self.Player:NetworkVar("Vector", 3, "GrapplePos")
 	self.Player:NetworkVar("Float", 29, "GrappleLength")
+
 	self.Player:NetworkVar("Entity", 0, "Swingbar")
+
 	self.Player:NetworkVar("Bool", 3, "CrouchJump")
 	self.Player:NetworkVar("Float", 9, "CrouchJumpTime")
 	self.Player:NetworkVar("Bool", 12, "CrouchJumpBlocked")
+
 	self.Player:NetworkVar("Float", 9, "SafetyRollKeyTime")
 	self.Player:NetworkVar("Float", 10, "SafetyRollTime")
 	self.Player:NetworkVar("Angle", 0, "SafetyRollAng")
+
 	self.Player:NetworkVar("Bool", 4, "Quickturn")
 	self.Player:NetworkVar("Float", 10, "QuickturnTime")
 	self.Player:NetworkVar("Angle", 1, "QuickturnAng")
+
 	self.Player:NetworkVar("Bool", 5, "WallrunElevated")
+
 	--We have to store this info on the player as multiple people can use one swingbar
 	self.Player:NetworkVar("Float", 11, "SBOffset")
 	self.Player:NetworkVar("Float", 12, "SBOffsetSpeed")
@@ -65,14 +84,20 @@ function PLAYER:SetupDataTables()
 	self.Player:NetworkVar("Int", 2, "SBPeak")
 	self.Player:NetworkVar("Bool", 6, "SBDir")
 	self.Player:NetworkVar("Entity", 1, "SwingbarLast")
+
 	self.Player:NetworkVar("Entity", 2, "Swingpipe")
+
 	self.Player:NetworkVar("Entity", 3, "Rabbit")
 	self.Player:NetworkVar("Int", 3, "RabbitSeat")
+
 	self.Player:NetworkVar("Float", 15, "OverdriveCharge")
 	self.Player:NetworkVar("Float", 16, "OverdriveMult")
+
 	self.Player:NetworkVar("Bool", 7, "JumpTurn")
 	self.Player:NetworkVar("Float", 17, "JumpTurnRecovery")
+
 	self.Player:NetworkVar("Bool", 8, "WasOnGround")
+
 	self.Player:NetworkVar("Entity", 4, "Ladder")
 	self.Player:NetworkVar("Float", 21, "LadderDelay")
 	self.Player:NetworkVar("Float", 22, "LadderHeight")
@@ -81,17 +106,21 @@ function PLAYER:SetupDataTables()
 	self.Player:NetworkVar("Vector", 5, "LadderStartPos")
 	self.Player:NetworkVar("Vector", 6, "LadderEndPos")
 	self.Player:NetworkVar("Float", 23, "LadderLerp")
+
 	self.Player:NetworkVar("Entity", 5, "Zipline")
 	self.Player:NetworkVar("Float", 21, "ZiplineStart")
 	self.Player:NetworkVar("Float", 22, "ZiplineFraction")
 	self.Player:NetworkVar("Float", 23, "ZiplineSpeed")
 	self.Player:NetworkVar("Float", 25, "ZiplineDelay")
+
 	self.Player:NetworkVar("Int", 5, "MeleeDamage")
 	self.Player:NetworkVar("Float", 26, "MeleeTime")
 	self.Player:NetworkVar("Float", 27, "MeleeDelay")
 	self.Player:NetworkVar("Int", 6, "Melee")
+
 	self.Player:NetworkVar("Float", 28, "Balance")
 	self.Player:NetworkVar("Entity", 6, "BalanceEntity")
+
 	self.Player:NetworkVar("Bool", 13, "Dive")
 end
 
@@ -104,58 +133,82 @@ function PLAYER:Loadout()
 
 	self.Player:Give("runnerhands")
 	self.Player:SelectWeapon("runnerhands")
+
 	self.Player:SetJumpPower(230)
 	self.Player:SetCrouchedWalkSpeed(0.5)
+
 	-- self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 100))
+
 	self.Player:SetCanZoom(false)
 end
 
 function PLAYER:SetModel()
 	BaseClass.SetModel(self)
+
 	local skin = self.Player:GetInfoNum("cl_playerskin", 0)
+
 	self.Player:SetSkin(skin)
+
 	local groups = self.Player:GetInfo("cl_playerbodygroups")
 	if groups == nil then groups = "" end
+
 	local groups = string.Explode(" ", groups)
 	local numBodyGroups = 0
+
 	local ok, result = pcall(self.Player.GetNumBodyGroups, self.Player)
+
 	if ok then numBodyGroups = result or 0 end
+
 	for k = 0, numBodyGroups - 1 do
 		self.Player:SetBodygroup(k, tonumber(groups[k + 1]) or 0)
 	end
 end
 
 if SERVER then util.AddNetworkString("BeatrunSpawn") end
+
 function PLAYER:Spawn()
 	BaseClass.Spawn(self)
+
 	local ply = self.Player
 	local col = ply:GetInfo("cl_playercolor")
+
 	ply:SetPlayerColor(Vector(col))
+
 	local faststartmult = ply:GetInfoNum("Beatrun_FastStart", 0) > 0 and 0.5 or 1
+
 	local col = Vector(ply:GetInfo("cl_weaponcolor"))
 	if col:Length() < 0.001 then col = Vector(0.001, 0.001, 0.001) end
+
 	ply:SetWeaponColor(col)
+
 	local CPSave = false
+
 	if Course_Name ~= "" and Course_StartPos ~= vector_origin then
 		if ply:GetInfoNum("Beatrun_CPSave", 0) >= 1 and ply:GetNW2Float("CPNum", 1) > 1 and ply.CPSavePos and ply.LastSpawnTime + 0.6 < CurTime() then
 			ply:SetPos(ply.CPSavePos)
 			ply:SetEyeAngles(ply.CPSaveAng)
 			ply:SetLocalVelocity(ply.CPSaveVel)
+
 			ply:LoadParkourState()
+
 			-- ply:SetNW2Float("RetryCount", ply:GetNW2Float("RetryCount", 0) + 1)
+
 			CPSave = true
 		else
 			ply.CPSavePos = nil
 			ply.CPsaveAng = nil
 			ply.CPsaveVel = nil
+
 			ply:SetPos(Course_StartPos)
 			ply:SetEyeAngles(Angle(0, Course_StartAng, 0))
 			ply:SetLocalVelocity(vector_origin)
-			--Failsafe
+
+			-- Failsafe
 			timer.Simple(0.1, function()
 				ply:SetLocalVelocity(vector_origin)
 				ply:SetPos(Course_StartPos)
 			end)
+
 			-- ReplayStop(ply)
 			-- ReplayStart(ply)
 		end
@@ -168,34 +221,45 @@ function PLAYER:Spawn()
 
 	if not CPSave then
 		ply.Course_StartTime = CurTime() + 2 * faststartmult
+
 		net.Start("BeatrunSpawn")
-		net.WriteFloat(CurTime())
-		net.WriteBool(ply.InReplay)
+			net.WriteFloat(CurTime())
+			net.WriteBool(ply.InReplay)
 		net.Send(ply)
+
 		ply.SpawnFreezeTime = CurTime() + 1.75 * faststartmult
 	end
 
 	ply:SetCustomCollisionCheck(true)
 	ply:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR)
+
 	if GetGlobalBool("GM_DATATHEFT") then ply:DataTheft_Bank() end
+
 	ply:SetAvoidPlayers(false)
 	ply:SetLaggedMovementValue(0) -- otherwise they drift off
+
 	timer.Simple(0.1, function() ply:SetLaggedMovementValue(1) end)
+
 	if ply.SlideLoopSound and ply.SlideLoopSound.Stop then ply.SlideLoopSound:Stop() end
+
 	ply:ResetParkourState()
 	ply:SetOverdriveCharge(0)
 	ply:SetOverdriveMult(1)
+
 	ply.LastSpawnTime = CurTime()
 end
 
 hook.Add("IsSpawnpointSuitable", "CheckSpawnPoint", function(ply, spawnpointent, bMakeSuitable)
 	if not GetGlobalBool("GM_DATATHEFT") or not GetGlobalBool("GM_DEATHMATCH") then return end
+
 	local pos = spawnpointent:GetPos()
+
 	-- Note that we're searching the default hull size here for a player in the way of our spawning.
 	-- This seems pretty rough, seeing as our player's hull could be different.. but it should do the job.
 	-- (HL2DM kills everything within a 128 unit radius)
 	local ents = ents.FindInBox(pos + Vector(-16, -16, 0), pos + Vector(16, 16, 72))
 	local Blockers = 0
+
 	for _, v in ipairs(ents) do
 		if v:IsPlayer() and v:Alive() then
 			Blockers = Blockers + 1
@@ -205,11 +269,13 @@ hook.Add("IsSpawnpointSuitable", "CheckSpawnPoint", function(ply, spawnpointent,
 
 	if bMakeSuitable then return true end
 	if Blockers > 0 then return false end
+
 	return true
 end)
 
 hook.Add("SetupMove", "SpawnFreeze", function(ply, mv, cmd) if ply.SpawnFreezeTime and Course_Name ~= "" and Course_StartPos ~= vector_origin and Course_StartPos and ply.SpawnFreezeTime > CurTime() then mv:SetOrigin(Course_StartPos) end end)
 hook.Add("ShouldCollide", "Beatrun_NoPlayerCollisions", function(ent1, ent2) if ent1:IsPlayer() and ent2.NoPlayerCollisions then return false end end)
+
 function PLAYER:ShouldDrawLocal()
 	if self.TauntCam:ShouldDrawLocalPlayer(self.Player, self.Player:IsPlayingTaunt()) then return true end
 end
@@ -227,6 +293,7 @@ end
 
 function PLAYER:GetHandsModel()
 	local cl_playermodel = self.Player:GetInfo("cl_playermodel")
+
 	return player_manager.TranslatePlayerHands(cl_playermodel)
 end
 
@@ -238,10 +305,12 @@ end
 
 hook.Add("FinishMove", "BeatrunRHVelocity", function(ply, mv)
 	local activewep = ply:GetActiveWeapon()
+
 	if ply:UsingRH() and activewep.SetOwnerVelocity then activewep:SetOwnerVelocity(math.Round(mv:GetVelocity():Length())) end
 end)
 
 local meta = FindMetaTable("Player")
+
 function meta:ResetParkourState()
 	self:SetSliding(false)
 	self:SetCrouchJump(false)
@@ -270,9 +339,12 @@ function meta:ResetParkourState()
 	self:SetJumpTurn(false)
 	self:SetDive(false)
 	self:SetViewOffsetDucked(Vector(0, 0, 32))
+
 	self.Swingrope = nil
 	self.DiveSliding = false
+
 	ParkourEvent("jump", self)
+
 	self:StopSound("ZiplineLoop")
 end
 
@@ -283,6 +355,7 @@ end
 function meta:LoadParkourState()
 	local save = self.ParkourSave
 	if not save then return end
+
 	self:SetSliding(save[1])
 	self:SetCrouchJump(save[2])
 	self:SetQuickturn(save[3])
@@ -323,6 +396,7 @@ end
 
 function meta:InOverdrive()
 	if not self.GetOverdriveMult then return false end
+
 	return self:GetOverdriveMult() ~= 1
 end
 
@@ -335,8 +409,11 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 		if transition and IsValid(ply) then
 			ply:ResetParkourTimes()
 			ply:SetJumpPower(230)
+
 			-- ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
+
 			ply:SetCanZoom(false)
+
 			ply.ClimbingTrace = nil
 		end
 	end)
@@ -344,10 +421,13 @@ end)
 
 if SERVER then
 	local LastModels = {}
+
 	hook.Add("Think", "BeatrunCheckPlayerModelChange", function()
 		for _, ply in ipairs(player.GetAll()) do
 			if not IsValid(ply) then continue end
+
 			local mdl = ply:GetModel() or ""
+
 			if LastModels[ply] == nil then
 				LastModels[ply] = mdl
 				continue
@@ -355,9 +435,12 @@ if SERVER then
 
 			if mdl ~= LastModels[ply] then
 				LastModels[ply] = mdl
+
 				timer.Simple(0, function()
 					if not IsValid(ply) then return end
+
 					player_manager.RunClass(ply, "SetModel")
+
 					ply:SetupHands()
 				end)
 			end
@@ -371,37 +454,52 @@ local lastCheckedSkin = 0
 local lastCheckedBodygroups = ""
 local lastCheckedHandsSkin = 0
 local lastCheckedHandsBodygroups = ""
+
 local function SafeGetNumBodyGroups(ent)
 	if not IsValid(ent) then return 0 end
+
 	local ok, result = pcall(ent.GetNumBodyGroups, ent)
+
 	if ok and isnumber(result) then return result end
+
 	return 0
 end
 
 local function SafeGetBodyGroups(ent)
 	if not IsValid(ent) then return nil end
+
 	local ok, result = pcall(ent.GetBodyGroups, ent)
+
 	if ok and istable(result) then return result end
+
 	return nil
 end
 
 local function GetBodygroupsString(ent)
 	if not IsValid(ent) then return "" end
+
 	local num = SafeGetNumBodyGroups(ent)
+
 	if num <= 0 then return "" end
+
 	local parts = {}
+
 	for i = 0, num - 1 do
 		local ok, bg = pcall(ent.GetBodygroup, ent, i)
+
 		table.insert(parts, tostring(ok and bg or 0))
 	end
+
 	return table.concat(parts, ",")
 end
 
 hook.Add("Think", "Beatrun_InstantModelUpdate", function()
 	if not IsValid(BodyAnim) then return end
 	if not IsValid(BodyAnimMDL) then return end
+
 	local ply = LocalPlayer()
 	if not IsValid(ply) then return end
+
 	local mdl = ply:GetModel() or ""
 	local handsEnt = ply:GetHands()
 	local hands = IsValid(handsEnt) and handsEnt:GetModel() or ""
@@ -409,22 +507,28 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
 	local bodygroups = GetBodygroupsString(ply)
 	local handsSkin = IsValid(handsEnt) and handsEnt:GetSkin() or 0
 	local handsBodygroups = GetBodygroupsString(handsEnt)
+
 	if mdl == "" then return end
+
 	local modelChanged = mdl ~= lastCheckedModel
 	local handsChanged = hands ~= lastCheckedHands
 	local skinChanged = skin ~= lastCheckedSkin
 	local bgChanged = bodygroups ~= lastCheckedBodygroups
 	local handsSkinChanged = handsSkin ~= lastCheckedHandsSkin
 	local handsBgChanged = handsBodygroups ~= lastCheckedHandsBodygroups
+
 	if not modelChanged and not handsChanged and not skinChanged and not bgChanged and not handsSkinChanged and not handsBgChanged then return end
+
 	lastCheckedModel = mdl
 	lastCheckedHands = hands
 	lastCheckedSkin = skin
 	lastCheckedBodygroups = bodygroups
 	lastCheckedHandsSkin = handsSkin
 	lastCheckedHandsBodygroups = handsBodygroups
+
 	if modelChanged then
 		local currentMdl = BodyAnimMDL:GetModel() or ""
+
 		if currentMdl ~= mdl then
 			local ok = pcall(function()
 				BodyAnimMDL:SetModel(mdl)
@@ -433,17 +537,21 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
 
 			if not ok then
 				lastCheckedModel = ""
+
 				return
 			end
 		end
 	end
 
 	if skinChanged or modelChanged then pcall(function() BodyAnimMDL:SetSkin(skin) end) end
+
 	if bgChanged or modelChanged then
 		local bodygroupsTable = SafeGetBodyGroups(ply)
+
 		if bodygroupsTable then
 			for num, _ in pairs(bodygroupsTable) do
 				local bgValue = 0
+
 				pcall(function() bgValue = ply:GetBodygroup(num - 1) end)
 				pcall(function() BodyAnimMDL:SetBodygroup(num - 1, bgValue) end)
 			end
@@ -453,8 +561,10 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
 	if IsValid(BodyAnimMDLarm) and hands ~= "" then
 		if handsChanged then
 			local currentHandsMdl = BodyAnimMDLarm:GetModel() or ""
+
 			if currentHandsMdl ~= hands then
 				local ok = pcall(function() BodyAnimMDLarm:SetModel(hands) end)
+
 				if not ok then
 					lastCheckedHands = ""
 					return
@@ -463,11 +573,14 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
 		end
 
 		if handsSkinChanged or handsChanged then pcall(function() BodyAnimMDLarm:SetSkin(handsSkin) end) end
+
 		if handsBgChanged or handsChanged then
 			local handBodygroups = SafeGetBodyGroups(handsEnt)
+
 			if handBodygroups then
 				for num, _ in pairs(handBodygroups) do
 					local bgValue = 0
+
 					pcall(function() bgValue = handsEnt:GetBodygroup(num - 1) end)
 					pcall(function() BodyAnimMDLarm:SetBodygroup(num - 1, bgValue) end)
 				end
@@ -484,13 +597,16 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
 
 	local bs = GetConVar("Beatrun_BodyScale"):GetFloat()
 	local av = Vector(bs, bs, bs)
+
 	for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
 		local bonename = BodyAnimMDL:GetBoneName(i)
+
 		if bonename and not armbones[bonename] then pcall(function() BodyAnimMDL:ManipulateBoneScale(i, av) end) end
 	end
 
 	local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
 	local aav = Vector(as, as, as)
+
 	if IsValid(BodyAnimMDLarm) then
 		for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
 			pcall(function() BodyAnimMDLarm:ManipulateBoneScale(i, aav) end)
@@ -498,6 +614,7 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
 	end
 
 	pcall(function() BodyAnimMDL:InvalidateBoneCache() end)
+
 	if IsValid(BodyAnimMDLarm) then pcall(function() BodyAnimMDLarm:InvalidateBoneCache() end) end
 end)
 
