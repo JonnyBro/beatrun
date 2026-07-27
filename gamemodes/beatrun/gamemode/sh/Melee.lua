@@ -332,7 +332,7 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 		ply:SetMeleeTime(0)
 		ply:SetMelee(0)
 	end
-	print(ply:GetCrouchJumpTime() -CurTime())
+
 	if KeyMelee(ply, mv) and ply:GetMeleeDelay() < CurTime() and ply:GetMeleeTime() == 0 and not ply:GetJumpTurn() and ply:GetClimbing() == 0 and ply:GetMantle() == 0 and (not ply:GetCrouchJump() or (ply:GetCrouchJumpTime() -CurTime()) > 0.4) then
 		MeleeCheck(ply, mv, cmd)
 	end
