@@ -393,7 +393,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 	end
 
-	local able_to_slide = ducking and sprinting and speed > runspeed * 0.5
+	local able_to_slide = ducking and sprinting and speed > runspeed * 0.5 and ply:GetMelee() ~= MELEE_JUMPCOILKICK
 	local already_sliding = (ply:GetSlidingDelay() >= CT) or ply:GetSliding()
 
 	if not already_sliding and ply:Alive() and onground and not ply:GetJumpTurn() and (able_to_slide or slippery or ply:GetDive()) then
