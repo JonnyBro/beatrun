@@ -3,6 +3,7 @@ local kickglitch = CreateConVar("Beatrun_KickGlitch", "2", {FCVAR_REPLICATED, FC
 local tr = {}
 local tr_result = {}
 
+MELEE_JUMPCOILKICK = 7 -- TODO: find cases where checks for wr melee (getmelee >= 5) conflicts with this
 MELEE_WRRIGHT = 6
 MELEE_WRLEFT = 5
 MELEE_DROPKICK = 4
@@ -99,6 +100,17 @@ meleedata[6] = {
 	Angle(-5, 0, -2.5), 80
 }
 
+meleedata[7] = {
+		"jumpcoilkick", 0.2, 1, function(ply, mv, cmd) -- 0.15 melee time , 1 melee delay ??
+			if CLIENT and IsFirstTimePredicted() then
+				ply:CLViewPunch(Angle(0.05, 0, -1))
+			elseif game.SinglePlayer() then
+				ply:ViewPunch(Angle(0.1, 0, -1.5))
+			end
+		end,
+		Angle(-5, 0, -2.5), 50
+}
+
 local doors = {
 	prop_door_rotating = true,
 	func_door_rotating = true
@@ -120,6 +132,13 @@ local function MeleeType(ply, mv, cmd)
 		vel.z = 0
 
 		ply:SetMelee(vel:Length() > 100 and MELEE_DROPKICK or MELEE_AIRKICK)
+
+		if ply:GetCrouchJump() then -- TODO: find a cleaner way to set the melee type
+			ply:SetMelee(MELEE_JUMPCOILKICK)
+			--ply:SetJumpTurn(true) -- there is probably a better way to get people to land on their backs but fuck it
+			ply:SetCrouchJump(false)
+		end
+
 	else
 		ply:SetMelee(ply:GetSliding() and not ply.DiveSliding and MELEE_SLIDEKICK or 0)
 	end
@@ -170,7 +189,7 @@ local function MeleeThink(ply, mv, cmd)
 
 		ply:LagCompensation(false)
 
-		if ply:GetMelee() >= 5 then
+		if ply:GetMelee() >= 5 and ply:GetMelee() < 7 then
 			local vel = mv:GetVelocity()
 			-- why is getwallrundir in the thousands?
 			vel:Add(ply:GetWallrunDir():GetNormalized() * 0.5 * vel:Length())
@@ -185,6 +204,8 @@ local function MeleeThink(ply, mv, cmd)
 
 			if ply:GetMelee() == MELEE_DROPKICK then
 				ParkourEvent("meleeairhit", ply)
+			elseif ply:GetMelee() == MELEE_JUMPCOILKICK then
+				ParkourEvent("jumpcoilkickhit", ply)
 			end
 
 			local ent = tr_result.Entity
@@ -198,6 +219,10 @@ local function MeleeThink(ply, mv, cmd)
 					d:SetDamagePosition(tr.start)
 					d:SetDamageForce(ply:EyeAngles():Forward() * 7000)
 				ent:TakeDamageInfo(d)
+
+				--if ent:IsNPC() and ply:GetMelee() == MELEE_JUMPCOILKICK then
+					-- TODO: how to make npc flinch ???????/
+				--end
 
 				if SERVER and ent:GetClass() == "func_breakable_surf" then
 					ent:Input("Shatter", nil, nil, Vector(0, 0, 250))
@@ -256,6 +281,9 @@ local function MeleeThink(ply, mv, cmd)
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 				util.ScreenShake(Vector(0, 0, 0), 2.5, 10, 0.25, 0)
 			end
+		elseif ply:GetMelee() == MELEE_JUMPCOILKICK then
+			ply:SetJumpTurn(true) -- there is probably a better way to get people to land on their backs but fuck it
+			--ply:SetCrouchJump(false)
 		end
 	else
 		meleedata[ply:GetMelee()][4](ply, mv, cmd)
@@ -270,7 +298,7 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 		return
 	end
 
-	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 and ply:GetMelee() >= 5 and not ply:OnGround() then
+	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 and (ply:GetMelee() >= 5 and ply:GetMelee() < 7) and not ply:OnGround() then
 		if kickglitch:GetInt() == 1 and mv:KeyDown(IN_JUMP) then
 			local vel = mv:GetVelocity()
 			vel:Mul(1.25)
@@ -305,7 +333,7 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 		ply:SetMelee(0)
 	end
 
-	if KeyMelee(ply, mv) and ply:GetMeleeDelay() < CurTime() and ply:GetMeleeTime() == 0 and not ply:GetCrouchJump() and not ply:GetJumpTurn() and ply:GetClimbing() == 0 and ply:GetMantle() == 0 then
+	if KeyMelee(ply, mv) and ply:GetMeleeDelay() < CurTime() and ply:GetMeleeTime() == 0 and not ply:GetJumpTurn() and ply:GetClimbing() == 0 and ply:GetMantle() == 0 then
 		MeleeCheck(ply, mv, cmd)
 	end
 

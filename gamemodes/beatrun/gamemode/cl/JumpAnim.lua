@@ -58,6 +58,8 @@ fbanims = {
 	crouchtostandleft = true,
 	wallrunverticalstart = true,
 	meleeair = true,
+	jumpcoilkick = true,
+	jumpcoilkickhit = true,
 	fallinguncontrolled = true,
 	stand = true,
 	meslideend = true,
@@ -231,6 +233,8 @@ local events = {
 	jumpwallrunleft = true,
 	meleeslide = true,
 	meleeair = true,
+	jumpcoilkick = true,
+	jumpcoilkickhit = true,
 	disarmscar = true,
 	falluncontrolled = true,
 	meleewrright = true,
@@ -305,6 +309,8 @@ local eventslut = {
 	meleeairhit = "meleeairhit",
 	meleewrleft = "meleewrleft",
 	meleeair = "meleeair",
+	jumpcoilkick = "jumpcoilkick",
+	jumpcoilkickhit = "jumpcoilkickhit",
 	jumpslide = "jumpfast",
 	hangfoldedendhang = "hangfoldedendhang",
 	walkbalancestill = "walkbalancestill",
@@ -348,6 +354,8 @@ local armfollowanims = {
 
 local armlock = {
 	meleeairhit = true,
+	jumpcoilkick = true,
+	jumpcoilkickhit = true,
 	bargein = true,
 	wallrunverticalstart = true,
 	ladderexittoprighthand = true,
@@ -425,6 +433,8 @@ local transitionanims = {
 	meleeairhit = "jumpair",
 	dodgejumpright = "stand",
 	meleeair = "jumpair",
+	jumpcoilkick = "jumpturnland",
+	jumpcoilkickhit =  "crouchstill", --"crouchtostandleft",
 	walkbalancefalloffright = "jumpair",
 	swingjumpoff = "jumpslow",
 	wallrunverticalstart = "wallrunvertical",
@@ -568,6 +578,7 @@ local ignorebac = {
 
 local customspeed = {
 	vaultonto = 1.15,
+	jumpcoilkickhit = 1.5, -- TODO: find a better value/better solution
 	vaultontohigh = 1
 }
 
@@ -646,6 +657,12 @@ local customcamoffset = {
 
 local transitionchecks = {
 	meleeairstill = function(ply)
+		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
+	end,
+	jumpcoilkick = function(ply)
+		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
+	end,
+	jumpcoilkickhit = function(ply) -- meleeairhit doesnt have this check so idk if this should too
 		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
 	end,
 	swingjumpoff = function(ply)
@@ -1961,7 +1978,7 @@ local function JumpThink()
 				BodyAnim:SetSequence(BodyAnim:LookupSequence("jumpair"))
 			end
 
-			if BodyAnimString == "jumpturnfly" or BodyAnimString == "jumpturnflyidle" then
+			if BodyAnimString == "jumpturnfly" or BodyAnimString == "jumpturnflyidle" or BodyAnimString == "jumpcoilkick" then
 				if ply:GetQuickturn() then
 					BodyAnim:SetAngles(ang + Angle(0, 6.5, 0))
 

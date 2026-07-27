@@ -419,7 +419,7 @@ local overdriveInMP = GetConVar("Beatrun_AllowOverdriveInMultiplayer")
 function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
 
-	if ply:GetJumpTurn() and not ply:OnGround() then
+	if ply:GetJumpTurn() and not ply:OnGround() and ply:GetMelee() ~= MELEE_JUMPCOILKICK then
 		if CLIENT then
 			return ArmInterrupt("jumpturnflypiecesign")
 		elseif game.SinglePlayer() then

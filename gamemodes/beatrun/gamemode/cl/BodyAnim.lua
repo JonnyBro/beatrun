@@ -107,11 +107,7 @@ hook.Add("Think", "beatrun_detect_tool", function()
 
 	local class = weapon:GetClass()
 
-	if tools[class] then
-		has_tool_equipped = true
-	else
-		has_tool_equipped = false
-	end
+	has_tool_equipped = tools[class] or false
 end)
 
 local AnimString = "nil"
