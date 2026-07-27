@@ -512,7 +512,7 @@ local function GetBodygroupsString(ent)
 	if not IsValid(ent) then return "" end
 	local num = SafeGetNumBodyGroups(ent)
 	if num <= 0 then return "" end
-	
+
 	local parts = {}
 	for i = 0, num - 1 do
 		local ok, bg = pcall(ent.GetBodygroup, ent, i)
