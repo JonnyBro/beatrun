@@ -1,4 +1,4 @@
-local kickglitch = CreateConVar("Beatrun_KickGlitch", "2", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Kickglitch mode. 0: disabled, 1: datae-style (velocity multiplier), 2: Mirror's Edge-style (invisible platform)", 0, 2)
+local kickglitch = CreateConVar("Beatrun_KickGlitch", "2", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "Kickglitch mode. 0: disabled, 1: datae-style (velocity multiplier), 2: Mirror's Edge-style (invisible platform)", 0, 2)
 
 local tr = {}
 local tr_result = {}
@@ -101,14 +101,14 @@ meleedata[6] = {
 }
 
 meleedata[7] = {
-		"jumpcoilkick", 0.2, 1, function(ply, mv, cmd) -- 0.15 melee time , 1 melee delay ??
+		"jumpcoilkick", 0.2, 1, function(ply, mv, cmd) -- 0.2 melee time , 1 melee delay ??
 			if CLIENT and IsFirstTimePredicted() then
 				ply:CLViewPunch(Angle(0.05, 0, -1))
 			elseif game.SinglePlayer() then
 				ply:ViewPunch(Angle(0.1, 0, -1.5))
 			end
 		end,
-		Angle(-5, 0, -2.5), 50
+		Angle(-5, 0, -2.5), 100
 }
 
 local doors = {
@@ -121,7 +121,7 @@ local function KeyMelee(ply, mv)
 end
 
 local function MeleeType(ply, mv, cmd)
-	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder()) or IsValid(ply:GetSwingbar()) then return 0 end
+	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder()) or IsValid(ply:GetSwingbar()) or ply:GetDive() then return 0 end
 
 	if ply:GetWallrun() ~= 0 then
 		if ply:GetWallrun() == 1 then return ply:GetMelee() end
@@ -137,6 +137,7 @@ local function MeleeType(ply, mv, cmd)
 			ply:SetMelee(MELEE_JUMPCOILKICK)
 			--ply:SetJumpTurn(true) -- there is probably a better way to get people to land on their backs but fuck it
 			ply:SetCrouchJump(false)
+			ply:SetSlidingDelay(CurTime() + 0.4)
 		end
 
 	else
@@ -206,6 +207,8 @@ local function MeleeThink(ply, mv, cmd)
 				ParkourEvent("meleeairhit", ply)
 			elseif ply:GetMelee() == MELEE_JUMPCOILKICK then
 				ParkourEvent("jumpcoilkickhit", ply)
+				ply:SetVelocity(-ply:GetForward() * 120 + Vector(0, 0, 10000)) -- why tf do i have to set the upward velocity that high for such little change
+				--ply:SetVelocity(-ply:GetAimVector() * 200)
 			end
 
 			local ent = tr_result.Entity
@@ -333,7 +336,7 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 		ply:SetMelee(0)
 	end
 
-	if KeyMelee(ply, mv) and ply:GetMeleeDelay() < CurTime() and ply:GetMeleeTime() == 0 and not ply:GetJumpTurn() and ply:GetClimbing() == 0 and ply:GetMantle() == 0 and (not ply:GetCrouchJump() or (ply:GetCrouchJumpTime() -CurTime()) > 0.4) then
+	if KeyMelee(ply, mv) and ply:GetMeleeDelay() < CurTime() and ply:GetMeleeTime() == 0 and not ply:GetJumpTurn() and ply:GetClimbing() == 0 and ply:GetMantle() == 0 and (not ply:GetCrouchJump() or (ply:GetCrouchJumpTime() - CurTime()) > 0.4) then
 		MeleeCheck(ply, mv, cmd)
 	end
 
