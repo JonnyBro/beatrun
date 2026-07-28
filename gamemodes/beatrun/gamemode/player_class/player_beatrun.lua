@@ -1,6 +1,6 @@
 ﻿AddCSLuaFile()
 
-DEFINE_BASECLASS("playr_default")
+DEFINE_BASECLASS("player_default")
 
 if CLIENT then
 	local lframeswepclass = lframeswepclass or ""
