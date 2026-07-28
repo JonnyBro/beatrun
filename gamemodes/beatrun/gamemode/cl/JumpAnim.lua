@@ -660,7 +660,11 @@ local transitionchecks = {
 		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
 	end,
 	jumpcoilkick = function(ply)
-		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
+		BodyLimitY = 5 -- lockang felt too snappy
+		if BodyAnimCycle >= 1 or ply:OnGround() then
+			BodyLimitY = 180
+			return true
+		end
 	end,
 	jumpcoilkickhit = function(ply) -- meleeairhit doesnt have this check so idk if this should too
 		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
@@ -1193,6 +1197,12 @@ eventsounds = {
 	meleeairstill = {
 		[0.015] = "Cloth.MovementRun",
 		[0.025] = "Melee.LegSwoosh",
+		[0.065] = "Faith.StrainHard",
+		[0.2] = "Cloth.MovementWalk"
+	},
+	jumpcoilkick = {
+		[0.015] = "Cloth.MovementRun",
+		[0.020] = "Melee.LegSwoosh",
 		[0.065] = "Faith.StrainHard",
 		[0.2] = "Cloth.MovementWalk"
 	},

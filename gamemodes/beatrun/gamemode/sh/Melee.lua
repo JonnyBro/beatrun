@@ -1,4 +1,5 @@
 local kickglitch = CreateConVar("Beatrun_KickGlitch", "2", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "Kickglitch mode. 0: disabled, 1: datae-style (velocity multiplier), 2: Mirror's Edge-style (invisible platform)", 0, 2)
+local dropkick_dmg = CreateConVar("Beatrun_DropkickDmg", "100", { FCVAR_REPLICATED, FCVAR_ARCHIVE }, "Custom Dropkick damage" , 0)
 
 local tr = {}
 local tr_result = {}
@@ -100,7 +101,7 @@ meleedata[6] = {
 	Angle(-5, 0, -2.5), 80
 }
 
-meleedata[7] = {
+meleedata[MELEE_JUMPCOILKICK] = {
 		"jumpcoilkick", 0.2, 1, function(ply, mv, cmd) -- 0.2 melee time , 1 melee delay ??
 			if CLIENT and IsFirstTimePredicted() then
 				ply:CLViewPunch(Angle(0.05, 0, -1))
@@ -108,7 +109,7 @@ meleedata[7] = {
 				ply:ViewPunch(Angle(0.1, 0, -1.5))
 			end
 		end,
-		Angle(-5, 0, -2.5), 100
+		Angle(-5, 0, -2.5), dropkick_dmg:GetFloat() or 100
 }
 
 local doors = {
@@ -135,7 +136,6 @@ local function MeleeType(ply, mv, cmd)
 
 		if ply:GetCrouchJump() then -- TODO: find a cleaner way to set the melee type
 			ply:SetMelee(MELEE_JUMPCOILKICK)
-			--ply:SetJumpTurn(true) -- there is probably a better way to get people to land on their backs but fuck it
 			ply:SetCrouchJump(false)
 			ply:SetSlidingDelay(CurTime() + 0.4)
 		end
@@ -164,9 +164,16 @@ local function MeleeCheck(ply, mv, cmd)
 	if ply.MeleeDir:Length() < 1 then
 		ply.MeleeDir = ply:GetAimVector()
 	end
+
+	if melee == MELEE_JUMPCOILKICK and ply.MeleeDir.z < 0 then
+		-- prevents players hitting the ground and cancelling the jumpturnland even thought they didnt hit "anything"
+		ply.MeleeDir.z = 0
+	end
+
 end
 
 local function MeleeThink(ply, mv, cmd)
+	meleedata[ply:GetMelee()][6] = dropkick_dmg:GetFloat() or 100
 	if ply:GetMeleeTime() <= CurTime() then
 		if ply:GetMelee() == MELEE_WRLEFT or ply:GetMelee() == MELEE_WRRIGHT then
 			ply.MeleeDir = ply:GetAimVector()
@@ -207,7 +214,7 @@ local function MeleeThink(ply, mv, cmd)
 				ParkourEvent("meleeairhit", ply)
 			elseif ply:GetMelee() == MELEE_JUMPCOILKICK then
 				ParkourEvent("jumpcoilkickhit", ply)
-				ply:SetVelocity(-ply:GetForward() * 120 + Vector(0, 0, 10000)) -- why tf do i have to set the upward velocity that high for such little change
+				mv:SetVelocity(-ply:GetForward() * 100 + Vector(0, 0, 175))
 				--ply:SetVelocity(-ply:GetAimVector() * 200)
 			end
 
