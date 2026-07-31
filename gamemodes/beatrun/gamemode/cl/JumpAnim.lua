@@ -433,8 +433,8 @@ local transitionanims = {
 	meleeairhit = "jumpair",
 	dodgejumpright = "stand",
 	meleeair = "jumpair",
-	jumpcoilkick = "jumpturnland",
-	jumpcoilkickhit =  "jumpair", --"crouchstill", --"crouchtostandleft",
+	jumpcoilkick = "jumpturnfly",
+	jumpcoilkickhit =  "jumpair",
 	walkbalancefalloffright = "jumpair",
 	swingjumpoff = "jumpslow",
 	wallrunverticalstart = "wallrunvertical",
@@ -662,12 +662,18 @@ local transitionchecks = {
 	jumpcoilkick = function(ply)
 		BodyLimitY = 5 -- lockang felt too snappy
 		if BodyAnimCycle >= 1 or ply:OnGround() then
-			BodyLimitY = 180
+			BodyLimitX = 40
+			BodyLimitY = 75
 			return true
 		end
 	end,
-	jumpcoilkickhit = function(ply) -- meleeairhit doesnt have this check so idk if this should too
-		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
+	jumpcoilkickhit = function(ply)
+		BodyLimitY = 20
+		if BodyAnimCycle >= 1 or ply:OnGround() then
+			BodyLimitX = 90 -- reset it just incase
+			BodyLimitY = 180
+			return true
+		end
 	end,
 	swingjumpoff = function(ply)
 		if BodyAnimCycle >= 0.15 or ply:OnGround() then
@@ -1988,7 +1994,7 @@ local function JumpThink()
 				BodyAnim:SetSequence(BodyAnim:LookupSequence("jumpair"))
 			end
 
-			if BodyAnimString == "jumpturnfly" or BodyAnimString == "jumpturnflyidle" or BodyAnimString == "jumpcoilkick" then
+			if BodyAnimString == "jumpturnfly" or BodyAnimString == "jumpturnflyidle" then
 				if ply:GetQuickturn() then
 					BodyAnim:SetAngles(ang + Angle(0, 6.5, 0))
 
