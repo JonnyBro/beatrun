@@ -18,6 +18,12 @@ function DoJumpTurn(lookbehind)
 	BodyLimitY = 75
 
 	if lookbehind then
+		--------------------------------------------------
+		-- NORMAL BEATRUN LOOK-BEHIND JUMP TURN
+		--
+		-- This is the original behavior.
+		--------------------------------------------------
+
 		local vel = LocalPlayer():GetVelocity()
 		vel:Normalize()
 		vel.z = 0
@@ -28,6 +34,26 @@ function DoJumpTurn(lookbehind)
 		BodyAnim:SetAngles(ang)
 
 		LocalPlayer().OrigEyeAng = ang
+
+	else
+		--------------------------------------------------
+		-- NORMAL / FORCED JUMP TURN
+		--
+		-- For damage-induced jump turns such as the
+		-- Antlion Guard attack, Beatrun has already
+		-- forced EyeAngles() to the correct direction.
+		--
+		-- BodyAnim should've follow that same direction like in thirdperson.
+		--------------------------------------------------
+
+		local eyeang = LocalPlayer():EyeAngles()
+
+		eyeang.x = 0
+		eyeang.z = 0
+
+		BodyAnim:SetAngles(eyeang)
+
+		LocalPlayer().OrigEyeAng = eyeang
 	end
 end
 
