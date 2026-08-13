@@ -122,7 +122,7 @@ local function KeyMelee(ply, mv)
 end
 
 local function MeleeType(ply, mv, cmd)
-	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder())  or IsValid(ply:GetSwingbar()) or ply:GetDive() or ply:InVehicle() then return 0 end
+	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder())  or IsValid(ply:GetSwingbar()) or ply:GetDive() or ply:InVehicle() or (ply:GetCrouchJump() and not dropkick:GetBool()) then return 0 end
 
 	if ply:GetWallrun() ~= 0 then
 		if ply:GetWallrun() == 1 then return ply:GetMelee() end
