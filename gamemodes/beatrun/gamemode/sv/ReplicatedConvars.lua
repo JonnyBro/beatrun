@@ -5,6 +5,7 @@ local replicatedConvars = {
 	["Beatrun_AllowPropSpawn"] = true,
 	["Beatrun_AllowWeaponSpawn"] = true,
 	["Beatrun_Disarm"] = true,
+	["Beatrun_Dropkick"] = true,
 	["Beatrun_HealthRegen"] = true,
 	["Beatrun_InfectionGameTime"] = true,
 	["Beatrun_InfectionStartTime"] = true,

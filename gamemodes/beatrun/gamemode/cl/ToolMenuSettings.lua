@@ -301,6 +301,16 @@ hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
 		end
 		panel:AddItem(kickGlitchSelect)
 
+		local dropKickToggle = vgui.Create("DCheckBoxLabel")
+		dropKickToggle:SetText("#beatrun.toolsmenu.moves.dropkick")
+		dropKickToggle:SetDark(true)
+		dropKickToggle:SetChecked(GetConVar("Beatrun_Dropkick"):GetBool())
+		function dropKickToggle:OnChange(value)
+			ChangeConvar("Beatrun_Dropkick", value and 1 or 0)
+		end
+		panel:AddItem(dropKickToggle)
+		panel:ControlHelp("#beatrun.toolsmenu.moves.dropkickdesc")
+
 		local quakeJumpToggle = vgui.Create("DCheckBoxLabel")
 		quakeJumpToggle:SetText("#beatrun.toolsmenu.moves.quakejump")
 		quakeJumpToggle:SetDark(true)
