@@ -464,7 +464,7 @@ end
 function Vault5(ply, mv, ang, t, h)
 	if ply:GetWallrun() == 1 and ply:GetWallrunTime() - CurTime() < 0.75 then return false end
 	if mv:GetVelocity().z < (not ply:GetDive() and -100 or -1000) then return false end
-
+	if ply:GetMelee() then return end -- when u do a vaultontohigh during a melee it would spam sounds and animations 
 	local eyevec = not ply:Crouching() and eyevec or eyevecduck
 	local neckvec = not ply:Crouching() and neckvec or neckvecduck
 

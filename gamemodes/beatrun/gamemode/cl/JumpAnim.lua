@@ -578,7 +578,7 @@ local ignorebac = {
 
 local customspeed = {
 	vaultonto = 1.15,
-	jumpcoilkickhit = 1.5, -- TODO: find a better value/better solution
+	jumpcoilkickhit = 1.2,
 	vaultontohigh = 1
 }
 
@@ -661,7 +661,7 @@ local transitionchecks = {
 	end,
 	jumpcoilkick = function(ply)
 		BodyLimitY = 5 -- lockang felt too snappy
-		if BodyAnimCycle >= 1 or ply:OnGround() then
+		if BodyAnimCycle >= 1 or (ply:OnGround() and BodyAnimCycle >= 0.52) then
 			BodyLimitX = 40
 			BodyLimitY = 75
 			return true

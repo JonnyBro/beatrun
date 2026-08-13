@@ -122,7 +122,7 @@ local function KeyMelee(ply, mv)
 end
 
 local function MeleeType(ply, mv, cmd)
-	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder()) or IsValid(ply:GetSwingbar()) or ply:GetDive() then return 0 end
+	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder())  or IsValid(ply:GetSwingbar()) or ply:GetDive() or ply:InVehicle() then return 0 end
 
 	if ply:GetWallrun() ~= 0 then
 		if ply:GetWallrun() == 1 then return ply:GetMelee() end
@@ -168,7 +168,6 @@ local function MeleeCheck(ply, mv, cmd)
 	end
 end
 
-local jumpcoilkick_knockbackUp = Vector(0, 0, 150)
 local function MeleeThink(ply, mv, cmd)
 	if ply:GetMeleeTime() <= CurTime() then
 		if ply:GetMelee() == MELEE_WRLEFT or ply:GetMelee() == MELEE_WRRIGHT then
@@ -217,7 +216,7 @@ local function MeleeThink(ply, mv, cmd)
 					ply:SendLua("LocalPlayer().hardlandtime = CurTime() + 1")
 				end
 
-				mv:SetVelocity(-ply.MeleeDir * 90 + jumpcoilkick_knockbackUp)
+				mv:SetVelocity(-ply.MeleeDir * 90 + Vector(0, 0, 150))
 				--mv:SetVelocity(-ply:GetForward * 90 +jumpcoilkick_knockbackUp)
 			end
 
@@ -256,7 +255,7 @@ local function MeleeThink(ply, mv, cmd)
 
 				if ent:IsNPC() then
 					ent:SetActivity(ACT_FLINCH_HEAD)
-					if ply:GetMelee() == MELEE_JUMPCOILKICK then ent:SetVelocity(ply.MeleeDir * 220 + Vector(0, 0, 50)) end
+					--if ply:GetMelee() == MELEE_JUMPCOILKICK then ent:SetVelocity(ply.MeleeDir * 220 + Vector(0, 0, 50)) end
 				end
 
 				if doors[ent:GetClass()] then
