@@ -1,8 +1,10 @@
-local kickglitch = CreateConVar("Beatrun_KickGlitch", "2", {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Kickglitch mode. 0: disabled, 1: datae-style (velocity multiplier), 2: Mirror's Edge-style (invisible platform)", 0, 2)
+local kickglitch = CreateConVar("Beatrun_KickGlitch", "2", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "Kickglitch mode. 0: disabled, 1: datae-style (velocity multiplier), 2: Mirror's Edge-style (invisible platform)", 0, 2)
+local dropkick = CreateConVar("Beatrun_Dropkick", "1", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "Attack during a crouch jump to do a dropkick", 0, 1)
 
 local tr = {}
 local tr_result = {}
 
+MELEE_JUMPCOILKICK = 7
 MELEE_WRRIGHT = 6
 MELEE_WRLEFT = 5
 MELEE_DROPKICK = 4
@@ -49,7 +51,7 @@ local meleedata = {
 	}
 }
 
-meleedata[5] = {
+meleedata[MELEE_WRLEFT] = {
 	"meleewrleft", 0.2, 0.75, function(ply, mv, cmd)
 		if CLIENT and IsFirstTimePredicted() then
 			ply:CLViewPunch(Angle(0.075, 0, 1))
@@ -74,7 +76,7 @@ meleedata[5] = {
 	Angle(-5, 0, 2.5), 80
 }
 
-meleedata[6] = {
+meleedata[MELEE_WRRIGHT] = {
 	"meleewrright", 0.2, 0.75, function(ply, mv, cmd)
 		if CLIENT and IsFirstTimePredicted() then
 			ply:CLViewPunch(Angle(0.075, 0, -1))
@@ -99,6 +101,17 @@ meleedata[6] = {
 	Angle(-5, 0, -2.5), 80
 }
 
+meleedata[MELEE_JUMPCOILKICK] = {
+		"jumpcoilkick", 0.25, 1, function(ply, mv, cmd) -- 2nd value is melee time, 3rd one is melee delay
+			if CLIENT and IsFirstTimePredicted() then
+				ply:CLViewPunch(Angle(0.05, 0, -1))
+			elseif game.SinglePlayer() then
+				ply:ViewPunch(Angle(0.1, 0, -1.5))
+			end
+		end,
+		Angle(-5, 0, -2.5), 70
+}
+
 local doors = {
 	prop_door_rotating = true,
 	func_door_rotating = true
@@ -109,7 +122,7 @@ local function KeyMelee(ply, mv)
 end
 
 local function MeleeType(ply, mv, cmd)
-	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder()) or IsValid(ply:GetSwingbar()) then return 0 end
+	if IsValid(ply:GetZipline()) or ply:GetGrappling() or IsValid(ply:GetLadder())  or IsValid(ply:GetSwingbar()) or ply:GetDive() or ply:InVehicle() or (ply:GetCrouchJump() and not dropkick:GetBool()) then return 0 end
 
 	if ply:GetWallrun() ~= 0 then
 		if ply:GetWallrun() == 1 then return ply:GetMelee() end
@@ -119,7 +132,15 @@ local function MeleeType(ply, mv, cmd)
 		local vel = mv:GetVelocity()
 		vel.z = 0
 
-		ply:SetMelee(vel:Length() > 100 and MELEE_DROPKICK or MELEE_AIRKICK)
+		local melee = vel:Length() > 100 and MELEE_DROPKICK or MELEE_AIRKICK
+
+		if ply:GetCrouchJump() and dropkick:GetBool() then
+			melee = MELEE_JUMPCOILKICK
+			ply:SetCrouchJump(false)
+			ply:SetSlidingDelay(CurTime() + 0.4)
+		end
+
+		ply:SetMelee(melee)
 	else
 		ply:SetMelee(ply:GetSliding() and not ply.DiveSliding and MELEE_SLIDEKICK or 0)
 	end
@@ -143,6 +164,7 @@ local function MeleeCheck(ply, mv, cmd)
 
 	if ply.MeleeDir:Length() < 1 then
 		ply.MeleeDir = ply:GetAimVector()
+		if melee == MELEE_JUMPCOILKICK  and ply.MeleeDir.z < 0 then ply.MeleeDir.z = 0 end -- makes it harder to hit the ground to cancel the jumpturn landing
 	end
 end
 
@@ -170,7 +192,7 @@ local function MeleeThink(ply, mv, cmd)
 
 		ply:LagCompensation(false)
 
-		if ply:GetMelee() >= 5 then
+		if ply:GetMelee() == 5 or ply:GetMelee() == 6 then
 			local vel = mv:GetVelocity()
 			-- why is getwallrundir in the thousands?
 			vel:Add(ply:GetWallrunDir():GetNormalized() * 0.5 * vel:Length())
@@ -185,6 +207,17 @@ local function MeleeThink(ply, mv, cmd)
 
 			if ply:GetMelee() == MELEE_DROPKICK then
 				ParkourEvent("meleeairhit", ply)
+			elseif ply:GetMelee() == MELEE_JUMPCOILKICK then
+				ParkourEvent("jumpcoilkickhit", ply)
+
+				if CLIENT and IsFirstTimePredicted() then -- something to make the jumpcoilkick less OP
+					ply.hardlandtime = CurTime() + 1
+				elseif game.SinglePlayer() then
+					ply:SendLua("LocalPlayer().hardlandtime = CurTime() + 1")
+				end
+
+				mv:SetVelocity(-ply.MeleeDir * 90 + Vector(0, 0, 150))
+				--mv:SetVelocity(-ply:GetForward * 90 +jumpcoilkick_knockbackUp)
 			end
 
 			local ent = tr_result.Entity
@@ -205,7 +238,7 @@ local function MeleeThink(ply, mv, cmd)
 					timer.Simple(0, function()
 						local BLEH = ents.Create("prop_physics")
 						BLEH:SetPos(tr_result.HitPos)
-						BLEH:SetAngles(Angle(0, 0, 0))
+						BLEH:SetAngles(angle_zero)
 						BLEH:SetModel("models/props_junk/wood_crate001a.mdl")
 						BLEH:SetNoDraw(true)
 						BLEH:SetCollisionGroup(COLLISION_GROUP_WORLD)
@@ -222,6 +255,7 @@ local function MeleeThink(ply, mv, cmd)
 
 				if ent:IsNPC() then
 					ent:SetActivity(ACT_FLINCH_HEAD)
+					--if ply:GetMelee() == MELEE_JUMPCOILKICK then ent:SetVelocity(ply.MeleeDir * 220 + Vector(0, 0, 50)) end
 				end
 
 				if doors[ent:GetClass()] then
@@ -254,8 +288,10 @@ local function MeleeThink(ply, mv, cmd)
 			end
 
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
-				util.ScreenShake(Vector(0, 0, 0), 2.5, 10, 0.25, 0)
+				util.ScreenShake(vector_origin, 2.5, 10, 0.25, 0)
 			end
+		elseif ply:GetMelee() == MELEE_JUMPCOILKICK then
+			ply:SetJumpTurn(true) -- if we dont hit anything we will fall on our back
 		end
 	else
 		meleedata[ply:GetMelee()][4](ply, mv, cmd)
@@ -270,7 +306,7 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 		return
 	end
 
-	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 and ply:GetMelee() >= 5 and not ply:OnGround() then
+	if ply:GetMeleeDelay() < CurTime() and ply:GetMelee() ~= 0 and (ply:GetMelee() == 5 or ply:GetMelee() == 6) and not ply:OnGround() then
 		if kickglitch:GetInt() == 1 and mv:KeyDown(IN_JUMP) then
 			local vel = mv:GetVelocity()
 			vel:Mul(1.25)
@@ -305,7 +341,7 @@ hook.Add("SetupMove", "Melee", function(ply, mv, cmd)
 		ply:SetMelee(0)
 	end
 
-	if KeyMelee(ply, mv) and ply:GetMeleeDelay() < CurTime() and ply:GetMeleeTime() == 0 and not ply:GetCrouchJump() and not ply:GetJumpTurn() and ply:GetClimbing() == 0 and ply:GetMantle() == 0 then
+	if KeyMelee(ply, mv) and ply:GetMeleeDelay() < CurTime() and ply:GetMeleeTime() == 0 and not ply:GetJumpTurn() and ply:GetClimbing() == 0 and ply:GetMantle() == 0 and (not ply:GetCrouchJump() or (ply:GetCrouchJumpTime() - CurTime()) > 0.4) then
 		MeleeCheck(ply, mv, cmd)
 	end
 

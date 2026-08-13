@@ -4,6 +4,7 @@
 --]]
 
 CourseGhost = CreateClientConVar("Beatrun_CourseGhost", "1", true, false, "", 0, 1)
+local ConVar_GhostTransparency = CreateClientConVar("Beatrun_CourseGhostTransparency", "50", true, false, "NOTE: some Playermodels will be capped to 30% transparency to avoid graphical issues", 0, 100)
 
 local Ghost_data = {}
 local Ghost_dataBuffer = {}
@@ -85,7 +86,6 @@ function StartGhostRecording()
 	hook.Add("CreateMove", "GhostRecording", GhostRecording)
 end
 
-local Ghost_transparency = 0.5
 
 local function GhostEntInit()
 	local ply = LocalPlayer()
@@ -109,18 +109,20 @@ local function GhostEntInit()
 		playerGhost:ManipulateBoneJiggle(i, 2) -- disable jigglebones. Why? jigglebones flicker because of the setblend thing
 	end
 
-	Ghost_transparency = 0.5
+	local Ghost_transparency =  1 - (ConVar_GhostTransparency:GetInt() / 100)
 
-	for _, matPath in ipairs(playerGhost:GetMaterials()) do
-		local mat = Material(matPath)
-		-- gmodwiki.com/IMaterial:GetInt
-		-- Please note that certain material flags such as $alphatest are stored in the $flags variable and cannot be directly set with this function.
-		-- $alphatest = 256
-		if bit.band(mat:GetInt("$flags"), 256) ~= 0 then
-			-- gmodwiki.com/render.SetBlend
-			-- If a material has the $alphatest flag enabled then this function might not behave as expected because alpha will be binary, this has a default cutoff of 0.7
-			Ghost_transparency = 0.7
-			break
+	if Ghost_transparency < 0.7 then -- only matters when we are above 30%
+		for _, matPath in ipairs(playerGhost:GetMaterials()) do
+			local mat = Material(matPath)
+			-- gmodwiki.com/IMaterial:GetInt
+			-- Please note that certain material flags such as $alphatest are stored in the $flags variable and cannot be directly set with this function.
+			-- $alphatest = 256
+			if bit.band(mat:GetInt("$flags"), 256) ~= 0 then
+				-- gmodwiki.com/render.SetBlend
+				-- If a material has the $alphatest flag enabled then this function might not behave as expected because alpha will be binary, this has a default cutoff of 0.7
+				Ghost_transparency = 0.7
+				break
+			end
 		end
 	end
 

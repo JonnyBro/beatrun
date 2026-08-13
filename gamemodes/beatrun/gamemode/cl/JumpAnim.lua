@@ -58,6 +58,8 @@ fbanims = {
 	crouchtostandleft = true,
 	wallrunverticalstart = true,
 	meleeair = true,
+	jumpcoilkick = true,
+	jumpcoilkickhit = true,
 	fallinguncontrolled = true,
 	stand = true,
 	meslideend = true,
@@ -231,6 +233,8 @@ local events = {
 	jumpwallrunleft = true,
 	meleeslide = true,
 	meleeair = true,
+	jumpcoilkick = true,
+	jumpcoilkickhit = true,
 	disarmscar = true,
 	falluncontrolled = true,
 	meleewrright = true,
@@ -305,6 +309,8 @@ local eventslut = {
 	meleeairhit = "meleeairhit",
 	meleewrleft = "meleewrleft",
 	meleeair = "meleeair",
+	jumpcoilkick = "jumpcoilkick",
+	jumpcoilkickhit = "jumpcoilkickhit",
 	jumpslide = "jumpfast",
 	hangfoldedendhang = "hangfoldedendhang",
 	walkbalancestill = "walkbalancestill",
@@ -348,6 +354,8 @@ local armfollowanims = {
 
 local armlock = {
 	meleeairhit = true,
+	jumpcoilkick = true,
+	jumpcoilkickhit = true,
 	bargein = true,
 	wallrunverticalstart = true,
 	ladderexittoprighthand = true,
@@ -425,6 +433,8 @@ local transitionanims = {
 	meleeairhit = "jumpair",
 	dodgejumpright = "stand",
 	meleeair = "jumpair",
+	jumpcoilkick = "jumpturnfly",
+	jumpcoilkickhit =  "jumpair",
 	walkbalancefalloffright = "jumpair",
 	swingjumpoff = "jumpslow",
 	wallrunverticalstart = "wallrunvertical",
@@ -568,6 +578,7 @@ local ignorebac = {
 
 local customspeed = {
 	vaultonto = 1.15,
+	jumpcoilkickhit = 1.2,
 	vaultontohigh = 1
 }
 
@@ -647,6 +658,22 @@ local customcamoffset = {
 local transitionchecks = {
 	meleeairstill = function(ply)
 		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
+	end,
+	jumpcoilkick = function(ply)
+		BodyLimitY = 5 -- lockang felt too snappy
+		if BodyAnimCycle >= 1 or (ply:OnGround() and BodyAnimCycle >= 0.52) then
+			BodyLimitX = 40
+			BodyLimitY = 75
+			return true
+		end
+	end,
+	jumpcoilkickhit = function(ply)
+		BodyLimitY = 20
+		if BodyAnimCycle >= 1 or ply:OnGround() then
+			BodyLimitX = 90 -- reset it just incase
+			BodyLimitY = 180
+			return true
+		end
 	end,
 	swingjumpoff = function(ply)
 		if BodyAnimCycle >= 0.15 or ply:OnGround() then
@@ -1176,6 +1203,12 @@ eventsounds = {
 	meleeairstill = {
 		[0.015] = "Cloth.MovementRun",
 		[0.025] = "Melee.LegSwoosh",
+		[0.065] = "Faith.StrainHard",
+		[0.2] = "Cloth.MovementWalk"
+	},
+	jumpcoilkick = {
+		[0.015] = "Cloth.MovementRun",
+		[0.020] = "Melee.LegSwoosh",
 		[0.065] = "Faith.StrainHard",
 		[0.2] = "Cloth.MovementWalk"
 	},
