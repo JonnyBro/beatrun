@@ -409,7 +409,12 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 
 		if ply:GetDive() then
-			ply.DiveSliding = true
+			if ply:OnGround() and ply:GetSafetyRollKeyTime() <= CurTime() then -- this whole section was taken out of the dive hook, some addons manage to somehow change the hook order and the dive slide breaks bcz of that
+				ply.DiveSliding = true
+				ply:SetDive(false)
+			elseif ply:OnGround() and mv:KeyDown(IN_BULLRUSH) then
+				mv:SetButtons(0)
+			end
 		end
 
 		ply:SetViewOffset(Vector(0, 0, 64))
@@ -455,7 +460,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		if game.SinglePlayer() then
 			net.Start("sliding_spfix")
-				net.WriteBool(ply:GetDive())
+				net.WriteBool(ply.DiveSliding)
 			net.Send(ply)
 		end
 
@@ -610,6 +615,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				cmd:SetViewAngles(ply:GetSlidingAngle())
 			end
+			
 
 			ply.DiveSliding = false
 			ply:SetSlidingTime(0)

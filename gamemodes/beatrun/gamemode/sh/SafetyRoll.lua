@@ -140,7 +140,7 @@ net.Receive("RollAnimSP", function()
 end)
 
 hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
-	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) then
+	if ply:GetJumpTurn() and ply:OnGround() and mv:KeyPressed(IN_BACK) and not ply:GetQuickturn() then
 		if SERVER then
 			ply:DrawViewModel(false)
 		end
