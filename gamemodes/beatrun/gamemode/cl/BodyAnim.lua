@@ -505,12 +505,26 @@ function StartBodyAnim(animtable)
 	BodyAnimMDL:AddEffects(EF_BONEMERGE)
 	BodyAnim:SetSequence(AnimString)
 
-	if tobool(showweapon) and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetModel() ~= "" then
-		BodyAnimWEPMDL = ClientsideModel(ply:GetActiveWeapon():GetModel(), RENDERGROUP_BOTH)
+	local wpn = ply:GetActiveWeapon()
+
+	if tobool(showweapon) and IsValid(wpn) and wpn:GetModel() ~= "" then
+		BodyAnimWEPMDL = ClientsideModel(wpn:GetModel(), RENDERGROUP_BOTH)
 		BodyAnimWEPMDL:SetPos(ply:GetPos())
 		BodyAnimWEPMDL:SetAngles(Angle(0, EyeAngles().y, 0))
 		BodyAnimWEPMDL:SetParent(BodyAnim)
 		BodyAnimWEPMDL:AddEffects(EF_BONEMERGE)
+		BodyAnimWEPMDL:SetSkin(wpn:GetSkin())
+
+		if weapons.IsBasedOn(wpn:GetClass(), "mg_base") and wpn.WorldModelOffsets then
+
+			local bone = mw_utils.LookupBoneCached(BodyAnimWEPMDL, wpn.WorldModelOffsets.Bone)
+			if (bone ~= nil and bone > 0) then
+				BodyAnimWEPMDL:ManipulateBoneAngles(bone, wpn.WorldModelOffsets.Angles)
+				BodyAnimWEPMDL:ManipulateBonePosition(bone, wpn.WorldModelOffsets.Pos)
+				--BodyAnimWEPMDL:ManipulateBoneAngles(bone, angle_zero)
+				--BodyAnimWEPMDL:ManipulateBonePosition(bone, angle_origin)
+			end
+		end
 	end
 
 	if BodyAnimMDL:LookupBone("ValveBiped.Bip01_Head1") ~= nil and not ply:ShouldDrawLocalPlayer() then
