@@ -71,7 +71,7 @@ function PLAYER:SetupDataTables()
 	self.Player:NetworkVar("Angle", 0, "SafetyRollAng")
 
 	self.Player:NetworkVar("Bool", 4, "Quickturn")
-	self.Player:NetworkVar("Float", 10, "QuickturnTime")
+	self.Player:NetworkVar("Float", 30, "QuickturnTime")
 	self.Player:NetworkVar("Angle", 1, "QuickturnAng")
 
 	self.Player:NetworkVar("Bool", 5, "WallrunElevated")
