@@ -85,6 +85,10 @@ local function Dive(ply, mv, cmd)
 		end
 
 		mv:AddKey(IN_DUCK)
+
+		if ply:OnGround() and mv:KeyDown(IN_BULLRUSH) and ply:GetSafetyRollKeyTime() > CurTime() then
+			mv:SetButtons(0)
+		end
 	end
 end
 
