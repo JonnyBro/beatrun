@@ -142,7 +142,7 @@ local function MeleeType(ply, mv, cmd)
 
 		ply:SetMelee(melee)
 	else
-		ply:SetMelee(ply:GetSliding() and not ply.DiveSliding and MELEE_SLIDEKICK or 0)
+		ply:SetMelee(ply:GetSliding() and not ply:GetDiveSliding() and MELEE_SLIDEKICK or 0)
 	end
 
 	return ply:GetMelee()

@@ -73,7 +73,7 @@ local function Dive(ply, mv, cmd)
 		if ply:GetMoveType() == MOVETYPE_NOCLIP or ply:WaterLevel() >= 3 or not ply:Alive() then
 			ply:SetDive(false)
 			ply:SetCrouchJump(false)
-			ply.DiveSliding = false
+			ply:SetDiveSliding(false)
 
 			ParkourEvent("diveslideend", ply)
 

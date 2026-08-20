@@ -105,7 +105,7 @@ local function SlidingAnimStart()
 		VMLegs:Remove()
 	end
 
-	if game.SinglePlayer() and not net.ReadBool() or not game.SinglePlayer() and not ply.DiveSliding then
+	if not ply:GetDiveSliding() then
 		CamIgnoreAng = false
 		camjoint = ply:GetSlidingSlippery() and "eyes" or "CameraJoint"
 
@@ -132,10 +132,12 @@ local function SlidingAnimStart()
 	hook.Add("Think", "SlidingAnimThink", SlidingAnimThink)
 end
 
-local function SlidingAnimEnd(slippery, diving)
+local function SlidingAnimEnd(slippery, diving) --  , diving
 	if not IsValid(BodyAnim) then return end
 
 	local ply = LocalPlayer()
+
+	local isDiveSliding = game.SinglePlayer() and diving or ply:GetDiveSliding()
 
 	if ply:GetJumpTurn() then
 		camjoint = "eyes"
@@ -145,16 +147,16 @@ local function SlidingAnimEnd(slippery, diving)
 	end
 
 	if not slippery then
-		if not ply.DiveSliding and not diving then
+		if not isDiveSliding then --  and not diving
 			local crouchEnd = PlayerCannotStand(ply)
 			local endAnim = crouchEnd and "meslideendcrouch" or "meslideend"
 
 			BodyAnimString = endAnim
 			BodyAnim:ResetSequence(endAnim)
 		else
-			ply.DiveSliding = false
+			--ply:SetDiveSliding(false)
 
-			local crouchEnd = PlayerCannotStand(ply)
+			local crouchEnd = PlayerCannotStand(ply) or ply:KeyDown(IN_DUCK)
 			local endAnim = crouchEnd and "diveslideendcrouch" or "diveslideend"
 
 			ParkourEvent(endAnim, ply, true)
@@ -240,7 +242,7 @@ local function SlideSurfaceSound(ply, pos)
 	local handstep = HANDSTEPS_SOFT_LUT[tr.MatType] or "ConcreteSoft"
 
 	ply:EmitSound("Cloth.FallShortMedium")
-	if not ply.DiveSliding then
+	if not ply:GetDiveSliding() then
 		ply:EmitSound("Handsteps." .. handstep)
 	end
 	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
@@ -405,12 +407,12 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			vel = 230
 
 			ply:SetDive(false)
-			ply.DiveSliding = false
+			ply:SetDiveSliding(false)
 		end
 
 		if ply:GetDive() then
 			--if ply:OnGround() and ply:GetSafetyRollKeyTime() <= CurTime() then -- this whole section was taken out of the dive hook, some addons manage to somehow change the hook order and the dive slide breaks bcz of that
-			ply.DiveSliding = true
+			ply:SetDiveSliding(true)
 			ply:SetDive(false)
 			--end
 		end
@@ -429,7 +431,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		ply:SetUnDuckSpeed(0.05)
 
 		if not slippery then
-			if not ply.DiveSliding then
+			if not ply:GetDiveSliding() then
 				ply:SetSlidingAngle(mv:GetVelocity():Angle())
 			else
 				local ang = cmd:GetViewAngles()
@@ -458,7 +460,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		if game.SinglePlayer() then
 			net.Start("sliding_spfix")
-				net.WriteBool(ply.DiveSliding)
+				--net.WriteBool(ply:GetDiveSliding())
 			net.Send(ply)
 		end
 
@@ -508,15 +510,12 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			net.Start("sliding_spend")
 				net.WriteBool(blocked)
 				net.WriteBool(false)
-				net.WriteBool(ply.DiveSliding)
+				net.WriteBool(ply:GetDiveSliding())
 			net.Send(ply)
-
-			ply.DiveSliding = false
 		elseif CLIENT and IsFirstTimePredicted() then
-			SlidingAnimEnd(false, ply.DiveSliding)
-
-			ply.DiveSliding = false
+			SlidingAnimEnd(false)
 		end
+		ply:SetDiveSliding(false)
 
 		ply:SetSlidingDelay(CT + 0.1)
 
@@ -609,12 +608,12 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			end
 		end
 
-		if mv:KeyPressed(IN_BACK) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 and not ply:GetQuickturn() then
+		if mv:KeyPressed(IN_BACK) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 then
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				cmd:SetViewAngles(ply:GetSlidingAngle())
 			end
 
-			ply.DiveSliding = false
+			ply:SetDiveSliding(false)
 			ply:SetSlidingTime(0)
 			ply:SetSliding(false)
 			ply:SetQuickturn(true)
@@ -651,28 +650,16 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			ply:SetSlidingTime(0)
 			ply:ViewPunch(Angle(0.85, 0, 0.15))
 
-			if SERVER and game.SinglePlayer() then
-				net.Start("sliding_spend")
-					net.WriteBool(false)
-					net.WriteBool(slippery)
-					net.WriteBool(ply.DiveSliding)
-				net.Send(ply)
-			elseif CLIENT and IsFirstTimePredicted() then
-				SlidingAnimEnd(slippery, ply.DiveSliding)
-			end
-
 			ply:SetSlidingDelay(CT + 0.1)
 
 			if SERVER then
 				ply.SlideLoopSound:FadeOut(0.15)
 			end
 
-			ply.DiveSliding = false
-
-			if not mv:KeyDown(IN_ATTACK2) or mv:KeyDown(IN_FORWARD) then
+			if (not mv:KeyDown(IN_ATTACK2) or mv:KeyDown(IN_FORWARD)) and not ply:GetDiveSliding() then
 				ply:ConCommand("-duck")
 				ply:SetViewOffsetDucked(Vector(0, 0, 32))
-			else
+			elseif not ply:GetDiveSliding() then
 				ply:SetViewOffsetDucked(Vector(0, 0, 17))
 				ply:SetViewOffset(Vector(0, 0, 64))
 				ply:SetJumpTurn(true)
@@ -685,6 +672,18 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 					ply:SendLua("DoJumpTurn(false) BodyAnim:SetSequence('meslideendprone')")
 				end
 			end
+
+			if SERVER and game.SinglePlayer() then
+					net.Start("sliding_spend")
+					net.WriteBool(false)
+					net.WriteBool(slippery)
+					net.WriteBool(ply:GetDiveSliding())
+					net.Send(ply)
+			elseif CLIENT and IsFirstTimePredicted() then
+				SlidingAnimEnd(slippery)
+			end
+
+			ply:SetDiveSliding(false)
 		end
 	end
 

@@ -122,6 +122,7 @@ function PLAYER:SetupDataTables()
 	self.Player:NetworkVar("Entity", 6, "BalanceEntity")
 
 	self.Player:NetworkVar("Bool", 13, "Dive")
+	self.Player:NetworkVar("Bool", 14, "DiveSliding")
 end
 
 function PLAYER:Loadout()
@@ -338,10 +339,11 @@ function meta:ResetParkourState()
 	self:SetMeleeDelay(0)
 	self:SetJumpTurn(false)
 	self:SetDive(false)
+	self:SetDiveSliding(false)
 	self:SetViewOffsetDucked(Vector(0, 0, 32))
 
 	self.Swingrope = nil
-	self.DiveSliding = false
+	--self.DiveSliding = false
 
 	ParkourEvent("jump", self)
 
@@ -349,7 +351,7 @@ function meta:ResetParkourState()
 end
 
 function meta:SaveParkourState()
-	self.ParkourSave = { self:GetSliding(), self:GetCrouchJump(), self:GetQuickturn(), self:GetGrappling(), self:GetSwingbar(), self:GetZipline(), self:GetLadder(), self:GetMantle(), self:GetWallrun(), self:GetMEMoveLimit(), self:GetMESprintDelay(), self:GetMEAng(), self:GetClimbing(), self:GetClimbingTime(), self:GetWallrunTime(), self:GetWallrunSoundTime(), self:GetSlidingTime(), self:GetSlidingDelay(), self:GetCrouchJumpTime(), self:GetSafetyRollKeyTime(), self:GetSafetyRollTime(), self:GetQuickturnTime(), self:GetJumpTurn(), self:GetDive(), }
+	self.ParkourSave = { self:GetSliding(), self:GetCrouchJump(), self:GetQuickturn(), self:GetGrappling(), self:GetSwingbar(), self:GetZipline(), self:GetLadder(), self:GetMantle(), self:GetWallrun(), self:GetMEMoveLimit(), self:GetMESprintDelay(), self:GetMEAng(), self:GetClimbing(), self:GetClimbingTime(), self:GetWallrunTime(), self:GetWallrunSoundTime(), self:GetSlidingTime(), self:GetSlidingDelay(), self:GetCrouchJumpTime(), self:GetSafetyRollKeyTime(), self:GetSafetyRollTime(), self:GetQuickturnTime(), self:GetJumpTurn(), self:GetDive(), self:GetDiveSliding() }
 end
 
 function meta:LoadParkourState()
@@ -380,6 +382,7 @@ function meta:LoadParkourState()
 	self:SetQuickturnTime(save[22])
 	self:SetJumpTurn(save[23])
 	self:SetDive(save[24])
+	self:SetDiveSliding(save[25])
 end
 
 function meta:ResetParkourTimes()
