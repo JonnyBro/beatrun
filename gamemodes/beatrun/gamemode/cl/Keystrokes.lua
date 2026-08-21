@@ -10,6 +10,8 @@ local size = 35
 local function GetFormattedKey(bind)
 	local keyBind = input.LookupBinding(bind)
 
+	if bind == "+attack" and keyBind == "ENTER" and input.LookupKeyBinding(MOUSE_LEFT) == "+attack" then return "LMB" end -- prioritize lmb over enter in +attack
+
 	if keyBind == "MOUSE1" then keyBind = "LMB"
 	elseif keyBind == "MOUSE2" then keyBind = "RMB"
 	elseif keyBind == "MOUSE3" then keyBind = "MMB" end
