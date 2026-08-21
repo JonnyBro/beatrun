@@ -1,6 +1,8 @@
 local qslide_duration = 3
 local qslide_speedmult = 1
 
+local ActuallyHoldingCrouch
+
 local slide_sounds = {
 	[MAT_CONCRETE] = { "Slide.Concrete" },
 	[MAT_SAND] = { "Slide.Gravel" },
@@ -156,7 +158,7 @@ local function SlidingAnimEnd(slippery, diving) --  , diving
 		else
 			--ply:SetDiveSliding(false)
 
-			local crouchEnd = PlayerCannotStand(ply) or ply:KeyDown(IN_DUCK)
+			local crouchEnd = PlayerCannotStand(ply) or ActuallyHoldingCrouch --ply:KeyDown(IN_DUCK)
 			local endAnim = crouchEnd and "diveslideendcrouch" or "diveslideend"
 
 			ParkourEvent(endAnim, ply, true)
@@ -701,6 +703,8 @@ end)
 
 hook.Add("StartCommand", "qslidespeed", function(ply, cmd)
 	if ply:GetSliding() then
+		ActuallyHoldingCrouch = cmd:KeyDown(IN_DUCK) -- this is kinda a hack to get diveslideendcrouch to work properly
+
 		cmd:RemoveKey(IN_SPEED)
 
 		if not ply:GetSlidingSlippery() then
