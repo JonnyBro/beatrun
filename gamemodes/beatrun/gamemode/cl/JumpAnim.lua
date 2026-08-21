@@ -656,6 +656,9 @@ local customcamoffset = {
 }
 
 local transitionchecks = {
+	meleeair = function(ply)
+		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
+	end,
 	meleeairstill = function(ply)
 		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
 	end,
