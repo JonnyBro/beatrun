@@ -162,7 +162,7 @@ local function MeleeCheck(ply, mv, cmd)
 	ply.MeleeDir.z = 0
 	ply.MeleeDir:Normalize()
 
-	if ply.MeleeDir:Length() < 1 then
+	if ply.MeleeDir:Length() < 1 and not ply:GetSliding() then
 		ply.MeleeDir = ply:GetAimVector()
 		if melee == MELEE_JUMPCOILKICK  and ply.MeleeDir.z < 0 then ply.MeleeDir.z = 0 end -- makes it harder to hit the ground to cancel the jumpturn landing
 	end
@@ -176,12 +176,17 @@ local function MeleeThink(ply, mv, cmd)
 
 		ply:ViewPunch(meleedata[ply:GetMelee()][5] or angle_zero)
 		ply:SetMeleeTime(0)
-
-		tr.start = ply:GetShootPos()
-		tr.endpos = ply:GetShootPos() + ply.MeleeDir * 75
+		local offset = not ply:OnGround() and Vector(0, 0, -10) or vector_origin
+		tr.start = ply:GetShootPos() + offset
+		tr.endpos = ply:GetShootPos() + ply.MeleeDir * 75  + offset
 		tr.filter = ply
-		tr.mins = Vector(-8, -8, ply:OnGround() and -8 or -64)
-		tr.maxs = Vector(8, 8, 16)
+		if ply:GetMelee() == MELEE_JUMPCOILKICK then
+			tr.mins = Vector(-12, -12, -46)
+			tr.maxs = Vector(12, 12, 16)
+		else
+			tr.mins = Vector(-8, -8, ply:OnGround() and -8 or -64)
+			tr.maxs = Vector(8, 8, 11)
+		end
 		tr.output = tr_result
 		tr.mask = MASK_SHOT_HULL
 
