@@ -336,7 +336,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 
 	ply:SetMEAng(MEAng)
 
-	if sidestep:GetBool() and usingrh and activewep.GetSideStep and not activewep:GetSideStep() and CurTime() > ply:GetSlidingDelay() - 0.2 and ply:GetClimbing() == 0 and ply:OnGround() and not ply:Crouching() and not cmd:KeyDown(IN_FORWARD) and not cmd:KeyDown(IN_JUMP) and cmd:KeyDown(IN_ATTACK2) and not ply:GetJumpTurn() then
+	if sidestep:GetBool() and usingrh and activewep.GetSideStep and not activewep:GetSideStep() and CurTime() > ply:GetSlidingDelay() - 0.2 and ply:GetClimbing() == 0 and ply:OnGround() and not ply:Crouching() and not cmd:KeyDown(IN_FORWARD) and not cmd:KeyDown(IN_JUMP) and cmd:KeyDown(IN_ATTACK2) and not ply:GetJumpTurn() and not ply:GetSliding() and IsFirstTimePredicted() then
 		if mv:KeyDown(IN_MOVELEFT) then
 			activewep:SendWeaponAnim(ACT_TURNLEFT45)
 			activewep:SetSideStep(true)

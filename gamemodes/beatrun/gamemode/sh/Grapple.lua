@@ -9,11 +9,11 @@ if CLIENT then
 	hook.Add("HUDPaint", "grappleicon", function()
 		local ply = LocalPlayer()
 
+		if not ply:UsingRH() then return end
 		if disable_grapple:GetBool() and Course_Name == "" then return end
 		if ply:GetRolling() then return end
 		if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
-		if not ply:Alive() or Course_Name ~= "" then return end
-		if not ply:UsingRH() then return end
+		if not ply:Alive() or ply:GetNW2Entity("Swingrope"):IsValid() then return end -- lets not show the crosshair in a swingrope (i dont see the point)
 		if ply:GetMoveType() == MOVETYPE_NOCLIP then return end
 		if IsValid(ply:GetSwingbar()) then return end
 		if GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_EVENTMODE") then return end
@@ -42,6 +42,7 @@ if CLIENT then
 		local trout = ply:GetEyeTrace()
 		local dist = trout.HitPos:DistToSqr(ply:GetPos())
 
+		if Course_Name ~= "" and trout.Entity:GetClass() ~= "br_hookpoint" then return end
 
 		if not trout.HitSky and trout.Fraction > 0 and dist < 2750000 and dist > 90000 then
 			cam.Start3D()
@@ -64,7 +65,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
 	if ply:GetInfoNum("Beatrun_DisableGrapple", 0) == 1 and Course_Name == "" and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 	if IsValid(ply:GetSwingbar()) then return end
-	if not ply:Alive() or Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
+	if not ply:Alive() and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 	local in_grapple_blocked_gamemode = GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_EVENTMODE")
 	if (in_grapple_blocked_gamemode and not ply:GetNW2Entity("Swingrope"):IsValid()) and not ply:GetGrappling() then return end -- we dont return if the player is grappling so we can "ungrapple"
 
@@ -83,6 +84,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 
 	if not ply:GetGrappling() and ply:GetMelee() == 0 and not ply:OnGround() and ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:GetSafetyRollKeyTime() < CurTime() and ply:GetWallrun() == 0 and usingrh and cmd:GetViewAngles().x <= -15 then
 		local trout = ply:GetEyeTrace()
+		if Course_Name ~= "" and trout.Entity:GetClass() ~= "br_hookpoint" then return end
 		local dist = trout.HitPos:DistToSqr(mv:GetOrigin())
 
 		if not trout.HitSky and trout.Fraction > 0 and dist < 2750000 and dist > 90000 and mv:KeyPressed(IN_JUMP) then

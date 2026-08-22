@@ -73,7 +73,7 @@ local function Dive(ply, mv, cmd)
 		if ply:GetMoveType() == MOVETYPE_NOCLIP or ply:WaterLevel() >= 3 or not ply:Alive() then
 			ply:SetDive(false)
 			ply:SetCrouchJump(false)
-			ply.DiveSliding = false
+			ply:SetDiveSliding(false)
 
 			ParkourEvent("diveslideend", ply)
 
@@ -86,10 +86,7 @@ local function Dive(ply, mv, cmd)
 
 		mv:AddKey(IN_DUCK)
 
-		if ply:OnGround() and ply:GetSafetyRollKeyTime() <= CurTime() then
-			ply.DiveSliding = true
-			ply:SetDive(false)
-		elseif ply:OnGround() and mv:KeyDown(IN_BULLRUSH) then
+		if ply:OnGround() and mv:KeyDown(IN_BULLRUSH) and ply:GetSafetyRollKeyTime() > CurTime() then
 			mv:SetButtons(0)
 		end
 	end
