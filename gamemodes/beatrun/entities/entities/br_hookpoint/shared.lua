@@ -1,5 +1,3 @@
--- TODO: Make it work for courses maybe?
-
 ENT.Type = "anim"
 ENT.Base = "base_entity"
 ENT.PrintName = "Hook Point"
@@ -35,6 +33,12 @@ function ENT:Think()
 	end
 
 	if CLIENT then
+		if LocalPlayer():GetGrappling() and self:GetPos():DistToSqr(LocalPlayer():GetGrapplePos()) < 324 then
+			self:SetModel("models/roller_spikes.mdl")
+		else
+			self:SetModel(self.Model)
+		end
+
 		local physobj = self:GetPhysicsObject()
 
 		if IsValid(physobj) then

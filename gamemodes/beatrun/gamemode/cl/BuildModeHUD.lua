@@ -219,7 +219,8 @@ local function BuildModeElements()
 		br_laser = Material("vgui/editor/laser.png"),
 		br_swingrope = Material("vgui/editor/swingrope.png"),
 		br_mat = Material("vgui/editor/mat.png"),
-		tt_cp = Material("vgui/editor/checkpoint.png")
+		tt_cp = Material("vgui/editor/checkpoint.png"),
+		br_hookpoint = Material("sprites/sent_ball.vmt") -- TODO: Find a proper icon
 	}
 
 	local buildmode_entnames = {
