@@ -139,7 +139,7 @@ local function CacheMapPreview(course)
 	end
 
 	steamworks.FileInfo(course.workshopId, function(result)
-		if not result then return end
+		if not result or not result.previewid then return end
 
 		steamworks.Download(result.previewid, true, function(name)
 			if not name then return end

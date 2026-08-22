@@ -111,3 +111,23 @@ function GetWeaponsList()
 
 	return cachedWeapons
 end
+
+local ply_mins = Vector(-16, -16, 0)
+local ply_maxs = Vector(16, 16, 72)
+
+function PlayerCannotStand(ply)
+	if not IsValid(ply) then return false end
+
+	local startPos = ply:GetPos()
+	local endPos = startPos + Vector(0, 0, 16)
+
+	local tr = util.TraceHull({
+		start = startPos,
+		endpos = endPos,
+		mins = ply_mins,
+		maxs = ply_maxs,
+		filter = ply
+	})
+
+	return tr and tr.Hit or false
+end

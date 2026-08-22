@@ -36,7 +36,8 @@ buildmode_entmodels = {
 	br_laser = "models/maxofs2d/button_02.mdl",
 	br_zipline = "models/hunter/blocks/cube025x025x025.mdl",
 	tt_cp = "models/props_phx/construct/windows/window_angle360.mdl",
-	br_swingbar = "models/hunter/plates/plate2.mdl"
+	br_swingbar = "models/hunter/plates/plate2.mdl",
+	br_hookpoint = "models/Roller.mdl"
 }
 
 -- format: multiline
@@ -107,7 +108,8 @@ buildmode_ents = {
 	br_laser = true,
 	br_zipline = true,
 	tt_cp = true,
-	br_swingbar = true
+	br_swingbar = true,
+	br_hookpoint = true
 }
 
 PlaceStartPos = nil

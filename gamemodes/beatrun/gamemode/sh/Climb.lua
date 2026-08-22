@@ -292,11 +292,6 @@ local function ClimbingThink(ply, mv, cmd)
 			local wallmat = trout.MatType
 			local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
 
-			tr.start = start
-			tr.endpos = start - Vector(0, 0, 80)
-
-			util.TraceLine(tr)
-
 			if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
 			local fail = trout.Fraction < 0.25 or trout.Fraction > 0.5
