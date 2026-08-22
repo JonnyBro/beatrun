@@ -610,7 +610,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			end
 		end
 
-		if mv:KeyPressed(IN_BACK) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 then
+		if mv:KeyPressed(IN_BACK) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 and not PlayerCannotStand(ply) then -- cannotstand check prevents players from getting stuck inside the map
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				cmd:SetViewAngles(ply:GetSlidingAngle())
 			end

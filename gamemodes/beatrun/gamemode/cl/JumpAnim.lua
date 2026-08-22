@@ -2,26 +2,6 @@ local AnimSet = CreateClientConVar("Beatrun_AnimSet", "0", true, false, "")
 local AutoHandSwitching = CreateClientConVar("Beatrun_AutoHandSwitching", "1", true, false)
 local CatalystCoil = CreateClientConVar("Beatrun_CatalystCoil", "0", true, false)
 
-function PlayerCannotStand(ply)
-	if not IsValid(ply) or ply:GetSliding() then return false end
-
-	local mins = Vector(-16, -16, 0)
-	local maxs = Vector(16, 16, 72)
-
-	local startPos = ply:GetPos()
-	local endPos = startPos + Vector(0, 0, 16)
-
-	local tr = util.TraceHull({
-		start = startPos,
-		endpos = endPos,
-		mins = mins,
-		maxs = maxs,
-		filter = ply
-	})
-
-	return tr and tr.Hit or false
-end
-
 -- Animations that use arms for auto hand switching
 local requiresArms = {
 	hang = true,
@@ -1606,18 +1586,20 @@ local function JumpAnim(event, ply)
 		eventslut.coil = "jumpcoil"
 	end
 
-	local isInCrawlspace = PlayerCannotStand(ply)
-	local isHoldingCrouch = ply:KeyDown(IN_DUCK)
+	--local isInCrawlspace = PlayerCannotStand(ply)
+	--local isHoldingCrouch = ply:KeyDown(IN_DUCK)
 
 	-- Jump Coil End
 	if event == "landcoil" then
-		eventslut[event] = (isInCrawlspace or isHoldingCrouch) and "jumpcoilendcrouch" or "jumpcoilend"
+		eventslut[event] = (PlayerCannotStand(ply) or ply:KeyDown(IN_DUCK)) and "jumpcoilendcrouch" or "jumpcoilend"
 	end
 
+	--[[
 	-- Jump Crouch
-	if event == "jump" and (isInCrawlspace or ply:Crouching()) then
+	if event == "jumpstill" and (isInCrawlspace or ply:Crouching()) then
 		eventslut[event] = "jumpcrouch"
 	end
+	-]]
 
 	if events[event] then
 		local wasjumpanim = fbanims[BodyAnimString] and IsValid(BodyAnim)
