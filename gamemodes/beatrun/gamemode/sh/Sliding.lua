@@ -659,7 +659,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			end
 
 			if (not mv:KeyDown(IN_ATTACK2) or mv:KeyDown(IN_FORWARD)) and not ply:GetDiveSliding() then
-				ply:ConCommand("-duck")
+				ply:ConCommand("-duck") -- since there is slide crouch end animations now maybe this is not needed??
 				ply:SetViewOffsetDucked(Vector(0, 0, 32))
 			elseif not ply:GetDiveSliding() then
 				ply:SetViewOffsetDucked(Vector(0, 0, 17))

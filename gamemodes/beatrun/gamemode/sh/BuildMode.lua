@@ -109,7 +109,7 @@ buildmode_ents = {
 	br_zipline = true,
 	tt_cp = true,
 	br_swingbar = true,
-	br_hookpoint = true,
+	br_hookpoint = true
 }
 
 PlaceStartPos = nil
