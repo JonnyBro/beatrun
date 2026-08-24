@@ -1,5 +1,6 @@
 function StartDiscordPresence(arguments)
 	if not util.IsBinaryModuleInstalled("gdiscord") then return end
+
 	require("gdiscord")
 
 	local image = "default"
@@ -61,6 +62,7 @@ end
 
 function StartSteamPresence(arguments)
 	if not util.IsBinaryModuleInstalled("steamrichpresencer") then return end
+
 	require("steamrichpresencer")
 
 	local richtext = ""

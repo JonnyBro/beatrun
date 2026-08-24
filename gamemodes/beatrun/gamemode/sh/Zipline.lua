@@ -123,8 +123,6 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 	end
 end
 
--- local zipvec = Vector(0, 0, 85)
-
 local function ZiplineThink(ply, mv, cmd, zipline)
 	local fraction = ply:GetZiplineFraction()
 	local speed = ply:GetZiplineSpeed()

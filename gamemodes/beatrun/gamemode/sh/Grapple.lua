@@ -1,5 +1,5 @@
 if CLIENT then
-	local disable_grapple = CreateClientConVar("Beatrun_DisableGrapple", 0, true, true, language.GetPhrase("beatrun.convars.disablegrapple"), 0, 1)
+	local disableGrapple = CreateClientConVar("Beatrun_DisableGrapple", 0, true, true, language.GetPhrase("beatrun.convars.disablegrapple"), 0, 1)
 
 	local brcross = Material("brcross.png", "nocull smooth")
 
@@ -10,7 +10,7 @@ if CLIENT then
 		local ply = LocalPlayer()
 
 		if not ply:UsingRH() then return end
-		if disable_grapple:GetBool() and Course_Name == "" then return end
+		if disableGrapple:GetBool() and Course_Name == "" then return end
 		if ply:GetRolling() then return end
 		if ply:GetMantle() ~= 0 or ply:GetClimbing() ~= 0 then return end
 		if not ply:Alive() or ply:GetNW2Entity("Swingrope"):IsValid() then return end -- lets not show the crosshair in a swingrope (i dont see the point)

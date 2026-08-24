@@ -1,7 +1,7 @@
 function CreateRopes()
 	local ents = ents.GetAll()
 
-	for k, v in pairs(ents) do
+	for _, v in pairs(ents) do
 		if v:GetClass() == "move_rope" then
 			local endpoint = v:GetInternalVariable("m_hEndPoint")
 
@@ -13,7 +13,7 @@ function CreateRopes()
 		end
 	end
 
-	for k, v in pairs(ents) do
+	for _, v in pairs(ents) do
 		if v:GetClass():find("rope") then
 			v:Remove()
 		end

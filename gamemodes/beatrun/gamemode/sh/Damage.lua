@@ -78,7 +78,7 @@ if CLIENT then
 	end)
 end
 
-local healthRegen = CreateConVar("Beatrun_HealthRegen", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local healthRegen = CreateConVar("Beatrun_HealthRegen", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
 if SERVER then
 	hook.Add("PlayerPostThink", "HealthRegen", function(ply)
