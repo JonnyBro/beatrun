@@ -16,7 +16,7 @@ CreateConVar("Beatrun_RandomLoadouts", "beatrun", { FCVAR_REPLICATED, FCVAR_ARCH
 
 -- Migrate old vars
 if table.HasValue({ "1", "2", "3", "4", "5" }, GetConVar("Beatrun_RandomLoadouts"):GetString()) then GetConVar("Beatrun_RandomLoadouts"):SetString("beatrun") end
-if not table.HasValue({ 1, 2, 3 }, GetConVar("Beatrun_SpeedometerMode"):GetInt()) then GetConVar("Beatrun_SpeedometerMode"):SetInt(1) end
+-- if not table.HasValue({ 1, 2, 3 }, GetConVar("Beatrun_SpeedometerMode"):GetInt()) then GetConVar("Beatrun_SpeedometerMode"):SetInt(1) end -- TODO: FIXME
 
 function CalcXPForNextLevel(level)
 	return math.Round(0.25 * level ^ 3 + 0.8 * level ^ 2 + 2 * level)
