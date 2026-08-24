@@ -13,6 +13,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -25,7 +26,8 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots or videos to help explain your problem.
 
 **Additional information:**
- - Game Version: [e.g. non-beta, chromium, x64]
+
+- Game Version: [e.g. non-beta, chromium, x64]
 - Game Type: [e.g. singleplayer or multiplayer]
 
 **Additional context**
