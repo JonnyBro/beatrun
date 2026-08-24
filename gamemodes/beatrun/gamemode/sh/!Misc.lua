@@ -1,42 +1,43 @@
 local allowPropSpawn = CreateConVar("Beatrun_AllowPropSpawn", "0", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
 local allowWeaponSpawn = CreateConVar("Beatrun_AllowWeaponSpawn", "0", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
+local allowEntitiesSpawn = CreateConVar("Beatrun_AllowEntitiesSpawn", "0", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
 local debugSpawnLogs = CreateConVar("Beatrun_DebugSpawnLogs", "0", { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
 if SERVER then
 	util.AddNetworkString("SPParkourEvent")
 
-	local function logSpawnDecision(ply, kind, allowed, reason)
+	local function logSpawnDecision(ply, decisionType, allowed, reason)
 		if not debugSpawnLogs:GetBool() then return end
 
-		local name = IsValid(ply) and ply:Nick() or "<invalid>"
+		local name = IsValid(ply) and ply:Nick() or ply:SteamID() or "<unknown>"
 
-		print("[Beatrun Spawn Logs] " .. kind .. " | player: " .. name .. " | allowed: " .. tostring(allowed) .. " | reason: " .. reason)
+		print("[Beatrun Spawn Logs] " .. decisionType .. " | player: " .. name .. " | allowed: " .. tostring(allowed) .. " | reason: " .. reason)
 	end
 
 	local function CanPlayerSpawnProps(ply)
 		if not IsValid(ply) then return false end
 
 		if ply:IsAdmin() then
-			logSpawnDecision(ply, "prop", true, "admin")
+			logSpawnDecision(ply, "Prop", true, "Admin")
 			return true
 		end
 
 		if allowPropSpawn:GetBool() then
-			logSpawnDecision(ply, "prop", true, "Beatrun_AllowPropSpawn")
+			logSpawnDecision(ply, "Prop", true, "Beatrun_AllowPropSpawn is enabled")
 			return true
 		end
 
 		if not GetGlobalBool("GM_EVENTMODE", false) then
-			logSpawnDecision(ply, "prop", false, "eventmode_off")
+			logSpawnDecision(ply, "Prop", false, "No event started")
 			return false
 		end
 
 		if not GetGlobalBool("EM_AllowProps", false) then
-			logSpawnDecision(ply, "prop", false, "EM_AllowProps_off")
+			logSpawnDecision(ply, "Prop", false, "Not currently allowed in event")
 			return false
 		end
 
-		logSpawnDecision(ply, "prop", true, "eventmode_ok")
+		logSpawnDecision(ply, "Prop", true, "Allowed in event")
 		return true
 	end
 
@@ -44,74 +45,67 @@ if SERVER then
 		if not IsValid(ply) then return false end
 
 		if ply:IsAdmin() then
-			logSpawnDecision(ply, "weapon", true, "admin")
+			logSpawnDecision(ply, "Weapon", true, "Admin")
 			return true
 		end
 
 		if allowWeaponSpawn:GetBool() then
-			logSpawnDecision(ply, "weapon", true, "Beatrun_AllowWeaponSpawn")
+			logSpawnDecision(ply, "Weapon", true, "Beatrun_AllowWeaponSpawn is enabled")
 			return true
 		end
 
 		if not GetGlobalBool("GM_EVENTMODE", false) then
-			logSpawnDecision(ply, "weapon", false, "eventmode_off")
+			logSpawnDecision(ply, "Weapon", false, "No event started")
 			return false
 		end
 
 		if not GetGlobalBool("EM_AllowWeapons", false) then
-			logSpawnDecision(ply, "weapon", false, "EM_AllowWeapons_off")
+			logSpawnDecision(ply, "Weapon", false, "Not currently allowed in event")
 			return false
 		end
 
-		logSpawnDecision(ply, "weapon", true, "eventmode_ok")
+		logSpawnDecision(ply, "Weapon", true, "Allowed in event")
 		return true
 	end
 
-	local function CanPlayerSpawnVehicles(ply)
+	local function CanPlayerSpawnEntities(ply)
 		if not IsValid(ply) then return false end
 
 		if ply:IsAdmin() then
-			logSpawnDecision(ply, "weapon", true, "admin")
+			logSpawnDecision(ply, "Entity", true, "Admin")
 			return true
 		end
 
-		if allowWeaponSpawn:GetBool() then
-			logSpawnDecision(ply, "weapon", true, "Beatrun_AllowWeaponSpawn")
+		if allowEntitiesSpawn:GetBool() then
+			logSpawnDecision(ply, "Entity", true, "Beatrun_AllowEntitiesSpawn is enabled")
 			return true
 		end
 
 		if not GetGlobalBool("GM_EVENTMODE", false) then
-			logSpawnDecision(ply, "weapon", false, "eventmode_off")
+			logSpawnDecision(ply, "Entity", false, "No event started")
 			return false
 		end
 
-		if not GetGlobalBool("EM_AllowVehicles", false) then
-			logSpawnDecision(ply, "weapon", false, "EM_AllowVehicles_off")
+		if not GetGlobalBool("EM_AllowEntities", false) then
+			logSpawnDecision(ply, "Entity", false, "Not currently allowed in event")
 			return false
 		end
 
-		logSpawnDecision(ply, "weapon", true, "eventmode_ok")
+		logSpawnDecision(ply, "Entity", true, "Allowed in event")
 		return true
 	end
 
-	hook.Add("PlayerSpawnProp", "Beatrun_Event_Prop1", function(ply) return CanPlayerSpawnProps(ply) end)
-	hook.Add("PlayerSpawnObject", "Beatrun_Event_Prop2", function(ply) return CanPlayerSpawnProps(ply) end)
+	hook.Add("PlayerSpawnProp", "Beatrun_CanSpawnProps1", function(ply) return CanPlayerSpawnProps(ply) end)
+	hook.Add("PlayerSpawnObject", "Beatrun_CanSpawnObjects", function(ply) return CanPlayerSpawnProps(ply) end)
 
-	hook.Add("PlayerGiveSWEP", "Beatrun_Event_SWEP1", function(ply) return CanPlayerSpawnWeapons(ply) end)
-	hook.Add("PlayerSpawnSWEP", "Beatrun_Event_SWEP2", function(ply) return CanPlayerSpawnWeapons(ply) end)
+	hook.Add("PlayerGiveSWEP", "Beatrun_CanSpawnSWEPs1", function(ply) return CanPlayerSpawnWeapons(ply) end)
+	hook.Add("PlayerSpawnSWEP", "Beatrun_CanSpawnSWEPs2", function(ply) return CanPlayerSpawnWeapons(ply) end)
 
-	hook.Add("PlayerSpawnVehicle", "Beatrun_BlockVehicle", function(ply) return CanPlayerSpawnVehicles(ply) end)
-
-	local function OnlyAdmins(ply)
-		return IsValid(ply) and ply:IsAdmin()
-	end
-
-	hook.Add("PlayerSpawnNPC", "Beatrun_BlockNPC", OnlyAdmins)
-	hook.Add("PlayerSpawnSENT", "Beatrun_BlockSENT", OnlyAdmins)
-	hook.Add("PlayerSpawnRagdoll", "Beatrun_BlockRagdoll", OnlyAdmins)
-	hook.Add("PlayerSpawnEffect", "Beatrun_BlockEffect", OnlyAdmins)
-
-	hook.Add("AllowPlayerPickup", "Beatrun_AllowPickupAdmin", function(ply) return ply:IsAdmin() end)
+	hook.Add("PlayerSpawnEffect", "Beatrun_CanSpawnEffects", function(ply) return CanPlayerSpawnEntities(ply) end)
+	hook.Add("PlayerSpawnNPC", "Beatrun_CanSpawnNPCs", function(ply) return CanPlayerSpawnEntities(ply) end)
+	hook.Add("PlayerSpawnRagdoll", "Beatrun_CanSpawnRagdolls", function(ply) return CanPlayerSpawnEntities(ply) end)
+	hook.Add("PlayerSpawnSENT", "Beatrun_CanSpawnSENTs", function(ply) return CanPlayerSpawnEntities(ply) end)
+	hook.Add("PlayerSpawnVehicle", "Beatrun_CanSpawnVehicles", function(ply) return CanPlayerSpawnEntities(ply) end)
 end
 
 if CLIENT then
@@ -125,6 +119,7 @@ if ulx and ulx.noclip then
 	function ulx.beatrun_noclip(calling_ply, target_plys)
 		for i = 1, #target_plys do
 			local ply = target_plys[i]
+
 			if ply:IsValid() then
 				if Course_Name ~= "" and ply:GetNW2Int("CPNum", 1) ~= -1 then
 					ply:SetNW2Int("CPNum", -1)
@@ -156,6 +151,8 @@ hook.Add("PlayerNoClip", "BlockNoClip", function(ply, enabled)
 		elseif SERVER and game.SinglePlayer() then
 			ply:SendLua("notification.AddLegacy(\"#beatrun.misc.noclipdetected\", NOTIFY_ERROR, 4)")
 		end
+
+		return true
 	end
 
 	if enabled and (GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH")) then return false end
@@ -260,7 +257,6 @@ if CLIENT then
 
 	local draw_blur = draw_blur
 	local impactblurlerp = 0
-	-- local lastintensity = 0
 
 	hook.Add("HUDPaint", "DrawImpactBlur", function()
 		if impactblurlerp > 0 then

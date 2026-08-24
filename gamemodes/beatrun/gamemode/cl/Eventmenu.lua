@@ -257,6 +257,10 @@ local function RebuildMainPanel()
 				"EM_AllowVehicles"
 			},
 			{
+				"Allow members to spawn entities",
+				"EM_AllowEntities"
+			},
+			{
 				"New players suspended",
 				"EM_NewPlayersSuspended"
 			},
