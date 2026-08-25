@@ -414,7 +414,7 @@ end
 local tr = {}
 local tr_result = {}
 
-local overdriveInMP = GetConVar("Beatrun_AllowOverdriveInMultiplayer")
+local isOverdriveDisabled = GetConVar("Beatrun_DisableOverdrive")
 
 function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
@@ -427,7 +427,7 @@ function SWEP:PrimaryAttack()
 		end
 	end
 
-	if ply:KeyDown(IN_USE) and (game.SinglePlayer() or overdriveInMP:GetBool()) then
+	if ply:KeyDown(IN_USE) and not isOverdriveDisabled:GetBool() then
 		local mult = (ply:InOverdrive() and 1) or 1.25
 		local fovmult = (mult == 1 and 1) or 1.1
 

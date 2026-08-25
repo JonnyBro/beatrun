@@ -4,6 +4,7 @@ local speedLimit = CreateConVar("Beatrun_SpeedLimit", 325, { FCVAR_REPLICATED, F
 
 CreateConVar("Beatrun_Disarm", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "", 0, 1)
 CreateConVar("Beatrun_AllowOverdriveInMultiplayer", 0, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
+CreateConVar("Beatrun_DisableOverdrive", 0, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
 
 local function Hardland(jt)
 	local ply = LocalPlayer()
