@@ -2,7 +2,6 @@ util.AddNetworkString("Beatrun_ChangeConvar")
 
 local replicatedConvars = {
 	["Beatrun_AllowEntitiesSpawn"] = true,
-	["Beatrun_AllowOverdriveInMultiplayer"] = true,
 	["Beatrun_AllowPropSpawn"] = true,
 	["Beatrun_AllowWeaponSpawn"] = true,
 	["Beatrun_DisableOverdrive"] = true,

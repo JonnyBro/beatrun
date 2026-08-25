@@ -70,7 +70,7 @@ It includes various improvements, new features, and enhanced functionality.
   - **Arrow to the next checkpoint** for easier navigation.
 - New server and client configuration variables:
   - Server:
-    - `Beatrun_AllowOverdriveInMultiplayer`: Allow Overdrive in multiplayer.
+    - `Beatrun_DisableOverdrive`: A toggle to allow Overdrive usage.
     - `Beatrun_AllowPropSpawn`: Let players spawn props without admin rights.
     - `Beatrun_AllowWeaponSpawn`: Let players spawn weapons without admin rights.
     - `Beatrun_HealthRegen`: Toggle health regeneration.

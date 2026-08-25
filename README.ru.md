@@ -72,14 +72,14 @@ Beatrun - это **небезызвестный паркур режим для G
   - **Указатель следующего чекпоинта** для облегчения навигации.
 - Новые серверные и клиентские переменные:
   - Серверные:
-    - `Beatrun_AllowOverdriveInMultiplayer` - разрешает Overdrive в мультиплеере.
-    - `Beatrun_AllowPropSpawn` - разрешает спавн пропов и оружия без прав администратора.
-    - `Beatrun_HealthRegen` - переключает регенерацию здоровья.
+    - `Beatrun_DisableOverdrive`: запрещает использование Overdrive.
+    - `Beatrun_AllowPropSpawn`: разрешает спавн пропов и оружия без прав администратора.
+    - `Beatrun_HealthRegen`: переключает регенерацию здоровья.
   - Клиентские:
-    - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor` - настройка цветов интерфейса.
-    - `Beatrun_DisableGrapple` - включение/выключение крюка-кошки.
-    - `Beatrun_KickGlitch` - переключение между старым и новым Kick Glitch.
-    - `Beatrun_QuickturnHandsOnly` - ограничение QuickTurn только для оружия Runner Hands.
+    - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`: настройка цветов интерфейса.
+    - `Beatrun_DisableGrapple`: включение/выключение крюка-кошки.
+    - `Beatrun_KickGlitch`: переключение между старым и новым Kick Glitch.
+    - `Beatrun_QuickturnHandsOnly`: ограничение QuickTurn только для оружия Runner Hands.
 - Прочие улучшения:
   - Небольшой толчок камеры при нырянии.
   - SteamID больше не отображается на экране.
