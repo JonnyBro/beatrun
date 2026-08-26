@@ -385,7 +385,19 @@ local arminterrupts = {
 	jumpturnflypiecesign = true,
 	standhandwallright = true,
 	standhandwallleft = true,
-	standhandwallboth = true
+	standhandwallboth = true,
+	standhandwallrightdown = true,
+	standhandwallleftdown = true,
+	standhandwallbothdown = true
+}
+
+local ignorePitch = {
+	standhandwallright = true,
+	standhandwallleft = true,
+	standhandwallboth = true,
+	standhandwallrightdown = true,
+	standhandwallleftdown = true,
+	standhandwallbothdown = true,
 }
 
 local transitionanims = {
@@ -538,7 +550,13 @@ local ignorezarm = {
 	wallrunverticalstart = true,
 	diestandlong = true,
 	vaultontohigh = true,
-	jumpcoilcatalyst = true
+	jumpcoilcatalyst = true,
+	standhandwallright = true,
+	standhandwallleft = true,
+	standhandwallboth = true,
+	standhandwallrightdown = true,
+	standhandwallleftdown = true,
+	standhandwallbothdown = true,
 }
 
 local nocyclereset = {
@@ -1402,7 +1420,7 @@ local defaultarmoffset = Vector()
 local armoffset = Vector()
 local armoffsetlerp = Vector()
 -- local drawnorigin = false
-local drawnskytime = 0
+--local drawnskytime = 0
 
 local function JumpArmDraw() --(a, b, c)
 	local bac = CreateBodyAnimArmCopy()
@@ -1458,6 +1476,8 @@ local function JumpArmDraw() --(a, b, c)
 			ply.armfollowlerp = 0
 		end
 
+		local bac_seq = bac:GetSequenceName(bac:GetSequence())
+
 		if armfollowanims[BodyAnimString] and not ArmInterrupting(bac) then
 			ang.x = ply.armfollowlerp < 1 and Lerp(ply.armfollowlerp, 0, ply:EyeAngles().x) or ply:EyeAngles().x
 			ply.armfollowlerp = math.Approach(ply.armfollowlerp, 1, FrameTime() * 1.5)
@@ -1468,6 +1488,10 @@ local function JumpArmDraw() --(a, b, c)
 			ang.x = ply.armfollowlerp > 0 and Lerp(ply.armfollowlerp, 0, ply:EyeAngles().x) or 0
 			ang.y = 0
 			ply.armfollowlerp = math.Approach(ply.armfollowlerp, 0, FrameTime() * 2.5 * arminterruptboost)
+		end
+
+		if ignorePitch[bac_seq] then
+			ang.x = ply:EyeAngles().x
 		end
 
 		pos:Add(armoffset)
@@ -1483,7 +1507,7 @@ local function JumpArmDraw() --(a, b, c)
 		if ply:UsingRH() then
 			if not worldarm[BodyAnimString] then
 				cam.Start3D(pos, ang)
-					cam.IgnoreZ(ignorezarm[BodyAnimString] or false)
+					cam.IgnoreZ(ignorezarm[bac_seq] or false)
 
 					BodyAnimMDLarm:SetPos(pos)
 					bac:SetupBones()
@@ -1492,7 +1516,7 @@ local function JumpArmDraw() --(a, b, c)
 			else
 				local armoff = LocalToWorld(armoffset, angle_zero, vector_origin, BodyAnim:GetAngles())
 
-				cam.IgnoreZ(ignorezarm[BodyAnimString] or false)
+				cam.IgnoreZ(ignorezarm[bac_seq] or false)
 				bac:SetAngles(BodyAnim:GetAngles())
 				bac:SetPos(BodyAnim:GetPos() + armoff)
 				bac:SetRenderOrigin(nil)
@@ -1531,25 +1555,22 @@ local function JumpArmDraw() --(a, b, c)
 
 			bac:SetSequence(seq)
 			bac:SetCycle(BodyAnim:GetCycle() or 1)
-		elseif seq and drawnskytime < CurTime() then
+		elseif seq then
 			bac:SetCycle(bac:GetCycle() + FrameTime() / bac:SequenceDuration())
 		end
 
 		if not worldarm[BodyAnimString] then --(not b or not skybox3d) and
 			bac:SetRenderOrigin(campos)
-
-			drawnorigin = true
 		end
-
-		drawnskytime = CurTime()
 	end
 end
 
+--[[
 hook.Add("PreRender", "JumpArmOriginVar", function()
 	drawnorigin = false
 end)
 
---[[
+
 hook.Add("PostDrawSkyBox", "JumpArm3DSky", function()
 	skybox3d = true
 
@@ -1846,8 +1867,10 @@ local function JumpThink()
 
 				lockang = false
 				CamIgnoreAng = true
-				BodyLimitX = 90
-				BodyLimitY = 180
+				if not ArmInterrupting(BodyAnimArmCopy) then
+					BodyLimitX = 90
+					BodyLimitY = 180
+				end
 				vel.z = 0
 
 				if back and vel_l > 10 then
