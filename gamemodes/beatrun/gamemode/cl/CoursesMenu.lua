@@ -4,7 +4,7 @@ local databaseDomain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", 
 local uiTheme = CreateClientConVar("Beatrun_CoursesMenu_Theme", "dark", true, false, language.GetPhrase("beatrun.convars.theme"))
 
 -- Database UI
-local isCurrentMapOnly = false
+local isCurrentMapOnly = true
 local currentMap = game.GetMap()
 local THEME = {
 	dark = {
@@ -1011,7 +1011,7 @@ local function ApplyCoursesFilter(newText)
 	for _, course in ipairs(Beatrun_CoursesCache.all) do
 		if isCurrentMapOnly and course.mapName ~= currentMap then continue end
 
-		local searchStr = string.lower(course.name .. course.mapName .. course.code .. course.uploadedBy.username)
+		local searchStr = string.lower(course.name .. " " .. course.mapName .. " " .. course.code .. " " .. course.uploadedBy.username)
 		if text ~= "" and not string.find(searchStr, text) then continue end
 
 		filtered[#filtered + 1] = course
