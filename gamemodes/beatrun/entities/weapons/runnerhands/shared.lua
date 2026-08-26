@@ -71,11 +71,6 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Float", 2, "PunchReset")
 end
 
--- local runseq = {
--- 	[6] = true,
--- 	[7] = true
--- }
-
 local oddseq = {
 	[8] = true,
 	[9] = true,
@@ -115,8 +110,6 @@ end
 
 local jumpseq = { ACT_VM_HAULBACK, ACT_VM_SWINGHARD }
 
--- local jumptr, jumptrout = {}, {}
--- local jumpvec = Vector(0, 0, -50)
 local fallang = Angle()
 local infall
 local fallct = 0
@@ -146,36 +139,6 @@ function SWEP:Think()
 	local injump = curseq == 13 or curseq == 14 or curseq == 17 or curseq == -1 or curseq == 1
 	infall = curseq == 19
 
-	--[[ TODO: what a piece of shit, send help
-	if vel:Length() == 0 and util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply).Hit and ply:GetMoveType() ~= MOVETYPE_NOCLIP and not ply:Crouching() and ply:WaterLevel() == 0 and ply:GetWallrun() == 0 then
-		if (math.floor(ply:LocalEyeAngles().y) <= 35 and math.floor(ply:LocalEyeAngles().y) >= 5) or (math.floor(ply:LocalEyeAngles().y) <= 125 and math.floor(ply:LocalEyeAngles().y) >= 95) or (math.floor(ply:LocalEyeAngles().y) <= -55 and math.floor(ply:LocalEyeAngles().y) >= -85) or (math.floor(ply:LocalEyeAngles().y) <= -145 and math.floor(ply:LocalEyeAngles().y) >= -175) then
-			if CLIENT then
-				BodyLimitX = 20
-
-				return ArmInterrupt("standhandwallright")
-			elseif game.SinglePlayer() then
-				return ply:SendLua("BodyLimitX = 20 ArmInterrupt('standhandwallright')")
-			end
-		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -5) or (math.floor(ply:LocalEyeAngles().y) <= 95 and math.floor(ply:LocalEyeAngles().y) >= 85) or (math.floor(ply:LocalEyeAngles().y) <= -85 and math.floor(ply:LocalEyeAngles().y) >= -95) or (math.floor(ply:LocalEyeAngles().y) <= -175 or math.floor(ply:LocalEyeAngles().y) >= 175) then
-			if CLIENT then
-				BodyLimitX = 20
-
-				return ArmInterrupt("standhandwallboth")
-			elseif game.SinglePlayer() then
-				return ply:SendLua("BodyLimitX = 20 ArmInterrupt('standhandwallboth')")
-			end
-		elseif (math.floor(ply:LocalEyeAngles().y) <= 5 and math.floor(ply:LocalEyeAngles().y) >= -35) or (math.floor(ply:LocalEyeAngles().y) <= 85 and math.floor(ply:LocalEyeAngles().y) >= 55) or (math.floor(ply:LocalEyeAngles().y) <= -95 and math.floor(ply:LocalEyeAngles().y) >= -125) or (math.floor(ply:LocalEyeAngles().y) <= 175 and math.floor(ply:LocalEyeAngles().y) >= 145) then
-			if CLIENT then
-				BodyLimitX = 20
-
-				return ArmInterrupt("standhandwallleft")
-			elseif game.SinglePlayer() then
-				return ply:SendLua("BodyLimitX = 20 ArmInterrupt('standhandwallleft')")
-			end
-		end
-	end
-	--]]
-
 	self:SetSideStep((curseq == 15 or curseq == 16) and GetConVar("Beatrun_SideStep"):GetBool())
 
 	local insidestep = self:GetSideStep()
@@ -184,11 +147,6 @@ function SWEP:Think()
 
 	if spvel.z < -800 and ply:GetMoveType() ~= MOVETYPE_NOCLIP then
 		if not infall then
-			-- if CLIENT then
-			-- 	RemoveBodyAnim()
-			-- elseif game.SinglePlayer() then
-			-- 	self:GetOwner():SendLua("RemoveBodyAnim()")
-			-- end
 			self:SendWeaponAnim(ACT_RUN_ON_FIRE)
 		end
 
