@@ -150,7 +150,7 @@ local function SlidingAnimEnd(slippery, diving) --  , diving
 
 	if not slippery then
 		if not isDiveSliding then --  and not diving
-			local crouchEnd = PlayerCannotStand(ply)
+			local crouchEnd = PlayerCannotStand(ply) or ActuallyHoldingCrouch
 			local endAnim = crouchEnd and "meslideendcrouch" or "meslideend"
 
 			BodyAnimString = endAnim
@@ -658,8 +658,8 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 				ply.SlideLoopSound:FadeOut(0.15)
 			end
 
-			if (not mv:KeyDown(IN_ATTACK2) or mv:KeyDown(IN_FORWARD)) and not ply:GetDiveSliding() then
-				ply:ConCommand("-duck") -- since there is slide crouch end animations now maybe this is not needed??
+			if (not mv:KeyDown(IN_ATTACK2) or mv:KeyDown(IN_FORWARD)) then
+				--ply:ConCommand("-duck") -- since there is slide crouch end animations now maybe this is not needed??
 				ply:SetViewOffsetDucked(Vector(0, 0, 32))
 			elseif not ply:GetDiveSliding() then
 				ply:SetViewOffsetDucked(Vector(0, 0, 17))
@@ -703,7 +703,7 @@ end)
 
 hook.Add("StartCommand", "qslidespeed", function(ply, cmd)
 	if ply:GetSliding() then
-		ActuallyHoldingCrouch = cmd:KeyDown(IN_DUCK) -- this is kinda a hack to get diveslideendcrouch to work properly
+		ActuallyHoldingCrouch = cmd:KeyDown(IN_DUCK) -- this is kinda a hack to get slide crouch end anims to work properly
 
 		cmd:RemoveKey(IN_SPEED)
 
