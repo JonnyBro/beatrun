@@ -114,3 +114,12 @@ sound.Add({
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/Ladder/Ladder_Slide_2a.wav" }
 })
+
+sound.Add({
+	name = "Dive.Totsugeki",
+	volume = 1,
+	level = 60,
+	channel = CHAN_STATIC,
+	pitch = 100,
+	sound = { "misc/totsugeki1.mp3", "misc/totsugeki2.mp3" }
+})
