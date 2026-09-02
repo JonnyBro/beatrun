@@ -23,34 +23,38 @@ hook.Add("EntityTakeDamage", "Beatrun_MissedMe", function(victim, dmginfo)
 	if victim:GetSliding() and (dmgtype == DMG_SLASH or dmgtype == DMG_CLUB) then return true end
 end)
 
-hook.Add("PlayerShouldTakeDamage", "DBNO", function(ply, attacker)
-	if not IsValid(attacker) then return end
+hook.Add("EntityTakeDamage", "DBNO", function(victim, dmginfo)
+	if not victim:IsPlayer() then return end
+	if not IsValid(victim) then return end
 
+	local attacker = dmginfo:GetAttacker()
 	local class = attacker:GetClass()
 
-	if class == "npc_antlionguard" or class == "npc_antlionguardian" then
+	if class == "npc_antlionguard" or class == "npc_antlionguardian" or class == "npc_hunter" then
+		if class == "npc_hunter" and (dmginfo:GetDamageType() ~= DMG_SLASH or dmginfo:GetDamageType() ~= DMG_CLUB) then return end
+
 		local atteyeang = attacker:EyeAngles()
 		atteyeang.x = 0
 		atteyeang.z = 0
 		atteyeang.y = atteyeang.y - 180
 
-		ply:SetEyeAngles(atteyeang)
-		ply:SetJumpTurn(true)
-		ply:SetPos(ply:GetPos() + Vector(0, 0, 8))
-		ply:SetLocalVelocity(atteyeang:Forward() * 100 + Vector(0, 0, 100))
+		victim:SetEyeAngles(atteyeang)
+		victim:SetJumpTurn(true)
+		victim:SetPos(victim:GetPos() + Vector(0, 0, 8))
+		victim:SetLocalVelocity(atteyeang:Forward() * 100 + Vector(0, 0, 100))
 
 		if game.SinglePlayer() then
 			timer.Simple(0, function()
 				net.Start("DBNO")
-				net.Send(ply)
+				net.Send(victim)
 			end)
 		else
 			net.Start("DBNO")
-			net.Send(ply)
+			net.Send(victim)
 		end
 	end
 
-	if ply:GetJumpTurn() and not ply:OnGround() and attacker:IsNPC() then return false end
+	if victim:GetJumpTurn() and not victim:OnGround() and attacker:IsNPC() then return true end
 end)
 
 if CLIENT then
