@@ -88,10 +88,14 @@ hook.Add("HUDPaint", "FallVignette", function()
 end)
 
 hook.Add("InputMouseApply", "FallLock", function(cmd, x, y, ang)
+local BRFallLock = CreateClientConVar("Beatrun_FallLock", "1", true, false)
+
+	if BRFallLock:GetBool() then
 	if LocalPlayer().FallStatic then
 		cmd:SetMouseX(0)
 		cmd:SetMouseY(0)
 
 		return true
 	end
+end
 end)

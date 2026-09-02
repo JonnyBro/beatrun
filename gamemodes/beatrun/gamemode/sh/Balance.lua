@@ -96,6 +96,10 @@ hook.Add("SetupMove", "Balance", function(ply, mv, cmd)
 		if out.Entity ~= balance and not out.Entity:IsPlayer() or distlen < 25 or distend < distlen + 30 or math.abs(ply:GetBalance()) >= 100 then
 			ParkourEvent("fall", ply)
 
+			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
+				ply:EmitSound("Cloth.Fall")
+			end
+
 			if math.abs(ply:GetBalance()) >= 100 then
 				if CLIENT then
 					BodyAnimSetEase(mv:GetOrigin())
