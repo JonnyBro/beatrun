@@ -1808,12 +1808,6 @@ local function JumpThink()
 					BodyAnim:SetSequence("wallrunverticalstart")
 				end
 
-				if ply:GetMantle() == 2 then
-					BodyAnim:SetSequence("vaultover")
-				elseif ply:GetMantle() == 3 then
-					BodyAnim:SetSequence("vaultkong")
-				end
-
 				if IsValid(ply:GetZipline()) then BodyAnim:SetSequence("zipline") end
 			end
 		end
@@ -2106,6 +2100,18 @@ local function JumpThink()
 			func = func and func(ply)
 
 			if func == true then return end
+			
+			if ply:GetMantle() == 2 then
+				BodyAnim:SetSequence("vaultover")
+				
+				return
+			end
+
+			if ply:GetMantle() == 3 then
+				BodyAnim:SetSequence("vaultkong")
+
+				return
+			end
 
 			if ply:GetMantle() == 4 then
 				BodyAnim:SetSequence("vaultoverhigh")
