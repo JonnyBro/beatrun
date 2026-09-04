@@ -12,7 +12,7 @@ local standWallAnims = {
 
 local down = Vector(0, 0, -3)
 
-local nextWallCheck = 0
+local nextWallCheck = 4 -- start out at 4 to prevent any errors when the game boots up ¯\_(ツ)_/¯
 
 hook.Add("Tick", "HandStandWall", function()
 	if not WallBrace:GetBool() then return end
@@ -27,7 +27,7 @@ hook.Add("Tick", "HandStandWall", function()
 
 	local rh = ply:GetActiveWeapon()
 
-	if not ply:OnGround() or not ply:UsingRH() or ply:GetWallrun() ~= 0 or ply:GetClimbing() ~= 0 or (rh.GetSideStep and rh:GetSideStep()) then
+	if not ply:OnGround() or ply:InVehicle() or not ply:UsingRH() or ply:GetJumpTurn() or ply:GetWallrun() ~= 0 or ply:GetClimbing() ~= 0 or (rh.GetSideStep and rh:GetSideStep()) then
 		IsPlyInStandWall = false
 
 		if standWallAnims[bac_seq] then
@@ -41,17 +41,32 @@ hook.Add("Tick", "HandStandWall", function()
 	traceDir.z = 0
 	traceDir.x = 0
 
-	local lenght = 22.5 -- this is the shortest lenght that works well with corners
+	local length = 22.5 -- this is the shortest lenght that works well with corners
 
 	local hand_offset =  traceDir:Right() * 5.5
 	traceDir = traceDir:Forward()
+	local shoot_pos = ply:GetShootPos()
 
-	local leftHand_trace = util.QuickTrace(ply:GetShootPos() - hand_offset + down, traceDir * lenght, ply)
-	local rightHand_trace = util.QuickTrace(ply:GetShootPos() + hand_offset + down, traceDir * lenght, ply)
+	local leftHand_trace = util.TraceLine({
+		start = shoot_pos - hand_offset + down,
+		endpos = (shoot_pos - hand_offset + down) + traceDir * length,
+		filter = ply, -- no need to check for other players since u cant get close enough to trigger the hands
+		mask = MASK_PLAYERSOLID,
+		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+	})
+
+	local rightHand_trace = util.TraceLine({
+		start = shoot_pos + hand_offset + down,
+		endpos = (shoot_pos + hand_offset + down) + traceDir * length,
+		filter = ply,
+		mask = MASK_PLAYERSOLID,
+		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+	})
 
 	if (leftHand_trace.Hit or rightHand_trace.Hit) and not (ply:KeyDown(IN_BACK) and ply:GetVelocity():Length() > 10) and ply:WaterLevel() <= 1 then --TODO: figure out how to get if the player is moving backwards with only the velocity (dont rely on keydown)
 		IsPlyInStandWall = true
-		BodyLimitX = 10
+
+		if not ply:ShouldDrawLocalPlayer() then BodyLimitX = 10 end -- no point in locking the view in thirdperson ¯\_(ツ)_/¯
 
 		if leftHand_trace.Hit and rightHand_trace.Hit then
 			ArmInterrupt("standhandwallboth")
@@ -67,19 +82,19 @@ hook.Add("Tick", "HandStandWall", function()
 		IsPlyInStandWall = false
 	end
 
-	if standWallAnims[bac_seq] and not IsPlyInStandWall then
+	if standWallAnims[bac_seq] and not IsPlyInStandWall and not ply:ShouldDrawLocalPlayer() then
 		BodyLimitX = 45
 	end
 end)
 
 hook.Add("AdjustMouseSensitivity", "HandStandWallSense", function()
-	if IsPlyInStandWall then
+	if IsPlyInStandWall and not LocalPlayer():ShouldDrawLocalPlayer() then
 		return 0.65
 	end
 end)
 
 hook.Add("CreateMove", "HandStandWallBlockAttack", function(cmd)
-	if IsValid(BodyAnimArmCopy) and standWallAnims[BodyAnimArmCopy:GetSequenceName(BodyAnimArmCopy:GetSequence())] and not LocalPlayer():ShouldDrawLocalPlayer() then -- we check for shoulddrawlocalplayer because arminterrupts stop playing in thirdperson and become stuck :)
+	if IsValid(BodyAnimArmCopy) and standWallAnims[BodyAnimArmCopy:GetSequenceName(BodyAnimArmCopy:GetSequence())] and not LocalPlayer():ShouldDrawLocalPlayer() then
 		cmd:RemoveKey(IN_ATTACK)
 	end
 end)
