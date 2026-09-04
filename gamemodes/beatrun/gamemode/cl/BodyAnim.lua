@@ -542,10 +542,11 @@ function StartBodyAnim(animtable)
 	-- Apply all scaling systems after model setup
 	timer.Simple(0.5, function()
 		if not IsValid(BodyAnimMDL) then return end
-
+		local head_bone = ply:LookupBone("ValveBiped.Bip01_Head1")
+		if not head_bone then return end -- fixes a lua error in multiplayer when spamming respawns
 		local bodyscale = GetConVar("beatrun_bodyscale"):GetFloat()
 		local armscale = GetConVar("beatrun_armbodyscale"):GetFloat()
-		local modelscale = math.abs((select(1, ply:GetBonePosition(ply:LookupBone("ValveBiped.Bip01_Head1"))).z - ply:GetPos().z + 1) / 64) * GetConVar("beatrun_modelscale"):GetFloat()
+		local modelscale = math.abs((select(1, ply:GetBonePosition(head_bone)).z - ply:GetPos().z + 1) / 64) * GetConVar("beatrun_modelscale"):GetFloat()
 		local bodyvec = Vector(bodyscale, bodyscale, bodyscale)
 		local armvec = Vector(armscale, armscale, armscale)
 
