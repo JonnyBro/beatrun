@@ -1291,14 +1291,6 @@ eventsounds = {
 	}
 }
 
--- Single entry point for addons/forks to register a new body-anim event that plays
--- on its own custom .mdl, without touching the tables above by hand each time.
--- data fields: model (required, "path/relative/to/models" no extension),
--- sequence (defaults to event name), transitionanim (defaults to "jumpair"),
--- transitioncheck(ply) (defaults to "done after one cycle"), sounds (eventsounds entry, optional),
--- speed (BodyAnimSpeed multiplier, optional), onStart(ply)/onFinish(ply) (optional callbacks).
--- Returns a handle: handle.start(ply) fires the event via ParkourEvent, handle.stop(ply) forces
--- an early transition out (same path a natural transitioncheck would take) and fires onFinish.
 CustomAnims = CustomAnims or {}
 
 function RegisterCustomAnim(event, data)
@@ -1651,8 +1643,6 @@ end)
 
 
 local function JumpAnim(event, ply)
-	print("[JumpAnim]", event, "cycle=", BodyAnimCycle, "onground=", ply:OnGround(), "curstring=", BodyAnimString)
-
 	if CatalystCoil:GetBool() and event == "coil" and ply:UsingRH() then
 		eventslut.coil = "jumpcoilcatalyst"
 	else
@@ -1681,9 +1671,6 @@ local function JumpAnim(event, ply)
 			customAnimForEvent.onStart(ply)
 		end
 
-		-- must also check the *previous* BodyAnimString, not just the incoming event - a custom
-		-- anim (e.g. grapple_throw) uses its own .mdl, so transitioning away from one can't reuse
-		-- the existing BodyAnim entity even though the new event itself isn't a custom anim
 		local wasjumpanim = not CustomAnims[event] and not CustomAnims[BodyAnimString] and fbanims[BodyAnimString] and IsValid(BodyAnim)
 
 		if not wasjumpanim then
