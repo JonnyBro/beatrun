@@ -1294,23 +1294,26 @@ eventsounds = {
 CustomAnims = CustomAnims or {}
 
 function RegisterCustomAnim(event, data)
-	fbanims[event] = true
+	-- event and animName can differ (a custom sequence baked under its own name) - everything
+	-- looked up via BodyAnimString elsewhere (fbanims/transitionanims/transitionchecks/customspeed/
+	-- CustomAnims) must be keyed by animName, not event, or the lookup silently misses
+	local animName = data.sequence or event
+
+	fbanims[animName] = true
 	events[event] = true
-	eventslut[event] = data.sequence or event
-	transitionanims[event] = data.transitionanim or "jumpair"
-	transitionchecks[event] = data.transitioncheck or function(ply)
-		if BodyAnimCycle >= 1 then return true end
-	end
+	eventslut[event] = animName
+	transitionanims[animName] = data.transitionanim or "jumpair"
+	transitionchecks[animName] = data.transitioncheck -- nil is fine, the generic dispatcher already defaults to "done after one cycle"
 
 	if data.sounds then
-		eventsounds[event] = data.sounds
+		eventsounds[animName] = data.sounds
 	end
 
 	if data.speed then
-		customspeed[event] = data.speed
+		customspeed[animName] = data.speed
 	end
 
-	CustomAnims[event] = data
+	CustomAnims[animName] = data
 
 	local handle = {}
 
@@ -1321,13 +1324,9 @@ function RegisterCustomAnim(event, data)
 	function handle.stop(ply)
 		ply = ply or LocalPlayer()
 
-		if BodyAnimString ~= event or not IsValid(BodyAnim) then return end
+		if BodyAnimString ~= animName or not IsValid(BodyAnim) then return end
 
-		BodyAnim:SetSequence(transitionanims[event])
-
-		if data.onFinish then
-			data.onFinish(ply)
-		end
+		BodyAnim:SetSequence(transitionanims[animName])
 	end
 
 	return handle
@@ -1665,13 +1664,13 @@ local function JumpAnim(event, ply)
 	-]]
 
 	if events[event] then
-		local customAnimForEvent = CustomAnims[event]
+		local customAnimForEvent = CustomAnims[eventslut[event]]
 
 		if customAnimForEvent and customAnimForEvent.onStart then
 			customAnimForEvent.onStart(ply)
 		end
 
-		local wasjumpanim = not CustomAnims[event] and not CustomAnims[BodyAnimString] and fbanims[BodyAnimString] and IsValid(BodyAnim)
+		local wasjumpanim = not customAnimForEvent and not CustomAnims[BodyAnimString] and fbanims[BodyAnimString] and IsValid(BodyAnim)
 
 		if not wasjumpanim then
 			RemoveBodyAnim()
@@ -2085,12 +2084,6 @@ local function JumpThink()
 			local check = transitionchecks[BodyAnimString]
 
 			if check and check(ply) or not check and BodyAnimCycle >= 0.9 and transitionanims[BodyAnimString] then
-				local customAnimForCurrent = CustomAnims[BodyAnimString]
-
-				if customAnimForCurrent and customAnimForCurrent.onFinish then
-					customAnimForCurrent.onFinish(ply)
-				end
-
 				BodyAnim:SetSequence(transitionanims[BodyAnimString])
 			end
 
