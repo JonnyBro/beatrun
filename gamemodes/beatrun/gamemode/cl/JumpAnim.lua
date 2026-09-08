@@ -1294,16 +1294,13 @@ eventsounds = {
 CustomAnims = CustomAnims or {}
 
 function RegisterCustomAnim(event, data)
-	-- event and animName can differ (a custom sequence baked under its own name) - everything
-	-- looked up via BodyAnimString elsewhere (fbanims/transitionanims/transitionchecks/customspeed/
-	-- CustomAnims) must be keyed by animName, not event, or the lookup silently misses
 	local animName = data.sequence or event
 
 	fbanims[animName] = true
 	events[event] = true
 	eventslut[event] = animName
 	transitionanims[animName] = data.transitionanim or "jumpair"
-	transitionchecks[animName] = data.transitioncheck -- nil is fine, the generic dispatcher already defaults to "done after one cycle"
+	transitionchecks[animName] = data.transitioncheck
 
 	if data.sounds then
 		eventsounds[animName] = data.sounds
