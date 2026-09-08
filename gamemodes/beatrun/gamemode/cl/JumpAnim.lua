@@ -1291,6 +1291,44 @@ eventsounds = {
 	}
 }
 
+CustomAnims = CustomAnims or {}
+
+function RegisterCustomAnim(event, data)
+	local animName = data.sequence or event
+
+	fbanims[animName] = true
+	events[event] = true
+	eventslut[event] = animName
+	transitionanims[animName] = data.transitionanim or "jumpair"
+	transitionchecks[animName] = data.transitioncheck
+
+	if data.sounds then
+		eventsounds[animName] = data.sounds
+	end
+
+	if data.speed then
+		customspeed[animName] = data.speed
+	end
+
+	CustomAnims[animName] = data
+
+	local handle = {}
+
+	function handle.start(ply)
+		ParkourEvent(event, ply or LocalPlayer(), true)
+	end
+
+	function handle.stop(ply)
+		ply = ply or LocalPlayer()
+
+		if BodyAnimString ~= animName or not IsValid(BodyAnim) then return end
+
+		BodyAnim:SetSequence(transitionanims[animName])
+	end
+
+	return handle
+end
+
 local CharaName = "Faith"
 
 local function BodyEventSounds(anim)
@@ -1626,7 +1664,13 @@ local function JumpAnim(event, ply)
 	-]]
 
 	if events[event] then
-		local wasjumpanim = fbanims[BodyAnimString] and IsValid(BodyAnim)
+		local customAnimForEvent = CustomAnims[eventslut[event]]
+
+		if customAnimForEvent and customAnimForEvent.onStart then
+			customAnimForEvent.onStart(ply)
+		end
+
+		local wasjumpanim = not customAnimForEvent and not CustomAnims[BodyAnimString] and fbanims[BodyAnimString] and IsValid(BodyAnim)
 
 		if not wasjumpanim then
 			RemoveBodyAnim()
@@ -1688,7 +1732,11 @@ end
 function CheckAnims()
 	RemoveBodyAnim()
 
-	if AnimSet:GetInt() == 0 then
+	local customAnim = CustomAnims[BodyAnimString]
+
+	if customAnim then
+		animtable.animmodelstring = customAnim.model
+	elseif AnimSet:GetInt() == 0 then
 		animtable.animmodelstring = "new_climbanim"
 	else
 		animtable.animmodelstring = "old_climbanim"
@@ -2036,6 +2084,12 @@ local function JumpThink()
 			local check = transitionchecks[BodyAnimString]
 
 			if check and check(ply) or not check and BodyAnimCycle >= 0.9 and transitionanims[BodyAnimString] then
+				local customAnimForCurrent = CustomAnims[BodyAnimString]
+
+				if customAnimForCurrent and customAnimForCurrent.onFinish then
+					customAnimForCurrent.onFinish(ply)
+				end
+
 				BodyAnim:SetSequence(transitionanims[BodyAnimString])
 			end
 
