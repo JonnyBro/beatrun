@@ -328,8 +328,8 @@ function CacheLerpBodyAnim()
 				local ModelBoneMatrix = BodyAnim:GetBoneMatrix(bone)
 				ModelBoneMatrix:SetTranslation(ModelBoneMatrix:GetTranslation())
 
-				from[bone] = cachebody[bone]:FastToTable(from[bone]) or from[bone]
 				to[bone] = to[bone] or ModelBoneMatrix:FastToTable(to[bone])
+				from[bone] = cachebody[bone] and cachebody[bone]:FastToTable(from[bone]) or to[bone]
 
 				local bonematrix = this:GetBoneMatrix(bone)
 				bonematrix:SetTranslation(bonematrix:GetTranslation() - pos)
