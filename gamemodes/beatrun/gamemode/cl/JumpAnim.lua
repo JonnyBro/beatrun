@@ -2081,6 +2081,12 @@ local function JumpThink()
 			local check = transitionchecks[BodyAnimString]
 
 			if check and check(ply) or not check and BodyAnimCycle >= 0.9 and transitionanims[BodyAnimString] then
+				local customAnimForCurrent = CustomAnims[BodyAnimString]
+
+				if customAnimForCurrent and customAnimForCurrent.onFinish then
+					customAnimForCurrent.onFinish(ply)
+				end
+
 				BodyAnim:SetSequence(transitionanims[BodyAnimString])
 			end
 
