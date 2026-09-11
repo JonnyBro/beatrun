@@ -102,14 +102,14 @@ meleedata[MELEE_WRRIGHT] = {
 }
 
 meleedata[MELEE_JUMPCOILKICK] = {
-		"jumpcoilkick", 0.25, 1, function(ply, mv, cmd) -- 2nd value is melee time, 3rd one is melee delay
-			if CLIENT and IsFirstTimePredicted() then
-				ply:CLViewPunch(Angle(0.05, 0, -1))
-			elseif game.SinglePlayer() then
-				ply:ViewPunch(Angle(0.1, 0, -1.5))
-			end
-		end,
-		Angle(-5, 0, -2.5), 70
+	"jumpcoilkick", 0.25, 1, function(ply, mv, cmd) -- 2nd value is melee time, 3rd one is melee delay
+		if CLIENT and IsFirstTimePredicted() then
+			ply:CLViewPunch(Angle(0.05, 0, -1))
+		elseif game.SinglePlayer() then
+			ply:ViewPunch(Angle(0.1, 0, -1.5))
+		end
+	end,
+	Angle(-5, 0, -2.5), 70
 }
 
 local doors = {

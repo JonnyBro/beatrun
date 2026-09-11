@@ -87,8 +87,8 @@ function PLAYER:SetupDataTables()
 
 	self.Player:NetworkVar("Entity", 2, "Swingpipe")
 
-	self.Player:NetworkVar("Entity", 3, "Rabbit")
-	self.Player:NetworkVar("Int", 3, "RabbitSeat")
+	--self.Player:NetworkVar("Entity", 3, "Rabbit")
+	--self.Player:NetworkVar("Int", 3, "RabbitSeat")
 
 	self.Player:NetworkVar("Float", 15, "OverdriveCharge")
 	self.Player:NetworkVar("Float", 16, "OverdriveMult")
@@ -250,8 +250,8 @@ function PLAYER:Spawn()
 	ply.LastSpawnTime = CurTime()
 end
 
-hook.Add("IsSpawnpointSuitable", "CheckSpawnPoint", function(ply, spawnpointent, bMakeSuitable)
-	if not GetGlobalBool("GM_DATATHEFT") or not GetGlobalBool("GM_DEATHMATCH") then return end
+function GM:IsSpawnpointSuitable(ply, spawnpointent, bMakeSuitable)
+	if not GetGlobalBool("GM_DATATHEFT") and not GetGlobalBool("GM_DEATHMATCH") then return end
 
 	local pos = spawnpointent:GetPos()
 
@@ -272,7 +272,7 @@ hook.Add("IsSpawnpointSuitable", "CheckSpawnPoint", function(ply, spawnpointent,
 	if Blockers > 0 then return false end
 
 	return true
-end)
+end
 
 hook.Add("SetupMove", "SpawnFreeze", function(ply, mv, cmd) if ply.SpawnFreezeTime and Course_Name ~= "" and Course_StartPos ~= vector_origin and Course_StartPos and ply.SpawnFreezeTime > CurTime() then mv:SetOrigin(Course_StartPos) end end)
 hook.Add("ShouldCollide", "Beatrun_NoPlayerCollisions", function(ent1, ent2) if ent1:IsPlayer() and ent2.NoPlayerCollisions then return false end end)
@@ -422,6 +422,7 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 	end)
 end)
 
+--[[ from my testing whole section does nothing??? feel free to uncomment if im wrong
 if SERVER then
 	local LastModels = {}
 
@@ -450,7 +451,9 @@ if SERVER then
 		end
 	end)
 end
+--]]
 
+if CLIENT then
 local lastCheckedModel = ""
 local lastCheckedHands = ""
 local lastCheckedSkin = 0
@@ -478,7 +481,7 @@ local function ApplyBodygroups(src, dst)
 	end
 end
 
-hook.Add("Think", "Beatrun_InstantModelUpdate", function()
+hook.Add("Tick", "Beatrun_InstantModelUpdate", function() --TODO: properly optimzize ts
 	if not IsValid(BodyAnim) then return end
 	if not IsValid(BodyAnimMDL) then return end
 
@@ -524,7 +527,7 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
 		ApplyBodygroups(ply, BodyAnimMDL)
 	end
 
-	if IsValid(BodyAnimMDLarm) and hands ~= "" then
+	if hands ~= "" then
 		if handsChanged and BodyAnimMDLarm:GetModel() ~= hands then
 			BodyAnimMDLarm:SetModel(hands)
 		end
@@ -558,14 +561,13 @@ hook.Add("Think", "Beatrun_InstantModelUpdate", function()
 	local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
 	local aav = Vector(as, as, as)
 
-	if IsValid(BodyAnimMDLarm) then
-		for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
-			BodyAnimMDLarm:ManipulateBoneScale(i, aav)
-		end
+	for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
+		BodyAnimMDLarm:ManipulateBoneScale(i, aav)
 	end
 
 	BodyAnimMDL:InvalidateBoneCache()
-	if IsValid(BodyAnimMDLarm) then BodyAnimMDLarm:InvalidateBoneCache() end
+	BodyAnimMDLarm:InvalidateBoneCache()
 end)
+end
 
 player_manager.RegisterClass("player_beatrun", PLAYER, "player_default")

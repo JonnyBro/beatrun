@@ -31,7 +31,7 @@ hook.Add("EntityTakeDamage", "DBNO", function(victim, dmginfo)
 	local class = attacker:GetClass()
 
 	if class == "npc_antlionguard" or class == "npc_antlionguardian" or class == "npc_hunter" then
-		if class == "npc_hunter" and (dmginfo:GetDamageType() ~= DMG_SLASH or dmginfo:GetDamageType() ~= DMG_CLUB) then return end
+		if class == "npc_hunter" and not dmginfo:IsDamageType(DMG_SLASH + DMG_CLUB) then return end
 
 		local atteyeang = attacker:EyeAngles()
 		atteyeang.x = 0
