@@ -43,21 +43,7 @@ if SERVER then
 	local revealed = false
 	local ended = false
 	local didmusic = false
-	-- local didgun = false
 	local cachedhumancount = -1
-
-	--[[
-	local function GiveLastManGun()
-		if cachedhumancount == 1 then
-			for k, v in pairs(player.GetAll()) do
-				if not didgun and not ended and v:Alive() and not v:GetNW2Bool("Infected") then
-					hook.Run("Infection_LastManGun", v)
-					didgun = true
-					break
-				end
-			end
-		end
-	end --]]
 
 	net.Receive("Infection_Touch", function(_, attacker)
 		local victim = net.ReadEntity()
@@ -70,14 +56,14 @@ if SERVER then
 			-- it works :shrug:
 			if not isSingleOrP2p then
 				for _, plr in player.Iterator() do
-					if IsValid(attacker) and IsValid(victim) then
-						if attacker == victim then
-							local str = string.format("chat.AddText('%s', Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infected'))", attacker:Nick())
-							plr:SendLua(str)
-						else
-							local str = string.format("chat.AddText('%s', Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infectedby') .. ' ', Color(255, 255, 100), '%s', '!')", attacker:Nick(), victim:Nick())
-							plr:SendLua(str)
-						end
+					if not IsValid(attacker) or not IsValid(victim) then return end
+
+					if attacker == victim then
+						local str = string.format("chat.AddText('%s', Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infected'))", markup.Escape(attacker:Nick()))
+						plr:SendLua(str)
+					else
+						local str = string.format("chat.AddText('%s', Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infectedby') .. ' ', Color(255, 255, 100), '%s', '!')", markup.Escape(attacker:Nick()), markup.Escape(victim:Nick()))
+						plr:SendLua(str)
 					end
 
 					attacker.InfectionTouchDelay = CurTime() + 3
@@ -95,8 +81,6 @@ if SERVER then
 
 			local humancount = HumanCount()
 			cachedhumancount = humancount
-
-			-- timer.Simple(0.01, GiveLastManGun)
 
 			if humancount < 1 then
 				victim:EmitSound("blackout_hit_0" .. math.random(1, 3) .. ".wav")
@@ -254,7 +238,6 @@ if SERVER then
 		revealed = false
 		ended = false
 		didmusic = false
-		-- didgun = false
 		cachedhumancount = 0
 
 		local players = player.GetAll()
@@ -297,8 +280,6 @@ if SERVER then
 
 			local humancount = HumanCount()
 			cachedhumancount = humancount
-
-			-- timer.Simple(0.01, GiveLastManGun)
 
 			if humancount < 1 then
 				net.Start("Infection_End")
