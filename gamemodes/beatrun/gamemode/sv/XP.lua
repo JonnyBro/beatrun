@@ -1,6 +1,5 @@
 if not game.IsDedicated() then return end
 
-util.AddNetworkString("Beatrun_ParkourEvent")
 util.AddNetworkString("Beatrun_XPUpdate")
 util.AddNetworkString("Beatrun_FloatingXP")
 util.AddNetworkString("Beatrun_LevelUpSound")
@@ -149,28 +148,48 @@ function meta:AddXP(xp)
 end
 
 BEATRUN_PLAYERS_LASTEVENT = BEATRUN_PLAYERS_LASTEVENT or {} -- [SteamID] = { event = time }
+BEATRUN_PLAYERS_LASTPOS = BEATRUN_PLAYERS_LASTPOS or {} -- [SteamID] = { event = Vector }
 
-net.Receive("Beatrun_ParkourEvent", function(_, ply)
+local ParkourXP_RNG = {
+	sidestep = 0.1
+}
+
+local ParkourXP_PosCheck = {
+	climb = true,
+	vault = true,
+	wallrunh = true,
+	wallrunv = true
+}
+
+hook.Add("OnParkour", "ParkourXP", function(event, ply)
 	if not IsValid(ply) then return end
 	if ply:IsBot() then return end
-
-	local event = net.ReadString()
+	if not ply:Alive() or ply:InVehicle() then return end
 	if not ParkourXP[event] then return end
 
 	local steamID = ply:SteamID()
+	local now = CurTime()
 
 	BEATRUN_PLAYERS_LASTEVENT[steamID] = BEATRUN_PLAYERS_LASTEVENT[steamID] or {}
 
-	local now = CurTime()
 	local last = BEATRUN_PLAYERS_LASTEVENT[steamID][event] or 0
 
-	if now - last < 0.5 then -- ratelimit
-		return
-	end
+	if now - last < 0.5 then return end
 
 	BEATRUN_PLAYERS_LASTEVENT[steamID][event] = now
 
-	if not ply:Alive() or ply:InVehicle() then return end
+	if math.random() >= (ParkourXP_RNG[event] or 1) then return end
+
+	if ParkourXP_PosCheck[event] then
+		BEATRUN_PLAYERS_LASTPOS[steamID] = BEATRUN_PLAYERS_LASTPOS[steamID] or {}
+
+		local lastpos = BEATRUN_PLAYERS_LASTPOS[steamID][event]
+		local pos = ply:GetPos()
+
+		if lastpos and lastpos:Distance(pos) <= 200 then return end
+
+		BEATRUN_PLAYERS_LASTPOS[steamID][event] = Vector(pos)
+	end
 
 	local xpAmount = (ParkourXP[event] or 0) * math.max(math.Round(ply:GetLevel() * 0.05), 1)
 

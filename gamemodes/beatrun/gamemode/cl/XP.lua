@@ -113,8 +113,7 @@ if isSingleOrP2p then
 	hook.Add("ShutDown", "Beatrun_SaveXP", Beatrun_SaveXP)
 	hook.Add("InitPostEntity", "Beatrun_LoadXP", Beatrun_LoadXP)
 
-	hook.Add("OnParkour", "ParkourXP", function(event)
-		local ply = LocalPlayer()
+	hook.Add("OnParkour", "ParkourXP", function(event, ply)
 		if not IsValid(ply) then return end
 
 		local pos = ply:GetPos()
@@ -128,21 +127,6 @@ if isSingleOrP2p then
 		end
 	end)
 else
-	hook.Add("OnParkour", "ParkourXP", function(event)
-		local ply = LocalPlayer()
-		if not IsValid(ply) then return end
-
-		local pos = ply:GetPos()
-
-		if math.random() < (ParkourXP_RNG[event] or 1) and (not ParkourXP_PosCheck[event] or parkourevent_lastpos:Distance(pos) > 200) then
-			net.Start("Beatrun_ParkourEvent")
-				net.WriteString(event)
-			net.SendToServer()
-
-			if ParkourXP_PosCheck[event] then parkourevent_lastpos:Set(pos) end
-		end
-	end)
-
 	net.Receive("Beatrun_XPUpdate", function() XP_ratiocache = nil end)
 
 	net.Receive("Beatrun_FloatingXP", function()
