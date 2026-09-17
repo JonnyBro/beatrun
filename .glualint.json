@@ -1,5 +1,5 @@
 {
-	"lint_maxScopeDepth": 0,
+	"lint_maxScopeDepth": 10,
 	"lint_syntaxErrors": true,
 	"lint_syntaxInconsistencies": true,
 	"lint_deprecated": true,
@@ -26,6 +26,7 @@
 	"lint_spaceBeforeComma": false,
 	"lint_spaceAfterComma": true,
 	"lint_maxLineLength": 0,
+	"lint_warningsAreErrors": false,
 
 	"prettyprint_spaceBetweenParens": false,
 	"prettyprint_spaceBetweenBrackets": false,
