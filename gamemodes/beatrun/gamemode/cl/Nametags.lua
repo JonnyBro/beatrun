@@ -35,14 +35,20 @@ local function GetNametagColor(ply)
 	return color
 end
 
-local function HideNearby(ply)
+local function HideNearbyPlayers(ply)
 	if ply == LocalPlayer() then return end
 	if GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then return end
 
 	local dist = LocalPlayer():GetPos():Distance(ply:GetPos())
-	ply.distfromlocal = dist
 
-	if not (NametagsEnable:GetBool() and not GetGlobalBool("EM_HideNametags") and dist < 50000) then return end
+	if not NametagsEnable:GetBool() or GetGlobalBool("EM_HideNametags") or dist > 50000 then return end
+end
+
+hook.Add("PrePlayerDraw", "Beatrun_HideNearbyPlayers", HideNearbyPlayers)
+
+hook.Add("PrePlayerDraw", "Beatrun_InfectionTouch", function(ply)
+	local dist = LocalPlayer():GetPos():Distance(ply:GetPos())
+	ply.distfromlocal = dist
 
 	local infectionmode = GetGlobalBool("GM_INFECTION")
 	local localinfected = LocalPlayer():GetNW2Bool("Infected")
@@ -56,12 +62,8 @@ local function HideNearby(ply)
 				net.WriteEntity(ply)
 			net.SendToServer()
 		end
-
-		return true
 	end
-end
-
-hook.Add("PrePlayerDraw", "HideNearby", HideNearby)
+end)
 
 local function DrawNametags(bDrawingDepth, bDrawingSkybox)
 	if bDrawingSkybox then return end
