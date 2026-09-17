@@ -34,7 +34,6 @@ end
 if SERVER then
 	util.AddNetworkString("Infection_Start")
 	util.AddNetworkString("Infection_End")
-	util.AddNetworkString("Infection_Touch")
 	util.AddNetworkString("Infection_Announce")
 	util.AddNetworkString("Infection_XPReward")
 	util.AddNetworkString("Infection_LastMan")
@@ -45,59 +44,84 @@ if SERVER then
 	local didmusic = false
 	local cachedhumancount = -1
 
-	net.Receive("Infection_Touch", function(_, attacker)
-		local victim = net.ReadEntity()
+	local function InfectionTouch(attacker, victim)
+		if ended then return end
+		if not IsValid(attacker) or not attacker:IsPlayer() then return end
+		if not attacker:Alive() then return end
+		if not attacker:GetNW2Bool("Infected") then return end
+		if not IsValid(victim) or not victim:IsPlayer() then return end
+		if victim:GetNW2Bool("Infected") then return end
+		if attacker:GetPos():DistToSqr(victim:GetPos()) > 900 then return end
 
-		if ended or not attacker:Alive() or not attacker:GetNW2Bool("Infected") or victim:GetNW2Bool("Infected") then return end
+		victim:SetNW2Bool("Infected", true)
 
-		if IsValid(victim) and victim:IsPlayer() and attacker:GetPos():Distance(victim:GetPos()) < 300 then
-			victim:SetNW2Bool("Infected", true)
+		if not isSingleOrP2p then
+			for _, plr in player.Iterator() do
+				if not IsValid(plr) then continue end
 
-			-- it works :shrug:
-			if not isSingleOrP2p then
-				for _, plr in player.Iterator() do
-					if not IsValid(attacker) or not IsValid(victim) then return end
-
-					if attacker == victim then
-						local str = string.format("chat.AddText('%s', Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infected'))", markup.Escape(attacker:Nick()))
-						plr:SendLua(str)
-					else
-						local str = string.format("chat.AddText('%s', Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infectedby') .. ' ', Color(255, 255, 100), '%s', '!')", markup.Escape(attacker:Nick()), markup.Escape(victim:Nick()))
-						plr:SendLua(str)
-					end
-
-					attacker.InfectionTouchDelay = CurTime() + 3
-
-					if attacker ~= victim then attacker:AddXP(25) end
+				if attacker == victim then
+					local str = string.format("chat.AddText(markup.Escape('%s'), Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infected'))", attacker:Nick())
+					plr:SendLua(str)
+				else
+					local str = string.format("chat.AddText(markup.Escape('%s'), Color(255, 25, 25), ' ' .. language.GetPhrase('beatrun.infection.infectedby') .. ' ', Color(255, 255, 100), markup.Escape('%s'), '!')", attacker:Nick(), victim:Nick())
+					plr:SendLua(str)
 				end
-			else
-				net.Start("Infection_Announce")
-					net.WriteEntity(attacker)
-					net.WriteEntity(victim)
-				net.Broadcast()
+
+				-- if attacker ~= victim then attacker:AddXP(25) end
 			end
+		else
+			net.Start("Infection_Announce")
+				net.WriteEntity(attacker)
+				net.WriteEntity(victim)
+			net.Broadcast()
+		end
 
-			victim:SetNW2Float("PBTime", CurTime() - Infection_StartTime)
+		attacker.InfectionTouchDelay = CurTime() + 3
 
-			local humancount = HumanCount()
-			cachedhumancount = humancount
+		victim:SetNW2Float("PBTime", CurTime() - Infection_StartTime)
 
-			if humancount < 1 then
-				victim:EmitSound("blackout_hit_0" .. math.random(1, 3) .. ".wav")
+		local humancount = HumanCount()
 
-				net.Start("Infection_End")
-					net.WriteFloat(CurTime())
-				net.Broadcast()
+		cachedhumancount = humancount
 
-				ended = true
+		if humancount < 1 then
+			victim:EmitSound("blackout_hit_0" .. math.random(1, 3) .. ".wav")
 
-				timer.Simple(15, function()
-					if ended and GetGlobalBool("GM_INFECTION") then
-						Beatrun_StartInfection()
-					end
-				end)
-			else
-				victim:EmitSound("player_damage_tonal_hit_0" .. math.random(1, 6) .. ".wav")
+			net.Start("Infection_End")
+				net.WriteFloat(CurTime())
+			net.Broadcast()
+
+			ended = true
+
+			timer.Simple(15, function() if ended and GetGlobalBool("GM_INFECTION") then Beatrun_StartInfection() end end)
+		else
+			victim:EmitSound("player_damage_tonal_hit_0" .. math.random(1, 6) .. ".wav")
+		end
+	end
+
+	timer.Create("Beatrun_InfectionTouch", 0.1, 0, function()
+		if ended then return end
+		if not GetGlobalBool("GM_INFECTION") then return end
+
+		for _, attacker in player.Iterator() do
+			if not attacker:Alive() then continue end
+			if not attacker:GetNW2Bool("Infected") then continue end
+
+			attacker.InfectionTouchDelay = attacker.InfectionTouchDelay or 0
+
+			if CurTime() < attacker.InfectionTouchDelay then continue end
+
+			local attackerPos = attacker:GetPos()
+
+			for _, victim in ipairs(ents.FindInSphere(attackerPos, 30)) do
+				if not IsValid(victim) then continue end
+				if not victim:IsPlayer() then continue end
+				if victim == attacker then continue end
+				if victim:GetNW2Bool("Infected") then continue end
+
+				InfectionTouch(attacker, victim)
+
+				break
 			end
 		end
 	end)
@@ -450,9 +474,9 @@ if CLIENT then
 
 		if IsValid(attacker) and IsValid(victim) then
 			if attacker == victim then
-				chat.AddText(attacker, red, " " .. language.GetPhrase("beatrun.infection.infected"))
+				chat.AddText(markup.Escape(attacker:Nick()), red, " " .. language.GetPhrase("beatrun.infection.infected"))
 			else
-				chat.AddText(attacker, red, " " .. language.GetPhrase("beatrun.infection.infectedby") .. " ", yellow, victim, "!")
+				chat.AddText(markup.Escape(attacker:Nick()), red, " " .. language.GetPhrase("beatrun.infection.infectedby") .. " ", yellow, markup.Escape(victim:Nick()), "!")
 			end
 
 			attacker.InfectionTouchDelay = CurTime() + 3

@@ -46,25 +46,6 @@ end
 
 hook.Add("PrePlayerDraw", "Beatrun_HideNearbyPlayers", HideNearbyPlayers)
 
-hook.Add("PrePlayerDraw", "Beatrun_InfectionTouch", function(ply)
-	local dist = LocalPlayer():GetPos():Distance(ply:GetPos())
-	ply.distfromlocal = dist
-
-	local infectionmode = GetGlobalBool("GM_INFECTION")
-	local localinfected = LocalPlayer():GetNW2Bool("Infected")
-	local plyinfected = ply:GetNW2Bool("Infected")
-
-	if dist < 30 then
-		if infectionmode and CurTime() > (LocalPlayer().InfectionTouchDelay or 0) and localinfected and not plyinfected then
-			LocalPlayer().InfectionTouchDelay = CurTime() + 1
-
-			net.Start("Infection_Touch")
-				net.WriteEntity(ply)
-			net.SendToServer()
-		end
-	end
-end)
-
 local function DrawNametags(bDrawingDepth, bDrawingSkybox)
 	if bDrawingSkybox then return end
 
