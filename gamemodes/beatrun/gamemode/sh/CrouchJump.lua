@@ -35,7 +35,7 @@ hook.Add("SetupMove", "CrouchJump", function(ply, mv, cmd)
 
 	local activewep = ply:GetActiveWeapon()
 
-	if ply:Alive() and not ply:GetCrouchJumpBlocked() and not IsValid(ply:GetZipline()) and not IsValid(ply:GetLadder()) and ply:GetClimbing() == 0 and not ply:GetJumpTurn() and ply:GetMantle() == 0 and not ply:OnGround() and ply:GetVelocity().z > -350 and ply:GetCrouchJumpTime() < CurTime() and ply:GetWallrun() == 0 and mv:KeyPressed(IN_DUCK) then
+	if ply:Alive() and not ply:GetCrouchJumpBlocked() and not IsValid(ply:GetZipline()) and not IsValid(ply:GetLadder()) and not IsValid(ply:GetSwingbar()) and ply:GetClimbing() == 0 and not ply:GetJumpTurn() and ply:GetMantle() == 0 and not ply:OnGround() and ply:GetVelocity().z > -350 and ply:GetCrouchJumpTime() < CurTime() and ply:GetWallrun() == 0 and mv:KeyPressed(IN_DUCK) then
 		if CLIENT then
 			local ang = ply:EyeAngles()
 			ang.x = 0
