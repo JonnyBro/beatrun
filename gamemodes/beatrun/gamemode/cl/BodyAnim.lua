@@ -477,6 +477,15 @@ function StartBodyAnim(animtable)
 			if head then
 				BodyAnim:ManipulateBoneScale(head, vector_origin)
 			end
+
+			-- fixes a duplicate issue with the body so now it shouldnt do those anymore (REMOVE IF READ)
+			for _, legBone in ipairs({ "ValveBiped.Bip01_L_Thigh", "ValveBiped.Bip01_R_Thigh" }) do
+				local bone = BodyAnimMDL:LookupBone(legBone)
+
+				if bone then
+					BodyAnimMDL:ManipulateBoneScale(bone, vector_origin)
+				end
+			end
 		end
 	elseif usefullbody == 1 then
 		BodyAnimMDL = ClientsideModel(playermodel, RENDERGROUP_BOTH)
@@ -587,6 +596,11 @@ hook.Add("Think", "BodyAnimThink", function()
 	end
 
 	BodyAnimCycle = BodyAnimCycle + FrameTime() / BodyAnim:SequenceDuration() * BodyAnimSpeed
+
+	-- custom anims never get their cycle reset if transitioncheck always returns false, so clamp it (REMOVE IF READ)
+	if CustomAnims[BodyAnimString] then
+		BodyAnimCycle = math.min(BodyAnimCycle, 1)
+	end
 
 	if not customcycle then BodyAnim:SetCycle(BodyAnimCycle) end
 
