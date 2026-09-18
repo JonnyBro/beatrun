@@ -1299,7 +1299,7 @@ function RegisterCustomAnim(event, data)
 	fbanims[animName] = true
 	events[event] = true
 	eventslut[event] = animName
-	transitionanims[animName] = data.transitionanim or "jumpair"
+	transitionanims[animName] = data.transitionanim == nil and "jumpair" or data.transitionanim
 	transitionchecks[animName] = data.transitioncheck
 
 	if data.sounds then
@@ -1487,7 +1487,7 @@ local function JumpArmDraw() --(a, b, c)
 		local arminterrupting = ArmInterrupting(bac)
 		local arminterruptboost = arminterrupting and 4 or 1
 
-		armoffsetlerp = LerpVector(math.min(10 * FrameTime() * arminterruptboost, 1), armoffsetlerp, not arminterrupting and customarmoffset[BodyAnimString] or defaultarmoffset)
+		armoffsetlerp = LerpVector(math.min(10 * FrameTime() * arminterruptrruptboost, 1), armoffsetlerp, not arminterrupting and customarmoffset[BodyAnimString] or defaultarmoffset)
 		armoffset:Set(armoffsetlerp)
 
 		local pos = offset.Pos
@@ -1667,7 +1667,13 @@ local function JumpAnim(event, ply)
 			customAnimForEvent.onStart(ply)
 		end
 
-		local wasjumpanim = not customAnimForEvent and not CustomAnims[BodyAnimString] and fbanims[BodyAnimString] and IsValid(BodyAnim)
+		local customAnimForCurrent = CustomAnims[BodyAnimString]
+
+		-- reuse the entity when switching between two custom anims on the same model (ONLY FOR CUSTOMANIMS) (REMOVE IF READ)
+		local sameCustomModel = customAnimForEvent and customAnimForCurrent
+			and customAnimForEvent.model == customAnimForCurrent.model
+		local wasjumpanim = ((not customAnimForEvent and not customAnimForCurrent) or sameCustomModel)
+			and fbanims[BodyAnimString] and IsValid(BodyAnim)
 
 		if not wasjumpanim then
 			RemoveBodyAnim()
