@@ -1487,7 +1487,7 @@ local function JumpArmDraw() --(a, b, c)
 		local arminterrupting = ArmInterrupting(bac)
 		local arminterruptboost = arminterrupting and 4 or 1
 
-		armoffsetlerp = LerpVector(math.min(10 * FrameTime() * arminterruptrruptboost, 1), armoffsetlerp, not arminterrupting and customarmoffset[BodyAnimString] or defaultarmoffset)
+		armoffsetlerp = LerpVector(math.min(10 * FrameTime() * arminterruptboost, 1), armoffsetlerp, not arminterrupting and customarmoffset[BodyAnimString] or defaultarmoffset)
 		armoffset:Set(armoffsetlerp)
 
 		local pos = offset.Pos
