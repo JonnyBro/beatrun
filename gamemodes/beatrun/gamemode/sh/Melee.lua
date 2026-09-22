@@ -287,9 +287,6 @@ local function MeleeThink(ply, mv, cmd)
 					end)
 
 					ent:EmitSound("Door.Barge")
-					ent:EmitSound("Door.BargeTexture")
-					ent:EmitSound("Door.BargeHit")
-					timer.Simple(0.15, function() ent:EmitSound("Door.BargeHit") end)
 
 					return false
 				end

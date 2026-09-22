@@ -17,33 +17,6 @@ sound.Add({
 })
 
 sound.Add({
-	name = "Door.BargeTexture",
-	volume = 1,
-	level = 80,
-	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
-	sound = { "mirrorsedge/gameplayobjects/Door_Bash_01.wav", "mirrorsedge/gameplayobjects/Door_Bash_01.wav", "mirrorsedge/gameplayobjects/Door_Bash_02.wav", "mirrorsedge/gameplayobjects/Door_Bash_03.wav" }
-})
-
-sound.Add({
-	name = "Door.BargeImpact",
-	volume = 1,
-	level = 80,
-	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
-	sound = { "mirrorsedge/gameplayobjects/Door_Bash_Impact.wav" }
-})
-
-sound.Add({
-	name = "Door.BargeHit",
-	volume = 0.75,
-	level = 80,
-	channel = CHAN_STATIC,
-	pitch = { 80, 100 },
-	sound = { "mirrorsedge/gameplayobjects/Door_Hit.wav" }
-})
-
-sound.Add({
 	name = "FenceClimb",
 	volume = 1,
 	level = 60,

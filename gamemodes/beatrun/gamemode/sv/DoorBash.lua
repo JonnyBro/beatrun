@@ -7,7 +7,7 @@ util.AddNetworkString("DoorBashAnim")
 
 hook.Add("PlayerUse", "DoorBash", function(ply, ent)
 	if doors[ent:GetClass()] then
-		if ply:GetVelocity():Length() < 180 or ply:Crouching() then return end
+		if ply:GetVelocity():Length() < 150 or ply:Crouching() then return end
 		if ent.bashdelay and ent.bashdelay > CurTime() then return end
 		if ent:GetInternalVariable("m_bLocked") then return end
 
@@ -35,11 +35,8 @@ hook.Add("PlayerUse", "DoorBash", function(ply, ent)
 		end)
 
 		ent:EmitSound("Door.Barge")
-		ent:EmitSound("Door.BargeTexture")
-		ent:EmitSound("Door.BargeHit")
-		ply:EmitSound("Door.BargeImpact")
+		ply:EmitSound("Melee.Foot") -- impact sound
 		timer.Simple(0.05, function() ply:FaithVO("Faith.Impact") end)
-		timer.Simple(0.15, function() ent:EmitSound("Door.BargeHit") end)
 
 		return false
 	end
