@@ -428,7 +428,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 	local able_to_slide = ducking and sprinting and speed > runspeed * 0.5
 	local already_sliding = (ply:GetSlidingDelay() >= CT) or ply:GetSliding()
 
-	if not already_sliding and ply:Alive() and onground and not ply:GetJumpTurn() and (able_to_slide or slippery or ply:GetDive()) then
+	if not already_sliding and ply:Alive() and onground and (not ply:GetJumpTurn() or slippery) and (able_to_slide or slippery or ply:GetDive()) then
 		vel = math.min(speed, 541.44) * ply:GetOverdriveMult()
 
 		ParkourEvent(slippery and "slide45" or "slide", ply)
@@ -542,8 +542,6 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 				net.WriteBool(false)
 				net.WriteBool(ply:GetDiveSliding())
 			net.Send(ply)
-
-			ply.DiveSliding = false
 		elseif CLIENT and IsFirstTimePredicted() then
 			SlidingAnimEnd(false)
 		end
