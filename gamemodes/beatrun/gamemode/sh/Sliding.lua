@@ -1,8 +1,6 @@
 local qslide_duration = 3
 local qslide_speedmult = 1
 
-local ActuallyHoldingCrouch
-
 local slide_sounds = {
 	[MAT_CONCRETE] = { "Slide.Concrete" },
 	[MAT_SAND] = { "Slide.Gravel" },
@@ -107,7 +105,7 @@ local function SlidingAnimStart()
 		VMLegs:Remove()
 	end
 
-	if not ply:GetDiveSliding() then
+	if game.SinglePlayer() and not net.ReadBool() or not game.SinglePlayer() and not ply.DiveSliding then
 		CamIgnoreAng = false
 		camjoint = ply:GetSlidingSlippery() and "eyes" or "CameraJoint"
 
@@ -134,12 +132,10 @@ local function SlidingAnimStart()
 	hook.Add("Think", "SlidingAnimThink", SlidingAnimThink)
 end
 
-local function SlidingAnimEnd(slippery, diving) --  , diving
+local function SlidingAnimEnd(slippery, diving)
 	if not IsValid(BodyAnim) then return end
 
 	local ply = LocalPlayer()
-
-	local isDiveSliding = game.SinglePlayer() and diving or ply:GetDiveSliding()
 
 	if ply:GetJumpTurn() then
 		camjoint = "eyes"
@@ -149,16 +145,16 @@ local function SlidingAnimEnd(slippery, diving) --  , diving
 	end
 
 	if not slippery then
-		if not isDiveSliding then --  and not diving
-			local crouchEnd = PlayerCannotStand(ply) or ActuallyHoldingCrouch
+		if not ply.DiveSliding and not diving then
+			local crouchEnd = PlayerCannotStand(ply)
 			local endAnim = crouchEnd and "meslideendcrouch" or "meslideend"
 
 			BodyAnimString = endAnim
 			BodyAnim:ResetSequence(endAnim)
 		else
-			--ply:SetDiveSliding(false)
+			ply.DiveSliding = false
 
-			local crouchEnd = PlayerCannotStand(ply) or ActuallyHoldingCrouch --ply:KeyDown(IN_DUCK)
+			local crouchEnd = PlayerCannotStand(ply)
 			local endAnim = crouchEnd and "diveslideendcrouch" or "diveslideend"
 
 			ParkourEvent(endAnim, ply, true)
@@ -234,6 +230,11 @@ local trace_down = Vector(0, 0, 32)
 -- local trace_up = Vector(0, 0, 32)
 local trace_tbl = {}
 
+-- CHANGE: Separate trace table for the per-tick loop-sound material check.
+-- Using a dedicated table avoids overwriting trace_tbl's fields while
+-- SlideSurfaceSound might also be mid-use.
+local loopmat_trace_tbl = {}
+
 local function SlideSurfaceSound(ply, pos)
 	trace_tbl.start = pos
 	trace_tbl.endpos = pos - trace_down
@@ -244,7 +245,7 @@ local function SlideSurfaceSound(ply, pos)
 	local handstep = HANDSTEPS_SOFT_LUT[tr.MatType] or "ConcreteSoft"
 
 	ply:EmitSound("Cloth.FallShortMedium")
-	if not ply:GetDiveSliding() then
+	if not ply.DiveSliding then
 		ply:EmitSound("Handsteps." .. handstep)
 	end
 	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
@@ -256,13 +257,40 @@ local function SlideLoopSound(ply, pos, mat)
 	local sndtable
 	if ply:WaterLevel() > 0 then
 		sndtable = slideloop_sounds[MAT_SLOSH]
+		mat = MAT_SLOSH
 	else
 		sndtable = slideloop_sounds[mat] or slideloop_sounds[0]
+		if not slideloop_sounds[mat] then mat = 0 end
 	end
 
+	ply.SlideLoopMat = mat
+
 	ply.SlideLoopSound = CreateSound(ply, sndtable)
-	ply.SlideLoopSound:PlayEx(0.1, 100)
+	ply.SlideLoopSound:PlayEx(0.25, 100)
 end
+
+local function UpdateSlideLoopSound(ply, mat)
+	local resolvedMat
+	if ply:WaterLevel() > 0 then
+		resolvedMat = MAT_SLOSH
+	else
+		resolvedMat = slideloop_sounds[mat] and mat or 0
+	end
+
+	if ply.SlideLoopMat == resolvedMat then return end
+
+	if ply.SlideLoopSound then
+		ply.SlideLoopSound:FadeOut(0.15)
+	end
+
+	ply.SlideLoopMat = resolvedMat
+
+	local sndtable = slideloop_sounds[resolvedMat] or slideloop_sounds[0]
+	ply.SlideLoopSound = CreateSound(ply, sndtable)
+	ply.SlideLoopSound:PlayEx(0.25, 100)
+end
+
+local SlideLoopMatInterval = 0.1
 
 -- local COORD_FRACTIONAL_BITS = 5
 -- local COORD_DENOMINATOR = bit.lshift(1, COORD_FRACTIONAL_BITS)
@@ -400,7 +428,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 	local able_to_slide = ducking and sprinting and speed > runspeed * 0.5
 	local already_sliding = (ply:GetSlidingDelay() >= CT) or ply:GetSliding()
 
-	if not already_sliding and ply:Alive() and onground and (not ply:GetJumpTurn() or slippery) and (able_to_slide or slippery or ply:GetDive()) then
+	if not already_sliding and ply:Alive() and onground and not ply:GetJumpTurn() and (able_to_slide or slippery or ply:GetDive()) then
 		vel = math.min(speed, 541.44) * ply:GetOverdriveMult()
 
 		ParkourEvent(slippery and "slide45" or "slide", ply)
@@ -409,14 +437,11 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			vel = 230
 
 			ply:SetDive(false)
-			ply:SetDiveSliding(false)
+			ply.DiveSliding = false
 		end
 
 		if ply:GetDive() then
-			--if ply:OnGround() and ply:GetSafetyRollKeyTime() <= CurTime() then -- this whole section was taken out of the dive hook, some addons manage to somehow change the hook order and the dive slide breaks bcz of that
-			ply:SetDiveSliding(true)
-			ply:SetDive(false)
-			--end
+			ply.DiveSliding = true
 		end
 
 		ply:SetViewOffset(Vector(0, 0, 64))
@@ -433,7 +458,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		ply:SetUnDuckSpeed(0.05)
 
 		if not slippery then
-			if not ply:GetDiveSliding() then
+			if not ply.DiveSliding then
 				ply:SetSlidingAngle(mv:GetVelocity():Angle())
 			else
 				local ang = cmd:GetViewAngles()
@@ -462,7 +487,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		if game.SinglePlayer() then
 			net.Start("sliding_spfix")
-				--net.WriteBool(ply:GetDiveSliding())
+				net.WriteBool(ply:GetDive())
 			net.Send(ply)
 		end
 
@@ -512,17 +537,23 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			net.Start("sliding_spend")
 				net.WriteBool(blocked)
 				net.WriteBool(false)
-				net.WriteBool(ply:GetDiveSliding())
+				net.WriteBool(ply.DiveSliding)
 			net.Send(ply)
+
+			ply.DiveSliding = false
 		elseif CLIENT and IsFirstTimePredicted() then
-			SlidingAnimEnd(false)
+			SlidingAnimEnd(false, ply.DiveSliding)
+
+			ply.DiveSliding = false
 		end
-		ply:SetDiveSliding(false)
 
 		ply:SetSlidingDelay(CT + 0.1)
 
 		if SERVER and ply.SlideLoopSound then
 			ply.SlideLoopSound:FadeOut(0.15)
+			-- CHANGE: Reset the material check timer on slide end so the next
+			-- slide doesn't inherit a stale interval from the previous one.
+			ply.SlideLoopMatNextCheck = nil
 		end
 
 		ply:ConCommand("-duck")
@@ -558,6 +589,27 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 
 		ply:SetSlidingLastPos(pos)
+
+		-- CHANGE: Server-side material check – runs every SlideLoopMatInterval
+		-- seconds (not every tick) to keep trace overhead low.  We trace straight
+		-- down from the player's current position (same direction SlideSurfaceSound
+		-- uses) to read the material under their feet, then let
+		-- UpdateSlideLoopSound decide whether a sound swap is actually needed.
+		if SERVER then
+			local now = CurTime()
+			if not ply.SlideLoopMatNextCheck or now >= ply.SlideLoopMatNextCheck then
+				ply.SlideLoopMatNextCheck = now + SlideLoopMatInterval
+
+				-- CHANGE: Populate the dedicated loop-mat trace table and fire it.
+				loopmat_trace_tbl.start  = pos
+				loopmat_trace_tbl.endpos = pos - trace_down
+				loopmat_trace_tbl.filter = ply
+
+				local loopTr = util.TraceLine(loopmat_trace_tbl)
+				-- CHANGE: Call the update function with the freshly traced material.
+				UpdateSlideLoopSound(ply, loopTr.MatType)
+			end
+		end
 
 		if slippery then
 			if mv:KeyDown(IN_MOVERIGHT) then
@@ -610,12 +662,12 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			end
 		end
 
-		if mv:KeyPressed(IN_BACK) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 and not PlayerCannotStand(ply) then -- cannotstand check prevents players from getting stuck inside the map
+		if mv:KeyPressed(IN_BACK) and ply:GetMelee() == 0 and ply:GetSlidingTime() < CT + slidetime * 0.95 then
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 				cmd:SetViewAngles(ply:GetSlidingAngle())
 			end
 
-			ply:SetDiveSliding(false)
+			ply.DiveSliding = false
 			ply:SetSlidingTime(0)
 			ply:SetSliding(false)
 			ply:SetQuickturn(true)
@@ -652,16 +704,31 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			ply:SetSlidingTime(0)
 			ply:ViewPunch(Angle(0.85, 0, 0.15))
 
+			if SERVER and game.SinglePlayer() then
+				net.Start("sliding_spend")
+					net.WriteBool(false)
+					net.WriteBool(slippery)
+					net.WriteBool(ply.DiveSliding)
+				net.Send(ply)
+			elseif CLIENT and IsFirstTimePredicted() then
+				SlidingAnimEnd(slippery, ply.DiveSliding)
+			end
+
 			ply:SetSlidingDelay(CT + 0.1)
 
 			if SERVER then
 				ply.SlideLoopSound:FadeOut(0.15)
+				-- CHANGE: Reset the material check timer so the next slide starts
+				-- a fresh check immediately rather than waiting out a leftover interval.
+				ply.SlideLoopMatNextCheck = nil
 			end
 
-			if (not mv:KeyDown(IN_ATTACK2) or mv:KeyDown(IN_FORWARD)) then
-				--ply:ConCommand("-duck") -- since there is slide crouch end animations now maybe this is not needed??
+			ply.DiveSliding = false
+
+			if not mv:KeyDown(IN_ATTACK2) or mv:KeyDown(IN_FORWARD) then
+				ply:ConCommand("-duck")
 				ply:SetViewOffsetDucked(Vector(0, 0, 32))
-			elseif not ply:GetDiveSliding() then
+			else
 				ply:SetViewOffsetDucked(Vector(0, 0, 17))
 				ply:SetViewOffset(Vector(0, 0, 64))
 				ply:SetJumpTurn(true)
@@ -674,18 +741,6 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 					ply:SendLua("DoJumpTurn(false) BodyAnim:SetSequence('meslideendprone')")
 				end
 			end
-
-			if SERVER and game.SinglePlayer() then
-					net.Start("sliding_spend")
-					net.WriteBool(false)
-					net.WriteBool(slippery)
-					net.WriteBool(ply:GetDiveSliding())
-					net.Send(ply)
-			elseif CLIENT and IsFirstTimePredicted() then
-				SlidingAnimEnd(slippery)
-			end
-
-			ply:SetDiveSliding(false)
 		end
 	end
 
@@ -703,8 +758,6 @@ end)
 
 hook.Add("StartCommand", "qslidespeed", function(ply, cmd)
 	if ply:GetSliding() then
-		ActuallyHoldingCrouch = cmd:KeyDown(IN_DUCK) -- this is kinda a hack to get slide crouch end anims to work properly
-
 		cmd:RemoveKey(IN_SPEED)
 
 		if not ply:GetSlidingSlippery() then

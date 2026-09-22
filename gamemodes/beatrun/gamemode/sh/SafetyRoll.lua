@@ -167,11 +167,12 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 
 		if SERVER and not land then
 			ply:EmitSound("Cloth.FallShortMediumLong")
-			timer.Simple(0.1, function()
+			ply:EmitSound("Cloth.RollCloth")
+			timer.Simple(0.15, function()
 				ply:EmitSound("Cloth.Roll")
 				ply:EmitSound("Cloth.BodyRollSwish")
-			end)
-			ply:EmitSound("Cloth.RollCloth")
+				ply:EmitSound("Cloth.BodyRoll")
+			end)			
 		elseif CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
 			ply:EmitSound("Handsteps.ConcreteHard")
 			ply:EmitSound("Land.Concrete")
@@ -252,7 +253,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 		end
 
 		if SERVER and not land then
-			timer.Simple(0.2, function()
+			timer.Simple(0.15, function()
 				ply:EmitSound("Cloth.Roll")
 				ply:EmitSound("Cloth.BodyRoll")
 				ply:EmitSound("Cloth.BodyRollSwish")
@@ -262,13 +263,12 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 			ply:EmitSound("Cloth.BodyRoll")
 			ply:EmitSound("Cloth.RollCloth")
 		elseif CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-			timer.Simple(0.01, function()
-				ply:EmitSound("Cloth.FallShortMedium")
-			end)
-			timer.Simple(0.35, function()
+			ply:EmitSound("Cloth.FallShortMedium")
+			ply:EmitSound("Cloth.MovementRun")
+			ply:EmitSound("Land.Concrete")
+			timer.Simple(0.3, function()
 				ply:EmitSound("Cloth.MovementWalk")
 			end)
-			ply:EmitSound("Land.Concrete")
 		end
 
 		if CLIENT and IsFirstTimePredicted() then

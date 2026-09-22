@@ -30,7 +30,7 @@ sound.Add({
 	volume = 0.5,
 	level = 40,
 	channel = CHAN_STATIC,
-	pitch = { 80, 105 },
+	pitch = { 90, 110 },
 	sound = { "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_01.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_02.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_03.wav" }
 })
 

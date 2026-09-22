@@ -9,8 +9,8 @@ sound.Add({
 
 sound.Add({
 	name = "Cloth.MovementRun",
-	volume = 0.75,
-	level = 30,
+	volume = 1,
+	level = 32,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/Cloth/ME_Cloth_Movement_Run1.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run2.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run3.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run4.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run5.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run6.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run7.wav", "mirrorsedge/Cloth/ME_Cloth_Movement_Run8.wav" }
@@ -18,8 +18,8 @@ sound.Add({
 
 sound.Add({
 	name = "Cloth.MovementWalk",
-	volume = 0.75,
-	level = 40,
+	volume = 1,
+	level = 45,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/Cloth/Cloth_Movement_Walk_01.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_02.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_03.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_04.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_05.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_06.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_07.wav", "mirrorsedge/Cloth/Cloth_Movement_Walk_08.wav" }
@@ -27,8 +27,8 @@ sound.Add({
 
 sound.Add({
 	name = "Cloth.MovementSneak",
-	volume = 0.75,
-	level = 40,
+	volume = 1,
+	level = 45,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/Cloth/Cloth_Movement_Sneak_01.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_02.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_03.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_04.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_05.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_06.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_07.wav", "mirrorsedge/Cloth/Cloth_Movement_Sneak_08.wav" }
