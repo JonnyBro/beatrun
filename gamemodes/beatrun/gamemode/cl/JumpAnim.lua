@@ -580,7 +580,7 @@ local ignorebac = {
 local customspeed = {
 	vaultonto = 1.15,
 	jumpcoilkickhit = 1.2,
-	vaultontohigh = 1,
+	vaultontohigh = 1
 }
 
 local vaultoverhighcam1 = Vector(0, 0, -7.5)
