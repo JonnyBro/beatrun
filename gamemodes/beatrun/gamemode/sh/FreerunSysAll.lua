@@ -11,7 +11,7 @@ local function Hardland(jt)
 
 	util.ScreenShake(Vector(0, 0, 0), 2, 2, 0.25, 0)
 
-	BodyAnimCycle = 0	
+	BodyAnimCycle = 0
 
 	if not ply:GetDive() then
 		if jt then
