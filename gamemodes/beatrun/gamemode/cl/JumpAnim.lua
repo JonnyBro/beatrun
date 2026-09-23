@@ -69,6 +69,7 @@ fbanims = {
 	hanghardstart = true,
 	hangstrafeleft = true,
 	walkfwd = true,
+	walkback = true,
 	jumpfast = true,
 	meslidestart45 = true,
 	hangfoldedendhang = true,
@@ -177,6 +178,7 @@ local runanims = {
 	stand = true,
 	runfwd = true,
 	walkfwd = true,
+	walkback = true,
 	crouchstill = true,
 	sprintfwd = true,
 	runbwd = true
@@ -325,6 +327,7 @@ local armfollowanims = {
 	diveslidestart = true,
 	vaultoverhigh = true,
 	walkfwd = true,
+	walkback = true,
 	crouchstill = true,
 	crouchtostandleft = true,
 	jumpcrouch = true,
@@ -624,6 +627,7 @@ local customarmoffset = {
 	crouchfwd = Vector(-4, 0, -2),
 	crouchbwd = Vector(-4, 0, -2),
 	walkfwd = Vector(10, 0, -10),
+	walkback = Vector(10, 0, -10),
 	runbwd = Vector(0, 0, 3),
 	stand = Vector(10, 0, -10),
 	walktostandleft = Vector(10, 0, -10)
@@ -893,7 +897,26 @@ local transitionchecks = {
 	end
 }
 
-
+local function HangAngleSoundCheck(ply)
+	local ang = ply.OrigEyeAng
+	if not ang then return end
+ 
+	local eyeang = ply:EyeAngles()
+	eyeang.x = 0
+ 
+	local a = math.abs(math.Clamp(math.AngleDifference(ang.y, eyeang.y), -179, 179))
+	local lookingAway = a >= 42
+ 
+	if lookingAway and not ply.hangLookingAway then
+		ply:EmitSound("Handsteps.ConcreteRelease")
+	elseif not lookingAway and ply.hangLookingAway then
+		local handstepsoft = ply:GetNW2String("HangHandstepSoft", "ConcreteSoft")
+		ply:EmitSound("Handsteps." .. handstepsoft)
+	end
+ 
+	ply.hangLookingAway = lookingAway
+end
+	
 fbfunctions = {
 	vaultontohigh = function(ply) return true end,
 	swing = function(ply)
@@ -950,6 +973,8 @@ fbfunctions = {
 			ply.hangyaw = 0
 		end
 
+		HangAngleSoundCheck(ply)
+
 		if math.abs(a) < 42 then
 			a = 0
 		end
@@ -976,11 +1001,13 @@ fbfunctions = {
 	end,
 	hangstrafeleft = function(ply)
 		BodyLimitY = 40
+		ply.hangLookingAway = nil
 
 		return true
 	end,
 	hangstraferight = function(ply)
 		BodyLimitY = 40
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -990,6 +1017,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -999,6 +1027,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1008,6 +1037,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1017,6 +1047,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1026,6 +1057,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1036,6 +1068,7 @@ fbfunctions = {
 
 		BodyAnim:SetAngles(ang)
 		ply.hangyaw = 0
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1936,7 +1969,11 @@ local function JumpThink()
 					moveback = true
 
 					if not ply:Crouching() then
-						BodyAnim:SetSequence(BodyAnim:LookupSequence("runbwd"))
+						if ply:KeyDown(IN_WALK) or vel:Length() < 150 then
+							BodyAnim:SetSequence(BodyAnim:LookupSequence("walkback"))
+						else
+							BodyAnim:SetSequence(BodyAnim:LookupSequence("runbwd"))
+						end
 					else
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchbwd"))
 					end
@@ -1993,11 +2030,17 @@ local function JumpThink()
 						end
 					end
 				else
-					if not ply:Crouching() and BodyAnimString:Left(6) == "crouch" or BodyAnimString == "walkfwd" or BodyAnimString == "runfwd" or BodyAnimString == "sprintfwd" or BodyAnimString == "runbwd" then
+					local stepmat = ply.LastStepMat or game.SinglePlayer() and ply:GetNW2String("LastStepMat", "Concrete") or "Concrete"
+					if not ply:Crouching() and BodyAnimString:Left(6) == "crouch" or BodyAnimString == "walkfwd" or BodyAnimString == "runfwd" or BodyAnimString == "sprintfwd" or BodyAnimString == "runbwd" or BodyAnimString == "walkback" then
 						BodyAnimCycle = 0
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
-						ply:EmitSound("Cloth.MovementWalk")
+						ply:EmitSound("Cloth.MovementSneak")
+						timer.Create("Beatrun_SneakSound", 0.4, 1, function()
+							if BodyAnimString == "walktostandleft" and ply:OnGround() then 
+								ply:EmitSound("Sneak." .. stepmat)
+							end
+						end)
 					end
 
 					if (BodyAnimString == "stand" or BodyAnimString == "walktostandleft" or BodyAnimString == "jumpcoilend") and ply:Crouching() or BodyAnimString == "crouchfwd" or BodyAnimString == "crouchbwd" then
@@ -2005,6 +2048,11 @@ local function JumpThink()
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchtostandleft"))
 						ply:EmitSound("Cloth.MovementSneak")
+						timer.Create("Beatrun_SneakSound", 0.4, 1, function()
+							if BodyAnimString == "crouchtostandleft" and ply:OnGround() then 
+								ply:EmitSound("Sneak." .. stepmat)
+							end
+						end)
 					end
 				end
 
@@ -2204,8 +2252,11 @@ local function JumpThink()
 					ply:EmitSound("Release." .. stepmat)
 					ply:EmitSound("Cloth.MovementWalk")
 
-					timer.Simple(0.15, function()
-						ply:EmitSound("Walk." .. stepmat)
+					timer.Simple(0.15, function() ply:EmitSound("Walk." .. stepmat) end)
+					timer.Simple(0.4, function()
+						if BodyAnimString == "walktostandleft" and ply:OnGround() then 
+							ply:EmitSound("Sneak." .. stepmat)
+						end
 					end)
 				end
 			end

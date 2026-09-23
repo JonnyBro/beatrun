@@ -10,7 +10,7 @@ sound.Add({
 sound.Add({
 	name = "Door.Barge",
 	volume = 1,
-	level = 60,
+	level = 80,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/GameplayObjects/ME_Door_Generic_Barge1.wav", "mirrorsedge/GameplayObjects/ME_Door_Generic_Barge2.wav", "mirrorsedge/GameplayObjects/ME_Door_Generic_Barge3.wav", "mirrorsedge/GameplayObjects/ME_Door_Generic_Barge4.wav" }

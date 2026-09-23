@@ -154,7 +154,12 @@ local function ClimbingThink(ply, mv, cmd)
 
 			ParkourEvent("hangend", ply)
 
-			ply:EmitSound("Cloth.MovementSneak")
+			ply:EmitSound("Cloth.SideStep")
+			ply:EmitSound("Handsteps.ConcreteRelease")
+			ply:EmitSound("WallrunRelease.Concrete")
+			timer.Simple(0.05, function()
+				ply:EmitSound("WallrunRelease.Concrete")
+			end)
 
 			if CLIENT and IsFirstTimePredicted() then
 				lockang2 = false
@@ -184,8 +189,12 @@ local function ClimbingThink(ply, mv, cmd)
 			ParkourEvent("hangjump", ply)
 
 			if SERVER then
-				ply:EmitSound("Cloth.MovementRun")
+				ply:EmitSound("Cloth.VaultSwish")
 				ply:EmitSound("WallrunRelease.Concrete")
+				ply:EmitSound("Handsteps.ConcreteRelease")
+				timer.Simple(0.05, function()
+					ply:EmitSound("WallrunRelease.Concrete")
+				end)
 			end
 
 			if CLIENT and IsFirstTimePredicted() then
@@ -291,6 +300,8 @@ local function ClimbingThink(ply, mv, cmd)
 
 			local wallmat = trout.MatType
 			local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
+
+			ply:SetNW2String("HangHandstepSoft", handstepsoft)
 
 			if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
@@ -492,6 +503,8 @@ local function ClimbingCheck(ply, mv, cmd)
 	local handstepsoft = HANDSTEPS_SOFT_LUT[wallmat] or "ConcreteSoft"
 	local handstephard = HANDSTEPS_HARD_LUT[wallmat] or "ConcreteHard"
 
+	ply:SetNW2String("HangHandstepSoft", handstepsoft)
+
 	if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
 	local detectionlen = 60
@@ -672,7 +685,7 @@ local function ClimbingCheck(ply, mv, cmd)
 		ply:EmitSound("Wallrun." .. wallrun)
 		ply:EmitSound("Cloth.MovementRun")
 
-		timer.Simple(0.025, function()
+		timer.Simple(0.05, function()
 			ply:EmitSound("WallrunRelease.Concrete")
 		end)
 	end
@@ -732,6 +745,7 @@ local function ClimbingCheck(ply, mv, cmd)
 		ParkourEvent("hangfoldedstart", ply)
 		if lastvel.z < -750 then
 			timer.Simple(0.1, function() ply:FaithVO("Faith.ImpactHard") end)
+			timer.Simple(0.05, function() ply:EmitSound("Cloth.FallShortHard") end)
 		else
 			timer.Simple(0.1, function() ply:FaithVO("Faith.Impact") end)
 		end

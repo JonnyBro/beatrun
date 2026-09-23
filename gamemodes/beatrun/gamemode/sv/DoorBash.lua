@@ -35,6 +35,8 @@ hook.Add("PlayerUse", "DoorBash", function(ply, ent)
 		end)
 
 		ent:EmitSound("Door.Barge")
+		ply:EmitSound("Melee.Foot") -- impact sound
+		timer.Simple(0.05, function() ply:FaithVO("Faith.Impact") end)
 
 		return false
 	end

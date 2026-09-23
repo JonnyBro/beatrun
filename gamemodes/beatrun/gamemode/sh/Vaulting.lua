@@ -784,7 +784,10 @@ hook.Add("SetupMove", "BeatrunVaulting", function(ply, mv, cmd)
 					ply:EmitSound("Duct.Ringout")
 					end
 
-					hook.Run("PlayerFootstep", ply, mv:GetOrigin(), 1, "Footsteps.Concrete", 1)
+					local step = FOOTSTEPS_MAT_TYPE_LUT[ply.MantleMatType] or "Concrete"
+					ply:EmitSound("Footsteps." .. step)
+					ply:EmitSound("Land." .. step)
+					ply:EmitSound("Cloth.MovementRun")
 				end
 
 				local springboardvel = ang:Forward() * math.Clamp((ply.MantleInitVel or vector_origin):Length() * 0.75, 200, 300) + Vector(0, 0, 350)

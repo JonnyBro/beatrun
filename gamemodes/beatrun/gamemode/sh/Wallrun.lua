@@ -121,11 +121,10 @@ local function WallrunningThink(ply, mv, cmd)
 			ParkourEvent("jumpwallrun", ply)
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 				ply:EmitSound("WallrunRelease.Concrete")
-				timer.Simple(0.025, function()
+				timer.Simple(0.05, function()
 					ply:EmitSound("WallrunRelease.Concrete")
-					ply:EmitSound("Cloth.SideStep")
 				end)
-				ply:EmitSound("Cloth.MovementRun")
+				ply:EmitSound("Cloth.VaultSwish")
 			end
 			ply:SetSafetyRollKeyTime(CurTime() + 0.001)
 
@@ -190,8 +189,10 @@ local function WallrunningThink(ply, mv, cmd)
 
 			if IsFirstTimePredicted() then
 				ply:EmitSound("Wallrun." .. wallsound)
-				ply:EmitSound("Cloth.MovementRun")
-				timer.Simple(0.025, function() ply:EmitSound("WallrunRelease.Concrete") end)
+				ply:EmitSound("Cloth.VaultSwish")
+				timer.Simple(0.05, function()
+					ply:EmitSound("WallrunRelease.Concrete")
+				end)
 			end
 		end
 	end
@@ -307,8 +308,10 @@ local function WallrunningThink(ply, mv, cmd)
 
 			if IsFirstTimePredicted() then
 				ply:EmitSound("Wallrun." .. wallsound)
-				ply:EmitSound("Cloth.MovementRun")
-				timer.Simple(0.025, function() ply:EmitSound("WallrunRelease.Concrete") end)
+				ply:EmitSound("Cloth.VaultSwish")
+				timer.Simple(0.05, function()
+					ply:EmitSound("WallrunRelease.Concrete")
+				end)
 			end
 		end
 	end
@@ -327,7 +330,7 @@ local function WallrunningThink(ply, mv, cmd)
 			ply:EmitSound("Wallrun." .. wallsound)
 			ply:EmitSound("Cloth.MovementRun")
 
-			timer.Simple(0.025, function()
+			timer.Simple(0.05, function()
 				ply:EmitSound("WallrunRelease.Concrete")
 			end)
 		end
@@ -484,6 +487,10 @@ local function WallrunningCheck(ply, mv, cmd)
 			mv:SetVelocity(vector_origin)
 
 			ply:SetWallrunData(2, CurTime() + hwrtime * timemult, trout.HitNormal)
+			
+			if SERVER then
+				ply:EmitSound("Bump.Concrete")
+			end
 
 			ParkourEvent("wallrunh", ply)
 

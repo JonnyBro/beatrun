@@ -116,6 +116,10 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 			mv:SetVelocity(vector_origin)
 
 			ply:SetWallrunData(2, CurTime() + hwrtime * timemult, trout.HitNormal)
+			
+			if SERVER then
+				ply:EmitSound("Bump.Concrete")
+			end
 
 			ParkourEvent("wallrunh", ply)
 
@@ -213,11 +217,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			ParkourEvent("jumpwallrun", ply)
 			if SERVER then
 				ply:EmitSound("WallrunRelease.Concrete")
-				timer.Simple(0.025, function()
-					ply:EmitSound("WallrunRelease.Concrete")
-					ply:EmitSound("Cloth.SideStep")
-				end)
-				ply:EmitSound("Cloth.MovementRun")
+				ply:EmitSound("Cloth.VaultSwish")
 			end
 
 			ply:SetSafetyRollKeyTime(CurTime() + 0.001)
@@ -285,10 +285,10 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			if IsFirstTimePredicted() then
 				local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[ply.WallRunTraceMat] or "Concrete"
 				ply:EmitSound("Wallrun." .. wallsound)
-				timer.Simple(0.025, function()
+				timer.Simple(0.05, function()
 					ply:EmitSound("WallrunRelease.Concrete")
 				end)
-				ply:EmitSound("Cloth.MovementRun")
+				ply:EmitSound("Cloth.VaultSwish")
 			end
 		end
 	end
@@ -405,10 +405,10 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			if IsFirstTimePredicted() then
 				local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[ply.WallRunTraceMat] or "Concrete"
 				ply:EmitSound("Wallrun." .. wallsound)
-				timer.Simple(0.025, function()
+				timer.Simple(0.05, function()
 					ply:EmitSound("WallrunRelease.Concrete")
 				end)
-				ply:EmitSound("Cloth.MovementRun")
+				ply:EmitSound("Cloth.VaultSwish")
 			end
 		end
 	end
@@ -428,7 +428,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			ply:EmitSound("Wallrun." .. wallsound)
 			ply:EmitSound("Cloth.MovementRun")
 
-			timer.Simple(0.025, function()
+			timer.Simple(0.05, function()
 				ply:EmitSound("WallrunRelease.Concrete")
 			end)
 		end
