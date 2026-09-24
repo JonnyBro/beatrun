@@ -69,6 +69,7 @@ fbanims = {
 	hanghardstart = true,
 	hangstrafeleft = true,
 	walkfwd = true,
+	walkback = true,
 	jumpfast = true,
 	meslidestart45 = true,
 	hangfoldedendhang = true,
@@ -177,6 +178,7 @@ local runanims = {
 	stand = true,
 	runfwd = true,
 	walkfwd = true,
+	walkback = true,
 	crouchstill = true,
 	sprintfwd = true,
 	runbwd = true
@@ -325,6 +327,7 @@ local armfollowanims = {
 	diveslidestart = true,
 	vaultoverhigh = true,
 	walkfwd = true,
+	walkback = true,
 	crouchstill = true,
 	crouchtostandleft = true,
 	jumpcrouch = true,
@@ -624,6 +627,7 @@ local customarmoffset = {
 	crouchfwd = Vector(-4, 0, -2),
 	crouchbwd = Vector(-4, 0, -2),
 	walkfwd = Vector(10, 0, -10),
+	walkback = Vector(10, 0, -10),
 	runbwd = Vector(0, 0, 3),
 	stand = Vector(10, 0, -10),
 	walktostandleft = Vector(10, 0, -10)
@@ -893,6 +897,25 @@ local transitionchecks = {
 	end
 }
 
+local function HangAngleSoundCheck(ply)
+	local ang = ply.OrigEyeAng
+	if not ang then return end
+
+	local eyeang = ply:EyeAngles()
+	eyeang.x = 0
+
+	local a = math.abs(math.Clamp(math.AngleDifference(ang.y, eyeang.y), -179, 179))
+	local lookingAway = a >= 42
+
+	if lookingAway and not ply.hangLookingAway then
+		ply:EmitSound("Handsteps.ConcreteRelease")
+	elseif not lookingAway and ply.hangLookingAway then
+		local handstepsoft = ply:GetNW2String("HangHandstepSoft", "ConcreteSoft")
+		ply:EmitSound("Handsteps." .. handstepsoft)
+	end
+
+	ply.hangLookingAway = lookingAway
+end
 
 fbfunctions = {
 	vaultontohigh = function(ply) return true end,
@@ -950,6 +973,8 @@ fbfunctions = {
 			ply.hangyaw = 0
 		end
 
+		HangAngleSoundCheck(ply)
+
 		if math.abs(a) < 42 then
 			a = 0
 		end
@@ -976,11 +1001,13 @@ fbfunctions = {
 	end,
 	hangstrafeleft = function(ply)
 		BodyLimitY = 40
+		ply.hangLookingAway = nil
 
 		return true
 	end,
 	hangstraferight = function(ply)
 		BodyLimitY = 40
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -990,6 +1017,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -999,6 +1027,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1008,6 +1037,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1017,6 +1047,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1026,6 +1057,7 @@ fbfunctions = {
 		local ang = ply.OrigEyeAng
 
 		BodyAnim:SetAngles(ang)
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1036,6 +1068,7 @@ fbfunctions = {
 
 		BodyAnim:SetAngles(ang)
 		ply.hangyaw = 0
+		ply.hangLookingAway = nil
 
 		return true
 	end,
@@ -1457,21 +1490,26 @@ end
 local defaultarmoffset = Vector()
 local armoffset = Vector()
 local armoffsetlerp = Vector()
+local manipulate_fingerAng = Angle(0, 30, 0)
+local bac_pos = Vector(0, 0, -64)
 -- local drawnorigin = false
 --local drawnskytime = 0
 
 local function JumpArmDraw() --(a, b, c)
 	local bac = CreateBodyAnimArmCopy()
+	if not IsValid(bac) or not IsValid(BodyAnim) then return end
 
-	if IsValid(bac) and not LocalPlayer():ShouldDrawLocalPlayer() and IsValid(BodyAnim) then --and not c
+	local bac_seq = bac:GetSequenceName(bac:GetSequence())
+	local ply = LocalPlayer()
+
+	if not ply:ShouldDrawLocalPlayer() then --and not c
 		render.SetColorModulation(1, 1, 1) -- fix: some maps turn viewmodel red (wow)
 
-		local ply = LocalPlayer()
-		local ang = ply:EyeAngles()
-		ang.z = 0
+		local eyeang = ply:EyeAngles()
+		--ang.z = 0
 
 		if not nospinebend[BodyAnimString] then
-			BodyAnim:ManipulateBoneAngles(1, Angle(0, math.max(ang.x * 0.5, 0), 0))
+			BodyAnim:ManipulateBoneAngles(1, Angle(0, math.max(eyeang.x * 0.5, 0), 0))
 		else
 			BodyAnim:ManipulateBoneAngles(1, angle_zero)
 		end
@@ -1498,7 +1536,7 @@ local function JumpArmDraw() --(a, b, c)
 		BodyAnimMDLarm:SetNoDraw(true)
 		bac:SetParent(nil)
 		bac:SetAngles(angle_zero)
-		bac:SetPos(Vector(0, 0, -64))
+		bac:SetPos(bac_pos)
 
 		if not worldarm[BodyAnimString] then
 			bac:SetRenderOrigin(bac:GetPos())
@@ -1514,22 +1552,20 @@ local function JumpArmDraw() --(a, b, c)
 			ply.armfollowlerp = 0
 		end
 
-		local bac_seq = bac:GetSequenceName(bac:GetSequence())
-
-		if armfollowanims[BodyAnimString] and not ArmInterrupting(bac) then
-			ang.x = ply.armfollowlerp < 1 and Lerp(ply.armfollowlerp, 0, ply:EyeAngles().x) or ply:EyeAngles().x
+		if armfollowanims[BodyAnimString] and not arminterrupting then
+			ang.x = ply.armfollowlerp < 1 and Lerp(ply.armfollowlerp, 0, eyeang.x) or eyeang.x
 			ply.armfollowlerp = math.Approach(ply.armfollowlerp, 1, FrameTime() * 1.5)
 		elseif armlock[BodyAnimString] then
-			ang.x = ply:EyeAngles().x
-			ang.y = ply:EyeAngles().y - ply.OrigEyeAng.y
+			ang.x = eyeang.x
+			ang.y = eyeang.y - ply.OrigEyeAng.y
 		else
-			ang.x = ply.armfollowlerp > 0 and Lerp(ply.armfollowlerp, 0, ply:EyeAngles().x) or 0
+			ang.x = ply.armfollowlerp > 0 and Lerp(ply.armfollowlerp, 0, eyeang.x) or 0
 			ang.y = 0
 			ply.armfollowlerp = math.Approach(ply.armfollowlerp, 0, FrameTime() * 2.5 * arminterruptboost)
 		end
 
 		if ignorePitch[bac_seq] then
-			ang.x = ply:EyeAngles().x
+			ang.x = eyeang.x
 		end
 
 		pos:Add(armoffset)
@@ -1570,36 +1606,36 @@ local function JumpArmDraw() --(a, b, c)
 
 		cam.IgnoreZ(false)
 
-		local seq = BodyAnim:GetSequence()
-
-		if seq and (not arminterrupts[bac:GetSequenceName(bac:GetSequence())] or bac:GetCycle() >= 1) then
-			if bac:GetSequence() ~= seq then
-				for _, v in ipairs(fingers) do
-					local b = bac:LookupBone(v)
-
-					if b then
-						bac:ManipulateBoneAngles(b, Angle(0, 30, 0))
-					end
-				end
-
-				for k, v in pairs(fingerscustom) do
-					local b = bac:LookupBone(k)
-
-					if b then
-						bac:ManipulateBoneAngles(b, v)
-					end
-				end
-			end
-
-			bac:SetSequence(seq)
-			bac:SetCycle(BodyAnim:GetCycle() or 1)
-		elseif seq then
-			bac:SetCycle(bac:GetCycle() + FrameTime() / bac:SequenceDuration())
-		end
-
 		if not worldarm[BodyAnimString] then --(not b or not skybox3d) and
 			bac:SetRenderOrigin(campos)
 		end
+	end
+
+	local seq = BodyAnim:GetSequence()
+
+	if seq and (not arminterrupts[bac_seq] or bac:GetCycle() >= 1) then
+		if bac:GetSequence() ~= seq then
+			for _, v in ipairs(fingers) do
+				local b = bac:LookupBone(v)
+
+				if b then
+					bac:ManipulateBoneAngles(b, manipulate_fingerAng)
+				end
+			end
+
+			for k, v in pairs(fingerscustom) do
+				local b = bac:LookupBone(k)
+
+				if b then
+					bac:ManipulateBoneAngles(b, v)
+				end
+			end
+		end
+
+		bac:SetSequence(seq)
+		bac:SetCycle(BodyAnim:GetCycle() or 1)
+	elseif seq then
+		bac:SetCycle(bac:GetCycle() + FrameTime() / bac:SequenceDuration())
 	end
 end
 
@@ -1939,7 +1975,11 @@ local function JumpThink()
 					moveback = true
 
 					if not ply:Crouching() then
-						BodyAnim:SetSequence(BodyAnim:LookupSequence("runbwd"))
+						if ply:KeyDown(IN_WALK) or vel:Length() < 150 then
+							BodyAnim:SetSequence(BodyAnim:LookupSequence("walkback"))
+						else
+							BodyAnim:SetSequence(BodyAnim:LookupSequence("runbwd"))
+						end
 					else
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchbwd"))
 					end
@@ -1996,11 +2036,17 @@ local function JumpThink()
 						end
 					end
 				else
-					if not ply:Crouching() and BodyAnimString:Left(6) == "crouch" or BodyAnimString == "walkfwd" or BodyAnimString == "runfwd" or BodyAnimString == "sprintfwd" or BodyAnimString == "runbwd" then
+					local stepmat = ply.LastStepMat or game.SinglePlayer() and ply:GetNW2String("LastStepMat", "Concrete") or "Concrete"
+					if not ply:Crouching() and BodyAnimString:Left(6) == "crouch" or BodyAnimString == "walkfwd" or BodyAnimString == "runfwd" or BodyAnimString == "sprintfwd" or BodyAnimString == "runbwd" or BodyAnimString == "walkback" then
 						BodyAnimCycle = 0
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
-						ply:EmitSound("Cloth.MovementWalk")
+						ply:EmitSound("Cloth.MovementSneak")
+						timer.Create("Beatrun_SneakSound", 0.4, 1, function()
+							if BodyAnimString == "walktostandleft" and ply:OnGround() then
+								ply:EmitSound("Sneak." .. stepmat)
+							end
+						end)
 					end
 
 					if (BodyAnimString == "stand" or BodyAnimString == "walktostandleft" or BodyAnimString == "jumpcoilend") and ply:Crouching() or BodyAnimString == "crouchfwd" or BodyAnimString == "crouchbwd" then
@@ -2008,6 +2054,11 @@ local function JumpThink()
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchtostandleft"))
 						ply:EmitSound("Cloth.MovementSneak")
+						timer.Create("Beatrun_SneakSound", 0.4, 1, function()
+							if BodyAnimString == "crouchtostandleft" and ply:OnGround() then
+								ply:EmitSound("Sneak." .. stepmat)
+							end
+						end)
 					end
 				end
 
@@ -2207,8 +2258,11 @@ local function JumpThink()
 					ply:EmitSound("Release." .. stepmat)
 					ply:EmitSound("Cloth.MovementWalk")
 
-					timer.Simple(0.15, function()
-						ply:EmitSound("Walk." .. stepmat)
+					timer.Simple(0.15, function() ply:EmitSound("Walk." .. stepmat) end)
+					timer.Simple(0.4, function()
+						if BodyAnimString == "walktostandleft" and ply:OnGround() then
+							ply:EmitSound("Sneak." .. stepmat)
+						end
 					end)
 				end
 			end
