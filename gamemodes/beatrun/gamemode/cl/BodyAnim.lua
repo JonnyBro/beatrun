@@ -478,6 +478,14 @@ function StartBodyAnim(animtable)
 				BodyAnim:ManipulateBoneScale(head, vector_origin)
 			end
 		end
+
+		for _, legBone in ipairs({ "ValveBiped.Bip01_L_Thigh", "ValveBiped.Bip01_R_Thigh" }) do
+			local bone = BodyAnimMDL:LookupBone(legBone)
+
+			if bone then
+				BodyAnimMDL:ManipulateBoneScale(bone, vector_origin)
+			end
+		end
 	elseif usefullbody == 1 then
 		BodyAnimMDL = ClientsideModel(playermodel, RENDERGROUP_BOTH)
 	else

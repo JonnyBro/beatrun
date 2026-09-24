@@ -900,23 +900,23 @@ local transitionchecks = {
 local function HangAngleSoundCheck(ply)
 	local ang = ply.OrigEyeAng
 	if not ang then return end
- 
+
 	local eyeang = ply:EyeAngles()
 	eyeang.x = 0
- 
+
 	local a = math.abs(math.Clamp(math.AngleDifference(ang.y, eyeang.y), -179, 179))
 	local lookingAway = a >= 42
- 
+
 	if lookingAway and not ply.hangLookingAway then
 		ply:EmitSound("Handsteps.ConcreteRelease")
 	elseif not lookingAway and ply.hangLookingAway then
 		local handstepsoft = ply:GetNW2String("HangHandstepSoft", "ConcreteSoft")
 		ply:EmitSound("Handsteps." .. handstepsoft)
 	end
- 
+
 	ply.hangLookingAway = lookingAway
 end
-	
+
 fbfunctions = {
 	vaultontohigh = function(ply) return true end,
 	swing = function(ply)
@@ -1332,7 +1332,7 @@ function RegisterCustomAnim(event, data)
 	fbanims[animName] = true
 	events[event] = true
 	eventslut[event] = animName
-	transitionanims[animName] = data.transitionanim or "jumpair"
+	transitionanims[animName] = data.transitionanim == nil and "jumpair" or data.transitionanim
 	transitionchecks[animName] = data.transitioncheck
 
 	if data.sounds then
@@ -1703,7 +1703,12 @@ local function JumpAnim(event, ply)
 			customAnimForEvent.onStart(ply)
 		end
 
-		local wasjumpanim = not customAnimForEvent and not CustomAnims[BodyAnimString] and fbanims[BodyAnimString] and IsValid(BodyAnim)
+		local customAnimForCurrent = CustomAnims[BodyAnimString]
+
+		local sameCustomModel = customAnimForEvent and customAnimForCurrent
+			and customAnimForEvent.model == customAnimForCurrent.model
+		local wasjumpanim = ((not customAnimForEvent and not customAnimForCurrent) or sameCustomModel)
+			and fbanims[BodyAnimString] and IsValid(BodyAnim)
 
 		if not wasjumpanim then
 			RemoveBodyAnim()
@@ -2037,7 +2042,7 @@ local function JumpThink()
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
 						ply:EmitSound("Cloth.MovementSneak")
 						timer.Create("Beatrun_SneakSound", 0.4, 1, function()
-							if BodyAnimString == "walktostandleft" and ply:OnGround() then 
+							if BodyAnimString == "walktostandleft" and ply:OnGround() then
 								ply:EmitSound("Sneak." .. stepmat)
 							end
 						end)
@@ -2049,7 +2054,7 @@ local function JumpThink()
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchtostandleft"))
 						ply:EmitSound("Cloth.MovementSneak")
 						timer.Create("Beatrun_SneakSound", 0.4, 1, function()
-							if BodyAnimString == "crouchtostandleft" and ply:OnGround() then 
+							if BodyAnimString == "crouchtostandleft" and ply:OnGround() then
 								ply:EmitSound("Sneak." .. stepmat)
 							end
 						end)
@@ -2254,7 +2259,7 @@ local function JumpThink()
 
 					timer.Simple(0.15, function() ply:EmitSound("Walk." .. stepmat) end)
 					timer.Simple(0.4, function()
-						if BodyAnimString == "walktostandleft" and ply:OnGround() then 
+						if BodyAnimString == "walktostandleft" and ply:OnGround() then
 							ply:EmitSound("Sneak." .. stepmat)
 						end
 					end)
