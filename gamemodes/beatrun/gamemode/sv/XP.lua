@@ -174,7 +174,7 @@ hook.Add("OnParkour", "ParkourXP", function(event, ply)
 
 	local last = BEATRUN_PLAYERS_LASTEVENT[steamID][event] or 0
 
-	if now - last < 0.5 then return end
+	if now - last < 1 then return end
 
 	BEATRUN_PLAYERS_LASTEVENT[steamID][event] = now
 
