@@ -1,35 +1,52 @@
 ---
 name: Bug report
-about: Report any issues you have found (don't report anything if you are using custom
-  code for speed change or anything else like that)
-title: "[Bug] Add a title here!"
+about: Report any issues you have found (if you modified Beatrun in any way don't report)
+title: "[Bug] REPLACE THIS!"
 labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
+## Describe the bug
+
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+## To Reproduce
+
 Steps to reproduce the behavior:
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+1. Go here ....
+1. Do that ....
+1. See stuff
 
-**Expected behavior**
+## Expected behavior
+
 A clear and concise description of what you expected to happen.
 
-**Screenshots/Videos**
+## Screenshots/Videos
+
 If applicable, add screenshots or videos to help explain your problem.
 
-**Additional information:**
+## Additional information
 
-- Game Version: [e.g. non-beta, chromium, x64]
-- Game Type: [e.g. singleplayer or multiplayer]
+- Running through:
+  - [ ] Native Linux
+  - [ ] Native Windows
+  - [ ] Wine (Wine, Proton, etc)
+  - [ ] MacOS
 
-**Additional context**
+- Game Branch (version):
+  - [ ] Default
+  - [ ] `dev`
+  - [ ] `x86-64`
+  - [ ] `prerelease`
+
+- Server Type:
+  - [ ] Singleplayer
+  - [ ] P2P server (Selected 2+ players on map menu)
+  - [ ] Dedicated server (Separate executable)
+
+## Additional context
+
 Add any other context about the problem here.
 Maybe addons list or settings you changed in Beatrun's config menu.
