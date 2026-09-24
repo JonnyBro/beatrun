@@ -479,7 +479,6 @@ function StartBodyAnim(animtable)
 			end
 		end
 
-		-- fixes a duplicate issue with the body so now it shouldnt do those anymore (REMOVE IF READ)
 		for _, legBone in ipairs({ "ValveBiped.Bip01_L_Thigh", "ValveBiped.Bip01_R_Thigh" }) do
 			local bone = BodyAnimMDL:LookupBone(legBone)
 
