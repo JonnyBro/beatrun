@@ -477,14 +477,14 @@ function StartBodyAnim(animtable)
 			if head then
 				BodyAnim:ManipulateBoneScale(head, vector_origin)
 			end
+		end
 
-			-- fixes a duplicate issue with the body so now it shouldnt do those anymore (REMOVE IF READ)
-			for _, legBone in ipairs({ "ValveBiped.Bip01_L_Thigh", "ValveBiped.Bip01_R_Thigh" }) do
-				local bone = BodyAnimMDL:LookupBone(legBone)
+		-- fixes a duplicate issue with the body so now it shouldnt do those anymore (REMOVE IF READ)
+		for _, legBone in ipairs({ "ValveBiped.Bip01_L_Thigh", "ValveBiped.Bip01_R_Thigh" }) do
+			local bone = BodyAnimMDL:LookupBone(legBone)
 
-				if bone then
-					BodyAnimMDL:ManipulateBoneScale(bone, vector_origin)
-				end
+			if bone then
+				BodyAnimMDL:ManipulateBoneScale(bone, vector_origin)
 			end
 		end
 	elseif usefullbody == 1 then
@@ -553,7 +553,6 @@ function StartBodyAnim(animtable)
 		if not IsValid(BodyAnimMDL) then return end
 		local head_bone = ply:LookupBone("ValveBiped.Bip01_Head1")
 		if not head_bone then return end -- fixes a lua error in multiplayer when spamming respawns
-
 		local bodyscale = GetConVar("beatrun_bodyscale"):GetFloat()
 		local armscale = GetConVar("beatrun_armbodyscale"):GetFloat()
 		local modelscale = math.abs((select(1, ply:GetBonePosition(head_bone)).z - ply:GetPos().z + 1) / 64) * GetConVar("beatrun_modelscale"):GetFloat()
@@ -630,11 +629,15 @@ local lasteyeang = Angle()
 
 local calcviewrunning = false
 
+local manip_headBone = Vector(-1000, 0, 0)
+
 function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 	if calcviewrunning then return end
+	local IsValidBa = IsValid(BodyAnim)
+	local ShouldDrawPly = ply:ShouldDrawLocalPlayer()
 
-	if ply:InVehicle() then
-		if IsValid(BodyAnim) then
+	if ply:InVehicle() or has_tool_equipped then
+		if IsValidBa then
 			BodyAnim:SetNoDraw(true)
 			BodyAnim:SetRenderOrigin(pos * 1000)
 		end
@@ -657,31 +660,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		end
 	end
 
-	-- I'd normally comment out all this tool_equipped stuff
-	if has_tool_equipped then
-		if IsValid(BodyAnim) then
-			BodyAnim:SetNoDraw(true)
-			BodyAnim:SetRenderOrigin(pos * 1000)
-		end
-
-		calcviewrunning = true
-
-		local view = hook.Run("CalcView", ply, pos, angles, fov, ...)
-
-		calcviewrunning = false
-
-		if not view then
-			fov = math.Remap(fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
-
-			return
-		else
-			view.fov = math.Remap(view.fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
-
-			return view
-		end
-	end
-
-	if IsValid(BodyAnim) and ply:ShouldDrawLocalPlayer() then
+	if IsValidBa and ShouldDrawPly then
 		if updatethirdperson then
 			ply:SetNoDraw(false)
 			BodyAnim:SetNoDraw(true)
@@ -694,9 +673,9 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		updatethirdperson = true
 	end
 
-	if IsValid(BodyAnim) or attach ~= nil then
-		if IsValid(BodyAnim) then
-			if followplayer and not ply:ShouldDrawLocalPlayer() then
+	if IsValidBa or attach ~= nil then
+		if IsValidBa then
+			if followplayer and not ShouldDrawPly then
 				local pos = ply:GetPos()
 
 				if BodyAnimCrouchLerp < 1 and (BodyAnimCrouchLerp ~= 0 or math.abs(BodyAnimCrouchLerpZ - pos.z) > 16 or math.abs(ply:GetNW2Float("BodyAnimCrouchLerpZ") - pos.z) > 16) then
@@ -723,7 +702,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 					BodyAnim:SetPos(pos)
 					BodyAnim:SetRenderOrigin(pos)
 				end
-			elseif BodyAnimPosEaseLerp < 1 and not ply:ShouldDrawLocalPlayer() then
+			elseif BodyAnimPosEaseLerp < 1 and not ShouldDrawPly then
 				local easedpos = LerpVector(BodyAnimPosEaseLerp, BodyAnimPosEase, BodyAnimStartPos)
 				BodyAnimPosEaseLerp = math.Approach(BodyAnimPosEaseLerp, 1, FrameTime() * 5)
 
@@ -758,9 +737,9 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				lerpchangeatt = math.Approach(lerpchangeatt, 1, FrameTime() * 5)
 			end
 
-			if not ply:ShouldDrawLocalPlayer() then
-				local head = BodyAnim:LookupBone("ValveBiped.Bip01_Head1")
-				if head then BodyAnim:ManipulateBonePosition(head, Vector(-1000, 0, 0)) end
+			if not ShouldDrawPly then
+				--local head = BodyAnim:LookupBone("ValveBiped.Bip01_Head1")
+				if head then BodyAnim:ManipulateBonePosition(head, manip_headBone) end
 			end
 
 			BodyAnim:SetAngles(oldang)
@@ -769,14 +748,14 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		if attach ~= nil then
 			view.origin = has_tool_equipped and pos or attach.Pos
 
-			if savedeyeangb == Angle(0, 0, 0) then savedeyeangb = Angle(0, attach.Ang.y, 0) end
+			if savedeyeangb == angle_zero then savedeyeangb = Angle(0, attach.Ang.y, 0) end
 
 			view.angles = ply:EyeAngles()
 
 			if lockang2 and not has_tool_equipped then
-				view.angles = has_tool_equipped and angles or attach.Ang
+				view.angles = attach.Ang
 				view.angles.x = ply:EyeAngles().x
-				view.origin = has_tool_equipped and pos or attach.Pos
+				view.origin = attach.Pos
 			end
 
 			allowedangchange = true
@@ -788,7 +767,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				lastlockangstart:Set(lasteyeang)
 			end
 
-			if ply:Alive() and lockang and not has_tool_equipped and not ply:ShouldDrawLocalPlayer() then
+			if ply:Alive() and lockang and not has_tool_equipped and not ShouldDrawPly then
 				local attachId = BodyAnim:LookupAttachment(camjoint)
 				local attach = BodyAnim:GetAttachment(attachId) or attach
 				local ang = attach.Ang
@@ -819,13 +798,13 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 			bodyanimlastattachang = ply:EyeAngles()
 			view.pos = attach.Pos
 
-			if not IsValid(BodyAnim) and endlerp < 1 then
+			if not IsValidBa and endlerp < 1 then
 				endlerp = math.Approach(endlerp, 1, RealFrameTime() * 6)
 				attach.Pos = LerpVector(endlerp, attach.Pos, ply:EyePos())
 				attach.Ang = LerpAngle(endlerp * 2, attach.Ang, ply:EyeAngles() + ply:GetViewPunchAngles() + ply:GetCLViewPunchAngles())
 
 				if IsValid(vm) then vm:SetNoDraw(false) end
-			elseif not IsValid(BodyAnim) and endlerp == 1 then
+			elseif not IsValidBa and endlerp == 1 then
 				attach = nil
 				endlerp = 0
 
@@ -836,7 +815,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				return
 			end
 
-			if not ply:ShouldDrawLocalPlayer() and not ply:InVehicle() then
+			if not ShouldDrawPly and not ply:InVehicle() then
 				local ang = Vector(view.angles:Unpack())
 				ang[1] = 0
 				ang[3] = 0
@@ -890,7 +869,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 
 					return
 				end
-			elseif not ply:ShouldDrawLocalPlayer() then
+			elseif not ShouldDrawPly then
 				ply:SetNoDraw(true)
 			end
 		end
