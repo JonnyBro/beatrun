@@ -598,11 +598,6 @@ hook.Add("Think", "BodyAnimThink", function()
 
 	BodyAnimCycle = BodyAnimCycle + FrameTime() / BodyAnim:SequenceDuration() * BodyAnimSpeed
 
-	-- custom anims never get their cycle reset if transitioncheck always returns false, so clamp it (REMOVE IF READ)
-	if CustomAnims[BodyAnimString] then
-		BodyAnimCycle = math.min(BodyAnimCycle, 1)
-	end
-
 	if not customcycle then BodyAnim:SetCycle(BodyAnimCycle) end
 
 	hook.Run("BodyAnimThink")
