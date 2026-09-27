@@ -31,6 +31,22 @@ local animtable = {
 	usefullbody = 2
 }
 
+-- every animtable field a custom anim is allowed to override, and what it resets to for anything
+-- that doesn't (stock jump/climb anims, or a custom anim that just doesn't care about that field).
+-- AnimString/animmodelstring are deliberately excluded - those are always set explicitly per-event.
+local CUSTOM_ANIM_OVERRIDABLE_DEFAULTS = {
+	lockang = false,
+	allowmove = true,
+	followplayer = true,
+	ignorez = false,
+	BodyAnimSpeed = 1,
+	deleteonend = false,
+	BodyLimitX = 90,
+	CamIgnoreAng = true,
+	BodyLimitY = 180,
+	usefullbody = 2,
+}
+
 fbanims = {
 	ladderexittoplefthand = true,
 	runfwdstart = true,
@@ -1778,6 +1794,15 @@ function CheckAnims()
 		animtable.animmodelstring = "new_climbanim"
 	else
 		animtable.animmodelstring = "old_climbanim"
+	end
+
+	-- lets a custom anim override any of these fields (e.g. usefullbody = 0 for an arms-only pose) just by
+	-- setting them in its own registered data table - nothing here needs to change for a gear to use a new
+	-- one. anything a custom anim doesn't set (or a stock climb anim, which never sets any of these at all)
+	-- falls back to the same default it always had
+	for key, defaultValue in pairs(CUSTOM_ANIM_OVERRIDABLE_DEFAULTS) do
+		local value = customAnim and customAnim[key]
+		animtable[key] = value == nil and defaultValue or value
 	end
 
 	StartBodyAnim(animtable)
