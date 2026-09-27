@@ -34,7 +34,7 @@ local animtable = {
 -- every animtable field a custom anim is allowed to override, and what it resets to for anything
 -- that doesn't (stock jump/climb anims, or a custom anim that just doesn't care about that field).
 -- AnimString/animmodelstring are deliberately excluded - those are always set explicitly per-event.
-local CUSTOM_ANIM_OVERRIDABLE_DEFAULTS = {
+local CustomAnimDefaults = {
 	lockang = false,
 	allowmove = true,
 	followplayer = true,
@@ -1800,7 +1800,7 @@ function CheckAnims()
 	-- setting them in its own registered data table - nothing here needs to change for a gear to use a new
 	-- one. anything a custom anim doesn't set (or a stock climb anim, which never sets any of these at all)
 	-- falls back to the same default it always had
-	for key, defaultValue in pairs(CUSTOM_ANIM_OVERRIDABLE_DEFAULTS) do
+	for key, defaultValue in pairs(CustomAnimDefaults) do
 		local value = customAnim and customAnim[key]
 		animtable[key] = value == nil and defaultValue or value
 	end
