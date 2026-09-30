@@ -1,7 +1,6 @@
 local vwrtime = 1.5
 local hwrtime = 1.5
 tiltdir = 1
--- local tilt = 0
 local wrmins = Vector(-16, -16, 0)
 local wrmaxs = Vector(16, 16, 16)
 
@@ -116,7 +115,7 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 			mv:SetVelocity(vector_origin)
 
 			ply:SetWallrunData(2, CurTime() + hwrtime * timemult, trout.HitNormal)
-			
+
 			if SERVER then
 				ply:EmitSound("Bump.Concrete")
 			end

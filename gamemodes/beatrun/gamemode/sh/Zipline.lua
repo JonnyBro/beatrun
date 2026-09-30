@@ -90,6 +90,7 @@ local function ZiplineCheck(ply, mv, cmd, zipline)
 		end
 
 		mv:SetOrigin(near)
+
 		ply:SetJumpTurn(false)
 		ply:SetZipline(zipline)
 		ply:SetZiplineStart(start)
@@ -230,13 +231,16 @@ local function Zipline(ply, mv, cmd)
 
 		mins.z = maxs.z * 0.8
 		maxs.z = maxs.z * 2
+
 		mins:Mul(2)
 		maxs:Mul(2)
+
 		mins.z = mins.z * 0.5
 		maxs.z = maxs.z * 0.5
 
 		tr.maxs = maxs
 		tr.mins = mins
+
 		ply.ZiplineTrace.mask = MASK_PLAYERSOLID
 		ply.ZiplineTrace.collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
 	end
@@ -251,6 +255,7 @@ local function Zipline(ply, mv, cmd)
 		tr.filter = ply
 
 		util.TraceHull(tr)
+
 		local trentity = trout.Entity
 
 		if IsValid(trentity) and trentity:GetClass() == "br_zipline" and ply:GetMoveType() == MOVETYPE_WALK then

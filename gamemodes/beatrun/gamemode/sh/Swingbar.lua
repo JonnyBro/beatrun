@@ -26,7 +26,6 @@ local function SwingbarCheck(ply, mv, cmd)
 
 		if math.abs(dot) < 0.7 then return end
 
-
 		if CLIENT then
 			swingbar:SetPredictable(true)
 		end
@@ -62,7 +61,6 @@ local function SwingbarCheck(ply, mv, cmd)
 end
 
 local radius = 30
--- local red = Color(255, 0, 0, 200)
 local circlepos = Vector()
 local axis = Vector(0, 0, 1)
 local dummyvec = Vector(1000, 1000, 1000)

@@ -150,7 +150,9 @@ local function WallrunningThink(ply, mv, cmd)
 	if wr == 1 and wrtimeremains then
 		local velz = math.Clamp((ply:GetWallrunTime() - CurTime()) / vwrtime, 0.1, 1)
 		local vecvel = Vector()
+
 		vecvel.z = 200 * velz
+
 		vecvel:Add(ply:GetWallrunDir():Angle():Forward() * -50)
 		vecvel:Mul(ply:GetOverdriveMult())
 
@@ -161,6 +163,7 @@ local function WallrunningThink(ply, mv, cmd)
 		local tr = ply.WallrunTrace
 		local trout = ply.WallrunTraceOut
 		local eyeang = ply.WallrunOrigAng or Angle()
+
 		eyeang.x = 0
 
 		tr.start = ply:EyePos() - Vector(0, 0, 5)
@@ -487,7 +490,7 @@ local function WallrunningCheck(ply, mv, cmd)
 			mv:SetVelocity(vector_origin)
 
 			ply:SetWallrunData(2, CurTime() + hwrtime * timemult, trout.HitNormal)
-			
+
 			if SERVER then
 				ply:EmitSound("Bump.Concrete")
 			end

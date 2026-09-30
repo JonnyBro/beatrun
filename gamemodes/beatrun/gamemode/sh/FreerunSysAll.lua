@@ -86,7 +86,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 	if ply:KeyDown(IN_WALK) and not ply:Crouching() then
 		steptime = steptime * 1.4
 	end
-	
+
 	if ply:KeyDown(IN_WALK) and ply:KeyDown(IN_BACK) and not ply:Crouching() then
 		steptime = steptime * 1.3
 	end
@@ -257,7 +257,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 		if mv:GetVelocity():Length() >= 140 or newsound == "Gantry" then
 			ply:EmitSound("Release." .. newsound)
 		end
-		
+
 		if ply:WaterLevel() > 0 then
 			ply:EmitSound("Release.Water")
 		end

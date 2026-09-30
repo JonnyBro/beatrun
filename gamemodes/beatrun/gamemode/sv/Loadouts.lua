@@ -81,12 +81,10 @@ end
 
 function BeatrunGetRandomLoadout(selected)
 	local allWeps = GetWeaponsList()
-	-- local attempts = math.Round(#allWeps / 5)
 	local tbl = {}
 	local usedClasses = {}
 
-	while #tbl < 2 --[[and attempts > 0]] do
-		-- attempts = attempts - 1
+	while #tbl < 2 do
 		local wep = allWeps[math.random(#allWeps)]
 
 		if selected == "beatrun" then

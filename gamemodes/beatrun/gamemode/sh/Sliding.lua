@@ -134,11 +134,11 @@ local function SlidingAnimStart()
 	hook.Add("Think", "SlidingAnimThink", SlidingAnimThink)
 end
 
-local function SlidingAnimEnd(slippery, diving) --  , diving
+local function SlidingAnimEnd(slippery, diving)
 	if not IsValid(BodyAnim) then return end
 
 	local ply = LocalPlayer()
-	
+
 	local isDiveSliding = game.SinglePlayer() and diving or ply:GetDiveSliding()
 
 	if ply:GetJumpTurn() then
@@ -149,16 +149,14 @@ local function SlidingAnimEnd(slippery, diving) --  , diving
 	end
 
 	if not slippery then
-		if not isDiveSliding then --  and not diving
+		if not isDiveSliding then
 			local crouchEnd = PlayerCannotStand(ply) or ActuallyHoldingCrouch
 			local endAnim = crouchEnd and "meslideendcrouch" or "meslideend"
 
 			BodyAnimString = endAnim
 			BodyAnim:ResetSequence(endAnim)
 		else
-			--ply:SetDiveSliding(false)
-
-			local crouchEnd = PlayerCannotStand(ply) or ActuallyHoldingCrouch --ply:KeyDown(IN_DUCK)
+			local crouchEnd = PlayerCannotStand(ply) or ActuallyHoldingCrouch
 			local endAnim = crouchEnd and "diveslideendcrouch" or "diveslideend"
 
 			ParkourEvent(endAnim, ply, true)
@@ -229,9 +227,7 @@ if game.SinglePlayer() then
 end
 
 local slidepunch = Angle(2.5, 0, -0.5)
--- local slidepunchend = Angle(3, 0, -3.5)
 local trace_down = Vector(0, 0, 32)
--- local trace_up = Vector(0, 0, 32)
 local trace_tbl = {}
 local loopmat_trace_tbl = {}
 
@@ -291,10 +287,6 @@ local function UpdateSlideLoopSound(ply, mat)
 end
 
 local SlideLoopMatInterval = 0.1
-
--- local COORD_FRACTIONAL_BITS = 5
--- local COORD_DENOMINATOR = bit.lshift(1, COORD_FRACTIONAL_BITS)
--- local COORD_RESOLUTION = 1 / COORD_FRACTIONAL_BITS
 
 local metaent = FindMetaTable("Entity")
 metaent.oldOnGround = metaent.oldOnGround or metaent.OnGround
@@ -359,7 +351,6 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			local slipnormal = slipperytraceout.HitNormal
 			local hitpos = slipperytraceout.HitPos
 			local ent = slipperytraceout.Entity
-			-- local delta = math.abs(mv:GetOrigin().z - hitpos.z)
 
 			slipperytrace.start = safestart
 			slipperytrace.endpos = safestart - Vector(0, 0, 120)
@@ -441,10 +432,8 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 
 		if ply:GetDive() then
-			--if ply:OnGround() and ply:GetSafetyRollKeyTime() <= CurTime() then -- this whole section was taken out of the dive hook, some addons manage to somehow change the hook order and the dive slide breaks bcz of that
 			ply:SetDiveSliding(true)
 			ply:SetDive(false)
-			--end
 		end
 
 		ply:SetViewOffset(Vector(0, 0, 64))
@@ -490,7 +479,6 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		if game.SinglePlayer() then
 			net.Start("sliding_spfix")
-				--net.WriteBool(ply:GetDiveSliding())
 			net.Send(ply)
 		end
 
@@ -720,7 +708,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 					ply:SendLua("DoJumpTurn(false) BodyAnim:SetSequence('meslideendprone')")
 				end
 			end
-			
+
 			if SERVER and game.SinglePlayer() then
 					net.Start("sliding_spend")
 					net.WriteBool(false)

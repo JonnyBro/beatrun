@@ -5,11 +5,10 @@ hook.Add("EntityTakeDamage", "MEHitSounds", function(ply, dmginfo)
 	if not dmginfo:IsFallDamage() and not (ply:HasGodMode() or cvars.Bool("sbox_godmode", false)) then ply:FaithVO("Faith.ImpactHard") end
 
 	if dmginfo:IsBulletDamage() then
-		-- Block damage if they're going above 400 hu/h
+		-- No damage if they're going above 400 hu/h. Get dodged idiot
 		if ply:GetVelocity():Length() > 400 then return true end
 
 		ply:EmitSound("FleshHit")
-		-- ply:ViewPunch(Angle(math.Rand(-10, -5), 0, math.Rand(0, 5))) -- People cried so hard about this
 	elseif not (ply:HasGodMode() or cvars.Bool("sbox_godmode", false)) and dmginfo:IsFallDamage() and ply:Health() - dmginfo:GetDamage() <= 0 then
 		net.Start("DeathStopSound")
 		net.Send(ply)

@@ -59,7 +59,6 @@ local function SwingpipeCheck(ply, mv, cmd)
 	end
 end
 
--- local red = Color(255, 0, 0, 200)
 local radius = 40
 local circlepos = Vector()
 local axis = Vector(0, 1, 0)
