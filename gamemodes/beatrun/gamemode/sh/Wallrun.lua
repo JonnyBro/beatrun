@@ -41,12 +41,12 @@ if CLIENT and game.SinglePlayer() then
 			BodyLimitX = 25
 			BodyLimitY = 70
 			BodyAnimCycle = 0
-			BodyAnim:SetSequence("wallrunverticalstart")
+			if IsValid(BodyAnim) then BodyAnim:SetSequence("wallrunverticalstart") end
 		else
 			BodyLimitX = 90
 			BodyLimitY = 180
 			BodyAnimCycle = 0
-			BodyAnim:SetSequence("jumpair")
+			if IsValid(BodyAnim) then BodyAnim:SetSequence("jumpair") end
 		end
 	end)
 
@@ -352,7 +352,7 @@ local function WallrunningThink(ply, mv, cmd)
 			BodyLimitY = 180
 			BodyAnimCycle = 0
 
-			BodyAnim:SetSequence("jumpair")
+			if IsValid(BodyAnim) then BodyAnim:SetSequence("jumpair") end
 		elseif game.SinglePlayer() and wr == 1 then
 			net.Start("BodyAnimWallrun")
 				net.WriteBool(false)
@@ -450,7 +450,7 @@ local function WallrunningCheck(ply, mv, cmd)
 					BodyLimitY = 70
 					BodyAnimCycle = 0
 
-					BodyAnim:SetSequence("wallrunverticalstart")
+					if IsValid(BodyAnim) then BodyAnim:SetSequence("wallrunverticalstart") end
 
 					ply.OrigEyeAng = angdir
 				elseif game.SinglePlayer() then
