@@ -1117,54 +1117,42 @@ eventsounds = {
 		[0.25] = "Handsteps.ConcreteRelease",
 		[0.4] = "Cloth.MovementRun",
 		[0.5] = "Faith.StrainHard",
-		[0.6] = "Cloth.MovementWalk",
-		[0.8] = "Cloth.MovementSneak"
+		[0.55] = "Cloth.MovementSneak"
 	},
 	hangfoldedheaveup = {
-		[0] = "Cloth.MovementWalk",
 		[0.1] = "Faith.StrainHard",
 		[0.025] = "Handsteps.ConcreteRelease",
 		[0.05] = "Cloth.MovementRun",
 		[0.15] = "WallrunRelease.Concrete",
-		[0.2] = "Cloth.MovementSneak",
-		[0.4] = "Cloth.MovementWalk"
+		[0.3] = "Cloth.MovementWalk"
 	},
 	hangfoldedstart = {
-		[0.02] = "Cloth.Fall",
-		[0] = "Cloth.MovementRun",
-		[0.15] = "Cloth.MovementWalk",
-		[0.2] = "Cloth.MovementSneak"
+		[0] = "Cloth.Fall",
+		[0.15] = "Cloth.MovementWalk"
 	},
 	hangheaveup = {
 		[0] = "Faith.StrainMedium",
-		[0.01] = "Cloth.MovementWalk",
 		[0.05] = "WallrunRelease.Concrete",
 		[0.1] = "WallrunRelease.Concrete",
 		[0.2] = "Cloth.MovementWalk",
-		[0.4] = "Cloth.MovementSneak",
-		[0.5] = "Cloth.MovementWalk",
-		[0.8] = "Cloth.MovementSneak",
-		[1] = "Cloth.MovementWalk"
+		[0.6] = "Cloth.MovementWalk"
 	},
 	hanghardstart = {
 		[0] = "Faith.Impact",
 		[0.05] = "Cloth.MovementRun",
 		[0.1] = "Cloth.MovementRun",
-		[0.3] = "Cloth.MovementWalk",
-		[0.6] = "Cloth.MovementSneak"
+		[0.2] = "Cloth.MovementSneak"
 	},
 	hanghardstart2 = {
 		[0.01] = "Cloth.MovementRun",
 		[0.2] = "Cloth.MovementSneak",
-		[0.5] = "Cloth.MovementWalk",
-		[0.7] = "Cloth.MovementWalk",
-		[0.8] = "Cloth.MovementSneak"
+		[0.45] = "Cloth.MovementWalk",
+		[0.7] = "Cloth.MovementSneak"
 	},
 	hanghardstartvertical = {
 		[0.3] = "Cloth.MovementSneak",
 		[0.6] = "Cloth.MovementWalk",
-		[0.9] = "Cloth.MovementSneak",
-		[1.05] = "Cloth.MovementWalk"
+		[0.9] = "Cloth.MovementSneak"
 	},
 	hangstrafeleft = {
 		[0.1] = "Cloth.MovementSneak",
@@ -1182,15 +1170,13 @@ eventsounds = {
 	},
 	vaultoverhigh = {
 		[0] = "Cloth.MovementRun",
-		[0.08] = "Faith.StrainMedium",
 		[0.1] = "Vault",
+		[0.15] = "Faith.StrainMedium",
 		[0.2] = "Cloth.VaultSwish",
-		[0.3] = "Cloth.SideStep",
 		[0.4] = "Cloth.MovementRun",
-		[0.6] = "Cloth.MovementWalk"
+		[0.5] = "Cloth.MovementSneak"
 	},
 	vaultonto = {
-		[0] = "Cloth.MovementWalk",
 		[0.01] = "Vault",
 		[0.05] = "Cloth.MovementRun",
 		[0.075] = "Faith.StrainSoft"
@@ -1216,29 +1202,27 @@ eventsounds = {
 		[1.28] = "Cloth.FallShortMedium",
 		[1.3] = "Cloth.FallShortHard",
 		[1.6] = "Cloth.MovementSneak",
-		[1.9] = "Cloth.MovementWalk"
+		[1.75] = "Cloth.MovementWalk"
 	},
 	meleeslide = {
 		[0.015] = "Cloth.MovementRun",
 		[0.025] = "Melee.LegSwoosh",
 		[0.055] = "Faith.StrainMedium",
-		[0.12] = "Cloth.MovementRun"
+		[0.2] = "Cloth.MovementRun"
 	},
 	meleeairhit = {
 		[0.01] = "Melee.LegSwoosh",
 		[0.005] = "Cloth.MovementRun",
 		[0] = "Faith.StrainHard",
-		[0.2] = "Cloth.MovementWalk"
 	},
 	meleeair = {
 		[0.01] = "Cloth.MovementRun",
-		[0.25] = "Cloth.MovementWalk"
 	},
 	meleeairstill = {
 		[0.015] = "Cloth.MovementRun",
 		[0.025] = "Melee.LegSwoosh",
 		[0.065] = "Faith.StrainHard",
-		[0.2] = "Cloth.MovementWalk"
+		[0.25] = "Cloth.MovementWalk"
 	},
 	jumpcoilkick = {
 		[0.015] = "Cloth.MovementRun",
@@ -1249,42 +1233,38 @@ eventsounds = {
 	meleewrleft = {
 		[0.025] = "Cloth.MovementRun",
 		[0.035] = "Melee.LegSwoosh",
-		[0.075] = "Faith.StrainHard",
-		[0.25] = "Cloth.MovementWalk"
+		[0.075] = "Faith.StrainHard"
 	},
 	meleewrright = {
 		[0.025] = "Cloth.MovementRun",
 		[0.035] = "Melee.LegSwoosh",
-		[0.075] = "Faith.StrainHard",
-		[0.25] = "Cloth.MovementWalk"
+		[0.075] = "Faith.StrainHard"
 	},
 	ladderenterbottom = {
-		[0.1] = "Cloth.MovementWalk",
+		[0.1] = "Cloth.MovementSneak",
 		[0.12] = "Handsteps.Ladder",
 		[0.25] = "Handsteps.Ladder",
 		[0.3] = "Footsteps.LadderMedium",
-		[0.35] = "Cloth.MovementWalk",
+		[0.35] = "Cloth.MovementSneak",
 		[0.4] = "Footsteps.LadderMedium",
 	},
 	ladderclimbhangstart = {
-		[0] = "Footsteps.LadderHeavy",
-		[0.01] = "Cloth.MovementRun",
-		[0.05] = "Handsteps.MetalPipeHard",
-		[0.08] = "Faith.Impact",
+		[0] = "Cloth.MovementRun",
+		[0.025] = "Handsteps.MetalPipeHard",
+		[0.075] = "Faith.Impact",
 		[0.1] = "Land.Ladder",
-		[0.15] = "Cloth.MovementRun",
 		[0.2] = "Land.Ladder",
-		[0.3] = "Cloth.MovementWalk"
+		[0.3] = "Cloth.MovementSneak"
 	},
 	ladderclimbuplefthand = {
 		[0] = "Release.Ladder",
-		[0.1] = "Cloth.MovementWalk",
+		[0.1] = "Cloth.MovementSneak",
 		[0.15] = "Footsteps.LadderMedium",
 		[0.2] = "Handsteps.Ladder"
 	},
 	ladderclimbuprighthand = {
 		[0] = "Release.Ladder",
-		[0.1] = "Cloth.MovementWalk",
+		[0.1] = "Cloth.MovementSneak",
 		[0.15] = "Footsteps.LadderMedium",
 		[0.2] = "Handsteps.Ladder"
 	},
@@ -1297,7 +1277,7 @@ eventsounds = {
 		[0.45] = "Release.Ladder",
 		[0.5] = "Release.Ladder",
 		[0.48] = "Handsteps.MetalPipeRelease",
-		[0.6] = "Cloth.MovementWalk"
+		[0.6] = "Cloth.MovementSneak"
 	},
 	ladderexittoprighthand = {
 		[0.05] = "Cloth.MovementWalk",
@@ -1308,7 +1288,7 @@ eventsounds = {
 		[0.48] = "Handsteps.MetalPipeRelease",
 		[0.45] = "Release.Ladder",
 		[0.5] = "Release.Ladder",
-		[0.6] = "Cloth.MovementWalk"
+		[0.6] = "Cloth.MovementSneak"
 	},
 	diveslidestart = {
 		[0] = "Cloth.FallShortHard",
@@ -2035,17 +2015,11 @@ local function JumpThink()
 						end
 					end
 				else
-					local stepmat = ply.LastStepMat or game.SinglePlayer() and ply:GetNW2String("LastStepMat", "Concrete") or "Concrete"
 					if not ply:Crouching() and BodyAnimString:Left(6) == "crouch" or BodyAnimString == "walkfwd" or BodyAnimString == "runfwd" or BodyAnimString == "sprintfwd" or BodyAnimString == "runbwd" or BodyAnimString == "walkback" then
 						BodyAnimCycle = 0
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
 						ply:EmitSound("Cloth.MovementSneak")
-						timer.Create("Beatrun_SneakSound", 0.4, 1, function()
-							if BodyAnimString == "walktostandleft" and ply:OnGround() then
-								ply:EmitSound("Sneak." .. stepmat)
-							end
-						end)
 					end
 
 					if (BodyAnimString == "stand" or BodyAnimString == "walktostandleft" or BodyAnimString == "jumpcoilend") and ply:Crouching() or BodyAnimString == "crouchfwd" or BodyAnimString == "crouchbwd" then
@@ -2053,11 +2027,6 @@ local function JumpThink()
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchtostandleft"))
 						ply:EmitSound("Cloth.MovementSneak")
-						timer.Create("Beatrun_SneakSound", 0.4, 1, function()
-							if BodyAnimString == "crouchtostandleft" and ply:OnGround() then
-								ply:EmitSound("Sneak." .. stepmat)
-							end
-						end)
 					end
 				end
 
@@ -2255,14 +2224,9 @@ local function JumpThink()
 
 					BodyAnim:SetSequence(BodyAnim:LookupSequence("walktostandleft"))
 					ply:EmitSound("Release." .. stepmat)
-					ply:EmitSound("Cloth.MovementWalk")
+					ply:EmitSound("Cloth.MovementSneak")
 
 					timer.Simple(0.15, function() ply:EmitSound("Walk." .. stepmat) end)
-					timer.Simple(0.4, function()
-						if BodyAnimString == "walktostandleft" and ply:OnGround() then
-							ply:EmitSound("Sneak." .. stepmat)
-						end
-					end)
 				end
 			end
 		end
