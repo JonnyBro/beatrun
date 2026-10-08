@@ -139,6 +139,9 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 				if math.random() > 0.9 then ParkourEvent("step") end
 			end
+			if ply:WaterLevel() > 0 then
+				ply:EmitSound("Footsteps.Water")
+			end
 		end
 
 		ply.LastFootstepSound = mat
@@ -155,6 +158,9 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 			ply:EmitSound("Sneak." .. sneaksound)
 			ply:EmitSound("Cloth.MovementSneak")
+			if ply:WaterLevel() > 0 then
+				ply:EmitSound("Sneak.Water")
+			end
 		end
 
 		if isBalancing and IsFirstTimePredicted() then
