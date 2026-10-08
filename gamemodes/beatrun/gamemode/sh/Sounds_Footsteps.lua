@@ -740,15 +740,6 @@ sound.Add({
 })
 
 sound.Add({
-	name = "Walk.Water",
-	volume = 0.4,
-	level = 35,
-	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step1.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step10.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step11.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step12.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step13.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step2.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step3.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step4.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step5.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step6.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step7.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step8.wav", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step9.wav" }
-})
-
-sound.Add({
 	name = "Sneak.Water",
 	volume = 1,
 	level = 50,
