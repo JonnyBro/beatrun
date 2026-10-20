@@ -151,6 +151,8 @@ if CLIENT then
 			net.WriteFloat(totaltime)
 		net.SendToServer()
 
+		if Beatrun_SubmitCourseRecord then Beatrun_SubmitCourseRecord(totaltime) end
+
 		timealpha = 1000
 	end)
 end

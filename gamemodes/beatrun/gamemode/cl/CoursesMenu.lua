@@ -2,6 +2,7 @@
 local databaseApiKey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.GetPhrase("beatrun.convars.apikey"))
 local databaseDomain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", true, false, language.GetPhrase("beatrun.convars.domain"))
 local uiTheme = CreateClientConVar("Beatrun_CoursesMenu_Theme", "dark", true, false, language.GetPhrase("beatrun.convars.theme"))
+local submitRecords = CreateClientConVar("Beatrun_SubmitRecords", "1", true, false, language.GetPhrase("beatrun.convars.submitrecords"), 0, 1)
 
 -- Database UI
 local isCurrentMapOnly = true
@@ -588,6 +589,46 @@ local function UploadCourseFile(course)
 	end, function(err)
 		notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
 		print("> /api/courses/upload\nError: ", err)
+	end, headers)
+end
+
+function Beatrun_SubmitCourseRecord(time)
+	if not submitRecords:GetBool() then return end
+	if Course_Name == "" or not Course_ID or Course_ID == "" then return end
+	if not time or time <= 0 then return end
+
+	local key = databaseApiKey:GetString()
+	if not key or key == "" or key == "0" then return end
+
+	if GetConVar("sv_cheats"):GetBool() then return end
+
+	local headers = {
+		authorization = key,
+		hash = Course_ID
+	}
+
+	http.Post("https://" .. databaseDomain:GetString() .. "/api/courses/records", {
+		time = tostring(time)
+	}, function(body, _, _, code)
+		-- Course is not in the database
+		if code == 404 then return end
+
+		local res = util.JSONToTable(body or "")
+
+		if code ~= 200 or not res or not res.data then
+			print("> /api/courses/records\n> Code: " .. tostring(code) .. "\n> Reply: " .. tostring(body))
+
+			return
+		end
+
+		if res.data.personalBest then
+			notification.AddLegacy(language.GetPhrase("#beatrun.coursesmenu.notification.record.pb"):format(res.data.position), NOTIFY_GENERIC, 5)
+			surface.PlaySound("buttons/bell1.wav")
+		else
+			notification.AddLegacy(language.GetPhrase("#beatrun.coursesmenu.notification.record.saved"):format(res.data.position), NOTIFY_HINT, 4)
+		end
+	end, function(err)
+		print("> /api/courses/records\nError: ", err)
 	end, headers)
 end
 
@@ -1421,6 +1462,15 @@ function BuildSettingsPage()
 
 		timer.Simple(.1, function() RunConsoleCommand("Beatrun_CoursesMenu") end)
 	end
+
+	local recordsCheck = vgui.Create("DCheckBoxLabel", SettingsPanel)
+	recordsCheck:SetText("#beatrun.coursesmenu.settings.submitrecords")
+	recordsCheck:SetFont("AEUIDefault")
+	recordsCheck:SetTextColor(CurrentTheme().text.primary)
+	recordsCheck:SetConVar("Beatrun_SubmitRecords")
+	recordsCheck:Dock(TOP)
+	recordsCheck:DockMargin(0, 0, 0, 20)
+	recordsCheck:SizeToContents()
 
 	local domainLabel = vgui.Create("DLabel", SettingsPanel)
 	domainLabel:SetText("#beatrun.coursesmenu.settings.domain")
