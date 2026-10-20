@@ -253,40 +253,13 @@ local function SlideLoopSound(ply, pos, mat)
 	local sndtable
 	if ply:WaterLevel() > 0 then
 		sndtable = slideloop_sounds[MAT_SLOSH]
-		mat = MAT_SLOSH
 	else
 		sndtable = slideloop_sounds[mat] or slideloop_sounds[0]
-		if not slideloop_sounds[mat] then mat = 0 end
 	end
-
-	ply.SlideLoopMat = mat
 
 	ply.SlideLoopSound = CreateSound(ply, sndtable)
-	ply.SlideLoopSound:PlayEx(0.25, 100)
+	ply.SlideLoopSound:PlayEx(0.15, 100)
 end
-
-local function UpdateSlideLoopSound(ply, mat)
-	local resolvedMat
-	if ply:WaterLevel() > 0 then
-		resolvedMat = MAT_SLOSH
-	else
-		resolvedMat = slideloop_sounds[mat] and mat or 0
-	end
-
-	if ply.SlideLoopMat == resolvedMat then return end
-
-	if ply.SlideLoopSound then
-		ply.SlideLoopSound:FadeOut(0.15)
-	end
-
-	ply.SlideLoopMat = resolvedMat
-
-	local sndtable = slideloop_sounds[resolvedMat] or slideloop_sounds[0]
-	ply.SlideLoopSound = CreateSound(ply, sndtable)
-	ply.SlideLoopSound:PlayEx(0.25, 100)
-end
-
-local SlideLoopMatInterval = 0.1
 
 local metaent = FindMetaTable("Entity")
 metaent.oldOnGround = metaent.oldOnGround or metaent.OnGround
@@ -539,7 +512,6 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		if SERVER and ply.SlideLoopSound then
 			ply.SlideLoopSound:FadeOut(0.15)
-			ply.SlideLoopMatNextCheck = nil
 		end
 
 		ply:ConCommand("-duck")
@@ -575,20 +547,6 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 
 		ply:SetSlidingLastPos(pos)
-
-		if SERVER then
-			local now = CurTime()
-			if not ply.SlideLoopMatNextCheck or now >= ply.SlideLoopMatNextCheck then
-				ply.SlideLoopMatNextCheck = now + SlideLoopMatInterval
-
-				loopmat_trace_tbl.start  = pos
-				loopmat_trace_tbl.endpos = pos - trace_down
-				loopmat_trace_tbl.filter = ply
-
-				local loopTr = util.TraceLine(loopmat_trace_tbl)
-				UpdateSlideLoopSound(ply, loopTr.MatType)
-			end
-		end
 
 		if slippery then
 			if mv:KeyDown(IN_MOVERIGHT) then
