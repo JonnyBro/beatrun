@@ -1,69 +1,102 @@
 BEATRUN_WEAPON_BLACKLIST = BEATRUN_WEAPON_BLACKLIST or {}
 BEATRUN_GAMEMODES_LOADOUTS = BEATRUN_GAMEMODES_LOADOUTS or {}
 
+local UI = BeatrunUI
+
 local loadoutsFrame
 local blacklistFrame
 local SelectedLoadout = 1
 
+local function RestoreScroll(scroll, y)
+	local vbar = scroll:GetVBar()
+
+	scroll:InvalidateLayout(true)
+	vbar:SetScroll(y)
+
+	timer.Simple(0, function() if IsValid(vbar) then vbar:SetScroll(y) end end)
+end
+
+local function MakeWeaponRow(scroll, wep, class)
+	local S = UI.S
+
+	local row = scroll:Add("DPanel")
+	row:SetTall(S(68))
+	row:Dock(TOP)
+	row:DockMargin(0, 0, S(10), S(6))
+	row:DockPadding(S(6), S(6), S(10), S(6))
+
+	row.Paint = function(self, w, h)
+		local theme = CurrentTheme()
+
+		UI.PaintPanel(w, h, (self:IsHovered() or self:IsChildHovered()) and theme.panels.secondary or theme.panels.primary)
+	end
+
+	local icon = vgui.Create("SpawnIcon", row)
+	icon:SetModel(wep and wep.WorldModel or "models/props_junk/watermelon01.mdl")
+	icon:SetTooltip(false)
+	icon:SetMouseInputEnabled(false)
+	icon:SetWide(S(56))
+	icon:Dock(LEFT)
+	icon:DockMargin(0, 0, S(12), 0)
+
+	return row
+end
+
+local function MakeWeaponText(row, wep, class)
+	local info = vgui.Create("DPanel", row)
+	info:Dock(FILL)
+	info.Paint = nil
+
+	local name = UI.MakeLabel(info, language.GetPhrase(wep and wep.PrintName or class), "BeatrunUI")
+	name:Dock(TOP)
+	name:DockMargin(0, UI.S(6), 0, 0)
+
+	local classLabel = UI.MakeLabel(info, class, "BeatrunUISmall", CurrentTheme().text.muted)
+	classLabel:Dock(TOP)
+end
+
 local function OpenLoadoutsMenu()
 	if IsValid(loadoutsFrame) then loadoutsFrame:Remove() end
 
-	loadoutsFrame = vgui.Create("DFrame")
-	loadoutsFrame:SetTitle("")
-	loadoutsFrame:SetSize(ScrW() * 0.6, ScrH() * 0.6)
-	loadoutsFrame:Center()
-	loadoutsFrame:DockPadding(10, 30, 0, 10)
-	loadoutsFrame:SetDeleteOnClose(true)
-	loadoutsFrame:ShowCloseButton(false)
-	loadoutsFrame:MakePopup()
+	UI = BeatrunUI
 
-	loadoutsFrame.Paint = function(self, w, h)
-		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
-		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
-		draw.SimpleText("#beatrun.loadoutseditor.title", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-	end
+	local S = UI.S
 
-	local close = vgui.Create("DButton", loadoutsFrame)
-	close:SetText("✕")
-	close:SetFont("AEUIDefault")
-	close:SetTextColor(CurrentTheme().buttons.red.t)
-	close:SetSize(24, 24)
-	close:SetPos(loadoutsFrame:GetWide() - 24, 0)
-
-	close.Paint = function(self, w, h)
-		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
-		local isDown = self:IsDown() and CurrentTheme().buttons.red.d
-		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
-	end
-
-	close.DoClick = function() loadoutsFrame:Close() end
+	loadoutsFrame = UI.MakeWindow("#beatrun.loadoutseditor.title", math.min(ScrW() * 0.6, S(1150)), math.min(ScrH() * 0.6, S(650)))
 
 	local left = vgui.Create("DPanel", loadoutsFrame)
-	left:SetWide(220)
+	left:SetWide(S(240))
 	left:Dock(LEFT)
-	left:DockMargin(0, 0, 10, 0)
+	left:DockMargin(0, 0, S(12), 0)
+	left:DockPadding(S(10), S(10), S(10), S(10))
 
-	left.Paint = function(self, w, h) draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.primary) end
+	left.Paint = function(self, w, h) UI.PaintPanel(w, h) end
 
-	local loadoutList = vgui.Create("DScrollPanel", left)
-	loadoutList:Dock(FILL)
+	local bottomLeft = vgui.Create("DPanel", left)
+	bottomLeft:SetTall(S(32) * 2 + S(8))
+	bottomLeft:Dock(BOTTOM)
+	bottomLeft.Paint = nil
 
-	ApplyScrollTheme(loadoutList)
+	local loadoutList = UI.MakeScroll(left)
+	loadoutList:DockMargin(0, 0, 0, S(10))
 
 	local right = vgui.Create("DPanel", loadoutsFrame)
-	right:SetTall(100)
 	right:Dock(FILL)
-	right:DockMargin(0, 0, 10, 0)
-	right:DockPadding(10, 10, 10, 10)
+	right:DockPadding(S(10), S(10), S(10), S(10))
 
-	right.Paint = function(self, w, h) draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.primary) end
+	right.Paint = function(self, w, h) UI.PaintPanel(w, h) end
 
-	local weaponList = vgui.Create("DScrollPanel", right)
-	weaponList:Dock(FILL)
+	local bottomRight = vgui.Create("DPanel", right)
+	bottomRight:SetTall(S(32))
+	bottomRight:Dock(BOTTOM)
+	bottomRight.Paint = nil
 
-	ApplyScrollTheme(weaponList)
+	local weaponList = UI.MakeScroll(right)
+	weaponList:DockMargin(0, 0, 0, S(10))
 
-	local function BuildWeapons()
+	local function BuildWeapons(keepScroll)
+		local scrollY = weaponList:GetVBar():GetScroll()
+
 		weaponList:Clear()
 
 		local loadout = BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout]
@@ -73,63 +106,52 @@ local function OpenLoadoutsMenu()
 
 		for _, class in ipairs(loadout) do
 			local wep = weapons.GetStored(class)
+			local row = MakeWeaponRow(weaponList, wep, class)
 
-			local row = weaponList:Add("DPanel")
-			row:SetTall(64)
-			row:Dock(TOP)
-			row:DockMargin(0, 0, 0, 5)
-
-			row.Paint = function(self, w, h) draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.secondary) end
-
-			local icon = vgui.Create("SpawnIcon", row)
-			icon:SetModel(wep.WorldModel or "models/props_junk/watermelon01.mdl")
-			icon:SetTooltip(false)
-			icon:SetMouseInputEnabled(false)
-			icon:SetWide(64)
-			icon:Dock(LEFT)
-
-			local label = vgui.Create("DLabel", row)
-			label:SetText(string.format("%s\n(%s)", language.GetPhrase(wep.PrintName), class))
-			label:SetFont("AEUIDefault")
-			label:SetTextColor(CurrentTheme().text.primary)
-			label:Dock(FILL)
-			label:DockMargin(10, 0, 0, 0)
-
-			local delete = vgui.Create("DButton", row)
-			delete:SetText("#beatrun.misc.delete")
-			delete:SetFont("AEUIDefault")
-			delete:SetTextColor(CurrentTheme().buttons.red.t)
-			delete:SetWide(loadoutsFrame:GetWide() / 10)
+			local delete = UI.MakeButton(row, "#beatrun.misc.delete", "danger")
+			delete:SetWide(math.max(delete:GetWide(), S(110)))
 			delete:Dock(RIGHT)
-			delete:DockMargin(0, 10, 10, 10)
-
-			delete.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+			delete:DockMargin(S(8), S(12), 0, S(12))
 
 			delete.DoClick = function()
 				table.RemoveByValue(loadout, class)
 
-				BuildWeapons()
+				BuildWeapons(true)
 			end
+
+			MakeWeaponText(row, wep, class)
 		end
+
+		if keepScroll then RestoreScroll(weaponList, scrollY) end
 	end
 
-	local function BuildLoadouts()
+	local function BuildLoadouts(keepWeaponsScroll)
+		local scrollY = loadoutList:GetVBar():GetScroll()
+
 		loadoutList:Clear()
 
 		for i, _ in ipairs(BEATRUN_GAMEMODES_LOADOUTS) do
 			local row = loadoutList:Add("DButton")
-			row:SetText(language.GetPhrase("beatrun.loadoutseditor.loadout"):format(i))
-			row:SetFont("AEUIDefault")
-			row:SetTextColor(CurrentTheme().buttons.red.t)
-			row:SetTall(40)
+			row:SetText(string.upper(language.GetPhrase("beatrun.loadoutseditor.loadout"):format(i)))
+			row:SetFont("BeatrunUI")
+			row:SetTall(S(38))
 			row:Dock(TOP)
-			row:DockMargin(5, 5, 5, 0)
+			row:DockMargin(0, 0, S(10), S(4))
 			row:SetContentAlignment(4)
+			row:SetTextInset(S(14), 0)
+			row:SetCursor("hand")
 
 			row.Paint = function(self, w, h)
+				local theme = CurrentTheme()
 				local active = i == SelectedLoadout
-				local col = active and CurrentTheme().accent or CurrentTheme().panels.secondary
-				draw.RoundedBox(6, 0, 0, w, h, col)
+
+				if active then
+					UI.PaintPanel(w, h, theme.panels.secondary, true)
+				elseif self:IsHovered() then
+					UI.PaintPanel(w, h, theme.panels.secondary)
+				end
+
+				self:SetTextColor((active and theme.text.primary) or (self:IsHovered() and theme.accent) or theme.text.muted)
 			end
 
 			row.DoClick = function()
@@ -139,24 +161,14 @@ local function OpenLoadoutsMenu()
 			end
 		end
 
-		BuildWeapons()
+		RestoreScroll(loadoutList, scrollY)
+
+		BuildWeapons(keepWeaponsScroll)
 	end
 
-	local bottomLeft = vgui.Create("DPanel", left)
-	bottomLeft:SetTall(100)
-	bottomLeft:Dock(BOTTOM)
-	bottomLeft:DockPadding(10, 0, 10, 10)
-	bottomLeft.Paint = nil
-
-	local add = vgui.Create("DButton", bottomLeft)
-	add:SetText("#beatrun.misc.add")
-	add:SetFont("AEUIDefault")
-	add:SetTextColor(CurrentTheme().buttons.green.t)
-	add:SetTall(40)
+	local add = UI.MakeButton(bottomLeft, "#beatrun.misc.add", "secondary")
 	add:Dock(TOP)
-	add:DockMargin(0, 0, 0, 10)
-
-	add.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+	add:DockMargin(0, 0, 0, S(8))
 
 	add.DoClick = function()
 		table.insert(BEATRUN_GAMEMODES_LOADOUTS, {})
@@ -166,14 +178,8 @@ local function OpenLoadoutsMenu()
 		BuildLoadouts()
 	end
 
-	local del = vgui.Create("DButton", bottomLeft)
-	del:SetText("#beatrun.misc.delete")
-	del:SetFont("AEUIDefault")
-	del:SetTextColor(CurrentTheme().buttons.red.t)
-	del:SetTall(40)
+	local del = UI.MakeButton(bottomLeft, "#beatrun.misc.delete", "danger")
 	del:Dock(TOP)
-
-	del.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
 
 	del.DoClick = function()
 		table.remove(BEATRUN_GAMEMODES_LOADOUTS, SelectedLoadout)
@@ -183,21 +189,18 @@ local function OpenLoadoutsMenu()
 		BuildLoadouts()
 	end
 
-	local bottomRight = vgui.Create("DPanel", right)
-	bottomRight:Dock(BOTTOM)
-	bottomRight:SetTall(100)
-	bottomRight:DockPadding(10, 10, 10, 10)
-	bottomRight.Paint = nil
+	local save = UI.MakeButton(bottomRight, "#beatrun.misc.save", "primary")
+	save:SetWide(math.max(save:GetWide(), S(140)))
+	save:Dock(RIGHT)
 
-	local addWeapon = vgui.Create("DButton", bottomRight)
-	addWeapon:SetText("#beatrun.loadoutseditor.addweapon")
-	addWeapon:SetFont("AEUIDefault")
-	addWeapon:SetTextColor(CurrentTheme().buttons.green.t)
-	addWeapon:SetTall(40)
-	addWeapon:Dock(TOP)
-	addWeapon:DockMargin(0, 0, 0, 10)
+	save.DoClick = function()
+		net.Start("Beatrun_UpdateLoadouts")
+			net.WriteTable(BEATRUN_GAMEMODES_LOADOUTS)
+		net.SendToServer()
+	end
 
-	addWeapon.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+	local addWeapon = UI.MakeButton(bottomRight, "#beatrun.loadoutseditor.addweapon", "secondary")
+	addWeapon:Dock(LEFT)
 
 	addWeapon.DoClick = function()
 		local menu = DermaMenu()
@@ -216,27 +219,14 @@ local function OpenLoadoutsMenu()
 			menu:AddOption(string.format("%s (%s)", wep.PrintName, wep.ClassName), function()
 				table.insert(loadout, wep.ClassName)
 
-				BuildWeapons()
+				BuildWeapons(true)
 			end)
 		end
 
 		menu:Open()
 	end
 
-	local save = vgui.Create("DButton", bottomRight)
-	save:SetText("#beatrun.misc.save")
-	save:SetFont("AEUIDefault")
-	save:SetTextColor(CurrentTheme().buttons.green.t)
-	save:SetTall(40)
-	save:Dock(TOP)
-
-	save.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
-
-	save.DoClick = function()
-		net.Start("Beatrun_UpdateLoadouts")
-			net.WriteTable(BEATRUN_GAMEMODES_LOADOUTS)
-		net.SendToServer()
-	end
+	loadoutsFrame.Refresh = function() BuildLoadouts(true) end
 
 	BuildLoadouts()
 end
@@ -253,46 +243,19 @@ net.Receive("Beatrun_SyncLoadouts", function()
 
 	SelectedLoadout = math.Clamp(SelectedLoadout or 1, 1, #BEATRUN_GAMEMODES_LOADOUTS)
 
-	if IsValid(loadoutsFrame) then OpenLoadoutsMenu() end
+	if IsValid(loadoutsFrame) then loadoutsFrame:Refresh() end
 end)
 
 local function OpenBlacklistMenu()
 	if IsValid(blacklistFrame) then blacklistFrame:Remove() end
 
-	blacklistFrame = vgui.Create("DFrame")
-	blacklistFrame:SetTitle("")
-	blacklistFrame:SetSize(ScrW() * 0.3, ScrH() * 0.5)
-	blacklistFrame:Center()
-	blacklistFrame:DockPadding(10, 30, 0, 10)
-	blacklistFrame:SetDeleteOnClose(true)
-	blacklistFrame:ShowCloseButton(false)
-	blacklistFrame:MakePopup()
+	UI = BeatrunUI
 
-	blacklistFrame.Paint = function(self, w, h)
-		draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
-		draw.RoundedBoxEx(8, 0, 0, w, 24, CurrentTheme().header, true, true, false, false)
-		draw.SimpleText("#beatrun.blacklisteditor.title", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-	end
+	local S = UI.S
 
-	local close = vgui.Create("DButton", blacklistFrame)
-	close:SetText("✕")
-	close:SetFont("AEUIDefault")
-	close:SetTextColor(CurrentTheme().buttons.red.t)
-	close:SetSize(24, 24)
-	close:SetPos(blacklistFrame:GetWide() - 24, 0)
+	blacklistFrame = UI.MakeWindow("#beatrun.blacklisteditor.title", math.min(ScrW() * 0.35, S(700)), math.min(ScrH() * 0.6, S(700)))
 
-	close.Paint = function(self, w, h)
-		local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
-		local isDown = self:IsDown() and CurrentTheme().buttons.red.d
-		draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
-	end
-
-	close.DoClick = function() blacklistFrame:Close() end
-
-	local scroll = vgui.Create("DScrollPanel", blacklistFrame)
-	scroll:Dock(FILL)
-
-	ApplyScrollTheme(scroll)
+	local scroll = UI.MakeScroll(blacklistFrame)
 
 	local allWeps = GetWeaponsList()
 	local categories = {}
@@ -312,60 +275,30 @@ local function OpenBlacklistMenu()
 
 	table.sort(sortedCats)
 
-	for _, category in ipairs(sortedCats) do
+	for i, category in ipairs(sortedCats) do
 		local weps = categories[category]
 
 		table.sort(weps, function(a, b) return a.ClassName < b.ClassName end)
 
-		local header = scroll:Add("DPanel")
-		header:SetTall(28)
-		header:Dock(TOP)
-		header:DockMargin(0, 10, 0, 4)
-
-		header.Paint = function(self, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, CurrentTheme().header)
-			draw.SimpleText(category, "AEUIDefault", 10, h / 2, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		end
+		local header = UI.MakeTitle(scroll, category)
+		header:DockMargin(0, i == 1 and 0 or S(14), 0, S(8))
 
 		for _, wep in ipairs(weps) do
 			local class = wep.ClassName
+			local row = MakeWeaponRow(scroll, wep, class)
 
-			local row = scroll:Add("DPanel")
-			row:SetTall(64)
-			row:Dock(TOP)
-			row:DockMargin(0, 0, 0, 6)
-
-			row.Paint = function(self, w, h)
-				local col = self:IsHovered() and CurrentTheme().panels.secondary or CurrentTheme().panels.primary
-				draw.RoundedBox(6, 0, 0, w, h, col)
-			end
-
-			local icon = vgui.Create("SpawnIcon", row)
-			icon:SetModel(wep.WorldModel or "models/props_junk/watermelon01.mdl")
-			icon:SetTooltip(false)
-			icon:SetMouseInputEnabled(false)
-			icon:SetWide(64)
-			icon:Dock(LEFT)
-
-			local label = vgui.Create("DLabel", row)
-			label:SetText(string.format("%s\n(%s)", language.GetPhrase(wep.PrintName), class))
-			label:SetFont("AEUIDefault")
-			label:SetTextColor(CurrentTheme().text.primary)
-			label:Dock(FILL)
-			label:DockMargin(10, 0, 0, 0)
-
-			local toggle = vgui.Create("DButton", row)
-			toggle:SetText("")
-			toggle:SetWide(110)
+			local toggle = UI.MakeButton(row, "#beatrun.blacklisteditor.allowed", "secondary")
+			toggle:SetWide(S(150))
 			toggle:Dock(RIGHT)
-			toggle:DockMargin(0, 6, 6, 6)
+			toggle:DockMargin(S(8), S(12), 0, S(12))
 
-			toggle.Paint = function(self, w, h)
-				local style = BEATRUN_WEAPON_BLACKLIST[class] and "red" or "green"
+			toggle.Think = function(self)
+				local blocked = BEATRUN_WEAPON_BLACKLIST[class] and true or false
+				if self.blocked == blocked then return end
 
-				ApplyButtonTheme(self, w, h, style)
-
-				draw.SimpleText(BEATRUN_WEAPON_BLACKLIST[class] and "#beatrun.blacklisteditor.blacklisted" or "#beatrun.blacklisteditor.allowed", "AEUIDefault", w / 2, h / 2, CurrentTheme().buttons[style].t, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				self.blocked = blocked
+				self.style = blocked and "red" or "secondary"
+				self:SetText(blocked and "#beatrun.blacklisteditor.blacklisted" or "#beatrun.blacklisteditor.allowed")
 			end
 
 			toggle.DoClick = function()
@@ -374,6 +307,8 @@ local function OpenBlacklistMenu()
 					net.WriteBool(not BEATRUN_WEAPON_BLACKLIST[class])
 				net.SendToServer()
 			end
+
+			MakeWeaponText(row, wep, class)
 		end
 	end
 end
@@ -387,6 +322,4 @@ end)
 
 net.Receive("Beatrun_SyncBlacklist", function()
 	BEATRUN_WEAPON_BLACKLIST = net.ReadTable()
-
-	if IsValid(blacklistFrame) then OpenBlacklistMenu() end
 end)

@@ -32,7 +32,7 @@ if CLIENT then
 
 			surface.SetDrawColor(255, 255, 255)
 			surface.SetMaterial(brcross)
-			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32 * scale), SScaleY(32 * scale), math.fmod(rotate_timer * 100, 360))
+			surface.DrawTexturedRectRotated(w2s.x, w2s.y, BeatrunUI.S(32 * scale), BeatrunUI.S(32 * scale), math.fmod(rotate_timer * 100, 360))
 
 			return
 		end
@@ -54,7 +54,7 @@ if CLIENT then
 
 			surface.SetDrawColor(255, 255, 255)
 			surface.SetMaterial(brcross)
-			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32 * scale), SScaleY(32 * scale), math.fmod(rotate_timer * 100, 360))
+			surface.DrawTexturedRectRotated(w2s.x, w2s.y, BeatrunUI.S(32 * scale), BeatrunUI.S(32 * scale), math.fmod(rotate_timer * 100, 360))
 		end
 	end)
 end

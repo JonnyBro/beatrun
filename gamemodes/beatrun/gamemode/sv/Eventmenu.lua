@@ -13,10 +13,23 @@ net.Receive("Eventmode_SetSpawn", function(len, ply)
 	hook.Add("PlayerSpawn", "EventMemberSpawnpoint", function(pl) if GetGlobalBool("GM_EVENTMODE") and spawnPos then if pl:GetNW2String("EPlayerStatus") == "Member" then timer.Simple(0, function() if IsValid(pl) then pl:SetPos(spawnPos) end end) end end end)
 end)
 
+local toggleableVars = {
+	EM_AllowProps = true,
+	EM_AllowWeapons = true,
+	EM_AllowVehicles = true,
+	EM_AllowEntities = true,
+	EM_NewPlayersSuspended = true,
+	EM_SuspendOnDeath = true,
+	EM_NoMeleeDamage = true,
+	EM_HideNametags = true
+}
+
 net.Receive("Eventmode_ToggleVar", function(len, ply)
 	if ply:GetNW2String("EPlayerStatus") ~= "Manager" then return end
 
 	local var = net.ReadString()
+	if not toggleableVars[var] then return end
+
 	local cur = GetGlobalBool(var, false)
 
 	SetGlobalBool(var, not cur)

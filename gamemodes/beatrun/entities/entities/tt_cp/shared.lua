@@ -39,27 +39,65 @@ end
 
 local screencolor = Color(64, 0, 0, 64)
 
-function ENT:StartTouch(ent)
-	if ent:IsPlayer() and Course_Name ~= "" and not ent.BuildMode and ent:GetNW2Int("CPNum", 1) == self:GetCPNum() then
-		ent:SetNW2Int("CPNum", ent:GetNW2Int("CPNum", 1) + 1)
+function ENT:Reached(ply)
+	if Course_Name == "" or ply.BuildMode or ply:GetNW2Int("CPNum", 1) ~= self:GetCPNum() then return end
 
-		if ent:GetNW2Int("CPNum", 1) > table.Count(Checkpoints) then
-			-- ReplayStop(ent)
-			FinishCourse(ent)
-		else
-			ent.CPSavePos = ent:GetPos()
-			ent.CPSaveAng = ent:EyeAngles()
-			ent.CPSaveVel = ent:GetVelocity()
+	ply:SetNW2Int("CPNum", ply:GetNW2Int("CPNum", 1) + 1)
 
-			ent:SaveParkourState()
+	if ply:GetNW2Int("CPNum", 1) > table.Count(Checkpoints) then
+		FinishCourse(ply)
+	else
+		ply.CPSavePos = ply:GetPos()
+		ply.CPSaveAng = ply:EyeAngles()
+		ply.CPSaveVel = ply:GetVelocity()
+		ply.CPSaveVehicle = nil
 
-			net.Start("Checkpoint_Hit")
-				net.WriteUInt(ent:GetNW2Int("CPNum", 1), 8)
-			net.Send(ent)
+		local vehicle = ply:GetVehicle()
+
+		if IsValid(vehicle) and not IsValid(vehicle:GetParent()) then
+			ply.CPSaveVehicle = {
+				ent = vehicle,
+				id = BuildModeEntitySpawnable(vehicle) or (vehicle.VehicleName and "vehicle:" .. vehicle.VehicleName),
+				pos = vehicle:GetPos(),
+				ang = vehicle:GetAngles(),
+				vel = vehicle:GetVelocity()
+			}
 		end
 
-		ent:ScreenFade(SCREENFADE.IN, screencolor, 0.25, 0)
+		ply:SaveParkourState()
+
+		net.Start("Checkpoint_Hit")
+			net.WriteUInt(ply:GetNW2Int("CPNum", 1), 8)
+		net.Send(ply)
 	end
+
+	ply:ScreenFade(SCREENFADE.IN, screencolor, 0.25, 0)
+end
+
+function ENT:StartTouch(ent)
+	if ent:IsPlayer() then self:Reached(ent) end
+end
+
+-- Players in vehicles are parented to them and never touch triggers
+function ENT:Think()
+	if CLIENT then return end
+
+	local pos = self:GetPos()
+	local cpmins, cpmaxs = pos + minb, pos + maxb
+
+	for _, ply in player.Iterator() do
+		if not ply:InVehicle() or ply:GetNW2Int("CPNum", 1) ~= self:GetCPNum() then continue end
+
+		local vehicle = ply:GetVehicle()
+		local root = IsValid(vehicle:GetParent()) and vehicle:GetParent() or vehicle
+		local mins, maxs = root:WorldSpaceAABB()
+
+		if util.IsBoxIntersectingBox(mins, maxs, cpmins, cpmaxs) then self:Reached(ply) end
+	end
+
+	self:NextThink(CurTime() + 0.05)
+
+	return true
 end
 
 function ENT:UpdateTransmitState()

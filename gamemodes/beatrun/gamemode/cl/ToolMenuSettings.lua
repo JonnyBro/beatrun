@@ -26,20 +26,6 @@ hook.Add("AddToolMenuCategories", "Beatrun_Category", function()
 end)
 
 hook.Add("PopulateToolMenu", "Beatrun_ToolMenu", function()
-	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_courses", "#beatrun.toolsmenu.courses.name", "", "", function(panel)
-		panel:Clear()
-		panel:SetName("#beatrun.toolsmenu.courses.desc")
-
-		panel:CheckBox("#beatrun.toolsmenu.courses.raceyourghost", "Beatrun_CourseGhost")
-		panel:ControlHelp("#beatrun.toolsmenu.courses.raceyourghostdesc")
-
-		panel:CheckBox("#beatrun.toolsmenu.courses.faststart", "Beatrun_FastStart")
-		panel:ControlHelp("#beatrun.toolsmenu.courses.faststartdesc")
-
-		panel:CheckBox("#beatrun.toolsmenu.courses.checkpointsave", "Beatrun_CPSave")
-		panel:ControlHelp("#beatrun.toolsmenu.courses.checkpointsavedesc")
-	end)
-
 	spawnmenu.AddToolMenuOption("Beatrun", "Client", "beatrun_hud", "#beatrun.toolsmenu.hud.name", "", "", function(panel)
 		panel:Clear()
 		panel:SetName("#beatrun.toolsmenu.hud.desc")
