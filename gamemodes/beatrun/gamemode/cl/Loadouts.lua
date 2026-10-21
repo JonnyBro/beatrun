@@ -5,6 +5,15 @@ local loadoutsFrame
 local blacklistFrame
 local SelectedLoadout = 1
 
+local function RestoreScroll(scroll, y)
+	local vbar = scroll:GetVBar()
+
+	scroll:InvalidateLayout(true)
+	vbar:SetScroll(y)
+
+	timer.Simple(0, function() if IsValid(vbar) then vbar:SetScroll(y) end end)
+end
+
 local function OpenLoadoutsMenu()
 	if IsValid(loadoutsFrame) then loadoutsFrame:Remove() end
 
@@ -63,7 +72,9 @@ local function OpenLoadoutsMenu()
 
 	ApplyScrollTheme(weaponList)
 
-	local function BuildWeapons()
+	local function BuildWeapons(keepScroll)
+		local scrollY = weaponList:GetVBar():GetScroll()
+
 		weaponList:Clear()
 
 		local loadout = BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout]
@@ -108,12 +119,16 @@ local function OpenLoadoutsMenu()
 			delete.DoClick = function()
 				table.RemoveByValue(loadout, class)
 
-				BuildWeapons()
+				BuildWeapons(true)
 			end
 		end
+
+		if keepScroll then RestoreScroll(weaponList, scrollY) end
 	end
 
-	local function BuildLoadouts()
+	local function BuildLoadouts(keepWeaponsScroll)
+		local scrollY = loadoutList:GetVBar():GetScroll()
+
 		loadoutList:Clear()
 
 		for i, _ in ipairs(BEATRUN_GAMEMODES_LOADOUTS) do
@@ -139,7 +154,9 @@ local function OpenLoadoutsMenu()
 			end
 		end
 
-		BuildWeapons()
+		RestoreScroll(loadoutList, scrollY)
+
+		BuildWeapons(keepWeaponsScroll)
 	end
 
 	local bottomLeft = vgui.Create("DPanel", left)
@@ -216,7 +233,7 @@ local function OpenLoadoutsMenu()
 			menu:AddOption(string.format("%s (%s)", wep.PrintName, wep.ClassName), function()
 				table.insert(loadout, wep.ClassName)
 
-				BuildWeapons()
+				BuildWeapons(true)
 			end)
 		end
 
@@ -238,6 +255,8 @@ local function OpenLoadoutsMenu()
 		net.SendToServer()
 	end
 
+	loadoutsFrame.Refresh = function() BuildLoadouts(true) end
+
 	BuildLoadouts()
 end
 
@@ -253,7 +272,7 @@ net.Receive("Beatrun_SyncLoadouts", function()
 
 	SelectedLoadout = math.Clamp(SelectedLoadout or 1, 1, #BEATRUN_GAMEMODES_LOADOUTS)
 
-	if IsValid(loadoutsFrame) then OpenLoadoutsMenu() end
+	if IsValid(loadoutsFrame) then loadoutsFrame:Refresh() end
 end)
 
 local function OpenBlacklistMenu()
@@ -387,6 +406,4 @@ end)
 
 net.Receive("Beatrun_SyncBlacklist", function()
 	BEATRUN_WEAPON_BLACKLIST = net.ReadTable()
-
-	if IsValid(blacklistFrame) then OpenBlacklistMenu() end
 end)
