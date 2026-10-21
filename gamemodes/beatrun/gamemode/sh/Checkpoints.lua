@@ -31,24 +31,6 @@ end
 if SERVER then
 	util.AddNetworkString("Checkpoint_Hit")
 	util.AddNetworkString("Checkpoint_Finish")
-else
-	surface.CreateFont("BeatrunHUD", {
-		font = "Roboto",
-		shadow = true,
-		blursize = 0,
-		underline = false,
-		rotary = false,
-		strikeout = false,
-		additive = false,
-		antialias = true,
-		extended = false,
-		scanlines = 0,
-		italic = false,
-		outline = false,
-		symbol = false,
-		size = 32,
-		weight = 2000
-	})
 end
 
 function LoadCheckpoints()
@@ -262,7 +244,6 @@ function CourseHUD()
 
 		-- NOTE: Calculations that I found on Valve's wiki, under "Source Engine Scale Calculations"
 		-- https://developer.valvesoftware.com/wiki/Dimensions_(Half-Life_2_and_Counter-Strike:_Source)#Source_Engine_Scale_Calculations
-
 		if mode == 1 then -- km/h
 			speed = math.Round(ply:GetVelocity():Length() * 0.068573863636364) -- 12069/176000
 		elseif mode == 2 then -- mph

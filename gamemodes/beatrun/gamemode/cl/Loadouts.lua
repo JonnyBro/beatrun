@@ -47,11 +47,11 @@ local function MakeWeaponText(row, wep, class)
 	info:Dock(FILL)
 	info.Paint = nil
 
-	local name = UI.MakeLabel(info, language.GetPhrase(wep and wep.PrintName or class), "BRCoursesHUD")
+	local name = UI.MakeLabel(info, language.GetPhrase(wep and wep.PrintName or class), "BeatrunUI")
 	name:Dock(TOP)
 	name:DockMargin(0, UI.S(6), 0, 0)
 
-	local classLabel = UI.MakeLabel(info, class, "BRCoursesHUDSmall", CurrentTheme().text.muted)
+	local classLabel = UI.MakeLabel(info, class, "BeatrunUISmall", CurrentTheme().text.muted)
 	classLabel:Dock(TOP)
 end
 
@@ -133,7 +133,7 @@ local function OpenLoadoutsMenu()
 		for i, _ in ipairs(BEATRUN_GAMEMODES_LOADOUTS) do
 			local row = loadoutList:Add("DButton")
 			row:SetText(string.upper(language.GetPhrase("beatrun.loadoutseditor.loadout"):format(i)))
-			row:SetFont("BRCoursesHUD")
+			row:SetFont("BeatrunUI")
 			row:SetTall(S(38))
 			row:Dock(TOP)
 			row:DockMargin(0, 0, S(10), S(4))

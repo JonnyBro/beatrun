@@ -1,239 +1,33 @@
 local databaseApiKey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.GetPhrase("beatrun.convars.apikey"))
 local databaseDomain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", true, false, language.GetPhrase("beatrun.convars.domain"))
-local uiTheme = CreateClientConVar("Beatrun_MenuTheme", "beatrun", true, false, language.GetPhrase("beatrun.convars.theme"))
 local submitRecords = CreateClientConVar("Beatrun_SubmitRecords", "1", true, false, language.GetPhrase("beatrun.convars.submitrecords"), 0, 1)
+
+local UI = BeatrunUI
+local S, L = UI.S, UI.L
+local THEME_ORDER = UI.THEME_ORDER
+local uiTheme = UI.ThemeConVar
+local PaintWindowBackground, PaintPanel = UI.PaintWindowBackground, UI.PaintPanel
+local MakeWindow, MakeButton, MakeLabel, MakeTitle = UI.MakeWindow, UI.MakeButton, UI.MakeLabel, UI.MakeTitle
+local MakeTextEntry, MakeScroll, StyleCheckBox = UI.MakeTextEntry, UI.MakeScroll, UI.StyleCheckBox
 
 local isCurrentMapOnly = true
 local currentMap = game.GetMap()
 
---[[
-	Themes. The loadout and blacklist editors use these too, so every theme keeps the same keys.
-
-	radius   corner radius of panels and buttons (scaled)
-	outline  1px border around panels, like the HUD and AEUI
-	edge     solid block on the left of important panels, like the HUD corner
-	buttons  t = text, n / h / d = background normal / hovered / pressed,
-	         o = border, ht = text when hovered. Fully transparent backgrounds aren't drawn
-]]
-local transparent = Color(0, 0, 0, 0)
-local THEME = {
-	beatrun = {
-		radius = 0,
-		outline = true,
-		blur = true,
-		accent = Color(0, 230, 0),
-		bg = Color(20, 20, 20, 165),
-		header = Color(0, 0, 0, 80),
-		primary = Color(255, 255, 255, 60),
-		secondary = Color(255, 255, 255, 30),
-		border = Color(255, 255, 255, 28),
-		edge = Color(235, 235, 235),
-		search = Color(0, 230, 0),
-		cursor = color_white,
-		text = {
-			primary = color_white,
-			muted = Color(190, 190, 190),
-			dark = Color(130, 130, 130),
-		},
-		buttons = {
-			primary = {
-				t = Color(14, 14, 14),
-				n = Color(235, 235, 235),
-				h = Color(0, 230, 0),
-				d = Color(0, 180, 0)
-			},
-			secondary = {
-				t = color_white,
-				ht = Color(0, 230, 0),
-				n = transparent,
-				h = Color(0, 230, 0, 18),
-				d = Color(0, 230, 0, 40),
-				o = Color(255, 255, 255, 110),
-				ho = Color(0, 230, 0)
-			},
-			danger = {
-				t = Color(240, 80, 80),
-				ht = color_white,
-				n = transparent,
-				h = Color(200, 25, 25),
-				d = Color(160, 20, 20),
-				o = Color(200, 25, 25)
-			},
-			green = {
-				t = Color(14, 14, 14),
-				n = Color(0, 200, 0),
-				h = Color(0, 230, 0),
-				d = Color(0, 170, 0)
-			},
-			red = {
-				t = color_white,
-				n = Color(200, 25, 25),
-				h = Color(225, 40, 40),
-				d = Color(170, 20, 20)
-			},
-			disabled = {
-				t = Color(255, 255, 255, 70),
-				n = transparent,
-				h = transparent,
-				d = transparent,
-				o = Color(255, 255, 255, 25)
-			}
-		},
-		panels = {
-			primary = Color(0, 0, 0, 90),
-			secondary = Color(255, 255, 255, 14)
-		}
-	},
-	dark = {
-		radius = 6,
-		outline = false,
-		accent = Color(255, 60, 60),
-		bg = Color(40, 40, 40),
-		header = Color(50, 50, 50),
-		primary = Color(70, 70, 70),
-		secondary = Color(80, 80, 80),
-		border = Color(80, 80, 80),
-		edge = Color(255, 60, 60),
-		search = Color(220, 60, 60), -- Color around active text box
-		cursor = color_white,
-		text = {
-			primary = color_white,
-			muted = Color(180, 180, 180),
-			dark = Color(150, 150, 150),
-		},
-		buttons = {
-			primary = {
-				t = color_white,
-				n = Color(220, 55, 55),
-				h = Color(240, 70, 70),
-				d = Color(200, 45, 45)
-			},
-			secondary = {
-				t = color_white,
-				n = Color(75, 75, 75),
-				h = Color(95, 95, 95),
-				d = Color(110, 110, 110)
-			},
-			danger = {
-				t = Color(255, 110, 110),
-				ht = color_white,
-				n = transparent,
-				h = Color(183, 28, 28),
-				d = Color(150, 20, 20),
-				o = Color(183, 28, 28)
-			},
-			green = {
-				t = color_white,
-				n = Color(46, 125, 50),
-				h = Color(56, 142, 60),
-				d = Color(67, 160, 71)
-			},
-			red = {
-				t = color_white,
-				n = Color(183, 28, 28),
-				h = Color(198, 40, 40),
-				d = Color(211, 47, 47)
-			},
-			disabled = {
-				t = Color(130, 130, 130),
-				n = Color(50, 50, 50),
-				h = Color(50, 50, 50),
-				d = Color(50, 50, 50)
-			}
-		},
-		panels = {
-			primary = Color(58, 58, 58),
-			secondary = Color(72, 72, 72)
-		}
-	},
-	light = {
-		radius = 6,
-		outline = false,
-		accent = Color(33, 150, 243),
-		bg = Color(245, 247, 250),
-		header = Color(230, 233, 238),
-		primary = Color(210, 214, 220),
-		secondary = Color(225, 229, 235),
-		border = Color(210, 214, 220),
-		edge = Color(33, 150, 243),
-		search = Color(25, 118, 210),
-		cursor = color_black,
-		text = {
-			primary = color_black,
-			muted = Color(110, 110, 110),
-			dark = Color(70, 70, 70),
-		},
-		buttons = {
-			primary = {
-				t = color_white,
-				n = Color(33, 150, 243),
-				h = Color(25, 118, 210),
-				d = Color(21, 101, 192)
-			},
-			secondary = {
-				t = color_black,
-				n = Color(215, 219, 225),
-				h = Color(200, 210, 220),
-				d = Color(185, 198, 212)
-			},
-			danger = {
-				t = Color(198, 40, 40),
-				ht = color_white,
-				n = transparent,
-				h = Color(229, 57, 53),
-				d = Color(198, 40, 40),
-				o = Color(229, 57, 53)
-			},
-			green = {
-				t = color_white,
-				n = Color(76, 175, 80),
-				h = Color(67, 160, 71),
-				d = Color(56, 142, 60)
-			},
-			red = {
-				t = color_white,
-				n = Color(229, 57, 53),
-				h = Color(211, 47, 47),
-				d = Color(198, 40, 40)
-			},
-			disabled = {
-				t = Color(150, 150, 150),
-				n = Color(225, 228, 232),
-				h = Color(225, 228, 232),
-				d = Color(225, 228, 232)
-			}
-		},
-		panels = {
-			primary = Color(255, 255, 255),
-			secondary = Color(240, 243, 247)
-		}
-	}
-}
-
-local THEME_ORDER = { "beatrun", "dark", "light" }
-
-for _, theme in pairs(THEME) do
-	theme.buttons.close = {
-		t = theme.text.muted,
-		ht = color_white,
-		n = transparent,
-		h = Color(200, 25, 25),
-		d = Color(160, 20, 20)
-	}
-end
-
 Beatrun_MapImageCache = Beatrun_MapImageCache or {}
+
 local CACHE_LIFETIME = 120
 local Frame, List, OnlinePager, LocalPanel, CodePanel, BrowsePanel, ProfilePanel, SettingsPanel, PopupFrame
 
 local function SanitizeString(str)
 	str = string.lower(str)
 	str = string.gsub(str, "[^%w_%-]", "_")
+
 	return str
 end
 
 local function LogApiError(endpoint, code, body, res)
 	print(string.format("> %s\n> Code: %s\n> Reply: %s", endpoint, tostring(res and res.code or code), tostring(res and res.message or body)))
+
 	if res and res.data ~= nil then print("> Data: " .. (istable(res.data) and util.TableToJSON(res.data) or tostring(res.data))) end
 end
 
@@ -241,17 +35,16 @@ function IsCoursesMenuOpen()
 	return IsValid(Frame) or IsValid(PopupFrame)
 end
 
-function CurrentTheme()
-	return THEME[string.lower(uiTheme:GetString())] or THEME.beatrun
-end
 
 local previewQueue = {}
 local previewRequested = {}
 local previewBusy = false
 local previewToken = nil
 local PREVIEW_TIMEOUT = 10
+
 local function ProcessPreviewQueue()
 	if previewBusy then return end
+
 	if not IsCoursesMenuOpen() then
 		for _, course in ipairs(previewQueue) do
 			previewRequested[course.mapName] = nil
@@ -263,22 +56,31 @@ local function ProcessPreviewQueue()
 
 	local course = table.remove(previewQueue, 1)
 	if not course then return end
+
 	previewBusy = true
+
 	local token = {}
+
 	previewToken = token
+
 	local function done()
 		if previewToken ~= token then return end
+
 		previewToken = nil
 		previewBusy = false
+
 		timer.Simple(0.1, ProcessPreviewQueue)
 	end
 
 	timer.Simple(PREVIEW_TIMEOUT, done)
+
 	steamworks.FileInfo(course.workshopId, function(result)
 		if previewToken ~= token then return end
 		if not result or not result.previewid then return done() end
+
 		steamworks.Download(result.previewid, true, function(name)
 			if name then Beatrun_MapImageCache[course.mapName] = AddonMaterial(name) end
+
 			done()
 		end)
 	end)
@@ -287,13 +89,17 @@ end
 local function CacheMapPreview(course)
 	local mapName = course.mapName
 	if not mapName or Beatrun_MapImageCache[mapName] or previewRequested[mapName] then return end
+
 	previewRequested[mapName] = true
+
 	if not course.workshopId then
 		if file.Size("maps/thumb/" .. mapName .. ".png", "GAME") > 0 then Beatrun_MapImageCache[mapName] = Material("maps/thumb/" .. mapName .. ".png", "smooth") end
+
 		return
 	end
 
 	previewQueue[#previewQueue + 1] = course
+
 	ProcessPreviewQueue()
 end
 
@@ -302,237 +108,15 @@ local function GetCurrentMapWorkshopID()
 		if not addon.mounted or not addon.downloaded or not addon.wsid then continue end
 		if file.Exists("maps/" .. currentMap .. ".bsp", addon.title) then return addon.wsid end
 	end
+
 	return nil
-end
-
-local function S(px)
-	if px == 0 then return 0 end
-	return math.max(1, math.Round(px * ScrH() / 1080))
-end
-
-local function L(phrase)
-	return language.GetPhrase(string.TrimLeft(phrase, "#"))
-end
-
-local function CreateMenuFonts()
-	for name, size in pairs({
-		BRCoursesHUDSmall = 6,
-		BRCoursesHUD = 7,
-		BRCoursesHUDLarge = 10
-	}) do
-		surface.CreateFont(name, {
-			font = "x14y24pxHeadUpDaisy",
-			extended = true,
-			antialias = false,
-			shadow = true,
-			scanlines = 2,
-			weight = 500,
-			size = ScreenScale(size)
-		})
-	end
-end
-
-CreateMenuFonts()
-
-hook.Add("OnScreenSizeChanged", "Beatrun_CoursesMenuFonts", CreateMenuFonts)
-
-local blurMaterial = Material("pp/blurscreen")
-
-local function DrawPanelBlur(panel)
-	if render.GetDXLevel() < 90 then return end
-
-	local x, y = panel:LocalToScreen(0, 0)
-	surface.SetDrawColor(255, 255, 255)
-	surface.SetMaterial(blurMaterial)
-
-	for i = 1, 3 do
-		blurMaterial:SetFloat("$blur", i / 3 * 5)
-		blurMaterial:Recompute()
-
-		render.UpdateScreenEffectTexture()
-
-		surface.DrawTexturedRect(-x, -y, ScrW(), ScrH())
-	end
-end
-
-local function PaintWindowBackground(panel, w, h)
-	local theme = CurrentTheme()
-
-	if theme.blur then DrawPanelBlur(panel) end
-
-	draw.RoundedBox(S(theme.radius), 0, 0, w, h, theme.bg)
-end
-
-local function PaintPanel(w, h, color, withEdge)
-	local theme = CurrentTheme()
-	local radius = S(theme.radius)
-
-	color = color or theme.panels.primary
-
-	draw.RoundedBox(radius, 0, 0, w, h, color)
-
-	if withEdge then
-		local edge = S(4)
-		if radius > 0 then
-			draw.RoundedBoxEx(radius, 0, 0, edge + radius, h, theme.edge, true, false, true, false)
-			surface.SetDrawColor(color)
-			surface.DrawRect(edge, 0, radius, h)
-		else
-			surface.SetDrawColor(theme.edge)
-			surface.DrawRect(0, 0, edge, h)
-		end
-	end
-
-	if theme.outline then
-		surface.SetDrawColor(theme.border)
-		surface.DrawOutlinedRect(0, 0, w, h, 1)
-	end
-end
-
-function ApplyScrollTheme(panel)
-	local bar = panel:GetVBar()
-
-	bar:SetWide(S(8))
-
-	bar.Paint = function() end
-	bar.btnUp.Paint = function() end
-	bar.btnDown.Paint = function() end
-
-	bar.btnGrip.Paint = function(self, w, h)
-		local theme = CurrentTheme()
-		draw.RoundedBox(S(theme.radius), 0, 0, w, h, self:IsHovered() and theme.accent or theme.primary)
-	end
-end
-
-function ApplyButtonTheme(self, w, h, style)
-	local theme = CurrentTheme()
-
-	local enabled = self:IsEnabled()
-	if not enabled then
-		self:SetCursor("arrow")
-		style = "disabled"
-	end
-
-	local colors = theme.buttons[style] or theme.buttons.secondary
-	local hovered = enabled and self:IsHovered()
-
-	local bg = enabled and self:IsDown() and colors.d or hovered and colors.h or colors.n
-	if bg.a > 0 then draw.RoundedBox(S(theme.radius), 0, 0, w, h, bg) end
-
-	local border = hovered and (colors.ho or colors.o) or colors.o
-
-	if border then
-		surface.SetDrawColor(border)
-		surface.DrawOutlinedRect(0, 0, w, h, 1)
-	end
-
-	self:SetTextColor(hovered and colors.ht or colors.t)
-end
-
-local function MakeLabel(parent, text, font, color)
-	local label = vgui.Create("DLabel", parent)
-	label:SetText(text)
-	label:SetFont(font or "BRCoursesHUD")
-	label:SetTextColor(color or CurrentTheme().text.primary)
-	label:SizeToContents()
-
-	return label
-end
-
-local function MakeTitle(parent, text)
-	local label = MakeLabel(parent, "// " .. string.upper(L(text)), "BRCoursesHUD")
-	label:Dock(TOP)
-	label:DockMargin(0, 0, 0, S(10))
-
-	return label
-end
-
-local function MakeButton(parent, text, style, font)
-	local btn = vgui.Create("DButton", parent)
-	btn:SetText(text)
-	btn:SetFont(font or "BRCoursesHUDSmall")
-	btn:SetCursor("hand")
-	btn:SetTall(S(32))
-	btn:SizeToContentsX(S(32))
-
-	btn.style = style or "secondary"
-	btn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, self.style) end
-
-	return btn
-end
-
-local function MakeTextEntry(parent, placeholder)
-	local entry = vgui.Create("DTextEntry", parent)
-	entry:SetPlaceholderText(placeholder)
-	entry:SetFont("BRCoursesHUD")
-	entry:SetTall(S(32))
-	entry:SetPaintBackground(false)
-
-	entry.Paint = function(self, w, h)
-		local theme = CurrentTheme()
-
-		draw.RoundedBox(S(theme.radius), 0, 0, w, h, theme.panels.primary)
-		surface.SetDrawColor(self:HasFocus() and theme.search or theme.border)
-		surface.DrawOutlinedRect(0, 0, w, h, 1)
-
-		self:DrawTextEntryText(theme.text.primary, theme.accent, theme.cursor)
-
-		if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, theme.text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
-	end
-
-	return entry
-end
-
-local function StyleCheckBox(checkbox)
-	checkbox.Paint = function(self, w, h)
-		local theme = CurrentTheme()
-
-		draw.RoundedBox(S(theme.radius), 0, 0, w, h, theme.panels.secondary)
-		surface.SetDrawColor(self:IsHovered() and theme.accent or theme.border)
-		surface.DrawOutlinedRect(0, 0, w, h, 1)
-
-		if self:GetChecked() then draw.RoundedBox(S(theme.radius), S(4), S(4), w - S(8), h - S(8), theme.accent) end
-	end
-end
-
-local function MakeWindow(title, w, h)
-	local headerH = S(30)
-
-	local frame = vgui.Create("DFrame")
-	frame:SetTitle("")
-	frame:SetSize(math.min(w, ScrW() - S(40)), math.min(h, ScrH() - S(40)))
-	frame:Center()
-	frame:DockPadding(S(16), headerH + S(14), S(16), S(16))
-	frame:SetDeleteOnClose(true)
-	frame:ShowCloseButton(false)
-	frame:MakePopup()
-	frame.Paint = function(self, pw, ph)
-		local theme = CurrentTheme()
-		local radius = S(theme.radius)
-
-		PaintWindowBackground(self, pw, ph)
-		draw.RoundedBoxEx(radius, 0, 0, pw, headerH, theme.header, true, true, false, false)
-
-		if theme.outline then
-			surface.SetDrawColor(theme.border)
-			surface.DrawOutlinedRect(0, 0, pw, ph, 1)
-		end
-
-		draw.SimpleText(string.upper(L(title)), "BRCoursesHUD", S(12), headerH / 2, theme.text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-	end
-
-	local close = MakeButton(frame, "✕", "close")
-	close:SetSize(headerH, headerH)
-	close:SetPos(frame:GetWide() - headerH, 0)
-	close.DoClick = function() if IsValid(frame) then frame:Close() end end
-
-	return frame
 end
 
 local function CreatePopup(title, w, h)
 	if IsValid(PopupFrame) then PopupFrame:Remove() end
 
 	PopupFrame = MakeWindow(title, S(w), S(h))
+
 	return PopupFrame
 end
 
@@ -602,9 +186,9 @@ local function OpenCourseSaveMenu()
 	slider:SetMax(1000)
 	slider:SetDecimals(0)
 	slider:SetValue(325)
-	slider.Label:SetFont("BRCoursesHUDSmall")
+	slider.Label:SetFont("BeatrunUISmall")
 	slider.Label:SetTextColor(CurrentTheme().text.primary)
-	slider.TextArea:SetFont("BRCoursesHUDSmall")
+	slider.TextArea:SetFont("BeatrunUISmall")
 	slider.TextArea:SetTextColor(CurrentTheme().text.primary)
 	slider.TextArea:SetPaintBackground(false)
 	slider.Slider.Paint = function(self, w, h)
@@ -1031,15 +615,6 @@ local function MakeBody(parent)
 	return body
 end
 
-local function MakeScroll(parent)
-	local scroll = vgui.Create("DScrollPanel", parent)
-	scroll:Dock(FILL)
-
-	ApplyScrollTheme(scroll)
-
-	return scroll
-end
-
 local function MakeRow(parent, height)
 	local row = parent:Add("DPanel")
 	row:SetTall(S(height))
@@ -1067,7 +642,7 @@ end
 local function MakeLink(parent, text, font, onClick, color)
 	local link = vgui.Create("DButton", parent)
 	link:SetText(text)
-	link:SetFont(font or "BRCoursesHUD")
+	link:SetFont(font or "BeatrunUI")
 	link:SetContentAlignment(4)
 	link:SetCursor(onClick and "hand" or "arrow")
 	link:SizeToContents()
@@ -1103,7 +678,7 @@ local function DrawCoursePreview(course, x, y, w, h)
 	else
 		surface.SetDrawColor(theme.panels.secondary)
 		surface.DrawRect(x, y, w, h)
-		draw.SimpleText(course.mapName or "?", "BRCoursesHUDSmall", x + w / 2, y + h / 2, theme.text.dark, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(course.mapName or "?", "BeatrunUISmall", x + w / 2, y + h / 2, theme.text.dark, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	surface.SetDrawColor(theme.border)
@@ -1111,7 +686,7 @@ local function DrawCoursePreview(course, x, y, w, h)
 end
 
 local function CopyCodeLink(parent, code, font)
-	return MakeLink(parent, code, font or "BRCoursesHUD", function(self)
+	return MakeLink(parent, code, font or "BeatrunUI", function(self)
 		SetClipboardText(code)
 
 		self:SetText("#beatrun.coursesmenu.copied")
@@ -1190,10 +765,10 @@ function BuildLocalPage()
 
 		MakeRowButton(row, "#beatrun.coursesmenu.delete", "danger", function() OpenConfirmPopup("#beatrun.coursesmenu.delete", "#beatrun.coursesmenu.delete.confirm", function() if file.Delete(path .. filename, "DATA") ~= false then BuildLocalPage() end end, true) end)
 
-		local name = MakeLabel(row, isReadable and tbl[5] or "#beatrun.coursesmenu.localpage.broken", "BRCoursesHUD", isReadable and CurrentTheme().text.primary or CurrentTheme().text.muted)
+		local name = MakeLabel(row, isReadable and tbl[5] or "#beatrun.coursesmenu.localpage.broken", "BeatrunUI", isReadable and CurrentTheme().text.primary or CurrentTheme().text.muted)
 		name:Dock(TOP)
 
-		local id = MakeLabel(row, string.upper(string.StripExtension(filename)), "BRCoursesHUDSmall", CurrentTheme().text.muted)
+		local id = MakeLabel(row, string.upper(string.StripExtension(filename)), "BeatrunUISmall", CurrentTheme().text.muted)
 		id:Dock(TOP)
 	end
 end
@@ -1204,8 +779,8 @@ local function BuildCodeCourseCard(parent, v)
 	local previewW, previewH = S(320), S(180)
 	local pad = S(16)
 
-	local textH = draw.GetFontHeight("BRCoursesHUDLarge") + draw.GetFontHeight("BRCoursesHUD") * 2 + draw.GetFontHeight("BRCoursesHUDSmall") * 2 + S(12) + S(34) + S(10)
-	if isOtherMap then textH = textH + draw.GetFontHeight("BRCoursesHUD") + S(6) end
+	local textH = draw.GetFontHeight("BeatrunUILarge") + draw.GetFontHeight("BeatrunUI") * 2 + draw.GetFontHeight("BeatrunUISmall") * 2 + S(12) + S(34) + S(10)
+	if isOtherMap then textH = textH + draw.GetFontHeight("BeatrunUI") + S(6) end
 
 	local card = vgui.Create("DPanel", parent)
 	card:Dock(TOP)
@@ -1247,32 +822,32 @@ local function BuildCodeCourseCard(parent, v)
 	siteBtn:Dock(LEFT)
 	siteBtn.DoClick = function() gui.OpenURL("https://" .. databaseDomain:GetString() .. "/course/" .. v.code) end
 
-	local name = MakeLabel(card, v.name or v.code, "BRCoursesHUDLarge")
+	local name = MakeLabel(card, v.name or v.code, "BeatrunUILarge")
 	name:Dock(TOP)
 
 	local codeRow = vgui.Create("DPanel", card)
-	codeRow:SetTall(draw.GetFontHeight("BRCoursesHUD"))
+	codeRow:SetTall(draw.GetFontHeight("BeatrunUI"))
 	codeRow:Dock(TOP)
 	codeRow.Paint = nil
 
 	CopyCodeLink(codeRow, v.code):Dock(LEFT)
 
-	local mapLink = MakeLink(codeRow, "  |  " .. v.mapName, "BRCoursesHUD", v.workshopId and function() gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end)
+	local mapLink = MakeLink(codeRow, "  |  " .. v.mapName, "BeatrunUI", v.workshopId and function() gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end)
 	mapLink:Dock(LEFT)
 
-	local author = MakeLink(card, L("beatrun.coursesmenu.codepage.author"):format(v.uploadedBy.username or "?") .. "  |  " .. L("beatrun.coursesmenu.uploadedat"):format(v.uploadedAt), "BRCoursesHUDSmall", v.uploadedBy.steamId and function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end)
+	local author = MakeLink(card, L("beatrun.coursesmenu.codepage.author"):format(v.uploadedBy.username or "?") .. "  |  " .. L("beatrun.coursesmenu.uploadedat"):format(v.uploadedAt), "BeatrunUISmall", v.uploadedBy.steamId and function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end)
 	author:Dock(TOP)
 
-	local stats = MakeLabel(card, L("beatrun.coursesmenu.codepage.stats"):format(v.downloadCount, v.runsCount, v.players, v.checkpoints or "?"), "BRCoursesHUDSmall", CurrentTheme().text.muted)
+	local stats = MakeLabel(card, L("beatrun.coursesmenu.codepage.stats"):format(v.downloadCount, v.runsCount, v.players, v.checkpoints or "?"), "BeatrunUISmall", CurrentTheme().text.muted)
 	stats:Dock(TOP)
 	stats:DockMargin(0, S(8), 0, 0)
 
-	local record = MakeLabel(card, v.bestTime and L("beatrun.coursesmenu.codepage.record"):format(string.FormattedTime(v.bestTime, "%02i:%02i:%02i")) or L("beatrun.coursesmenu.codepage.norecord"), "BRCoursesHUD")
+	local record = MakeLabel(card, v.bestTime and L("beatrun.coursesmenu.codepage.record"):format(string.FormattedTime(v.bestTime, "%02i:%02i:%02i")) or L("beatrun.coursesmenu.codepage.norecord"), "BeatrunUI")
 	record:Dock(TOP)
 	record:DockMargin(0, S(4), 0, 0)
 
 	if isOtherMap then
-		local warn = MakeLabel(card, L("beatrun.coursesmenu.codepage.wrongmap"):format(v.mapName, currentMap), "BRCoursesHUD", CurrentTheme().buttons.danger.t)
+		local warn = MakeLabel(card, L("beatrun.coursesmenu.codepage.wrongmap"):format(v.mapName, currentMap), "BeatrunUI", CurrentTheme().buttons.danger.t)
 		warn:Dock(TOP)
 		warn:DockMargin(0, S(6), 0, 0)
 	end
@@ -1419,7 +994,7 @@ local function BuildOnlineEntry(v)
 		avatar:DockMargin(0, 0, S(8), 0)
 	end
 
-	local authorLink = MakeLink(authorRow, v.uploadedBy.username or "?", "BRCoursesHUDSmall", v.uploadedBy.steamId and function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end, CurrentTheme().text.primary)
+	local authorLink = MakeLink(authorRow, v.uploadedBy.username or "?", "BeatrunUISmall", v.uploadedBy.steamId and function() gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end, CurrentTheme().text.primary)
 	authorLink:Dock(FILL)
 
 	local downloadBtn = MakeButton(side, "#beatrun.coursesmenu.onlinepage.download", "secondary")
@@ -1433,20 +1008,20 @@ local function BuildOnlineEntry(v)
 	startBtn:Dock(BOTTOM)
 	startBtn.DoClick = function() StartOnlineCourse(v) end
 
-	local name = MakeLabel(row, v.name, "BRCoursesHUDLarge")
+	local name = MakeLabel(row, v.name, "BeatrunUILarge")
 	name:Dock(TOP)
 
 	local codeRow = vgui.Create("DPanel", row)
-	codeRow:SetTall(draw.GetFontHeight("BRCoursesHUD"))
+	codeRow:SetTall(draw.GetFontHeight("BeatrunUI"))
 	codeRow:Dock(TOP)
 	codeRow.Paint = nil
 
 	CopyCodeLink(codeRow, v.code):Dock(LEFT)
 
-	local mapLink = MakeLink(codeRow, "  |  " .. v.mapName, "BRCoursesHUD", v.workshopId and function() gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end)
+	local mapLink = MakeLink(codeRow, "  |  " .. v.mapName, "BeatrunUI", v.workshopId and function() gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end)
 	mapLink:Dock(LEFT)
 
-	local info = MakeLabel(row, L("beatrun.coursesmenu.uploadedat"):format(v.uploadedAt) .. "  |  " .. L("beatrun.coursesmenu.downloads"):format(v.downloadCount), "BRCoursesHUDSmall", CurrentTheme().text.muted)
+	local info = MakeLabel(row, L("beatrun.coursesmenu.uploadedat"):format(v.uploadedAt) .. "  |  " .. L("beatrun.coursesmenu.downloads"):format(v.downloadCount), "BeatrunUISmall", CurrentTheme().text.muted)
 	info:Dock(BOTTOM)
 end
 
@@ -1523,10 +1098,10 @@ local function BuildProfileCourses(scroll, myCourses)
 			end, true)
 		end)
 
-		local name = MakeLabel(row, v.name, "BRCoursesHUD")
+		local name = MakeLabel(row, v.name, "BeatrunUI")
 		name:Dock(TOP)
 
-		local info = MakeLabel(row, v.code .. "  |  " .. v.mapName .. "  |  " .. L("beatrun.coursesmenu.downloads"):format(v.downloadCount), "BRCoursesHUDSmall", CurrentTheme().text.muted)
+		local info = MakeLabel(row, v.code .. "  |  " .. v.mapName .. "  |  " .. L("beatrun.coursesmenu.downloads"):format(v.downloadCount), "BeatrunUISmall", CurrentTheme().text.muted)
 		info:Dock(TOP)
 	end
 end
@@ -1535,7 +1110,7 @@ local function BuildProfileCard(body, apiKey)
 	local steamId = LocalPlayer():SteamID64()
 	local pad = S(16)
 	local avatarSize = S(84)
-	local textH = draw.GetFontHeight("BRCoursesHUDLarge") + draw.GetFontHeight("BRCoursesHUD") + draw.GetFontHeight("BRCoursesHUDSmall") + S(30) + S(8)
+	local textH = draw.GetFontHeight("BeatrunUILarge") + draw.GetFontHeight("BeatrunUI") + draw.GetFontHeight("BeatrunUISmall") + S(30) + S(8)
 
 	local card = vgui.Create("DPanel", body)
 	card:Dock(TOP)
@@ -1556,13 +1131,13 @@ local function BuildProfileCard(body, apiKey)
 
 	avatarHolder.PerformLayout = function(self, w, h) avatar:SetPos(0, math.floor((h - avatarSize) / 2)) end
 
-	local rank = MakeLabel(card, "★ ...", "BRCoursesHUDLarge")
+	local rank = MakeLabel(card, "★ ...", "BeatrunUILarge")
 	rank:Dock(TOP)
 
-	local nameRow = MakeLabel(card, LocalPlayer():Nick(), "BRCoursesHUD")
+	local nameRow = MakeLabel(card, LocalPlayer():Nick(), "BeatrunUI")
 	nameRow:Dock(TOP)
 
-	local stats = MakeLabel(card, "#beatrun.coursesmenu.profilepage.loading", "BRCoursesHUDSmall", CurrentTheme().text.muted)
+	local stats = MakeLabel(card, "#beatrun.coursesmenu.profilepage.loading", "BeatrunUISmall", CurrentTheme().text.muted)
 	stats:Dock(TOP)
 
 	local keyRow = vgui.Create("DPanel", card)
@@ -1571,7 +1146,7 @@ local function BuildProfileCard(body, apiKey)
 	keyRow.Paint = nil
 
 	local masked = string.rep("*", math.max(#apiKey - 4, 0)) .. string.sub(apiKey, -4)
-	local keyLabel = MakeLabel(keyRow, L("beatrun.coursesmenu.profilepage.key"):format(masked), "BRCoursesHUDSmall", CurrentTheme().text.muted)
+	local keyLabel = MakeLabel(keyRow, L("beatrun.coursesmenu.profilepage.key"):format(masked), "BeatrunUISmall", CurrentTheme().text.muted)
 	keyLabel:Dock(LEFT)
 	keyLabel:DockMargin(0, 0, S(12), 0)
 
@@ -1618,7 +1193,7 @@ local function BuildProfileSignIn(body)
 	card:DockPadding(S(4) + pad, pad, pad, pad)
 	card.Paint = function(self, w, h) PaintPanel(w, h, nil, true) end
 
-	local title = MakeLabel(card, "★ " .. string.upper(L("beatrun.coursesmenu.profilepage.signin")), "BRCoursesHUDLarge")
+	local title = MakeLabel(card, "★ " .. string.upper(L("beatrun.coursesmenu.profilepage.signin")), "BeatrunUILarge")
 	title:Dock(TOP)
 	title:DockMargin(0, 0, 0, S(10))
 
@@ -1729,11 +1304,31 @@ end
 local OpenCoursesMenu
 
 local function MakeSettingLabel(parent, text)
-	local label = MakeLabel(parent, text, "BRCoursesHUDSmall", CurrentTheme().text.muted)
+	local label = MakeLabel(parent, text, "BeatrunUISmall", CurrentTheme().text.muted)
 	label:Dock(TOP)
 	label:DockMargin(0, 0, 0, S(6))
 
 	return label
+end
+
+local function MakeSettingCheck(parent, text, description, convar)
+	local check = vgui.Create("DCheckBoxLabel", parent)
+	check:SetText(text)
+	check:SetFont("BeatrunUI")
+	check:SetTextColor(CurrentTheme().text.primary)
+	check:SetConVar(convar)
+	check:Dock(TOP)
+	check.Button:SetSize(S(20), S(20))
+
+	StyleCheckBox(check.Button)
+
+	local hint = MakeLabel(parent, description, "AEUIDefault", CurrentTheme().text.muted)
+	hint:Dock(TOP)
+	hint:DockMargin(S(28), S(2), 0, S(14))
+	hint:SetWrap(true)
+	hint:SetAutoStretchVertical(true)
+
+	return check
 end
 
 function BuildSettingsPage()
@@ -1741,15 +1336,17 @@ function BuildSettingsPage()
 
 	SettingsPanel:Clear()
 
-	local body = MakeBody(SettingsPanel)
+	local scroll = MakeScroll(SettingsPanel)
+	local body = scroll:GetCanvas()
 	body:DockPadding(S(20), S(20), math.max(S(20), SettingsPanel:GetParent():GetWide() - S(580)), S(20))
 
+	-- Appearance
 	MakeTitle(body, "#beatrun.coursesmenu.settings")
 
 	MakeSettingLabel(body, "#beatrun.coursesmenu.settings.theme")
 
 	local themeSelect = vgui.Create("DComboBox", body)
-	themeSelect:SetFont("BRCoursesHUD")
+	themeSelect:SetFont("BeatrunUI")
 	themeSelect:SetTall(S(32))
 	themeSelect:Dock(TOP)
 	themeSelect:DockMargin(0, 0, 0, S(20))
@@ -1785,7 +1382,7 @@ function BuildSettingsPage()
 		end
 
 		for _, option in pairs(self.Menu:GetCanvas():GetChildren()) do
-			option:SetFont("BRCoursesHUD")
+			option:SetFont("BeatrunUI")
 			option:SetTall(S(30))
 			option.Paint = function(s, w, h)
 				local theme = CurrentTheme()
@@ -1810,16 +1407,16 @@ function BuildSettingsPage()
 		timer.Simple(0, function() OpenCoursesMenu("settings") end)
 	end
 
-	local recordsCheck = vgui.Create("DCheckBoxLabel", body)
-	recordsCheck:SetText("#beatrun.coursesmenu.settings.submitrecords")
-	recordsCheck:SetFont("BRCoursesHUD")
-	recordsCheck:SetTextColor(CurrentTheme().text.primary)
-	recordsCheck:SetConVar("Beatrun_SubmitRecords")
-	recordsCheck:Dock(TOP)
-	recordsCheck:DockMargin(0, 0, 0, S(20))
-	recordsCheck.Button:SetSize(S(20), S(20))
+	-- Courses
+	MakeTitle(body, "#beatrun.toolsmenu.courses.name"):DockMargin(0, S(10), 0, S(10))
 
-	StyleCheckBox(recordsCheck.Button)
+	MakeSettingCheck(body, "#beatrun.toolsmenu.courses.raceyourghost", "#beatrun.toolsmenu.courses.raceyourghostdesc", "Beatrun_CourseGhost")
+	MakeSettingCheck(body, "#beatrun.toolsmenu.courses.faststart", "#beatrun.toolsmenu.courses.faststartdesc", "Beatrun_FastStart")
+	MakeSettingCheck(body, "#beatrun.toolsmenu.courses.checkpointsave", "#beatrun.toolsmenu.courses.checkpointsavedesc", "Beatrun_CPSave")
+	MakeSettingCheck(body, "#beatrun.coursesmenu.settings.submitrecords", "#beatrun.coursesmenu.settings.submitrecordsdesc", "Beatrun_SubmitRecords")
+
+	-- Database
+	MakeTitle(body, "#beatrun.coursesmenu.settings.database"):DockMargin(0, S(10), 0, S(10))
 
 	MakeSettingLabel(body, "#beatrun.coursesmenu.settings.domain")
 
@@ -1851,7 +1448,7 @@ local function BuildOnlineChrome(panel)
 	mapBtn:Dock(LEFT)
 	mapBtn:DockMargin(0, 0, S(8), 0)
 
-	surface.SetFont("BRCoursesHUDSmall")
+	surface.SetFont("BeatrunUISmall")
 
 	local w1 = surface.GetTextSize(L("beatrun.coursesmenu.onlinepage.currentmap"))
 	local w2 = surface.GetTextSize(L("beatrun.coursesmenu.onlinepage.notcurrentmap"))
@@ -1906,7 +1503,7 @@ local function BuildOnlineChrome(panel)
 	nextBtn:Dock(RIGHT)
 	nextBtn.DoClick = function() SetOnlinePage(onlineState.page + 1) end
 
-	local pageLabel = MakeLabel(OnlinePager, "", "BRCoursesHUDSmall", CurrentTheme().text.muted)
+	local pageLabel = MakeLabel(OnlinePager, "", "BeatrunUISmall", CurrentTheme().text.muted)
 	pageLabel:Dock(FILL)
 	pageLabel:SetContentAlignment(5)
 
@@ -1946,14 +1543,14 @@ function OpenCoursesMenu(startPage)
 			surface.DrawOutlinedRect(0, 0, w, h, 1)
 		end
 
-		draw.SimpleText("★ BEATRUN / " .. string.upper(L("beatrun.coursesmenu.title")), "BRCoursesHUD", S(14), headerH / 2, theme.text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("★ BEATRUN / " .. string.upper(L("beatrun.coursesmenu.title")), "BeatrunUI", S(14), headerH / 2, theme.text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 		local ply = LocalPlayer()
 
 		if IsValid(ply) and ply.GetLevel then
 			local right = w - headerH - S(14)
 			local barW = S(120)
-			draw.SimpleText(L("beatrun.hud.lvl"):format(ply:GetLevel()) .. " | " .. ply:Nick(), "BRCoursesHUDSmall", right - barW - S(12), headerH / 2, theme.text.primary, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(L("beatrun.hud.lvl"):format(ply:GetLevel()) .. " | " .. ply:Nick(), "BeatrunUISmall", right - barW - S(12), headerH / 2, theme.text.primary, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 			surface.SetDrawColor(theme.panels.secondary)
 			surface.DrawRect(right - barW, headerH / 2 - S(2), barW, S(4))
 			surface.SetDrawColor(theme.text.primary)
@@ -2001,7 +1598,7 @@ function OpenCoursesMenu(startPage)
 
 		local tab = vgui.Create("DButton", tabBar)
 		tab:SetText(string.upper(L(label)))
-		tab:SetFont("BRCoursesHUDSmall")
+		tab:SetFont("BeatrunUISmall")
 		tab:SetCursor("hand")
 		tab:Dock(LEFT)
 		tab:SizeToContentsX(S(28))
@@ -2038,18 +1635,7 @@ function OpenCoursesMenu(startPage)
 	timer.Simple(0, function() if IsValid(Frame) then SelectPage(startPage or "local") end end)
 end
 
-BeatrunUI = {
-	S = S,
-	L = L,
-	PaintPanel = PaintPanel,
-	MakeWindow = MakeWindow,
-	MakeButton = MakeButton,
-	MakeLabel = MakeLabel,
-	MakeTitle = MakeTitle,
-	MakeTextEntry = MakeTextEntry,
-	MakeScroll = MakeScroll,
-	StyleCheckBox = StyleCheckBox
-}
+BeatrunUI.OpenCourseSave = OpenCourseSaveMenu
 
 function OpenDBMenu()
 	OpenCoursesMenu()

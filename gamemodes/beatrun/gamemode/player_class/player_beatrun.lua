@@ -167,6 +167,46 @@ end
 
 if SERVER then util.AddNetworkString("BeatrunSpawn") end
 
+local function RestoreCheckpointVehicle(ply)
+	local save = ply.CPSaveVehicle
+	local vehicle = save.ent
+
+	if not IsValid(vehicle) or IsValid(vehicle:GetDriver()) then
+		if not save.id or not BuildModeSpawnSpawnable then return end
+
+		SafeRemoveEntity(ply.CPVehicleCopy)
+
+		vehicle = BuildModeSpawnSpawnable(save.id, save.pos, save.ang)
+		if not IsValid(vehicle) then return end
+
+		vehicle:SetNW2String("BRSpawnable", "")
+
+		ply.CPVehicleCopy = vehicle
+		save.ent = vehicle
+	end
+
+	vehicle:SetPos(save.pos)
+	vehicle:SetAngles(save.ang)
+
+	timer.Simple(0, function()
+		if not IsValid(ply) or not IsValid(vehicle) or not ply:Alive() or ply:InVehicle() then return end
+
+		ply:EnterVehicle(vehicle)
+
+		local phys = vehicle:GetPhysicsObject()
+
+		if IsValid(phys) then
+			phys:Wake()
+			phys:SetVelocityInstantaneous(save.vel)
+			phys:AddAngleVelocity(-phys:GetAngleVelocity())
+		end
+	end)
+end
+
+hook.Add("PlayerDisconnected", "CheckpointVehicleCleanup", function(ply)
+	SafeRemoveEntity(ply.CPVehicleCopy)
+end)
+
 function PLAYER:Spawn()
 	BaseClass.Spawn(self)
 
@@ -192,6 +232,8 @@ function PLAYER:Spawn()
 
 			ply:LoadParkourState()
 
+			if ply.CPSaveVehicle then RestoreCheckpointVehicle(ply) end
+
 			-- ply:SetNW2Float("RetryCount", ply:GetNW2Float("RetryCount", 0) + 1)
 
 			CPSave = true
@@ -199,6 +241,9 @@ function PLAYER:Spawn()
 			ply.CPSavePos = nil
 			ply.CPsaveAng = nil
 			ply.CPsaveVel = nil
+			ply.CPSaveVehicle = nil
+
+			SafeRemoveEntity(ply.CPVehicleCopy)
 
 			ply:SetPos(Course_StartPos)
 			ply:SetEyeAngles(Angle(0, Course_StartAng, 0))

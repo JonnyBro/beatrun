@@ -1,70 +1,64 @@
-if not AEUI then
-	ErrorNoHalt("[EventMenu] AEUI not found! Make sure !UI.lua is loaded before this file.\n")
-	return
-end
+local UI = BeatrunUI
+local S, L = UI.S, UI.L
 
-local MainPanel = nil
-local PlayersPanel = nil
+local Frame
+local Content
+local Tabs
 local CurrentTab = "players"
-local PANEL_W = 720
-local PANEL_H = 560
-local PADDING = 20
-local menuIsActive = false
 
-local function CloseMenu()
-	if PlayersPanel then
-		AEUI:RemovePanel(PlayersPanel)
-		PlayersPanel = nil
-	end
+local SETTINGS = {
+	{ "#beatrun.eventmenu.setting.props", "EM_AllowProps" },
+	{ "#beatrun.eventmenu.setting.weapons", "EM_AllowWeapons" },
+	{ "#beatrun.eventmenu.setting.vehicles", "EM_AllowVehicles" },
+	{ "#beatrun.eventmenu.setting.entities", "EM_AllowEntities" },
+	{ "#beatrun.eventmenu.setting.newsuspended", "EM_NewPlayersSuspended" },
+	{ "#beatrun.eventmenu.setting.suspendondeath", "EM_SuspendOnDeath" },
+	{ "#beatrun.eventmenu.setting.nomelee", "EM_NoMeleeDamage" },
+	{ "#beatrun.eventmenu.setting.hidenametags", "EM_HideNametags" }
+}
 
-	if MainPanel then
-		AEUI:RemovePanel(MainPanel)
-		MainPanel = nil
-	end
-
-	menuIsActive = false
-	hook.Remove("Think", "EventMenu_EscapeClose")
+local function IsManager()
+	return GetGlobalBool("GM_EVENTMODE", false) and LocalPlayer():GetNW2String("EPlayerStatus", "Member") == "Manager"
 end
 
-local function RebuildPlayersPanel()
-	if PlayersPanel then AEUI:RemovePanel(PlayersPanel) end
+local function Send(message, ply)
+	net.Start(message)
+		if ply then net.WriteEntity(ply) end
+	net.SendToServer()
+end
 
-	local content_y = MainPanel and MainPanel.content_y + 45 or 160
+local function MakeRow(parent, height)
+	local row = parent:Add("DPanel")
+	row:SetTall(S(height))
+	row:Dock(TOP)
+	row:DockMargin(0, 0, S(10), S(6))
+	row:DockPadding(S(12), S(8), S(10), S(8))
 
-	PlayersPanel = {
-		x = MainPanel.x + PADDING,
-		y = MainPanel.y + content_y,
-		w = PANEL_W - PADDING * 2,
-		h = PANEL_H - content_y - 40,
-		bgcolor = Color(28, 28, 28, 240),
-		outlinecolor = Color(60, 60, 60),
-		alpha = 1,
-		elements = {},
-		scroll = 0,
-		maxscroll = nil
-	}
+	row.Paint = function(self, w, h)
+		local theme = CurrentTheme()
 
-	AEUI:AddPanel(PlayersPanel)
+		UI.PaintPanel(w, h, (self:IsHovered() or self:IsChildHovered()) and theme.panels.secondary or theme.panels.primary)
+	end
 
-	local y_offset = 6
+	return row
+end
+
+local function BuildPlayers()
+	local scroll = UI.MakeScroll(Content)
+
 	local players = player.GetAll()
+	local order = { Member = 1, Suspended = 2, Manager = 3 }
 
 	table.sort(players, function(a, b)
-		local order = {
-			Member = 1,
-			Suspended = 2,
-			Manager = 3
-		}
-
-		local sa = a:GetNW2String("EPlayerStatus", "Member")
-		local sb = b:GetNW2String("EPlayerStatus", "Member")
-		local oa = order[sa] or 99
-		local ob = order[sb] or 99
+		local oa = order[a:GetNW2String("EPlayerStatus", "Member")] or 99
+		local ob = order[b:GetNW2String("EPlayerStatus", "Member")] or 99
 
 		if oa ~= ob then return oa < ob end
 
 		return string.lower(a:Nick()) < string.lower(b:Nick())
 	end)
+
+	local shown = 0
 
 	for _, ply in ipairs(players) do
 		if not IsValid(ply) then continue end
@@ -72,265 +66,170 @@ local function RebuildPlayersPanel()
 		local status = ply:GetNW2String("EPlayerStatus", "Member")
 		if status == "Manager" then continue end
 
+		shown = shown + 1
+
 		local sdata = GetStatusData(status)
-		local label = ply:Nick() .. " - " .. status
+		local row = MakeRow(scroll, 52)
 
-		local playerBtn = AEUI:AddButton(PlayersPanel, label, function()
-			local st = ply:GetNW2String("EPlayerStatus", "Member")
+		local suspended = status == "Suspended"
 
-			if st == "Suspended" then
-				net.Start("Eventmode_Unsuspend")
-					net.WriteEntity(ply)
-				net.SendToServer()
-			elseif st == "Member" then
-				net.Start("Eventmode_Suspend")
-					net.WriteEntity(ply)
-				net.SendToServer()
-			end
-
-			timer.Simple(.2, function() if MainPanel and CurrentTab == "players" then RebuildPlayersPanel() end end)
-		end, "AEUIDefault", 8, y_offset, false, sdata.color)
-
-		if playerBtn then
-			playerBtn.w = PlayersPanel.w - 16
-			playerBtn.h = 24
-		end
+		local toggle = UI.MakeButton(row, suspended and "#beatrun.eventmenu.unsuspend" or "#beatrun.eventmenu.suspend", suspended and "secondary" or "danger", "BeatrunUISmall")
+		toggle:SetWide(math.max(toggle:GetWide(), S(150)))
+		toggle:Dock(RIGHT)
+		toggle.DoClick = function() Send(suspended and "Eventmode_Unsuspend" or "Eventmode_Suspend", ply) end
 
 		if ply:IsAdmin() then
-			local managerBtn = AEUI:AddButton(PlayersPanel, " ♛ ", function()
-				net.Start("Eventmode_Manager")
-					net.WriteEntity(ply)
-				net.SendToServer()
-			end, "AEUIDefault", 0, y_offset, false, EPlayerStatus.Manager.color)
-
-			if managerBtn then
-				managerBtn.h = 24
-				managerBtn.x = playerBtn.x + playerBtn.w - 30
-				managerBtn.y = playerBtn.y
-			end
+			local manager = UI.MakeButton(row, "#beatrun.eventmenu.makemanager", "secondary", "BeatrunUISmall")
+			manager:Dock(RIGHT)
+			manager:DockMargin(0, 0, S(8), 0)
+			manager.DoClick = function() Send("Eventmode_Manager", ply) end
 		end
 
-		y_offset = y_offset + 30
+		local avatar = vgui.Create("AvatarImage", row)
+		avatar:SetPlayer(ply, 64)
+		avatar:SetWide(S(36))
+		avatar:Dock(LEFT)
+		avatar:DockMargin(0, 0, S(12), 0)
+
+		local name = UI.MakeLabel(row, ply:Nick(), "BeatrunUI")
+		name:Dock(TOP)
+
+		local statusLabel = UI.MakeLabel(row, string.upper(L(sdata.label_key)), "BeatrunUISmall", sdata.color)
+		statusLabel:Dock(TOP)
+	end
+
+	if shown == 0 then
+		local empty = UI.MakeLabel(scroll, "#beatrun.eventmenu.noplayers", "BeatrunUI", CurrentTheme().text.muted)
+		empty:Dock(TOP)
 	end
 end
 
-local function RebuildMainPanel()
-	if not menuIsActive then return end
-	if MainPanel then AEUI:RemovePanel(MainPanel) end
-
-	if PlayersPanel then
-		AEUI:RemovePanel(PlayersPanel)
-		PlayersPanel = nil
-	end
-
-	local px = math.floor((1920 - PANEL_W) / 2 + 0.5)
-	local py = math.floor((1080 - PANEL_H) / 2 + 0.5)
-
-	MainPanel = {
-		x = px,
-		y = py,
-		w = PANEL_W,
-		h = PANEL_H,
-		bgcolor = Color(18, 18, 18, 240),
-		outlinecolor = Color(70, 70, 70),
-		alpha = 1,
-		elements = {},
-		scroll = 0,
-		maxscroll = nil
+local function BuildActions()
+	local actions = {
+		{ "#beatrun.eventmenu.action.bring", "Eventmode_BringMembers", "secondary" },
+		{ "#beatrun.eventmenu.action.setpoint", "Eventmode_SetSpawn", "secondary" },
+		{ "#beatrun.eventmenu.action.teleport", "Eventmode_TeleportMembersToPoint", "secondary" },
+		{ "#beatrun.eventmenu.action.unsuspendall", "Eventmode_UnsuspendAll", "secondary" },
+		{ "#beatrun.eventmenu.action.suspendall", "Eventmode_SuspendAll", "danger" }
 	}
 
-	AEUI:AddPanel(MainPanel)
+	for _, action in ipairs(actions) do
+		local row = vgui.Create("DPanel", Content)
+		row:SetTall(S(42))
+		row:Dock(TOP)
+		row:DockMargin(0, 0, 0, S(6))
+		row.Paint = nil
 
-	AEUI:Text(MainPanel, "Event Mode Manager", "AEUIVeryLarge", MainPanel.w * 0.5, 37.5, true, color_white)
+		local btn = UI.MakeButton(row, action[1], action[3], "BeatrunUI")
+		btn:Dock(FILL)
+		btn.DoClick = function() Send(action[2]) end
 
-	surface.SetFont("AEUIVeryLarge")
-
-	local _, th_title = surface.GetTextSize("Event Mode Manager")
-	local line_gap = 12
-	local line_thickness = 2
-
-	AEUI:AddImage(MainPanel, Material("vgui/white"), nil, 20, 30 + th_title * 0.5 + line_gap, MainPanel.w - 40, line_thickness, color_white)
-
-	local line1_y = 30 + th_title * 0.5 + line_gap
-
-	surface.SetFont("AEUILarge")
-
-	local _, th_tab = surface.GetTextSize("PLAYERS")
-	local tab_y = line1_y + line_thickness + 35
-
-	local tabs = {
-		{
-			name = "PLAYERS",
-			id = "players"
-		},
-		{
-			name = "ACTIONS",
-			id = "actions"
-		},
-		{
-			name = "SETTINGS",
-			id = "settings"
-		}
-	}
-
-	local centers = { 20 + 140 * 0.5, MainPanel.w * 0.5, MainPanel.w - 20 - 140 * 0.5 }
-
-	for i, tab in ipairs(tabs) do
-		local btn = AEUI:AddButton(MainPanel, tab.name, function()
-			CurrentTab = tab.id
-			RebuildMainPanel()
-		end, "AEUILarge", centers[i], tab_y, true, color_white)
-
-		if btn then
-			btn.w = 140
-			btn.h = 28
-			if tab.id == CurrentTab then btn.color = Color(0, 200, 0) end
-		end
+		local hint = UI.MakeLabel(row, L(action[1] .. ".hint"), "AEUIDefault", CurrentTheme().text.muted)
+		hint:SetWide(S(330))
+		hint:SetWrap(true)
+		hint:Dock(RIGHT)
+		hint:DockMargin(S(14), 0, 0, 0)
 	end
+end
 
-	local line2_y = tab_y + th_tab * 0.5 + line_gap
+local function BuildSettings()
+	for _, setting in ipairs(SETTINGS) do
+		local label, var = setting[1], setting[2]
 
-	AEUI:AddImage(MainPanel, Material("vgui/white"), nil, 20, line2_y, MainPanel.w - 40, line_thickness, color_white)
+		local row = vgui.Create("DButton", Content)
+		row:SetTall(S(40))
+		row:Dock(TOP)
+		row:DockMargin(0, 0, 0, S(6))
+		row:SetText("")
+		row:SetCursor("hand")
 
-	MainPanel.content_y = line2_y + line_thickness + 12
+		row.Paint = function(self, w, h)
+			local theme = CurrentTheme()
+			local on = GetGlobalBool(var, false)
+			local box = h - S(16)
 
-	if CurrentTab == "players" then
-		AEUI:Text(MainPanel, "Players:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
+			UI.PaintPanel(w, h, self:IsHovered() and theme.panels.secondary or theme.panels.primary)
 
-		RebuildPlayersPanel()
-	elseif CurrentTab == "actions" then
-		AEUI:Text(MainPanel, "Actions:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
+			surface.SetDrawColor(self:IsHovered() and theme.accent or theme.border)
+			surface.DrawOutlinedRect(S(10), S(8), box, box, 1)
 
-		local y = MainPanel.content_y + 45
-
-		local function AddAction(label, send)
-			local btn = AEUI:AddButton(MainPanel, label, function() if send then send() end end, "AEUIDefault", 20, y, false, color_white)
-			if btn then
-				btn.w = MainPanel.w - PADDING * 2
-				btn.h = 28
+			if on then
+				surface.SetDrawColor(theme.accent)
+				surface.DrawRect(S(10) + S(4), S(8) + S(4), box - S(8), box - S(8))
 			end
 
-			y = y + 30
+			draw.SimpleText(L(label), "BeatrunUI", S(10) + box + S(12), h / 2, theme.text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			draw.SimpleText(string.upper(L(on and "beatrun.eventmenu.on" or "beatrun.eventmenu.off")), "BeatrunUISmall", w - S(12), h / 2, on and theme.accent or theme.text.muted, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		end
 
-		AddAction("Bring members", function()
-			net.Start("Eventmode_BringMembers")
+		row.DoClick = function()
+			net.Start("Eventmode_ToggleVar")
+				net.WriteString(var)
 			net.SendToServer()
-		end)
-
-		AddAction("Set members point", function()
-			net.Start("Eventmode_SetSpawn")
-			net.SendToServer()
-		end)
-
-		AddAction("Teleport members to point", function()
-			net.Start("Eventmode_TeleportMembersToPoint")
-			net.SendToServer()
-		end)
-
-		AddAction("Unsuspend all players", function()
-			net.Start("Eventmode_UnsuspendAll")
-			net.SendToServer()
-		end)
-
-		AddAction("Suspend all players", function()
-			net.Start("Eventmode_SuspendAll")
-			net.SendToServer()
-		end)
-	elseif CurrentTab == "settings" then
-		AEUI:Text(MainPanel, "Settings:", "AEUILarge", 20, MainPanel.content_y, false, color_white)
-
-		local y = MainPanel.content_y + 45
-
-		-- format: multiline
-		local toggles = {
-			{
-				"Allow members to spawn props",
-				"EM_AllowProps"
-			},
-			{
-				"Allow members to spawn weapons",
-				"EM_AllowWeapons"
-			},
-			{
-				"Allow members to spawn vehicles",
-				"EM_AllowVehicles"
-			},
-			{
-				"Allow members to spawn entities",
-				"EM_AllowEntities"
-			},
-			{
-				"New players suspended",
-				"EM_NewPlayersSuspended"
-			},
-			{
-				"Suspend at death",
-				"EM_SuspendOnDeath"
-			},
-			{
-				"No melee damage",
-				"EM_NoMeleeDamage"
-			},
-			{
-				"Hide nametags",
-				"EM_HideNametags"
-			}
-		}
-
-		for _, t in ipairs(toggles) do
-			local name, var = t[1], t[2]
-			local current = GetGlobalBool(var, false)
-			local label = string.format("%s: %s", name, current and "YES" or "NO")
-
-			local btn = AEUI:AddButton(MainPanel, label, function()
-				net.Start("Eventmode_ToggleVar")
-					net.WriteString(var)
-				net.SendToServer()
-
-				timer.Simple(0.2, function() if MainPanel and CurrentTab == "settings" then RebuildMainPanel() end end)
-			end, "AEUIDefault", 20, y, false, color_white)
-
-			if btn then
-				btn.w = MainPanel.w - PADDING * 2
-				btn.h = 26
-			end
-
-			y = y + 30
 		end
 	end
+end
+
+local builders = {
+	players = BuildPlayers,
+	actions = BuildActions,
+	settings = BuildSettings
+}
+
+local function Rebuild()
+	if not IsValid(Content) then return end
+
+	Content:Clear()
+	builders[CurrentTab]()
+end
+
+local function CloseMenu()
+	if IsValid(Frame) then Frame:Remove() end
+
+	Frame = nil
 end
 
 local function OpenMenu()
-	if not MainPanel and #AEUI.Panels > 0 then return end
+	if IsValid(Frame) then return CloseMenu() end
+	if not IsManager() then return end
 
-	if MainPanel then
-		CloseMenu()
-		return
+	Frame = UI.MakeWindow("#beatrun.eventmenu.title", math.min(ScrW() * 0.8, S(860)), math.min(ScrH() * 0.8, S(640)))
+
+	Frame.Think = function(self)
+		if not IsManager() then CloseMenu() end
 	end
 
-	if not GetGlobalBool("GM_EVENTMODE", false) then return end
-	if LocalPlayer():GetNW2String("EPlayerStatus", "Member") ~= "Manager" then return end
+	Tabs = UI.MakeTabBar(Frame, 40)
+	Tabs:DockMargin(0, 0, 0, S(12))
 
-	menuIsActive = true
+	Content = vgui.Create("DPanel", Frame)
+	Content:Dock(FILL)
+	Content.Paint = nil
 
-	RebuildMainPanel()
+	for _, key in ipairs({ "players", "actions", "settings" }) do
+		Tabs:AddTab(key, "#beatrun.eventmenu.tab." .. key, function()
+			CurrentTab = key
+			Rebuild()
+		end)
+	end
 
-	hook.Add("Think", "EventMenu_EscapeClose", function()
-		if not GetGlobalBool("GM_EVENTMODE", false) or LocalPlayer():GetNW2String("EPlayerStatus", "Member") ~= "Manager" then CloseMenu() end
-		if input.IsKeyDown(KEY_ESCAPE) then CloseMenu() end
-	end)
+	Tabs:Select(CurrentTab)
 end
 
-net.Receive("Eventmode_UpdatePlayerStatus", function() timer.Simple(.1, function() if MainPanel then RebuildMainPanel() end end) end)
+net.Receive("Eventmode_UpdatePlayerStatus", function()
+	timer.Simple(0.1, function()
+		if IsValid(Frame) and CurrentTab == "players" then Rebuild() end
+	end)
+end)
 
 hook.Add("ShutDown", "EventMenu_ShutdownRemove", CloseMenu)
-hook.Add("InitPostEntity", "EventMenu_Init", function() end)
 
 local lastPress = 0
+
 hook.Add("Think", "EventMenu_Open", function()
 	if input.IsKeyDown(KEY_F2) and CurTime() > lastPress + 0.2 then
-		OpenMenu()
 		lastPress = CurTime()
+
+		OpenMenu()
 	end
 end)

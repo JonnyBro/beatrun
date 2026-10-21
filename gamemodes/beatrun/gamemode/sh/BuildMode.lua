@@ -40,57 +40,7 @@ buildmode_entmodels = {
 	br_hookpoint = "models/Roller.mdl"
 }
 
--- format: multiline
-local misc = {
-	"models/hunter/misc/lift2x2.mdl",
-	"models/hunter/misc/stair1x1.mdl",
-	"models/hunter/misc/stair1x1inside.mdl",
-	"models/hunter/misc/stair1x1outside.mdl",
-	"models/props_combine/combine_barricade_short02a.mdl",
-	"models/props_combine/combine_bridge_b.mdl",
-	"models/props_docks/channelmarker_gib02.mdl",
-	"models/props_docks/channelmarker_gib04.mdl",
-	"models/props_docks/channelmarker_gib03.mdl",
-	"models/props_lab/blastdoor001a.mdl",
-	"models/props_lab/blastdoor001c.mdl",
-	"models/props_wasteland/cargo_container01.mdl",
-	"models/props_wasteland/cargo_container01b.mdl",
-	"models/props_wasteland/cargo_container01c.mdl",
-	"models/props_wasteland/horizontalcoolingtank04.mdl",
-	"models/props_wasteland/laundry_washer001a.mdl",
-	"models/props_wasteland/laundry_washer003.mdl",
-	"models/props_junk/TrashDumpster01a.mdl",
-	"models/props_junk/TrashDumpster02.mdl",
-	"models/props_junk/wood_crate001a.mdl",
-	"models/props_junk/wood_crate002a.mdl",
-	"models/props_junk/wood_pallet001a.mdl",
-	"models/props_c17/fence01a.mdl",
-	"models/props_c17/fence01b.mdl",
-	"models/props_c17/fence02a.mdl",
-	"models/props_c17/fence03a.mdl",
-	"models/props_c17/fence04a.mdl",
-	"models/props_wasteland/interior_fence001g.mdl",
-	"models/props_wasteland/interior_fence002d.mdl",
-	"models/props_wasteland/interior_fence002e.mdl",
-	"models/props_building_details/Storefront_Template001a_Bars.mdl",
-	"models/props_wasteland/wood_fence01a.mdl",
-	"models/props_wasteland/wood_fence02a.mdl",
-	"models/props_c17/concrete_barrier001a.mdl",
-	"models/props_wasteland/medbridge_base01.mdl",
-	"models/props_wasteland/medbridge_post01.mdl",
-	"models/props_wasteland/medbridge_strut01.mdl",
-	"models/props_c17/column02a.mdl",
-	"models/props_junk/iBeam01a_cluster01.mdl",
-	"models/props_junk/iBeam01a.mdl",
-	"models/props_canal/canal_cap001.mdl",
-	"models/props_canal/canal_bridge04.mdl",
-	"models/Mechanics/gears2/pinion_80t3.mdl",
-	"models/props_phx/gears/rack36.mdl",
-	"models/props_phx/gears/rack70.mdl",
-	"models/cranes/crane_frame.mdl",
-	"models/cranes/crane_docks.mdl",
-	"models/props_wasteland/cranemagnet01a.mdl"
-}
+local misc = { "models/hunter/misc/lift2x2.mdl", "models/hunter/misc/stair1x1.mdl", "models/hunter/misc/stair1x1inside.mdl", "models/hunter/misc/stair1x1outside.mdl", "models/props_combine/combine_barricade_short02a.mdl", "models/props_combine/combine_bridge_b.mdl", "models/props_docks/channelmarker_gib02.mdl", "models/props_docks/channelmarker_gib04.mdl", "models/props_docks/channelmarker_gib03.mdl", "models/props_lab/blastdoor001a.mdl", "models/props_lab/blastdoor001c.mdl", "models/props_wasteland/cargo_container01.mdl", "models/props_wasteland/cargo_container01b.mdl", "models/props_wasteland/cargo_container01c.mdl", "models/props_wasteland/horizontalcoolingtank04.mdl", "models/props_wasteland/laundry_washer001a.mdl", "models/props_wasteland/laundry_washer003.mdl", "models/props_junk/TrashDumpster01a.mdl", "models/props_junk/TrashDumpster02.mdl", "models/props_junk/wood_crate001a.mdl", "models/props_junk/wood_crate002a.mdl", "models/props_junk/wood_pallet001a.mdl", "models/props_c17/fence01a.mdl", "models/props_c17/fence01b.mdl", "models/props_c17/fence02a.mdl", "models/props_c17/fence03a.mdl", "models/props_c17/fence04a.mdl", "models/props_wasteland/interior_fence001g.mdl", "models/props_wasteland/interior_fence002d.mdl", "models/props_wasteland/interior_fence002e.mdl", "models/props_building_details/Storefront_Template001a_Bars.mdl", "models/props_wasteland/wood_fence01a.mdl", "models/props_wasteland/wood_fence02a.mdl", "models/props_c17/concrete_barrier001a.mdl", "models/props_wasteland/medbridge_base01.mdl", "models/props_wasteland/medbridge_post01.mdl", "models/props_wasteland/medbridge_strut01.mdl", "models/props_c17/column02a.mdl", "models/props_junk/iBeam01a_cluster01.mdl", "models/props_junk/iBeam01a.mdl", "models/props_canal/canal_cap001.mdl", "models/props_canal/canal_bridge04.mdl", "models/Mechanics/gears2/pinion_80t3.mdl", "models/props_phx/gears/rack36.mdl", "models/props_phx/gears/rack70.mdl", "models/cranes/crane_frame.mdl", "models/cranes/crane_docks.mdl", "models/props_wasteland/cranemagnet01a.mdl" }
 
 for _, v in ipairs(misc) do
 	local key = table.insert(buildmode_props, v:lower())
@@ -351,13 +301,60 @@ for k, v in pairs(buildmode_props) do
 end
 
 local function CustomPropMat(prop)
-	if propmatsblacklist[buildmode_props_index[prop:GetModel()]] then return end
+	local index = buildmode_props_index[string.lower(prop:GetModel() or "")]
+	if index and propmatsblacklist[index] and not prop.hr then return end
 
 	if prop.hr then
 		prop:SetMaterial("medge/redplainplastervertex")
-	else
+	elseif index and not propmatsblacklist[index] then
 		prop:SetMaterial("medge/plainplastervertex")
+	else
+		prop:SetMaterial("")
 	end
+end
+
+function BuildModeIsCustomModel(index)
+	return isstring(index) and string.StartWith(index, "models/")
+end
+
+function BuildModeSpawnable(id)
+	if not isstring(id) then return end
+
+	local kind, name = string.match(id, "^(%a+):(.+)$")
+	local data
+
+	if kind == "vehicle" then
+		data = list.GetForEdit("Vehicles")[name]
+	elseif kind == "npc" then
+		data = list.GetForEdit("NPC")[name]
+	end
+
+	if data then return kind, name, data end
+end
+
+function BuildModeEntitySpawnable(ent)
+	local id = ent:GetNW2String("BRSpawnable")
+
+	return id ~= "" and id or nil
+end
+
+local function SpawnableModel(data)
+	local model = istable(data.Model) and data.Model[1] or data.Model
+
+	return isstring(model) and model or "models/editor/playerstart.mdl"
+end
+
+function BuildModeItemModel(index)
+	if BuildModeIsCustomModel(index) then return index end
+
+	local kind, _, data = BuildModeSpawnable(index)
+	if kind then return SpawnableModel(data) end
+
+	return buildmode_props[index] or buildmode_entmodels[index]
+end
+
+function BuildModeIsValidModelPath(model)
+	return isstring(model) and string.StartWith(model, "models/") and string.EndsWith(model, ".mdl") and not string.find(model, "..", 1, true) and util.IsValidModel(model)
 end
 
 Course_StartPos = Course_StartPos or Vector()
@@ -379,6 +376,10 @@ if SERVER then
 	util.AddNetworkString("BuildMode_ReadCourse")
 	util.AddNetworkString("BuildMode_Sync")
 	util.AddNetworkString("Course_Stop")
+	util.AddNetworkString("BuildMode_Undo")
+	util.AddNetworkString("BuildMode_Redo")
+	util.AddNetworkString("BuildMode_Undone")
+	util.AddNetworkString("BuildMode_ToggleAI")
 
 	function Course_Sync()
 		net.Start("BuildMode_Sync")
@@ -401,6 +402,11 @@ if SERVER then
 
 		for _, plr in ipairs(player.GetAll()) do
 			plr:ConCommand("Beatrun_SpeedLimit 325")
+
+			if plr.BuildMode then BuildMode_Toggle(plr) end
+
+			plr.BuildModeUndo = nil
+			plr.BuildModeRedo = nil
 		end
 
 		game.CleanUpMap()
@@ -411,10 +417,373 @@ if SERVER then
 
 	buildmode_placed = buildmode_placed or {}
 
+	local function SpawnBuildProp(model, pos, ang, hr)
+		local a = ents.Create("prop_physics")
+		a:SetModel(model)
+		a.hr = hr
+
+		CustomPropMat(a)
+
+		a:SetPos(pos)
+		a:SetAngles(ang)
+		a:Spawn()
+
+		local phys = a:GetPhysicsObject()
+
+		if IsValid(phys) then
+			phys:EnableMotion(false)
+			phys:Sleep()
+		end
+
+		a:PhysicsDestroy()
+		a:SetHealth(inf)
+
+		return a
+	end
+
+	function BuildModeSetNPCAI(ent, enabled)
+		ent:SetNW2Bool("BRNoAI", not enabled)
+
+		-- No think function freezes the NPC in place, ai_disabled would affect every NPC on the server
+		if enabled then
+			ent:RemoveEFlags(EFL_NO_THINK_FUNCTION)
+		else
+			ent:AddEFlags(EFL_NO_THINK_FUNCTION)
+		end
+	end
+
+	local function SetSpawnPose(ent, pos, ang)
+		ent:SetNW2Vector("BRSpawnPos", pos)
+		ent:SetNW2Angle("BRSpawnAng", ang)
+	end
+
+	local function SpawnSpawnable(id, pos, ang, weapon, noai)
+		local kind, name, data = BuildModeSpawnable(id)
+		if not kind then return end
+
+		local ent = ents.Create(data.Class)
+		if not IsValid(ent) then return end
+
+		local model = SpawnableModel(data)
+
+		if kind == "vehicle" then
+			ent:SetModel(model)
+
+			for k, v in pairs(data.KeyValues or {}) do ent:SetKeyValue(k, v) end
+
+			ent:SetPos(pos)
+			ent:SetAngles(ang)
+			ent:Spawn()
+			ent:Activate()
+
+			if data.Members then table.Merge(ent, data.Members) end
+			if ent.SetVehicleClass then ent:SetVehicleClass(name) end
+
+			ent.VehicleName = name
+			ent.VehicleTable = data
+			ent.ClassOverride = data.Class
+		else
+			ang = Angle(0, ang.y, 0)
+
+			if data.Model then ent:SetModel(model) end
+			if data.Material then ent:SetMaterial(data.Material) end
+
+			for k, v in pairs(data.KeyValues or {}) do ent:SetKeyValue(k, v) end
+
+			local flags = data.TotalSpawnFlags or bit.bor(SF_NPC_FADE_CORPSE, SF_NPC_ALWAYSTHINK, data.SpawnFlags or 0)
+			ent:SetKeyValue("spawnflags", flags)
+			ent.SpawnFlags = flags
+
+			if weapon == nil and data.Weapons then weapon = table.Random(data.Weapons) end
+
+			if isstring(weapon) and weapon ~= "" and weapon ~= "none" then
+				ent:SetKeyValue("additionalequipment", weapon)
+				ent.Equipment = weapon
+			end
+
+			ent:SetNW2String("BRWeapon", weapon or "")
+			ent:SetPos(pos)
+			ent:SetAngles(ang)
+			ent:Spawn()
+			ent:Activate()
+
+			ent.NPCName = name
+
+			if data.Model and string.lower(ent:GetModel() or "") ~= string.lower(model) then ent:SetModel(model) end
+			if data.Skin then ent:SetSkin(data.Skin) end
+
+			if data.Health then
+				ent:SetHealth(data.Health)
+				ent:SetMaxHealth(data.Health)
+			end
+
+			for k, v in pairs(data.BodyGroups or {}) do ent:SetBodygroup(k, v) end
+
+			BuildModeSetNPCAI(ent, not noai)
+		end
+
+		ent:SetNW2String("BRSpawnable", id)
+		SetSpawnPose(ent, pos, ang)
+
+		return ent
+	end
+
+	BuildModeSpawnSpawnable = SpawnSpawnable
+
+	local UNDO_LIMIT = 50
+
+	local function IsBuildEntity(ent)
+		return IsValid(ent) and (ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] ~= nil or BuildModeEntitySpawnable(ent) ~= nil)
+	end
+
+	local REVERT_OP = {
+		create = "delete",
+		remove = "restore",
+		move = "setpos",
+		highlight = "togglehr",
+		ai = "toggleai"
+	}
+
+	local function PushUndo(ply, action)
+		ply.BuildModeUndo = ply.BuildModeUndo or {}
+		ply.BuildModeRedo = {}
+
+		action.label = action.kind
+		action.op = REVERT_OP[action.kind]
+
+		table.insert(ply.BuildModeUndo, action)
+
+		if #ply.BuildModeUndo > UNDO_LIMIT then table.remove(ply.BuildModeUndo, 1) end
+	end
+
+	local function Resolve(ply, ent)
+		local remap = ply.BuildModeRemap
+		local guard = 0
+
+		while not IsValid(ent) and remap and remap[ent] and guard < UNDO_LIMIT do
+			ent = remap[ent]
+			guard = guard + 1
+		end
+
+		return ent
+	end
+
+	local function SnapshotEntity(ent)
+		local spawnable = BuildModeEntitySpawnable(ent)
+
+		if spawnable then
+			return {
+				source = ent,
+				spawnable = spawnable,
+				pos = ent:GetNW2Vector("BRSpawnPos", ent:GetPos()),
+				ang = ent:GetNW2Angle("BRSpawnAng", ent:GetAngles()),
+				weapon = ent:GetNW2String("BRWeapon"),
+				noai = ent:GetNW2Bool("BRNoAI")
+			}
+		end
+
+		local class = ent:GetClass()
+		local snap = {
+			source = ent,
+			class = class,
+			ent = class,
+			model = ent:GetModel(),
+			pos = ent:GetPos(),
+			ang = ent:GetAngles(),
+			hr = ent.hr
+		}
+
+		if class == "tt_cp" then snap.cpnum = ent:GetCPNum() end
+		if entsavefunc[class] then entsavefunc[class](ent, snap) end
+
+		return snap
+	end
+
+	local function RestoreEntity(snap)
+		if snap.spawnable then return SpawnSpawnable(snap.spawnable, snap.pos, snap.ang, snap.weapon, snap.noai) end
+		if snap.class == "prop_physics" then return SpawnBuildProp(snap.model, snap.pos, snap.ang, snap.hr) end
+
+		local a = ents.Create(snap.class)
+		if not IsValid(a) then return end
+
+		if snap.class == "tt_cp" then
+			a:SetPos(snap.pos)
+			a:SetCPNum(snap.cpnum or 1)
+			a:Spawn()
+
+			return a
+		end
+
+		local dontsetpos = entreadfunc[snap.class] and entreadfunc[snap.class](a, snap)
+
+		if not dontsetpos then
+			a:SetPos(snap.pos)
+			a:SetAngles(snap.ang)
+		end
+
+		a:Spawn()
+
+		return a
+	end
+
+	local function ApplyOperation(ply, action)
+		local inverse = { label = action.label }
+		local count = 0
+
+		if action.op == "delete" then
+			inverse.op = "restore"
+			inverse.items = {}
+
+			for _, ent in ipairs(action.ents) do
+				ent = Resolve(ply, ent)
+
+				if IsBuildEntity(ent) then
+					table.insert(inverse.items, SnapshotEntity(ent))
+
+					ent:Remove()
+					count = count + 1
+				end
+			end
+		elseif action.op == "restore" then
+			inverse.op = "delete"
+			inverse.ents = {}
+
+			ply.BuildModeRemap = ply.BuildModeRemap or {}
+
+			for _, snap in ipairs(action.items) do
+				local ent = RestoreEntity(snap)
+
+				if IsValid(ent) then
+					table.insert(inverse.ents, ent)
+					table.insert(buildmode_placed, ent)
+
+					ply.BuildModeRemap[snap.source] = ent
+					count = count + 1
+				end
+			end
+		elseif action.op == "setpos" then
+			inverse.op = "setpos"
+			inverse.items = {}
+
+			for _, item in ipairs(action.items) do
+				local ent = Resolve(ply, item.ent)
+
+				if IsValid(ent) then
+					table.insert(inverse.items, { ent = ent, pos = ent:GetPos(), ang = ent:GetAngles() })
+
+					ent:SetPos(item.pos)
+					ent:SetAngles(item.ang)
+
+					if BuildModeEntitySpawnable(ent) then SetSpawnPose(ent, item.pos, item.ang) end
+
+					count = count + 1
+				end
+			end
+		elseif action.op == "toggleai" then
+			inverse.op = "toggleai"
+			inverse.ents = {}
+
+			for _, ent in ipairs(action.ents) do
+				ent = Resolve(ply, ent)
+
+				if IsValid(ent) and ent:IsNPC() then
+					BuildModeSetNPCAI(ent, ent:GetNW2Bool("BRNoAI"))
+					table.insert(inverse.ents, ent)
+					count = count + 1
+				end
+			end
+		elseif action.op == "togglehr" then
+			inverse.op = "togglehr"
+			inverse.ents = {}
+
+			for _, ent in ipairs(action.ents) do
+				ent = Resolve(ply, ent)
+
+				if IsValid(ent) then
+					ent.hr = not ent.hr
+
+					CustomPropMat(ent)
+					table.insert(inverse.ents, ent)
+					count = count + 1
+				end
+			end
+		end
+
+		timer.Simple(0, LoadCheckpoints)
+
+		return inverse, count
+	end
+
+	local function StepHistory(ply, from, to, isRedo)
+		if not ply.BuildMode then return end
+
+		local action = ply[from] and table.remove(ply[from])
+		local count = 0
+
+		if action then
+			local inverse
+			inverse, count = ApplyOperation(ply, action)
+
+			ply[to] = ply[to] or {}
+			table.insert(ply[to], inverse)
+
+			if #ply[to] > UNDO_LIMIT then table.remove(ply[to], 1) end
+		end
+
+		net.Start("BuildMode_Undone")
+			net.WriteString(action and action.label or "")
+			net.WriteUInt(count, 16)
+			net.WriteBool(isRedo)
+		net.Send(ply)
+	end
+
+	net.Receive("BuildMode_Undo", function(len, ply) StepHistory(ply, "BuildModeUndo", "BuildModeRedo", false) end)
+
+	hook.Add("PlayerSpawnedProp", "BuildModeSpawnMenuProps", function(ply, model, ent)
+		if not ply.BuildMode or not IsValid(ent) then return end
+
+		local phys = ent:GetPhysicsObject()
+
+		if IsValid(phys) then
+			phys:EnableMotion(false)
+			phys:Sleep()
+		end
+
+		table.insert(buildmode_placed, ent)
+
+		PushUndo(ply, { kind = "create", ents = { ent } })
+	end)
+
+	net.Receive("BuildMode_Redo", function(len, ply) StepHistory(ply, "BuildModeRedo", "BuildModeUndo", true) end)
+
+	local function TagSpawnMenuEntity(ply, ent, id)
+		if not ply.BuildMode or not IsValid(ent) or not BuildModeSpawnable(id) then return end
+
+		ent:SetNW2String("BRSpawnable", id)
+		if ent:IsNPC() then
+			ent:SetNW2String("BRWeapon", ent.Equipment or "")
+			BuildModeSetNPCAI(ent, false)
+		end
+
+		SetSpawnPose(ent, ent:GetPos(), ent:GetAngles())
+		table.insert(buildmode_placed, ent)
+
+		PushUndo(ply, { kind = "create", ents = { ent } })
+	end
+
+	hook.Add("PlayerSpawnedVehicle", "BuildModeSpawnMenuVehicles", function(ply, ent)
+		TagSpawnMenuEntity(ply, ent, "vehicle:" .. tostring(ent.VehicleName))
+	end)
+
+	hook.Add("PlayerSpawnedNPC", "BuildModeSpawnMenuNPCs", function(ply, ent)
+		TagSpawnMenuEntity(ply, ent, "npc:" .. tostring(ent.NPCName or ent:GetClass()))
+	end)
+
 	function BuildMode_Toggle(ply)
 		if not ply.BuildMode and not ply:IsSuperAdmin() and not ply.BuildModePerm then return end
 
 		ply.BuildMode = not ply.BuildMode
+		ply:SetNoTarget(ply.BuildMode)
 
 		if ply.BuildMode then
 			ply:SetMoveType(MOVETYPE_NOCLIP)
@@ -436,9 +805,14 @@ if SERVER then
 		if not ply.BuildMode then return end
 
 		local prop = net.ReadUInt(16)
+		local custommodel, spawnable
 
 		if prop == 65535 then
 			prop = net.ReadString()
+		elseif prop == 65534 then
+			custommodel = net.ReadString()
+		elseif prop == 65533 then
+			spawnable = net.ReadString()
 		end
 
 		local x = net.ReadFloat()
@@ -448,24 +822,26 @@ if SERVER then
 		local vec = Vector(x, y, z)
 		local vecextra = net.ReadVector()
 
-		if not isstring(prop) then
-			local a = ents.Create("prop_physics")
-			a:SetModel(buildmode_props[prop])
+		local a
 
-			CustomPropMat(a)
+		if spawnable then
+			local kind, _, data = BuildModeSpawnable(spawnable)
+			if not kind or (data.AdminOnly and not ply:IsAdmin()) then return end
 
-			a:SetPos(vec)
-			a:SetAngles(ang)
-			a:Spawn()
+			a = SpawnSpawnable(spawnable, vec, ang, nil, net.ReadBool())
+			if not IsValid(a) then return end
+		elseif custommodel then
+			if not BuildModeIsValidModelPath(custommodel) then return end
 
-			local phys = a:GetPhysicsObject()
-			phys:EnableMotion(false)
-			phys:Sleep()
+			a = SpawnBuildProp(custommodel, vec, ang)
+		elseif not isstring(prop) then
+			if not buildmode_props[prop] then return end
 
-			a:PhysicsDestroy()
-			a:SetHealth(inf)
+			a = SpawnBuildProp(buildmode_props[prop], vec, ang)
 		else
-			local a = ents.Create(prop)
+			if not buildmode_ents[prop] then return end
+
+			a = ents.Create(prop)
 			local prespawn = entplacefunc_prespawn[prop]
 
 			a:SetPos(vec)
@@ -483,6 +859,8 @@ if SERVER then
 		end
 
 		table.insert(buildmode_placed, a)
+
+		PushUndo(ply, { kind = "create", ents = { a } })
 	end)
 
 	net.Receive("BuildMode_Duplicate", function(len, ply)
@@ -490,59 +868,85 @@ if SERVER then
 
 		local selected = net.ReadTable()
 		local selectedents = net.ReadTable()
+		local created = {}
 
 		for _, v in pairs(selected) do
-			local a = ents.Create("prop_physics")
-			a:SetModel(v:GetModel())
+			if IsBuildEntity(v) then
+				if BuildModeEntitySpawnable(v) then
+					local snap = SnapshotEntity(v)
+					snap.pos = v:GetPos()
+					snap.ang = v:GetAngles()
 
-			CustomPropMat(a)
-
-			a:SetPos(v:GetPos())
-			a:SetAngles(v:GetAngles())
-			a:Spawn()
-			a.hr = v.hr
-
-			CustomPropMat(a)
-
-			local phys = a:GetPhysicsObject()
-			phys:EnableMotion(false)
-			phys:Sleep()
-
-			a:PhysicsDestroy()
-			a:SetHealth(inf)
+					table.insert(created, RestoreEntity(snap))
+				else
+					table.insert(created, SpawnBuildProp(v:GetModel(), v:GetPos(), v:GetAngles(), v.hr))
+				end
+			end
 		end
 
 		for _, v in pairs(selectedents) do
-			local a = ents.Create(v:GetClass())
+			if IsBuildEntity(v) then
+				local a = ents.Create(v:GetClass())
 
-			a:SetPos(v:GetPos())
-			a:SetAngles(v:GetAngles())
-			a:Spawn()
+				a:SetPos(v:GetPos())
+				a:SetAngles(v:GetAngles())
+				a:Spawn()
+
+				table.insert(created, a)
+			end
 		end
+
+		if #created > 0 then PushUndo(ply, { kind = "create", ents = created }) end
 	end)
 
 	net.Receive("BuildMode_Delete", function(len, ply)
 		if not ply.BuildMode then return end
 
 		local selected = net.ReadTable()
+		local removed = {}
 
 		for _, v in pairs(selected) do
-			if IsValid(v) then
+			if IsBuildEntity(v) then
+				table.insert(removed, SnapshotEntity(v))
+
 				v:Remove()
 			end
 		end
+
+		if #removed > 0 then PushUndo(ply, { kind = "remove", items = removed }) end
 	end)
 
 	net.Receive("BuildMode_Highlight", function(len, ply)
 		if not ply.BuildMode then return end
 
 		local selected = net.ReadTable()
+		local changed = {}
 
 		for _, v in pairs(selected) do
-			v.hr = not v.hr
+			if IsValid(v) and v:GetClass() == "prop_physics" then
+				v.hr = not v.hr
 
-			CustomPropMat(v)
+				CustomPropMat(v)
+				table.insert(changed, v)
+			end
 		end
+
+		if #changed > 0 then PushUndo(ply, { kind = "highlight", ents = changed }) end
+	end)
+
+	net.Receive("BuildMode_ToggleAI", function(len, ply)
+		if not ply.BuildMode then return end
+
+		local changed = {}
+
+		for _, v in pairs(net.ReadTable()) do
+			if IsBuildEntity(v) and v:IsNPC() then
+				BuildModeSetNPCAI(v, v:GetNW2Bool("BRNoAI"))
+				table.insert(changed, v)
+			end
+		end
+
+		if #changed > 0 then PushUndo(ply, { kind = "ai", ents = changed }) end
 	end)
 
 	net.Receive("BuildMode_Remove", function(len, ply)
@@ -559,24 +963,17 @@ if SERVER then
 		local a = net.ReadData(len)
 		local props = util.JSONToTable(a)
 
+		if not istable(props) then return end
+
+		local created = {}
+
 		for _, v in pairs(props) do
-			local a = ents.Create("prop_physics")
-
-			a:SetModel(buildmode_props[v.model])
-
-			CustomPropMat(a)
-
-			a:SetPos(v.pos + ply:EyePos())
-			a:SetAngles(v.ang)
-			a:Spawn()
-
-			local phys = a:GetPhysicsObject()
-			phys:EnableMotion(false)
-			phys:Sleep()
-
-			a:PhysicsDestroy()
-			a:SetHealth(inf)
+			if buildmode_props[v.model] then
+				table.insert(created, SpawnBuildProp(buildmode_props[v.model], v.pos + ply:EyePos(), v.ang))
+			end
 		end
+
+		if #created > 0 then PushUndo(ply, { kind = "create", ents = created }) end
 	end)
 
 	net.Receive("BuildMode_Checkpoint", function(len, ply)
@@ -594,6 +991,8 @@ if SERVER then
 		a:Spawn()
 
 		LoadCheckpoints()
+
+		PushUndo(ply, { kind = "create", ents = { a } })
 	end)
 
 	net.Receive("BuildMode_Entity", function(len, ply)
@@ -653,7 +1052,7 @@ if SERVER then
 		id = id or util.CRC(decompress)
 		local courseData = util.JSONToTable(decompress)
 
-		local props, cp, pos, ang, name, entities, speed = unpack(courseData)
+		local props, cp, pos, ang, name, entities, speed, spawnables = unpack(courseData)
 		speed = speed or 325
 
 		for _, v in pairs(props) do
@@ -713,6 +1112,10 @@ if SERVER then
 			end
 		end
 
+		for _, v in ipairs(spawnables or {}) do
+			SpawnSpawnable(v.id, v.pos, v.ang, v.weapon, v.noai)
+		end
+
 		Course_StartPos:Set(pos)
 
 		Course_StartAng = ang
@@ -740,11 +1143,20 @@ if SERVER then
 		if not ply.BuildMode then return end
 
 		local selected = net.ReadTable()
+		local moved = {}
 
 		for k, v in pairs(selected) do
-			k:SetPos(v.pos or k:GetPos())
-			k:SetAngles(v.ang or k:GetAngles())
+			if IsBuildEntity(k) then
+				table.insert(moved, { ent = k, pos = k:GetPos(), ang = k:GetAngles() })
+
+				k:SetPos(v.pos or k:GetPos())
+				k:SetAngles(v.ang or k:GetAngles())
+
+				if BuildModeEntitySpawnable(k) then SetSpawnPose(k, k:GetPos(), k:GetAngles()) end
+			end
 		end
+
+		if #moved > 0 then PushUndo(ply, { kind = "move", items = moved }) end
 	end)
 
 	return
@@ -752,13 +1164,16 @@ end
 
 if CLIENT then
 	BuildModePlaceDelay = 0
+	BuildModePlaceAI = false
 	BuildMode = false
 	GhostModel = nil
 	BuildModeIndex = 0
+
 	local GhostColor = Color(255, 255, 255, 200)
+
 	BuildModeAngle = Angle()
 	BuildModePos = Vector()
-	-- local BuildModeDist = 500
+
 	local usedown = false
 	local mousedown = false
 	local axislock = 0
@@ -768,24 +1183,20 @@ if CLIENT then
 
 	local axisdisplay1 = Vector()
 	local axisdisplay2 = Vector()
+
 	mousey = 0
 	mousex = 0
-	-- local mousemoved = false
+
 	local camcontrol = false
-	-- local scrw = ScrW()
-	-- local scrh = ScrH()
-	-- local nscrw = ScrW()
-	-- local nscrh = ScrH()
 	local aimvector = Vector()
 	local dragstartx = 0
 	local dragstarty = 0
-	-- local dragstartvec = Vector()
 	local dragging = false
 	local dragoffset = Vector()
-	-- local hulltr = {}
-	-- local hulltrout = {}
+
 	buildmode_placed = buildmode_placed or {}
 	buildmode_selected = {}
+
 	local keytime = 0
 
 	playerstart = IsValid(playerstart) and playerstart or ClientsideModel("models/editor/playerstart.mdl")
@@ -797,6 +1208,40 @@ if CLIENT then
 	local ziplinemaxs = Vector(8, 8, 8)
 
 	local placedistance = 1000
+	local adjustingDistance = false
+
+	function BuildModeRotatedCenter(mins, maxs, ang)
+		local center = (mins + maxs) * 0.5
+		center:Rotate(ang)
+
+		return center
+	end
+
+	local gridsizes = { 0, 4, 8, 16, 32, 64 }
+	local gridindex = 1
+
+	function BuildModeGridSize()
+		return gridsizes[gridindex]
+	end
+
+	local function SnapToGrid(value)
+		local grid = gridsizes[gridindex]
+		if grid == 0 then return value end
+
+		return math.Round(value / grid) * grid
+	end
+
+	function BuildModeGetState()
+		return {
+			dragging = dragging,
+			axis = axislock > 0 and axislist[axislock] or nil,
+			distance = placedistance,
+			grid = gridsizes[gridindex],
+			camera = camcontrol,
+			secondPoint = PlaceStartPos ~= nil,
+			selected = table.Count(buildmode_selected)
+		}
+	end
 
 	surface.CreateFont("BuildMode", {
 		font = "D-DIN",
@@ -816,38 +1261,10 @@ if CLIENT then
 		size = ScreenScale(10)
 	})
 
-	-- local blur = Material("pp/blurscreen")
-
-	--[[
-	local function DrawBlurRect(x, y, w, h)
-		local X = 0
-		local Y = 0
-
-		surface.SetDrawColor(255, 255, 255)
-		surface.SetMaterial(blur)
-
-		for i = 1, 5 do
-			blur:SetFloat("$blur", i / 3 * 5)
-			blur:Recompute()
-
-			render.UpdateScreenEffectTexture()
-			render.SetScissorRect(x, y, x + w, y + h, true)
-
-			surface.DrawTexturedRect(X * -1, Y * -1, scrw, scrh)
-
-			render.SetScissorRect(0, 0, 0, 0, false)
-		end
-	end
-	]]
-
 	function BuildModeCreateGhost()
 		if not IsValid(GhostModel) then
-			GhostModel = ClientsideModel(buildmode_props[BuildModeIndex] or buildmode_entmodels[BuildModeIndex], RENDERGROUP_TRANSLUCENT)
+			GhostModel = ClientsideModel(BuildModeItemModel(BuildModeIndex), RENDERGROUP_TRANSLUCENT)
 		else
-			if propmatsblacklist[BuildModeIndex] then
-				GhostModel:SetMaterial("")
-			end
-
 			return
 		end
 
@@ -858,9 +1275,22 @@ if CLIENT then
 		CustomPropMat(GhostModel)
 	end
 
+	function BuildModeUpdateGhost()
+		if BuildModeIndex == 0 then
+			SafeRemoveEntity(GhostModel)
+
+			return
+		end
+
+		BuildModeCreateGhost()
+
+		GhostModel:SetModel(BuildModeItemModel(BuildModeIndex))
+
+		CustomPropMat(GhostModel)
+	end
+
 	local trace = {}
 	local tracer = {}
-	-- local flatn = Angle(0, 0, 1)
 
 	function BuildModeGhost()
 		if ZiplineStart then
@@ -868,7 +1298,7 @@ if CLIENT then
 		end
 
 		if BuildModeIndex == 0 then return end
-		if AEUI.HoveredPanel then return end
+		if BeatrunUI.IsCursorOverUI() then return end
 
 		BuildModeCreateGhost()
 
@@ -879,16 +1309,27 @@ if CLIENT then
 
 		aimvector = util.AimVector(eyeang, 133, mousex, mousey, ScrW(), ScrH())
 
-		local dmult = 1
+		local closer, farther = input.IsKeyDown(KEY_MINUS), input.IsKeyDown(KEY_EQUAL)
 
-		if input.IsKeyDown(KEY_LALT) then dmult = 0.1 end
+		if closer or farther then
+			local speed = 400 * FrameTime() * (input.IsKeyDown(KEY_LALT) and 0.1 or 1)
 
-		if input.IsKeyDown(KEY_EQUAL) then
-			placedistance = math.min(placedistance + 100 * FrameTime() * dmult, inf)
-		end
+			if not adjustingDistance then
+				adjustingDistance = true
 
-		if input.IsKeyDown(KEY_MINUS) then
-			placedistance = math.max(placedistance - 100 * FrameTime() * dmult, 0)
+				trace.start = eyepos
+				trace.endpos = eyepos + aimvector * 100000
+				trace.filter = ply
+				trace.output = tracer
+
+				util.TraceLine(trace)
+
+				placedistance = math.min(placedistance, eyepos:Distance(tracer.HitPos))
+			end
+
+			placedistance = math.Clamp(placedistance + (farther and speed or -speed), 16, 100000)
+		else
+			adjustingDistance = false
 		end
 
 		trace.start = eyepos
@@ -899,12 +1340,18 @@ if CLIENT then
 		util.TraceLine(trace)
 
 		local ghostpos = tracer.HitPos
-		ghostpos.z = ghostpos.z - mins.z
+
+		local center = Vector(ghostpos)
+		center.z = center.z + (maxs.z - mins.z) / 2
+		center.x = SnapToGrid(center.x)
+		center.y = SnapToGrid(center.y)
+
+		local origin = center - BuildModeRotatedCenter(mins, maxs, BuildModeAngle)
 
 		if axislock > 0 then
-			BuildModePos[axislist[axislock]] = ghostpos[axislist[axislock]]
+			BuildModePos[axislist[axislock]] = origin[axislist[axislock]]
 		else
-			BuildModePos:Set(ghostpos)
+			BuildModePos:Set(origin)
 		end
 
 		if PlaceStartPos and PlaceAxisLock and math.abs(PlaceAxisLock) > 0 then
@@ -926,7 +1373,10 @@ if CLIENT then
 		render.DrawWireframeBox(BuildModePos, BuildModeAngle, mins, maxs, color_white, true)
 
 		if PlaceStartPos then
-			render.DrawWireframeBox(PlaceStartPos, BuildModeAngle, PlaceMins, PlaceMaxs, color_white, true)
+			render.DrawWireframeBox(PlaceStartPos, BuildModeAngle, PlaceMins, PlaceMaxs, BEATRUN_ACCENT, true)
+
+			render.SetColorMaterial()
+			render.DrawBeam(PlaceStartPos, BuildModePos, 2, 0, 1, BEATRUN_ACCENT)
 		end
 
 		if axislock > 0 then
@@ -941,8 +1391,6 @@ if CLIENT then
 			render.DrawLine(axisdisplay2, axisdisplay1, axiscolors[axislock])
 		end
 
-		ghostpos.z = ghostpos.z + mins.z
-
 		render.DrawLine(tracer.StartPos + eyeang:Forward() * 5, ghostpos, axiscolors[3])
 	end
 
@@ -955,17 +1403,8 @@ if CLIENT then
 	end
 
 	function CourseData(name, speed)
-		-- [1] = Props, [2] = Checkpoints, [3] = Starting pos, [4] = Starting angle, [5] = Name, [6] = Entities, [7] = Restricted player's speed (0 = unrestricted)
-		-- format: multiline
-		local save = {
-			{},
-			{},
-			Course_StartPos,
-			Course_StartAng,
-			name or os.date("%H:%M:%S - %Y/%m/%d", os.time()),
-			{},
-			speed or 0
-		}
+		-- [1] = Props, [2] = Checkpoints, [3] = Starting pos, [4] = Starting angle, [5] = Name, [6] = Entities, [7] = Restricted player's speed (0 = unrestricted), [8] = Vehicles and NPCs
+		local save = { {}, {}, Course_StartPos, Course_StartAng, name or os.date("%H:%M:%S - %Y/%m/%d", os.time()), {}, speed or 0, {} }
 
 		for _, v in pairs(buildmode_placed) do
 			if not IsValid(v) then continue end
@@ -974,12 +1413,20 @@ if CLIENT then
 				print("[BR] Ignoring protected ent")
 			else
 				local class = v:GetClass()
+				local spawnable = BuildModeEntitySpawnable(v)
 
-				if class == "prop_physics" then
+				if spawnable then
+					table.insert(save[8], {
+						id = spawnable,
+						pos = v:GetNW2Vector("BRSpawnPos", v:GetPos()),
+						ang = v:GetNW2Angle("BRSpawnAng", v:GetAngles()),
+						weapon = v:IsNPC() and v:GetNW2String("BRWeapon") or nil,
+						noai = v:IsNPC() and v:GetNW2Bool("BRNoAI") or nil
+					})
+				elseif class == "prop_physics" then
 					local hr = false
 
 					if v:GetMaterial() == "medge/redplainplastervertex" then hr = true end
-					-- if v.buildmode_placed_manually then hr = false end
 
 					table.insert(save[1], {
 						model = v:GetModel():lower(),
@@ -1204,7 +1651,7 @@ if CLIENT then
 				local props = {}
 
 				for k, _ in pairs(buildmode_selected) do
-					if not propmatsblacklist[buildmode_props_index[k:GetModel()]] then
+					if k:GetClass() == "prop_physics" and not propmatsblacklist[buildmode_props_index[k:GetModel()]] then
 						table.insert(props, k)
 					end
 				end
@@ -1274,16 +1721,103 @@ if CLIENT then
 		end,
 		[KEY_PAD_PLUS] = function()
 			local save = file.Read("beatrun/savedbuilds/save.txt", "DATA")
+			if not save then return end
 
 			net.Start("BuildMode_ReadSave")
 				net.WriteData(save)
 			net.SendToServer()
+		end,
+		[KEY_N] = function()
+			gridindex = gridindex % #gridsizes + 1
+
+			LocalPlayer():EmitSound("buttonrollover.wav")
+		end,
+		[KEY_Z] = function()
+			if not input.IsKeyDown(KEY_LCONTROL) and not input.IsKeyDown(KEY_RCONTROL) then return end
+
+			net.Start("BuildMode_Undo")
+			net.SendToServer()
+		end,
+		[KEY_Y] = function()
+			if not input.IsKeyDown(KEY_LCONTROL) and not input.IsKeyDown(KEY_RCONTROL) then return end
+
+			net.Start("BuildMode_Redo")
+			net.SendToServer()
+		end,
+		[KEY_H] = function()
+			if BuildModeToggleHelp then BuildModeToggleHelp() end
+		end,
+		[KEY_I] = function()
+			local npcs = {}
+
+			for k, _ in pairs(buildmode_selected) do
+				if IsValid(k) and k:IsNPC() then table.insert(npcs, k) end
+			end
+
+			if #npcs > 0 then
+				net.Start("BuildMode_ToggleAI")
+					net.WriteTable(npcs)
+				net.SendToServer()
+			else
+				BuildModePlaceAI = not BuildModePlaceAI
+			end
+
+			LocalPlayer():EmitSound("buttonrollover.wav")
 		end
 	}
 
+	net.Receive("BuildMode_Undone", function()
+		local kind = net.ReadString()
+		local count = net.ReadUInt(16)
+		local prefix = net.ReadBool() and "beatrun.buildmode.redo." or "beatrun.buildmode.undo."
+
+		if kind == "" then
+			notification.AddLegacy("#" .. prefix .. "nothing", NOTIFY_HINT, 3)
+
+			return
+		end
+
+		notification.AddLegacy(language.GetPhrase(prefix .. kind):format(count), NOTIFY_UNDO, 3)
+		surface.PlaySound("buttons/button15.wav")
+
+		timer.Simple(0.1, LoadCheckpoints)
+	end)
+
 	buildmodeinputsmouse = {
 		[MOUSE_LEFT] = function()
-			if isstring(BuildModeIndex) then
+			if BuildModeSpawnable(BuildModeIndex) then
+				if CurTime() < BuildModePlaceDelay then return end
+
+				net.Start("BuildMode_Place")
+					net.WriteUInt(65533, 16)
+					net.WriteString(BuildModeIndex)
+					net.WriteFloat(BuildModePos.x)
+					net.WriteFloat(BuildModePos.y)
+					net.WriteFloat(BuildModePos.z)
+					net.WriteAngle(BuildModeAngle)
+					net.WriteVector(BuildModePos)
+					net.WriteBool(not BuildModePlaceAI)
+				net.SendToServer()
+
+				LocalPlayer():EmitSound("buttonclick.wav")
+
+				BuildModePlaceDelay = CurTime() + 0.05
+			elseif BuildModeIsCustomModel(BuildModeIndex) then
+				if CurTime() < BuildModePlaceDelay then return end
+
+				net.Start("BuildMode_Place")
+					net.WriteUInt(65534, 16)
+					net.WriteString(BuildModeIndex)
+					net.WriteFloat(BuildModePos.x)
+					net.WriteFloat(BuildModePos.y)
+					net.WriteFloat(BuildModePos.z)
+					net.WriteAngle(BuildModeAngle)
+				net.SendToServer()
+
+				LocalPlayer():EmitSound("buttonclick.wav")
+
+				BuildModePlaceDelay = CurTime() + 0.05
+			elseif isstring(BuildModeIndex) then
 				local noplace = false
 
 				if entplacefunc_cl[BuildModeIndex] then
@@ -1351,7 +1885,7 @@ if CLIENT then
 			end
 
 			if BuildModeIndex == 0 then
-				local svec = gui.ScreenToVector(gui.MouseX(), gui.MouseY()) -- util.AimVector(LocalPlayer():EyeAngles(), 133, mousex, mousey, ScrW(), ScrH())
+				local svec = gui.ScreenToVector(gui.MouseX(), gui.MouseY())
 				svec:Mul(100000)
 
 				local start = LocalPlayer():EyePos()
@@ -1361,7 +1895,7 @@ if CLIENT then
 					table.Empty(buildmode_selected)
 				end
 
-				if IsValid(tr.Entity) and tr.Entity:GetClass() == "prop_physics" then
+				if IsValid(tr.Entity) and (tr.Entity:GetClass() == "prop_physics" or BuildModeEntitySpawnable(tr.Entity)) then
 					buildmode_selected[tr.Entity] = not buildmode_selected[tr.Entity]
 
 					if buildmode_selected[tr.Entity] == false then
@@ -1396,21 +1930,15 @@ if CLIENT then
 
 				LocalPlayer():EmitSound("buttonrollover.wav")
 			else
+				if not isnumber(BuildModeIndex) then BuildModeIndex = 0 end
+
 				BuildModeIndex = BuildModeIndex - 1
 
 				if BuildModeIndex < 0 then
 					BuildModeIndex = #buildmode_props
 				end
 
-				if BuildModeIndex == 0 then
-					SafeRemoveEntity(GhostModel)
-
-					return
-				end
-
-				BuildModeCreateGhost()
-
-				GhostModel:SetModel(buildmode_props[BuildModeIndex] or buildmode_entmodels[BuildModeIndex])
+				BuildModeUpdateGhost()
 			end
 		end,
 		[MOUSE_WHEEL_UP] = function()
@@ -1421,33 +1949,28 @@ if CLIENT then
 
 				LocalPlayer():EmitSound("buttonrollover.wav")
 			else
+				if not isnumber(BuildModeIndex) then BuildModeIndex = 0 end
+
 				BuildModeIndex = BuildModeIndex + 1
 
 				if BuildModeIndex > #buildmode_props then
 					BuildModeIndex = 0
 				end
 
-				if BuildModeIndex == 0 then
-					SafeRemoveEntity(GhostModel)
-
-					return
-				end
-
-				BuildModeCreateGhost()
-
-				GhostModel:SetModel(buildmode_props[BuildModeIndex] or buildmode_entmodels[BuildModeIndex])
+				BuildModeUpdateGhost()
 			end
 		end
 	}
 
 	function BuildModeInput(ply, bind, pressed, code)
+		if bind == "+menu" then return end
 		if bind ~= "Beatrun_BuildMode" and not camcontrol then return true end
 	end
 
 	hook.Add("InitPostEntity", "buildmode_create_hook", function()
 		timer.Simple(2, function()
 			hook.Add("OnEntityCreated", "BuildModeProps", function(ent)
-				if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] then
+				if not ent:GetNW2Bool("BRProtected") and ent:GetClass() == "prop_physics" or buildmode_ents[ent:GetClass()] or ent:IsNPC() or ent:IsVehicle() then
 					if not BuildMode then ent.buildmode_placed_manually = true end
 
 					table.insert(buildmode_placed, ent)
@@ -1482,11 +2005,10 @@ if CLIENT then
 				flipy = true
 			end
 
-			surface.SetDrawColor(50, 125, 255, 80)
+			surface.SetDrawColor(ColorAlpha(BEATRUN_ACCENT, 40))
 			surface.DrawRect(x, y, w, h)
-			surface.SetDrawColor(125, 125, 125, 125)
-			surface.DrawOutlinedRect(x, y, w, h)
-			surface.SetDrawColor(0, 200, 0, 255)
+			surface.SetDrawColor(BEATRUN_ACCENT)
+			surface.DrawOutlinedRect(x, y, w, h, 1)
 
 			cam.Start3D()
 				for _, v in ipairs(buildmode_placed) do
@@ -1538,7 +2060,13 @@ if CLIENT then
 			elseif v then
 				if dragging then
 					local newpos = LocalPlayer():EyePos() + dragoffset * f.dragorigpos:Distance(LocalPlayer():EyePos()) - dragorigin
-					local offset = k.dragorigpos + newpos - f.dragorigpos - dragorigin
+					local delta = newpos - f.dragorigpos - dragorigin
+
+					delta.x = SnapToGrid(delta.x)
+					delta.y = SnapToGrid(delta.y)
+					delta.z = SnapToGrid(delta.z)
+
+					local offset = k.dragorigpos + delta
 
 					if axislock > 0 then
 						local a = offset[axislist[axislock]]
@@ -1547,8 +2075,13 @@ if CLIENT then
 						offset[axislist[axislock]] = a
 					end
 
+					local newang = k.dragorigang + BuildModeAngle
+					local bmins, bmaxs = k:GetRenderBounds()
+
+					offset = offset + BuildModeRotatedCenter(bmins, bmaxs, k.dragorigang) - BuildModeRotatedCenter(bmins, bmaxs, newang)
+
 					k:SetRenderOrigin(offset)
-					k:SetRenderAngles(k.dragorigang + BuildModeAngle)
+					k:SetRenderAngles(newang)
 				end
 
 				local mins, maxs = k:GetRenderBounds()
@@ -1570,16 +2103,29 @@ if CLIENT then
 		end
 	end
 
+	local color_npc_noai = Color(140, 140, 140)
+
+	local function DrawWorldTag(pos, text, color)
+		local w2s = pos:ToScreen()
+		if not w2s.visible then return end
+
+		surface.SetFont("BeatrunUISmall")
+
+		local tw, th = surface.GetTextSize(text)
+		local pad = BeatrunUI.S(6)
+		local x, y = math.floor(w2s.x - tw / 2 - pad), math.floor(w2s.y - th - pad * 3)
+
+		surface.SetDrawColor(0, 0, 0, 170)
+		surface.DrawRect(x, y, tw + pad * 2, th + pad)
+
+		surface.SetDrawColor(color)
+		surface.DrawRect(x, y, BeatrunUI.S(3), th + pad)
+
+		draw.SimpleText(text, "BeatrunUISmall", x + pad + BeatrunUI.S(2), y + pad / 2, color_white)
+	end
+
 	function BuildModeHUDPaint()
 		BuildModeDrag()
-
-		if dragging then
-			surface.SetDrawColor(0, 255, 0)
-			surface.DrawRect(0, 0, 50, 50)
-		end
-
-		surface.SetFont("DebugFixed")
-		surface.SetTextColor(255, 255, 255)
 
 		for _, v in pairs(Checkpoints) do
 			if not IsValid(v) then
@@ -1588,17 +2134,55 @@ if CLIENT then
 				break
 			end
 
-			local w2s = v:GetPos():ToScreen()
-			local num = v:GetCPNum()
-
-			surface.SetTextPos(w2s.x, w2s.y)
-			surface.DrawText("Checkpoint: " .. num)
+			DrawWorldTag(v:GetPos(), language.GetPhrase("beatrun.buildmode.checkpoint"):format(v:GetCPNum()), BEATRUN_ACCENT)
 		end
 
-		local startw2s = Course_StartPos:ToScreen()
+		DrawWorldTag(Course_StartPos, language.GetPhrase("beatrun.buildmode.spawn"), color_white)
 
-		surface.SetTextPos(startw2s.x, startw2s.y)
-		surface.DrawText("Spawn")
+		for _, v in ipairs(buildmode_placed) do
+			if IsValid(v) and v:IsNPC() and BuildModeEntitySpawnable(v) then
+				local noai = v:GetNW2Bool("BRNoAI")
+				local pos = v:GetPos()
+				pos.z = pos.z + v:OBBMaxs().z + 8
+
+				DrawWorldTag(pos, language.GetPhrase(noai and "beatrun.buildmode.tool.aioff" or "beatrun.buildmode.tool.aion"), noai and color_npc_noai or BEATRUN_ACCENT)
+			end
+		end
+
+		if PlaceStartPos and BuildModeIndex ~= 0 then
+			local length = PlaceStartPos:Distance(BuildModePos)
+			local text = language.GetPhrase("beatrun.buildmode.length"):format(math.Round(length), string.format("%.1f", length / 52.49))
+
+			if BuildModeIndex == "br_zipline" then
+				text = text .. " | " .. language.GetPhrase(input.IsKeyDown(KEY_LSHIFT) and "beatrun.buildmode.zipline.twoway" or "beatrun.buildmode.zipline.oneway")
+			end
+
+			DrawWorldTag((PlaceStartPos + BuildModePos) * 0.5, text, BEATRUN_ACCENT)
+		end
+	end
+
+	local rmbWasDown, rmbPressedAt, rmbPressedAng = false, 0, Angle()
+
+	local function CheckSecondPointCancel()
+		local down = input.IsMouseDown(MOUSE_RIGHT)
+
+		if down and not rmbWasDown then
+			rmbPressedAt = CurTime()
+			rmbPressedAng = LocalPlayer():EyeAngles()
+		elseif not down and rmbWasDown and PlaceStartPos then
+			local quick = CurTime() - rmbPressedAt < 0.25
+			local turned = math.abs(math.AngleDifference(LocalPlayer():EyeAngles().y, rmbPressedAng.y)) + math.abs(math.AngleDifference(LocalPlayer():EyeAngles().p, rmbPressedAng.p))
+
+			if quick and turned < 3 then
+				PlaceStartPos = nil
+				PlaceEndPos = nil
+				PlaceAxisLock = 0
+
+				LocalPlayer():EmitSound("buttonclickrelease.wav")
+			end
+		end
+
+		rmbWasDown = down
 	end
 
 	function BuildModeCommand(ply, ucmd)
@@ -1620,7 +2204,15 @@ if CLIENT then
 		usedown = input.IsKeyDown(KEY_E)
 		mousedown = input.IsMouseDown(MOUSE_LEFT)
 
-		if AEUI.HoveredPanel then return end
+		CheckSecondPointCancel()
+
+		if BeatrunUI.IsTyping() then
+			if input.WasMousePressed(MOUSE_LEFT) and not BeatrunUI.IsCursorOverUI() then vgui.GetKeyboardFocus():KillFocus() end
+
+			return
+		end
+
+		if BeatrunUI.IsCursorOverUI() then return end
 		if keytime == CurTime() then return end
 
 		for keybind, func in pairs(buildmodeinputs) do
