@@ -16,6 +16,8 @@ local currentMap = game.GetMap()
 Beatrun_MapImageCache = Beatrun_MapImageCache or {}
 
 local CACHE_LIFETIME = 120
+local UploadCourseFile, OpenConfirmPopup
+local databaseCourseCode, localCourseFile
 local Frame, List, OnlinePager, LocalPanel, CodePanel, BrowsePanel, ProfilePanel, SettingsPanel, PopupFrame
 
 local function SanitizeString(str)
@@ -34,7 +36,6 @@ end
 function IsCoursesMenuOpen()
 	return IsValid(Frame) or IsValid(PopupFrame)
 end
-
 
 local previewQueue = {}
 local previewRequested = {}
@@ -159,38 +160,89 @@ local function ClosePopup()
 	if IsValid(PopupFrame) then PopupFrame:Close() end
 end
 
+local function WrapText(text, font, width)
+	surface.SetFont(font)
+
+	local lines, line = {}, ""
+
+	for word in string.gmatch(text, "%S+") do
+		local candidate = line == "" and word or line .. " " .. word
+
+		if line ~= "" and surface.GetTextSize(candidate) > width then
+			table.insert(lines, line)
+			line = word
+		else
+			line = candidate
+		end
+	end
+
+	if line ~= "" then table.insert(lines, line) end
+
+	return lines
+end
+
 local function OpenCourseSaveMenu()
-	local frame = CreatePopup("#beatrun.coursesmenu.localpage.savecourse", 520, 230)
+	local frame = CreatePopup("#beatrun.coursesmenu.localpage.savecourse", 460, 400)
+	local data = CourseData()
+	local hasKey = databaseApiKey:GetString() ~= "" and databaseApiKey:GetString() ~= "0"
+	local padL, padT, padR, padB = frame:GetDockPadding()
+	local width = frame:GetWide() - padL - padR
+	local items = {}
 
-	local entry = MakeTextEntry(frame, "#beatrun.coursesmenu.save.placeholder")
-	entry:Dock(TOP)
+	local function Add(panel, gap)
+		table.insert(items, { panel = panel, gap = gap or 0 })
 
-	local speedRow = vgui.Create("DPanel", frame)
-	speedRow:SetTall(S(26))
-	speedRow:Dock(TOP)
-	speedRow:DockMargin(0, S(14), 0, 0)
-	speedRow.Paint = nil
+		return panel
+	end
 
-	local checkbox = vgui.Create("DCheckBox", speedRow)
-	checkbox:SetWide(S(26))
-	checkbox:Dock(LEFT)
-	checkbox:SetValue(false)
+	local function Section(text, first)
+		Add(MakeLabel(frame, "// " .. string.upper(L(text)), "BeatrunUISmall", CurrentTheme().text.muted), first and 0 or S(14))
+	end
 
-	StyleCheckBox(checkbox)
+	local function Check(text)
+		local check = vgui.Create("DCheckBoxLabel", frame)
+		check:SetText(text)
+		check:SetFont("BeatrunUISmall")
+		check:SetTextColor(CurrentTheme().text.primary)
+		check:SetTall(S(20))
+		check.Button:SetSize(S(18), S(18))
 
-	local slider = vgui.Create("DNumSlider", speedRow)
-	slider:SetText("#beatrun.coursesmenu.save.maxspeedlock")
-	slider:Dock(FILL)
-	slider:DockMargin(S(10), 0, 0, 0)
+		StyleCheckBox(check.Button)
+
+		return Add(check, S(6))
+	end
+
+	local function Text(text, color, gap)
+		local labels = {}
+
+		for i, line in ipairs(WrapText(L(text), "BeatrunUISmall", width)) do
+			table.insert(labels, Add(MakeLabel(frame, line, "BeatrunUISmall", color), i == 1 and gap or S(2)))
+		end
+
+		return labels
+	end
+
+	Section("#beatrun.coursesmenu.save.name", true)
+
+	local entry = Add(MakeTextEntry(frame, "#beatrun.coursesmenu.save.placeholder"), S(6))
+	entry:SetText(Course_Name or "")
+
+	Section("#beatrun.coursesmenu.save.speed")
+
+	local speedCheck = Check("#beatrun.coursesmenu.save.maxspeedlock")
+	speedCheck:SetValue(Course_Speed and Course_Speed > 0)
+
+	local slider = Add(vgui.Create("DNumSlider", frame), S(4))
+	slider:SetTall(S(26))
 	slider:SetMin(325)
 	slider:SetMax(1000)
 	slider:SetDecimals(0)
-	slider:SetValue(325)
-	slider.Label:SetFont("BeatrunUISmall")
-	slider.Label:SetTextColor(CurrentTheme().text.primary)
+	slider:SetValue(Course_Speed and Course_Speed > 0 and Course_Speed or 325)
+	slider.Label:SetVisible(false)
 	slider.TextArea:SetFont("BeatrunUISmall")
 	slider.TextArea:SetTextColor(CurrentTheme().text.primary)
 	slider.TextArea:SetPaintBackground(false)
+
 	slider.Slider.Paint = function(self, w, h)
 		local theme = CurrentTheme()
 		draw.RoundedBox(S(theme.radius), 0, h / 2 - S(2), w, S(4), theme.panels.secondary)
@@ -201,31 +253,192 @@ local function OpenCourseSaveMenu()
 		draw.RoundedBox(S(theme.radius), 0, 0, w, h, theme.accent)
 	end
 
-	MakePopupButtons(frame, {
-		{
-			text = "#beatrun.coursesmenu.save",
-			style = "primary",
-			onClick = function()
-				local name = string.Trim(entry:GetValue())
-				if name == "" then return entry:RequestFocus() end
-				local speed = checkbox:GetChecked() and math.floor(slider:GetValue()) or nil
-				local saved = SaveCourse(name, speed)
-				if saved then
-					local text = L("beatrun.coursesmenu.notification.save.success"):format("beatrun/" .. currentMap .. "/" .. saved .. ".txt")
-					notification.AddLegacy(text, NOTIFY_GENERIC, 6)
-					if IsValid(LocalPanel) then BuildLocalPage() end
-				end
+	local function UpdateSlider()
+		local on = speedCheck:GetChecked()
 
-				ClosePopup()
+		slider:SetMouseInputEnabled(on)
+		slider:SetAlpha(on and 255 or 80)
+	end
+
+	speedCheck.OnChange = UpdateSlider
+	UpdateSlider()
+
+	local localDir = "beatrun/courses/" .. currentMap .. "/"
+	local localNames = {}
+
+	for _, filename in ipairs(file.Find(localDir .. "*.txt", "DATA") or {}) do
+		local raw = file.Read(localDir .. filename, "DATA")
+		local json = raw and (util.Decompress(raw) or raw)
+		local tbl = json and util.JSONToTable(json)
+
+		if istable(tbl) and isstring(tbl[5]) then localNames[filename] = string.lower(string.Trim(tbl[5])) end
+	end
+
+	local loadedFile = Course_Name ~= "" and localCourseFile and localNames[localCourseFile] and localCourseFile or nil
+	local oldFile, sameName
+
+	local function FindOldFile()
+		local name = string.lower(string.Trim(entry:GetValue()))
+		local match
+
+		if name ~= "" then
+			for filename, courseName in SortedPairs(localNames) do
+				if courseName == name and (not match or filename == loadedFile) then match = filename end
 			end
-		}
+		end
+
+		if match then return match, true end
+
+		return loadedFile, false
+	end
+
+	local localSection = Add(MakeLabel(frame, "// " .. string.upper(L("#beatrun.coursesmenu.save.localfile")), "BeatrunUISmall", CurrentTheme().text.muted), S(14))
+	local sameNameWarning = Text("#beatrun.coursesmenu.save.samename", CurrentTheme().accent, S(2))
+	local replaceCheck = Check("")
+	replaceCheck:SetValue(true)
+
+	local replaceWarning = Text("#beatrun.coursesmenu.save.replacewarning", CurrentTheme().text.muted, S(6))
+
+	Section("#beatrun.coursesmenu.save.database")
+
+	local uploadCheck = Check(hasKey and "#beatrun.coursesmenu.save.upload" or "#beatrun.coursesmenu.save.uploadnokey")
+	local updateCheck = Check("#beatrun.coursesmenu.save.update")
+
+	for _, check in ipairs({ uploadCheck, updateCheck }) do
+		check:SetMouseInputEnabled(hasKey)
+		check:SetAlpha(hasKey and 255 or 80)
+	end
+
+	local codeEntry = Add(MakeTextEntry(frame, "#beatrun.coursesmenu.save.updatecode"), S(6))
+	codeEntry:SetText(Course_Name ~= "" and databaseCourseCode or "")
+
+	local updateWarning = Text("#beatrun.coursesmenu.save.updatewarning", CurrentTheme().accent, S(6))
+	local updateOnly = { codeEntry, unpack(updateWarning) }
+	local Relayout
+
+	Section("#beatrun.coursesmenu.save.summary")
+	Text(L("beatrun.coursesmenu.save.counts"):format(#data[1], #data[6], #data[2], #data[8]), CurrentTheme().text.primary, 0)
+
+	if #data[2] == 0 then Text("#beatrun.coursesmenu.save.nocheckpoints", CurrentTheme().accent, S(6)) end
+
+	local function UpdateDatabaseOptions()
+		local updating = hasKey and updateCheck:GetChecked()
+
+		for _, panel in ipairs(updateOnly) do panel:SetVisible(updating) end
+
+		oldFile, sameName = FindOldFile()
+
+		localSection:SetVisible(oldFile ~= nil)
+		replaceCheck:SetVisible(oldFile ~= nil)
+		replaceCheck:SetText(L("beatrun.coursesmenu.save.replace"):format(oldFile or ""))
+
+		for _, panel in ipairs(sameNameWarning) do panel:SetVisible(oldFile ~= nil and sameName) end
+		for _, panel in ipairs(replaceWarning) do panel:SetVisible(oldFile ~= nil and replaceCheck:GetChecked()) end
+
+		Relayout()
+	end
+
+	replaceCheck.OnChange = UpdateDatabaseOptions
+
+	entry:SetUpdateOnType(true)
+	entry.OnValueChange = UpdateDatabaseOptions
+
+	uploadCheck.OnChange = function(_, value)
+		if value then updateCheck:SetChecked(false) end
+
+		UpdateDatabaseOptions()
+	end
+
+	updateCheck.OnChange = function(_, value)
+		if value then uploadCheck:SetChecked(false) end
+
+		UpdateDatabaseOptions()
+	end
+
+	local function Save()
+		local name = string.Trim(entry:GetValue())
+		if name == "" then return entry:RequestFocus() end
+
+		local updateCode = hasKey and updateCheck:GetChecked() and string.upper(string.Trim(codeEntry:GetValue())) or nil
+		if updateCode == "" then return codeEntry:RequestFocus() end
+
+		local speed = speedCheck:GetChecked() and math.floor(slider:GetValue()) or nil
+		local saved = SaveCourse(name, speed)
+
+		ClosePopup()
+
+		if not saved then return end
+
+		local path = "beatrun/courses/" .. currentMap .. "/" .. saved .. ".txt"
+
+		notification.AddLegacy(L("beatrun.coursesmenu.notification.save.success"):format(path), NOTIFY_GENERIC, 6)
+
+		if IsValid(LocalPanel) then BuildLocalPage() end
+
+		local replace = oldFile and replaceCheck:GetChecked() and oldFile ~= saved .. ".txt"
+		local messages = {}
+
+		if replace then table.insert(messages, L("beatrun.coursesmenu.save.replaceconfirm"):format(oldFile)) end
+		if updateCode then table.insert(messages, L("beatrun.coursesmenu.save.updateconfirm"):format(updateCode)) end
+
+		if #messages == 0 then
+			if hasKey and uploadCheck:GetChecked() then UploadCourseFile(path) end
+
+			return
+		end
+
+		local title = updateCode and "#beatrun.coursesmenu.save.updateconfirm.title" or "#beatrun.coursesmenu.save.replaceconfirm.title"
+
+		OpenConfirmPopup(title, table.concat(messages, "\n\n"), function()
+			if replace and file.Delete(localDir .. oldFile, "DATA") ~= false then
+				localCourseFile = saved .. ".txt"
+
+				if IsValid(LocalPanel) then BuildLocalPage() end
+			end
+
+			if updateCode then
+				UploadCourseFile(path, updateCode)
+			elseif hasKey and uploadCheck:GetChecked() then
+				UploadCourseFile(path)
+			end
+		end, true, #messages > 1 and 320 or 220)
+	end
+
+	entry.OnEnter = Save
+
+	local buttons = MakePopupButtons(frame, {
+		{ text = "#beatrun.coursesmenu.save", style = "primary", onClick = Save },
+		{ text = "#beatrun.misc.cancel", style = "secondary", onClick = ClosePopup }
 	})
+	buttons:Dock(NODOCK)
+	Add(buttons, S(18))
+
+	Relayout = function()
+		local y = padT
+
+		for _, item in ipairs(items) do
+			if item.panel:IsVisible() then
+				y = y + item.gap
+
+				item.panel:SetPos(padL, y)
+				item.panel:SetWide(width)
+
+				y = y + item.panel:GetTall()
+			end
+		end
+
+		frame:SetTall(y + padB)
+		frame:Center()
+	end
+
+	UpdateDatabaseOptions()
 
 	entry:RequestFocus()
+	entry:SetCaretPos(#entry:GetValue())
 end
 
-local function OpenConfirmPopup(title, message, onConfirm, danger)
-	local frame = CreatePopup(title, 520, 200)
+function OpenConfirmPopup(title, message, onConfirm, danger, height)
+	local frame = CreatePopup(title, 520, height or 200)
 	MakePopupButtons(frame, {
 		{
 			text = "#beatrun.misc.ok",
@@ -326,10 +539,10 @@ local function FetchAndStartCourse(code)
 		code = code
 	}
 
-	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, code)
-		if code ~= 200 then
+	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, status)
+		if status ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
-			LogApiError("/api/courses/download", code, body)
+			LogApiError("/api/courses/download", status, body)
 
 			return
 		end
@@ -337,10 +550,13 @@ local function FetchAndStartCourse(code)
 		local res = util.JSONToTable(body)
 		if res and res.code and res.code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
-			LogApiError("/api/courses/download", code, body, res)
+			LogApiError("/api/courses/download", status, body, res)
 
 			return
 		end
+
+		databaseCourseCode = code
+		localCourseFile = nil
 
 		LoadCourseRaw(util.Base64Decode(body))
 		notification.AddLegacy(language.GetPhrase("#beatrun.coursesmenu.notification.startingcourse"):format(code), NOTIFY_GENERIC, 4)
@@ -350,7 +566,7 @@ local function FetchAndStartCourse(code)
 	end, headers)
 end
 
-local function UploadCourseFile(course)
+function UploadCourseFile(course, updateCode)
 	if not databaseApiKey:GetString() or databaseApiKey:GetString() == "0" or databaseApiKey:GetString() == "" then
 		notification.AddLegacy("#beatrun.coursesmenu.notification.nokey", NOTIFY_ERROR, 4)
 
@@ -368,15 +584,18 @@ local function UploadCourseFile(course)
 	local headers = {
 		authorization = databaseApiKey:GetString(),
 		mapName = currentMap,
-		workshopId = GetCurrentMapWorkshopID()
+		workshopId = GetCurrentMapWorkshopID(),
+		code = updateCode
 	}
 
-	http.Post("https://" .. databaseDomain:GetString() .. "/api/courses/upload", {
+	local endpoint = updateCode and "/api/courses/update" or "/api/courses/upload"
+
+	http.Post("https://" .. databaseDomain:GetString() .. endpoint, {
 		data = encoded
 	}, function(body, _, _, code)
 		if code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
-			LogApiError("/api/courses/upload", code, body)
+			LogApiError(endpoint, code, body)
 
 			return
 		end
@@ -384,16 +603,23 @@ local function UploadCourseFile(course)
 		local res = util.JSONToTable(body)
 		if res and res.code and res.code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
-			LogApiError("/api/courses/upload", code, body, res)
+			LogApiError(endpoint, code, body, res)
 
 			return
 		end
 
-		notification.AddLegacy("#beatrun.coursesmenu.notification.upload.success", NOTIFY_GENERIC, 4)
+		if updateCode then
+			local removed = res and istable(res.data) and res.data.removedRecords or 0
+
+			notification.AddLegacy(L("beatrun.coursesmenu.notification.update.success"):format(updateCode, removed), NOTIFY_GENERIC, 6)
+		else
+			notification.AddLegacy("#beatrun.coursesmenu.notification.upload.success", NOTIFY_GENERIC, 4)
+		end
+
 		print("> " .. tostring(res and res.message or body))
 	end, function(err)
 		notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
-		print("> /api/courses/upload\nError: ", err)
+		print("> " .. endpoint .. "\nError: ", err)
 	end, headers)
 end
 
@@ -753,6 +979,9 @@ function BuildLocalPage()
 		local isReadable = istable(tbl) and isstring(tbl[5])
 		local row = MakeRow(scroll, 64)
 		local loadBtn = MakeRowButton(row, "#beatrun.coursesmenu.start", "primary", function()
+			databaseCourseCode = nil
+			localCourseFile = filename
+
 			LoadCourse(filename)
 
 			if IsValid(Frame) then Frame:Close() end
