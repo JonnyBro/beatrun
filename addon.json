@@ -1,0 +1,18 @@
+{
+	"title": "Beatrun",
+	"type": "gamemode",
+	"tags": [
+		"fun",
+		"realism"
+	],
+	"ignore": [
+		".git/*",
+		".github/*",
+		".vscode/*",
+		".gitignore",
+		".gitattributes",
+		".glualint.json",
+		"README*.md",
+		"LICENSE"
+	]
+}
