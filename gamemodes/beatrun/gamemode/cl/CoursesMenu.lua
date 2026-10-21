@@ -108,7 +108,7 @@ Beatrun_CoursesCache = Beatrun_CoursesCache or {
 }
 
 local CACHE_LIFETIME = 120
-local Frame, Header, Sheet, List, LocalPanel, BrowsePanel, ProfilePanel, PopupFrame
+local Frame, Header, Sheet, List, LocalPanel, CodePanel, BrowsePanel, ProfilePanel, PopupFrame
 
 -- Helpers
 local function SanitizeString(str)
@@ -130,26 +130,73 @@ function CurrentTheme()
 	return THEME[string.lower(uiTheme:GetString())] or THEME.dark
 end
 
+local previewQueue = {}
+local previewRequested = {}
+local previewBusy = false
+local previewToken = nil
+local PREVIEW_TIMEOUT = 10
+
+local function ProcessPreviewQueue()
+	if previewBusy then return end
+
+	if not IsCoursesMenuOpen() then
+		for _, course in ipairs(previewQueue) do
+			previewRequested[course.mapName] = nil
+		end
+
+		table.Empty(previewQueue)
+
+		return
+	end
+
+	local course = table.remove(previewQueue, 1)
+	if not course then return end
+
+	previewBusy = true
+
+	local token = {}
+	previewToken = token
+
+	local function done()
+		if previewToken ~= token then return end
+
+		previewToken = nil
+		previewBusy = false
+
+		timer.Simple(0.1, ProcessPreviewQueue)
+	end
+
+	timer.Simple(PREVIEW_TIMEOUT, done)
+
+	steamworks.FileInfo(course.workshopId, function(result)
+		if previewToken ~= token then return end
+		if not result or not result.previewid then return done() end
+
+		steamworks.Download(result.previewid, true, function(name)
+			if name then Beatrun_MapImageCache[course.mapName] = AddonMaterial(name) end
+
+			done()
+		end)
+	end)
+end
+
 local function CacheMapPreview(course)
+	local mapName = course.mapName
+	if not mapName or Beatrun_MapImageCache[mapName] or previewRequested[mapName] then return end
+
+	previewRequested[mapName] = true
+
 	if not course.workshopId then
-		if file.Size("maps/thumb/" .. course.mapName .. ".png", "GAME") > 0 then
-			Beatrun_MapImageCache[course.mapName] = Material("maps/thumb/" .. course.mapName .. ".png", "smooth")
+		if file.Size("maps/thumb/" .. mapName .. ".png", "GAME") > 0 then
+			Beatrun_MapImageCache[mapName] = Material("maps/thumb/" .. mapName .. ".png", "smooth")
 		end
 
 		return
 	end
 
-	steamworks.FileInfo(course.workshopId, function(result)
-		if not result or not result.previewid then return end
+	previewQueue[#previewQueue + 1] = course
 
-		steamworks.Download(result.previewid, true, function(name)
-			if not name then return end
-
-			Beatrun_MapImageCache[course.mapName] = AddonMaterial(name)
-
-			return
-		end)
-	end)
+	ProcessPreviewQueue()
 end
 
 local function GetCurrentMapWorkshopID()
@@ -590,6 +637,102 @@ local function UploadCourseFile(course)
 		notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
 		print("> /api/courses/upload\nError: ", err)
 	end, headers)
+end
+
+local function StartOnlineCourse(v)
+	if v.workshopId and not steamworks.IsSubscribed(v.workshopId) then
+		local loadWarn = vgui.Create("DFrame")
+		loadWarn:SetTitle("")
+		loadWarn:SetSize(360, 140)
+		loadWarn:Center()
+		loadWarn:SetDeleteOnClose(true)
+		loadWarn:ShowCloseButton(false)
+		loadWarn:MakePopup()
+
+		loadWarn.Paint = function(self, w, h)
+			draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
+			draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
+			draw.SimpleText("#beatrun.coursesmenu.onlinepage.start", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+
+		local close = vgui.Create("DButton", loadWarn)
+		close:SetText("✕")
+		close:SetFont("AEUIDefault")
+		close:SetTextColor(CurrentTheme().buttons.red.t)
+		close:SetSize(24, 24)
+		close:SetPos(loadWarn:GetWide() - 24, 0)
+
+		close.Paint = function(self, w, h)
+			local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
+			local isDown = self:IsDown() and CurrentTheme().buttons.red.d
+
+			draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
+		end
+
+		close.DoClick = function() if IsValid(loadWarn) then loadWarn:Close() end end
+
+		local label = vgui.Create("DLabel", loadWarn)
+		label:SetText("#beatrun.coursesmenu.onlinepage.start.message")
+		label:SetFont("AEUISmall")
+		label:SetTextColor(CurrentTheme().text.primary)
+		label:SetWrap(true)
+		label:SetSize(330, 60)
+		label:SetPos(15, 35)
+
+		local workshop = vgui.Create("DButton", loadWarn)
+		workshop:SetText("#beatrun.coursesmenu.onlinepage.openworkshop")
+		workshop:SetFont("AEUIDefault")
+		workshop:SetTextColor(CurrentTheme().buttons.green.t)
+		workshop:SetSize(150, 30)
+		workshop:SetPos(20, 95)
+		workshop:SetEnabled(v.workshopId ~= nil)
+
+		workshop.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
+
+		workshop.DoClick = function()
+			gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId)
+
+			if IsValid(loadWarn) then loadWarn:Close() end
+		end
+
+		local iKnowWhatImDoing = vgui.Create("DButton", loadWarn)
+		iKnowWhatImDoing:SetText("#beatrun.coursesmenu.onlinepage.iknowwhatimdoing")
+		iKnowWhatImDoing:SetFont("AEUISmall")
+		iKnowWhatImDoing:SetTextColor(CurrentTheme().buttons.red.t)
+		iKnowWhatImDoing:SetSize(150, 30)
+		iKnowWhatImDoing:SetPos(190, 95)
+
+		iKnowWhatImDoing.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
+
+		iKnowWhatImDoing.DoClick = function()
+			FetchAndStartCourse(v.code)
+
+			if IsValid(Frame) then Frame:Close() end
+			if IsValid(loadWarn) then loadWarn:Close() end
+		end
+
+		return
+	end
+
+	FetchAndStartCourse(v.code)
+
+	if IsValid(Frame) then Frame:Close() end
+end
+
+local function IsCourseDownloaded(v)
+	return file.Exists(string.format("beatrun/courses/%s/%s.txt", v.mapName, string.lower(v.code)), "DATA")
+end
+
+local function DownloadOnlineCourse(v)
+	if IsCourseDownloaded(v) then
+		OpenConfirmPopup("#beatrun.coursesmenu.onlinepage.overwrite", "#beatrun.coursesmenu.onlinepage.overwrite.confirm", function()
+			FetchAndSaveCourse(v)
+		end)
+
+		return
+	end
+
+	FetchAndSaveCourse(v)
 end
 
 function Beatrun_SubmitCourseRecord(time)
@@ -1123,10 +1266,6 @@ function BuildOnlinePage()
 			BuildOnlinePage()
 
 			if IsValid(ProfilePanel) then BuildProfilePage() end
-
-			for _, v in ipairs(Beatrun_CoursesCache.all) do
-				CacheMapPreview(v)
-			end
 		end, function(err)
 			Beatrun_CoursesCache.loading = false
 
@@ -1147,6 +1286,8 @@ function BuildOnlinePage()
 			local col = self:IsHovered() and CurrentTheme().panels.secondary or CurrentTheme().panels.primary
 
 			draw.RoundedBox(6, 0, 0, w, h, col)
+
+			CacheMapPreview(v)
 
 			local mapMaterial = Beatrun_MapImageCache[v.mapName]
 
@@ -1255,85 +1396,7 @@ function BuildOnlinePage()
 
 		loadBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "primary") end
 
-		loadBtn.DoClick = function()
-			if v.workshopId and not steamworks.IsSubscribed(v.workshopId) then
-				local loadWarn = vgui.Create("DFrame")
-				loadWarn:SetTitle("")
-				loadWarn:SetSize(360, 140)
-				loadWarn:Center()
-				loadWarn:SetDeleteOnClose(true)
-				loadWarn:ShowCloseButton(false)
-				loadWarn:MakePopup()
-
-				loadWarn.Paint = function(self, w, h)
-					draw.RoundedBox(8, 0, 0, w, h, CurrentTheme().bg)
-					draw.RoundedBox(8, 0, 0, w, 24, CurrentTheme().header)
-					draw.SimpleText("#beatrun.coursesmenu.onlinepage.start", "AEUIDefault", 10, 12, CurrentTheme().text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				end
-
-				local close = vgui.Create("DButton", loadWarn)
-				close:SetText("✕")
-				close:SetFont("AEUIDefault")
-				close:SetTextColor(CurrentTheme().buttons.red.t)
-				close:SetSize(24, 24)
-				close:SetPos(loadWarn:GetWide() - 24, 0)
-
-				close.Paint = function(self, w, h)
-					local bg = self:IsHovered() and CurrentTheme().buttons.red.h or CurrentTheme().buttons.red.n
-					local isDown = self:IsDown() and CurrentTheme().buttons.red.d
-
-					draw.RoundedBoxEx(6, 0, 0, w, h, isDown or bg, false, true, false, false)
-				end
-
-				close.DoClick = function() if IsValid(loadWarn) then loadWarn:Close() end end
-
-				local label = vgui.Create("DLabel", loadWarn)
-				label:SetText("#beatrun.coursesmenu.onlinepage.start.message")
-				label:SetFont("AEUISmall")
-				label:SetTextColor(CurrentTheme().text.primary)
-				label:SetWrap(true)
-				label:SetSize(330, 60)
-				label:SetPos(15, 35)
-
-				local workshop = vgui.Create("DButton", loadWarn)
-				workshop:SetText("#beatrun.coursesmenu.onlinepage.openworkshop")
-				workshop:SetFont("AEUIDefault")
-				workshop:SetTextColor(CurrentTheme().buttons.green.t)
-				workshop:SetSize(150, 30)
-				workshop:SetPos(20, 95)
-				workshop:SetEnabled(v.workshopId ~= nil)
-
-				workshop.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "green") end
-
-				workshop.DoClick = function()
-					gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId)
-
-					if IsValid(loadWarn) then loadWarn:Close() end
-				end
-
-				local iKnowWhatImDoing = vgui.Create("DButton", loadWarn)
-				iKnowWhatImDoing:SetText("#beatrun.coursesmenu.onlinepage.iknowwhatimdoing")
-				iKnowWhatImDoing:SetFont("AEUISmall")
-				iKnowWhatImDoing:SetTextColor(CurrentTheme().buttons.red.t)
-				iKnowWhatImDoing:SetSize(150, 30)
-				iKnowWhatImDoing:SetPos(190, 95)
-
-				iKnowWhatImDoing.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "red") end
-
-				iKnowWhatImDoing.DoClick = function()
-					FetchAndStartCourse(v.code)
-
-					if IsValid(Frame) then Frame:Close() end
-					if IsValid(loadWarn) then loadWarn:Close() end
-				end
-
-				return
-			end
-
-			FetchAndStartCourse(v.code)
-
-			if IsValid(Frame) then Frame:Close() end
-		end
+		loadBtn.DoClick = function() StartOnlineCourse(v) end
 
 		local downloadBtn = vgui.Create("DButton", loadPanel)
 		downloadBtn:SetText("#beatrun.coursesmenu.onlinepage.download")
@@ -1344,8 +1407,7 @@ function BuildOnlinePage()
 		downloadBtn:SetCursor("hand")
 		downloadBtn:Dock(BOTTOM)
 
-		local code = string.lower(v.code)
-		local courseDoesExist = file.Exists(string.format("beatrun/courses/%s/%s.txt", v.mapName, code), "DATA")
+		local courseDoesExist = IsCourseDownloaded(v)
 
 		downloadBtn.Paint = function(self, w, h)
 			local bg = self:IsHovered() and CurrentTheme().buttons.green.h or CurrentTheme().buttons.green.n
@@ -1362,17 +1424,335 @@ function BuildOnlinePage()
 			draw.RoundedBox(4, 0, 0, w, h, isDown or bg)
 		end
 
-		downloadBtn.DoClick = function()
-			if courseDoesExist then
-				OpenConfirmPopup("#beatrun.coursesmenu.onlinepage.overwrite", "#beatrun.coursesmenu.onlinepage.overwrite.confirm", function()
-					FetchAndSaveCourse(v)
-				end)
+		downloadBtn.DoClick = function() DownloadOnlineCourse(v) end
+	end
+end
 
-				return
-			end
+local codeLookup = {
+	input = "",
+	status = "idle", -- idle, invalid, loading, found, notfound, error
+	code = nil,
+	course = nil,
+	lastRequest = {},
+	cache = {}
+}
 
-			FetchAndSaveCourse(v)
+local CODE_RETRY_DELAY = 2
+
+local function NormalizeCourseCode(text)
+	local code = string.upper(string.gsub(string.Trim(text or ""), "%s+", ""))
+
+	if not string.match(code, "^%w+%-[%w%-]*%w$") then return nil end
+
+	return code
+end
+
+local function LookupCourseByCode(text)
+	codeLookup.input = text or ""
+
+	local code = NormalizeCourseCode(text)
+
+	if not code then
+		codeLookup.status = "invalid"
+		codeLookup.course = nil
+
+		return BuildCodePage()
+	end
+
+	if codeLookup.code == code and (codeLookup.status == "loading" or codeLookup.status == "found") then return end
+
+	local cached = codeLookup.cache[code]
+
+	if cached and CurTime() - cached.at < CACHE_LIFETIME then
+		codeLookup.code = code
+		codeLookup.course = cached.course
+		codeLookup.status = "found"
+
+		return BuildCodePage()
+	end
+
+	if (codeLookup.lastRequest[code] or 0) + CODE_RETRY_DELAY > CurTime() then return end
+
+	codeLookup.lastRequest[code] = CurTime()
+	codeLookup.code = code
+	codeLookup.course = nil
+	codeLookup.status = "loading"
+
+	BuildCodePage()
+
+	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/info/" .. code, function(body, _, _, status)
+		if codeLookup.code ~= code then return end
+
+		local res = util.JSONToTable(body or "")
+
+		if status == 404 then
+			codeLookup.status = "notfound"
+		elseif status ~= 200 or not res or not res.data then
+			codeLookup.status = "error"
+
+			print("> /api/courses/info/" .. code .. "\n> Code: " .. tostring(status) .. "\n> Reply: " .. tostring(body))
+		else
+			local data = res.data
+			local author = data.author or {}
+
+			local course = {
+				code = data.code,
+				name = data.name,
+				mapName = data.mapName,
+				workshopId = data.workshopId,
+				downloadCount = data.downloadCount or 0,
+				runsCount = data.runsCount or 0,
+				players = data.players or 0,
+				checkpoints = data.checkpoints,
+				bestTime = data.bestTime,
+				uploadedAt = os.date("%Y-%m-%d %H:%M", (data.uploadedAt or 0) / 1000),
+				uploadedBy = {
+					steamId = author.steamId,
+					username = author.username or author.steamId
+				}
+			}
+
+			codeLookup.course = course
+			codeLookup.status = "found"
+			codeLookup.cache[code] = { course = course, at = CurTime() }
+
+			CacheMapPreview(course)
 		end
+
+		BuildCodePage()
+	end, function(err)
+		if codeLookup.code ~= code then return end
+
+		codeLookup.status = "error"
+
+		print("> /api/courses/info/" .. code .. "\nError: ", err)
+
+		BuildCodePage()
+	end)
+end
+
+local function CodePageMessage(parent, text, color)
+	local label = vgui.Create("DLabel", parent)
+	label:SetText(text)
+	label:SetFont("AEUIDefault")
+	label:SetTextColor(color or CurrentTheme().text.muted)
+	label:SetWrap(true)
+	label:SetAutoStretchVertical(true)
+	label:Dock(TOP)
+	label:DockMargin(20, 20, 20, 0)
+
+	return label
+end
+
+local function BuildCodeCourseCard(parent, v)
+	local isOtherMap = v.mapName ~= currentMap
+
+	local card = vgui.Create("DPanel", parent)
+	card:SetTall(200)
+	card:Dock(TOP)
+	card:DockMargin(10, 10, 10, 0)
+	card:DockPadding(300, 10, 10, 10)
+
+	card.Paint = function(self, w, h)
+		draw.RoundedBox(6, 0, 0, w, h, CurrentTheme().panels.primary)
+
+		local mapMaterial = Beatrun_MapImageCache[v.mapName]
+
+		if mapMaterial and not mapMaterial:IsError() then
+			surface.SetMaterial(mapMaterial)
+			surface.SetDrawColor(255, 255, 255)
+			surface.DrawTexturedRect(10, 10, 280, h - 20)
+		else
+			draw.RoundedBox(4, 10, 10, 280, h - 20, CurrentTheme().panels.secondary)
+			draw.SimpleText("No image", "AEUIDefault", 150, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+	end
+
+	local name = vgui.Create("DLabel", card)
+	name:SetText(v.name or v.code)
+	name:SetFont("AEUILarge")
+	name:SetTextColor(CurrentTheme().text.primary)
+	name:Dock(TOP)
+	name:SizeToContentsY()
+
+	local mapBtn = vgui.Create("DButton", card)
+	mapBtn:SetText(v.code .. "  |  " .. v.mapName)
+	mapBtn:SetFont("AEUIDefault")
+	mapBtn:SetTextColor(CurrentTheme().text.muted)
+	mapBtn:SetContentAlignment(4)
+	mapBtn:SetCursor(v.workshopId and "hand" or "arrow")
+	mapBtn:SetPaintBackground(false)
+	mapBtn:Dock(TOP)
+	mapBtn:SizeToContentsY()
+
+	mapBtn.DoClick = function() if v.workshopId then gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" .. v.workshopId) end end
+	mapBtn.OnCursorEntered = function(self) if v.workshopId then self:SetTextColor(CurrentTheme().accent) end end
+	mapBtn.OnCursorExited = function(self) self:SetTextColor(CurrentTheme().text.muted) end
+
+	local authorBtn = vgui.Create("DButton", card)
+	authorBtn:SetText(language.GetPhrase("beatrun.coursesmenu.codepage.author"):format(v.uploadedBy.username or "?") .. "  |  " .. language.GetPhrase("beatrun.coursesmenu.uploadedat"):format(v.uploadedAt))
+	authorBtn:SetFont("AEUIDefault")
+	authorBtn:SetTextColor(CurrentTheme().text.muted)
+	authorBtn:SetContentAlignment(4)
+	authorBtn:SetCursor(v.uploadedBy.steamId and "hand" or "arrow")
+	authorBtn:SetPaintBackground(false)
+	authorBtn:Dock(TOP)
+	authorBtn:SizeToContentsY()
+
+	authorBtn.DoClick = function() if v.uploadedBy.steamId then gui.OpenURL("https://steamcommunity.com/profiles/" .. v.uploadedBy.steamId) end end
+	authorBtn.OnCursorEntered = function(self) if v.uploadedBy.steamId then self:SetTextColor(CurrentTheme().accent) end end
+	authorBtn.OnCursorExited = function(self) self:SetTextColor(CurrentTheme().text.muted) end
+
+	local stats = vgui.Create("DLabel", card)
+	stats:SetText(language.GetPhrase("beatrun.coursesmenu.codepage.stats"):format(v.downloadCount, v.runsCount, v.players, v.checkpoints or "?"))
+	stats:SetFont("AEUIDefault")
+	stats:SetTextColor(CurrentTheme().text.primary)
+	stats:Dock(TOP)
+	stats:DockMargin(0, 6, 0, 0)
+	stats:SizeToContentsY()
+
+	local record = vgui.Create("DLabel", card)
+	record:SetText(v.bestTime and language.GetPhrase("beatrun.coursesmenu.codepage.record"):format(string.FormattedTime(v.bestTime, "%02i:%02i:%02i")) or language.GetPhrase("beatrun.coursesmenu.codepage.norecord"))
+	record:SetFont("AEUIDefault")
+	record:SetTextColor(CurrentTheme().text.primary)
+	record:Dock(TOP)
+	record:SizeToContentsY()
+
+	if isOtherMap then
+		local warn = vgui.Create("DLabel", card)
+		warn:SetText(language.GetPhrase("beatrun.coursesmenu.codepage.wrongmap"):format(v.mapName, currentMap))
+		warn:SetFont("AEUIDefault")
+		warn:SetTextColor(CurrentTheme().buttons.red.n)
+		warn:Dock(TOP)
+		warn:DockMargin(0, 6, 0, 0)
+		warn:SizeToContentsY()
+	end
+
+	local buttons = vgui.Create("DPanel", card)
+	buttons:SetTall(32)
+	buttons:Dock(BOTTOM)
+	buttons.Paint = nil
+
+	local startBtn = vgui.Create("DButton", buttons)
+	startBtn:SetText("#beatrun.coursesmenu.onlinepage.start")
+	startBtn:SetFont("AEUIDefault")
+	startBtn:SetTextColor(CurrentTheme().buttons.primary.t)
+	startBtn:SetWide(160)
+	startBtn:Dock(LEFT)
+	startBtn:DockMargin(0, 0, 8, 0)
+
+	startBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "primary") end
+
+	startBtn.DoClick = function()
+		if isOtherMap then
+			OpenConfirmPopup("#beatrun.coursesmenu.onlinepage.start", "#beatrun.coursesmenu.codepage.wrongmap.confirm", function()
+				StartOnlineCourse(v)
+			end)
+
+			return
+		end
+
+		StartOnlineCourse(v)
+	end
+
+	local downloadBtn = vgui.Create("DButton", buttons)
+	downloadBtn:SetText("#beatrun.coursesmenu.onlinepage.download")
+	downloadBtn:SetFont("AEUIDefault")
+	downloadBtn:SetTextColor(CurrentTheme().buttons.green.t)
+	downloadBtn:SetWide(160)
+	downloadBtn:Dock(LEFT)
+	downloadBtn:DockMargin(0, 0, 8, 0)
+
+	downloadBtn.Paint = function(self, w, h)
+		if (self.checkedAt or 0) < CurTime() then
+			self.exists = IsCourseDownloaded(v)
+			self.checkedAt = CurTime() + 1
+		end
+
+		local exists = self.exists
+
+		self:SetText(exists and "#beatrun.coursesmenu.onlinepage.overwrite" or "#beatrun.coursesmenu.onlinepage.download")
+		ApplyButtonTheme(self, w, h, exists and "red" or "green")
+	end
+	downloadBtn.DoClick = function() DownloadOnlineCourse(v) end
+
+	local siteBtn = vgui.Create("DButton", buttons)
+	siteBtn:SetText("#beatrun.coursesmenu.codepage.website")
+	siteBtn:SetFont("AEUIDefault")
+	siteBtn:SetTextColor(CurrentTheme().buttons.primary.t)
+	siteBtn:SetWide(160)
+	siteBtn:Dock(LEFT)
+
+	siteBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "primary") end
+	siteBtn.DoClick = function() gui.OpenURL("https://" .. databaseDomain:GetString() .. "/course/" .. v.code) end
+end
+
+function BuildCodePage()
+	if not IsValid(CodePanel) then return end
+
+	CodePanel:Clear()
+
+	local top = vgui.Create("DPanel", CodePanel)
+	top:SetTall(40)
+	top:Dock(TOP)
+	top:DockPadding(10, 8, 10, 8)
+
+	top.Paint = function(self, w, h) draw.RoundedBox(0, 0, 0, w, h, CurrentTheme().header) end
+
+	local findBtn = vgui.Create("DButton", top)
+	findBtn:SetText("#beatrun.coursesmenu.codepage.find")
+	findBtn:SetFont("AEUISmall")
+	findBtn:SetTextColor(CurrentTheme().buttons.primary.t)
+	findBtn:SetWide(100)
+	findBtn:Dock(RIGHT)
+	findBtn:DockMargin(8, 0, 0, 0)
+	findBtn:SetEnabled(codeLookup.status ~= "loading")
+
+	findBtn.Paint = function(self, w, h) ApplyButtonTheme(self, w, h, "primary") end
+
+	local entry = vgui.Create("DTextEntry", top)
+	entry:SetPlaceholderText("#beatrun.coursesmenu.codepage.placeholder")
+	entry:SetFont("AEUIDefault")
+	entry:SetText(codeLookup.input)
+	entry:Dock(FILL)
+	entry:SetPaintBackground(false)
+	entry:SetUpdateOnType(false)
+
+	entry.Paint = function(self, w, h)
+		surface.SetDrawColor(CurrentTheme().text.muted)
+		surface.DrawOutlinedRect(0, 0, w, h, 1)
+
+		self:DrawTextEntryText(CurrentTheme().text.primary, CurrentTheme().text.muted, CurrentTheme().cursor)
+
+		if self:GetValue() == "" then draw.SimpleText(self:GetPlaceholderText(), self:GetFont(), 5, h / 2, CurrentTheme().text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
+
+		if self:HasFocus() then
+			surface.SetDrawColor(CurrentTheme().search:Unpack())
+			surface.DrawOutlinedRect(0, 0, w, h, 1)
+		end
+	end
+
+	entry.OnChange = function(self) codeLookup.input = self:GetValue() end
+	entry.OnEnter = function(self, value) LookupCourseByCode(value) end
+	findBtn.DoClick = function() LookupCourseByCode(entry:GetValue()) end
+
+	local status = codeLookup.status
+
+	if status == "idle" then
+		CodePageMessage(CodePanel, "#beatrun.coursesmenu.codepage.hint")
+		entry:RequestFocus()
+	elseif status == "invalid" then
+		CodePageMessage(CodePanel, "#beatrun.coursesmenu.codepage.invalid", CurrentTheme().buttons.red.n)
+		entry:RequestFocus()
+	elseif status == "loading" then
+		CodePageMessage(CodePanel, "#beatrun.coursesmenu.codepage.loading")
+	elseif status == "notfound" then
+		CodePageMessage(CodePanel, language.GetPhrase("beatrun.coursesmenu.codepage.notfound"):format(codeLookup.code), CurrentTheme().buttons.red.n)
+		entry:RequestFocus()
+	elseif status == "error" then
+		CodePageMessage(CodePanel, "#beatrun.coursesmenu.codepage.error", CurrentTheme().buttons.red.n)
+	elseif status == "found" and codeLookup.course then
+		BuildCodeCourseCard(CodePanel, codeLookup.course)
 	end
 end
 
@@ -1569,6 +1949,8 @@ function OpenDBMenu()
 
 		if string.match(img, "/folder_user") then
 			BuildLocalPage()
+		elseif string.match(img, "/magnifier") then
+			BuildCodePage()
 		elseif string.match(img, "/folder_database") then
 			ApplyCoursesFilter()
 			BuildOnlinePage()
@@ -1586,6 +1968,14 @@ function OpenDBMenu()
 	LocalPanel:SetBackgroundColor(CurrentTheme().bg)
 
 	Sheet:AddSheet("#beatrun.coursesmenu.localpage", LocalPanel, "icon16/folder_user.png")
+
+	-- Course by code page
+	CodePanel = vgui.Create("DPanel", Sheet)
+	CodePanel:Dock(FILL)
+	CodePanel:DockPadding(0, 0, 0, 0)
+	CodePanel:SetBackgroundColor(CurrentTheme().bg)
+
+	Sheet:AddSheet("#beatrun.coursesmenu.codepage", CodePanel, "icon16/magnifier.png")
 
 	-- Browse page
 	BrowsePanel = vgui.Create("DPanel", Sheet)
@@ -1680,7 +2070,7 @@ function OpenDBMenu()
 
 	Sheet:AddSheet("#beatrun.coursesmenu.settings", SettingsPanel, "icon16/cog.png")
 
-	-- NOTE: Add sheets (pages) before this (or they will not be themed!)
+	-- NOTE: Do not add sheets (pages) after this or they will not be themed!
 	Sheet.Paint = function(self, w, h) draw.RoundedBox(0, 0, 0, w, h, CurrentTheme().bg) end
 
 	for _, tab in pairs(Sheet.Items) do
