@@ -656,6 +656,27 @@ local function IsCursorOverUI()
 	return IsValid(hovered) and hovered ~= vgui.GetWorldPanel() and hovered ~= GetHUDPanel()
 end
 
+local largeWindowFrame, largeWindowOpen = -1, false
+
+local function IsLargeWindowOpen()
+	local frame = FrameNumber()
+	if frame == largeWindowFrame then return largeWindowOpen end
+
+	largeWindowFrame, largeWindowOpen = frame, false
+
+	local minArea = ScrW() * ScrH() * 0.2
+
+	for _, panel in ipairs(vgui.GetWorldPanel():GetChildren()) do
+		if panel ~= g_ContextMenu and panel:IsVisible() and panel:IsMouseInputEnabled() and panel:GetWide() * panel:GetTall() >= minArea then
+			largeWindowOpen = true
+
+			break
+		end
+	end
+
+	return largeWindowOpen
+end
+
 local function IsTyping()
 	local focus = vgui.GetKeyboardFocus()
 
@@ -681,5 +702,6 @@ BeatrunUI = {
 	MakeKeyHint = MakeKeyHint,
 	StyleCheckBox = StyleCheckBox,
 	IsCursorOverUI = IsCursorOverUI,
+	IsLargeWindowOpen = IsLargeWindowOpen,
 	IsTyping = IsTyping
 }

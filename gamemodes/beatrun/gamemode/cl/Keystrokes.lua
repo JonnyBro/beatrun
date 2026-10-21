@@ -66,7 +66,7 @@ local function FitFont(text, width)
 end
 
 local function ShowKeyStrokes()
-	if BuildMode then return end
+	if BuildMode or BeatrunUI.IsLargeWindowOpen() then return end
 	if not showKeystrokes:GetBool() or Beatrun_HUDHidden:GetInt() ~= 0 then return end
 
 	local S = BeatrunUI.S

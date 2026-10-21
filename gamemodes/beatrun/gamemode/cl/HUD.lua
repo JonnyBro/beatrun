@@ -123,6 +123,8 @@ end
 local hidealpha = 0
 
 local function BeatrunHUD()
+	if BeatrunUI.IsLargeWindowOpen() then return end
+
 	local ply = LocalPlayer()
 	local scrw = ScrW()
 	local scrh = ScrH()
@@ -333,6 +335,7 @@ local function sortleaderboard(a, b)
 end
 
 function BeatrunLeaderboard(forced)
+	if not forced and BeatrunUI.IsLargeWindowOpen() then return end
 	if not forced and Course_Name == "" and not GetGlobalBool("GM_INFECTION") and not GetGlobalBool("GM_DATATHEFT") and not GetGlobalBool("GM_DEATHMATCH") and not GetGlobalBool("GM_EVENTMODE") then return end
 
 	local isinfection = GetGlobalBool("GM_INFECTION")
@@ -505,6 +508,7 @@ local sgoffsetx = 0.75
 local sgoffsety = 0.75
 
 local function DrawSpeedGraph()
+	if BeatrunUI.IsLargeWindowOpen() then return end
 	if not speedrecord or not LocalPlayer().InReplay then return end
 
 	local offsetx = ScrW() * sgoffsetx

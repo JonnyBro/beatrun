@@ -218,6 +218,8 @@ local function StartCountdownHUD()
 end
 
 function CourseHUD()
+	if BeatrunUI.IsLargeWindowOpen() then return end
+
 	local ply = LocalPlayer()
 	local vp = ply:GetViewPunchAngles()
 	local vpx = vp.x
