@@ -160,6 +160,35 @@ local function ClosePopup()
 	if IsValid(PopupFrame) then PopupFrame:Close() end
 end
 
+local function GetBanReason(body)
+	local res = util.JSONToTable(body or "")
+	if not istable(res) or not istable(res.data) or not res.data.banned then return end
+
+	return tostring(res.data.reason or "?")
+end
+
+local function OpenDatabaseSite()
+	gui.OpenURL("https://" .. databaseDomain:GetString() .. "/profile")
+end
+
+local function ShowBannedPopup(reason)
+	local frame = CreatePopup("#beatrun.coursesmenu.banned.title", 520, 240)
+
+	MakePopupButtons(frame, {
+		{
+			text = "#beatrun.coursesmenu.banned.opensite",
+			style = "primary",
+			onClick = function()
+				OpenDatabaseSite()
+				ClosePopup()
+			end
+		},
+		{ text = "#beatrun.misc.ok", style = "secondary", onClick = ClosePopup }
+	})
+
+	MakePopupMessage(frame, L("beatrun.coursesmenu.banned.text"):format(reason))
+end
+
 local function WrapText(text, font, width)
 	surface.SetFont(font)
 
@@ -594,7 +623,14 @@ function UploadCourseFile(course, updateCode)
 		data = encoded
 	}, function(body, _, _, code)
 		if code ~= 200 then
-			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+			local banReason = GetBanReason(body)
+
+			if banReason then
+				ShowBannedPopup(banReason)
+			else
+				notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+			end
+
 			LogApiError(endpoint, code, body)
 
 			return
@@ -715,6 +751,15 @@ function Beatrun_SubmitCourseRecord(time)
 		time = tostring(time)
 	}, function(body, _, _, code)
 		if code == 404 then return end -- Course is not in the database
+
+		local banReason = GetBanReason(body)
+
+		if banReason then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.banned", NOTIFY_ERROR, 6)
+			print("> /api/courses/records\n" .. L("beatrun.coursesmenu.banned.text"):format(banReason))
+
+			return
+		end
 
 		local res = util.JSONToTable(body or "")
 
@@ -1491,6 +1536,16 @@ function BuildProfilePage()
 		if not res.data then return BuildProfileSignIn(body) end
 
 		BuildProfileCard(body, apiKey)
+
+		if istable(res.ban) then
+			local banned = MakeMessage(body, L("beatrun.coursesmenu.banned.text"):format(tostring(res.ban.reason or "?")), CurrentTheme().buttons.danger.t)
+			banned:DockMargin(0, 0, 0, S(6))
+
+			local openSite = MakeButton(body, "#beatrun.coursesmenu.banned.opensite", "primary")
+			openSite:Dock(TOP)
+			openSite:DockMargin(0, 0, 0, S(14))
+			openSite.DoClick = OpenDatabaseSite
+		end
 
 		MakeTitle(body, "#beatrun.coursesmenu.profilepage.mycourses")
 
