@@ -473,8 +473,9 @@ function OpenConfirmPopup(title, message, onConfirm, danger, height)
 			text = "#beatrun.misc.ok",
 			style = danger and "danger" or "primary",
 			onClick = function()
-				if onConfirm then onConfirm() end
 				ClosePopup()
+
+				if onConfirm then onConfirm() end
 			end
 		},
 		{
@@ -677,7 +678,9 @@ local function StartOnlineCourse(v)
 				style = "danger",
 				onClick = function()
 					FetchAndStartCourse(v.code)
+
 					ClosePopup()
+
 					if IsValid(Frame) then Frame:Close() end
 				end
 			}
@@ -689,6 +692,7 @@ local function StartOnlineCourse(v)
 	end
 
 	FetchAndStartCourse(v.code)
+
 	if IsValid(Frame) then Frame:Close() end
 end
 
@@ -1238,6 +1242,7 @@ local function SetOnlinePage(page)
 end
 
 local function BuildOnlineEntry(v)
+	local isOtherMap = v.mapName ~= currentMap
 	local previewW, _previewH = S(178), S(100)
 
 	local row = MakeRow(List, 120)
@@ -1280,7 +1285,14 @@ local function BuildOnlineEntry(v)
 
 	local startBtn = MakeButton(side, "#beatrun.coursesmenu.onlinepage.start", "primary")
 	startBtn:Dock(BOTTOM)
-	startBtn.DoClick = function() StartOnlineCourse(v) end
+	startBtn.DoClick = function()
+		if isOtherMap then
+			OpenConfirmPopup("#beatrun.coursesmenu.onlinepage.start", "#beatrun.coursesmenu.codepage.wrongmap.confirm", function() StartOnlineCourse(v) end)
+			return
+		end
+
+		StartOnlineCourse(v)
+	end
 
 	local name = MakeLabel(row, v.name, "BeatrunUILarge")
 	name:Dock(TOP)
@@ -1343,9 +1355,17 @@ local function BuildProfileCourses(scroll, myCourses)
 	end
 
 	for _, v in ipairs(myCourses) do
+		local isOtherMap = v.mapName ~= currentMap
 		local row = MakeRow(scroll, 64)
 
-		MakeRowButton(row, "#beatrun.coursesmenu.start", "primary", function() StartOnlineCourse(v) end)
+		MakeRowButton(row, "#beatrun.coursesmenu.start", "primary", function()
+			if isOtherMap then
+				OpenConfirmPopup("#beatrun.coursesmenu.onlinepage.start", "#beatrun.coursesmenu.codepage.wrongmap.confirm", function() StartOnlineCourse(v) end)
+				return
+			end
+
+			StartOnlineCourse(v)
+		end)
 
 		MakeRowButton(row, "#beatrun.coursesmenu.delete", "danger", function()
 			OpenConfirmPopup("#beatrun.coursesmenu.delete", "#beatrun.coursesmenu.delete.confirm", function()
