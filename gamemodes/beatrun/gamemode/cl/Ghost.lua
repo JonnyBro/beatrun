@@ -201,7 +201,7 @@ function StartGhostReplay()
 	hook.Add("CreateMove", "GhostReplay", GhostReplay)
 end
 
-concommand.Add("Beatrun_ToggleGhostRecord", function()
+concommand.Add("beatrun_toggleghostrecord", function()
 	if Course_Name ~= "" then
 		print("This command is only available in Freeplay")
 		return
@@ -218,7 +218,7 @@ concommand.Add("Beatrun_ToggleGhostRecord", function()
 	end
 end)
 
-concommand.Add("Beatrun_ToggleGhostPlay", function()
+concommand.Add("beatrun_toggleghostplay", function()
 	if Course_Name ~= "" then
 		print("This command is only available in Freeplay")
 		return

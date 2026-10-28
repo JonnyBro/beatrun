@@ -797,7 +797,7 @@ if SERVER then
 		net.Send(ply)
 	end
 
-	concommand.Add("Beatrun_BuildMode", function(ply, cmd, args)
+	concommand.Add("beatrun_buildmode", function(ply, cmd, args)
 		BuildMode_Toggle(ply)
 	end)
 

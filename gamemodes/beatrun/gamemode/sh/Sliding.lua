@@ -229,7 +229,6 @@ end
 local slidepunch = Angle(2.5, 0, -0.5)
 local trace_down = Vector(0, 0, 32)
 local trace_tbl = {}
-local loopmat_trace_tbl = {}
 
 local function SlideSurfaceSound(ply, pos)
 	trace_tbl.start = pos

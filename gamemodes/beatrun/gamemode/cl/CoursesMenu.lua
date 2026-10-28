@@ -261,26 +261,11 @@ local function OpenCourseSaveMenu()
 	local speedCheck = Check("#beatrun.coursesmenu.save.maxspeedlock")
 	speedCheck:SetValue(Course_Speed and Course_Speed > 0)
 
-	local slider = Add(vgui.Create("DNumSlider", frame), S(4))
-	slider:SetTall(S(26))
+	local slider = Add(UI.MakeSlider(frame), S(4))
 	slider:SetMin(325)
 	slider:SetMax(1000)
 	slider:SetDecimals(0)
 	slider:SetValue(Course_Speed and Course_Speed > 0 and Course_Speed or 325)
-	slider.Label:SetVisible(false)
-	slider.TextArea:SetFont("BeatrunUISmall")
-	slider.TextArea:SetTextColor(CurrentTheme().text.primary)
-	slider.TextArea:SetPaintBackground(false)
-
-	slider.Slider.Paint = function(self, w, h)
-		local theme = CurrentTheme()
-		draw.RoundedBox(S(theme.radius), 0, h / 2 - S(2), w, S(4), theme.panels.secondary)
-	end
-
-	slider.Slider.Knob.Paint = function(self, w, h)
-		local theme = CurrentTheme()
-		draw.RoundedBox(S(theme.radius), 0, 0, w, h, theme.accent)
-	end
 
 	local function UpdateSlider()
 		local on = speedCheck:GetChecked()
@@ -994,7 +979,7 @@ function BuildLocalPage()
 	buildBtn:DockMargin(0, 0, S(8), 0)
 	buildBtn:SetEnabled(isSuperAdmin)
 	buildBtn.DoClick = function()
-		LocalPlayer():ConCommand("Beatrun_BuildMode")
+		LocalPlayer():ConCommand("beatrun_buildmode")
 		if IsValid(Frame) then Frame:Close() end
 	end
 
@@ -1647,58 +1632,23 @@ function BuildSettingsPage()
 	-- Appearance
 	MakeTitle(body, "#beatrun.coursesmenu.settings")
 
+	local allSettings = MakeButton(body, "#beatrun.settings.open", "secondary", "BeatrunUI")
+	allSettings:Dock(TOP)
+	allSettings:DockMargin(0, 0, 0, S(20))
+	allSettings.DoClick = function()
+		if IsValid(Frame) then Frame:Close() end
+
+		OpenSettingsMenu()
+	end
+
 	MakeSettingLabel(body, "#beatrun.coursesmenu.settings.theme")
 
-	local themeSelect = vgui.Create("DComboBox", body)
-	themeSelect:SetFont("BeatrunUI")
-	themeSelect:SetTall(S(32))
+	local themeSelect = UI.MakeComboBox(body)
 	themeSelect:Dock(TOP)
 	themeSelect:DockMargin(0, 0, 0, S(20))
-	themeSelect:SetSortItems(false)
-	themeSelect:SetTextColor(CurrentTheme().text.primary)
-	themeSelect.DropButton:SetVisible(false)
 
 	for _, key in ipairs(THEME_ORDER) do
 		themeSelect:AddChoice(L("beatrun.coursesmenu.themes." .. key), key, key == string.lower(uiTheme:GetString()))
-	end
-
-	themeSelect.Paint = function(self, w, h)
-		local theme = CurrentTheme()
-
-		draw.RoundedBox(S(theme.radius), 0, 0, w, h, theme.panels.primary)
-		surface.SetDrawColor((self:IsHovered() or self:IsMenuOpen()) and theme.accent or theme.border)
-		surface.DrawOutlinedRect(0, 0, w, h, 1)
-		draw.SimpleText(self:IsMenuOpen() and "▴" or "▾", "AEUIDefault", w - S(14), h / 2, theme.text.muted, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	end
-
-	function themeSelect:OpenMenu()
-		DComboBox.OpenMenu(self)
-
-		if not IsValid(self.Menu) then return end
-
-		self.Menu.Paint = function(s, w, h)
-			local theme = CurrentTheme()
-
-			surface.SetDrawColor(theme.bg)
-			surface.DrawRect(0, 0, w, h)
-			surface.SetDrawColor(theme.border)
-			surface.DrawOutlinedRect(0, 0, w, h, 1)
-		end
-
-		for _, option in pairs(self.Menu:GetCanvas():GetChildren()) do
-			option:SetFont("BeatrunUI")
-			option:SetTall(S(30))
-			option.Paint = function(s, w, h)
-				local theme = CurrentTheme()
-
-				s:SetTextColor(s:IsHovered() and theme.accent or theme.text.primary)
-
-				if s:IsHovered() then
-					surface.SetDrawColor(theme.panels.secondary)
-					surface.DrawRect(0, 0, w, h)
-				end
-			end
-		end
 	end
 
 	function themeSelect:OnSelect(_, _, data)
@@ -1945,4 +1895,4 @@ function OpenDBMenu()
 	OpenCoursesMenu()
 end
 
-concommand.Add("Beatrun_CoursesMenu", OpenDBMenu)
+concommand.Add("beatrun_coursesmenu", OpenDBMenu)

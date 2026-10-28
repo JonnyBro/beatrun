@@ -82,9 +82,10 @@ end
 if (BEATRUN_DEBUG == nil) then
 	BEATRUN_DEBUG = false
 end
+
 initDebug() -- First time init
 
-concommand.Add("Beatrun_Debug", function(ply, cmd, args)
+concommand.Add("beatrun_debug", function(ply, cmd, args)
 	BEATRUN_DEBUG = tobool(args[1])
 
 	print("Beatrun Debug: " .. tostring(BEATRUN_DEBUG))

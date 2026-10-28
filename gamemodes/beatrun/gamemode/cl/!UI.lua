@@ -638,6 +638,77 @@ local function MakeTabBar(parent, height)
 	return bar
 end
 
+local function MakeComboBox(parent)
+	local combo = vgui.Create("DComboBox", parent)
+	combo:SetFont("BeatrunUI")
+	combo:SetTall(S(32))
+	combo:SetSortItems(false)
+	combo:SetTextColor(CurrentTheme().text.primary)
+	combo.DropButton:SetVisible(false)
+
+	combo.Paint = function(self, w, h)
+		local theme = CurrentTheme()
+
+		draw.RoundedBox(S(theme.radius), 0, 0, w, h, theme.panels.primary)
+		surface.SetDrawColor((self:IsHovered() or self:IsMenuOpen()) and theme.accent or theme.border)
+		surface.DrawOutlinedRect(0, 0, w, h, 1)
+		draw.SimpleText(self:IsMenuOpen() and "▴" or "▾", "AEUIDefault", w - S(14), h / 2, theme.text.muted, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
+	function combo:OpenMenu()
+		DComboBox.OpenMenu(self)
+
+		if not IsValid(self.Menu) then return end
+
+		self.Menu.Paint = function(_, w, h)
+			local theme = CurrentTheme()
+
+			surface.SetDrawColor(theme.bg)
+			surface.DrawRect(0, 0, w, h)
+			surface.SetDrawColor(theme.border)
+			surface.DrawOutlinedRect(0, 0, w, h, 1)
+		end
+
+		for _, option in pairs(self.Menu:GetCanvas():GetChildren()) do
+			option:SetFont("BeatrunUI")
+			option:SetTall(S(30))
+			option.Paint = function(s, w, h)
+				local theme = CurrentTheme()
+
+				s:SetTextColor(s:IsHovered() and theme.accent or theme.text.primary)
+
+				if s:IsHovered() then
+					surface.SetDrawColor(theme.panels.secondary)
+					surface.DrawRect(0, 0, w, h)
+				end
+			end
+		end
+	end
+
+	return combo
+end
+
+local function MakeSlider(parent)
+	local slider = vgui.Create("DNumSlider", parent)
+	slider:SetTall(S(26))
+	slider.Label:SetVisible(false)
+	slider.TextArea:SetFont("BeatrunUISmall")
+	slider.TextArea:SetTextColor(CurrentTheme().text.primary)
+	slider.TextArea:SetPaintBackground(false)
+
+	slider.Slider.Paint = function(_, w, h)
+		local theme = CurrentTheme()
+		draw.RoundedBox(S(theme.radius), 0, h / 2 - S(2), w, S(4), theme.panels.secondary)
+	end
+
+	slider.Slider.Knob.Paint = function(_, w, h)
+		local theme = CurrentTheme()
+		draw.RoundedBox(S(theme.radius), 0, 0, w, h, theme.accent)
+	end
+
+	return slider
+end
+
 local function MakeKeyHint(parent, keyText, text)
 	local hint = vgui.Create("DPanel", parent)
 	hint.keyText = string.upper(L(keyText))
@@ -720,6 +791,8 @@ BeatrunUI = {
 	MakeTitle = MakeTitle,
 	MakeTextEntry = MakeTextEntry,
 	MakeScroll = MakeScroll,
+	MakeComboBox = MakeComboBox,
+	MakeSlider = MakeSlider,
 	MakeTabBar = MakeTabBar,
 	MakeKeyHint = MakeKeyHint,
 	StyleCheckBox = StyleCheckBox,
