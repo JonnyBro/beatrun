@@ -1,8 +1,0 @@
-"Sprite"
-{
-	"$spriteorientation" "vp_parallel"
-	"$spriteorigin" "[ 0.50 0.50 ]"
-	"$basetexture" "circlesprite"
-	"$translucent" "1"
-	"$nocull" "1"
-}
