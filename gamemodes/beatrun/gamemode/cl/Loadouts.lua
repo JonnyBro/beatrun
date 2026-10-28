@@ -5,6 +5,7 @@ local UI = BeatrunUI
 
 local loadoutsFrame
 local blacklistFrame
+local weaponPicker
 local SelectedLoadout = 1
 
 local function RestoreScroll(scroll, y)
@@ -14,6 +15,12 @@ local function RestoreScroll(scroll, y)
 	vbar:SetScroll(y)
 
 	timer.Simple(0, function() if IsValid(vbar) then vbar:SetScroll(y) end end)
+end
+
+local function SpawnMenuIconPath(class)
+	local path = "entities/" .. class .. ".png"
+
+	return file.Exists("materials/" .. path, "GAME") and path or nil
 end
 
 local function MakeWeaponRow(scroll, wep, class)
@@ -31,9 +38,20 @@ local function MakeWeaponRow(scroll, wep, class)
 		UI.PaintPanel(w, h, (self:IsHovered() or self:IsChildHovered()) and theme.panels.secondary or theme.panels.primary)
 	end
 
-	local icon = vgui.Create("SpawnIcon", row)
-	icon:SetModel(wep and wep.WorldModel or "models/props_junk/watermelon01.mdl")
-	icon:SetTooltip(false)
+	local worldModel = wep and wep.WorldModel ~= "" and wep.WorldModel
+	local iconPath = not worldModel and SpawnMenuIconPath(class)
+	local icon
+
+	if iconPath then
+		icon = vgui.Create("DImage", row)
+		icon:SetMaterial(Material(iconPath, "smooth mips"))
+		icon:SetKeepAspect(true)
+	else
+		icon = vgui.Create("SpawnIcon", row)
+		icon:SetModel(worldModel or "models/props_junk/watermelon01.mdl")
+		icon:SetTooltip(false)
+	end
+
 	icon:SetMouseInputEnabled(false)
 	icon:SetWide(S(56))
 	icon:Dock(LEFT)
@@ -53,6 +71,130 @@ local function MakeWeaponText(row, wep, class)
 
 	local classLabel = UI.MakeLabel(info, class, "BeatrunUISmall", CurrentTheme().text.muted)
 	classLabel:Dock(TOP)
+end
+
+local function GetSelectableWeapons()
+	local result = {}
+
+	for class, data in pairs(list.Get("Weapon")) do
+		if BEATRUN_WEAPON_BLACKLIST[class] then continue end
+		if class == "runnerhands" then continue end
+
+		local name = language.GetPhrase(data.PrintName or class)
+
+		table.insert(result, {
+			class = class,
+			name = name,
+			category = data.Category or "Other",
+			search = string.lower(name .. " " .. class .. " " .. (data.Category or ""))
+		})
+	end
+
+	table.sort(result, function(a, b)
+		if a.category ~= b.category then return a.category < b.category end
+
+		return string.lower(a.name) < string.lower(b.name)
+	end)
+
+	return result
+end
+
+local function WeaponIcon(entry)
+	if entry.icon == nil then
+		local path = SpawnMenuIconPath(entry.class)
+
+		entry.icon = path and Material(path, "smooth mips") or false
+	end
+
+	return entry.icon or nil
+end
+
+local function OpenWeaponPicker(getLoadout, onAdd)
+	if IsValid(weaponPicker) then weaponPicker:Remove() end
+
+	local S = UI.S
+
+	weaponPicker = UI.MakeWindow("#beatrun.loadoutseditor.addweapon", math.min(ScrW() * 0.5, S(720)), math.min(ScrH() * 0.75, S(760)))
+
+	local search = UI.MakeTextEntry(weaponPicker, "#beatrun.loadoutseditor.search")
+	search:Dock(TOP)
+	search:DockMargin(0, 0, 0, S(10))
+	search:SetUpdateOnType(true)
+
+	local scroll = UI.MakeScroll(weaponPicker)
+	local all = GetSelectableWeapons()
+
+	local function Build()
+		scroll:Clear()
+
+		local query = string.lower(string.Trim(search:GetValue()))
+		local loadout = getLoadout() or {}
+		local lastCategory
+
+		for _, entry in ipairs(all) do
+			if query ~= "" and not string.find(entry.search, query, 1, true) then continue end
+
+			if entry.category ~= lastCategory then
+				local header = UI.MakeTitle(scroll, entry.category)
+				header:DockMargin(0, lastCategory and S(12) or 0, 0, S(6))
+
+				lastCategory = entry.category
+			end
+
+			local row = scroll:Add("DButton")
+			row:SetText("")
+			row:SetTall(S(44))
+			row:Dock(TOP)
+			row:DockMargin(0, 0, S(10), S(4))
+			row:SetCursor("hand")
+
+			row.Paint = function(self, w, h)
+				local theme = CurrentTheme()
+				local added = table.HasValue(loadout, entry.class)
+				local icon = WeaponIcon(entry)
+				local x = S(8)
+
+				UI.PaintPanel(w, h, self:IsHovered() and not added and theme.panels.secondary or theme.panels.primary)
+
+				if icon then
+					surface.SetDrawColor(255, 255, 255, added and 90 or 255)
+					surface.SetMaterial(icon)
+					surface.DrawTexturedRect(x, S(4), h - S(8), h - S(8))
+				end
+
+				x = x + h + S(2)
+
+				draw.SimpleText(entry.name, "BeatrunUI", x, h / 2, added and theme.text.muted or theme.text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+				draw.SimpleText(entry.class, "BeatrunUISmall", x, h / 2, theme.text.muted, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+
+				if added then
+					draw.SimpleText(string.upper(language.GetPhrase("beatrun.loadoutseditor.added")), "BeatrunUISmall", w - S(12), h / 2, theme.text.muted, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				end
+			end
+
+			row.DoClick = function()
+				if table.HasValue(loadout, entry.class) then return end
+
+				onAdd(entry.class)
+				surface.PlaySound("buttons/button15.wav")
+			end
+		end
+
+		if not lastCategory then
+			local empty = UI.MakeLabel(scroll, "#beatrun.loadoutseditor.noweapons", "BeatrunUI", CurrentTheme().text.muted)
+			empty:Dock(TOP)
+		end
+	end
+
+	search.OnValueChange = function()
+		timer.Create("Beatrun_WeaponPickerSearch", 0.15, 1, function()
+			if IsValid(scroll) then Build() end
+		end)
+	end
+
+	Build()
+
+	search:RequestFocus()
 end
 
 local function OpenLoadoutsMenu()
@@ -203,28 +345,19 @@ local function OpenLoadoutsMenu()
 	addWeapon:Dock(LEFT)
 
 	addWeapon.DoClick = function()
-		local menu = DermaMenu()
-		local weps = GetWeaponsList()
+		if not istable(BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout]) then return end
 
-		local loadout = BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout]
-		if not istable(loadout) then return end
+		OpenWeaponPicker(function() return BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout] end, function(class)
+			local loadout = BEATRUN_GAMEMODES_LOADOUTS[SelectedLoadout]
+			if not istable(loadout) then return end
 
-		table.sort(weps, function(a, b) return a.ClassName < b.ClassName end)
+			table.insert(loadout, class)
 
-		for _, wep in ipairs(weps) do
-			if string.find(wep.ClassName, "base") then continue end
-			if BEATRUN_WEAPON_BLACKLIST[wep.ClassName] then continue end
-			if table.HasValue(loadout, wep.ClassName) then continue end
-
-			menu:AddOption(string.format("%s (%s)", wep.PrintName, wep.ClassName), function()
-				table.insert(loadout, wep.ClassName)
-
-				BuildWeapons(true)
-			end)
-		end
-
-		menu:Open()
+			BuildWeapons(true)
+		end)
 	end
+
+	loadoutsFrame.OnRemove = function() if IsValid(weaponPicker) then weaponPicker:Remove() end end
 
 	loadoutsFrame.Refresh = function() BuildLoadouts(true) end
 
@@ -263,6 +396,7 @@ local function OpenBlacklistMenu()
 	for _, wep in ipairs(allWeps) do
 		if not wep.ClassName then continue end
 		if string.find(wep.ClassName, "base") then continue end
+		if wep.ClassName == "runnerhands" then continue end
 
 		local category = wep.Category or "Other"
 
