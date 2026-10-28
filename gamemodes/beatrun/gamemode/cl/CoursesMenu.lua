@@ -289,7 +289,6 @@ local function OpenCourseSaveMenu()
 	end
 
 	local loadedFile = Course_Name ~= "" and localCourseFile and localNames[localCourseFile] and localCourseFile or nil
-	local oldFile, sameName
 
 	local function FindOldFile()
 		local name = string.lower(string.Trim(entry:GetValue()))
@@ -305,13 +304,6 @@ local function OpenCourseSaveMenu()
 
 		return loadedFile, false
 	end
-
-	local localSection = Add(MakeLabel(frame, "// " .. string.upper(L("#beatrun.coursesmenu.save.localfile")), "BeatrunUISmall", CurrentTheme().text.muted), S(14))
-	local sameNameWarning = Text("#beatrun.coursesmenu.save.samename", CurrentTheme().accent, S(2))
-	local replaceCheck = Check("")
-	replaceCheck:SetValue(true)
-
-	local replaceWarning = Text("#beatrun.coursesmenu.save.replacewarning", CurrentTheme().text.muted, S(6))
 
 	Section("#beatrun.coursesmenu.save.database")
 
@@ -340,22 +332,8 @@ local function OpenCourseSaveMenu()
 
 		for _, panel in ipairs(updateOnly) do panel:SetVisible(updating) end
 
-		oldFile, sameName = FindOldFile()
-
-		localSection:SetVisible(oldFile ~= nil)
-		replaceCheck:SetVisible(oldFile ~= nil)
-		replaceCheck:SetText(L("beatrun.coursesmenu.save.replace"):format(oldFile or ""))
-
-		for _, panel in ipairs(sameNameWarning) do panel:SetVisible(oldFile ~= nil and sameName) end
-		for _, panel in ipairs(replaceWarning) do panel:SetVisible(oldFile ~= nil and replaceCheck:GetChecked()) end
-
 		Relayout()
 	end
-
-	replaceCheck.OnChange = UpdateDatabaseOptions
-
-	entry:SetUpdateOnType(true)
-	entry.OnValueChange = UpdateDatabaseOptions
 
 	uploadCheck.OnChange = function(_, value)
 		if value then updateCheck:SetChecked(false) end
@@ -369,6 +347,46 @@ local function OpenCourseSaveMenu()
 		UpdateDatabaseOptions()
 	end
 
+	local function Finish(name, speed, updateCode, upload, replaceFile)
+		local saved = SaveCourse(name, speed)
+		if not saved then return end
+
+		local path = localDir .. saved .. ".txt"
+
+		notification.AddLegacy(L("beatrun.coursesmenu.notification.save.success"):format(path), NOTIFY_GENERIC, 6)
+
+		if replaceFile and replaceFile ~= saved .. ".txt" then file.Delete(localDir .. replaceFile, "DATA") end
+
+		localCourseFile = saved .. ".txt"
+
+		if IsValid(LocalPanel) then BuildLocalPage() end
+
+		if updateCode then
+			OpenConfirmPopup("#beatrun.coursesmenu.save.updateconfirm.title", L("beatrun.coursesmenu.save.updateconfirm"):format(updateCode), function() UploadCourseFile(path, updateCode) end, true, 220)
+		elseif upload then
+			UploadCourseFile(path)
+		end
+	end
+
+	local function AskReplace(oldFile, sameName, onChoice)
+		local ask = MakeWindow("#beatrun.coursesmenu.save.exists.title", S(520), S(230))
+
+		local function Choose(replace)
+			ask:Remove()
+			onChoice(replace)
+		end
+
+		MakePopupButtons(ask, {
+			{ text = "#beatrun.coursesmenu.save.exists.replace", style = "danger", onClick = function() Choose(true) end },
+			{ text = "#beatrun.coursesmenu.save.exists.keep", style = "secondary", onClick = function() Choose(false) end },
+			{ text = "#beatrun.misc.cancel", style = "secondary", onClick = function() ask:Remove() end }
+		})
+
+		local message = sameName and L("beatrun.coursesmenu.save.exists.samename"):format(string.Trim(entry:GetValue()), oldFile) or L("beatrun.coursesmenu.save.exists.loaded"):format(oldFile)
+
+		MakePopupMessage(ask, message)
+	end
+
 	local function Save()
 		local name = string.Trim(entry:GetValue())
 		if name == "" then return entry:RequestFocus() end
@@ -377,45 +395,19 @@ local function OpenCourseSaveMenu()
 		if updateCode == "" then return codeEntry:RequestFocus() end
 
 		local speed = speedCheck:GetChecked() and math.floor(slider:GetValue()) or nil
-		local saved = SaveCourse(name, speed)
+		local upload = hasKey and uploadCheck:GetChecked()
+		local oldFile, sameName = FindOldFile()
 
-		ClosePopup()
+		if not oldFile then
+			ClosePopup()
 
-		if not saved then return end
-
-		local path = "beatrun/courses/" .. currentMap .. "/" .. saved .. ".txt"
-
-		notification.AddLegacy(L("beatrun.coursesmenu.notification.save.success"):format(path), NOTIFY_GENERIC, 6)
-
-		if IsValid(LocalPanel) then BuildLocalPage() end
-
-		local replace = oldFile and replaceCheck:GetChecked() and oldFile ~= saved .. ".txt"
-		local messages = {}
-
-		if replace then table.insert(messages, L("beatrun.coursesmenu.save.replaceconfirm"):format(oldFile)) end
-		if updateCode then table.insert(messages, L("beatrun.coursesmenu.save.updateconfirm"):format(updateCode)) end
-
-		if #messages == 0 then
-			if hasKey and uploadCheck:GetChecked() then UploadCourseFile(path) end
-
-			return
+			return Finish(name, speed, updateCode, upload)
 		end
 
-		local title = updateCode and "#beatrun.coursesmenu.save.updateconfirm.title" or "#beatrun.coursesmenu.save.replaceconfirm.title"
-
-		OpenConfirmPopup(title, table.concat(messages, "\n\n"), function()
-			if replace and file.Delete(localDir .. oldFile, "DATA") ~= false then
-				localCourseFile = saved .. ".txt"
-
-				if IsValid(LocalPanel) then BuildLocalPage() end
-			end
-
-			if updateCode then
-				UploadCourseFile(path, updateCode)
-			elseif hasKey and uploadCheck:GetChecked() then
-				UploadCourseFile(path)
-			end
-		end, true, #messages > 1 and 320 or 220)
+		AskReplace(oldFile, sameName, function(replace)
+			ClosePopup()
+			Finish(name, speed, updateCode, upload, replace and oldFile)
+		end)
 	end
 
 	entry.OnEnter = Save
