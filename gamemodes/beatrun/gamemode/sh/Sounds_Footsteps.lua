@@ -583,7 +583,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land1.wav", "mirrorsedge/Footsteps/ME_Footsteps_Metal_Crane_Land2.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land3.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land4.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land5.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land6.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land7.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land8.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land9.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land10.wav" }
+	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land1.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land2.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land3.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land4.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land5.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land6.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land7.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land8.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land9.wav", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land10.wav" }
 })
 
 sound.Add({
