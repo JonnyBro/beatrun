@@ -17,34 +17,56 @@ function ENT:SetupDataTables()
 end
 
 local minb, maxb = Vector(-75, -75, 0), Vector(75, 75, 100)
+local handlemin, handlemax = Vector(-8, -8, 0), Vector(8, 8, 16)
 
 function ENT:Initialize()
 	self:SetModel(self.Model)
 	self:DrawShadow(false)
-	self:SetMoveType(MOVETYPE_NONE)
-	self:SetSolid(SOLID_BBOX)
-	self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
-	self:SetCollisionBounds(minb, maxb)
 
-	if CLIENT then
+	if SERVER then
+		self:PhysicsInitBox(handlemin, handlemax)
+		self:SetMoveType(MOVETYPE_NONE)
+
+		local phys = self:GetPhysicsObject()
+		if IsValid(phys) then phys:EnableMotion(false) end
+
+		self.Inside = {}
+	else
 		self:SetRenderBounds(minb, maxb)
 		self.offset = 0
-	else
-		self:SetTrigger(true)
 	end
 
-	self:SetPos(self:GetPos() + Vector(-0, -0, 0))
+	self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
 end
 
-function ENT:StartTouch(ent)
-	if ent:IsPlayer() and ent:GetNW2Entity("DataBank") == self and ent:GetNW2Int("DataCubes", 0) > 0 then
-		ent:SetNW2Int("DataBanked", ent:GetNW2Int("DataBanked", 0) + math.min(ent:GetNW2Int("DataCubes"), 5))
-		ent:SetNW2Int("DataCubes", math.max(ent:GetNW2Int("DataCubes") - 5, 0))
+function ENT:Deposit(ply)
+	if ply:GetNW2Entity("DataBank") ~= self or ply:GetNW2Int("DataCubes", 0) <= 0 then return end
 
-		ent:DataTheft_Bank()
+	ply:SetNW2Int("DataBanked", ply:GetNW2Int("DataBanked", 0) + math.min(ply:GetNW2Int("DataCubes"), 5))
+	ply:SetNW2Int("DataCubes", math.max(ply:GetNW2Int("DataCubes") - 5, 0))
 
-		self:EmitSound("mirrorsedge/ui/ME_UI_hud_select.ogg", 60, 100 + math.random(-10, 5))
+	ply:DataTheft_Bank()
+
+	self:EmitSound("mirrorsedge/ui/ME_UI_hud_select.ogg", 60, 100 + math.random(-10, 5))
+end
+
+function ENT:Think()
+	if CLIENT then return end
+
+	local pos = self:GetPos()
+	local zmin, zmax = pos + minb, pos + maxb
+
+	for _, ply in player.Iterator() do
+		local inside = ply:Alive() and ply:GetPos():WithinAABox(zmin, zmax)
+
+		if inside and not self.Inside[ply] then self:Deposit(ply) end
+
+		self.Inside[ply] = inside or nil
 	end
+
+	self:NextThink(CurTime() + 0.1)
+
+	return true
 end
 
 function ENT:UpdateTransmitState()
@@ -62,7 +84,16 @@ local red = Color(200, 200, 200, 200)
 local circlepos = Vector()
 local circleup = Vector(0, 0, 25)
 
+local toolweapons = {
+	gmod_tool = true,
+	weapon_physgun = true
+}
+
 function ENT:DrawTranslucent()
+	local wep = LocalPlayer():GetActiveWeapon()
+
+	if IsValid(wep) and toolweapons[wep:GetClass()] then render.DrawWireframeBox(self:GetPos(), self:GetAngles(), handlemin, handlemax, color_white, true) end
+
 	local db = LocalPlayer():GetNW2Entity("DataBank")
 
 	if IsValid(db) and db == self then
