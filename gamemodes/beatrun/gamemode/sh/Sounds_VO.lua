@@ -1,4 +1,4 @@
-local FaithVO = CreateConVar("Beatrun_FaithVO", 0, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY })
+if CLIENT then CreateClientConVar("Beatrun_FaithVO", "0", true, true, "", 0, 1) end
 local meta = FindMetaTable("Player")
 
 sound.Add({
@@ -128,7 +128,7 @@ sound.Add({
 })
 
 function meta:FaithVO(vo)
-	if FaithVO:GetBool() then
+	if self:GetInfoNum("Beatrun_FaithVO", 0) >= 1 then
 		if CLIENT then
 			nextbreath = CurTime() + 1
 		elseif game.SinglePlayer() then
