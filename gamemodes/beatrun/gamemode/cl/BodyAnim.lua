@@ -14,6 +14,29 @@ timer.Simple(0.05, function()
 	if IsValid(BodyAnimMDLarm) then BodyAnimMDLarm:SetModelScale(modelscale, 0) end
 end)
 
+-- Hair, hats and other bones parented to the head aren't on the animation rig, so the whole head subtree is hidden.
+-- Has to be reapplied after anything that rescales the body
+function BodyAnimHideHead()
+	if not IsValid(BodyAnimMDL) then return end
+
+	local head = BodyAnimMDL:LookupBone("ValveBiped.Bip01_Head1")
+	if not head then return end
+
+	for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
+		local bone = i
+
+		while bone and bone >= 0 do
+			if bone == head then
+				BodyAnimMDL:ManipulateBoneScale(i, vector_origin)
+
+				break
+			end
+
+			bone = BodyAnimMDL:GetBoneParent(bone)
+		end
+	end
+end
+
 local function ApplyBodyScale()
 	if not IsValid(BodyAnimMDL) then return end
 
@@ -30,6 +53,8 @@ local function ApplyBodyScale()
 		local bonename = BodyAnimMDL:GetBoneName(i)
 		if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, bodyscalevec) end
 	end
+
+	BodyAnimHideHead()
 
 	-- scale arm model (if exists)
 	if IsValid(BodyAnimMDLarm) then
@@ -49,6 +74,8 @@ cvars.AddChangeCallback("Beatrun_BodyScale", function(_, _, value_new)
 		local bonename = BodyAnimMDL:GetBoneName(i)
 		if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, scalevec) end
 	end
+
+	BodyAnimHideHead()
 end, "BeatrunBodyScaleUpdate")
 
 cvars.AddChangeCallback("Beatrun_ArmBodyScale", function(_, _, value_new)
@@ -121,6 +148,7 @@ camjoint = "eyes"
 
 BodyAnimCrouchLerp = 1
 BodyAnimCrouchLerpZ = 0
+BodyAnimFootDrop = 0
 BodyAnimLimitEase = false
 
 CamShake = false
@@ -511,9 +539,7 @@ function StartBodyAnim(animtable)
 		end
 	end
 
-	if BodyAnimMDL:LookupBone("ValveBiped.Bip01_Head1") ~= nil and not ply:ShouldDrawLocalPlayer() then
-		BodyAnimMDL:ManipulateBoneScale(BodyAnimMDL:LookupBone("ValveBiped.Bip01_Head1"), Vector(0, 0, 0))
-	end
+	BodyAnimHideHead()
 
 	if not showvm then
 		ply:DrawViewModel(false)
@@ -538,6 +564,8 @@ function StartBodyAnim(animtable)
 			local bonename = BodyAnimMDL:GetBoneName(i)
 			if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, bodyvec) end
 		end
+
+		BodyAnimHideHead()
 
 		if IsValid(BodyAnimMDLarm) then
 			for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
@@ -599,7 +627,6 @@ local lasteyeang = Angle()
 
 local calcviewrunning = false
 
-local manip_headBone = Vector(-1000, 0, 0)
 
 function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 	if calcviewrunning then return end
@@ -661,6 +688,8 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 					end
 				end
 
+				pos.z = pos.z - BodyAnimFootDrop
+
 				if BodyAnimPosEaseLerp < 1 then
 					local easedpos = LerpVector(BodyAnimPosEaseLerp, BodyAnimPosEase, pos)
 					BodyAnimPosEaseLerp = math.Approach(BodyAnimPosEaseLerp, 1, FrameTime() * 5)
@@ -692,9 +721,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				lerpchangeatt = 0
 			end
 
-			local head = BodyAnim:LookupBone("ValveBiped.Bip01_Head1")
-			if head then BodyAnim:ManipulateBonePosition(head, vector_origin) end
-
 			attachId = BodyAnim:LookupAttachment(camjoint)
 			attach = not BodyAnim:IsMarkedForDeletion() and BodyAnim:GetAttachment(attachId) or attach --IsMarkedForDeletion is here to fix a bug with the roll camera
 
@@ -704,10 +730,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				lastattdata = BodyAnim:GetAttachment(attachId) or attach
 				lerpedpos = LerpVector(lerpchangeatt, lastattdata.Pos, attach.Pos)
 				lerpchangeatt = math.Approach(lerpchangeatt, 1, FrameTime() * 5)
-			end
-
-			if not ShouldDrawPly then
-				if head then BodyAnim:ManipulateBonePosition(head, manip_headBone) end
 			end
 
 			BodyAnim:SetAngles(oldang)

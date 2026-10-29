@@ -477,7 +477,7 @@ local function ApplyBodygroups(src, dst)
 	end
 end
 
-hook.Add("Tick", "Beatrun_InstantModelUpdate", function() --TODO: properly optimzize ts
+hook.Add("Tick", "Beatrun_InstantModelUpdate", function()
 	if not IsValid(BodyAnim) then return end
 	if not IsValid(BodyAnimMDL) then return end
 
@@ -553,6 +553,8 @@ hook.Add("Tick", "Beatrun_InstantModelUpdate", function() --TODO: properly optim
 			BodyAnimMDL:ManipulateBoneScale(i, av)
 		end
 	end
+
+	BodyAnimHideHead()
 
 	local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
 	local aav = Vector(as, as, as)
