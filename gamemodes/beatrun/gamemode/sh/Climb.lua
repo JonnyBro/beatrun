@@ -298,8 +298,14 @@ local function ClimbingThink(ply, mv, cmd)
 
 				trout = ply.ClimbingTraceSafetyOut
 
+				local mins, maxs = ply:GetHull()
+
+				mins.z = maxs.z * 0.25
+
 				tr.start = mv:GetOrigin() + dir - wallang:Forward() * 0.533
 				tr.endpos = tr.start
+				tr.mins = mins
+				tr.maxs = maxs
 
 				util.TraceHull(tr)
 
@@ -620,6 +626,8 @@ local function ClimbingCheck(ply, mv, cmd)
 	local __mins, __maxs = ply:GetHull()
 	tr.start = mv:GetOrigin() + wallang:Forward() * 20 + vector_up * __maxs.z + vector_up * 5
 	tr.endpos = tr.start
+	tr.mins = vector_origin
+	tr.maxs = vector_origin
 
 	util.TraceHull(tr)
 
