@@ -59,7 +59,7 @@ hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function()
 
 	local ply = LocalPlayer()
 	local inp = color ~= 1
-	local noclipping = ply:GetMoveType() == MOVETYPE_NOCLIP and not BuildMode and ply:GetMantle() == 0 and ply:GetClimbing() == 0 and not IsValid(ply:GetLadder()) and not ply:InVehicle()
+	local noclipping = not disableColorModify:GetBool() and ply:GetMoveType() == MOVETYPE_NOCLIP and not BuildMode and ply:GetMantle() == 0 and ply:GetClimbing() == 0 and not IsValid(ply:GetLadder()) and not ply:InVehicle()
 
 	if noclipping or inp then
 		tab["$pp_colour_colour"] = color
@@ -156,7 +156,7 @@ local function BeatrunHUD()
 
 	if shoulddraw == false then return end
 
-	local vp = ply:GetViewPunchAngles()
+	local vp = ply:GetSmoothViewPunchAngles()
 
 	if not sway:GetBool() then
 		vp.x = 0
@@ -344,7 +344,7 @@ function BeatrunLeaderboard(forced)
 	local iseventmode = GetGlobalBool("GM_EVENTMODE")
 
 	local ply = LocalPlayer()
-	local vp = ply:GetViewPunchAngles()
+	local vp = ply:GetSmoothViewPunchAngles()
 	local scrh = ScrH()
 
 	if not sway:GetBool() then

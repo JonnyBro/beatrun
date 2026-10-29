@@ -221,7 +221,7 @@ function CourseHUD()
 	if BeatrunUI.IsLargeWindowOpen() then return end
 
 	local ply = LocalPlayer()
-	local vp = ply:GetViewPunchAngles()
+	local vp = ply:GetSmoothViewPunchAngles()
 	local vpx = vp.x
 	local vpz = vp.z
 	local incourse = Course_Name ~= ""

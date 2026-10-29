@@ -791,7 +791,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 			if not IsValidBa and endlerp < 1 then
 				endlerp = math.Approach(endlerp, 1, RealFrameTime() * 6)
 				attach.Pos = LerpVector(endlerp, attach.Pos, ply:EyePos())
-				attach.Ang = LerpAngle(endlerp * 2, attach.Ang, ply:EyeAngles() + ply:GetViewPunchAngles() + ply:GetCLViewPunchAngles())
+				attach.Ang = LerpAngle(endlerp * 2, attach.Ang, ply:EyeAngles() + ply:GetSmoothViewPunchAngles() + ply:GetCLViewPunchAngles())
 
 				if IsValid(vm) then vm:SetNoDraw(false) end
 			elseif not IsValidBa and endlerp == 1 then
@@ -822,7 +822,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 
 				ply:SetNoDraw(false)
 
-				view.angles:Add(ply:GetViewPunchAngles() + ply:GetCLViewPunchAngles())
+				view.angles:Add(ply:GetSmoothViewPunchAngles() + ply:GetCLViewPunchAngles())
 
 				hook.Run("BodyAnimCalcView", view)
 

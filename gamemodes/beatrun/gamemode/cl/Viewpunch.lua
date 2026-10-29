@@ -73,7 +73,7 @@ local function CLViewPunchCalc(ply, pos, ang)
 
 	local stabilize = viewbob_stabilized:GetBool() and 1 or -1
 	local vel = ply:GetVelocity():Length()
-	local punchang = ply:GetViewPunchAngles() + (ply.ViewPunchAngle or angle_zero)
+	local punchang = ply:GetSmoothViewPunchAngles() + (ply.ViewPunchAngle or angle_zero)
 
 	if ply:OnGround() and not ArmInterrupting(ply.BAC) and not ply:Crouching() and not ply:GetRolling() and ply:KeyDown(IN_FORWARD) and vel > 155 then
 		local offset = Vector(0, -1, 0)
@@ -119,7 +119,7 @@ local function CLViewPunchCalc(ply, pos, ang)
 
 	runangmul = math.Approach(runangmul, grounded and 0.5 or 0, FrameTime() * (grounded and 5 or 15))
 
-	ang:Sub(ply:GetViewPunchAngles() * math.abs(runfwd - 0.75) * runangmul)
+	ang:Sub(ply:GetSmoothViewPunchAngles() * math.abs(runfwd - 0.75) * runangmul)
 
 	ang.z = ang.z - PunchPos.y * 0.15 * math.Clamp(-(runfwd - 1) * 1.25, 0, 1.25)
 	ang.x = ang.x + punchlocal.z * 0.1 * math.Clamp(runfwd * 1.25 - 0.125, 0, 1.25)
@@ -140,4 +140,24 @@ end
 
 function meta:GetCLViewPunchAngles()
 	return self.ViewPunchAngle
+end
+
+local smoothpunchfrom = Angle()
+local smoothpunchto = Angle()
+local smoothpunchtime = 0
+
+-- The engine view punch only changes once per tick (in singleplayer it even comes from the server),
+-- so at higher framerates it moves the camera in steps. This eases from what was shown to each new value over one tick
+function meta:GetSmoothViewPunchAngles()
+	local raw = self:GetViewPunchAngles()
+	local frac = math.min((RealTime() - smoothpunchtime) / engine.TickInterval(), 1)
+
+	if raw ~= smoothpunchto then
+		smoothpunchfrom:Set(LerpAngle(frac, smoothpunchfrom, smoothpunchto))
+		smoothpunchto:Set(raw)
+		smoothpunchtime = RealTime()
+		frac = 0
+	end
+
+	return LerpAngle(frac, smoothpunchfrom, smoothpunchto)
 end
