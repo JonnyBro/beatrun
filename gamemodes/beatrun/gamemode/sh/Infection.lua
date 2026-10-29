@@ -85,7 +85,7 @@ if SERVER then
 		cachedhumancount = humancount
 
 		if humancount < 1 then
-			victim:EmitSound("blackout_hit_0" .. math.random(1, 3) .. ".wav")
+			victim:EmitSound("blackout_hit_0" .. math.random(1, 3) .. ".ogg")
 
 			net.Start("Infection_End")
 				net.WriteFloat(CurTime())
@@ -95,7 +95,7 @@ if SERVER then
 
 			timer.Simple(15, function() if ended and GetGlobalBool("GM_INFECTION") then Beatrun_StartInfection() end end)
 		else
-			victim:EmitSound("player_damage_tonal_hit_0" .. math.random(1, 6) .. ".wav")
+			victim:EmitSound("player_damage_tonal_hit_0" .. math.random(1, 6) .. ".ogg")
 		end
 	end
 
@@ -441,7 +441,7 @@ if CLIENT then
 			if survivors == "" then
 				survivors = language.GetPhrase("beatrun.infection.nosurvivors")
 
-				LocalPlayer():EmitSound("death.wav")
+				LocalPlayer():EmitSound("death.ogg")
 			end
 
 			chat.AddText(chatcolor, language.GetPhrase("beatrun.infection.end"):format(survivors, _time))

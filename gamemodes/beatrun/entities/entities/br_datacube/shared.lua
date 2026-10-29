@@ -36,7 +36,7 @@ function ENT:StartTouch(ent)
 	if ent:IsPlayer() then
 		ent:SetNW2Int("DataCubes", ent:GetNW2Int("DataCubes", 0) + 1)
 
-		self:EmitSound("A_TT_Stars.wav", 75, 100 + math.random(-10, 5))
+		self:EmitSound("A_TT_Stars.ogg", 75, 100 + math.random(-10, 5))
 		self:Remove()
 	end
 end

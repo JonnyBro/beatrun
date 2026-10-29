@@ -4,7 +4,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_01.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_02.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_03.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_04.wav" }
+	sound = { "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_01.ogg", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_02.ogg", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_03.ogg", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepSoft_04.ogg" }
 })
 
 sound.Add({
@@ -13,7 +13,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Concrete/ConcreteHandStepHard_01.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepHard_02.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepHard_03.wav" }
+	sound = { "mirrorsedge/Handsteps/Concrete/ConcreteHandStepHard_01.ogg", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepHard_02.ogg", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepHard_03.ogg" }
 })
 
 sound.Add({
@@ -31,7 +31,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_01.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_02.wav", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_03.wav" }
+	sound = { "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_01.ogg", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_02.ogg", "mirrorsedge/Handsteps/Concrete/ConcreteHandStepFastRelease_03.ogg" }
 })
 
 sound.Add({
@@ -40,7 +40,7 @@ sound.Add({
 	level = 50,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard1.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard2.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard3.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard4.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard5.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard6.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard7.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard8.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard9.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard10.wav" }
+	sound = { "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard1.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard2.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard3.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard4.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard5.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard6.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard7.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard8.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard9.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_HandStepHard10.ogg" }
 })
 
 sound.Add({
@@ -58,7 +58,7 @@ sound.Add({
 	level = 50,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab1.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab2.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab3.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab4.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab5.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab6.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab7.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab8.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab9.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab10.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab11.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab12.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab13.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab14.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab15.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab16.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab17.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab18.wav" }
+	sound = { "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab1.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab2.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab3.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab4.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab5.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab6.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab7.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab8.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab9.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab10.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab11.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab12.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab13.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab14.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab15.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab16.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab17.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Grab18.ogg" }
 })
 
 sound.Add({
@@ -67,7 +67,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 80, 100 },
-	sound = { "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release1.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release2.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release3.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release4.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release5.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release6.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release7.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release8.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release9.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release10.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release11.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release12.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release13.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release14.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release15.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release16.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release17.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release18.wav" }
+	sound = { "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release1.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release2.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release3.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release4.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release5.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release6.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release7.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release8.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release9.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release10.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release11.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release12.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release13.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release14.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release15.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release16.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release17.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Release18.ogg" }
 })
 
 sound.Add({
@@ -76,7 +76,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release1.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release2.wav", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release3.wav" }
+	sound = { "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release1.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release2.ogg", "mirrorsedge/Handsteps/Metal/MetalPipeSwing_Release3.ogg" }
 })
 
 sound.Add({
@@ -85,7 +85,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing1.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing2.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing3.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing4.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing5.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing6.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing7.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing8.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing9.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing10.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing11.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing12.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing13.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing14.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing15.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing16.wav", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing17.wav", }
+	sound = { "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing1.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing2.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing3.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing4.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing5.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing6.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing7.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing8.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing9.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing10.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing11.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing12.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing13.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing14.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing15.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing16.ogg", "mirrorsedge/Handsteps/Metal/ME_Handstep_Pipe_Swing17.ogg", }
 })
 
 sound.Add({
@@ -94,7 +94,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard1.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard2.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard3.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard4.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard5.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard6.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard7.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard8.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard9.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard10.wav" }
+	sound = { "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard1.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard2.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard3.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard4.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard5.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard6.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard7.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard8.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard9.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctHard10.ogg" }
 })
 
 sound.Add({
@@ -103,7 +103,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft1.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft2.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft3.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft4.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft5.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft6.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft7.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft8.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft9.wav", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft10.wav" }
+	sound = { "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft1.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft2.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft3.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft4.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft5.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft6.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft7.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft8.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft9.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStepAirDuctSoft10.ogg" }
 })
 
 sound.Add({
@@ -112,7 +112,7 @@ sound.Add({
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 95, 105 },
-	sound = { "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault1.wav", "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault2.wav", "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault3.wav", "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault4.wav", "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault5.wav" }
+	sound = { "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault1.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault2.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault3.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault4.ogg", "mirrorsedge/Handsteps/Metal/ME_HandStep_ChainFenceVault5.ogg" }
 })
 
 sound.Add({
@@ -121,7 +121,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard1.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard2.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard3.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard4.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard5.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard6.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard7.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard8.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard9.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard10.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard11.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard12.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard13.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard14.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard15.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard16.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard17.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard18.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard19.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard20.wav" }
+	sound = { "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard1.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard2.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard3.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard4.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard5.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard6.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard7.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard8.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard9.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard10.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard11.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard12.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard13.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard14.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard15.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard16.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard17.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard18.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard19.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassHard20.ogg" }
 })
 
 sound.Add({
@@ -130,7 +130,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft1.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft2.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft3.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft4.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft5.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft6.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft7.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft8.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft9.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft10.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft11.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft12.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft13.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft14.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft15.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft16.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft17.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft18.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft19.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft20.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft21.wav", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft22.wav" }
+	sound = { "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft1.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft2.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft3.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft4.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft5.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft6.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft7.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft8.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft9.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft10.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft11.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft12.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft13.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft14.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft15.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft16.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft17.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft18.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft19.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft20.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft21.ogg", "mirrorsedge/Handsteps/Glass/ME_HandStepGlassSoft22.ogg" }
 })
 
 HANDSTEPS_SOFT_LUT = {

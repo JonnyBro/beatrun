@@ -437,14 +437,14 @@ function SWEP:PrimaryAttack()
 
 	util.TraceHull(tr)
 
-	self:EmitSound("mirrorsedge/Melee/armswoosh" .. math.random(1, 6) .. ".wav")
+	self:EmitSound("mirrorsedge/Melee/armswoosh" .. math.random(1, 6) .. ".ogg")
 
 	if ply:IsPlayer() then
 		ply:LagCompensation(false)
 	end
 
 	if tr_result.Hit then
-		self:EmitSound("mirrorsedge/Melee/fist" .. math.random(1, 5) .. ".wav")
+		self:EmitSound("mirrorsedge/Melee/fist" .. math.random(1, 5) .. ".ogg")
 
 		local ent = tr_result.Entity
 

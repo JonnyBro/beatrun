@@ -252,7 +252,7 @@ if CLIENT then
 	net.Receive("Eventmode_Start", function()
 		hook.Add("BeatrunHUDCourse", "EventmodeHUDName", EventmodeHUDName)
 
-		LocalPlayer():EmitSound("mirrorsedge/ui/ME_UI_hud_select.wav")
+		LocalPlayer():EmitSound("mirrorsedge/ui/ME_UI_hud_select.ogg")
 
 		chat.AddText(Color(95, 245, 130), language.GetPhrase("beatrun.eventmode.start"))
 	end)
@@ -282,7 +282,7 @@ if CLIENT then
 		local lp = LocalPlayer()
 
 		if st ~= "" then
-			lp:EmitSound("mirrorsedge/ui/ME_UI_hud_select.wav")
+			lp:EmitSound("mirrorsedge/ui/ME_UI_hud_select.ogg")
 			goal = st
 		else
 			goal = nil

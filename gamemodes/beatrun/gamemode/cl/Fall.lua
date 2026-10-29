@@ -59,7 +59,7 @@ local function FallEffect()
 
 		if CurTime() > nextbeat then
 			nextbeat = CurTime() + math.Clamp(0.5 / vel, 0.3, 0.5)
-			ply:EmitSound("heartbeat_beat_0" .. math.random(1, 8) .. ".wav", 80, 100, beatvol)
+			ply:EmitSound("heartbeat_beat_0" .. math.random(1, 8) .. ".ogg", 80, 100, beatvol)
 			beatvol = math.min(beatvol + 0.05, 1)
 			blurpass = math.min(blurpass + 0.1, 10)
 		end

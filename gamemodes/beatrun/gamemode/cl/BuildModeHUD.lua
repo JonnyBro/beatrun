@@ -252,7 +252,7 @@ end
 local function SelectItem(id)
 	BuildModeIndex = id or 0
 
-	LocalPlayer():EmitSound("buttonclick.wav")
+	LocalPlayer():EmitSound("buttonclick.ogg")
 
 	if BuildModeIndex == 0 then
 		SafeRemoveEntity(GhostModel)

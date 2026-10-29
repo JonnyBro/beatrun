@@ -103,7 +103,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetNW2Bool("grappledNonCourse", true)
 
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-				ply:EmitSound("mirrorsedge/Gadgets/ME_Magrope_Fire.wav", 40, 100 + math.random(-25, 10))
+				ply:EmitSound("mirrorsedge/Gadgets/ME_Magrope_Fire.ogg", 40, 100 + math.random(-25, 10))
 			end
 
 			ply:ViewPunch(zpunchstart)
@@ -143,7 +143,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetCrouchJumpBlocked(false)
 
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-				ply:EmitSound("mirrorsedge/zipline_detach.wav", 40, 100 + math.random(-25, 10))
+				ply:EmitSound("mirrorsedge/zipline_detach.ogg", 40, 100 + math.random(-25, 10))
 			end
 
 			if mv:KeyPressed(IN_JUMP) then

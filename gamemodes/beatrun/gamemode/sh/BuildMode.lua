@@ -138,7 +138,7 @@ entplacefunc_cl = {
 			net.WriteVector(BuildModePos)
 		net.SendToServer()
 
-		LocalPlayer():EmitSound("buttonclick.wav")
+		LocalPlayer():EmitSound("buttonclick.ogg")
 
 		BuildModePlaceDelay = CurTime() + 0.05
 		PlaceStartPos = nil
@@ -167,7 +167,7 @@ entplacefunc_cl = {
 			net.WriteBool(input.IsKeyDown(KEY_LSHIFT))
 		net.SendToServer()
 
-		LocalPlayer():EmitSound("buttonclick.wav")
+		LocalPlayer():EmitSound("buttonclick.ogg")
 
 		BuildModePlaceDelay = CurTime() + 0.05
 		PlaceStartPos = nil
@@ -195,7 +195,7 @@ entplacefunc_cl = {
 			net.WriteVector(BuildModePos)
 		net.SendToServer()
 
-		LocalPlayer():EmitSound("buttonclick.wav")
+		LocalPlayer():EmitSound("buttonclick.ogg")
 
 		BuildModePlaceDelay = CurTime() + 0.05
 		PlaceStartPos = nil
@@ -223,7 +223,7 @@ entplacefunc_cl = {
 			net.WriteVector(BuildModePos)
 		net.SendToServer()
 
-		LocalPlayer():EmitSound("buttonclick.wav")
+		LocalPlayer():EmitSound("buttonclick.ogg")
 
 		BuildModePlaceDelay = CurTime() + 0.05
 		PlaceStartPos = nil
@@ -1491,28 +1491,28 @@ if CLIENT then
 
 			BuildModeAngle:RotateAroundAxis(Vector(1, 0, 0), 15 * mult)
 
-			LocalPlayer():EmitSound("buttonrollover.wav")
+			LocalPlayer():EmitSound("buttonrollover.ogg")
 		end,
 		[KEY_C] = function()
 			local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
 
 			BuildModeAngle:RotateAroundAxis(Vector(1, 0, 0), -15 * mult)
 
-			LocalPlayer():EmitSound("buttonrollover.wav")
+			LocalPlayer():EmitSound("buttonrollover.ogg")
 		end,
 		[KEY_V] = function()
 			local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
 
 			BuildModeAngle:RotateAroundAxis(Vector(0, 1, 0), 15 * mult)
 
-			LocalPlayer():EmitSound("buttonrollover.wav")
+			LocalPlayer():EmitSound("buttonrollover.ogg")
 		end,
 		[KEY_B] = function()
 			local mult = input.IsKeyDown(KEY_LCONTROL) and 0.06666666666666667 or 1
 
 			BuildModeAngle:RotateAroundAxis(Vector(0, 1, 0), -15 * mult)
 
-			LocalPlayer():EmitSound("buttonrollover.wav")
+			LocalPlayer():EmitSound("buttonrollover.ogg")
 		end,
 		[KEY_F] = function()
 			if CurTime() < BuildModePlaceDelay then return end
@@ -1681,7 +1681,7 @@ if CLIENT then
 		[KEY_N] = function()
 			gridindex = gridindex % #gridsizes + 1
 
-			LocalPlayer():EmitSound("buttonrollover.wav")
+			LocalPlayer():EmitSound("buttonrollover.ogg")
 		end,
 		[KEY_Z] = function()
 			if not input.IsKeyDown(KEY_LCONTROL) and not input.IsKeyDown(KEY_RCONTROL) then return end
@@ -1713,7 +1713,7 @@ if CLIENT then
 				BuildModePlaceAI = not BuildModePlaceAI
 			end
 
-			LocalPlayer():EmitSound("buttonrollover.wav")
+			LocalPlayer():EmitSound("buttonrollover.ogg")
 		end
 	}
 
@@ -1750,7 +1750,7 @@ if CLIENT then
 					net.WriteBool(not BuildModePlaceAI)
 				net.SendToServer()
 
-				LocalPlayer():EmitSound("buttonclick.wav")
+				LocalPlayer():EmitSound("buttonclick.ogg")
 
 				BuildModePlaceDelay = CurTime() + 0.05
 			elseif BuildModeIsCustomModel(BuildModeIndex) then
@@ -1765,7 +1765,7 @@ if CLIENT then
 					net.WriteAngle(BuildModeAngle)
 				net.SendToServer()
 
-				LocalPlayer():EmitSound("buttonclick.wav")
+				LocalPlayer():EmitSound("buttonclick.ogg")
 
 				BuildModePlaceDelay = CurTime() + 0.05
 			elseif isstring(BuildModeIndex) then
@@ -1785,7 +1785,7 @@ if CLIENT then
 						net.WriteAngle(BuildModeAngle)
 					net.SendToServer()
 
-					LocalPlayer():EmitSound("buttonclick.wav")
+					LocalPlayer():EmitSound("buttonclick.ogg")
 
 					BuildModePlaceDelay = CurTime() + 0.05
 				end
@@ -1800,7 +1800,7 @@ if CLIENT then
 					net.WriteAngle(BuildModeAngle)
 				net.SendToServer()
 
-				LocalPlayer():EmitSound("buttonclick.wav")
+				LocalPlayer():EmitSound("buttonclick.ogg")
 
 				BuildModePlaceDelay = CurTime() + 0.05
 			end
@@ -1830,7 +1830,7 @@ if CLIENT then
 
 				axislock = 0
 
-				LocalPlayer():EmitSound("buttonclick.wav")
+				LocalPlayer():EmitSound("buttonclick.ogg")
 
 				return
 			end
@@ -1879,7 +1879,7 @@ if CLIENT then
 
 				BuildModeAngle:RotateAroundAxis(Vector(0, 0, 1), -15 * mult)
 
-				LocalPlayer():EmitSound("buttonrollover.wav")
+				LocalPlayer():EmitSound("buttonrollover.ogg")
 			else
 				if not isnumber(BuildModeIndex) then BuildModeIndex = 0 end
 
@@ -1898,7 +1898,7 @@ if CLIENT then
 
 				BuildModeAngle:RotateAroundAxis(Vector(0, 0, 1), 15 * mult)
 
-				LocalPlayer():EmitSound("buttonrollover.wav")
+				LocalPlayer():EmitSound("buttonrollover.ogg")
 			else
 				if not isnumber(BuildModeIndex) then BuildModeIndex = 0 end
 

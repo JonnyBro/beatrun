@@ -43,7 +43,7 @@ function ENT:StartTouch(ent)
 
 		ent:DataTheft_Bank()
 
-		self:EmitSound("mirrorsedge/ui/ME_UI_hud_select.wav", 60, 100 + math.random(-10, 5))
+		self:EmitSound("mirrorsedge/ui/ME_UI_hud_select.ogg", 60, 100 + math.random(-10, 5))
 	end
 end
 
