@@ -23,6 +23,8 @@ local PAGES = {
 		key = "hud",
 		label = "#beatrun.toolsmenu.hud.name",
 		items = {
+			{ type = "theme" },
+			{ type = "check", convar = "Beatrun_GlobalDermaSkin", label = "#beatrun.settings.globalskin", desc = "#beatrun.settings.globalskindesc" },
 			{ type = "check", convar = "Beatrun_HUDDynamic", label = "#beatrun.toolsmenu.hud.dynamic", desc = "#beatrun.toolsmenu.hud.dynamicdesc" },
 			{ type = "check", convar = "Beatrun_HUDSway", label = "#beatrun.toolsmenu.hud.sway", desc = "#beatrun.toolsmenu.hud.swaydesc" },
 			{ type = "check", convar = "Beatrun_Nametags", label = "#beatrun.toolsmenu.hud.nametags", desc = "#beatrun.toolsmenu.hud.nametagsdesc" },
@@ -264,6 +266,29 @@ builders.combo = function(body, item)
 	FieldEnd(body, item)
 end
 
+builders.theme = function(body)
+	FieldLabel(body, "#beatrun.coursesmenu.settings.theme")
+
+	local current = string.lower(UI.ThemeConVar:GetString())
+	local combo = UI.MakeComboBox(body)
+	combo:Dock(TOP)
+
+	for _, key in ipairs(UI.THEME_ORDER) do
+		combo:AddChoice(L("beatrun.coursesmenu.themes." .. key), key, key == current)
+	end
+
+	combo.OnSelect = function(_, _, _, key)
+		if key == current then return end
+
+		UI.ThemeConVar:SetString(key)
+
+		CloseSettingsMenu()
+		OpenSettingsMenu()
+	end
+
+	FieldEnd(body, {})
+end
+
 builders.color = function(body, item)
 	local cvar = GetConVar(item.convar)
 
@@ -342,7 +367,7 @@ local function BuildPage(content, page)
 	end
 end
 
-local function CloseSettingsMenu()
+function CloseSettingsMenu()
 	if IsValid(Frame) then Frame:Remove() end
 
 	Frame = nil

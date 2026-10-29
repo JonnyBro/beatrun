@@ -4,8 +4,6 @@ local submitRecords = CreateClientConVar("Beatrun_SubmitRecords", "1", true, fal
 
 local UI = BeatrunUI
 local S, L = UI.S, UI.L
-local THEME_ORDER = UI.THEME_ORDER
-local uiTheme = UI.ThemeConVar
 local PaintWindowBackground, PaintPanel = UI.PaintWindowBackground, UI.PaintPanel
 local MakeWindow, MakeButton, MakeLabel, MakeTitle = UI.MakeWindow, UI.MakeButton, UI.MakeLabel, UI.MakeTitle
 local MakeTextEntry, MakeScroll, StyleCheckBox = UI.MakeTextEntry, UI.MakeScroll, UI.StyleCheckBox
@@ -1631,26 +1629,6 @@ function BuildSettingsPage()
 		if IsValid(Frame) then Frame:Close() end
 
 		OpenSettingsMenu()
-	end
-
-	MakeSettingLabel(body, "#beatrun.coursesmenu.settings.theme")
-
-	local themeSelect = UI.MakeComboBox(body)
-	themeSelect:Dock(TOP)
-	themeSelect:DockMargin(0, 0, 0, S(20))
-
-	for _, key in ipairs(THEME_ORDER) do
-		themeSelect:AddChoice(L("beatrun.coursesmenu.themes." .. key), key, key == string.lower(uiTheme:GetString()))
-	end
-
-	function themeSelect:OnSelect(_, _, data)
-		if uiTheme:GetString() == data then return end
-
-		uiTheme:SetString(data)
-
-		if IsValid(Frame) then Frame:Remove() end
-
-		timer.Simple(0, function() OpenCoursesMenu("settings") end)
 	end
 
 	-- Courses
