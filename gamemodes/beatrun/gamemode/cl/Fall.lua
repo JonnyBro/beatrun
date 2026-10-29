@@ -33,7 +33,7 @@ local function FallCheck()
 		if not ply:GetJumpTurn() then
 			ParkourEvent("falluncontrolled", ply, true)
 		end
-	elseif ply.FallStatic and speed > -800 then
+	elseif ply.FallStatic and (speed > -800 or ply:GetMoveType() == MOVETYPE_NOCLIP) then
 		ply:StopSound("FallStatic")
 
 		ply.FallStatic = false
