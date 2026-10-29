@@ -20,6 +20,33 @@ elseif game.SinglePlayer() and CLIENT then
 	end)
 end
 
+local function MoveOutOfWall(ply, mv)
+	local mins, maxs = ply:GetHull()
+	local back = -ply:GetClimbingAngle():Forward()
+	local origin = mv:GetOrigin()
+
+	local tr = {
+		mins = mins,
+		maxs = maxs,
+		filter = ply,
+		mask = MASK_PLAYERSOLID,
+		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+	}
+
+	for i = 0, 32 do
+		local pos = origin + back * i
+
+		tr.start = pos
+		tr.endpos = pos
+
+		if not util.TraceHull(tr).Hit then
+			if i > 0 then mv:SetOrigin(pos) end
+
+			return
+		end
+	end
+end
+
 local function ClimbingEnd(ply, mv, cmd)
 	mv:SetOrigin(ply:GetClimbingEnd())
 	ply:SetClimbing(0)
@@ -144,6 +171,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 		if mv:KeyDown(IN_DUCK) then
 			mv:SetOrigin(ply:GetClimbingStart() - ply:GetClimbingAngle():Forward() * 5)
+			MoveOutOfWall(ply, mv)
 
 			ply:SetMoveType(MOVETYPE_WALK)
 
@@ -176,6 +204,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 		if mv:KeyDown(IN_JUMP) and ang > 42 then
 			mv:SetOrigin(ply:GetClimbingStart() - ply:GetClimbingAngle():Forward() * 0.6)
+			MoveOutOfWall(ply, mv)
 
 			ply:SetMoveType(MOVETYPE_WALK)
 
