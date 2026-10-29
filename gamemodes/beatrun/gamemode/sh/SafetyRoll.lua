@@ -112,15 +112,24 @@ local function AnimSetModel()
 	return GetConVar("Beatrun_AnimSet"):GetInt() == 0 and "new_climbanim" or "old_climbanim"
 end
 
+local matfall = {
+	followplayer = true,
+	animmodelstring = "new_climbanim",
+	showweapon = true,
+	lockang = true,
+	BodyAnimSpeed = 1,
+	ignorez = true,
+	deleteonend = true,
+	usefullbody = true,
+	AnimString = "falldown"
+}
+
 local function StartMatFallAnim()
-	roll.AnimString = "falldown"
-	roll.animmodelstring = AnimSetModel()
-	roll.BodyAnimSpeed = 1
-	roll.usefullbody = true
+	matfall.animmodelstring = AnimSetModel()
 
 	CacheBodyAnim()
 	RemoveBodyAnim()
-	StartBodyAnim(roll)
+	StartBodyAnim(matfall)
 end
 
 net.Receive("RollAnimSP", function()
