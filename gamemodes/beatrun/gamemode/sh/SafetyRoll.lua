@@ -273,7 +273,8 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 	local normal = out.HitNormal
 	local sang = normal:Angle()
 
-	if speed >= MAT_FALL_SPEED and IsValid(out.Entity) and out.Entity:GetClass() == "br_mat" and tr.start.z - out.HitPos.z < 16 then return MatFall(ply) end
+	local groundent = ply:GetGroundEntity()
+	if speed >= MAT_FALL_SPEED and IsValid(groundent) and groundent:GetClass() == "br_mat" then return MatFall(ply) end
 
 	if sang.x <= 314 and not ply:InOverdrive() and (speed >= 350 or ply:GetDive()) and speed < 800 and (CurTime() < ply:GetSafetyRollKeyTime() and not ply:GetDive() or ply:GetDive() and not ply:KeyDown(IN_DUCK)) and not ply:GetJumpTurn() and (not ply:Crouching() or ply:GetDive()) then
 		if IsValid(ply) and ply:Alive() and IsValid(ply:GetActiveWeapon()) and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
