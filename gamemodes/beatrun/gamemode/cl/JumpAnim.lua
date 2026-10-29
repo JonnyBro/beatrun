@@ -1366,7 +1366,6 @@ local function BodyEventSounds(anim)
 	end
 end
 
-camint = 1
 campos = Vector()
 camang = Angle()
 local customoffsetlerp = Vector()
@@ -1380,22 +1379,6 @@ local function JumpCalcView(view)
 		if IsValid(BodyAnimArmCopy) then
 			BodyAnimArmCopy:Remove()
 		end
-	end
-
-	BodyAnim:SetupBones()
-
-	local m = BodyAnim:GetBoneMatrix(68)
-	local ang = nil -- local pos, ang = nil
-
-	if m then
-		ang = m:GetAngles()
-		pos = m:GetTranslation()
-	end
-
-	if IsValid(ang) then
-		ang:Sub(view.angles)
-		ang:Mul(camint)
-		view.angles:Add(ang)
 	end
 
 	customoffsetlerp = LerpVector(math.min(10 * FrameTime(), 1), customoffsetlerp, customcamoffset[BodyAnimString] or defaultcamoffset)
