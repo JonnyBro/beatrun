@@ -141,14 +141,19 @@ end
 
 if SERVER then
 	net.Receive("Checkpoint_Finish", function(len, ply)
-		local pb = net.ReadFloat() or 0
-		local svtime = CurTime() - ply.Course_StartTime
+		local svtime = ply.Course_FinishTime
+		if not svtime then return end
 
-		if math.abs(svtime - pb) > 5 then
-			pb = svtime
-		end
+		ply.Course_FinishTime = nil
 
-		if ply:GetNW2Int("CPNum", 1) == -1 and (ply:GetNW2Float("PBTime") == 0 or pb < ply:GetNW2Float("PBTime")) then
+		local tolerance = 0.1 + ply:Ping() / 1000
+		local pb = net.ReadFloat()
+
+		if pb ~= pb then pb = svtime end
+
+		pb = math.Clamp(pb, svtime - tolerance, svtime + tolerance)
+
+		if ply:GetNW2Float("PBTime") == 0 or pb < ply:GetNW2Float("PBTime") then
 			ply:SetNW2Float("PBTime", pb)
 		end
 	end)
@@ -157,6 +162,8 @@ end
 local finishcolor = Color(45, 45, 175, 100)
 
 function FinishCourse(ply)
+	ply.Course_FinishTime = CurTime() - (ply.Course_StartTime or CurTime())
+
 	ply:ScreenFade(SCREENFADE.IN, finishcolor, 0, 4)
 	ply:DrawViewModel(false)
 
@@ -166,7 +173,7 @@ function FinishCourse(ply)
 	ply:SetNW2Int("CPNum", -1)
 
 	timer.Simple(4, function()
-		ply:DrawViewModel(true)
+		if IsValid(ply) then ply:DrawViewModel(true) end
 	end)
 end
 
