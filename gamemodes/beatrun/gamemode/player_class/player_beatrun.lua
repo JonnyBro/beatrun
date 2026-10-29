@@ -160,7 +160,35 @@ function PLAYER:SetModel()
 	end
 end
 
-if SERVER then util.AddNetworkString("BeatrunSpawn") end
+if SERVER then
+	util.AddNetworkString("BeatrunUpdateModel")
+	util.AddNetworkString("BeatrunSpawn")
+
+	net.Receive("BeatrunUpdateModel", function(_, ply)
+		local delay = math.max((ply.NextModelUpdate or 0) - CurTime(), 0)
+
+		timer.Create("BeatrunUpdateModel" .. ply:EntIndex(), delay, 1, function()
+			if not IsValid(ply) or not ply:Alive() then return end
+
+			ply.NextModelUpdate = CurTime() + 0.5
+
+			hook.Call("PlayerSetModel", GAMEMODE, ply)
+			ply:SetPlayerColor(Vector(ply:GetInfo("cl_playercolor")))
+			ply:SetupHands()
+		end)
+	end)
+else
+	local function RequestModelUpdate()
+		timer.Create("BeatrunUpdateModel", 0.1, 1, function()
+			net.Start("BeatrunUpdateModel")
+			net.SendToServer()
+		end)
+	end
+
+	for _, name in ipairs({ "cl_playermodel", "cl_playerskin", "cl_playerbodygroups", "cl_playercolor" }) do
+		cvars.AddChangeCallback(name, RequestModelUpdate, "BeatrunUpdateModel")
+	end
+end
 
 local function RestoreCheckpointVehicle(ply)
 	local save = ply.CPSaveVehicle
@@ -513,6 +541,13 @@ hook.Add("Tick", "Beatrun_InstantModelUpdate", function()
 	if modelChanged and BodyAnimMDL:GetModel() ~= mdl then
 		BodyAnimMDL:SetModel(mdl)
 		BodyAnimMDL:SnatchModelInstance(ply)
+
+		-- First person arms come from the arm copy, the body's own arms stay hidden
+		for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
+			if armbones[BodyAnimMDL:GetBoneName(i)] then
+				BodyAnimMDL:ManipulateBoneScale(i, vector_origin)
+			end
+		end
 	end
 
 	if skinChanged or modelChanged then
@@ -523,7 +558,9 @@ hook.Add("Tick", "Beatrun_InstantModelUpdate", function()
 		ApplyBodygroups(ply, BodyAnimMDL)
 	end
 
-	if hands ~= "" then
+	local armValid = IsValid(BodyAnimMDLarm)
+
+	if armValid and hands ~= "" then
 		if handsChanged and BodyAnimMDLarm:GetModel() ~= hands then
 			BodyAnimMDLarm:SetModel(hands)
 		end
@@ -534,13 +571,6 @@ hook.Add("Tick", "Beatrun_InstantModelUpdate", function()
 
 		if handsBgChanged or handsChanged then
 			ApplyBodygroups(handsEnt, BodyAnimMDLarm)
-		end
-	end
-
-	if modelChanged and playermodelbones then
-		for _, v in ipairs(playermodelbones) do
-			local b = BodyAnimMDL:LookupBone(v)
-			if b then BodyAnimMDL:ManipulateBoneScale(b, vector_origin) end
 		end
 	end
 
@@ -556,15 +586,18 @@ hook.Add("Tick", "Beatrun_InstantModelUpdate", function()
 
 	BodyAnimHideHead()
 
-	local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
-	local aav = Vector(as, as, as)
-
-	for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
-		BodyAnimMDLarm:ManipulateBoneScale(i, aav)
-	end
-
 	BodyAnimMDL:InvalidateBoneCache()
-	BodyAnimMDLarm:InvalidateBoneCache()
+
+	if armValid then
+		local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
+		local aav = Vector(as, as, as)
+
+		for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
+			BodyAnimMDLarm:ManipulateBoneScale(i, aav)
+		end
+
+		BodyAnimMDLarm:InvalidateBoneCache()
+	end
 end)
 end
 
