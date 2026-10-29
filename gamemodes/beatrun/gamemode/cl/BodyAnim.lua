@@ -627,6 +627,9 @@ local lasteyeang = Angle()
 
 local calcviewrunning = false
 
+local fovdesired = GetConVar("fov_desired")
+local beatrunfov = GetConVar("Beatrun_FOV")
+
 local smoothposfrom = Vector()
 local smoothposto = Vector()
 local smoothpostime = 0
@@ -676,11 +679,11 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		calcviewrunning = false
 
 		if not view then
-			fov = math.Remap(fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+			fov = math.Remap(fov, 0, fovdesired:GetInt(), 0, beatrunfov:GetInt())
 
 			return
 		else
-			view.fov = math.Remap(view.fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+			view.fov = math.Remap(view.fov, 0, fovdesired:GetInt(), 0, beatrunfov:GetInt())
 
 			return view
 		end
@@ -880,11 +883,11 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				calcviewrunning = false
 
 				if view and view.fov then
-					view.fov = math.Remap(view.fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+					view.fov = math.Remap(view.fov, 0, fovdesired:GetInt(), 0, beatrunfov:GetInt())
 
 					return view
 				else
-					fov = math.Remap(fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+					fov = math.Remap(fov, 0, fovdesired:GetInt(), 0, beatrunfov:GetInt())
 
 					return
 				end

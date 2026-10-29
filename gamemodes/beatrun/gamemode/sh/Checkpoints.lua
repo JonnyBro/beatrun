@@ -22,10 +22,15 @@ local timetext = ""
 local timealpha = 1000
 local timecolor = color_neutral
 
+local showspeedometer, hudstats, speedometermode
+-- Created in cl/HUD.lua, which loads after this file
+local hudhidden, hudtextcolor
+local textcolorstring, textcolor
+
 if CLIENT then
-	CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("beatrun.convars.showspeedometer"), 0, 1)
-	CreateClientConVar("Beatrun_HUDStats", "0", true, false, "", 0, 1)
-	CreateClientConVar("Beatrun_SpeedometerMode", 1, true, true, language.GetPhrase("beatrun.convars.speedometermode"), 1, 3)
+	showspeedometer = CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("beatrun.convars.showspeedometer"), 0, 1)
+	hudstats = CreateClientConVar("Beatrun_HUDStats", "0", true, false, "", 0, 1)
+	speedometermode = CreateClientConVar("Beatrun_SpeedometerMode", 1, true, true, language.GetPhrase("beatrun.convars.speedometermode"), 1, 3)
 end
 
 if SERVER then
@@ -246,10 +251,12 @@ function CourseHUD()
 		surface.DrawText(text)
 	end
 
-	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() and GetConVar("Beatrun_HUDHidden"):GetInt() ~= 2 then
+	hudhidden = hudhidden or GetConVar("Beatrun_HUDHidden")
+
+	if showspeedometer:GetBool() and hudhidden:GetInt() ~= 2 then
 		local speed = 0
 
-		local mode = GetConVar("Beatrun_SpeedometerMode"):GetInt()
+		local mode = speedometermode:GetInt()
 
 		-- NOTE: Calculations that I found on Valve's wiki, under "Source Engine Scale Calculations"
 		-- https://developer.valvesoftware.com/wiki/Dimensions_(Half-Life_2_and_Counter-Strike:_Source)#Source_Engine_Scale_Calculations
@@ -271,14 +278,19 @@ function CourseHUD()
 		local w, _ = surface.GetTextSize(text)
 		w = w or 0
 
-		local r, g, b, a = string.ToColor(GetConVar("Beatrun_HUDTextColor"):GetString())
+		hudtextcolor = hudtextcolor or GetConVar("Beatrun_HUDTextColor")
+
+		if hudtextcolor:GetString() ~= textcolorstring then
+			textcolorstring = hudtextcolor:GetString()
+			textcolor = string.ToColor(textcolorstring)
+		end
 
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetTextColor(r, g, b, a)
+		surface.SetTextColor(textcolor)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.85 + vpz)
 		surface.DrawText(text)
 
-		if GetConVar("Beatrun_HUDStats"):GetBool() then
+		if hudstats:GetBool() then
 			local ang1 = ply:GetAimVector()
 			ang1 = math.Round(ang1:Angle()[2] % 90, 0)
 			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.88 + vpz)

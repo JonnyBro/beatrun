@@ -61,7 +61,7 @@ local PAGES = {
 		key = "camera",
 		label = "#beatrun.toolsmenu.camera.name",
 		items = {
-			{ type = "slider", convar = "Beatrun_FOV", label = "#beatrun.toolsmenu.camera.fov", desc = "#beatrun.toolsmenu.camera.fovdesc", min = 90, max = 120 },
+			{ type = "slider", convar = "Beatrun_FOV", label = "#beatrun.toolsmenu.camera.fov", desc = "#beatrun.toolsmenu.camera.fovdesc", min = 70, max = 120 },
 			{ type = "check", convar = "Beatrun_ViewbobStabilized", label = "#beatrun.toolsmenu.camera.stabilization", desc = "#beatrun.toolsmenu.camera.stabilizationdesc" },
 			{ type = "slider", convar = "Beatrun_ViewbobIntensity", label = "#beatrun.toolsmenu.camera.intensity", min = -100, max = 100 },
 			{ type = "check", convar = "Beatrun_DisableColorFilter", label = "#beatrun.toolsmenu.camera.colormodifyfilter", desc = "#beatrun.toolsmenu.camera.colormodifyfilterdesc" }
