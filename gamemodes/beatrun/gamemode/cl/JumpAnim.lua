@@ -1369,8 +1369,6 @@ end
 camint = 1
 campos = Vector()
 camang = Angle()
--- local customoffset = Vector()
--- local movedback = false
 local customoffsetlerp = Vector()
 
 local function JumpCalcView(view)
@@ -1383,9 +1381,6 @@ local function JumpCalcView(view)
 			BodyAnimArmCopy:Remove()
 		end
 	end
-
-	-- local eyepos = LocalPlayer():EyePos()
-	-- local vieworigin = view.origin
 
 	BodyAnim:SetupBones()
 
@@ -1472,8 +1467,6 @@ local armoffset = Vector()
 local armoffsetlerp = Vector()
 local manipulate_fingerAng = Angle(0, 30, 0)
 local bac_pos = Vector(0, 0, -64)
--- local drawnorigin = false
---local drawnskytime = 0
 
 local function JumpArmDraw() --(a, b, c)
 	local bac = CreateBodyAnimArmCopy()
@@ -1486,7 +1479,6 @@ local function JumpArmDraw() --(a, b, c)
 		render.SetColorModulation(1, 1, 1) -- fix: some maps turn viewmodel red (wow)
 
 		local eyeang = ply:EyeAngles()
-		--ang.z = 0
 
 		if not nospinebend[BodyAnimString] then
 			BodyAnim:ManipulateBoneAngles(1, Angle(0, math.max(eyeang.x * 0.5, 0), 0))
@@ -1496,7 +1488,6 @@ local function JumpArmDraw() --(a, b, c)
 
 		cam.IgnoreZ(true)
 
-		-- local camposoff = campos - ply:EyePos()
 		local attachId = bac:LookupAttachment("eyes")
 		local offset = bac:GetAttachment(attachId)
 
@@ -1619,18 +1610,6 @@ local function JumpArmDraw() --(a, b, c)
 	end
 end
 
---[[
-hook.Add("PreRender", "JumpArmOriginVar", function()
-	drawnorigin = false
-end)
-
-
-hook.Add("PostDrawSkyBox", "JumpArm3DSky", function()
-	skybox3d = true
-
-	hook.Remove("PostDrawSkyBox", "JumpArm3DSky")
-end) --]]
-
 hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 	if has_tool_equipped then return end
 
@@ -1661,20 +1640,10 @@ local function JumpAnim(event, ply)
 		eventslut.coil = "jumpcoil"
 	end
 
-	--local isInCrawlspace = PlayerCannotStand(ply)
-	--local isHoldingCrouch = ply:KeyDown(IN_DUCK)
-
 	-- Jump Coil End
 	if event == "landcoil" then
 		eventslut[event] = (PlayerCannotStand(ply) or ply:KeyDown(IN_DUCK)) and "jumpcoilendcrouch" or "jumpcoilend"
 	end
-
-	--[[
-	-- Jump Crouch
-	if event == "jumpstill" and (isInCrawlspace or ply:Crouching()) then
-		eventslut[event] = "jumpcrouch"
-	end
-	-]]
 
 	if events[event] then
 		local customAnimForEvent = CustomAnims[eventslut[event]]
@@ -1804,22 +1773,6 @@ function ArmInterrupt(anim)
 					arm:ManipulateBoneAngles(b, angle_zero)
 				end
 			end
-
-			--[[ TODO: make work good
-			if string.match(anim, "standhandwall") then
-				local ply = LocalPlayer()
-				local trace = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply)
-				local x = trace.Normal.x < 0.6 and trace.Normal.x or trace.Normal.y
-				local y = trace.Normal.y > -0.8 and trace.Normal.y or -trace.Normal.x
-
-				local newAng = Angle(x * (5 * trace.Fraction * x), 0, x * (10 * trace.Fraction * y))
-
-				ply:ChatPrint("Fraction: " .. tostring(trace.Fraction))
-				ply:ChatPrint("Normal: " .. tostring(trace.Normal))
-
-				arm:SetAngles(newAng)
-			end
-			--]]
 
 			arm:SetSequence(anim)
 			arm:SetCycle(0)
@@ -1998,9 +1951,6 @@ local function JumpThink()
 					lerpspeed = 30
 
 					if vel:Length() > 300 and ply:OnGround() then
-						-- if ply:InOverdrive() and BodyAnimString ~= "sprintfwd" and vel:Length() < 300 then
-						-- 	ply:EmitSound("CyborgRun")
-						-- end
 
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("sprintfwd"))
 					elseif ply:OnGround() and not moveback then

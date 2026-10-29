@@ -29,7 +29,6 @@ if SERVER then
 	util.AddNetworkString("Eventmode_Start")
 	util.AddNetworkString("Eventmode_Sync")
 	util.AddNetworkString("Eventmode_UpdatePlayerStatus")
-	util.AddNetworkString("Eventmode_GlobalSettings")
 	util.AddNetworkString("Eventmode_SetGoal")
 
 	util.AddNetworkString("Eventmode_Suspend")

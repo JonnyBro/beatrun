@@ -187,22 +187,6 @@ local spawn = {
 	{ "br_anticampbox", Vector(-380.66781616211, 1725.1768798828, 2131.5939941406), Angle(0, 0, 0) },
 }
 
-function PrintAllBars()
-	for _, v in pairs(ents.FindByClass("br_swingbar")) do
-		local pos, ang = v:GetPos(), v:GetAngles()
-		local str = "{\"br_swingbar\", Vector(" .. pos.x .. ", " .. pos.y .. ", " .. pos.z .. "), Angle(" .. ang.x .. ", " .. ang.y .. ", " .. ang.z .. ")},"
-		print(str)
-	end
-end
-
-function PrintAllCampBoxes()
-	for _, v in pairs(ents.FindByClass("br_anticampbox")) do
-		local pos, ang = v:GetPos(), v:GetAngles()
-		local str = "{\"br_anticampbox\", Vector(" .. pos.x .. ", " .. pos.y .. ", " .. pos.z .. "), Angle(" .. ang.x .. ", " .. ang.y .. ", " .. ang.z .. ")},"
-		print(str)
-	end
-end
-
 local function CreateSpawnEntities()
 	for _, v in ipairs(spawn) do
 		BRProtectedEntity(v[1], v[2], v[3])
@@ -250,5 +234,3 @@ end)
 hook.Add("PlayerUse", "button", function(ply, ent)
 	if ent:GetName() == "device_ctrl" then return false end
 end)
-
-print("Loaded cubix")

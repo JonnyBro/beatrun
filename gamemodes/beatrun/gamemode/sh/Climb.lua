@@ -239,30 +239,6 @@ local function ClimbingThink(ply, mv, cmd)
 
 			util.TraceHull(tr)
 
-			--[[ TODO: Make this work
-			for i = -64, 64, 1 do
-				tr.endpos = tr.start + ply:GetClimbingAngle():Forward() * i
-
-				util.TraceHull(tr)
-
-				print(trout.Hit)
-				print(tr.endpos)
-
-				if not trout.Hit then
-					-- tr.start = tr.endpos
-					-- tr.endpos = tr.start - ply:GetClimbingAngle():Forward() * i
-
-					-- util.TraceHull(tr)
-
-					-- if not trout.Hit then
-						ply:SetClimbingEnd(tr.endpos)
-						ply:SetClimbing(2)
-						ParkourEvent("climbheave", ply)
-					-- end
-				end
-			end
-			--]]
-
 			if not trout.Hit then
 				tr.start = ply:GetClimbingEnd()
 				tr.endpos = tr.start - ply:GetClimbingAngle():Forward() * 20
@@ -513,8 +489,6 @@ local function ClimbingCheck(ply, mv, cmd)
 		tr.start = mv:GetOrigin() + wallang:Forward() * 20 + upvalue
 		tr.endpos = tr.start - Vector(0, 0, 90)
 
-		-- debugoverlay.Line(tr.start, tr.endpos, 5, Color(0, 0, 255), true)
-
 		util.TraceLine(tr)
 
 		if trout.Fraction <= 0 or trout.Fraction >= 0.5 then return end
@@ -523,7 +497,6 @@ local function ClimbingCheck(ply, mv, cmd)
 	end
 
 	local endpos = trout.HitPos
-	-- local height = trout.Fraction
 	local startpos = ply.ClimbingTraceOut.HitPos
 	startpos.z = trout.HitPos.z - 77
 	startpos:Add(wallang:Forward() * 0.533)
@@ -565,15 +538,6 @@ local function ClimbingCheck(ply, mv, cmd)
 	util.TraceLine(tr)
 
 	if trout.Hit then return end
-	-- 	local h1 = trout.HitPos
-	-- 	local h2 = tr.start - wallang:Forward() - Vector(100, 0, 0)
-	-- 	local hit = util.QuickTrace(h1, h2, ply)
-
-	-- 	debugoverlay.Line(h1, h2, 5, Color(255, 200, 100), true)
-
-	-- 	print(hit.Hit)
-	-- 	print(hit.HitPos)
-	-- end
 
 	tr.start = startpos + Vector(0, 0, 77)
 	tr.endpos = tr.start + wallang:Forward() * detectionlen * 0.5
@@ -582,7 +546,6 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	if trout.Hit then return end
 
-	-- local steep = trout.HitNormal:Distance(Vector(0, 0, 1)) > 0.01
 	local tr = ply.ClimbingTraceSafety
 	local trout = ply.ClimbingTraceSafetyOut
 
@@ -677,8 +640,6 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	local wr = ply:GetWallrun()
 	local wallrun = FOOTSTEPS_MAT_TYPE_TO_STR[ply.ClimbingTraceOut.MatType] or "Concrete"
-	-- local wrtime = ply:GetWallrunTime() - CurTime()
-	-- local vel = mv:GetVelocity()
 
 	if wr ~= 0 then
 		ply:SetWallrun(0)

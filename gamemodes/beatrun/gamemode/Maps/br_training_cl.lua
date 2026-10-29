@@ -182,10 +182,6 @@ end
 
 hook.Add("OnParkour", "TutorialEvents", TutorialEvents)
 
-function TutorialClearEvents()
-	table.Empty(curevent)
-end
-
 local markerup = Vector()
 local markercol = Color(255, 25, 25)
 

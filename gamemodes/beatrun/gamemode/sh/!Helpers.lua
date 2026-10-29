@@ -26,10 +26,6 @@ function LerpL(t, a, b)
 	return a + (b - a) * t
 end
 
-function LerpC(t, a, b, powa)
-	return a + (b - a) * math.pow(t, powa)
-end
-
 function TraceSetData(tbl, start, endpos, mins, maxs, filter)
 	tbl.start = start
 	tbl.endpos = endpos

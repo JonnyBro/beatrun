@@ -1,27 +1,17 @@
 local playermodelbones = { "ValveBiped.Bip01_R_Clavicle", "ValveBiped.Bip01_R_UpperArm", "ValveBiped.Bip01_R_Forearm", "ValveBiped.Bip01_R_Hand", "ValveBiped.Bip01_L_Clavicle", "ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_L_Forearm", "ValveBiped.Bip01_L_Hand", "ValveBiped.Bip01_L_Wrist", "ValveBiped.Bip01_R_Wrist", "ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger42", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger32", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger22", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_L_Finger12", "ValveBiped.Bip01_L_Finger0", "ValveBiped.Bip01_L_Finger01", "ValveBiped.Bip01_L_Finger02", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger42", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger32", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger22", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11", "ValveBiped.Bip01_R_Finger12", "ValveBiped.Bip01_R_Finger0", "ValveBiped.Bip01_R_Finger01", "ValveBiped.Bip01_R_Finger02" }
 
--- Beatrun BodyAnim with Live Body Scale Support
 CreateClientConVar("Beatrun_ModelScale", "1", true, true, "Global model scale for Beatrun body animation models")
 CreateClientConVar("Beatrun_BodyScale", "1", true, false, "Body scale for Beatrun body animations")
 CreateClientConVar("Beatrun_ArmBodyScale", "1", true, false, "Arm scale for Beatrun body animations")
-CreateClientConVar("Beatrun_ModelScaleViewOffsetEnable", "0", true, true, "Automatically adjusts some internal stuff to make addons work properly. Disable if you're using a dynamic height addon.")
 
--- Apply full model scaling using SetModelScale
 timer.Simple(0.05, function()
 	if not IsValid(BodyAnimMDL) then return end
 
 	local modelscale = GetConVar("Beatrun_ModelScale"):GetFloat()
 
-	-- Scale the full models (body + arm)
 	BodyAnimMDL:SetModelScale(modelscale, 0)
 
 	if IsValid(BodyAnimMDLarm) then BodyAnimMDLarm:SetModelScale(modelscale, 0) end
-
-	-- Optional: slightly raise model to prevent clipping with ground
-	-- if modelscale < 1 then
-	-- 	local offset = Vector(0, 0, (1 - modelscale) * 40)
-	-- 	BodyAnim:SetPos(BodyAnim:GetPos() + offset)
-	-- end
 end)
 
 local function ApplyBodyScale()
@@ -49,10 +39,8 @@ local function ApplyBodyScale()
 	end
 end
 
--- Apply body scale when animation starts
 ApplyBodyScale()
 
--- Live update when the convar changes
 cvars.AddChangeCallback("Beatrun_BodyScale", function(_, _, value_new)
 	local scale = tonumber(value_new)
 	if not scale or not IsValid(BodyAnimMDL) then return end
@@ -382,8 +370,6 @@ function StartBodyAnim(animtable)
 	justremoved = false
 	local ply = LocalPlayer()
 
-	-- if ply:InVehicle() then return end
-
 	updatethirdperson = true
 
 	animmodelstring = animtable.animmodelstring
@@ -521,8 +507,6 @@ function StartBodyAnim(animtable)
 			if (bone ~= nil and bone > 0) then
 				BodyAnimWEPMDL:ManipulateBoneAngles(bone, wpn.WorldModelOffsets.Angles)
 				BodyAnimWEPMDL:ManipulateBonePosition(bone, wpn.WorldModelOffsets.Pos)
-				--BodyAnimWEPMDL:ManipulateBoneAngles(bone, angle_zero)
-				--BodyAnimWEPMDL:ManipulateBonePosition(bone, angle_origin)
 			end
 		end
 	end
@@ -654,7 +638,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 			updatethirdperson = false
 		end
 
-		--return
 	else
 		updatethirdperson = true
 	end
@@ -724,7 +707,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 			end
 
 			if not ShouldDrawPly then
-				--local head = BodyAnim:LookupBone("ValveBiped.Bip01_Head1")
 				if head then BodyAnim:ManipulateBonePosition(head, manip_headBone) end
 			end
 
@@ -895,7 +877,6 @@ hook.Add("PostDrawOpaqueRenderables", "IgnoreZBodyAnim", function() -- (depth, s
 	end
 end)
 
--- local lasteyeang = Angle()
 local lastlimitx = 0
 local lastlimity = 0
 local pastlimitx = false

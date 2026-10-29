@@ -64,5 +64,3 @@ hook.Add("OnEntityCreated", "BlacklistedEnts", function(ent)
 		end
 	end)
 end)
-
-print("Loaded undercrane")

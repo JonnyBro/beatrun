@@ -363,16 +363,13 @@ Course_StartAng = Course_StartAng or 0
 if SERVER then
 	util.AddNetworkString("BuildMode")
 	util.AddNetworkString("BuildMode_Place")
-	util.AddNetworkString("BuildMode_Remove")
 	util.AddNetworkString("BuildMode_Drag")
 	util.AddNetworkString("BuildMode_Duplicate")
 	util.AddNetworkString("BuildMode_Delete")
 	util.AddNetworkString("BuildMode_Highlight")
 	util.AddNetworkString("BuildMode_ReadSave")
 	util.AddNetworkString("BuildMode_Checkpoint")
-	util.AddNetworkString("BuildMode_Entity")
 	util.AddNetworkString("BuildMode_SetSpawn")
-	util.AddNetworkString("BuildMode_SaveCourse")
 	util.AddNetworkString("BuildMode_ReadCourse")
 	util.AddNetworkString("BuildMode_Sync")
 	util.AddNetworkString("Course_Stop")
@@ -949,14 +946,6 @@ if SERVER then
 		if #changed > 0 then PushUndo(ply, { kind = "ai", ents = changed }) end
 	end)
 
-	net.Receive("BuildMode_Remove", function(len, ply)
-		if not ply.BuildMode then return end
-
-		local ent = net.ReadEntity()
-
-		SafeRemoveEntity(ent)
-	end)
-
 	net.Receive("BuildMode_ReadSave", function(len, ply)
 		if not ply.BuildMode then return end
 
@@ -995,23 +984,6 @@ if SERVER then
 		PushUndo(ply, { kind = "create", ents = { a } })
 	end)
 
-	net.Receive("BuildMode_Entity", function(len, ply)
-		if not ply.BuildMode then return end
-
-		local ent = net.ReadString()
-		local x = net.ReadFloat()
-		local y = net.ReadFloat()
-		local z = net.ReadFloat()
-		local a = ents.Create(ent)
-		a:SetPos(Vector(x, y, z))
-
-		if entplacefunc[ent] then
-			entplacefunc[ent](a)
-		end
-
-		a:Spawn()
-	end)
-
 	net.Receive("BuildMode_SetSpawn", function(len, ply)
 		if not ply.BuildMode then return end
 
@@ -1032,17 +1004,6 @@ if SERVER then
 		if not data then return print("[BR] Error while loading a course") end
 
 		Beatrun_ReadCourse(data)
-	end
-
-	function Beatrun_ReadCourseLocal(id)
-		local dir = "beatrun/courses/" .. string.Replace(game.GetMap(), " ", "-") .. "/"
-		local save = file.Read(dir .. id .. ".txt", "DATA")
-
-		if not save then return print("[BR] Non-existent save with id: " .. tostring(id)) end
-
-		Course_ID = id
-
-		Beatrun_ReadCourse(save, id)
 	end
 
 	function Beatrun_ReadCourse(data, id)
@@ -1409,9 +1370,7 @@ if CLIENT then
 		for _, v in pairs(buildmode_placed) do
 			if not IsValid(v) then continue end
 
-			if v:GetNW2Bool("BRProtected") then
-				print("[BR] Ignoring protected ent")
-			else
+			if not v:GetNW2Bool("BRProtected") then
 				local class = v:GetClass()
 				local spawnable = BuildModeEntitySpawnable(v)
 
@@ -1487,19 +1446,13 @@ if CLIENT then
 	end
 
 	function LoadCourseRaw(data)
-		if not data then
-			print("Supply course data")
-
-			return
-		end
+		if not data then return end
 
 		net.Start("BuildMode_ReadCourse")
 			net.WriteData(data)
 		net.SendToServer()
 
 		LoadCheckpoints()
-
-		Course_ID = id
 	end
 
 	net.Receive("BuildMode_Sync", function()
@@ -1703,9 +1656,7 @@ if CLIENT then
 			for k, _ in pairs(buildmode_selected) do
 				startpos = startpos or k:GetPos()
 
-				if not buildmode_props_index[k:GetModel()] then
-					print("ignoring", k:GetModel())
-				else
+				if buildmode_props_index[k:GetModel()] then
 					table.insert(save, {
 						model = buildmode_props_index[k:GetModel()],
 						pos = k:GetPos() - startpos,

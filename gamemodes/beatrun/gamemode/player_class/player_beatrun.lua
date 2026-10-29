@@ -87,9 +87,6 @@ function PLAYER:SetupDataTables()
 
 	self.Player:NetworkVar("Entity", 2, "Swingpipe")
 
-	--self.Player:NetworkVar("Entity", 3, "Rabbit")
-	--self.Player:NetworkVar("Int", 3, "RabbitSeat")
-
 	self.Player:NetworkVar("Float", 15, "OverdriveCharge")
 	self.Player:NetworkVar("Float", 16, "OverdriveMult")
 
@@ -137,8 +134,6 @@ function PLAYER:Loadout()
 
 	self.Player:SetJumpPower(230)
 	self.Player:SetCrouchedWalkSpeed(0.5)
-
-	-- self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 100))
 
 	self.Player:SetCanZoom(false)
 end
@@ -324,9 +319,6 @@ function PLAYER:CreateMove(cmd)
 end
 
 function PLAYER:CalcView(view)
-	-- local mult = (self.Player:InOverdrive() and 1.1) or 1
-	-- local fov = GetConVar("Beatrun_FOV"):GetInt()
-	-- view.fov = fov * mult
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
 end
 
@@ -381,7 +373,6 @@ function meta:ResetParkourState()
 	self:SetViewOffsetDucked(Vector(0, 0, 32))
 
 	self.Swingrope = nil
-	--self.DiveSliding = false
 
 	ParkourEvent("jump", self)
 
@@ -451,45 +442,12 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 			ply:ResetParkourTimes()
 			ply:SetJumpPower(230)
 
-			-- ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
-
 			ply:SetCanZoom(false)
 
 			ply.ClimbingTrace = nil
 		end
 	end)
 end)
-
---[[ from my testing whole section does nothing??? feel free to uncomment if im wrong
-if SERVER then
-	local LastModels = {}
-
-	hook.Add("Think", "BeatrunCheckPlayerModelChange", function()
-		for _, ply in ipairs(player.GetAll()) do
-			if not IsValid(ply) then continue end
-
-			local mdl = ply:GetModel() or ""
-
-			if LastModels[ply] == nil then
-				LastModels[ply] = mdl
-				continue
-			end
-
-			if mdl ~= LastModels[ply] then
-				LastModels[ply] = mdl
-
-				timer.Simple(0, function()
-					if not IsValid(ply) then return end
-
-					player_manager.RunClass(ply, "SetModel")
-
-					ply:SetupHands()
-				end)
-			end
-		end
-	end)
-end
---]]
 
 if CLIENT then
 local lastCheckedModel = ""
