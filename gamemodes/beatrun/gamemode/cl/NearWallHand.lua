@@ -15,10 +15,18 @@ local down = Vector(0, 0, -3)
 local nextWallCheck = 4 -- start out at 4 to prevent any errors when the game boots up ¯\_(ツ)_/¯
 
 hook.Add("Tick", "HandStandWall", function()
-	if not WallBrace:GetBool() then return end
+	if not WallBrace:GetBool() then
+		HandIKSetContact(1, false)
+		HandIKSetContact(2, false)
+
+		return
+	end
 
 	if nextWallCheck > CurTime() then return end -- lets not spam checks
 	nextWallCheck = CurTime() + 0.03 -- ~33 hz should be fast enough
+
+	HandIKSetContact(1, false)
+	HandIKSetContact(2, false)
 
 	local ply = LocalPlayer()
 	local bac = BodyAnimArmCopy
@@ -66,7 +74,10 @@ hook.Add("Tick", "HandStandWall", function()
 	if (leftHand_trace.Hit or rightHand_trace.Hit) and not (ply:KeyDown(IN_BACK) and ply:GetVelocity():Length() > 10) and ply:WaterLevel() <= 1 then --TODO: figure out how to get if the player is moving backwards with only the velocity (dont rely on keydown)
 		IsPlyInStandWall = true
 
-		if not ply:ShouldDrawLocalPlayer() then BodyLimitX = 10 end -- no point in locking the view in thirdperson ¯\_(ツ)_/¯
+		if leftHand_trace.Hit then HandIKSetContact(1, true, leftHand_trace.HitPos, leftHand_trace.HitNormal) end
+		if rightHand_trace.Hit then HandIKSetContact(2, true, rightHand_trace.HitPos, rightHand_trace.HitNormal) end
+
+		if not ply:ShouldDrawLocalPlayer() then BodyLimitX = 30 end -- no point in locking the view in thirdperson ¯\_(ツ)_/¯
 
 		if leftHand_trace.Hit and rightHand_trace.Hit then
 			ArmInterrupt("standhandwallboth")
@@ -89,7 +100,7 @@ end)
 
 hook.Add("AdjustMouseSensitivity", "HandStandWallSense", function()
 	if IsPlyInStandWall and not LocalPlayer():ShouldDrawLocalPlayer() then
-		return 0.65
+		return 0.8
 	end
 end)
 
