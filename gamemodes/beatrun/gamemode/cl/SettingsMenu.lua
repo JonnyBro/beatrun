@@ -24,7 +24,7 @@ local PAGES = {
 		label = "#beatrun.toolsmenu.hud.name",
 		items = {
 			{ type = "theme" },
-			{ type = "check", convar = "Beatrun_GlobalDermaSkin", label = "#beatrun.settings.globalskin", desc = "#beatrun.settings.globalskindesc" },
+			{ type = "check", convar = "Beatrun_GlobalDermaSkin", optional = true, label = "#beatrun.settings.globalskin", desc = "#beatrun.settings.globalskindesc" },
 			{ type = "check", convar = "Beatrun_HUDDynamic", label = "#beatrun.toolsmenu.hud.dynamic", desc = "#beatrun.toolsmenu.hud.dynamicdesc" },
 			{ type = "check", convar = "Beatrun_HUDSway", label = "#beatrun.toolsmenu.hud.sway", desc = "#beatrun.toolsmenu.hud.swaydesc" },
 			{ type = "check", convar = "Beatrun_Nametags", label = "#beatrun.toolsmenu.hud.nametags", desc = "#beatrun.toolsmenu.hud.nametagsdesc" },
@@ -363,6 +363,8 @@ local function BuildPage(content, page)
 	body:DockPadding(S(20), S(16), math.max(S(20), content:GetWide() - S(680)), S(20))
 
 	for _, item in ipairs(page.items) do
+		if item.optional and not GetConVar(item.convar) then continue end
+
 		builders[item.type](body, item)
 	end
 end
