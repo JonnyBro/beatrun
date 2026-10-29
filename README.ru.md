@@ -78,7 +78,7 @@ Beatrun - это **небезызвестный паркур режим для G
 
 ### Режимы
 
-- Режим **Deathmatch**.
+- Режимы **Deathmatch**, **Data Theft** и **Infection**.
 - Новое меню ивентов (F2).
 - Редактор снаряжений с нормальным выбором оружия и чёрный список для случайных снаряжений.
 - Случайные снаряжения из **MW Base**, **ARC9**, **ARCCW**, **TFA** или из любого оружия, что у вас есть.
@@ -144,6 +144,7 @@ Beatrun - это **небезызвестный паркур режим для G
 - [Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc) - модуль показа статусов в Discord.
 - [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) - модуль показа статусов в Steam (создатель TFA Base).
 - [\[aka\]bomb's FOV Remap](https://steamcommunity.com/sharedfiles/filedetails/?id=2831115438) - Фикс CalcView (камеры под землёй).
+- scubamaster96 - Задники.
 
 ### Шрифты
 

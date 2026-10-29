@@ -76,7 +76,7 @@ Beatrun is an **infamous parkour gamemode for Garry's Mod**, now fully open-sour
 
 ### Gamemodes
 
-- **Deathmatch** gamemode.
+- **Deathmatch**, **Data Theft** and **Infection** gamemodes.
 - New event menu (F2).
 - Loadouts editor with a proper weapon picker and a blacklist for random loadouts.
 - Random loadouts from **MW Base**, **ARC9**, **ARCCW**, **TFA** or from any weapon you have.
@@ -142,6 +142,7 @@ You can change animations in the **Settings menu** under Gameplay.
 - [Fluffy Servers](https://github.com/fluffy-servers/gmod-discord-rpc) - Discord Rich Presence.
 - [YuRaNnNzZZ](https://github.com/YuRaNnNzZZ/gmcl_steamrichpresencer) - Steam Presence.
 - [\[aka\]bomb's FOV Remap](https://steamcommunity.com/sharedfiles/filedetails/?id=2831115438) - CalcView fix (camera under map).
+- scubamaster96 - Background images.
 
 ### Fonts
 
