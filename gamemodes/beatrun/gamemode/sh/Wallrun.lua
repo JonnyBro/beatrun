@@ -122,7 +122,7 @@ local function WallrunningThink(ply, mv, cmd)
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 				ply:EmitSound("WallrunRelease.Concrete")
 				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
+					if IsValid(ply) then ply:EmitSound("WallrunRelease.Concrete") end
 				end)
 				ply:EmitSound("Cloth.VaultSwish")
 			end
@@ -193,9 +193,7 @@ local function WallrunningThink(ply, mv, cmd)
 			if IsFirstTimePredicted() then
 				ply:EmitSound("Wallrun." .. wallsound)
 				ply:EmitSound("Cloth.VaultSwish")
-				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
-				end)
+				PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 			end
 		end
 	end
@@ -312,9 +310,7 @@ local function WallrunningThink(ply, mv, cmd)
 			if IsFirstTimePredicted() then
 				ply:EmitSound("Wallrun." .. wallsound)
 				ply:EmitSound("Cloth.VaultSwish")
-				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
-				end)
+				PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 			end
 		end
 	end
@@ -334,7 +330,7 @@ local function WallrunningThink(ply, mv, cmd)
 			ply:EmitSound("Cloth.MovementRun")
 
 			timer.Simple(0.05, function()
-				ply:EmitSound("WallrunRelease.Concrete")
+				if IsValid(ply) then ply:EmitSound("WallrunRelease.Concrete") end
 			end)
 		end
 

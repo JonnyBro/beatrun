@@ -127,7 +127,7 @@ sound.Add({
 	sound = { "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_01.ogg", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_02.ogg", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_03.ogg", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_04.ogg", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_05.ogg", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_06.ogg", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_07.ogg", "mirrorsedge/VO/Faith/Breath_Medium_Long_Out_08.ogg" }
 })
 
-function meta:FaithVO(vo)
+function meta:FaithVO(vo, filter)
 	if self:GetInfoNum("Beatrun_FaithVO", 0) >= 1 then
 		if CLIENT then
 			nextbreath = CurTime() + 1
@@ -135,6 +135,6 @@ function meta:FaithVO(vo)
 			Entity(1):SendLua("nextbreath = CurTime()+1")
 		end
 
-		self:EmitSound(vo)
+		self:EmitSound(vo, nil, nil, nil, nil, nil, nil, filter)
 	end
 end

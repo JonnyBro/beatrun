@@ -26,6 +26,33 @@ function LerpL(t, a, b)
 	return a + (b - a) * t
 end
 
+-- Delayed effects from predicted movement code. A timer fires outside prediction, so the engine can neither skip
+-- the copies made when the client re-predicts a command nor leave the predicting player out of the server's sound.
+-- fn gets a recipient filter on a multiplayer server (everyone nearby except ply, who already played it), nil otherwise
+function PredictedTimer(ply, delay, fn)
+	if CLIENT and not IsFirstTimePredicted() then return end
+
+	timer.Simple(delay, function()
+		if not IsValid(ply) then return end
+
+		local filter
+
+		if SERVER and not game.SinglePlayer() then
+			filter = RecipientFilter()
+			filter:AddPAS(ply:GetPos())
+			filter:RemovePlayer(ply)
+		end
+
+		fn(ply, filter)
+	end)
+end
+
+function PredictedSoundAfter(ply, delay, snd)
+	PredictedTimer(ply, delay, function(p, filter)
+		p:EmitSound(snd, nil, nil, nil, nil, nil, nil, filter)
+	end)
+end
+
 function TraceSetData(tbl, start, endpos, mins, maxs, filter)
 	tbl.start = start
 	tbl.endpos = endpos

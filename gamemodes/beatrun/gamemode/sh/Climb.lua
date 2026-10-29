@@ -87,7 +87,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 			ply.FootstepLand = false
 
-			timer.Simple(0.35, function() ply:EmitSound("Walk." .. step) end)
+			PredictedSoundAfter(ply, 0.35, "Walk." .. step)
 
 			ply:EmitSound("Handsteps." .. handstepsoft)
 
@@ -96,9 +96,9 @@ local function ClimbingThink(ply, mv, cmd)
 		elseif ply:GetClimbingDelay() < CurTime() then
 			ParkourEvent("hangfoldedendhang", ply)
 
-			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-			timer.Simple(0.42, function() ply:EmitSound("Handsteps." .. handstephard) end)
-			timer.Simple(0.5, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+			PredictedSoundAfter(ply, 0.05, "Handsteps." .. handstepsoft)
+			PredictedSoundAfter(ply, 0.42, "Handsteps." .. handstephard)
+			PredictedSoundAfter(ply, 0.5, "Handsteps." .. handstepsoft)
 
 			ply:SetClimbing(1)
 			ply:SetClimbingDelay(CurTime() + 1.35)
@@ -157,9 +157,7 @@ local function ClimbingThink(ply, mv, cmd)
 			ply:EmitSound("Cloth.SideStep")
 			ply:EmitSound("Handsteps.ConcreteRelease")
 			ply:EmitSound("WallrunRelease.Concrete")
-			timer.Simple(0.05, function()
-				ply:EmitSound("WallrunRelease.Concrete")
-			end)
+			PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 
 			if CLIENT and IsFirstTimePredicted() then
 				lockang2 = false
@@ -193,7 +191,7 @@ local function ClimbingThink(ply, mv, cmd)
 				ply:EmitSound("WallrunRelease.Concrete")
 				ply:EmitSound("Handsteps.ConcreteRelease")
 				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
+					if IsValid(ply) then ply:EmitSound("WallrunRelease.Concrete") end
 				end)
 			end
 
@@ -251,8 +249,8 @@ local function ClimbingThink(ply, mv, cmd)
 
 					ParkourEvent("climbheave", ply)
 
-					timer.Simple(0.65, function() ply:EmitSound("Walk." .. step) end)
-					timer.Simple(1, function() if not (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVERIGHT)) then ply:EmitSound("Sneak." .. step) end end)
+					PredictedSoundAfter(ply, 0.65, "Walk." .. step)
+					PredictedTimer(ply, 1, function(p, filter) if not (p:KeyDown(IN_FORWARD) or p:KeyDown(IN_BACK) or p:KeyDown(IN_MOVELEFT) or p:KeyDown(IN_MOVERIGHT)) then p:EmitSound("Sneak." .. step, nil, nil, nil, nil, nil, nil, filter) end end)
 				end
 			end
 		end
@@ -321,8 +319,8 @@ local function ClimbingThink(ply, mv, cmd)
 						ParkourEvent("hangstrafeleft", ply)
 					end
 
-					timer.Simple(0.4, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-					timer.Simple(0.9, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+					PredictedSoundAfter(ply, 0.4, "Handsteps." .. handstepsoft)
+					PredictedSoundAfter(ply, 0.9, "Handsteps." .. handstepsoft)
 				end
 
 				ply:SetClimbingDelay(CurTime() + 0.9)
@@ -646,9 +644,7 @@ local function ClimbingCheck(ply, mv, cmd)
 		ply:EmitSound("Wallrun." .. wallrun)
 		ply:EmitSound("Cloth.MovementRun")
 
-		timer.Simple(0.05, function()
-			ply:EmitSound("WallrunRelease.Concrete")
-		end)
+		PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 	end
 
 	local climbvalue = 1
@@ -705,10 +701,10 @@ local function ClimbingCheck(ply, mv, cmd)
 
 		ParkourEvent("hangfoldedstart", ply)
 		if lastvel.z < -750 then
-			timer.Simple(0.1, function() ply:FaithVO("Faith.ImpactHard") end)
-			timer.Simple(0.05, function() ply:EmitSound("Cloth.FallShortHard") end)
+			PredictedTimer(ply, 0.1, function(p, filter) p:FaithVO("Faith.ImpactHard", filter) end)
+			PredictedSoundAfter(ply, 0.05, "Cloth.FallShortHard")
 		else
-			timer.Simple(0.1, function() ply:FaithVO("Faith.Impact") end)
+			PredictedTimer(ply, 0.1, function(p, filter) p:FaithVO("Faith.Impact", filter) end)
 		end
 
 		if foldedDamage:GetBool() then
@@ -733,23 +729,23 @@ local function ClimbingCheck(ply, mv, cmd)
 				ply:TakeDamageInfo(info)
 			end
 		end
-		timer.Simple(0.15, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+		PredictedSoundAfter(ply, 0.15, "Handsteps." .. handstepsoft)
 
 	else
 		local event = "climbhard"
 
 		if wr == 1 then
 			event = "climb"
-			timer.Simple(0.93, function()
-				if ply:GetClimbing() == 1 then
-					ply:EmitSound("Handsteps." .. handstepsoft)
+			PredictedTimer(ply, 0.93, function(p, filter)
+				if p:GetClimbing() == 1 then
+					p:EmitSound("Handsteps." .. handstepsoft, nil, nil, nil, nil, nil, nil, filter)
 				end
 			end)
 			wallangc.x = -30
 		elseif lastvel.z < -200 then
 			event = "climbhard2"
-			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-			timer.Simple(0.7, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+			PredictedSoundAfter(ply, 0.05, "Handsteps." .. handstepsoft)
+			PredictedSoundAfter(ply, 0.7, "Handsteps." .. handstepsoft)
 
 			if lastvel.z < -250 then
 				ply:FaithVO("Faith.Impact")
@@ -757,9 +753,7 @@ local function ClimbingCheck(ply, mv, cmd)
 				ply:FaithVO("Faith.ImpactSoft")
 			end
 		else
-			timer.Simple(0.15, function()
-				ply:EmitSound("Handsteps." .. handstepsoft)
-			end)
+			PredictedSoundAfter(ply, 0.15, "Handsteps." .. handstepsoft)
 		end
 
 		ParkourEvent(event, ply)

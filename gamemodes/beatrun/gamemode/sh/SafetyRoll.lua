@@ -197,6 +197,8 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 		if SERVER and not land then
 			ply:EmitSound("Cloth.FallShortMediumLong")
 			timer.Simple(0.15, function()
+				if not IsValid(ply) then return end
+
 				ply:EmitSound("Cloth.Roll")
 				ply:EmitSound("Cloth.BodyRollSwish")
 				ply:EmitSound("Cloth.BodyRoll")
@@ -228,7 +230,7 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 		end
 
 		timer.Simple(.85, function()
-			if SERVER then
+			if SERVER and IsValid(ply) then
 				ply:DrawViewModel(true)
 			end
 		end)
@@ -314,6 +316,8 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 		if SERVER and not land then
 			timer.Simple(0.15, function()
+				if not IsValid(ply) then return end
+
 				ply:EmitSound("Cloth.Roll")
 				ply:EmitSound("Cloth.BodyRoll")
 				ply:EmitSound("Cloth.BodyRollSwish")
