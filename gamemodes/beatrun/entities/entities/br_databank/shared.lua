@@ -96,7 +96,7 @@ function ENT:DrawTranslucent()
 
 	local db = LocalPlayer():GetNW2Entity("DataBank")
 
-	if IsValid(db) and db == self then
+	if GetGlobalBool("GM_DATATHEFT") and IsValid(db) and db == self then
 		self:SetRenderBounds(minb, maxb)
 
 		render.SetColorMaterial()
@@ -129,7 +129,7 @@ local vecup = Vector(0, 0, 50)
 hook.Add("HUDPaint", "DataBank", function()
 	local db = LocalPlayer():GetNW2Entity("DataBank")
 
-	if IsValid(db) then
+	if GetGlobalBool("GM_DATATHEFT") and IsValid(db) then
 		local pos = db:GetPos()
 		pos:Add(vecup)
 		local w2s = pos:ToScreen()
