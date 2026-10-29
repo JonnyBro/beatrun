@@ -415,7 +415,7 @@ hook.Add("SetupMove", "MESetupMove", function(ply, mv, cmd)
 end)
 
 if CLIENT then
-	-- local jumpseq = {ACT_VM_HAULBACK, ACT_VM_SWINGHARD}
+	local autosprint = CreateClientConVar("Beatrun_AutoSprint", "1", true, false, "Always sprint while Runner Hands are equipped", 0, 1)
 
 	hook.Add("CreateMove", "MECreateMove", function(cmd)
 		local ply = LocalPlayer()
@@ -427,7 +427,7 @@ if CLIENT then
 			cmd:SetSideMove(cmd:GetSideMove() * 0.01)
 		end
 
-		if (ply:InOverdrive() or ply:UsingRH() and ply:GetMoveType() == MOVETYPE_WALK and not hardland and ply:OnGround()) and not cmd:KeyDown(IN_SPEED) and not ply:GetSliding() and not IsValid(ply:GetBalanceEntity()) then
+		if (ply:InOverdrive() or autosprint:GetBool() and ply:UsingRH() and ply:GetMoveType() == MOVETYPE_WALK and not hardland and ply:OnGround()) and not cmd:KeyDown(IN_SPEED) and not ply:GetSliding() and not IsValid(ply:GetBalanceEntity()) then
 			cmd:SetButtons(cmd:GetButtons() + IN_SPEED)
 		end
 	end)

@@ -79,6 +79,7 @@ local PAGES = {
 			{ type = "check", convar = "Beatrun_QuickturnGround", label = "#beatrun.toolsmenu.gameplay.quickturnground", desc = "#beatrun.toolsmenu.gameplay.quickturngrounddesc" },
 			{ type = "check", convar = "Beatrun_QuickturnHandsOnly", label = "#beatrun.toolsmenu.gameplay.quickturnhandsonly", desc = "#beatrun.toolsmenu.gameplay.quickturnhandsonlydesc" },
 			{ type = "check", convar = "Beatrun_AutoHandSwitching", label = "#beatrun.toolsmenu.gameplay.autohandswitch", desc = "#beatrun.toolsmenu.gameplay.autohandswitchdesc" },
+			{ type = "check", convar = "Beatrun_AutoSprint", label = "#beatrun.toolsmenu.gameplay.autosprint", desc = "#beatrun.toolsmenu.gameplay.autosprintdesc" },
 			{ type = "check", convar = "Beatrun_PuristMode", label = "#beatrun.toolsmenu.gameplay.puristmode", desc = "#beatrun.toolsmenu.gameplay.puristmodedesc" },
 			{ type = "check", convar = "Beatrun_DisableGrapple", label = "#beatrun.toolsmenu.gameplay.disablegrapple", desc = "#beatrun.toolsmenu.gameplay.disablegrappledesc" },
 			{ type = "check", convar = "Beatrun_TotsugekiAudio", label = "#beatrun.toolsmenu.moves.totsugekiaudio", desc = "#beatrun.toolsmenu.moves.totsugekiaudiodesc" },
