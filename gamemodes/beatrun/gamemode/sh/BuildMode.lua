@@ -2186,10 +2186,6 @@ if CLIENT then
 	end
 
 	function BuildModeCommand(ply, ucmd)
-		-- NOTE: SetFOV does nothing clientside(networked variable).
-		-- TODO: Implement this properly
-		-- LocalPlayer():SetFOV(120)
-
 		if gui.IsGameUIVisible() then return end
 
 		camcontrol = input.IsMouseDown(MOUSE_RIGHT)
@@ -2244,10 +2240,6 @@ if CLIENT then
 
 			LocalPlayer():DrawViewModel(false)
 
-			-- NOTE: SetFOV does nothing clientside(networked variable).
-			-- TODO: Implement this properly
-			-- LocalPlayer():SetFOV(120)
-
 			hook.Run("BuildModeState", true)
 		else
 			hook.Remove("PostDrawTranslucentRenderables", "BuildModeGhost")
@@ -2262,10 +2254,6 @@ if CLIENT then
 			LocalPlayer():DrawViewModel(true)
 
 			gui.EnableScreenClicker(false)
-
-			-- NOTE: SetFOV does nothing clientside(networked variable).
-			-- TODO: Implement this properly
-			-- LocalPlayer():SetFOV(0)
 
 			CheckpointNumber = 1
 

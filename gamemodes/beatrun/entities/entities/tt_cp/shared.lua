@@ -129,7 +129,7 @@ function ENT:DrawTranslucent()
 
 	self:SetRenderBounds(minb, maxb)
 
-	if (not BuildMode and CheckpointNumber ~= self:GetCPNum()) and not LocalPlayer().InReplay then return end
+	if not BuildMode and CheckpointNumber ~= self:GetCPNum() then return end
 
 	render.SetColorMaterial()
 
@@ -175,7 +175,7 @@ end
 local circlesprite = Material("circle.png", "nocull")
 
 function ENT:DrawLOC()
-	if (not BuildMode and CheckpointNumber ~= self:GetCPNum()) and not LocalPlayer().InReplay then return end
+	if not BuildMode and CheckpointNumber ~= self:GetCPNum() then return end
 
 	render.SetMaterial(circlesprite)
 

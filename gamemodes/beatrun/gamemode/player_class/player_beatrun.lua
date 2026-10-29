@@ -234,8 +234,6 @@ function PLAYER:Spawn()
 
 			if ply.CPSaveVehicle then RestoreCheckpointVehicle(ply) end
 
-			-- ply:SetNW2Float("RetryCount", ply:GetNW2Float("RetryCount", 0) + 1)
-
 			CPSave = true
 		else
 			ply.CPSavePos = nil
@@ -254,15 +252,11 @@ function PLAYER:Spawn()
 				ply:SetLocalVelocity(vector_origin)
 				ply:SetPos(Course_StartPos)
 			end)
-
-			-- ReplayStop(ply)
-			-- ReplayStart(ply)
 		end
 	end
 
-	if not ply.InReplay and not CPSave then
+	if not CPSave then
 		ply:SetNW2Float("CPNum", 1)
-		-- ply:SetNW2Float("RetryCount", 0)
 	end
 
 	if not CPSave then
@@ -270,7 +264,6 @@ function PLAYER:Spawn()
 
 		net.Start("BeatrunSpawn")
 			net.WriteFloat(CurTime())
-			net.WriteBool(ply.InReplay)
 		net.Send(ply)
 
 		ply.SpawnFreezeTime = CurTime() + 1.75 * faststartmult

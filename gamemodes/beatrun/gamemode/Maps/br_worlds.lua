@@ -21,5 +21,3 @@ hook.Add("InitPostEntity", "CreateSpawnEntities", CreateSpawnEntities)
 hook.Add("PostCleanupMap", "CreateSpawnEntities", CreateSpawnEntities)
 
 print("Loaded worlds")
-
-BlockWhitescaleSkypaint = true

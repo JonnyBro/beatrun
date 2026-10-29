@@ -56,7 +56,7 @@ local function MoveSlideGate()
 		pos[3] = math.max(350, pos[3] - 2.75)
 
 		slidegate:SetPos(pos)
-	elseif not sentreset and not Entity(1).InReplay then
+	elseif not sentreset then
 		Entity(1):SendLua("SGR()")
 		sentreset = true
 	end

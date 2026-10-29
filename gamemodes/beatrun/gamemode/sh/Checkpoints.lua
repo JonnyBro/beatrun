@@ -402,11 +402,8 @@ end
 
 net.Receive("BeatrunSpawn", function()
 	local spawntime = net.ReadFloat()
-	local replay = net.ReadBool()
 
 	hook.Run("BeatrunSpawn")
-
-	LocalPlayer().InReplay = replay
 
 	if LocalPlayer().GetInfoNum then
 		StartCourse(spawntime)

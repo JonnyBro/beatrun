@@ -139,7 +139,6 @@ local function TutorialLogic()
 	local ply = LocalPlayer()
 
 	if not IsValid(ply) then return end
-	if ply.InReplay then return end
 
 	local endpos = tutorialendpos[curtutorial]
 

@@ -25,7 +25,7 @@ cvars.AddChangeCallback("Beatrun_HUDFloatingXPColor", function(convar_name, valu
 	HUDXPColor =  string.ToColor(value_new)
 end)
 
-local packetloss = Material("vgui/packetloss.png")
+local packetlossicon = Material("vgui/packetloss.png")
 local lastloss = 0
 local MELogo = Material("vgui/MELogo.png", "mips smooth")
 
@@ -131,20 +131,20 @@ local function BeatrunHUD()
 
 	surface.SetFont("DebugFixedSmall")
 
-	local pl = ply:GetNW2Int("PLoss")
+	local packetloss = ply:GetNW2Int("PLoss")
 	local CT = CurTime()
 
-	if pl > 10 or CT < lastloss then
+	if packetloss > 10 or CT < lastloss then
 		local alpha = math.Clamp(math.abs(math.sin(CurTime() * 4) * 255), 25, 255)
 
 		surface.SetDrawColor(255, 255, 255, alpha)
-		surface.SetMaterial(packetloss)
+		surface.SetMaterial(packetlossicon)
 		surface.DrawTexturedRect(5, 5, 58.75, 41.75)
 		surface.SetTextPos(65, 20)
 		surface.SetTextColor(255, 195, 90, alpha)
-		surface.DrawText(pl)
+		surface.DrawText(packetloss)
 
-		if pl > 10 then
+		if packetloss > 10 then
 			lastloss = CT + 4
 		end
 	end
@@ -499,94 +499,3 @@ hook.Add("RenderScreenspaceEffects", "FilterPP", function()
 		DrawColorModify(pp)
 	end
 end)
-
-local maxentries = BeatrunUI.S(375)
-
-speedrecord = {}
-
-local sgoffsetx = 0.75
-local sgoffsety = 0.75
-
-local function DrawSpeedGraph()
-	if BeatrunUI.IsLargeWindowOpen() then return end
-	if not speedrecord or not LocalPlayer().InReplay then return end
-
-	local offsetx = ScrW() * sgoffsetx
-	local offsety = ScrH() * sgoffsety
-	local boxscaledx = BeatrunUI.S(400)
-	local boxscaledy = BeatrunUI.S(200)
-
-	render.SetScissorRect(offsetx, offsety, offsetx + boxscaledx, offsety + boxscaledy, true)
-
-	surface.SetDrawColor(25, 25, 25, 100)
-	surface.DrawRect(offsetx, offsety, boxscaledx, boxscaledy)
-	surface.SetFont("DebugFixedSmall")
-
-	render.PushFilterMag(TEXFILTER.POINT)
-	render.PushFilterMin(TEXFILTER.POINT)
-
-	for i = 1, #speedrecord do
-		local speed = speedrecord[i]
-		speedcol = speed * 2
-
-		surface.SetDrawColor(speedcol * 0.1, speedcol * 0.5, speedcol * 0.25, speedcol * 2)
-		surface.DrawLine(offsetx + i - 1, offsety + boxscaledy, offsetx + i, offsety + boxscaledy - speed)
-
-		lasty = speed
-	end
-
-	local entrycount = #speedrecord
-	local lastrecord = speedrecord[entrycount]
-
-	if lastrecord then
-		surface.SetTextColor(255, 255, 255)
-		surface.SetTextPos(offsetx + entrycount, offsety + boxscaledy - lastrecord)
-		surface.DrawText(math.Round(lastrecord))
-	end
-
-	render.SetScissorRect(0, 0, 0, 0, false)
-	render.PopFilterMag()
-	render.PopFilterMin()
-	surface.SetDrawColor(45, 45, 45, 145)
-	surface.DrawOutlinedRect(offsetx - 1, offsety - 1, boxscaledx + 1, boxscaledy + 1)
-end
-
-hook.Add("HUDPaint", "SpeedGraph", DrawSpeedGraph)
-
-local smoothvel = true
-local lastvel = 0
-
-local function RecordSpeedGraph()
-	if not LocalPlayer().InReplay then return end
-
-	local lenrecord = #speedrecord
-	local vel = LocalPlayer():GetVelocity()
-	local oldrecord = false
-
-	if LocalPlayer():GetClimbing() ~= 0 then
-		oldrecord = speedrecord[lenrecord] or 0
-	end
-
-	if maxentries <= lenrecord then
-		table.remove(speedrecord, 1)
-	end
-
-	if not oldrecord then
-		vel.z = math.max(vel.z, 0)
-		local power = nil
-
-		if smoothvel then
-			power = math.pow(Lerp(0, lastvel, vel:Length()), 2)
-		else
-			power = math.pow(vel:Length(), 2)
-		end
-
-		table.insert(speedrecord, BeatrunUI.S(power * 0.001 * power * 5e-06))
-	else
-		table.insert(speedrecord, oldrecord)
-	end
-
-	lastvel = Lerp(0.1, lastvel, vel:Length())
-end
-
-hook.Add("Tick", "SpeedGraph", RecordSpeedGraph)
