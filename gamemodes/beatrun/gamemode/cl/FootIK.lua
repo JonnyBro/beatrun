@@ -14,11 +14,15 @@ local legnames = {
 
 local maxdrop = 18
 local maxlift = 24
+-- Steeper ground than this (about 45 degrees) is treated as flat for the foot tilt
+local mintiltz = 0.7
 
 local ikweight = 0
 local footdrop = 0
 local footlift = { 0, 0 }
 local ground = { 0, 0 }
+local footnormal = { Vector(0, 0, 1), Vector(0, 0, 1) }
+local groundnormal = Vector()
 
 local trout = {}
 local tr = {
@@ -98,6 +102,33 @@ local function RotateBoneTowards(m, ax, ay, az, bx, by, bz, px, py, pz)
 	m:SetUnpacked(m11, m12, m13, px, m21, m22, m23, py, m31, m32, m33, pz, 0, 0, 0, 1)
 end
 
+-- Rotates a bone around a pivot by the shortest rotation taking straight up to the normal nx/ny/nz
+local function TiltBone(ent, bone, nx, ny, nz, px, py, pz)
+	local m = ent:GetBoneMatrix(bone)
+	if not m then return end
+
+	local s = math.sqrt(nx * nx + ny * ny)
+	local kx, ky = -ny / s, nx / s
+	local c, t = nz, 1 - nz
+
+	local r11, r12, r13 = c + t * kx * kx, t * kx * ky, s * ky
+	local r21, r22, r23 = t * kx * ky, c + t * ky * ky, -s * kx
+	local r31, r32, r33 = -s * ky, s * kx, c
+
+	local m11, m12, m13, tx, m21, m22, m23, ty, m31, m32, m33, tz = m:Unpack()
+
+	tx, ty, tz = tx - px, ty - py, tz - pz
+
+	m:SetUnpacked(
+		r11 * m11 + r12 * m21 + r13 * m31, r11 * m12 + r12 * m22 + r13 * m32, r11 * m13 + r12 * m23 + r13 * m33, px + r11 * tx + r12 * ty + r13 * tz,
+		r21 * m11 + r22 * m21 + r23 * m31, r21 * m12 + r22 * m22 + r23 * m32, r21 * m13 + r22 * m23 + r23 * m33, py + r21 * tx + r22 * ty + r23 * tz,
+		r31 * m11 + r32 * m21 + r33 * m31, r31 * m12 + r32 * m22 + r33 * m32, r31 * m13 + r32 * m23 + r33 * m33, pz + r31 * tx + r32 * ty + r33 * tz,
+		0, 0, 0, 1
+	)
+
+	ent:SetBoneMatrix(bone, m)
+end
+
 local function GetLegBones(ent)
 	local legs = {}
 
@@ -168,6 +199,24 @@ local function FootIK(ent)
 				end
 			end
 		end
+
+		local normal = footnormal[i]
+		local nx, ny, nz = normal.x * ikweight, normal.y * ikweight, 1 + (normal.z - 1) * ikweight
+		local nlen = math.sqrt(nx * nx + ny * ny + nz * nz)
+
+		mf = ent:GetBoneMatrix(leg.foot)
+
+		if mf and nx * nx + ny * ny > 1e-6 * nlen * nlen then
+			nx, ny, nz = nx / nlen, ny / nlen, nz / nlen
+
+			local _, _, _, ax, _, _, _, ay, _, _, _, az = mf:Unpack()
+
+			TiltBone(ent, leg.foot, nx, ny, nz, ax, ay, az)
+
+			for _, child in ipairs(leg.footchildren) do
+				TiltBone(ent, child, nx, ny, nz, ax, ay, az)
+			end
+		end
 	end
 end
 
@@ -195,6 +244,7 @@ hook.Add("Think", "BeatrunFootIK", function()
 			local footpos = bone and BodyAnim:GetBonePosition(bone)
 
 			ground[i] = 0
+			groundnormal:SetUnpacked(0, 0, 1)
 
 			if footpos then
 				tr.start:SetUnpacked(footpos.x, footpos.y, origin.z + maxlift)
@@ -204,8 +254,15 @@ hook.Add("Think", "BeatrunFootIK", function()
 
 				if trout.Hit and not trout.StartSolid then
 					ground[i] = trout.HitPos.z - origin.z
+
+					if trout.HitNormal.z > mintiltz then
+						groundnormal:Set(trout.HitNormal)
+					end
 				end
 			end
+
+			footnormal[i]:Set(LerpVector(1 - math.exp(-ft * 25), footnormal[i], groundnormal))
+			footnormal[i]:Normalize()
 		end
 
 		-- The body drops so the lower foot reaches its ground, the other foot is then lifted by bending its knee
@@ -218,6 +275,8 @@ hook.Add("Think", "BeatrunFootIK", function()
 	elseif ikweight <= 0 then
 		footdrop = 0
 		footlift[1], footlift[2] = 0, 0
+		footnormal[1]:SetUnpacked(0, 0, 1)
+		footnormal[2]:SetUnpacked(0, 0, 1)
 	end
 
 	BodyAnimFootDrop = footdrop * ikweight
