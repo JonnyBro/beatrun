@@ -671,7 +671,17 @@ local function MakeComboBox(parent)
 
 		for _, option in pairs(self.Menu:GetCanvas():GetChildren()) do
 			option:SetFont("BeatrunUI")
-			option:SetTall(S(30))
+			option:SetTextInset(S(12), 0)
+
+			-- DMenuOption forces a height of 22 in its own PerformLayout
+			option.PerformLayout = function(s, w, h)
+				local contentW = s:GetContentSize()
+
+				s:SetSize(math.max(s:GetParent():GetWide(), contentW + S(24)), S(34))
+
+				DButton.PerformLayout(s, w, h)
+			end
+
 			option.Paint = function(s, w, h)
 				local theme = CurrentTheme()
 
@@ -683,6 +693,8 @@ local function MakeComboBox(parent)
 				end
 			end
 		end
+
+		self.Menu:InvalidateLayout(true)
 	end
 
 	return combo
@@ -695,6 +707,9 @@ local function MakeSlider(parent)
 	slider.TextArea:SetFont("BeatrunUISmall")
 	slider.TextArea:SetTextColor(CurrentTheme().text.primary)
 	slider.TextArea:SetPaintBackground(false)
+
+	surface.SetFont("BeatrunUISmall")
+	slider.TextArea:SetWide(surface.GetTextSize("-0000") + S(10))
 
 	slider.Slider.Paint = function(_, w, h)
 		local theme = CurrentTheme()

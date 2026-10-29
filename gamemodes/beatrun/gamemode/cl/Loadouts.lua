@@ -390,19 +390,23 @@ local function OpenBlacklistMenu()
 
 	local scroll = UI.MakeScroll(blacklistFrame)
 
-	local allWeps = GetWeaponsList()
 	local categories = {}
 
-	for _, wep in ipairs(allWeps) do
-		if not wep.ClassName then continue end
-		if string.find(wep.ClassName, "base") then continue end
-		if wep.ClassName == "runnerhands" then continue end
-
+	for _, wep in ipairs(GetRandomLoadoutPool()) do
 		local category = wep.Category or "Other"
 
 		categories[category] = categories[category] or {}
 
 		table.insert(categories[category], wep)
+	end
+
+	if table.IsEmpty(categories) then
+		local empty = UI.MakeLabel(scroll, "#beatrun.blacklisteditor.empty", "BeatrunUI", CurrentTheme().text.muted)
+		empty:Dock(TOP)
+		empty:SetWrap(true)
+		empty:SetAutoStretchVertical(true)
+
+		return
 	end
 
 	local sortedCats = table.GetKeys(categories)
@@ -419,7 +423,7 @@ local function OpenBlacklistMenu()
 
 		for _, wep in ipairs(weps) do
 			local class = wep.ClassName
-			local row = MakeWeaponRow(scroll, wep, class)
+			local row = MakeWeaponRow(scroll, weapons.GetStored(class), class)
 
 			local toggle = UI.MakeButton(row, "#beatrun.blacklisteditor.allowed", "secondary")
 			toggle:SetWide(S(150))

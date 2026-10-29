@@ -140,6 +140,7 @@ local PAGES = {
 			{ type = "title", label = "#beatrun.settings.loadouts" },
 			{ type = "combo", server = true, convar = "Beatrun_RandomLoadouts", label = "#beatrun.randomloadoutsdesc", choices = {
 				{ "#beatrun.randombeatrunloadouts", "beatrun" },
+				{ "#beatrun.randomanyloadouts", "any" },
 				{ "#beatrun.randommwloadouts", "mg_base" },
 				{ "#beatrun.randomarc9loadouts", "arc9" },
 				{ "#beatrun.randomarccwloadouts", "arccw" },

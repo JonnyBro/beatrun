@@ -113,6 +113,55 @@ function GetWeaponsList()
 	return cachedWeapons
 end
 
+RANDOM_LOADOUT_BASES = { "mg_base", "arc9", "arccw", "tfa_" }
+
+local function MatchesBase(wep, selected)
+	local base = isstring(wep.Base) and wep.Base or ""
+
+	if selected then return string.find(base, selected, 1, true) ~= nil end
+
+	for _, b in ipairs(RANDOM_LOADOUT_BASES) do
+		if string.find(base, b, 1, true) then return true end
+	end
+
+	return false
+end
+
+local NOT_WEAPONS = {
+	gmod_camera = true,
+	gmod_tool = true,
+	manhack_welder = true,
+	runnerhands = true,
+	weapon_physgun = true
+}
+
+local function AddToPool(pool, seen, class, name, category)
+	if seen[class] or NOT_WEAPONS[class] or string.find(class, "base", 1, true) then return end
+
+	seen[class] = true
+
+	table.insert(pool, { ClassName = class, PrintName = name or class, Category = category or "Other" })
+end
+
+-- selected: one of RANDOM_LOADOUT_BASES, "any" or nil for every weapon
+function GetRandomLoadoutPool(selected)
+	local pool, seen = {}, {}
+
+	if selected == "any" then selected = nil end
+
+	if not selected then
+		for class, data in pairs(list.Get("Weapon")) do
+			AddToPool(pool, seen, class, data.PrintName, data.Category)
+		end
+	end
+
+	for _, wep in ipairs(GetWeaponsList()) do
+		if MatchesBase(wep, selected) then AddToPool(pool, seen, wep.ClassName, wep.PrintName, wep.Category) end
+	end
+
+	return pool
+end
+
 local ply_mins = Vector(-16, -16, 0)
 local ply_maxs = Vector(16, 16, 72)
 
