@@ -627,6 +627,35 @@ local lasteyeang = Angle()
 
 local calcviewrunning = false
 
+local smoothposfrom = Vector()
+local smoothposto = Vector()
+local smoothpostime = 0
+
+-- With client prediction the local player's position only moves when a command is predicted, not every frame,
+-- so the body (and the camera on its head) would step at high framerates. Eases to each new position over one tick.
+-- Singleplayer doesn't predict and already interpolates the player
+local function GetSmoothPlayerPos(ply)
+	local raw = ply:GetPos()
+
+	if game.SinglePlayer() then return raw end
+
+	local frac = math.min((RealTime() - smoothpostime) / engine.TickInterval(), 1)
+
+	if raw ~= smoothposto then
+		if raw:DistToSqr(smoothposto) > 4096 then
+			smoothposfrom:Set(raw)
+		else
+			smoothposfrom:Set(LerpVector(frac, smoothposfrom, smoothposto))
+		end
+
+		smoothposto:Set(raw)
+		smoothpostime = RealTime()
+		frac = 0
+	end
+
+	return LerpVector(frac, smoothposfrom, smoothposto)
+end
+
 
 function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 	if calcviewrunning then return end
@@ -672,7 +701,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 	if IsValidBa or attach ~= nil then
 		if IsValidBa then
 			if followplayer and not ShouldDrawPly then
-				local pos = ply:GetPos()
+				local pos = GetSmoothPlayerPos(ply)
 
 				if BodyAnimCrouchLerp < 1 and (BodyAnimCrouchLerp ~= 0 or math.abs(BodyAnimCrouchLerpZ - pos.z) > 16 or math.abs(ply:GetNW2Float("BodyAnimCrouchLerpZ") - pos.z) > 16) then
 					if ply:OnGround() then BodyAnimCrouchLerp = 1 end
