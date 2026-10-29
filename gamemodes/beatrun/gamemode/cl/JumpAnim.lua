@@ -1551,10 +1551,15 @@ local function JumpArmDraw() --(a, b, c)
 
 		if ply:UsingRH() then
 			if not worldarm[BodyAnimString] then
+				local viewpos, viewang = EyePos(), EyeAngles()
+
 				cam.Start3D(pos, ang)
 					cam.IgnoreZ(ignorezarm[bac_seq] or false)
 
 					BodyAnimMDLarm:SetPos(pos)
+
+					HandIKBeginArms(bac, viewpos, viewang, pos, ang)
+
 					bac:SetupBones()
 					BodyAnimMDLarm:DrawModel()
 				cam.End3D()
@@ -1567,6 +1572,9 @@ local function JumpArmDraw() --(a, b, c)
 				bac:SetRenderOrigin(nil)
 
 				BodyAnimMDLarm:SetPos(BodyAnim:GetPos() + armoff)
+
+				HandIKBeginArms(bac)
+
 				bac:SetupBones()
 				BodyAnimMDLarm:DrawModel()
 			end
@@ -1965,6 +1973,8 @@ local function JumpThink()
 						end
 					end
 				else
+					BodyAnimSpeed = 1
+
 					if not ply:Crouching() and BodyAnimString:Left(6) == "crouch" or BodyAnimString == "walkfwd" or BodyAnimString == "runfwd" or BodyAnimString == "sprintfwd" or BodyAnimString == "runbwd" or BodyAnimString == "walkback" then
 						BodyAnimCycle = 0
 
