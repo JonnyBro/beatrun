@@ -13,7 +13,6 @@
 ## About
 
 Beatrun is an **infamous parkour gamemode for Garry's Mod**, now fully open-sourced and maintained by the community.
-It includes various improvements, new features, and enhanced functionality.
 
 > [!WARNING]
 > This repository contains **optional** modules for showing custom statuses in Discord and Steam.\
@@ -35,7 +34,7 @@ It includes various improvements, new features, and enhanced functionality.
 
 ### Manual Installation
 
-1. **[Download the repository](https://github.com/JonnyBro/beatrun/archive/refs/heads/master.zip).**
+1. **[Download the repository](https://github.com/JonnyBro/beatrun/archive/refs/heads/main.zip).**
 1. Delete the `beatrun` folder in `your_game_folder/garrysmod/addons`, if it exists.
 1. Extract `beatrun-main` into `your_game_folder/garrysmod/addons`.
    - (Optional) For Discord and Steam Presence, move the contents of `beatrun-main/lua/bin` to your `your_game_folder/garrysmod/lua/bin` (create the folder if it doesn't exists).
@@ -49,53 +48,75 @@ It includes various improvements, new features, and enhanced functionality.
 > [!NOTE]
 > There are plenty of changes and fixes that are not documented here. If you are interested - feel free to read the commits.
 
-### New Features
+### New UI
 
-- **In-game** Courses Database UI.
-  - Accessible by pressing F4 (**[source code](https://github.com/JonnyBro/beatrun-courses-server)**).
-  - Default one is hosted by @JonnyBro.
-- **New Deathmatch gamemode**.
+- The whole interface was rewritten to Beatrun's style, with 3 themes to choose from in F4 → Settings.
+- **Settings menu** with every Beatrun setting, both client and server. Open it from the context menu (`C`), from F4 → Settings or with `beatrun_settings`.\
+  The Tools menu category is gone.
+- HUD and keystrokes hide when a big window is open.
+- Keystrokes show the real key state and have a walk key now.
+- New scoreboard.
+- Localization in **9 languages**.
+
+### Courses Database
+
+- **[courses.jbro.top](https://courses.jbro.top)** - website with every uploaded course, previews, leaderboards and player profiles (**[source code](https://github.com/JonnyBro/beatrun-courses-server)**).
+- Press F4 in game to browse courses, load them by code or upload yours.
+- Your times are sent to the leaderboards automatically when you finish a course, just set your key in F4 → Profile.
+- You can update your course without changing its code, from the game or from the website. Its leaderboard gets wiped though.
+- Saving a course over an old local file of it, so you don't end up with 20 copies.
+
+### Build Mode
+
+- New interface with a props palette, search and hints for the keys you can press right now. Press `H` to see all of them.
+- Grid snapping (`N`), undo and redo (`CTRL+Z` / `CTRL+Y`).
+- Any model by its path, and props from the Spawn Menu are saved in your course too.
+- **Vehicles and NPCs** in courses. NPCs spawn with AI off, `I` toggles it.
+- Checkpoints work in vehicles, and respawning on a checkpoint puts you back in your vehicle.
+
+### Gamemodes
+
+- **Deathmatch** gamemode.
+- New event menu (F2).
+- Loadouts editor with a proper weapon picker and a blacklist for random loadouts.
+- Random loadouts from **MW Base**, **ARC9**, **ARCCW**, **TFA** or from any weapon you have.
+
+### ULX
+
+If you have ULX, there are commands for most things: `!loadcourse`, `!stopcourse`, `!restart`, `!tpcp`, `!tolastcp`, `!invalidaterun`, `!buildperm`, `!gamemode`, `!manager`, `!suspend`, `!setlevel`, `!addxp`, `!resetlevel` and `!br` for server settings.
+
+### Other
+
 - "Proper" Kick Glitch similar to the **[original game](https://www.youtube.com/watch?v=zK5y3NBUStc)**.
-- **In-game** configuration in the Tools menu under **Beatrun**. All settings can be changed from there.
-- Localization support in **8 languages**.
-- UIs for creating loadouts and a blacklist.
-- Serverside and singleplayer/P2P levels.
-- Enhanced Build Mode: spawn props from the Spawn Menu, and they will save in your course.
-- Random weapon loadouts from **MW Base**, **ARC9**, **ARCCW** and **TFA**. Or create your own in [!Helpers.lua](./gamemodes/beatrun/gamemode/sh/!Helpers.lua#L8)!
 - Race your Ghost: a ghost of your best time in the current course.
+- Serverside levels on dedicated servers, local ones in singleplayer and P2P.
 - Various new/fixed abilities:
   - **Roll after ziplines:** Press `+duck` (CTRL by default).
   - **Dismount ladders:** Press `+duck` (CTRL by default).
   - **Remove ziplines created with Zipline Gun:** Press `+attack2` (RMB by default).
+  - **Wall brace:** stand against a wall with your hand.
   - **Arrow to the next checkpoint** for easier navigation.
-- New server and client configuration variables:
-  - Server:
-    - `Beatrun_DisableOverdrive`: A toggle to allow Overdrive usage.
-    - `Beatrun_AllowPropSpawn`: Let players spawn props without admin rights.
-    - `Beatrun_AllowWeaponSpawn`: Let players spawn weapons without admin rights.
-    - `Beatrun_HealthRegen`: Toggle health regeneration.
-  - Client:
-    - `Beatrun_HUDTextColor`, `Beatrun_HUDCornerColor`, `Beatrun_HUDFloatingXPColor`: Customize HUD colors.
-    - `Beatrun_DisableGrapple`: Toggle the grapple ability.
-    - `Beatrun_KickGlitch`: Switch between old and new Kick Glitch versions.
-    - `Beatrun_QuickturnHandsOnly`: Restrict QuickTurn to the Runner Hands weapon.
-- Other improvements:
-  - Small camera punch effect when diving.
-  - SteamID no longer displayed on your screen.
+- Small camera punch effect when diving.
+- SteamID no longer displayed on your screen.
 
 ### Fixes
 
 - Fixed playermodels showing as `ERROR` in first person.
-- Improved leaderboard sorting in gamemodes.
 - Fixed crashes and issues with Data Theft gamemode.
+- Fixed an exploit in Infection with player names, and infecting doesn't depend on the nametags setting anymore.
+- Fixed random loadouts freezing the server when there aren't enough weapons.
+- Fixed the online courses tab not warning you about a different map.
+- A lot of animation fixes.
+- Improved leaderboard sorting in gamemodes.
 - Enabled jumping while walking.
 - Grapple now follows moving entities and visible to other players.
+- Removed a bunch of unused files, the addon is a little smaller now.
 
 ---
 
 ## Animations
 
-You can now change animations in the **Tools menu** under the Beatrun category.
+You can change animations in the **Settings menu** under Gameplay.
 
 ---
 
@@ -108,6 +129,7 @@ You can now change animations in the **Tools menu** under the Beatrun category.
 ## Related Projects
 
 - **[Beatrun Reanimated Project](https://github.com/JonnyBro/beatrun-anims)**
+- **[Beatrun Courses Database](https://github.com/JonnyBro/beatrun-courses-server)**
 
 ---
 
