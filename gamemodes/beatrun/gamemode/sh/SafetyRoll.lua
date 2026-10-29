@@ -6,6 +6,9 @@ local landang = Angle(0, 0, 0)
 local lastGroundSpeed = 0
 local rollspeedloss = CreateConVar("Beatrun_RollSpeedLoss", 1, { FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_NOTIFY }, "", 0, 1)
 
+local MAT_FALL_SPEED = 500
+local MAT_FALL_TIME = 1.5
+
 local roll = {
 	followplayer = true,
 	animmodelstring = "new_climbanim",
@@ -105,10 +108,27 @@ hook.Add("SetupMove", "SafetyRoll", function(ply, mv, cmd)
 	end
 end)
 
+local function AnimSetModel()
+	return GetConVar("Beatrun_AnimSet"):GetInt() == 0 and "new_climbanim" or "old_climbanim"
+end
+
+local function StartMatFallAnim()
+	roll.AnimString = "falldown"
+	roll.animmodelstring = AnimSetModel()
+	roll.BodyAnimSpeed = 1
+	roll.usefullbody = true
+
+	CacheBodyAnim()
+	RemoveBodyAnim()
+	StartBodyAnim(roll)
+end
+
 net.Receive("RollAnimSP", function()
 	local ply = LocalPlayer()
 	local land = net.ReadBool()
 	local evade = net.ReadBool()
+
+	if net.ReadBool() then return StartMatFallAnim() end
 
 	if land then
 		roll.AnimString = ply:UsingRH() and "land" or "landgun"
@@ -194,6 +214,7 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 			net.Start("RollAnimSP")
 				net.WriteBool(false)
 				net.WriteBool(true)
+				net.WriteBool(false)
 			net.Send(ply)
 		end
 
@@ -205,6 +226,33 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 	end
 end)
 
+local function MatFall(ply)
+	ply:SetCrouchJump(false)
+	ply:SetDive(false)
+	ply:SetSafetyRollAng(landang)
+	ply:SetSafetyRollTime(CurTime() + MAT_FALL_TIME)
+
+	if SERVER then
+		ply:DrawViewModel(false)
+		ply:EmitSound("Cloth.FallShortMediumLong")
+		ply:EmitSound("Cloth.BodyRoll")
+
+		timer.Simple(MAT_FALL_TIME, function()
+			if IsValid(ply) then ply:DrawViewModel(true) end
+		end)
+	end
+
+	if CLIENT and IsFirstTimePredicted() then
+		StartMatFallAnim()
+	elseif game.SinglePlayer() then
+		net.Start("RollAnimSP")
+			net.WriteBool(false)
+			net.WriteBool(false)
+			net.WriteBool(true)
+		net.Send(ply)
+	end
+end
+
 hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 	local tr = {
 		filter = ply,
@@ -215,6 +263,8 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 	local out = util.TraceLine(tr)
 	local normal = out.HitNormal
 	local sang = normal:Angle()
+
+	if speed >= MAT_FALL_SPEED and IsValid(out.Entity) and out.Entity:GetClass() == "br_mat" and tr.start.z - out.HitPos.z < 16 then return MatFall(ply) end
 
 	if sang.x <= 314 and not ply:InOverdrive() and (speed >= 350 or ply:GetDive()) and speed < 800 and (CurTime() < ply:GetSafetyRollKeyTime() and not ply:GetDive() or ply:GetDive() and not ply:KeyDown(IN_DUCK)) and not ply:GetJumpTurn() and (not ply:Crouching() or ply:GetDive()) then
 		if IsValid(ply) and ply:Alive() and IsValid(ply:GetActiveWeapon()) and weapons.IsBasedOn(ply:GetActiveWeapon():GetClass(), "mg_base") then
@@ -286,6 +336,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 		elseif game.SinglePlayer() then
 			net.Start("RollAnimSP")
 				net.WriteBool(land)
+				net.WriteBool(false)
 				net.WriteBool(false)
 			net.Send(ply)
 		end
