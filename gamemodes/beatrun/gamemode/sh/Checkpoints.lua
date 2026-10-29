@@ -83,17 +83,17 @@ if CLIENT then
 		end
 
 		if not pbtimes or vspb == 0 then
-			LocalPlayer():EmitSound("A_TT_CP_Neutral.ogg")
+			LocalPlayer():EmitSound("a_tt_cp_neutral.ogg")
 
 			timecolor = color_neutral
 			timetext = string.FormattedTime(math.abs(timetaken), "%02i:%02i:%02i")
 		elseif vspb < 0 then
-			LocalPlayer():EmitSound("A_TT_CP_Positive.ogg")
+			LocalPlayer():EmitSound("a_tt_cp_positive.ogg")
 
 			timecolor = color_positive
 			timetext = "-" .. string.FormattedTime(math.abs(vspb), "%02i:%02i:%02i")
 		else
-			LocalPlayer():EmitSound("A_TT_CP_Negative.ogg")
+			LocalPlayer():EmitSound("a_tt_cp_negative.ogg")
 
 			timecolor = color_negative
 			timetext = "+" .. string.FormattedTime(math.abs(vspb), "%02i:%02i:%02i")
@@ -123,13 +123,13 @@ if CLIENT then
 			timetext = "-" .. string.FormattedTime(math.abs(timestr), "%02i:%02i:%02i")
 			timecolor = color_positive
 
-			LocalPlayer():EmitSound("A_TT_Finish_Positive.ogg")
+			LocalPlayer():EmitSound("a_tt_finish_positive.ogg")
 			SaveCheckpointTime()
 		else
 			timetext = "+" .. string.FormattedTime(math.abs(timestr), "%02i:%02i:%02i")
 			timecolor = color_negative
 
-			LocalPlayer():EmitSound("A_TT_Finish_Negative.ogg")
+			LocalPlayer():EmitSound("a_tt_finish_negative.ogg")
 		end
 
 		if CourseGhost:GetBool() then StopGhostRecording(pbtotal == 0, totaltime < pbtotal) end
@@ -200,11 +200,11 @@ local function StartCountdown()
 		countdown = countdown + 1
 
 		if countdown >= 3 then
-			LocalPlayer():EmitSound("A_TT_CD_02.ogg")
+			LocalPlayer():EmitSound("a_tt_cd_02.ogg")
 			hook.Remove("Think", "StartCountdown")
 			hook.Remove("StartCommand", "StartFreeze")
 		else
-			LocalPlayer():EmitSound("A_TT_CD_01.ogg")
+			LocalPlayer():EmitSound("a_tt_cd_01.ogg")
 		end
 	end
 end

@@ -48,7 +48,7 @@ function ENT:Think()
 		if util.IsBoxIntersectingBox(pmin, pmax, zmin, zmax) then
 			ply:SetNW2Int("DataCubes", ply:GetNW2Int("DataCubes", 0) + 1)
 
-			self:EmitSound("A_TT_Stars.ogg", 75, 100 + math.random(-10, 5))
+			self:EmitSound("a_tt_stars.ogg", 75, 100 + math.random(-10, 5))
 			self:Remove()
 
 			return

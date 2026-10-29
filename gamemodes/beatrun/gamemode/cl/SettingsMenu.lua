@@ -411,7 +411,7 @@ concommand.Add("beatrun_settings", OpenSettingsMenu)
 
 list.Set("DesktopWindows", "BeatrunSettings", {
 	title = "#beatrun.settings.desktop",
-	icon = "vgui/MELogo.png",
+	icon = "vgui/melogo.png",
 	width = 1,
 	height = 1,
 	onewindow = false,

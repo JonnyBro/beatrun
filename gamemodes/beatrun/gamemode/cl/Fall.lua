@@ -4,7 +4,7 @@ sound.Add({
 	volume = 1,
 	level = 80,
 	pitch = 100,
-	sound = "mirrorsedge/FallStatic.wav"
+	sound = "mirrorsedge/fallstatic.wav"
 })
 
 local zoom = Material("vgui/zoom.vtf")

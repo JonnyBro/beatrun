@@ -103,7 +103,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetNW2Bool("grappledNonCourse", true)
 
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-				ply:EmitSound("mirrorsedge/Gadgets/ME_Magrope_Fire.ogg", 40, 100 + math.random(-25, 10))
+				ply:EmitSound("mirrorsedge/gadgets/me_magrope_fire.ogg", 40, 100 + math.random(-25, 10))
 			end
 
 			ply:ViewPunch(zpunchstart)

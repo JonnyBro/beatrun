@@ -27,7 +27,7 @@ end)
 
 local packetlossicon = Material("vgui/packetloss.png")
 local lastloss = 0
-local MELogo = Material("vgui/MELogo.png", "mips smooth")
+local MELogo = Material("vgui/melogo.png", "mips smooth")
 
 local hide = {
 	CHudBattery = true,

@@ -366,7 +366,7 @@ if SERVER then
 		local groundEnt = ply:GetGroundEntity()
 
 		if IsValid(groundEnt) and safelandents[groundEnt:GetClass()] then
-			groundEnt:EmitSound("mirrorsedge/GameplayObjects/Landing_01.ogg", 80, 100 + math.random(-30, 10))
+			groundEnt:EmitSound("mirrorsedge/gameplayobjects/landing_01.ogg", 80, 100 + math.random(-30, 10))
 
 			return 0
 		end

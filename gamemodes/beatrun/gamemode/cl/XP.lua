@@ -49,7 +49,7 @@ function meta:LevelUp()
 		if i > 1000 then break end
 	end
 
-	if i > 0 then self:EmitSound("mirrorsedge/UI/ME_UI_challenge_end_success.ogg", 35, 100 + math.random(-5, 5)) end
+	if i > 0 then self:EmitSound("mirrorsedge/ui/me_ui_challenge_end_success.ogg", 35, 100 + math.random(-5, 5)) end
 end
 
 function meta:SetLevel(level)
@@ -134,5 +134,5 @@ else
 		if xp > 0 then XP_floatingxp[CurTime() + 2] = "+" .. xp end
 	end)
 
-	net.Receive("Beatrun_LevelUpSound", function() LocalPlayer():EmitSound("mirrorsedge/UI/ME_UI_challenge_end_success.ogg", 35, 100 + math.random(-5, 5)) end)
+	net.Receive("Beatrun_LevelUpSound", function() LocalPlayer():EmitSound("mirrorsedge/ui/me_ui_challenge_end_success.ogg", 35, 100 + math.random(-5, 5)) end)
 end

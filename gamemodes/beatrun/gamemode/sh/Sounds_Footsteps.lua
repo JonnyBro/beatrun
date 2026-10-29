@@ -4,7 +4,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun10.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun11.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun12.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun13.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun14.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun6.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun7.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun8.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRun9.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concreterun1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun10.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun11.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun12.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun13.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun14.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun6.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun7.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun8.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterun9.ogg" }
 })
 
 sound.Add({
@@ -13,7 +13,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk6.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk7.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk8.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk9.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteWalk10.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concretewalk1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretewalk2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretewalk3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretewalk4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretewalk5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretewalk6.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretewalk7.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretewalk8.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretewalk9.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretewalk10.ogg" }
 })
 
 sound.Add({
@@ -22,7 +22,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak6.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak7.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak8.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak9.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteSneak10.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concretesneak1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretesneak2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretesneak3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretesneak4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretesneak5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretesneak6.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretesneak7.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretesneak8.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretesneak9.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretesneak10.ogg" }
 })
 
 sound.Add({
@@ -31,7 +31,7 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease6.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease7.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease8.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease9.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease10.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease11.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease12.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease13.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease14.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease6.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease7.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease8.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease9.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease10.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease11.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease12.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease13.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease14.ogg" }
 })
 
 sound.Add({
@@ -40,7 +40,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land6.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land7.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land8.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_Concrete_Land9.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concrete_land1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concrete_land2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concrete_land3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concrete_land4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concrete_land5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concrete_land6.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concrete_land7.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concrete_land8.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concrete_land9.ogg" }
 })
 
 sound.Add({
@@ -49,7 +49,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith1.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith10.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith11.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith12.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith13.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith14.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith2.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith3.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith4.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith5.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith6.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith7.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith8.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Slow_Faith9.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith1.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith10.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith11.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith12.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith13.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith14.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith2.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith3.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith4.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith5.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith6.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith7.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith8.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_slow_faith9.ogg" }
 })
 
 sound.Add({
@@ -58,7 +58,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith1.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith2.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith3.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith4.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith5.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith6.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith7.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith8.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith9.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith10.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith11.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith12.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith13.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith14.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith15.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith16.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith17.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith18.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith19.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith20.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith21.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Congrete_Clean_WallRun_Fast_Faith22.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith1.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith2.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith3.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith4.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith5.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith6.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith7.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith8.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith9.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith10.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith11.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith12.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith13.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith14.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith15.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith16.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith17.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith18.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith19.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith20.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith21.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_congrete_clean_wallrun_fast_faith22.ogg" }
 })
 
 sound.Add({
@@ -67,7 +67,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRun_01.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRun_02.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRun_03.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRun_04.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRun_05.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRun_06.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/concretefootstepwallrun_01.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrun_02.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrun_03.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrun_04.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrun_05.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrun_06.ogg" }
 })
 
 sound.Add({
@@ -76,7 +76,7 @@ sound.Add({
 	level = 35,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRunRelease_01.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRunRelease_02.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRunRelease_03.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRunRelease_04.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRunRelease_05.ogg", "mirrorsedge/Footsteps/Concrete/ConcreteFootStepWallRunRelease_06.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/concretefootstepwallrunrelease_01.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrunrelease_02.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrunrelease_03.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrunrelease_04.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrunrelease_05.ogg", "mirrorsedge/footsteps/concrete/concretefootstepwallrunrelease_06.ogg" }
 })
 
 sound.Add({
@@ -85,13 +85,13 @@ sound.Add({
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Slide/Concrete/ME_Concrete_Slide1.ogg", "mirrorsedge/Slide/Concrete/ME_Concrete_Slide2.ogg", "mirrorsedge/Slide/Concrete/ME_Concrete_Slide3.ogg", "mirrorsedge/Slide/Concrete/ME_Concrete_Slide4.ogg", "mirrorsedge/Slide/Concrete/ME_Concrete_Slide5.ogg", "mirrorsedge/Slide/Concrete/ME_Concrete_Slide6.ogg", "mirrorsedge/Slide/Concrete/ME_Concrete_Slide7.ogg" }
+	sound = { "mirrorsedge/slide/concrete/me_concrete_slide1.ogg", "mirrorsedge/slide/concrete/me_concrete_slide2.ogg", "mirrorsedge/slide/concrete/me_concrete_slide3.ogg", "mirrorsedge/slide/concrete/me_concrete_slide4.ogg", "mirrorsedge/slide/concrete/me_concrete_slide5.ogg", "mirrorsedge/slide/concrete/me_concrete_slide6.ogg", "mirrorsedge/slide/concrete/me_concrete_slide7.ogg" }
 })
 
 sound.Add({
 	name = "Slide.ConcreteLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_ConcreteSlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_concreteslideloop.wav",
 	pitch = 100,
 	level = 75,
 	channel = CHAN_STATIC
@@ -103,7 +103,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk6.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk7.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk8.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk9.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk10.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk6.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk7.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk8.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk9.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk10.ogg" }
 })
 
 sound.Add({
@@ -112,7 +112,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk6.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk7.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk8.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk9.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk10.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk6.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk7.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk8.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk9.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk10.ogg" }
 })
 
 -- Reusing the walk (or run) sounds if certain materials dont have their own unique sounds.
@@ -122,7 +122,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run1.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run2.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run3.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run4.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run5.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run6.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run7.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run8.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run9.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run10.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run11.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run12.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run13.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run14.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run15.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run16.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run17.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run18.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run19.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run20.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run21.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run22.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run23.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run24.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run25.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run1.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run2.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run3.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run4.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run5.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run6.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run7.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run8.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run9.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run10.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run11.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run12.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run13.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run14.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run15.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run16.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run17.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run18.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run19.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run20.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run21.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run22.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run23.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run24.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run25.ogg" }
 })
 
 sound.Add({
@@ -131,7 +131,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run1.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run2.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run3.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run4.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run5.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run6.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run7.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run8.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run9.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run10.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run11.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run12.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run13.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run14.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run15.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run16.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run17.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run18.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run19.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run20.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run21.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run22.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run23.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run24.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_Run25.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run1.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run2.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run3.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run4.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run5.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run6.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run7.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run8.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run9.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run10.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run11.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run12.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run13.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run14.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run15.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run16.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run17.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run18.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run19.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run20.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run21.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run22.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run23.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run24.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_run25.ogg" }
 })
 
 sound.Add({
@@ -140,7 +140,7 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/footsteps/concrete/ME_FootStep_ConcreteTile_Release1.ogg", "mirrorsedge/footsteps/concrete/ME_FootStep_ConcreteTile_Release2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteRunRelease3.ogg", "mirrorsedge/footsteps/concrete/ME_FootStep_ConcreteTile_Release4.ogg", "mirrorsedge/footsteps/concrete/ME_FootStep_ConcreteTile_Release5.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concretetile_release1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_release2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concreterunrelease3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_release4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_release5.ogg" }
 })
 
 sound.Add({
@@ -149,7 +149,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast1.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast2.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast3.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast-04.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast5.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast6.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast7.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast8.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast9.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast10.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast11.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast12.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast13.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast14.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast15.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast16.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast17.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast18.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast19.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast20.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast21.ogg", "mirrorsedge/Footsteps/Concrete/ME_Footsteps_Concrete_Grit_WallRun_Fast22.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast1.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast2.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast3.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast-04.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast5.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast6.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast7.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast8.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast9.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast10.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast11.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast12.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast13.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast14.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast15.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast16.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast17.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast18.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast19.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast20.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast21.ogg", "mirrorsedge/footsteps/concrete/me_footsteps_concrete_grit_wallrun_fast22.ogg" }
 })
 
 sound.Add({
@@ -158,7 +158,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint1.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint2.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint3.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint4.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint5.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint6.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint7.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint8.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint9.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint10.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint11.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint12.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint13.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint14.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint15.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint16.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint17.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint18.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint19.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint20.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint21.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint22.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint23.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint24.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint25.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint26.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint27.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint28.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint29.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint30.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint31.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint32.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Sprint33.ogg" }
+	sound = { "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint1.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint2.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint3.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint4.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint5.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint6.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint7.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint8.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint9.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint10.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint11.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint12.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint13.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint14.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint15.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint16.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint17.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint18.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint19.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint20.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint21.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint22.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint23.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint24.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint25.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint26.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint27.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint28.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint29.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint30.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint31.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint32.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_sprint33.ogg" }
 })
 
 sound.Add({
@@ -167,7 +167,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run6.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run6.ogg" }
 })
 
 sound.Add({
@@ -176,7 +176,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteTile_Run6.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretetile_run6.ogg" }
 })
 
 sound.Add({
@@ -185,7 +185,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release1.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release2.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release3.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release4.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release5.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release6.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release7.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release8.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release9.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release10.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release11.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release12.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release13.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release14.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release15.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release16.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release17.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release18.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release19.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release20.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release21.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release22.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release23.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release24.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release25.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release26.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release27.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release28.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release29.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release30.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release31.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release32.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release33.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Release34.ogg" }
+	sound = { "mirrorsedge/footsteps/marble/me_footsteps_marble_release1.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release2.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release3.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release4.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release5.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release6.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release7.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release8.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release9.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release10.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release11.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release12.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release13.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release14.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release15.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release16.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release17.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release18.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release19.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release20.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release21.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release22.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release23.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release24.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release25.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release26.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release27.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release28.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release29.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release30.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release31.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release32.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release33.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_release34.ogg" }
 })
 
 sound.Add({
@@ -194,13 +194,13 @@ sound.Add({
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/slide/Marble/Me_Slide_Marble1.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble2.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble3.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble4.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble5.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble6.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble7.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble8.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble9.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble10.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble11.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble12.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble13.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble14.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble15.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble16.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble17.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble18.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble19.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble20.ogg", "mirrorsedge/slide/Marble/Me_Slide_Marble21.ogg" }
+	sound = { "mirrorsedge/slide/marble/me_slide_marble1.ogg", "mirrorsedge/slide/marble/me_slide_marble2.ogg", "mirrorsedge/slide/marble/me_slide_marble3.ogg", "mirrorsedge/slide/marble/me_slide_marble4.ogg", "mirrorsedge/slide/marble/me_slide_marble5.ogg", "mirrorsedge/slide/marble/me_slide_marble6.ogg", "mirrorsedge/slide/marble/me_slide_marble7.ogg", "mirrorsedge/slide/marble/me_slide_marble8.ogg", "mirrorsedge/slide/marble/me_slide_marble9.ogg", "mirrorsedge/slide/marble/me_slide_marble10.ogg", "mirrorsedge/slide/marble/me_slide_marble11.ogg", "mirrorsedge/slide/marble/me_slide_marble12.ogg", "mirrorsedge/slide/marble/me_slide_marble13.ogg", "mirrorsedge/slide/marble/me_slide_marble14.ogg", "mirrorsedge/slide/marble/me_slide_marble15.ogg", "mirrorsedge/slide/marble/me_slide_marble16.ogg", "mirrorsedge/slide/marble/me_slide_marble17.ogg", "mirrorsedge/slide/marble/me_slide_marble18.ogg", "mirrorsedge/slide/marble/me_slide_marble19.ogg", "mirrorsedge/slide/marble/me_slide_marble20.ogg", "mirrorsedge/slide/marble/me_slide_marble21.ogg" }
 })
 
 sound.Add({
 	name = "Slide.MarbleLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_MarbleSlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_marbleslideloop.wav",
 	pitch = 100,
 	level = 75,
 	channel = CHAN_STATIC
@@ -212,7 +212,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land1.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land2.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land3.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land4.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land5.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land6.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land7.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land8.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land9.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land10.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land11.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land12.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land13.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land14.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land15.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land16.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land17.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land18.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land19.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land20.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land21.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land22.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land23.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land24.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land25.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land26.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land27.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land28.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land29.ogg", "mirrorsedge/Footsteps/Marble/ME_Footsteps_Marble_Land30.ogg" }
+	sound = { "mirrorsedge/footsteps/marble/me_footsteps_marble_land1.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land2.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land3.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land4.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land5.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land6.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land7.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land8.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land9.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land10.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land11.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land12.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land13.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land14.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land15.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land16.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land17.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land18.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land19.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land20.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land21.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land22.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land23.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land24.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land25.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land26.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land27.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land28.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land29.ogg", "mirrorsedge/footsteps/marble/me_footsteps_marble_land30.ogg" }
 })
 
 sound.Add({
@@ -221,7 +221,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun1.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun10.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun11.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun12.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun13.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun14.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun15.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun16.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun17.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun18.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun19.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun2.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun20.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun3.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun4.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun5.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun6.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun7.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun8.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRun9.ogg" }
+	sound = { "mirrorsedge/footsteps/glass/me_footstep_glasspanerun1.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun10.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun11.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun12.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun13.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun14.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun15.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun16.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun17.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun18.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun19.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun2.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun20.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun3.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun4.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun5.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun6.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun7.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun8.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerun9.ogg" }
 })
 
 sound.Add({
@@ -230,7 +230,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk1.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk10.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk11.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk12.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk13.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk14.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk15.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk16.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk17.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk18.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk19.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk2.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk20.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk21.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk-22.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk3.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk4.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk5.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk6.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk7.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk8.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_Walk9.ogg" }
+	sound = { "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk1.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk10.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk11.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk12.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk13.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk14.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk15.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk16.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk17.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk18.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk19.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk2.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk20.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk21.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk-22.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk3.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk4.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk5.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk6.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk7.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk8.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_walk9.ogg" }
 })
 
 sound.Add({
@@ -239,7 +239,7 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRunRelease1.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRunRelease2.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRunRelease3.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRunRelease4.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRunRelease5.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRunRelease6.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRunRelease7.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRunRelease8.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneRunRelease9.ogg" }
+	sound = { "mirrorsedge/footsteps/glass/me_footstep_glasspanerunrelease1.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerunrelease2.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerunrelease3.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerunrelease4.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerunrelease5.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerunrelease6.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerunrelease7.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerunrelease8.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanerunrelease9.ogg" }
 })
 
 sound.Add({
@@ -248,7 +248,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPanelLand1.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPanelLand2.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPanelLand3.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPanelLand4.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPanelLand5.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPanelLand6.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPanelLand7.ogg" }
+	sound = { "mirrorsedge/footsteps/glass/me_footstep_glasspanelland1.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanelland2.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanelland3.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanelland4.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanelland5.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanelland6.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanelland7.ogg" }
 })
 
 sound.Add({
@@ -257,13 +257,13 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak1.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak2.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak3.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak4.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak5.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak6.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak7.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak8.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak9.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak10.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak11.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak12.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak13.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak14.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak15.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak16.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak17.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak18.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPaneSneak19.ogg" }
+	sound = { "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak1.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak2.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak3.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak4.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak5.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak6.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak7.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak8.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak9.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak10.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak11.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak12.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak13.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak14.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak15.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak16.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak17.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak18.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspanesneak19.ogg" }
 })
 
 sound.Add({
 	name = "Slide.Glass",
 	volume = 1,
-	sound = "mirrorsedge/Slide/glass/Me_Slide_Glass.ogg",
+	sound = "mirrorsedge/slide/glass/me_slide_glass.ogg",
 	pitch = 100,
 	level = 60,
 	channel = CHAN_STATIC
@@ -272,7 +272,7 @@ sound.Add({
 sound.Add({
 	name = "Slide.GlassLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_GlassSlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_glassslideloop.wav",
 	pitch = 100,
 	level = 60,
 	channel = CHAN_STATIC
@@ -284,7 +284,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun1.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun2.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun3.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun4.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun5.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun6.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun7.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun8.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun9.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun10.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun11.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun12.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun13.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun14.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun15.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun16.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun17.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun18.ogg", "mirrorsedge/Footsteps/Glass/ME_FootStep_GlassPane_WallRun18.ogg" }
+	sound = { "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun1.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun2.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun3.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun4.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun5.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun6.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun7.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun8.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun9.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun10.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun11.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun12.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun13.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun14.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun15.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun16.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun17.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun18.ogg", "mirrorsedge/footsteps/glass/me_footstep_glasspane_wallrun18.ogg" }
 })
 
 -- Metal --
@@ -294,7 +294,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint10.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint11.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint12.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint13.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint14.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint15.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint16.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint17.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint18.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint19.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint20.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint9.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint10.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint11.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint12.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint13.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint14.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint15.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint16.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint17.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint18.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint19.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint20.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint9.ogg" }
 })
 
 sound.Add({
@@ -303,7 +303,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk9.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk10.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk11.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk12.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk13.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk14.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk15.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk16.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk17.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk18.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk19.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk9.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk10.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk11.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk12.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk13.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk14.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk15.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk16.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk17.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk18.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk19.ogg" }
 })
 
 sound.Add({
@@ -312,7 +312,7 @@ sound.Add({
 	level = 35,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk9.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk10.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk11.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk12.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk13.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk14.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk15.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk16.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk17.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk18.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Walk19.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk9.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk10.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk11.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk12.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk13.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk14.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk15.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk16.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk17.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk18.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk19.ogg" }
 })
 
 sound.Add({
@@ -321,7 +321,7 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release10.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release11.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release12.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release13.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release14.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release15.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Polished_Sprint_Release9.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release10.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release11.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release12.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release13.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release14.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release15.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_sprint_release9.ogg" }
 })
 
 sound.Add({
@@ -330,7 +330,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land9.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Land10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_land1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_land2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_land3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_land4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_land5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_land6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_land7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_land8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_land9.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_land10.ogg" }
 })
 
 sound.Add({
@@ -339,7 +339,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_WallRun1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_WallRun2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_WallRun3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_WallRun4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_WallRun5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_WallRun6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_WallRun7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_WallRun8.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_wallrun1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_wallrun2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_wallrun3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_wallrun4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_wallrun5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_wallrun6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_wallrun7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_wallrun8.ogg" }
 })
 
 sound.Add({
@@ -348,7 +348,7 @@ sound.Add({
 	level = 50,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Master_Metal_Vault_Ringouts1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Master_Metal_Vault_Ringouts2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Master_Metal_Vault_Ringouts3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Master_Metal_Vault_Ringouts4.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_master_metal_vault_ringouts1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_master_metal_vault_ringouts2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_master_metal_vault_ringouts3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_master_metal_vault_ringouts4.ogg" }
 })
 
 sound.Add({
@@ -357,13 +357,13 @@ sound.Add({
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Slide/Metal/Me_Slide_Metal1.ogg", "mirrorsedge/Slide/Metal/Me_Slide_Metal2.ogg", "mirrorsedge/Slide/Metal/Me_Slide_Metal3.ogg", "mirrorsedge/Slide/Metal/Me_Slide_Metal4.ogg" }
+	sound = { "mirrorsedge/slide/metal/me_slide_metal1.ogg", "mirrorsedge/slide/metal/me_slide_metal2.ogg", "mirrorsedge/slide/metal/me_slide_metal3.ogg", "mirrorsedge/slide/metal/me_slide_metal4.ogg" }
 })
 
 sound.Add({
 	name = "Slide.MetalLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_MetalSlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_metalslideloop.wav",
 	pitch = 100,
 	level = 75,
 	channel = CHAN_STATIC
@@ -376,7 +376,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run1.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run2.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run3.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run4.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run5.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run6.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run7.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run8.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run9.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Run10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metal_run1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_run2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_run3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_run4.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_run5.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_run6.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_run7.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_run8.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_run9.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_run10.ogg" }
 })
 
 sound.Add({
@@ -385,7 +385,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk1.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk2.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk3.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk4.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk5.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk6.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk7.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk8.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk9.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metalwalk1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk4.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk5.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk6.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk7.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk8.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk9.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk10.ogg" }
 })
 
 sound.Add({
@@ -394,7 +394,7 @@ sound.Add({
 	level = 35,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk1.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk2.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk3.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk4.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk5.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk6.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk7.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk8.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk9.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalWalk10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metalwalk1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk4.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk5.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk6.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk7.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk8.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk9.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalwalk10.ogg" }
 })
 
 sound.Add({
@@ -403,7 +403,7 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release1.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release2.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release3.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release4.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release5.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release6.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release7.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release8.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release9.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metal_release1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release4.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release5.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release6.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release7.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release8.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release9.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release10.ogg" }
 })
 
 sound.Add({
@@ -412,7 +412,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun1.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun2.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun3.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun4.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun5.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun6.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun7.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun8.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun9.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun10.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun11.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metalductrun1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun4.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun5.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun6.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun7.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun8.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun9.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun10.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun11.ogg" }
 })
 
 sound.Add({
@@ -421,7 +421,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk-01.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk-02.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk-03.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk-04.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk-05.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk-06.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk-07.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk-08.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk-09.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk10.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctWalk11.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metalductwalk-01.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk-02.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk-03.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk-04.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk-05.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk-06.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk-07.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk-08.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk-09.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk10.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductwalk11.ogg" }
 })
 
 sound.Add({
@@ -430,7 +430,7 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release1.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release2.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release3.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release4.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release5.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release6.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release7.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release8.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release9.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_Metal_Release10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metal_release1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release4.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release5.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release6.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release7.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release8.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release9.ogg", "mirrorsedge/footsteps/metal/me_footstep_metal_release10.ogg" }
 })
 
 sound.Add({
@@ -439,7 +439,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuct_Land1.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuct_Land2.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuct_Land3.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuct_Land4.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metalduct_land1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalduct_land2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalduct_land3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalduct_land4.ogg" }
 })
 
 sound.Add({
@@ -448,7 +448,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun1.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun2.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun3.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun4.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun5.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun6.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun7.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun8.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun9.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun10.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctRun11.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metalductrun1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun4.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun5.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun6.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun7.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun8.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun9.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun10.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductrun11.ogg" }
 })
 
 sound.Add({
@@ -457,7 +457,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak1.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak2.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak3.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak4.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak5.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak6.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak7.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak8.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak9.ogg", "mirrorsedge/Footsteps/Metal/ME_FootStep_MetalDuctSneak10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metalductsneak1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductsneak2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductsneak3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductsneak4.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductsneak5.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductsneak6.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductsneak7.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductsneak8.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductsneak9.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalductsneak10.ogg" }
 })
 
 sound.Add({
@@ -466,13 +466,13 @@ sound.Add({
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Slide/Metal/Me_Slide_Duct1.ogg", "mirrorsedge/Slide/Metal/Me_Slide_Duct2.ogg", "mirrorsedge/Slide/Metal/Me_Slide_Duct3.ogg", "mirrorsedge/Slide/Metal/Me_Slide_Duct4.ogg" }
+	sound = { "mirrorsedge/slide/metal/me_slide_duct1.ogg", "mirrorsedge/slide/metal/me_slide_duct2.ogg", "mirrorsedge/slide/metal/me_slide_duct3.ogg", "mirrorsedge/slide/metal/me_slide_duct4.ogg" }
 })
 
 sound.Add({
 	name = "Slide.DuctLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_DuctSlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_ductslideloop.wav",
 	pitch = 100,
 	level = 75,
 	channel = CHAN_STATIC
@@ -484,7 +484,7 @@ sound.Add({
 	level = 50,
 	channel = CHAN_STATIC,
 	pitch = { 95, 105 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footstep_SpringBoard_AirDuct1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footstep_SpringBoard_AirDuct2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footstep_SpringBoard_AirDuct3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footstep_SpringBoard_AirDuct4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footstep_SpringBoard_AirDuct5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footstep_SpringBoard_AirDuct6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footstep_SpringBoard_AirDuct7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footstep_SpringBoard_AirDuct8.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_springboard_airduct1.ogg", "mirrorsedge/footsteps/metal/me_footstep_springboard_airduct2.ogg", "mirrorsedge/footsteps/metal/me_footstep_springboard_airduct3.ogg", "mirrorsedge/footsteps/metal/me_footstep_springboard_airduct4.ogg", "mirrorsedge/footsteps/metal/me_footstep_springboard_airduct5.ogg", "mirrorsedge/footsteps/metal/me_footstep_springboard_airduct6.ogg", "mirrorsedge/footsteps/metal/me_footstep_springboard_airduct7.ogg", "mirrorsedge/footsteps/metal/me_footstep_springboard_airduct8.ogg" }
 })
 
 sound.Add({
@@ -493,7 +493,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_01.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_02.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_03.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_04.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_05.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_06.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_07.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_08.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_09.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_01.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_02.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_03.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_04.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_05.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_06.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_07.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_08.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_09.ogg" }
 })
 
 sound.Add({
@@ -502,7 +502,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_01.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_02.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_03.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_04.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_05.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_06.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_07.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_08.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_09.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_01.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_02.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_03.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_04.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_05.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_06.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_07.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_08.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_09.ogg" }
 })
 
 sound.Add({
@@ -511,7 +511,7 @@ sound.Add({
 	level = 35,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_01.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_02.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_03.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_04.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_05.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_06.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_07.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_08.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Steps_Sprint_New_09.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_01.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_02.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_03.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_04.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_05.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_06.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_07.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_08.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_steps_sprint_new_09.ogg" }
 })
 
 sound.Add({
@@ -520,7 +520,7 @@ sound.Add({
 	level = 35,
 	channel = CHAN_STATIC,
 	pitch = 100,
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Release1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Release2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Release3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Release4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Release5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Release6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Release7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Release8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Gantry_Release9.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_release1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_release2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_release3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_release4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_release5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_release6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_release7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_release8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_gantry_release9.ogg" }
 })
 
 sound.Add({
@@ -529,13 +529,13 @@ sound.Add({
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Slide/Metal/Me_Slide_Gantry1.ogg", "mirrorsedge/Slide/Metal/Me_Slide_Gantry2.ogg", "mirrorsedge/Slide/Metal/Me_Slide_Gantry3.ogg", "mirrorsedge/Slide/Metal/Me_Slide_Gantry4.ogg" }
+	sound = { "mirrorsedge/slide/metal/me_slide_gantry1.ogg", "mirrorsedge/slide/metal/me_slide_gantry2.ogg", "mirrorsedge/slide/metal/me_slide_gantry3.ogg", "mirrorsedge/slide/metal/me_slide_gantry4.ogg" }
 })
 
 sound.Add({
 	name = "Slide.GantryLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_GantrySlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_gantryslideloop.wav",
 	pitch = 100,
 	level = 60,
 	channel = CHAN_STATIC
@@ -547,7 +547,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint9.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Sprint10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint9.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_sprint10.ogg" }
 })
 
 sound.Add({
@@ -556,7 +556,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk9.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk9.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk10.ogg" }
 })
 
 sound.Add({
@@ -565,7 +565,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk9.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Walk10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk9.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_walk10.ogg" }
 })
 
 sound.Add({
@@ -574,7 +574,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land9.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land9.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land10.ogg" }
 })
 
 sound.Add({
@@ -583,7 +583,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land1.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land2.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land3.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land4.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land5.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land6.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land7.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land8.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land9.ogg", "mirrorsedge/Footsteps/Metal/ME_Footsteps_Metal_Crane_Land10.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land9.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_crane_land10.ogg" }
 })
 
 sound.Add({
@@ -592,7 +592,7 @@ sound.Add({
 	level = 50,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk1.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk2.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk3.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk4.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk5.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk6.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk7.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk8.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk9.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk10.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk11.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk12.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk13.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk14.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk15.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk16.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk17.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk18.ogg", "mirrorsedge/Footsteps/metal/ME_FootStep_MetalPole_Walk19.ogg" }
+	sound = { "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk1.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk2.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk3.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk4.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk5.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk6.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk7.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk8.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk9.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk10.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk11.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk12.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk13.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk14.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk15.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk16.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk17.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk18.ogg", "mirrorsedge/footsteps/metal/me_footstep_metalpole_walk19.ogg" }
 })
 
 sound.Add({
@@ -601,7 +601,7 @@ sound.Add({
 	level = 42,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant10.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant11.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant12.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant13.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant14.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant15.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant9.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant10.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant11.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant12.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant13.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant14.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant15.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant9.ogg" }
 })
 
 sound.Add({
@@ -610,7 +610,7 @@ sound.Add({
 	level = 42,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant10.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant11.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant12.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant13.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant14.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant15.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant9.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant10.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant11.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant12.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant13.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant14.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant15.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant9.ogg" }
 })
 
 sound.Add({
@@ -619,7 +619,7 @@ sound.Add({
 	level = 42,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant10.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant11.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant12.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant13.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant14.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant15.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunFootplant9.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant10.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant11.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant12.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant13.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant14.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant15.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant9.ogg" }
 })
 
 sound.Add({
@@ -628,7 +628,7 @@ sound.Add({
 	level = 35,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease10.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease11.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease12.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease13.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease14.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease15.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_RunRelease9.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease10.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease11.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease12.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease13.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease14.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease15.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runrelease9.ogg" }
 })
 
 sound.Add({
@@ -637,7 +637,7 @@ sound.Add({
 	level = 45,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land9.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodGeneric_Land10.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land9.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_land10.ogg" }
 })
 
 sound.Add({
@@ -646,7 +646,7 @@ sound.Add({
 	level = 42,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun9.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodWallRun10.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodwallrun1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodwallrun2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodwallrun3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodwallrun4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodwallrun5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodwallrun6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodwallrun7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodwallrun8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodwallrun9.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodwallrun10.ogg" }
 })
 
 sound.Add({
@@ -655,13 +655,13 @@ sound.Add({
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Slide/Wood/Me_Slide_Wood1.ogg", "mirrorsedge/Slide/Wood/Me_Slide_Wood2.ogg", "mirrorsedge/Slide/Wood/Me_Slide_Wood3.ogg", "mirrorsedge/Slide/Wood/Me_Slide_Wood4.ogg" }
+	sound = { "mirrorsedge/slide/wood/me_slide_wood1.ogg", "mirrorsedge/slide/wood/me_slide_wood2.ogg", "mirrorsedge/slide/wood/me_slide_wood3.ogg", "mirrorsedge/slide/wood/me_slide_wood4.ogg" }
 })
 
 sound.Add({
 	name = "Slide.WoodLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_WoodSlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_woodslideloop.wav",
 	pitch = 100,
 	level = 60,
 	channel = CHAN_STATIC
@@ -673,7 +673,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint1.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint2.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint3.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint4.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint5.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint6.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint7.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint8.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint9.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint10.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_wood_sprint1.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint2.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint3.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint4.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint5.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint6.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint7.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint8.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint9.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint10.ogg" }
 })
 
 sound.Add({
@@ -682,7 +682,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint1.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint2.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint3.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint4.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint5.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint6.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint7.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint8.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint9.ogg", "mirrorsedge/Footsteps/wood/ME_FootStep_Wood_Sprint10.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_wood_sprint1.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint2.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint3.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint4.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint5.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint6.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint7.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint8.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint9.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_sprint10.ogg" }
 })
 
 sound.Add({
@@ -691,7 +691,7 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease9.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease10.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease1.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease2.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease3.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease4.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease5.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease6.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease7.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease8.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease9.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease10.ogg" }
 })
 
 sound.Add({
@@ -700,7 +700,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run9.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Run10.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodplank_run1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_run2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_run3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_run4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_run5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_run6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_run7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_run8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_run9.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_run10.ogg" }
 })
 
 sound.Add({
@@ -709,7 +709,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk9.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk10.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk9.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk10.ogg" }
 })
 
 sound.Add({
@@ -718,7 +718,7 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease9.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_Wood_RunRelease10.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease1.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease2.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease3.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease4.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease5.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease6.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease7.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease8.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease9.ogg", "mirrorsedge/footsteps/wood/me_footstep_wood_runrelease10.ogg" }
 })
 
 sound.Add({
@@ -727,7 +727,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk1.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk2.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk3.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk4.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk5.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk6.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk7.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk8.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk9.ogg", "mirrorsedge/Footsteps/Wood/ME_FootStep_WoodPlank_Walk10.ogg" }
+	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk9.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodplank_walk10.ogg" }
 })
 
 sound.Add({
@@ -736,7 +736,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step1.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step10.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step11.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step12.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step13.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step2.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step3.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step4.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step5.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step6.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step7.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step8.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Step9.ogg" }
+	sound = { "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step1.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step10.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step11.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step12.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step13.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step2.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step3.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step4.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step5.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step6.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step7.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step8.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_step9.ogg" }
 })
 
 sound.Add({
@@ -745,7 +745,7 @@ sound.Add({
 	level = 50,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak1.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak2.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak3.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak4.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak5.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak6.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak7.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak8.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak9.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterSneak10.ogg" }
+	sound = { "mirrorsedge/footsteps/water/me_footstep_watersneak1.ogg", "mirrorsedge/footsteps/water/me_footstep_watersneak2.ogg", "mirrorsedge/footsteps/water/me_footstep_watersneak3.ogg", "mirrorsedge/footsteps/water/me_footstep_watersneak4.ogg", "mirrorsedge/footsteps/water/me_footstep_watersneak5.ogg", "mirrorsedge/footsteps/water/me_footstep_watersneak6.ogg", "mirrorsedge/footsteps/water/me_footstep_watersneak7.ogg", "mirrorsedge/footsteps/water/me_footstep_watersneak8.ogg", "mirrorsedge/footsteps/water/me_footstep_watersneak9.ogg", "mirrorsedge/footsteps/water/me_footstep_watersneak10.ogg" }
 })
 
 sound.Add({
@@ -754,7 +754,7 @@ sound.Add({
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Water/ME_FootStep_WaterLand1.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterLand2.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterLand3.ogg", "mirrorsedge/Footsteps/Water/ME_FootStep_WaterLand4.ogg" }
+	sound = { "mirrorsedge/footsteps/water/me_footstep_waterland1.ogg", "mirrorsedge/footsteps/water/me_footstep_waterland2.ogg", "mirrorsedge/footsteps/water/me_footstep_waterland3.ogg", "mirrorsedge/footsteps/water/me_footstep_waterland4.ogg" }
 })
 
 sound.Add({
@@ -763,13 +763,13 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release1.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release10.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release11.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release12.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release13.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release14.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release2.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release3.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release4.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release5.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release6.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release7.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release8.ogg", "mirrorsedge/Footsteps/Water/ME_Faith_Water_Shallow_Sprint_Release9.ogg" }
+	sound = { "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release1.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release10.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release11.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release12.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release13.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release14.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release2.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release3.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release4.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release5.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release6.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release7.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release8.ogg", "mirrorsedge/footsteps/water/me_faith_water_shallow_sprint_release9.ogg" }
 })
 
 sound.Add({
 	name = "Slide.WaterLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_WaterShallowSlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_watershallowslideloop.wav",
 	pitch = 100,
 	level = 75,
 	channel = CHAN_STATIC
@@ -781,7 +781,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint1.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint10.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint11.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint12.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint13.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint2.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint3.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint4.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint5.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint6.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint7.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint8.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint9.ogg" }
+	sound = { "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint1.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint10.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint11.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint12.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint13.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint2.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint3.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint4.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint5.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint6.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint7.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint8.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint9.ogg" }
 })
 
 sound.Add({
@@ -790,7 +790,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk1.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk2.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk3.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk4.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk5.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk6.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk7.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk8.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk9.ogg", "mirrorsedge/Footsteps/Concrete/ME_FootStep_ConcreteDirtWalk10.ogg" }
+	sound = { "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk1.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk2.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk3.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk4.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk5.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk6.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk7.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk8.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk9.ogg", "mirrorsedge/footsteps/concrete/me_footstep_concretedirtwalk10.ogg" }
 })
 
 sound.Add({
@@ -799,7 +799,7 @@ sound.Add({
 	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith1.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith10.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith11.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith12.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith13.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith14.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith2.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith3.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith4.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith5.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith6.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith7.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith8.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Sprint_Release_Faith9.ogg" }
+	sound = { "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith1.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith10.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith11.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith12.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith13.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith14.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith2.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith3.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith4.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith5.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith6.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith7.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith8.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_sprint_release_faith9.ogg" }
 })
 
 sound.Add({
@@ -808,7 +808,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy1.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy10.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy11.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy2.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy3.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy4.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy5.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy6.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy7.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy8.ogg", "mirrorsedge/Footsteps/Gravel/ME_Footsteps_Gravel_Land_Heavy9.ogg" }
+	sound = { "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy1.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy10.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy11.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy2.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy3.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy4.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy5.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy6.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy7.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy8.ogg", "mirrorsedge/footsteps/gravel/me_footsteps_gravel_land_heavy9.ogg" }
 })
 
 sound.Add({
@@ -817,13 +817,13 @@ sound.Add({
 	level = 42,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Slide/Gravel/ME_Gravel_Slide1.ogg", "mirrorsedge/Slide/Gravel/ME_Gravel_Slide2.ogg", "mirrorsedge/Slide/Gravel/ME_Gravel_Slide3.ogg", "mirrorsedge/Slide/Gravel/ME_Gravel_Slide4.ogg", "mirrorsedge/Slide/Gravel/ME_Gravel_Slide5.ogg", "mirrorsedge/Slide/Gravel/ME_Gravel_Slide6.ogg", "mirrorsedge/Slide/Gravel/ME_Gravel_Slide7.ogg", "mirrorsedge/Slide/Gravel/ME_Gravel_Slide8.ogg", "mirrorsedge/Slide/Gravel/ME_Gravel_Slide9.ogg", "mirrorsedge/Slide/Gravel/ME_Gravel_Slide10.ogg" }
+	sound = { "mirrorsedge/slide/gravel/me_gravel_slide1.ogg", "mirrorsedge/slide/gravel/me_gravel_slide2.ogg", "mirrorsedge/slide/gravel/me_gravel_slide3.ogg", "mirrorsedge/slide/gravel/me_gravel_slide4.ogg", "mirrorsedge/slide/gravel/me_gravel_slide5.ogg", "mirrorsedge/slide/gravel/me_gravel_slide6.ogg", "mirrorsedge/slide/gravel/me_gravel_slide7.ogg", "mirrorsedge/slide/gravel/me_gravel_slide8.ogg", "mirrorsedge/slide/gravel/me_gravel_slide9.ogg", "mirrorsedge/slide/gravel/me_gravel_slide10.ogg" }
 })
 
 sound.Add({
 	name = "Slide.GravelLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_GravelSlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_gravelslideloop.wav",
 	pitch = 100,
 	level = 95,
 	channel = CHAN_STATIC
@@ -835,7 +835,7 @@ sound.Add({
 	level = 45,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run1.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run2.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run3.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run4.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run5.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run6.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run7.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run8.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run9.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Run10.ogg" }
+	sound = { "mirrorsedge/footsteps/carpet/me_footstep_carpet_run1.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_run2.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_run3.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_run4.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_run5.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_run6.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_run7.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_run8.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_run9.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_run10.ogg" }
 })
 
 sound.Add({
@@ -844,7 +844,7 @@ sound.Add({
 	level = 42,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease1.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease2.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease3.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease4.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_RunRelease5.ogg" }
+	sound = { "mirrorsedge/footsteps/carpet/me_footstep_carpet_runrelease1.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_runrelease2.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_runrelease3.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_runrelease4.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_runrelease5.ogg" }
 })
 
 sound.Add({
@@ -853,7 +853,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk1.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk2.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk3.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk4.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk5.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk6.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk7.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk8.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk9.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk10.ogg" }
+	sound = { "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk1.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk2.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk3.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk4.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk5.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk6.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk7.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk8.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk9.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk10.ogg" }
 })
 
 sound.Add({
@@ -862,7 +862,7 @@ sound.Add({
 	level = 35,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk1.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk2.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk3.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk4.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk5.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk6.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk7.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk8.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk9.ogg", "mirrorsedge/Footsteps/Carpet/ME_FootStep_Carpet_Walk10.ogg" }
+	sound = { "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk1.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk2.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk3.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk4.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk5.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk6.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk7.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk8.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk9.ogg", "mirrorsedge/footsteps/carpet/me_footstep_carpet_walk10.ogg" }
 })
 
 sound.Add({
@@ -871,7 +871,7 @@ sound.Add({
 	level = 42,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint1.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint2.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint3.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint4.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint5.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint6.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint7.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint8.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint9.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint10.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint11.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint12.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint13.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint14.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint15.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint16.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint17.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint18.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint19.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint20.ogg" }
+	sound = { "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint1.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint2.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint3.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint4.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint5.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint6.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint7.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint8.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint9.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint10.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint11.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint12.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint13.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint14.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint15.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint16.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint17.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint18.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint19.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint20.ogg" }
 })
 
 sound.Add({
@@ -880,7 +880,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint1.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint2.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint3.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint4.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint5.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint6.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint7.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint8.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint9.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint10.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint11.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint12.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint13.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint14.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint15.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint16.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint17.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint18.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint19.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint20.ogg" }
+	sound = { "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint1.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint2.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint3.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint4.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint5.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint6.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint7.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint8.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint9.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint10.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint11.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint12.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint13.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint14.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint15.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint16.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint17.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint18.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint19.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint20.ogg" }
 })
 
 sound.Add({
@@ -889,7 +889,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint1.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint2.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint3.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint4.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint5.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint6.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint7.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint8.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint9.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint10.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint11.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint12.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint13.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint14.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint15.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint16.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint17.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint18.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint19.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Sprint20.ogg" }
+	sound = { "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint1.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint2.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint3.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint4.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint5.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint6.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint7.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint8.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint9.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint10.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint11.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint12.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint13.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint14.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint15.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint16.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint17.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint18.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint19.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint20.ogg" }
 })
 
 sound.Add({
@@ -898,7 +898,7 @@ sound.Add({
 	level = 33,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release1.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release2.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release3.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release4.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release5.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release6.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release7.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release8.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release9.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release10.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release11.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release12.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release13.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release14.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Release15.ogg" }
+	sound = { "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release1.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release2.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release3.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release4.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release5.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release6.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release7.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release8.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release9.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release10.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release11.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release12.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release13.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release14.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_release15.ogg" }
 })
 
 sound.Add({
@@ -907,13 +907,13 @@ sound.Add({
 	level = 42,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land1.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land2.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land3.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land4.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land5.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land6.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land7.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land8.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land9.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land10.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land11.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land12.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land13.ogg", "mirrorsedge/Footsteps/Tarp/ME_Footsteps_Tarp_Land14.ogg" }
+	sound = { "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land1.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land2.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land3.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land4.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land5.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land6.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land7.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land8.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land9.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land10.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land11.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land12.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land13.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_land14.ogg" }
 })
 
 sound.Add({
 	name = "Slide.Tarp",
 	volume = 1,
-	sound = "mirrorsedge/Slide/tarp/ME_Footsteps_TarpSlide.ogg",
+	sound = "mirrorsedge/slide/tarp/me_footsteps_tarpslide.ogg",
 	pitch = 100,
 	level = 75,
 	channel = CHAN_STATIC
@@ -922,7 +922,7 @@ sound.Add({
 sound.Add({
 	name = "Slide.TarpLoop",
 	volume = 1,
-	sound = "mirrorsedge/Slide/ME_FootStep_TarpSlideLoop.wav",
+	sound = "mirrorsedge/slide/me_footstep_tarpslideloop.wav",
 	pitch = 100,
 	level = 75,
 	channel = CHAN_STATIC
@@ -934,7 +934,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Ladder/LadderFootstepHvy_01.ogg", "mirrorsedge/Ladder/LadderFootstepHvy_02.ogg", "mirrorsedge/Ladder/LadderFootstepHvy_03.ogg", "mirrorsedge/Ladder/LadderFootstepHvy_04.ogg", "mirrorsedge/Ladder/LadderFootstepHvy_05.ogg", "mirrorsedge/Ladder/LadderFootstepHvy_06.ogg" }
+	sound = { "mirrorsedge/ladder/ladderfootstephvy_01.ogg", "mirrorsedge/ladder/ladderfootstephvy_02.ogg", "mirrorsedge/ladder/ladderfootstephvy_03.ogg", "mirrorsedge/ladder/ladderfootstephvy_04.ogg", "mirrorsedge/ladder/ladderfootstephvy_05.ogg", "mirrorsedge/ladder/ladderfootstephvy_06.ogg" }
 })
 
 sound.Add({
@@ -943,7 +943,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Ladder/LadderFootstepMed_01.ogg", "mirrorsedge/Ladder/LadderFootstepMed_02.ogg", "mirrorsedge/Ladder/LadderFootstepMed_03.ogg", "mirrorsedge/Ladder/LadderFootstepMed_04.ogg", "mirrorsedge/Ladder/LadderFootstepMed_05.ogg", "mirrorsedge/Ladder/LadderFootstepMed_06.ogg" }
+	sound = { "mirrorsedge/ladder/ladderfootstepmed_01.ogg", "mirrorsedge/ladder/ladderfootstepmed_02.ogg", "mirrorsedge/ladder/ladderfootstepmed_03.ogg", "mirrorsedge/ladder/ladderfootstepmed_04.ogg", "mirrorsedge/ladder/ladderfootstepmed_05.ogg", "mirrorsedge/ladder/ladderfootstepmed_06.ogg" }
 })
 
 sound.Add({
@@ -952,7 +952,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Ladder/LadderFootstepRelease_01.ogg", "mirrorsedge/Ladder/LadderFootstepRelease_02.ogg", "mirrorsedge/Ladder/LadderFootstepRelease_03.ogg", "mirrorsedge/Ladder/LadderFootstepRelease_04.ogg", "mirrorsedge/Ladder/LadderFootstepRelease_05.ogg", "mirrorsedge/Ladder/LadderFootstepRelease_06.ogg" }
+	sound = { "mirrorsedge/ladder/ladderfootsteprelease_01.ogg", "mirrorsedge/ladder/ladderfootsteprelease_02.ogg", "mirrorsedge/ladder/ladderfootsteprelease_03.ogg", "mirrorsedge/ladder/ladderfootsteprelease_04.ogg", "mirrorsedge/ladder/ladderfootsteprelease_05.ogg", "mirrorsedge/ladder/ladderfootsteprelease_06.ogg" }
 })
 
 sound.Add({

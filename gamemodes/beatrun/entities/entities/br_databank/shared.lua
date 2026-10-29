@@ -47,7 +47,7 @@ function ENT:Deposit(ply)
 
 	ply:DataTheft_Bank()
 
-	self:EmitSound("mirrorsedge/ui/ME_UI_hud_select.ogg", 60, 100 + math.random(-10, 5))
+	self:EmitSound("mirrorsedge/ui/me_ui_hud_select.ogg", 60, 100 + math.random(-10, 5))
 end
 
 function ENT:Think()
