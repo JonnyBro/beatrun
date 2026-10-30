@@ -622,10 +622,10 @@ local customarmoffset = {
 	ladderclimbhangstart = Vector(-5, 0, 0),
 	ladderenterbottom = Vector(-7.5, 0, 0),
 	jumpcrouch = Vector(-4, 0, -2),
-	crouchstill = Vector(-4, 0, -2),
-	crouchtostandleft = Vector(-4, 0, -2),
-	crouchfwd = Vector(-4, 0, -2),
-	crouchbwd = Vector(-4, 0, -2),
+	crouchstill = Vector(0, 0, -2),
+	crouchtostandleft = Vector(0, 0, -2),
+	crouchfwd = Vector(0, 0, -2),
+	crouchbwd = Vector(0, 0, -2),
 	walkfwd = Vector(10, 0, -10),
 	walkback = Vector(10, 0, -10),
 	runbwd = Vector(0, 0, 3),
@@ -651,10 +651,10 @@ local customcamoffset = {
 	hangstrafeleft = Vector(-2.5, 0, 0),
 	hangstraferight = Vector(-2.5, 0, 0),
 	snatchscar = snatchscarcam1,
-	crouchstill = Vector(2, 0, 2.5),
-	crouchtostandleft = Vector(2, 0, 2.5),
-	crouchfwd = Vector(2, 0, 2.5),
-	crouchbwd = Vector(2, 0, 2.5)
+	crouchstill = Vector(2, 0, -3),
+	crouchtostandleft = Vector(2, 0, -3),
+	crouchfwd = Vector(2, 0, -3),
+	crouchbwd = Vector(2, 0, -3)
 }
 
 local transitionchecks = {
@@ -1451,6 +1451,37 @@ local armoffsetlerp = Vector()
 local manipulate_fingerAng = Angle(0, 30, 0)
 local bac_pos = Vector(0, 0, -64)
 
+local function SpineBend(ent)
+	local ply = LocalPlayer()
+	if nospinebend[BodyAnimString] or ply:ShouldDrawLocalPlayer() then return end
+
+	local eyeang = ply:EyeAngles()
+	local bend = math.rad(math.max(eyeang.x * 0.5, 0))
+	if bend <= 0 then return end
+
+	if not ent.spinebones then
+		local spine = ent:LookupBone("ValveBiped.Bip01_Spine")
+
+		ent.spine = spine
+		ent.spinebones = spine and BeatrunIK.GetSubtree(ent, spine) or {}
+	end
+
+	local px, py, pz = BeatrunIK.GetBonePos(ent, ent.spine)
+	if not px then return end
+
+	-- The body's own yaw, not the view's: standing, the body lags behind the view and would bend sideways
+	local left = -Angle(0, ent:GetAngles().y, 0):Right()
+	local r11, r12, r13, r21, r22, r23, r31, r32, r33 = BeatrunIK.AxisAngle(left.x, left.y, left.z, bend)
+
+	BeatrunIK.MoveBones(ent, ent.spinebones, r11, r12, r13, r21, r22, r23, r31, r32, r33, px, py, pz, px, py, pz)
+end
+
+hook.Add("BodyAnimStart", "BeatrunSpineBend", function()
+	if IsValid(BodyAnim) then
+		BodyAnim:AddCallback("BuildBonePositions", SpineBend)
+	end
+end)
+
 local function JumpArmDraw() --(a, b, c)
 	local bac = CreateBodyAnimArmCopy()
 	if not IsValid(bac) or not IsValid(BodyAnim) then return end
@@ -1462,12 +1493,6 @@ local function JumpArmDraw() --(a, b, c)
 		render.SetColorModulation(1, 1, 1) -- fix: some maps turn viewmodel red (wow)
 
 		local eyeang = ply:EyeAngles()
-
-		if not nospinebend[BodyAnimString] then
-			BodyAnim:ManipulateBoneAngles(1, Angle(0, math.max(eyeang.x * 0.5, 0), 0))
-		else
-			BodyAnim:ManipulateBoneAngles(1, angle_zero)
-		end
 
 		cam.IgnoreZ(true)
 
@@ -1524,6 +1549,7 @@ local function JumpArmDraw() --(a, b, c)
 
 		pos:Add(armoffset)
 		pos:Add(customoffsetlerp)
+
 		ang:Add(ViewTiltAngle)
 
 		if CamShake then

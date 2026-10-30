@@ -116,6 +116,29 @@ local function IsDescendant(ent, bone, ancestor)
 	return false
 end
 
+-- The bone and everything under it
+function BeatrunIK.GetSubtree(ent, bone)
+	local bones = {}
+
+	for b = 0, ent:GetBoneCount() - 1 do
+		if IsDescendant(ent, b, bone) then
+			bones[#bones + 1] = b
+		end
+	end
+
+	return bones
+end
+
+-- Rotation by angle radians around the unit axis ax/ay/az, as a row-major 3x3
+function BeatrunIK.AxisAngle(ax, ay, az, angle)
+	local c, s = math.cos(angle), math.sin(angle)
+	local t = 1 - c
+
+	return t * ax * ax + c, t * ax * ay - s * az, t * ax * az + s * ay,
+		t * ax * ay + s * az, t * ay * ay + c, t * ay * az - s * ax,
+		t * ax * az - s * ay, t * ay * az + s * ax, t * az * az + c
+end
+
 -- Looks up a root -> mid -> end chain and splits the root's subtree into what follows each of the three
 -- (twist bones go with their segment, fingers and toes with the end), names past the third end up in chain.extra
 function BeatrunIK.GetChain(ent, names)
