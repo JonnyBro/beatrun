@@ -14,14 +14,30 @@ local down = Vector(0, 0, -3)
 
 local nextWallCheck = 4 -- start out at 4 to prevent any errors when the game boots up ¯\_(ツ)_/¯
 
-hook.Add("Tick", "HandStandWall", function()
-	if not WallBrace:GetBool() then
-		HandIKSetContact(1, false)
-		HandIKSetContact(2, false)
+local wallruntr = {
+	start = Vector(),
+	endpos = Vector(),
+	mask = MASK_PLAYERSOLID,
+	collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+}
 
-		return
+-- 2 = wall on the right, 3 = wall on the left
+local function WallrunHand(ply)
+	local wallrun = ply:GetWallrun()
+	if wallrun ~= 2 and wallrun ~= 3 or ply:GetMelee() ~= 0 then return end
+
+	wallruntr.start:Set(ply:GetShootPos())
+	wallruntr.endpos:Set(wallruntr.start - ply:GetWallrunDir() * 40)
+	wallruntr.filter = ply
+
+	local tr = util.TraceLine(wallruntr)
+
+	if tr.Hit then
+		HandIKSetContact(wallrun == 2 and 2 or 1, true, tr.HitPos, tr.HitNormal)
 	end
+end
 
+hook.Add("Tick", "HandStandWall", function()
 	if nextWallCheck > CurTime() then return end -- lets not spam checks
 	nextWallCheck = CurTime() + 0.03 -- ~33 hz should be fast enough
 
@@ -29,9 +45,15 @@ hook.Add("Tick", "HandStandWall", function()
 	HandIKSetContact(2, false)
 
 	local ply = LocalPlayer()
+	if not IsValid(ply) then return end
+
+	WallrunHand(ply)
+
+	if not WallBrace:GetBool() then return end
+
 	local bac = BodyAnimArmCopy
 	local bac_seq = IsValid(bac) and bac:GetSequenceName(bac:GetSequence()) or ""
-	if not IsValid(ply) or ply:GetMelee() ~= 0 or (ArmInterrupting(bac) and not standWallAnims[bac_seq]) or ply:GetSafetyRollTime() > CurTime() or (ply:GetDive() or ply:GetDiveSliding() or string.StartsWith(BodyAnimString, "diveslideend")) then IsPlyInStandWall = false return end
+	if ply:GetMelee() ~= 0 or (ArmInterrupting(bac) and not standWallAnims[bac_seq]) or ply:GetSafetyRollTime() > CurTime() or (ply:GetDive() or ply:GetDiveSliding() or string.StartsWith(BodyAnimString, "diveslideend")) then IsPlyInStandWall = false return end
 
 	local rh = ply:GetActiveWeapon()
 

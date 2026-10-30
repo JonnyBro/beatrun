@@ -88,13 +88,16 @@ local function HandIK(ent)
 		local planepos, planenormal = ToArmSpace(contact.pos, contact.normal)
 		local nx, ny, nz = planenormal.x, planenormal.y, planenormal.z
 		local dist = (ax - planepos.x) * nx + (ay - planepos.y) * ny + (az - planepos.z) * nz
-		local correction = (palmoffset - dist) * contact.weight
+		local correction = palmoffset - dist
+		local weight = contact.weight * math.Clamp(2 - 2 * math.abs(correction) / maxcorrection, 0, 1)
 
-		if math.abs(correction) < maxcorrection then
+		if weight > 0 then
+			correction = correction * weight
+
 			ax, ay, az = IK.ReachChain(ent, arm, ax + nx * correction, ay + ny * correction, az + nz * correction, pole.x, pole.y, pole.z)
 
 			if ax then
-				TiltPalm(ent, arm, ax, ay, az, nx, ny, nz, contact.weight)
+				TiltPalm(ent, arm, ax, ay, az, nx, ny, nz, weight)
 			end
 		end
 	end
