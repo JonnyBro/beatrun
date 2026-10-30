@@ -1799,6 +1799,41 @@ end)
 local animtr, animtr_result = nil, nil
 local oldnewang = Angle()
 
+local movex, movey = 1, 0
+
+local function SetMoveDirection(vel, ang)
+	local len = vel:Length2D()
+	local x, y = movex, movey
+
+	if len > 1 then
+		local fwd, right = ang:Forward(), ang:Right()
+
+		x = (vel.x * fwd.x + vel.y * fwd.y) / len
+		y = (vel.x * right.x + vel.y * right.y) / len
+	end
+
+	local k = 1 - math.exp(-FrameTime() * 10)
+
+	movex, movey = Lerp(k, movex, x), Lerp(k, movey, y)
+
+	local px, py = movex, movey
+	local m = math.max(math.abs(px), math.abs(py))
+
+	if m > 1e-3 then
+		local s = math.sqrt(px * px + py * py) / m
+
+		px, py = px * s, py * s
+	end
+
+	BodyAnim:SetPoseParameter("move_x", px)
+	BodyAnim:SetPoseParameter("move_y", py)
+
+	if IsValid(BodyAnimArmCopy) then
+		BodyAnimArmCopy:SetPoseParameter("move_x", px)
+		BodyAnimArmCopy:SetPoseParameter("move_y", py)
+	end
+end
+
 local usingHands = false
 local lastWeapon
 
@@ -1814,7 +1849,7 @@ local function JumpThink()
 			usingHands = true
 
 			if IsValid(BodyAnim) then
-				if ply:GetWallrun() == 1 then -- 1 = verticaL
+				if ply:GetWallrun() == 1 then -- 1 = vertical
 					BodyLimitX = 25
 					BodyLimitY = 70
 
@@ -1886,65 +1921,21 @@ local function JumpThink()
 				end
 				vel.z = 0
 
-				if back and vel_l > 10 then
-					ang = vel:Angle()
-
-					if ang:Forward():Dot(angold:Forward()) < 0 then
-						ang:RotateAroundAxis(Vector(0, 0, 1), 180)
-					end
-
-					BodyAnimSpeed = math.Clamp(vel_l / 150, 0.1, 0.8)
-					lerpspeed = 300
-					moveback = true
-
-					if not ply:Crouching() then
-						if ply:KeyDown(IN_WALK) or vel:Length() < 150 then
-							BodyAnim:SetSequence(BodyAnim:LookupSequence("walkback"))
-						else
-							BodyAnim:SetSequence(BodyAnim:LookupSequence("runbwd"))
-						end
-					else
-						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchbwd"))
-					end
-				elseif vel_l > 0 and moving and ply:GetWallrun() == 0 and ply:GetMantle() == 0 then
-					ang = vel:Angle()
-
-					if moveback then
-						ang:RotateAroundAxis(Vector(0, 0, 1), -180)
-
-						if ply:KeyDown(IN_FORWARD) then
-							moveback = false
-						elseif ply:Crouching() and moveback then
-							BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchbwd"))
-						else
-							BodyAnim:SetSequence(BodyAnim:LookupSequence("runbwd"))
-						end
-					end
+				if (moving or back) and vel_l > 0 and ply:GetWallrun() == 0 and ply:GetMantle() == 0 then
+					ang = angold
+					lerpspeed = 30
 
 					if ply:InOverdrive() then
 						BodyAnimSpeed = math.Clamp(vel_l / 320, 0.85, 1.5)
+					elseif vel_l > 295 then
+						BodyAnimSpeed = math.Clamp(vel_l / 300, 0.85, 1)
 					else
-						local dot = ang:Forward():Dot(angold:Forward())
-
-						if dot < 0 then
-							ang:RotateAroundAxis(Vector(0, 0, 1), 180 * math.abs(dot))
-						end
-
-						if vel_l > 295 then
-							BodyAnimSpeed = math.Clamp(vel_l / 300, 0.85, 1)
-						elseif moveback then
-							BodyAnimSpeed = math.Clamp(vel_l / 150, 0.1, 0.8)
-						else
-							BodyAnimSpeed = math.Clamp(vel_l / 255, 0.85, 1.15)
-						end
+						BodyAnimSpeed = math.Clamp(vel_l / 255, 0.85, 1.15)
 					end
 
-					lerpspeed = 30
-
 					if vel:Length() > 300 and ply:OnGround() then
-
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("sprintfwd"))
-					elseif ply:OnGround() and not moveback then
+					elseif ply:OnGround() then
 						if not ply:Crouching() then
 							if ply:KeyDown(IN_WALK) or vel:Length() < 150 then
 								BodyAnim:SetSequence(BodyAnim:LookupSequence("walkfwd"))
@@ -1955,6 +1946,8 @@ local function JumpThink()
 							BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchfwd"))
 						end
 					end
+
+					SetMoveDirection(vel, angold)
 				else
 					BodyAnimSpeed = 1
 
