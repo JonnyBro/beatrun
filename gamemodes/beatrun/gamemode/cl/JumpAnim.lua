@@ -1933,11 +1933,11 @@ local function JumpThink()
 						BodyAnimSpeed = math.Clamp(vel_l / 255, 0.85, 1.15)
 					end
 
-					if vel:Length() > 300 and ply:OnGround() then
+					if vel:Length() > 240 and ply:OnGround() then
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("sprintfwd"))
 					elseif ply:OnGround() then
 						if not ply:Crouching() then
-							if ply:KeyDown(IN_WALK) or vel:Length() < 150 then
+							if ply:KeyDown(IN_WALK) or vel:Length() < 110 then
 								BodyAnim:SetSequence(BodyAnim:LookupSequence("walkfwd"))
 							else
 								BodyAnim:SetSequence(BodyAnim:LookupSequence("runfwd"))
