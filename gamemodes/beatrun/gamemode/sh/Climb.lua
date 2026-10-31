@@ -1,4 +1,12 @@
-local ClimbingTimes = { 5, 1.25, 1, 1, nil, 2 }
+-- 7 is going around an outer corner, as long as the hangcorner animations
+local ClimbingTimes = { 5, 1.25, 1, 1, nil, 2, 1 / 1.2 }
+
+-- The hanging origin sits this far below the top of the ledge
+local hangheight = 77
+
+local hangjumpup = 300
+local hangjumpsideup = 250
+local hangjumpside = 250
 
 if game.SinglePlayer() and SERVER then
 	util.AddNetworkString("Climb_SPFix")
@@ -45,6 +53,103 @@ local function MoveOutOfWall(ply, mv)
 			return
 		end
 	end
+end
+
+local function CornerTrace(ply, start, endpos)
+	return util.TraceLine({
+		start = start,
+		endpos = endpos,
+		filter = ply,
+		mask = MASK_PLAYERSOLID,
+		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+	})
+end
+
+-- When the ledge ends while shimmying, looks for it wrapping around an outer corner at the same height
+-- and starts moving onto the side face
+local function HangCorner(ply, mv, isright)
+	local wallang = ply:GetClimbingAngle()
+	local fwd = wallang:Forward()
+	local side = wallang:Right()
+
+	if not isright then side:Mul(-1) end
+
+	local origin = mv:GetOrigin()
+	local top = origin.z + hangheight
+
+	local face = CornerTrace(ply, Vector(origin.x, origin.y, top - 4), Vector(origin.x, origin.y, top - 4) + fwd * 40)
+	if not face.Hit or face.StartSolid then return end
+
+	local depth = (face.HitPos - origin):Dot(fwd)
+	local probe = face.HitPos + fwd * 16 + side * 64
+
+	local sideface = CornerTrace(ply, probe, probe - side * 64)
+	if not sideface.Hit or sideface.StartSolid or sideface.HitNormal:Dot(side) < 0.7 then return end
+
+	local newfwd = -sideface.HitNormal
+	newfwd.z = 0
+	newfwd:Normalize()
+
+	local ledge = CornerTrace(ply, sideface.HitPos + newfwd * 4 + Vector(0, 0, 20), sideface.HitPos + newfwd * 4 - Vector(0, 0, 16))
+	if not ledge.Hit or ledge.StartSolid or ledge.HitNormal.z < 0.7 or math.abs(ledge.HitPos.z - top) > 8 then return end
+
+	local neworigin = sideface.HitPos - newfwd * depth
+	neworigin.z = ledge.HitPos.z - hangheight
+
+	local mins, maxs = ply:GetHull()
+	mins.z = maxs.z * 0.25
+
+	-- A hanging player sits 0.533 into the wall (see ClimbingCheck), so the room is checked pulled back by that much
+	local hullpos = neworigin - newfwd * 0.533
+
+	local hull = util.TraceHull({
+		start = hullpos,
+		endpos = hullpos,
+		mins = mins,
+		maxs = maxs,
+		filter = ply,
+		mask = MASK_PLAYERSOLID,
+		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+	})
+
+	if hull.Hit then return end
+
+	local newang = newfwd:Angle()
+
+	-- Not networked, but every realm runs the same traces when the corner starts
+	local pivot = face.HitPos + side * (sideface.HitPos - face.HitPos):Dot(side)
+	local mid = pivot - fwd * depth
+	mid.z = origin.z
+
+	local yaw0 = (mid - pivot):Angle().y
+	local turn = ((neworigin - pivot):Angle().y - yaw0) % 360
+	local outside = ((side - fwd):Angle().y - yaw0) % 360
+
+	-- Slides along the wall up to the corner first, then swings around it. The way round has to be the outside one,
+	-- the shorter way can go through the wall
+	ply.HangCornerPivot = pivot
+	ply.HangCornerMid = mid
+	ply.HangCornerTurn = outside < turn and turn or turn - 360
+
+	ply:SetClimbingStart(origin)
+	ply:SetClimbingEnd(neworigin)
+	ply:SetClimbingEndOld(Vector(neworigin.x, neworigin.y, ledge.HitPos.z) + newfwd * 20)
+	ply:SetClimbingTime(0)
+	ply:SetClimbingAngle(newang)
+	ply:SetClimbing(7)
+
+	ply.wallang = newang
+
+	ParkourEvent(isright and "hangcornerright" or "hangcornerleft", ply)
+
+	if CLIENT and IsFirstTimePredicted() then
+		ply.CornerFromAng = Angle(0, wallang.y, 0)
+		ply.CornerLastYaw = wallang.y
+	elseif game.SinglePlayer() then
+		ply:SendLua("LocalPlayer().CornerFromAng=Angle(0," .. wallang.y .. ",0) LocalPlayer().CornerLastYaw=" .. wallang.y)
+	end
+
+	return true
 end
 
 local function ClimbingEnd(ply, mv, cmd)
@@ -250,7 +355,48 @@ local function ClimbingThink(ply, mv, cmd)
 			return
 		end
 
-		if (mv:KeyPressed(IN_FORWARD) or mv:KeyPressed(IN_JUMP)) and ang <= 42 then
+		if mv:KeyPressed(IN_JUMP) and ang <= 42 then
+			local wallang = ply:GetClimbingAngle()
+			local side = (mv:KeyDown(IN_MOVERIGHT) and 1 or 0) - (mv:KeyDown(IN_MOVELEFT) and 1 or 0)
+
+			mv:SetOrigin(ply:GetClimbingStart() - wallang:Forward() * 0.6)
+			MoveOutOfWall(ply, mv)
+
+			ply:SetMoveType(MOVETYPE_WALK)
+
+			mv:SetButtons(0)
+
+			ply:SetClimbing(0)
+			-- ClimbingCheck would grab the ledge we just let go of on the way up
+			ply:SetClimbingDelay(CurTime() + 0.3)
+
+			local vel = wallang:Right() * side * hangjumpside
+			vel.z = side == 0 and hangjumpup or hangjumpsideup
+
+			mv:SetVelocity(vel)
+
+			ParkourEvent("hangjumpup", ply)
+
+			if SERVER then
+				ply:EmitSound("Cloth.VaultSwish")
+				ply:EmitSound("Handsteps.ConcreteRelease")
+			end
+
+			if CLIENT and IsFirstTimePredicted() then
+				lockang2 = false
+				lockang = false
+				BodyLimitX = 25
+				BodyLimitY = 70
+
+				ply.WallrunOrigAng = Angle(0, wallang.y, 0)
+			elseif game.SinglePlayer() then
+				ply:SendLua("lockang2=false lockang=false BodyLimitX=25 BodyLimitY=70 LocalPlayer().WallrunOrigAng=Angle(0," .. wallang.y .. ",0)")
+			end
+
+			return
+		end
+
+		if mv:KeyPressed(IN_FORWARD) and ang <= 42 then
 			local tr = ply.ClimbingTraceSafety
 			local trout = ply.ClimbingTraceSafetyOut
 			local mins, maxs = ply:GetHull()
@@ -309,6 +455,8 @@ local function ClimbingThink(ply, mv, cmd)
 			if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
 			local fail = trout.Fraction < 0.25 or trout.Fraction > 0.5
+
+			if fail and HangCorner(ply, mv, isright) then return end
 
 			if not fail then
 				local ostart = tr.start
@@ -399,6 +547,47 @@ local function ClimbingThink(ply, mv, cmd)
 		end
 	end
 
+	if ply:GetClimbing() == 7 then
+		local t = math.min(ply:GetClimbingTime(), 1)
+		local from, to = ply:GetClimbingStart(), ply:GetClimbingEnd()
+		local pivot = ply.HangCornerPivot
+
+		-- Swings around the corner instead of cutting straight through it
+		local mid = ply.HangCornerMid
+
+		if pivot and mid and ply.HangCornerTurn then
+			local a, b = mid - pivot, to - pivot
+			local ra, rb = a:Length2D(), b:Length2D()
+			local slide = from:Distance(mid)
+			local swing = math.abs(math.rad(ply.HangCornerTurn)) * (ra + rb) * 0.5
+			local split = slide / math.max(slide + swing, 1)
+
+			if t < split then
+				mv:SetOrigin(LerpVector(t / split, from, mid))
+			else
+				local u = (t - split) / (1 - split)
+				local yaw = math.rad(a:Angle().y + ply.HangCornerTurn * u)
+				local r = Lerp(u, ra, rb)
+
+				mv:SetOrigin(Vector(pivot.x + math.cos(yaw) * r, pivot.y + math.sin(yaw) * r, Lerp(u, mid.z, to.z)))
+			end
+		else
+			mv:SetOrigin(LerpVector(t, from, to))
+		end
+
+		ply:SetClimbingTime(ply:GetClimbingTime() + FrameTime() * ClimbingTimes[7])
+
+		if ply:GetClimbingTime() >= 1 then
+			mv:SetOrigin(to)
+
+			ply:SetClimbing(1)
+			ply:SetClimbingStart(to)
+			ply:SetClimbingEnd(ply:GetClimbingEndOld())
+			ply:SetClimbingTime(0)
+			ply:SetClimbingDelay(CurTime() + 0.1)
+		end
+	end
+
 	if ply:GetClimbing() == 2 or ply:GetClimbing() == 6 then
 		if game.SinglePlayer() then
 			net.Start("Climb_SPFix")
@@ -439,6 +628,7 @@ local foldedDamage = CreateConVar("Beatrun_LedgeGrabDamage", "0", { FCVAR_ARCHIV
 
 local function ClimbingCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
+	if mv:GetVelocity().z > 0 and ply:GetClimbingDelay() > CurTime() then return end
 
 	local mins, maxs = ply:GetHull()
 

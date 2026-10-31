@@ -12,7 +12,9 @@ local requiresArms = {
 	hangfoldedendhang = true,
 	hangfoldedheaveup = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	hanghardstart = true
 }
 
@@ -53,6 +55,7 @@ fbanims = {
 	jumpcoilendcrouch = true,
 	jumpcoilcatalyst = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	hangfoldedstart = true,
 	jumpslow = true,
 	jumpcrouch = true,
@@ -68,6 +71,7 @@ fbanims = {
 	jumpturnlandidle = true,
 	hanghardstart = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	walkfwd = true,
 	walkback = true,
 	jumpfast = true,
@@ -192,7 +196,9 @@ local events = {
 	jumpwallrun = true,
 	ziplinestart = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	climbhard = true,
 	walkbalancefwd = true,
 	hangfoldedheaveup = true,
@@ -236,6 +242,7 @@ local events = {
 	diveslidestart = true,
 	bargedoor = true,
 	hangjump = true,
+	hangjumpup = true,
 	diveslideend = true,
 	landcoil = true,
 	ladderexittoprighthand = true,
@@ -258,6 +265,7 @@ local eventslut = {
 	hangfoldedheaveup = "hangfoldedheaveup",
 	jumpwallrun = "jumpfast",
 	hangstrafeleft = "hangstrafeleft",
+	hangcornerleft = "hangcornerleft",
 	ziplinestart = "ziplinestart",
 	climbhard2 = "hanghardstart2",
 	vaultonto = "vaultonto",
@@ -270,6 +278,7 @@ local eventslut = {
 	sidestepleft = "dodgejumpleft",
 	vaulthigh = "vaultoverhigh",
 	hangstraferight = "hangstraferight",
+	hangcornerright = "hangcornerright",
 	hangfoldedstart = "hangfoldedstart",
 	ladderexittoprighthand = "ladderexittoprighthand",
 	swingpipeleft = "stand",
@@ -306,6 +315,7 @@ local eventslut = {
 	slide = "meslidestart",
 	bargedoor = "bargein",
 	hangjump = "jumpfast",
+	hangjumpup = "wallrunverticalstart", -- CHANGE THIS TO NEW JUMP UP ANIM
 	diveslidestart = "diveslidestart",
 	landcoil = "jumpcoilend",
 	diveslideend = "diveslideend",
@@ -411,6 +421,7 @@ local transitionanims = {
 	walktostandleft = "stand",
 	fallinguncontrolled = "runfwd",
 	hangstrafeleft = "hang",
+	hangcornerleft = "hang",
 	ladderclimbhangstart = "ladderclimbuprighthandstill",
 	hanghardstart2 = "hang",
 	meslideend = "runfwd",
@@ -420,6 +431,7 @@ local transitionanims = {
 	springboardleftleg = "runfwd",
 	hanghardstartvertical = "hang",
 	hangstraferight = "hang",
+	hangcornerright = "hang",
 	zipline = "jumpzipline",
 	ladderenterbottom = "ladderclimbuplefthandstill",
 	hangheaveup = "runfwd",
@@ -479,6 +491,7 @@ local nospinebend = {
 	ziplinestart = true,
 	hangfoldedendhang = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	zipline = true,
 	hanghardstart2 = true,
 	snatchsniper = true,
@@ -488,6 +501,7 @@ local nospinebend = {
 	diveidle = true,
 	hanghardstartvertical = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	hangfoldedstart = true,
 	ladderenterbottom = true,
 	hangheaveup = true,
@@ -518,6 +532,7 @@ local worldarm = {
 	snatchsniper = true,
 	hangfoldedendhang = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	bargein = true,
 	hanghardstart2 = true,
 	grapplecenter = true,
@@ -528,6 +543,7 @@ local worldarm = {
 	diveslideendcrouch = true,
 	hanghardstartvertical = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	hangfoldedstart = true,
 	ladderenterbottom = true,
 	hangheaveup = true,
@@ -649,7 +665,9 @@ local customcamoffset = {
 	ladderexittoprighthand = Vector(-5, 0, 0),
 	ladderenterbottom = Vector(-5, 0, 0),
 	hangstrafeleft = Vector(-2.5, 0, 0),
+	hangcornerleft = Vector(-2.5, 0, 0),
 	hangstraferight = Vector(-2.5, 0, 0),
+	hangcornerright = Vector(-2.5, 0, 0),
 	snatchscar = snatchscarcam1,
 	crouchstill = Vector(2, 0, -3),
 	crouchtostandleft = Vector(2, 0, -3),
@@ -917,6 +935,54 @@ local function HangAngleSoundCheck(ply)
 	ply.hangLookingAway = lookingAway
 end
 
+-- Turns the body and the view with it from the old wall to the new one as the corner goes on. The camera isn't
+-- locked to the head, the animation turns the head away from where the body ends up.
+-- The animation swings the pelvis out and back in place while Climb.lua already moves the player around the corner,
+-- so the pelvis' sideways drift from its first frame is taken back out
+local function HangCornerTurn(ply)
+	local from = ply.CornerFromAng or ply:GetClimbingAngle()
+	-- Finishes a bit early, the animation hands over to hang at 0.9 and this stops running there
+	local t = math.Clamp(ply:GetClimbing() == 7 and ply:GetClimbingTime() / 0.85 or 1, 0, 1)
+	local ang = LerpAngle(t * t * (3 - 2 * t), from, ply:GetClimbingAngle())
+
+	ang.x = 0
+	ang.z = 0
+
+	CamIgnoreAng = false
+	BodyLimitY = 40
+
+	BodyAnim:SetAngles(ang)
+	ply.OrigEyeAng = ang
+
+	if ply.CornerLastYaw then
+		local eyeang = ply:EyeAngles()
+
+		eyeang.y = eyeang.y + math.AngleDifference(ang.y, ply.CornerLastYaw)
+		ply:SetEyeAngles(eyeang)
+	end
+
+	ply.CornerLastYaw = ang.y
+
+	local pelvis = BodyAnim:LookupBone("ValveBiped.Bip01_Pelvis")
+	local pelvispos = pelvis and BodyAnim:GetBonePosition(pelvis)
+
+	if pelvispos then
+		local localpos = WorldToLocal(pelvispos, angle_zero, BodyAnim:GetPos(), ang)
+		localpos.z = 0
+
+		if BodyAnimCycle < 0.05 or not ply.CornerPelvisBase then
+			ply.CornerPelvisBase = localpos
+		end
+
+		localpos:Sub(ply.CornerPelvisBase)
+		localpos:Rotate(ang)
+
+		BodyAnimPosOffset:Set(-localpos)
+	end
+
+	return true
+end
+
 fbfunctions = {
 	vaultontohigh = function(ply) return true end,
 	swing = function(ply)
@@ -1011,6 +1077,8 @@ fbfunctions = {
 
 		return true
 	end,
+	hangcornerleft = HangCornerTurn,
+	hangcornerright = HangCornerTurn,
 	hanghardstartvertical = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 120
@@ -1159,6 +1227,14 @@ eventsounds = {
 		[0.5] = "Cloth.MovementSneak"
 	},
 	hangstraferight = {
+		[0.1] = "Cloth.MovementSneak",
+		[0.5] = "Cloth.MovementSneak"
+	},
+	hangcornerleft = {
+		[0.1] = "Cloth.MovementSneak",
+		[0.5] = "Cloth.MovementSneak"
+	},
+	hangcornerright = {
 		[0.1] = "Cloth.MovementSneak",
 		[0.5] = "Cloth.MovementSneak"
 	},
@@ -1921,6 +1997,8 @@ local function JumpThink()
 		BodyAnimString = BodyAnim:GetSequenceName(BodyAnim:GetSequence())
 
 		if fbanims[BodyAnimString] then
+			BodyAnimPosOffset:Zero()
+
 			local ply = LocalPlayer()
 
 			if jumpanims[BodyAnimString] and (ply:OnGround() or ply:GetWallrun() ~= 0 or ply:GetMantle() ~= 0) then
@@ -2100,7 +2178,18 @@ local function JumpThink()
 
 			if BodyAnimString == "wallrunverticalstart" or BodyAnimString == "wallrunvertical" then
 				ang = ply.WallrunOrigAng or ang
-				BodyAnimSpeed = 1.2 * math.Clamp((LocalPlayer():GetWallrunTime() - CurTime()) / 1.2, 0.5, 1)
+
+				if ply:GetWallrun() == 1 then
+					BodyAnimSpeed = 1.2 * math.Clamp((LocalPlayer():GetWallrunTime() - CurTime()) / 1.2, 0.5, 1)
+				else
+					-- Jumping up from a hang borrows the vertical wallrun start, there's no wallrun to end it
+					BodyAnimSpeed = 1.2
+
+					if ply:GetVelocity().z < 0 and ply:GetClimbing() == 0 then
+						BodyAnimCycle = 0
+						BodyAnim:SetSequence(BodyAnim:LookupSequence("jumpair"))
+					end
+				end
 			end
 
 			if BodyAnimString == "vaultover" or BodyAnimString == "vaultkong" or BodyAnimString == "stepuprightleg" or BodyAnimString == "vaultonto" then
