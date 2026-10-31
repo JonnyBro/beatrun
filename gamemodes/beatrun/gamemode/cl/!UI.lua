@@ -1,23 +1,3 @@
-local SScaleX_cached = {}
-local SScaleY_cached = {}
-
--- Deprecated, kept until addons based on Beatrun move to BeatrunUI.S
-function SScaleX(sizex)
-	if SScaleX_cached[sizex] then return SScaleX_cached[sizex] end
-
-	SScaleX_cached[sizex] = math.ceil(sizex / (1920 / ScrW()))
-
-	return SScaleX_cached[sizex]
-end
-
-function SScaleY(sizey)
-	if SScaleY_cached[sizey] then return SScaleY_cached[sizey] end
-
-	SScaleY_cached[sizey] = math.ceil(sizey / (1080 / ScrH()))
-
-	return SScaleY_cached[sizey]
-end
-
 function AEUIFonts()
 	surface.CreateFont("AEUISmall", {
 		font = "D-DIN",
