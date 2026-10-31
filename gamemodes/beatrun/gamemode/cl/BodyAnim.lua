@@ -149,7 +149,6 @@ camjoint = "eyes"
 BodyAnimCrouchLerp = 1
 BodyAnimCrouchLerpZ = 0
 BodyAnimFootDrop = 0
-BodyAnimPosOffset = Vector()
 BodyAnimLimitEase = false
 
 CamShake = false
@@ -722,7 +721,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				end
 
 				pos.z = pos.z - BodyAnimFootDrop
-				pos:Add(BodyAnimPosOffset)
 
 				if BodyAnimPosEaseLerp < 1 then
 					local easedpos = LerpVector(BodyAnimPosEaseLerp, BodyAnimPosEase, pos)

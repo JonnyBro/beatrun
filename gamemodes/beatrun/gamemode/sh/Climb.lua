@@ -116,21 +116,6 @@ local function HangCorner(ply, mv, isright)
 
 	local newang = newfwd:Angle()
 
-	-- Not networked, but every realm runs the same traces when the corner starts
-	local pivot = face.HitPos + side * (sideface.HitPos - face.HitPos):Dot(side)
-	local mid = pivot - fwd * depth
-	mid.z = origin.z
-
-	local yaw0 = (mid - pivot):Angle().y
-	local turn = ((neworigin - pivot):Angle().y - yaw0) % 360
-	local outside = ((side - fwd):Angle().y - yaw0) % 360
-
-	-- Slides along the wall up to the corner first, then swings around it. The way round has to be the outside one,
-	-- the shorter way can go through the wall
-	ply.HangCornerPivot = pivot
-	ply.HangCornerMid = mid
-	ply.HangCornerTurn = outside < turn and turn or turn - 360
-
 	ply:SetClimbingStart(origin)
 	ply:SetClimbingEnd(neworigin)
 	ply:SetClimbingEndOld(Vector(neworigin.x, neworigin.y, ledge.HitPos.z) + newfwd * 20)
@@ -550,30 +535,9 @@ local function ClimbingThink(ply, mv, cmd)
 	if ply:GetClimbing() == 7 then
 		local t = math.min(ply:GetClimbingTime(), 1)
 		local from, to = ply:GetClimbingStart(), ply:GetClimbingEnd()
-		local pivot = ply.HangCornerPivot
 
-		-- Swings around the corner instead of cutting straight through it
-		local mid = ply.HangCornerMid
-
-		if pivot and mid and ply.HangCornerTurn then
-			local a, b = mid - pivot, to - pivot
-			local ra, rb = a:Length2D(), b:Length2D()
-			local slide = from:Distance(mid)
-			local swing = math.abs(math.rad(ply.HangCornerTurn)) * (ra + rb) * 0.5
-			local split = slide / math.max(slide + swing, 1)
-
-			if t < split then
-				mv:SetOrigin(LerpVector(t / split, from, mid))
-			else
-				local u = (t - split) / (1 - split)
-				local yaw = math.rad(a:Angle().y + ply.HangCornerTurn * u)
-				local r = Lerp(u, ra, rb)
-
-				mv:SetOrigin(Vector(pivot.x + math.cos(yaw) * r, pivot.y + math.sin(yaw) * r, Lerp(u, mid.z, to.z)))
-			end
-		else
-			mv:SetOrigin(LerpVector(t, from, to))
-		end
+		-- Straight through the corner, the player doesn't collide while hanging anyway
+		mv:SetOrigin(LerpVector(t * t * (3 - 2 * t), from, to))
 
 		ply:SetClimbingTime(ply:GetClimbingTime() + FrameTime() * ClimbingTimes[7])
 

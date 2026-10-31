@@ -936,9 +936,7 @@ local function HangAngleSoundCheck(ply)
 end
 
 -- Turns the body and the view with it from the old wall to the new one as the corner goes on. The camera isn't
--- locked to the head, the animation turns the head away from where the body ends up.
--- The animation swings the pelvis out and back in place while Climb.lua already moves the player around the corner,
--- so the pelvis' sideways drift from its first frame is taken back out
+-- locked to the head, the animation turns the head away from where the body ends up
 local function HangCornerTurn(ply)
 	local from = ply.CornerFromAng or ply:GetClimbingAngle()
 	-- Finishes a bit early, the animation hands over to hang at 0.9 and this stops running there
@@ -962,23 +960,6 @@ local function HangCornerTurn(ply)
 	end
 
 	ply.CornerLastYaw = ang.y
-
-	local pelvis = BodyAnim:LookupBone("ValveBiped.Bip01_Pelvis")
-	local pelvispos = pelvis and BodyAnim:GetBonePosition(pelvis)
-
-	if pelvispos then
-		local localpos = WorldToLocal(pelvispos, angle_zero, BodyAnim:GetPos(), ang)
-		localpos.z = 0
-
-		if BodyAnimCycle < 0.05 or not ply.CornerPelvisBase then
-			ply.CornerPelvisBase = localpos
-		end
-
-		localpos:Sub(ply.CornerPelvisBase)
-		localpos:Rotate(ang)
-
-		BodyAnimPosOffset:Set(-localpos)
-	end
 
 	return true
 end
@@ -1997,8 +1978,6 @@ local function JumpThink()
 		BodyAnimString = BodyAnim:GetSequenceName(BodyAnim:GetSequence())
 
 		if fbanims[BodyAnimString] then
-			BodyAnimPosOffset:Zero()
-
 			local ply = LocalPlayer()
 
 			if jumpanims[BodyAnimString] and (ply:OnGround() or ply:GetWallrun() ~= 0 or ply:GetMantle() ~= 0) then
