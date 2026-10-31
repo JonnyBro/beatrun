@@ -21,11 +21,13 @@ local viewmapped = false
 local realpos, realang = Vector(), Angle()
 local armpos, armang = Vector(), Angle()
 
--- hand: 1 = left, 2 = right
-function HandIKSetContact(hand, want, pos, normal)
+-- hand: 1 = left, 2 = right. Without shift the hand is pressed onto the plane, with it the hand is moved off the plane
+-- it's already at by that much (so a hand the animation already places right can be moved relative to that)
+function HandIKSetContact(hand, want, pos, normal, shift)
 	local contact = contacts[hand]
 
 	contact.want = want
+	contact.shift = shift
 
 	if want then
 		contact.pos:Set(pos)
@@ -88,7 +90,7 @@ local function HandIK(ent)
 		local planepos, planenormal = ToArmSpace(contact.pos, contact.normal)
 		local nx, ny, nz = planenormal.x, planenormal.y, planenormal.z
 		local dist = (ax - planepos.x) * nx + (ay - planepos.y) * ny + (az - planepos.z) * nz
-		local correction = palmoffset - dist
+		local correction = contact.shift and contact.shift * contact.normal.z or palmoffset - dist
 		local weight = contact.weight * math.Clamp(2 - 2 * math.abs(correction) / maxcorrection, 0, 1)
 
 		if weight > 0 then
@@ -96,7 +98,13 @@ local function HandIK(ent)
 
 			ax, ay, az = IK.ReachChain(ent, arm, ax + nx * correction, ay + ny * correction, az + nz * correction, pole.x, pole.y, pole.z)
 
-			if ax then
+			if ax and contact.shift then
+				-- Only the slope itself, the grip from the animation stays as it is on flat ground
+				local _, up = ToArmSpace(contact.pos, vector_up)
+				local r11, r12, r13, r21, r22, r23, r31, r32, r33 = IK.MinArc(up.x, up.y, up.z, nx, ny, nz, weight)
+
+				IK.MoveBones(ent, arm.endbones, r11, r12, r13, r21, r22, r23, r31, r32, r33, ax, ay, az, ax, ay, az)
+			elseif ax then
 				TiltPalm(ent, arm, ax, ay, az, nx, ny, nz, weight)
 			end
 		end

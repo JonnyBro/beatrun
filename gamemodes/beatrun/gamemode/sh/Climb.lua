@@ -426,7 +426,8 @@ local function ClimbingThink(ply, mv, cmd)
 
 			local tr = ply.ClimbingTraceEnd
 			local trout = ply.ClimbingTraceEndOut
-			local start = mv:GetOrigin() + wallang:Forward() * 20 + Vector(0, 0, 100) + dir
+			-- From well above the ledge so it can go up a slope as far as it can go down (about 20 units per step)
+			local start = mv:GetOrigin() + wallang:Forward() * 20 + Vector(0, 0, 120) + dir
 
 			tr.start = start
 			tr.endpos = start - Vector(0, 0, 80)
@@ -440,7 +441,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 			if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
-			local fail = trout.Fraction < 0.25 or trout.Fraction > 0.5
+			local fail = trout.Fraction < 0.25 or trout.Fraction > 0.75
 
 			if fail and HangCorner(ply, mv, isright) then return end
 
@@ -448,8 +449,8 @@ local function ClimbingThink(ply, mv, cmd)
 				local ostart = tr.start
 				local oendpos = tr.endpos
 
-				tr.start = ply:GetClimbingEnd() + dir
-				tr.endpos = tr.start - Vector(0, 0, 100)
+				tr.start = ply:GetClimbingEnd() + dir + Vector(0, 0, 30)
+				tr.endpos = tr.start - Vector(0, 0, 130)
 
 				util.TraceLine(tr)
 
@@ -479,7 +480,7 @@ local function ClimbingThink(ply, mv, cmd)
 					ply:SetClimbingEnd(mv:GetOrigin() + dir)
 					ply:SetClimbingTime(0)
 
-					tr.start = mv:GetOrigin() + ply:GetClimbingAngle():Forward() * 20 + Vector(0, 0, 100) + dir
+					tr.start = mv:GetOrigin() + ply:GetClimbingAngle():Forward() * 20 + Vector(0, 0, 120) + dir
 					tr.endpos = tr.start - Vector(0, 0, 80)
 
 					if isright then

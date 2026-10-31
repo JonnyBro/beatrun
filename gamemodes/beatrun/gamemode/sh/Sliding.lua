@@ -533,6 +533,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		ply:SetViewOffsetDucked(Vector(0, 0, 28) + eyeang * -25)
 		local slidedelta = (ply:GetSlidingTime() - CT) / slidetime
+		local slidejumped = false
 
 		local speed = ply:GetSlidingVel() * math.min(1.75, (ply:GetSlidingTime() - CT + 0.5) / slidetime) * qslide_speedmult
 		mv:SetVelocity(ply:GetSlidingAngle():Forward() * speed)
@@ -621,6 +622,8 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 				mv:SetVelocity(vel)
 
 				ParkourEvent("jumpslide", ply)
+
+				slidejumped = true
 			end
 		end
 
@@ -676,7 +679,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		end
 
 		-- A slide jump has already ended the slide on its own
-		if ply:GetSliding() and ply:GetSlidingTime() < CT and ply:GetMelee() == 0 then
+		if not slidejumped and ply:GetSlidingTime() < CT and ply:GetMelee() == 0 then
 			ply:SetSliding(false)
 			ply:SetSlidingTime(0)
 			ply:ViewPunch(Angle(0.85, 0, 0.15))
