@@ -14,19 +14,40 @@ timer.Simple(0.05, function()
 	if IsValid(BodyAnimMDLarm) then BodyAnimMDLarm:SetModelScale(modelscale, 0) end
 end)
 
--- Hair, hats and other bones parented to the head aren't on the animation rig, so the whole head subtree is hidden.
--- Has to be reapplied after anything that rescales the body
+-- Called right before drawing, after the bones (jiggle ones included) are set up for the frame. Jiggle bones
+-- (hair) don't shrink with ManipulateBoneScale and a BuildBonePositions callback doesn't reach them on a bonemerged model
+local function HideHeadBones(ent)
+	if not ent.hiddenheadbones then return end
+
+	ent:SetupBones()
+
+	for _, bone in ipairs(ent.hiddenheadbones) do
+		local m = ent:GetBoneMatrix(bone)
+
+		if m then
+			m:SetScale(vector_origin)
+			ent:SetBoneMatrix(bone, m)
+		end
+	end
+end
+
+-- Hair, hats and other bones parented to the head (or the neck, on some models) aren't on the animation rig,
+-- so the whole subtree is hidden. Has to be reapplied after anything that rescales the body
 function BodyAnimHideHead()
 	if not IsValid(BodyAnimMDL) then return end
 
-	local head = BodyAnimMDL:LookupBone("ValveBiped.Bip01_Head1")
-	if not head then return end
+	local root = BodyAnimMDL:LookupBone("ValveBiped.Bip01_Neck1") or BodyAnimMDL:LookupBone("ValveBiped.Bip01_Head1")
+	if not root then return end
+
+	local bones = {}
 
 	for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
-		local bone = i
+		local bone = BodyAnimMDL:GetBoneParent(i)
 
 		while bone and bone >= 0 do
-			if bone == head then
+			if bone == root then
+				bones[#bones + 1] = i
+
 				BodyAnimMDL:ManipulateBoneScale(i, vector_origin)
 
 				break
@@ -35,6 +56,8 @@ function BodyAnimHideHead()
 			bone = BodyAnimMDL:GetBoneParent(bone)
 		end
 	end
+
+	BodyAnimMDL.hiddenheadbones = bones
 end
 
 local function ApplyBodyScale()
@@ -170,6 +193,8 @@ function BaDisableReflectionsAndShadows(self)
 	if name == "_rt_waterreflection" or name == "_rt_shadowdummy" then -- _rt_waterreflection is basically every reflection
 		return
 	end
+
+	HideHeadBones(self)
 
 	self:DrawModel()
 end
@@ -919,6 +944,7 @@ hook.Add("PostDrawOpaqueRenderables", "IgnoreZBodyAnim", function() -- (depth, s
 
 		if ignorez then
 			cam.IgnoreZ(true)
+			HideHeadBones(BodyAnimMDL)
 			BodyAnimMDL:DrawModel()
 			local customarmdraw = hook.Run("BodyAnimDrawArm")
 

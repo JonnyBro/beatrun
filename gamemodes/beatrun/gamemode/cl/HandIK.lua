@@ -58,6 +58,50 @@ local function TiltPalm(ent, arm, wx, wy, wz, nx, ny, nz, weight)
 	IK.MoveBones(ent, arm.endbones, r11, r12, r13, r21, r22, r23, r31, r32, r33, wx, wy, wz, wx, wy, wz)
 end
 
+local fingersides = { "L", "R" }
+
+-- Index to pinky, each as base, middle and tip. The thumb stays as the animation has it
+local function GetFingers(ent, hand)
+	local fingers = {}
+
+	for f = 1, 4 do
+		local prefix = "ValveBiped.Bip01_" .. fingersides[hand] .. "_Finger" .. f
+		local base, mid, tip = ent:LookupBone(prefix), ent:LookupBone(prefix .. "1"), ent:LookupBone(prefix .. "2")
+
+		if base and mid and tip then
+			fingers[#fingers + 1] = { { base, mid, tip }, { mid, tip }, { tip } }
+		end
+	end
+
+	return fingers
+end
+
+-- Lays the fingers flat along the wall, pointing the way the palm does, since the animation keeps them curled.
+-- ValveBiped bones point down their own x axis
+local function FlattenFingers(ent, fingers, wx, wy, wz, middle, nx, ny, nz, weight)
+	local mx, my, mz = IK.GetBonePos(ent, middle)
+	if not mx then return end
+
+	local dx, dy, dz = mx - wx, my - wy, mz - wz
+	local along = dx * nx + dy * ny + dz * nz
+
+	dx, dy, dz = dx - nx * along, dy - ny * along, dz - nz * along
+
+	for _, finger in ipairs(fingers) do
+		for _, segment in ipairs(finger) do
+			local m = ent:GetBoneMatrix(segment[1])
+
+			if m then
+				local fwd = m:GetForward()
+				local px, py, pz = IK.GetBonePos(ent, segment[1])
+				local r11, r12, r13, r21, r22, r23, r31, r32, r33 = IK.MinArc(fwd.x, fwd.y, fwd.z, dx, dy, dz, weight)
+
+				IK.MoveBones(ent, segment, r11, r12, r13, r21, r22, r23, r31, r32, r33, px, py, pz, px, py, pz)
+			end
+		end
+	end
+end
+
 local function ToArmSpace(pos, normal)
 	if not viewmapped then return pos, normal end
 
@@ -106,6 +150,12 @@ local function HandIK(ent)
 				IK.MoveBones(ent, arm.endbones, r11, r12, r13, r21, r22, r23, r31, r32, r33, ax, ay, az, ax, ay, az)
 			elseif ax then
 				TiltPalm(ent, arm, ax, ay, az, nx, ny, nz, weight)
+
+				arm.fingers = arm.fingers or GetFingers(ent, i)
+
+				if arm.extra[2] then
+					FlattenFingers(ent, arm.fingers, ax, ay, az, arm.extra[2], nx, ny, nz, weight)
+				end
 			end
 		end
 	end
