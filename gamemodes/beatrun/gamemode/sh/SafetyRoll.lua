@@ -120,7 +120,7 @@ local matfall = {
 	BodyAnimSpeed = 1,
 	ignorez = true,
 	deleteonend = true,
-	usefullbody = true,
+	usefullbody = 2,
 	AnimString = "falldown"
 }
 
@@ -192,7 +192,7 @@ hook.Add("SetupMove", "EvadeRoll", function(ply, mv, cmd)
 
 		roll.AnimString = "evaderoll"
 		roll.animmodelstring = "new_climbanim"
-		roll.usefullbody = false
+		roll.usefullbody = 2
 
 		if SERVER and not land then
 			ply:EmitSound("Cloth.FallShortMediumLong")
@@ -302,7 +302,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 			roll.AnimString = ply:UsingRH() and "land" or "landgun"
 			roll.animmodelstring = "new_climbanim"
-			roll.usefullbody = true
+			roll.usefullbody = 2
 		else
 			land = false
 
@@ -311,7 +311,7 @@ hook.Add("OnPlayerHitGround", "SafetyRoll", function(ply, water, floater, speed)
 
 			roll.AnimString = ply:UsingRH() and "meroll" or "merollgun"
 			roll.animmodelstring = "new_climbanim"
-			roll.usefullbody = false
+			roll.usefullbody = 2
 		end
 
 		if SERVER and not land then

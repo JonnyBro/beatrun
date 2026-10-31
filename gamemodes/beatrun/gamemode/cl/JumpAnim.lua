@@ -1451,9 +1451,12 @@ local armoffsetlerp = Vector()
 local manipulate_fingerAng = Angle(0, 30, 0)
 local bac_pos = Vector(0, 0, -64)
 
+-- Set by JumpArmDraw. Other body anims (rolls) lock the camera to the head, which the bend would feed back into
+local spinebendframe = -1
+
 local function SpineBend(ent)
 	local ply = LocalPlayer()
-	if nospinebend[BodyAnimString] or ply:ShouldDrawLocalPlayer() then return end
+	if FrameNumber() - spinebendframe > 1 or nospinebend[BodyAnimString] or ply:ShouldDrawLocalPlayer() then return end
 
 	local eyeang = ply:EyeAngles()
 	local bend = math.rad(math.max(eyeang.x * 0.5, 0))
@@ -1477,6 +1480,8 @@ local function SpineBend(ent)
 end
 
 hook.Add("BodyAnimStart", "BeatrunSpineBend", function()
+	spinebendframe = -1
+
 	if IsValid(BodyAnim) then
 		BodyAnim:AddCallback("BuildBonePositions", SpineBend)
 	end
@@ -1491,6 +1496,8 @@ local function JumpArmDraw() --(a, b, c)
 
 	if not ply:ShouldDrawLocalPlayer() then --and not c
 		render.SetColorModulation(1, 1, 1) -- fix: some maps turn viewmodel red (wow)
+
+		spinebendframe = FrameNumber()
 
 		local eyeang = ply:EyeAngles()
 
