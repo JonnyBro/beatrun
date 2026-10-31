@@ -675,7 +675,14 @@ local customcamoffset = {
 	crouchbwd = Vector(2, 0, -3)
 }
 
+-- Held shimmy steps restart the strafe animation, going back to hang in between would blend in and out every step
+local function HangStrafeDone(ply)
+	return BodyAnimCycle >= 0.95 and ply:GetClimbing() == 1 and not ply:KeyDown(IN_MOVELEFT) and not ply:KeyDown(IN_MOVERIGHT)
+end
+
 local transitionchecks = {
+	hangstrafeleft = HangStrafeDone,
+	hangstraferight = HangStrafeDone,
 	meleeair = function(ply)
 		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
 	end,

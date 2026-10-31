@@ -1,5 +1,6 @@
--- 7 is going around an outer corner, as long as the hangcorner animations
-local ClimbingTimes = { 5, 1.25, 1, 1, nil, 2, 1 / 1.2 }
+-- 3 and 4 are a shimmy step and 7 is going around an outer corner, each as long as its animation
+-- (hangstrafe 36 frames, hangcorner 36 frames, both 30 fps) so held steps chain without the animation cutting
+local ClimbingTimes = { 5, 1.25, 30 / 35, 30 / 35, nil, 2, 30 / 35 }
 
 -- The hanging origin sits this far below the top of the ledge
 local hangheight = 77
