@@ -160,7 +160,9 @@ hook.Add("Tick", "HandStandWall", function()
 		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
 	})
 
-	if (leftHand_trace.Hit or rightHand_trace.Hit) and not (ply:KeyDown(IN_BACK) and ply:GetVelocity():Length() > 10) and ply:WaterLevel() <= 1 then --TODO: figure out how to get if the player is moving backwards with only the velocity (dont rely on keydown)
+	local movingback = ply:GetVelocity():Dot(traceDir) < -10
+
+	if (leftHand_trace.Hit or rightHand_trace.Hit) and not movingback and ply:WaterLevel() <= 1 then
 		IsPlyInStandWall = true
 
 		if leftHand_trace.Hit then HandIKSetContact(1, true, leftHand_trace.HitPos, leftHand_trace.HitNormal) end
