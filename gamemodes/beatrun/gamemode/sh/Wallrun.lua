@@ -369,7 +369,7 @@ local function WallrunningCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
 
 	if not ply.WallrunTrace then
-		ply.WallrunTrace = {}
+		ply.WallrunTrace = { mask = MASK_PLAYERSOLID }
 		ply.WallrunTraceOut = {}
 	end
 

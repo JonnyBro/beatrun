@@ -71,10 +71,28 @@ local function PlayVaultAnim(ply, ang)
 	end
 end
 
+local facetr = {}
+
+local function ProbeDistance(ply, mv, ang, dist, past)
+	facetr.start = mv:GetOrigin() + chestvec
+	facetr.endpos = facetr.start + ang:Forward() * dist
+	facetr.filter = ply
+
+	TraceParkourMask(facetr)
+
+	local tr = util.TraceLine(facetr)
+
+	if tr.Hit and not tr.StartSolid then
+		return math.min(dist, tr.Fraction * dist + past)
+	end
+
+	return dist
+end
+
 local function Vault1(ply, mv, ang, t, h)
 	local mins, maxs = ply:GetHull()
 
-	t.start = mv:GetOrigin() + eyevec + ang:Forward() * 25
+	t.start = mv:GetOrigin() + eyevec + ang:Forward() * ProbeDistance(ply, mv, ang, 25, 1)
 	t.endpos = t.start - neckvec
 	t.filter = ply
 
@@ -194,7 +212,7 @@ local function Vault2(ply, mv, ang, t, h)
 	local mins, maxs = ply:GetHull()
 	maxs.z = maxs.z * 0.5
 
-	local start = mv:GetOrigin() + chestvec + ang:Forward() * 35
+	local start = mv:GetOrigin() + chestvec + ang:Forward() * ProbeDistance(ply, mv, ang, 35, 8)
 
 	TraceSetData(t, start, start, mins, maxs, ply)
 	TraceParkourMask(t)
@@ -278,7 +296,7 @@ local function Vault3(ply, mv, ang, t, h)
 	local mins, maxs = ply:GetHull()
 	maxs.z = maxs.z * 0.5
 
-	t.start = mv:GetOrigin() + chestvec + ang:Forward() * 35
+	t.start = mv:GetOrigin() + chestvec + ang:Forward() * ProbeDistance(ply, mv, ang, 35, 8)
 	t.endpos = t.start
 	t.filter = ply
 
