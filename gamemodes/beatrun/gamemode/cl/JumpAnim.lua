@@ -1518,6 +1518,13 @@ local armoffsetlerp = Vector()
 local manipulate_fingerAng = Angle(0, 30, 0)
 local bac_pos = Vector(0, 0, -64)
 
+-- How close the head may get to a wall when bending down
+local spinemargin = 10
+local spinetr = {
+	mask = MASK_PLAYERSOLID,
+	collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+}
+
 -- Set by JumpArmDraw. Other body anims (rolls) lock the camera to the head, which the bend would feed back into
 local spinebendframe = -1
 
@@ -1526,13 +1533,14 @@ local function SpineBend(ent)
 	if FrameNumber() - spinebendframe > 1 or nospinebend[BodyAnimString] or ply:ShouldDrawLocalPlayer() then return end
 
 	local eyeang = ply:EyeAngles()
-	local bend = math.rad(math.max(eyeang.x * 0.5, 0))
+	local bend = math.rad(math.max(eyeang.x * 0.4, 0))
 	if bend <= 0 then return end
 
 	if not ent.spinebones then
 		local spine = ent:LookupBone("ValveBiped.Bip01_Spine")
 
 		ent.spine = spine
+		ent.spinehead = ent:LookupBone("ValveBiped.Bip01_Head1")
 		ent.spinebones = spine and BeatrunIK.GetSubtree(ent, spine) or {}
 	end
 
@@ -1540,7 +1548,28 @@ local function SpineBend(ent)
 	if not px then return end
 
 	-- The body's own yaw, not the view's: standing, the body lags behind the view and would bend sideways
-	local left = -Angle(0, ent:GetAngles().y, 0):Right()
+	local yaw = Angle(0, ent:GetAngles().y, 0)
+
+	-- The head (and the camera on it) swings forward past the player's hull, against a wall it would go inside it
+	local hx, hy, hz = BeatrunIK.GetBonePos(ent, ent.spinehead or ent.spine)
+	local length = math.sqrt((hx - px) ^ 2 + (hy - py) ^ 2 + (hz - pz) ^ 2)
+
+	if length > 1 then
+		local head = Vector(hx, hy, hz)
+
+		spinetr.start = head
+		spinetr.endpos = head + yaw:Forward() * (length + spinemargin)
+		spinetr.filter = ply
+
+		local tr = util.TraceLine(spinetr)
+		local room = math.max(tr.Fraction * (length + spinemargin) - spinemargin, 0)
+
+		bend = math.min(bend, math.asin(math.min(room / length, 1)))
+
+		if bend <= 0 then return end
+	end
+
+	local left = -yaw:Right()
 	local r11, r12, r13, r21, r22, r23, r31, r32, r33 = BeatrunIK.AxisAngle(left.x, left.y, left.z, bend)
 
 	BeatrunIK.MoveBones(ent, ent.spinebones, r11, r12, r13, r21, r22, r23, r31, r32, r33, px, py, pz, px, py, pz)
