@@ -600,13 +600,7 @@ function StartBodyAnim(animtable)
 
 		-- Apply SetModelScale to BodyAnim (root entity)
 		if IsValid(BodyAnim) then
-			-- The worst math I've ever written
 			BodyAnim:SetModelScale(modelscale, 0.001)
-
-			if modelscale < 1 then
-				local offset = Vector(0, 0, (1 - modelscale) * 40)
-				BodyAnim:SetPos(BodyAnim:GetPos() + offset)
-			end
 		end
 	end)
 
@@ -793,7 +787,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		end
 
 		if attach ~= nil then
-			view.origin = has_tool_equipped and pos or attach.Pos
+			view.origin = not ply:UsingRH() and pos or attach.Pos
 
 			if savedeyeangb == angle_zero then savedeyeangb = Angle(0, attach.Ang.y, 0) end
 
