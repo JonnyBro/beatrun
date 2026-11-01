@@ -7,6 +7,7 @@ local requiresArms = {
 	hang = true,
 	hanghardstartvertical = true,
 	hangheaveup = true,
+	hangjumpup = true,
 	hangfoldedstart = true,
 	hanghardstart2 = true,
 	hangfoldedendhang = true,
@@ -60,6 +61,7 @@ fbanims = {
 	jumpslow = true,
 	jumpcrouch = true,
 	hangheaveup = true,
+	hangjumpup = true,
 	jumpwrright = true,
 	meleeairhit = true,
 	jumpstill = true,
@@ -315,7 +317,7 @@ local eventslut = {
 	slide = "meslidestart",
 	bargedoor = "bargein",
 	hangjump = "jumpfast",
-	hangjumpup = "wallrunverticalstart", -- CHANGE THIS TO NEW JUMP UP ANIM
+	hangjumpup = "hangjumpup",
 	diveslidestart = "diveslidestart",
 	landcoil = "jumpcoilend",
 	diveslideend = "diveslideend",
@@ -360,6 +362,7 @@ local armlock = {
 	ladderclimbuplefthandstill = true,
 	ladderclimbuprighthandstill = true,
 	wallrunvertical = true,
+	hangjumpup = true,
 	ladderclimbdownfast = true,
 	ladderclimbuprighthand = true,
 	ladderclimbhangstart = true,
@@ -414,6 +417,7 @@ local ignorePitch = {
 }
 
 local transitionanims = {
+	hangjumpup = "jumpair",
 	hanghardstart = "hang",
 	divestart = "diveidle",
 	diveslideendcrouch = "crouchfwd",
@@ -675,7 +679,6 @@ local customcamoffset = {
 	crouchbwd = Vector(2, 0, -3)
 }
 
--- Held shimmy steps restart the strafe animation, going back to hang in between would blend in and out every step
 local function HangStrafeDone(ply)
 	return BodyAnimCycle >= 0.95 and ply:GetClimbing() == 1 and not ply:KeyDown(IN_MOVELEFT) and not ply:KeyDown(IN_MOVERIGHT)
 end
@@ -2164,18 +2167,7 @@ local function JumpThink()
 
 			if BodyAnimString == "wallrunverticalstart" or BodyAnimString == "wallrunvertical" then
 				ang = ply.WallrunOrigAng or ang
-
-				if ply:GetWallrun() == 1 then
-					BodyAnimSpeed = 1.2 * math.Clamp((LocalPlayer():GetWallrunTime() - CurTime()) / 1.2, 0.5, 1)
-				else
-					-- Jumping up from a hang borrows the vertical wallrun start, there's no wallrun to end it
-					BodyAnimSpeed = 1.2
-
-					if ply:GetVelocity().z < 0 and ply:GetClimbing() == 0 then
-						BodyAnimCycle = 0
-						BodyAnim:SetSequence(BodyAnim:LookupSequence("jumpair"))
-					end
-				end
+				BodyAnimSpeed = 1.2 * math.Clamp((LocalPlayer():GetWallrunTime() - CurTime()) / 1.2, 0.5, 1)
 			end
 
 			if BodyAnimString == "vaultover" or BodyAnimString == "vaultkong" or BodyAnimString == "stepuprightleg" or BodyAnimString == "vaultonto" then
