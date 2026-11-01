@@ -75,8 +75,6 @@ end
 AEUIFonts()
 
 hook.Add("OnScreenSizeChanged", "AEUI_ScreenSize", function()
-	table.Empty(SScaleX_cached)
-	table.Empty(SScaleY_cached)
 	AEUIFonts()
 end)
 
