@@ -681,6 +681,11 @@ end
 
 function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 	if calcviewrunning then return end
+
+	-- util.ScreenShake modifies the incoming view origin. Preserve that offset
+	-- when replacing the normal player view with the BodyAnim attachment.
+	local screenShakeOffset = pos - ply:EyePos()
+
 	local IsValidBa = IsValid(BodyAnim)
 	local ShouldDrawPly = ply:ShouldDrawLocalPlayer()
 
@@ -787,6 +792,8 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		end
 
 		if attach ~= nil then
+			-- Keep the native ScreenShake offset for rotational shake only.
+			-- The camera remains anchored to the BodyAnim attachment.
 			view.origin = has_tool_equipped and pos or attach.Pos
 
 			if savedeyeangb == angle_zero then savedeyeangb = Angle(0, attach.Ang.y, 0) end
@@ -877,6 +884,13 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 
 				hook.Run("BodyAnimCalcView", view)
 
+				-- Convert native util.ScreenShake displacement into camera roll.
+				-- This deliberately avoids translating the camera position.
+				if not has_tool_equipped and screenShakeOffset:LengthSqr() > 0 then
+					local shakeRoll = math.Clamp(screenShakeOffset:Dot(view.angles:Right()) * 0.5, -4, 4)
+					view.angles.r = view.angles.r + shakeRoll
+				end
+
 				pos:Set(view.origin)
 
 				if not has_tool_equipped then angles:Set(view.angles) end
@@ -887,7 +901,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				lastatt = camjoint
 
 				if CamShake then
-					CamShakeAng:Set(AngleRand() * 0.005 * CamShakeMult)
+					CamShakeAng:Set(Angle(0, 0, math.Rand(-0.9, 0.9) * CamShakeMult))
 					angles:Add(CamShakeAng)
 				end
 
@@ -918,7 +932,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		if attach == nil or CurTime() < (mantletimer or 0) then
 			view.origin = has_tool_equipped and pos or lastattachpos
 
-			pos:Set(lastattachpos)
+			pos:Set(view.origin)
 
 			return
 		end
