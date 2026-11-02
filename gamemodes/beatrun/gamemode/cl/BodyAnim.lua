@@ -787,7 +787,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		end
 
 		if attach ~= nil then
-			view.origin = not ply:UsingRH() and pos or attach.Pos
+			view.origin = has_tool_equipped and pos or attach.Pos
 
 			if savedeyeangb == angle_zero then savedeyeangb = Angle(0, attach.Ang.y, 0) end
 
