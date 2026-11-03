@@ -127,52 +127,39 @@ function ENT:Think()
 	end
 end
 
+local piecelength = 250
+local piecescale = Vector(1, 1, 1)
+
 function ENT:Draw()
 	local pos = self:GetPos()
 	local ang = self:GetAngles()
-	-- local oldz = pos.z
-	-- local old = pos
 	local mins, maxs = self:GetCollisionBounds()
-	maxs.z = self:GetBalanceLength()
-
-	local num = maxs.z / 250
-	local numc = math.floor(num)
-	local extra = num - numc
+	local length = self:GetBalanceLength()
+	maxs.z = length
 
 	if not IsValid(self.CLModel) then
 		self.CLModel = ClientsideModel(self.Model)
-		self.CLModel:SetPos(pos)
-		self.CLModel:SetAngles(ang)
 		self.CLModel:SetMaterial("medge/redbrickvertex")
 	end
 
 	self:SetRenderBounds(mins, maxs)
 
-	-- render.DrawWireframeBox(pos, ang, mins, maxs)
-	for i = 0, numc do
-		pos = self:GetPos()
+	local model = self.CLModel
+	local pieces = math.max(math.ceil(length / piecelength), 1)
 
-		if num == 1 then
-			self.CLModel:DrawModel()
-			break
-		end
+	model:SetAngles(ang)
 
-		if i == numc then
-			pos = pos + ang:Up() * (250 * (i - 1))
+	piecescale.z = math.min(length / piecelength, 1)
 
-			if i > 0 then
-				pos = pos + ang:Up() * (250 * extra)
-			end
+	self.PieceMatrix = self.PieceMatrix or Matrix()
+	self.PieceMatrix:SetScale(piecescale)
+	model:EnableMatrix("RenderMultiply", self.PieceMatrix)
 
-			self.CLModel:SetPos(pos)
-			self.CLModel:SetupBones()
-			self.CLModel:DrawModel()
-		else
-			pos = pos + ang:Up() * (250 * i)
+	for i = 0, pieces - 1 do
+		local offset = math.min(piecelength * i, math.max(length - piecelength, 0))
 
-			self.CLModel:SetPos(pos)
-			self.CLModel:SetupBones()
-			self.CLModel:DrawModel()
-		end
+		model:SetPos(pos + ang:Up() * offset)
+		model:SetupBones()
+		model:DrawModel()
 	end
 end
