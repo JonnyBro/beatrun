@@ -27,9 +27,9 @@ function HandIKSetContact(hand, want, pos, normal, shift)
 	local contact = contacts[hand]
 
 	contact.want = want
-	contact.shift = shift
 
 	if want then
+		contact.shift = shift
 		contact.pos:Set(pos)
 		contact.normal:Set(normal)
 	end
@@ -153,7 +153,7 @@ local function HandIK(ent)
 
 				arm.fingers = arm.fingers or GetFingers(ent, i)
 
-				if arm.extra[2] then
+				if arm.extra[2] and LocalPlayer():GetClimbing() == 0 then
 					FlattenFingers(ent, arm.fingers, ax, ay, az, arm.extra[2], nx, ny, nz, weight)
 				end
 			end
