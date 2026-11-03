@@ -105,7 +105,7 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 
-		if trout.Hit and trout.HitNormal:IsEqualTol(ply:GetEyeTrace().HitNormal, 0.1) then
+		if trout.Hit then
 			local ovel = mv:GetVelocity() * 0.85
 			ovel.z = 0
 
@@ -152,7 +152,7 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 
-		if trout.Hit and trout.HitNormal:IsEqualTol(ply:GetEyeTrace().HitNormal, 0.1) then
+		if trout.Hit then
 			local ovel = mv:GetVelocity() * 0.85
 			ovel.z = 0
 

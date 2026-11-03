@@ -368,10 +368,16 @@ local realistic = GetConVar("Beatrun_LeRealisticClimbing")
 local function WallrunningCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
 
+	-- defensive initialization
 	if not ply.WallrunTrace then
-		ply.WallrunTrace = { mask = MASK_PLAYERSOLID }
+		ply.WallrunTrace = {}
+	end
+
+	if not ply.WallrunTraceOut then
 		ply.WallrunTraceOut = {}
 	end
+
+	ply.WallrunTrace.mask = MASK_PLAYERSOLID
 
 	local eyeang = ply:EyeAngles()
 	eyeang.x = 0
@@ -476,7 +482,7 @@ local function WallrunningCheck(ply, mv, cmd)
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 
-		if trout.Hit and trout.HitNormal:IsEqualTol(ply:GetEyeTrace().HitNormal, 0.1) then
+		if trout.Hit then
 			local ovel = mv:GetVelocity()
 			ovel.z = 0
 
@@ -522,7 +528,7 @@ local function WallrunningCheck(ply, mv, cmd)
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 
-		if trout.Hit and trout.HitNormal:IsEqualTol(ply:GetEyeTrace().HitNormal, 0.1) then
+		if trout.Hit then
 			local ovel = mv:GetVelocity()
 			ovel.z = 0
 
