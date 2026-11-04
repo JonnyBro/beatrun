@@ -72,7 +72,7 @@ hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function()
 		color = math.Approach(color, 1, RealFrameTime() * 2)
 	end
 
-	if ply:Health() < 100 then
+	if ply:Health() < ply:GetMaxHealth() then
 		tab["$pp_colour_colour"] = math.max(ply:Health() / ply:GetMaxHealth(), 0)
 		DrawColorModify(tab)
 	end
