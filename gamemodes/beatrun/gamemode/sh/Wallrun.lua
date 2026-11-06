@@ -122,7 +122,7 @@ local function WallrunningThink(ply, mv, cmd)
 			if game.SinglePlayer() or CLIENT and IsFirstTimePredicted() then
 				ply:EmitSound("WallrunRelease.Concrete")
 				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
+					if IsValid(ply) then ply:EmitSound("WallrunRelease.Concrete") end
 				end)
 				ply:EmitSound("Cloth.VaultSwish")
 			end
@@ -193,9 +193,7 @@ local function WallrunningThink(ply, mv, cmd)
 			if IsFirstTimePredicted() then
 				ply:EmitSound("Wallrun." .. wallsound)
 				ply:EmitSound("Cloth.VaultSwish")
-				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
-				end)
+				PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 			end
 		end
 	end
@@ -312,9 +310,7 @@ local function WallrunningThink(ply, mv, cmd)
 			if IsFirstTimePredicted() then
 				ply:EmitSound("Wallrun." .. wallsound)
 				ply:EmitSound("Cloth.VaultSwish")
-				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
-				end)
+				PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 			end
 		end
 	end
@@ -334,7 +330,7 @@ local function WallrunningThink(ply, mv, cmd)
 			ply:EmitSound("Cloth.MovementRun")
 
 			timer.Simple(0.05, function()
-				ply:EmitSound("WallrunRelease.Concrete")
+				if IsValid(ply) then ply:EmitSound("WallrunRelease.Concrete") end
 			end)
 		end
 
@@ -372,10 +368,16 @@ local realistic = GetConVar("Beatrun_LeRealisticClimbing")
 local function WallrunningCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
 
+	-- defensive initialization
 	if not ply.WallrunTrace then
 		ply.WallrunTrace = {}
+	end
+
+	if not ply.WallrunTraceOut then
 		ply.WallrunTraceOut = {}
 	end
+
+	ply.WallrunTrace.mask = MASK_PLAYERSOLID
 
 	local eyeang = ply:EyeAngles()
 	eyeang.x = 0
@@ -480,7 +482,7 @@ local function WallrunningCheck(ply, mv, cmd)
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 
-		if trout.Hit and trout.HitNormal:IsEqualTol(ply:GetEyeTrace().HitNormal, 0.1) then
+		if trout.Hit then
 			local ovel = mv:GetVelocity()
 			ovel.z = 0
 
@@ -526,7 +528,7 @@ local function WallrunningCheck(ply, mv, cmd)
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 
-		if trout.Hit and trout.HitNormal:IsEqualTol(ply:GetEyeTrace().HitNormal, 0.1) then
+		if trout.Hit then
 			local ovel = mv:GetVelocity()
 			ovel.z = 0
 

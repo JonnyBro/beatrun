@@ -69,7 +69,7 @@ if CLIENT then
 		local w = ScrW()
 		local h = ScrH()
 
-		dmgalpha = math.min(300 * math.abs(ply:Health() / ply:GetMaxHealth() - 1), 255)
+		dmgalpha = math.Clamp(300 * (1 - ply:Health() / ply:GetMaxHealth()), 0, 255)
 
 		surface.SetMaterial(radial)
 		surface.SetDrawColor(0, 0, 0, dmgalpha * 0.85)

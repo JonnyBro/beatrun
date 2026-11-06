@@ -31,6 +31,7 @@ if SERVER then
 
 		for _, v in ipairs(player.GetAll()) do
 			v:SetNW2Int("DataCubes", 0)
+			v:SetNW2Entity("DataBank", NULL)
 
 			v:StripWeapons()
 			v:StripAmmo()

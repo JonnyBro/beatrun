@@ -16,7 +16,6 @@ CreateConVar("Beatrun_RandomLoadouts", "beatrun", { FCVAR_REPLICATED, FCVAR_ARCH
 
 -- Migrate old vars
 if table.HasValue({ "1", "2", "3", "4", "5" }, GetConVar("Beatrun_RandomLoadouts"):GetString()) then GetConVar("Beatrun_RandomLoadouts"):SetString("beatrun") end
--- if not table.HasValue({ 1, 2, 3 }, GetConVar("Beatrun_SpeedometerMode"):GetInt()) then GetConVar("Beatrun_SpeedometerMode"):SetInt(1) end -- TODO: FIXME
 
 function CalcXPForNextLevel(level)
 	return math.Round(0.25 * level ^ 3 + 0.8 * level ^ 2 + 2 * level)
@@ -26,8 +25,31 @@ function LerpL(t, a, b)
 	return a + (b - a) * t
 end
 
-function LerpC(t, a, b, powa)
-	return a + (b - a) * math.pow(t, powa)
+-- Delayed effects from predicted movement code. A timer fires outside prediction, so the engine can neither skip
+-- the copies made when the client re-predicts a command nor leave the predicting player out of the server's sound.
+-- fn gets a recipient filter on a multiplayer server (everyone nearby except ply, who already played it), nil otherwise
+function PredictedTimer(ply, delay, fn)
+	if CLIENT and not IsFirstTimePredicted() then return end
+
+	timer.Simple(delay, function()
+		if not IsValid(ply) then return end
+
+		local filter
+
+		if SERVER and not game.SinglePlayer() then
+			filter = RecipientFilter()
+			filter:AddPAS(ply:GetPos())
+			filter:RemovePlayer(ply)
+		end
+
+		fn(ply, filter)
+	end)
+end
+
+function PredictedSoundAfter(ply, delay, snd)
+	PredictedTimer(ply, delay, function(p, filter)
+		p:EmitSound(snd, nil, nil, nil, nil, nil, nil, filter)
+	end)
 end
 
 function TraceSetData(tbl, start, endpos, mins, maxs, filter)
@@ -111,6 +133,54 @@ function GetWeaponsList()
 	end
 
 	return cachedWeapons
+end
+
+RANDOM_LOADOUT_BASES = { "mg_base", "arc9", "arccw", "tfa_" }
+
+local function MatchesBase(wep, selected)
+	local base = isstring(wep.Base) and wep.Base or ""
+
+	if selected then return string.find(base, selected, 1, true) ~= nil end
+
+	for _, b in ipairs(RANDOM_LOADOUT_BASES) do
+		if string.find(base, b, 1, true) then return true end
+	end
+
+	return false
+end
+
+local NOT_WEAPONS = {
+	gmod_camera = true,
+	gmod_tool = true,
+	runnerhands = true,
+	weapon_physgun = true
+}
+
+local function AddToPool(pool, seen, class, name, category)
+	if seen[class] or NOT_WEAPONS[class] or string.find(class, "base", 1, true) then return end
+
+	seen[class] = true
+
+	table.insert(pool, { ClassName = class, PrintName = name or class, Category = category or "Other" })
+end
+
+-- selected: one of RANDOM_LOADOUT_BASES, "any" or nil for every weapon
+function GetRandomLoadoutPool(selected)
+	local pool, seen = {}, {}
+
+	if selected == "any" then selected = nil end
+
+	if not selected then
+		for class, data in pairs(list.Get("Weapon")) do
+			AddToPool(pool, seen, class, data.PrintName, data.Category)
+		end
+	end
+
+	for _, wep in ipairs(GetWeaponsList()) do
+		if MatchesBase(wep, selected) then AddToPool(pool, seen, wep.ClassName, wep.PrintName, wep.Category) end
+	end
+
+	return pool
 end
 
 local ply_mins = Vector(-16, -16, 0)

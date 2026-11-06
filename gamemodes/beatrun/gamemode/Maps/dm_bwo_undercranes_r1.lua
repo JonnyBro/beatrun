@@ -43,7 +43,7 @@ hook.Add("PlayerSpawn", "CubixInit", function()
 	if not skypaint then
 		skypaint = ents.Create("env_skypaint")
 
-		WhitescaleOn()
+		BRSetSkypaint(skypaint)
 	end
 end)
 
@@ -64,5 +64,3 @@ hook.Add("OnEntityCreated", "BlacklistedEnts", function(ent)
 		end
 	end)
 end)
-
-print("Loaded undercrane")

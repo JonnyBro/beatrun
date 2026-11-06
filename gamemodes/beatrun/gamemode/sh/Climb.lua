@@ -1,4 +1,13 @@
-local ClimbingTimes = { 5, 1.25, 1, 1, nil, 2 }
+-- 3 and 4 are a shimmy step and 7 is going around an outer corner, each as long as its animation
+-- (hangstrafe 36 frames, hangcorner 36 frames, both 30 fps) so held steps chain without the animation cutting
+local ClimbingTimes = { 5, 1.25, 30 / 35, 30 / 35, nil, 2, 30 / 35 }
+
+-- The hanging origin sits this far below the top of the ledge
+local hangheight = 77
+
+local hangjumpup = 300
+local hangjumpsideup = 250
+local hangjumpside = 250
 
 if game.SinglePlayer() and SERVER then
 	util.AddNetworkString("Climb_SPFix")
@@ -18,6 +27,115 @@ elseif game.SinglePlayer() and CLIENT then
 			LocalPlayer().OrigEyeAng = ang
 		end
 	end)
+end
+
+local function MoveOutOfWall(ply, mv)
+	local mins, maxs = ply:GetHull()
+	local back = -ply:GetClimbingAngle():Forward()
+	local origin = mv:GetOrigin()
+
+	local tr = {
+		mins = mins,
+		maxs = maxs,
+		filter = ply,
+		mask = MASK_PLAYERSOLID,
+		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+	}
+
+	for i = 0, 32 do
+		local pos = origin + back * i
+
+		tr.start = pos
+		tr.endpos = pos
+
+		if not util.TraceHull(tr).Hit then
+			if i > 0 then mv:SetOrigin(pos) end
+
+			return
+		end
+	end
+end
+
+local function CornerTrace(ply, start, endpos)
+	return util.TraceLine({
+		start = start,
+		endpos = endpos,
+		filter = ply,
+		mask = MASK_PLAYERSOLID,
+		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+	})
+end
+
+-- When the ledge ends while shimmying, looks for it wrapping around an outer corner at the same height
+-- and starts moving onto the side face
+local function HangCorner(ply, mv, isright)
+	local wallang = ply:GetClimbingAngle()
+	local fwd = wallang:Forward()
+	local side = wallang:Right()
+
+	if not isright then side:Mul(-1) end
+
+	local origin = mv:GetOrigin()
+	local top = origin.z + hangheight
+
+	local face = CornerTrace(ply, Vector(origin.x, origin.y, top - 4), Vector(origin.x, origin.y, top - 4) + fwd * 40)
+	if not face.Hit or face.StartSolid then return end
+
+	local depth = (face.HitPos - origin):Dot(fwd)
+	local probe = face.HitPos + fwd * 16 + side * 64
+
+	local sideface = CornerTrace(ply, probe, probe - side * 64)
+	if not sideface.Hit or sideface.StartSolid or sideface.HitNormal:Dot(side) < 0.7 then return end
+
+	local newfwd = -sideface.HitNormal
+	newfwd.z = 0
+	newfwd:Normalize()
+
+	local ledge = CornerTrace(ply, sideface.HitPos + newfwd * 4 + Vector(0, 0, 20), sideface.HitPos + newfwd * 4 - Vector(0, 0, 16))
+	if not ledge.Hit or ledge.StartSolid or ledge.HitNormal.z < 0.7 or math.abs(ledge.HitPos.z - top) > 8 then return end
+
+	local neworigin = sideface.HitPos - newfwd * depth
+	neworigin.z = ledge.HitPos.z - hangheight
+
+	local mins, maxs = ply:GetHull()
+	mins.z = maxs.z * 0.25
+
+	-- A hanging player sits 0.533 into the wall (see ClimbingCheck), so the room is checked pulled back by that much
+	local hullpos = neworigin - newfwd * 0.533
+
+	local hull = util.TraceHull({
+		start = hullpos,
+		endpos = hullpos,
+		mins = mins,
+		maxs = maxs,
+		filter = ply,
+		mask = MASK_PLAYERSOLID,
+		collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+	})
+
+	if hull.Hit then return end
+
+	local newang = newfwd:Angle()
+
+	ply:SetClimbingStart(origin)
+	ply:SetClimbingEnd(neworigin)
+	ply:SetClimbingEndOld(Vector(neworigin.x, neworigin.y, ledge.HitPos.z) + newfwd * 20)
+	ply:SetClimbingTime(0)
+	ply:SetClimbingAngle(newang)
+	ply:SetClimbing(7)
+
+	ply.wallang = newang
+
+	ParkourEvent(isright and "hangcornerright" or "hangcornerleft", ply)
+
+	if CLIENT and IsFirstTimePredicted() then
+		ply.CornerFromAng = Angle(0, wallang.y, 0)
+		ply.CornerLastYaw = wallang.y
+	elseif game.SinglePlayer() then
+		ply:SendLua("LocalPlayer().CornerFromAng=Angle(0," .. wallang.y .. ",0) LocalPlayer().CornerLastYaw=" .. wallang.y)
+	end
+
+	return true
 end
 
 local function ClimbingEnd(ply, mv, cmd)
@@ -87,7 +205,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 			ply.FootstepLand = false
 
-			timer.Simple(0.35, function() ply:EmitSound("Walk." .. step) end)
+			PredictedSoundAfter(ply, 0.35, "Walk." .. step)
 
 			ply:EmitSound("Handsteps." .. handstepsoft)
 
@@ -96,9 +214,9 @@ local function ClimbingThink(ply, mv, cmd)
 		elseif ply:GetClimbingDelay() < CurTime() then
 			ParkourEvent("hangfoldedendhang", ply)
 
-			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-			timer.Simple(0.42, function() ply:EmitSound("Handsteps." .. handstephard) end)
-			timer.Simple(0.5, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+			PredictedSoundAfter(ply, 0.05, "Handsteps." .. handstepsoft)
+			PredictedSoundAfter(ply, 0.42, "Handsteps." .. handstephard)
+			PredictedSoundAfter(ply, 0.5, "Handsteps." .. handstepsoft)
 
 			ply:SetClimbing(1)
 			ply:SetClimbingDelay(CurTime() + 1.35)
@@ -144,6 +262,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 		if mv:KeyDown(IN_DUCK) then
 			mv:SetOrigin(ply:GetClimbingStart() - ply:GetClimbingAngle():Forward() * 5)
+			MoveOutOfWall(ply, mv)
 
 			ply:SetMoveType(MOVETYPE_WALK)
 
@@ -157,9 +276,7 @@ local function ClimbingThink(ply, mv, cmd)
 			ply:EmitSound("Cloth.SideStep")
 			ply:EmitSound("Handsteps.ConcreteRelease")
 			ply:EmitSound("WallrunRelease.Concrete")
-			timer.Simple(0.05, function()
-				ply:EmitSound("WallrunRelease.Concrete")
-			end)
+			PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 
 			if CLIENT and IsFirstTimePredicted() then
 				lockang2 = false
@@ -178,6 +295,7 @@ local function ClimbingThink(ply, mv, cmd)
 
 		if mv:KeyDown(IN_JUMP) and ang > 42 then
 			mv:SetOrigin(ply:GetClimbingStart() - ply:GetClimbingAngle():Forward() * 0.6)
+			MoveOutOfWall(ply, mv)
 
 			ply:SetMoveType(MOVETYPE_WALK)
 
@@ -193,7 +311,7 @@ local function ClimbingThink(ply, mv, cmd)
 				ply:EmitSound("WallrunRelease.Concrete")
 				ply:EmitSound("Handsteps.ConcreteRelease")
 				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
+					if IsValid(ply) then ply:EmitSound("WallrunRelease.Concrete") end
 				end)
 			end
 
@@ -223,7 +341,48 @@ local function ClimbingThink(ply, mv, cmd)
 			return
 		end
 
-		if (mv:KeyPressed(IN_FORWARD) or mv:KeyPressed(IN_JUMP)) and ang <= 42 then
+		if mv:KeyPressed(IN_JUMP) and ang <= 42 then
+			local wallang = ply:GetClimbingAngle()
+			local side = (mv:KeyDown(IN_MOVERIGHT) and 1 or 0) - (mv:KeyDown(IN_MOVELEFT) and 1 or 0)
+
+			mv:SetOrigin(ply:GetClimbingStart() - wallang:Forward() * 0.6)
+			MoveOutOfWall(ply, mv)
+
+			ply:SetMoveType(MOVETYPE_WALK)
+
+			mv:SetButtons(0)
+
+			ply:SetClimbing(0)
+			-- ClimbingCheck would grab the ledge we just let go of on the way up
+			ply:SetClimbingDelay(CurTime() + 0.3)
+
+			local vel = wallang:Right() * side * hangjumpside
+			vel.z = side == 0 and hangjumpup or hangjumpsideup
+
+			mv:SetVelocity(vel)
+
+			ParkourEvent("hangjumpup", ply)
+
+			if SERVER then
+				ply:EmitSound("Cloth.VaultSwish")
+				ply:EmitSound("Handsteps.ConcreteRelease")
+			end
+
+			if CLIENT and IsFirstTimePredicted() then
+				lockang2 = false
+				lockang = false
+				BodyLimitX = 25
+				BodyLimitY = 70
+
+				ply.WallrunOrigAng = Angle(0, wallang.y, 0)
+			elseif game.SinglePlayer() then
+				ply:SendLua("lockang2=false lockang=false BodyLimitX=25 BodyLimitY=70 LocalPlayer().WallrunOrigAng=Angle(0," .. wallang.y .. ",0)")
+			end
+
+			return
+		end
+
+		if mv:KeyPressed(IN_FORWARD) and ang <= 42 then
 			local tr = ply.ClimbingTraceSafety
 			local trout = ply.ClimbingTraceSafetyOut
 			local mins, maxs = ply:GetHull()
@@ -239,30 +398,6 @@ local function ClimbingThink(ply, mv, cmd)
 
 			util.TraceHull(tr)
 
-			--[[ TODO: Make this work
-			for i = -64, 64, 1 do
-				tr.endpos = tr.start + ply:GetClimbingAngle():Forward() * i
-
-				util.TraceHull(tr)
-
-				print(trout.Hit)
-				print(tr.endpos)
-
-				if not trout.Hit then
-					-- tr.start = tr.endpos
-					-- tr.endpos = tr.start - ply:GetClimbingAngle():Forward() * i
-
-					-- util.TraceHull(tr)
-
-					-- if not trout.Hit then
-						ply:SetClimbingEnd(tr.endpos)
-						ply:SetClimbing(2)
-						ParkourEvent("climbheave", ply)
-					-- end
-				end
-			end
-			--]]
-
 			if not trout.Hit then
 				tr.start = ply:GetClimbingEnd()
 				tr.endpos = tr.start - ply:GetClimbingAngle():Forward() * 20
@@ -275,8 +410,8 @@ local function ClimbingThink(ply, mv, cmd)
 
 					ParkourEvent("climbheave", ply)
 
-					timer.Simple(0.65, function() ply:EmitSound("Walk." .. step) end)
-					timer.Simple(1, function() if not (ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVERIGHT)) then ply:EmitSound("Sneak." .. step) end end)
+					PredictedSoundAfter(ply, 0.65, "Walk." .. step)
+					PredictedTimer(ply, 1, function(p, filter) if not (p:KeyDown(IN_FORWARD) or p:KeyDown(IN_BACK) or p:KeyDown(IN_MOVELEFT) or p:KeyDown(IN_MOVERIGHT)) then p:EmitSound("Sneak." .. step, nil, nil, nil, nil, nil, nil, filter) end end)
 				end
 			end
 		end
@@ -291,7 +426,8 @@ local function ClimbingThink(ply, mv, cmd)
 
 			local tr = ply.ClimbingTraceEnd
 			local trout = ply.ClimbingTraceEndOut
-			local start = mv:GetOrigin() + wallang:Forward() * 20 + Vector(0, 0, 100) + dir
+			-- From well above the ledge so it can go up a slope as far as it can go down (about 20 units per step)
+			local start = mv:GetOrigin() + wallang:Forward() * 20 + Vector(0, 0, 120) + dir
 
 			tr.start = start
 			tr.endpos = start - Vector(0, 0, 80)
@@ -305,14 +441,16 @@ local function ClimbingThink(ply, mv, cmd)
 
 			if trout.Entity and trout.Entity.IsNPC and (trout.Entity:IsNPC() or trout.Entity:IsPlayer()) then return false end
 
-			local fail = trout.Fraction < 0.25 or trout.Fraction > 0.5
+			local fail = trout.Fraction < 0.25 or trout.Fraction > 0.75
+
+			if fail and HangCorner(ply, mv, isright) then return end
 
 			if not fail then
 				local ostart = tr.start
 				local oendpos = tr.endpos
 
-				tr.start = ply:GetClimbingEnd() + dir
-				tr.endpos = tr.start - Vector(0, 0, 100)
+				tr.start = ply:GetClimbingEnd() + dir + Vector(0, 0, 30)
+				tr.endpos = tr.start - Vector(0, 0, 130)
 
 				util.TraceLine(tr)
 
@@ -324,8 +462,14 @@ local function ClimbingThink(ply, mv, cmd)
 
 				trout = ply.ClimbingTraceSafetyOut
 
+				local mins, maxs = ply:GetHull()
+
+				mins.z = maxs.z * 0.25
+
 				tr.start = mv:GetOrigin() + dir - wallang:Forward() * 0.533
 				tr.endpos = tr.start
+				tr.mins = mins
+				tr.maxs = maxs
 
 				util.TraceHull(tr)
 
@@ -336,7 +480,7 @@ local function ClimbingThink(ply, mv, cmd)
 					ply:SetClimbingEnd(mv:GetOrigin() + dir)
 					ply:SetClimbingTime(0)
 
-					tr.start = mv:GetOrigin() + ply:GetClimbingAngle():Forward() * 20 + Vector(0, 0, 100) + dir
+					tr.start = mv:GetOrigin() + ply:GetClimbingAngle():Forward() * 20 + Vector(0, 0, 120) + dir
 					tr.endpos = tr.start - Vector(0, 0, 80)
 
 					if isright then
@@ -345,8 +489,8 @@ local function ClimbingThink(ply, mv, cmd)
 						ParkourEvent("hangstrafeleft", ply)
 					end
 
-					timer.Simple(0.4, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-					timer.Simple(0.9, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+					PredictedSoundAfter(ply, 0.4, "Handsteps." .. handstepsoft)
+					PredictedSoundAfter(ply, 0.9, "Handsteps." .. handstepsoft)
 				end
 
 				ply:SetClimbingDelay(CurTime() + 0.9)
@@ -390,6 +534,26 @@ local function ClimbingThink(ply, mv, cmd)
 		end
 	end
 
+	if ply:GetClimbing() == 7 then
+		local t = math.min(ply:GetClimbingTime(), 1)
+		local from, to = ply:GetClimbingStart(), ply:GetClimbingEnd()
+
+		-- Straight through the corner, the player doesn't collide while hanging anyway
+		mv:SetOrigin(LerpVector(t * t * (3 - 2 * t), from, to))
+
+		ply:SetClimbingTime(ply:GetClimbingTime() + FrameTime() * ClimbingTimes[7])
+
+		if ply:GetClimbingTime() >= 1 then
+			mv:SetOrigin(to)
+
+			ply:SetClimbing(1)
+			ply:SetClimbingStart(to)
+			ply:SetClimbingEnd(ply:GetClimbingEndOld())
+			ply:SetClimbingTime(0)
+			ply:SetClimbingDelay(CurTime() + 0.1)
+		end
+	end
+
 	if ply:GetClimbing() == 2 or ply:GetClimbing() == 6 then
 		if game.SinglePlayer() then
 			net.Start("Climb_SPFix")
@@ -430,6 +594,7 @@ local foldedDamage = CreateConVar("Beatrun_LedgeGrabDamage", "0", { FCVAR_ARCHIV
 
 local function ClimbingCheck(ply, mv, cmd)
 	if realistic:GetBool() and not ply:UsingRH() then return end
+	if mv:GetVelocity().z > 0 and ply:GetClimbingDelay() > CurTime() then return end
 
 	local mins, maxs = ply:GetHull()
 
@@ -513,8 +678,6 @@ local function ClimbingCheck(ply, mv, cmd)
 		tr.start = mv:GetOrigin() + wallang:Forward() * 20 + upvalue
 		tr.endpos = tr.start - Vector(0, 0, 90)
 
-		-- debugoverlay.Line(tr.start, tr.endpos, 5, Color(0, 0, 255), true)
-
 		util.TraceLine(tr)
 
 		if trout.Fraction <= 0 or trout.Fraction >= 0.5 then return end
@@ -523,7 +686,6 @@ local function ClimbingCheck(ply, mv, cmd)
 	end
 
 	local endpos = trout.HitPos
-	-- local height = trout.Fraction
 	local startpos = ply.ClimbingTraceOut.HitPos
 	startpos.z = trout.HitPos.z - 77
 	startpos:Add(wallang:Forward() * 0.533)
@@ -565,15 +727,6 @@ local function ClimbingCheck(ply, mv, cmd)
 	util.TraceLine(tr)
 
 	if trout.Hit then return end
-	-- 	local h1 = trout.HitPos
-	-- 	local h2 = tr.start - wallang:Forward() - Vector(100, 0, 0)
-	-- 	local hit = util.QuickTrace(h1, h2, ply)
-
-	-- 	debugoverlay.Line(h1, h2, 5, Color(255, 200, 100), true)
-
-	-- 	print(hit.Hit)
-	-- 	print(hit.HitPos)
-	-- end
 
 	tr.start = startpos + Vector(0, 0, 77)
 	tr.endpos = tr.start + wallang:Forward() * detectionlen * 0.5
@@ -582,7 +735,6 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	if trout.Hit then return end
 
-	-- local steep = trout.HitNormal:Distance(Vector(0, 0, 1)) > 0.01
 	local tr = ply.ClimbingTraceSafety
 	local trout = ply.ClimbingTraceSafetyOut
 
@@ -659,6 +811,8 @@ local function ClimbingCheck(ply, mv, cmd)
 	local __mins, __maxs = ply:GetHull()
 	tr.start = mv:GetOrigin() + wallang:Forward() * 20 + vector_up * __maxs.z + vector_up * 5
 	tr.endpos = tr.start
+	tr.mins = vector_origin
+	tr.maxs = vector_origin
 
 	util.TraceHull(tr)
 
@@ -677,17 +831,13 @@ local function ClimbingCheck(ply, mv, cmd)
 
 	local wr = ply:GetWallrun()
 	local wallrun = FOOTSTEPS_MAT_TYPE_TO_STR[ply.ClimbingTraceOut.MatType] or "Concrete"
-	-- local wrtime = ply:GetWallrunTime() - CurTime()
-	-- local vel = mv:GetVelocity()
 
 	if wr ~= 0 then
 		ply:SetWallrun(0)
 		ply:EmitSound("Wallrun." .. wallrun)
 		ply:EmitSound("Cloth.MovementRun")
 
-		timer.Simple(0.05, function()
-			ply:EmitSound("WallrunRelease.Concrete")
-		end)
+		PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 	end
 
 	local climbvalue = 1
@@ -744,10 +894,10 @@ local function ClimbingCheck(ply, mv, cmd)
 
 		ParkourEvent("hangfoldedstart", ply)
 		if lastvel.z < -750 then
-			timer.Simple(0.1, function() ply:FaithVO("Faith.ImpactHard") end)
-			timer.Simple(0.05, function() ply:EmitSound("Cloth.FallShortHard") end)
+			PredictedTimer(ply, 0.1, function(p, filter) p:FaithVO("Faith.ImpactHard", filter) end)
+			PredictedSoundAfter(ply, 0.05, "Cloth.FallShortHard")
 		else
-			timer.Simple(0.1, function() ply:FaithVO("Faith.Impact") end)
+			PredictedTimer(ply, 0.1, function(p, filter) p:FaithVO("Faith.Impact", filter) end)
 		end
 
 		if foldedDamage:GetBool() then
@@ -772,23 +922,23 @@ local function ClimbingCheck(ply, mv, cmd)
 				ply:TakeDamageInfo(info)
 			end
 		end
-		timer.Simple(0.15, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+		PredictedSoundAfter(ply, 0.15, "Handsteps." .. handstepsoft)
 
 	else
 		local event = "climbhard"
 
 		if wr == 1 then
 			event = "climb"
-			timer.Simple(0.93, function()
-				if ply:GetClimbing() == 1 then
-					ply:EmitSound("Handsteps." .. handstepsoft)
+			PredictedTimer(ply, 0.93, function(p, filter)
+				if p:GetClimbing() == 1 then
+					p:EmitSound("Handsteps." .. handstepsoft, nil, nil, nil, nil, nil, nil, filter)
 				end
 			end)
 			wallangc.x = -30
 		elseif lastvel.z < -200 then
 			event = "climbhard2"
-			timer.Simple(0.05, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
-			timer.Simple(0.7, function() ply:EmitSound("Handsteps." .. handstepsoft) end)
+			PredictedSoundAfter(ply, 0.05, "Handsteps." .. handstepsoft)
+			PredictedSoundAfter(ply, 0.7, "Handsteps." .. handstepsoft)
 
 			if lastvel.z < -250 then
 				ply:FaithVO("Faith.Impact")
@@ -796,9 +946,7 @@ local function ClimbingCheck(ply, mv, cmd)
 				ply:FaithVO("Faith.ImpactSoft")
 			end
 		else
-			timer.Simple(0.15, function()
-				ply:EmitSound("Handsteps." .. handstepsoft)
-			end)
+			PredictedSoundAfter(ply, 0.15, "Handsteps." .. handstepsoft)
 		end
 
 		ParkourEvent(event, ply)

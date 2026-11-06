@@ -32,7 +32,7 @@ if CLIENT then
 
 			surface.SetDrawColor(255, 255, 255)
 			surface.SetMaterial(brcross)
-			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32 * scale), SScaleY(32 * scale), math.fmod(rotate_timer * 100, 360))
+			surface.DrawTexturedRectRotated(w2s.x, w2s.y, BeatrunUI.S(32 * scale), BeatrunUI.S(32 * scale), math.fmod(rotate_timer * 100, 360))
 
 			return
 		end
@@ -54,7 +54,7 @@ if CLIENT then
 
 			surface.SetDrawColor(255, 255, 255)
 			surface.SetMaterial(brcross)
-			surface.DrawTexturedRectRotated(w2s.x, w2s.y, SScaleX(32 * scale), SScaleY(32 * scale), math.fmod(rotate_timer * 100, 360))
+			surface.DrawTexturedRectRotated(w2s.x, w2s.y, BeatrunUI.S(32 * scale), BeatrunUI.S(32 * scale), math.fmod(rotate_timer * 100, 360))
 		end
 	end)
 end
@@ -103,7 +103,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetNW2Bool("grappledNonCourse", true)
 
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-				ply:EmitSound("mirrorsedge/Gadgets/ME_Magrope_Fire.wav", 40, 100 + math.random(-25, 10))
+				ply:EmitSound("mirrorsedge/gadgets/me_magrope_fire.ogg", 40, 100 + math.random(-25, 10))
 			end
 
 			ply:ViewPunch(zpunchstart)
@@ -143,7 +143,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 			ply:SetCrouchJumpBlocked(false)
 
 			if CLIENT and IsFirstTimePredicted() or game.SinglePlayer() then
-				ply:EmitSound("mirrorsedge/zipline_detach.wav", 40, 100 + math.random(-25, 10))
+				ply:EmitSound("mirrorsedge/zipline_detach.ogg", 40, 100 + math.random(-25, 10))
 			end
 
 			if mv:KeyPressed(IN_JUMP) then

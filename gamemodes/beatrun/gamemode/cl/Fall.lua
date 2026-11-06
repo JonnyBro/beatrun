@@ -4,7 +4,7 @@ sound.Add({
 	volume = 1,
 	level = 80,
 	pitch = 100,
-	sound = "mirrorsedge/FallStatic.wav"
+	sound = "mirrorsedge/fallstatic.wav"
 })
 
 local zoom = Material("vgui/zoom.vtf")
@@ -33,10 +33,7 @@ local function FallCheck()
 		if not ply:GetJumpTurn() then
 			ParkourEvent("falluncontrolled", ply, true)
 		end
-	elseif ply.FallStatic and speed > -800 then
-		-- NOTE: SetFOV does nothing clientside(networked variable).
-		-- TODO: Implement this properly
-		-- ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
+	elseif ply.FallStatic and (speed > -800 or ply:GetMoveType() == MOVETYPE_NOCLIP) then
 		ply:StopSound("FallStatic")
 
 		ply.FallStatic = false
@@ -54,7 +51,6 @@ local function FallEffect()
 	if ply.FallStatic then
 		local vel = math.abs(ply:GetVelocity().z) / 1400
 		local csm = CamShakeMult
-		-- DrawMotionBlur( 0.4, 0.8, 0.015*vel )
 
 		CamShakeMult = math.Approach(csm, 3, FrameTime() * 1.5)
 		DrawMaterialOverlay("effects/fall_warp", CamShakeMult * 0.025)
@@ -63,14 +59,11 @@ local function FallEffect()
 
 		if CurTime() > nextbeat then
 			nextbeat = CurTime() + math.Clamp(0.5 / vel, 0.3, 0.5)
-			ply:EmitSound("heartbeat_beat_0" .. math.random(1, 8) .. ".wav", 80, 100, beatvol)
+			ply:EmitSound("heartbeat_beat_0" .. math.random(1, 8) .. ".ogg", 80, 100, beatvol)
 			beatvol = math.min(beatvol + 0.05, 1)
 			blurpass = math.min(blurpass + 0.1, 10)
 		end
 
-		-- NOTE: SetFOV does nothing clientside(networked variable).
-		-- TODO: Implement this properly
-		-- ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100) + math.Rand(0, CamShakeMult * 2.5))
 	end
 end
 

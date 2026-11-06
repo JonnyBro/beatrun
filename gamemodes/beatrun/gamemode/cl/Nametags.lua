@@ -35,19 +35,13 @@ local function GetNametagColor(ply)
 	return color
 end
 
-local function HideNearbyPlayers(ply)
-	if ply == LocalPlayer() then return end
-	if GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") then return end
-
-	local dist = LocalPlayer():GetPos():Distance(ply:GetPos())
-
-	if not NametagsEnable:GetBool() or GetGlobalBool("EM_HideNametags") or dist > 50000 then return end
-end
-
-hook.Add("PrePlayerDraw", "Beatrun_HideNearbyPlayers", HideNearbyPlayers)
-
 local function DrawNametags(bDrawingDepth, bDrawingSkybox)
-	if bDrawingSkybox then return end
+	if bDrawingDepth or bDrawingSkybox then return end
+
+	local rt = render.GetRenderTarget()
+	local rtname = rt and rt:GetName()
+
+	if rtname == "_rt_waterreflection" or rtname == "_rt_waterrefraction" then return end
 
 	for _, ply in ipairs(player.GetAll()) do
 		local color = GetNametagColor(ply)

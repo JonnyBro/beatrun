@@ -105,7 +105,7 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 
-		if trout.Hit and trout.HitNormal:IsEqualTol(ply:GetEyeTrace().HitNormal, 0.1) then
+		if trout.Hit then
 			local ovel = mv:GetVelocity() * 0.85
 			ovel.z = 0
 
@@ -152,7 +152,7 @@ function PuristWallrunningCheck(ply, mv, cmd, vel, eyeang, timemult, speedmult)
 
 		if trout.HitNormal:IsEqualTol(ply:GetWallrunDir(), 0.25) then return end
 
-		if trout.Hit and trout.HitNormal:IsEqualTol(ply:GetEyeTrace().HitNormal, 0.1) then
+		if trout.Hit then
 			local ovel = mv:GetVelocity() * 0.85
 			ovel.z = 0
 
@@ -284,9 +284,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			if IsFirstTimePredicted() then
 				local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[ply.WallRunTraceMat] or "Concrete"
 				ply:EmitSound("Wallrun." .. wallsound)
-				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
-				end)
+				PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 				ply:EmitSound("Cloth.VaultSwish")
 			end
 		end
@@ -404,9 +402,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			if IsFirstTimePredicted() then
 				local wallsound = FOOTSTEPS_MAT_TYPE_TO_STR[ply.WallRunTraceMat] or "Concrete"
 				ply:EmitSound("Wallrun." .. wallsound)
-				timer.Simple(0.05, function()
-					ply:EmitSound("WallrunRelease.Concrete")
-				end)
+				PredictedSoundAfter(ply, 0.05, "WallrunRelease.Concrete")
 				ply:EmitSound("Cloth.VaultSwish")
 			end
 		end
@@ -428,7 +424,7 @@ function PuristWallrunningThink(ply, mv, cmd, wr, wrtimeremains)
 			ply:EmitSound("Cloth.MovementRun")
 
 			timer.Simple(0.05, function()
-				ply:EmitSound("WallrunRelease.Concrete")
+				if IsValid(ply) then ply:EmitSound("WallrunRelease.Concrete") end
 			end)
 		end
 

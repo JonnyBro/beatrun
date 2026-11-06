@@ -80,27 +80,21 @@ function BeatrunGiveAmmo(ply, wep)
 end
 
 function BeatrunGetRandomLoadout(selected)
-	local allWeps = GetWeaponsList()
-	local tbl = {}
-	local usedClasses = {}
+	if selected == "beatrun" then
+		if #BEATRUN_GAMEMODES_LOADOUTS == 0 then return {} end
 
-	while #tbl < 2 do
-		local wep = allWeps[math.random(#allWeps)]
-
-		if selected == "beatrun" then
-			return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
-		else
-			if string.find(wep.Base, selected) and not string.find(wep.ClassName, "base") and not usedClasses[wep.ClassName] and not BEATRUN_WEAPON_BLACKLIST[wep.ClassName] then
-				table.insert(tbl, wep.ClassName)
-
-				usedClasses[wep.ClassName] = true
-			end
-		end
+		return BEATRUN_GAMEMODES_LOADOUTS[math.random(#BEATRUN_GAMEMODES_LOADOUTS)]
 	end
 
-	if #tbl == 2 then return tbl end
+	local pool = {}
 
-	return {}
+	for _, wep in ipairs(GetRandomLoadoutPool(selected)) do
+		if not BEATRUN_WEAPON_BLACKLIST[wep.ClassName] then table.insert(pool, wep.ClassName) end
+	end
+
+	table.Shuffle(pool)
+
+	return { pool[1], pool[2] }
 end
 
 function BeatrunGiveGMLoadout(ply)

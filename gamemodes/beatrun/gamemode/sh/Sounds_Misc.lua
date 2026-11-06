@@ -4,7 +4,7 @@ sound.Add({
 	level = 50,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/ME_BodyConcreteBump1.wav", "mirrorsedge/ME_BodyConcreteBump2.wav", "mirrorsedge/ME_BodyConcreteBump3.wav", "mirrorsedge/ME_BodyConcreteBump4.wav", "mirrorsedge/ME_BodyConcreteBump5.wav", "mirrorsedge/ME_BodyConcreteBump6.wav", "mirrorsedge/ME_BodyConcreteBump7.wav", "mirrorsedge/ME_BodyConcreteBump8.wav", "mirrorsedge/ME_BodyConcreteBump9.wav", "mirrorsedge/ME_BodyConcreteBump10.wav" }
+	sound = { "mirrorsedge/me_bodyconcretebump1.ogg", "mirrorsedge/me_bodyconcretebump2.ogg", "mirrorsedge/me_bodyconcretebump3.ogg", "mirrorsedge/me_bodyconcretebump4.ogg", "mirrorsedge/me_bodyconcretebump5.ogg", "mirrorsedge/me_bodyconcretebump6.ogg", "mirrorsedge/me_bodyconcretebump7.ogg", "mirrorsedge/me_bodyconcretebump8.ogg", "mirrorsedge/me_bodyconcretebump9.ogg", "mirrorsedge/me_bodyconcretebump10.ogg" }
 })
 
 sound.Add({
@@ -13,7 +13,7 @@ sound.Add({
 	level = 80,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/GameplayObjects/ME_Door_Generic_Barge1.wav", "mirrorsedge/GameplayObjects/ME_Door_Generic_Barge2.wav", "mirrorsedge/GameplayObjects/ME_Door_Generic_Barge3.wav", "mirrorsedge/GameplayObjects/ME_Door_Generic_Barge4.wav" }
+	sound = { "mirrorsedge/gameplayobjects/me_door_generic_barge1.ogg", "mirrorsedge/gameplayobjects/me_door_generic_barge2.ogg", "mirrorsedge/gameplayobjects/me_door_generic_barge3.ogg", "mirrorsedge/gameplayobjects/me_door_generic_barge4.ogg" }
 })
 
 sound.Add({
@@ -22,13 +22,13 @@ sound.Add({
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 95, 105 },
-	sound = { "mirrorsedge/GameplayObjects/Fence_01.wav", "mirrorsedge/GameplayObjects/Fence_02.wav" }
+	sound = { "mirrorsedge/gameplayobjects/fence_01.ogg", "mirrorsedge/gameplayobjects/fence_02.ogg" }
 })
 
 sound.Add({
 	name = "FenceClimbEnd",
 	volume = 0.5,
-	sound = "mirrorsedge/GameplayObjects/Fence.wav",
+	sound = "mirrorsedge/gameplayobjects/fence.ogg",
 	level = 60,
 	channel = CHAN_STATIC,
 	pitch = { 95, 105 }
@@ -40,13 +40,13 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Vault_01.wav", "mirrorsedge/Vault_02.wav", "mirrorsedge/Vault_03.wav", "mirrorsedge/Vault_04.wav" }
+	sound = { "mirrorsedge/vault_01.ogg", "mirrorsedge/vault_02.ogg", "mirrorsedge/vault_03.ogg", "mirrorsedge/vault_04.ogg" }
 })
 
 sound.Add({
 	name = "ZiplineStart",
 	volume = 1,
-	sound = "mirrorsedge/zipline_attach.wav",
+	sound = "mirrorsedge/zipline_attach.ogg",
 	pitch = 100,
 	level = 40,
 	channel = CHAN_STATIC
@@ -55,7 +55,7 @@ sound.Add({
 sound.Add({
 	name = "ZiplineEnd",
 	volume = 1,
-	sound = "mirrorsedge/zipline_detach.wav",
+	sound = "mirrorsedge/zipline_detach.ogg",
 	pitch = 100,
 	level = 40,
 	channel = CHAN_STATIC
@@ -76,7 +76,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Ladder/Ladder_Land_01.ogg", "mirrorsedge/Ladder/Ladder_Land_02.ogg", "mirrorsedge/Ladder/Ladder_Land_03.ogg" }
+	sound = { "mirrorsedge/ladder/ladder_land_01.ogg", "mirrorsedge/ladder/ladder_land_02.ogg", "mirrorsedge/ladder/ladder_land_03.ogg" }
 })
 
 sound.Add({
@@ -85,7 +85,7 @@ sound.Add({
 	level = 80,
 	channel = CHAN_STATIC,
 	pitch = { 95, 105 },
-	sound = { "mirrorsedge/DeathFall1.wav", "mirrorsedge/DeathFall2.wav", "mirrorsedge/DeathFall3.wav", "mirrorsedge/DeathFall4.wav" }
+	sound = { "mirrorsedge/deathfall1.ogg", "mirrorsedge/deathfall2.ogg", "mirrorsedge/deathfall3.ogg", "mirrorsedge/deathfall4.ogg" }
 })
 
 sound.Add({
@@ -94,7 +94,7 @@ sound.Add({
 	level = 80,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Flesh_01.wav", "mirrorsedge/Flesh_02.wav", "mirrorsedge/Flesh_03.wav", "mirrorsedge/Flesh_04.wav", "mirrorsedge/Flesh_05.wav", "mirrorsedge/Flesh_06.wav", "mirrorsedge/Flesh_07.wav", "mirrorsedge/Flesh_08.wav", "mirrorsedge/Flesh_09.wav" }
+	sound = { "mirrorsedge/flesh_01.ogg", "mirrorsedge/flesh_02.ogg", "mirrorsedge/flesh_03.ogg", "mirrorsedge/flesh_04.ogg", "mirrorsedge/flesh_05.ogg", "mirrorsedge/flesh_06.ogg", "mirrorsedge/flesh_07.ogg", "mirrorsedge/flesh_08.ogg", "mirrorsedge/flesh_09.ogg" }
 })
 
 sound.Add({
@@ -103,7 +103,7 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Ladder/Ladder_Slide_1a.wav" }
+	sound = { "mirrorsedge/ladder/ladder_slide_1a.wav" }
 })
 
 sound.Add({
@@ -112,5 +112,5 @@ sound.Add({
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
-	sound = { "mirrorsedge/Ladder/Ladder_Slide_2a.wav" }
+	sound = { "mirrorsedge/ladder/ladder_slide_2a.wav" }
 })

@@ -71,7 +71,7 @@ function ENT:Think()
 			dmginfo:SetDamageType(DMG_DISSOLVE)
 		hitEnt:TakeDamageInfo(dmginfo)
 
-		hitEnt:EmitSound("bigspark" .. math.random(1, 2) .. ".wav")
+		hitEnt:EmitSound("bigspark" .. math.random(1, 2) .. ".ogg")
 	end
 
 	self:NextThink(CurTime())

@@ -22,33 +22,20 @@ local timetext = ""
 local timealpha = 1000
 local timecolor = color_neutral
 
+local showspeedometer, hudstats, speedometermode
+-- Created in cl/HUD.lua, which loads after this file
+local hudhidden, hudtextcolor
+local textcolorstring, textcolor
+
 if CLIENT then
-	CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("beatrun.convars.showspeedometer"), 0, 1)
-	CreateClientConVar("Beatrun_HUDStats", "0", true, false, "", 0, 1)
-	CreateClientConVar("Beatrun_SpeedometerMode", 1, true, true, language.GetPhrase("beatrun.convars.speedometermode"), 1, 3)
+	showspeedometer = CreateClientConVar("Beatrun_ShowSpeedometer", 1, true, true, language.GetPhrase("beatrun.convars.showspeedometer"), 0, 1)
+	hudstats = CreateClientConVar("Beatrun_HUDStats", "0", true, false, "", 0, 1)
+	speedometermode = CreateClientConVar("Beatrun_SpeedometerMode", 1, true, true, language.GetPhrase("beatrun.convars.speedometermode"), 1, 3)
 end
 
 if SERVER then
 	util.AddNetworkString("Checkpoint_Hit")
 	util.AddNetworkString("Checkpoint_Finish")
-else
-	surface.CreateFont("BeatrunHUD", {
-		font = "Roboto",
-		shadow = true,
-		blursize = 0,
-		underline = false,
-		rotary = false,
-		strikeout = false,
-		additive = false,
-		antialias = true,
-		extended = false,
-		scanlines = 0,
-		italic = false,
-		outline = false,
-		symbol = false,
-		size = 32,
-		weight = 2000
-	})
 end
 
 function LoadCheckpoints()
@@ -96,17 +83,17 @@ if CLIENT then
 		end
 
 		if not pbtimes or vspb == 0 then
-			LocalPlayer():EmitSound("A_TT_CP_Neutral.wav")
+			LocalPlayer():EmitSound("a_tt_cp_neutral.ogg")
 
 			timecolor = color_neutral
 			timetext = string.FormattedTime(math.abs(timetaken), "%02i:%02i:%02i")
 		elseif vspb < 0 then
-			LocalPlayer():EmitSound("A_TT_CP_Positive.wav")
+			LocalPlayer():EmitSound("a_tt_cp_positive.ogg")
 
 			timecolor = color_positive
 			timetext = "-" .. string.FormattedTime(math.abs(vspb), "%02i:%02i:%02i")
 		else
-			LocalPlayer():EmitSound("A_TT_CP_Negative.wav")
+			LocalPlayer():EmitSound("a_tt_cp_negative.ogg")
 
 			timecolor = color_negative
 			timetext = "+" .. string.FormattedTime(math.abs(vspb), "%02i:%02i:%02i")
@@ -136,13 +123,13 @@ if CLIENT then
 			timetext = "-" .. string.FormattedTime(math.abs(timestr), "%02i:%02i:%02i")
 			timecolor = color_positive
 
-			LocalPlayer():EmitSound("A_TT_Finish_Positive.wav")
+			LocalPlayer():EmitSound("a_tt_finish_positive.ogg")
 			SaveCheckpointTime()
 		else
 			timetext = "+" .. string.FormattedTime(math.abs(timestr), "%02i:%02i:%02i")
 			timecolor = color_negative
 
-			LocalPlayer():EmitSound("A_TT_Finish_Negative.wav")
+			LocalPlayer():EmitSound("a_tt_finish_negative.ogg")
 		end
 
 		if CourseGhost:GetBool() then StopGhostRecording(pbtotal == 0, totaltime < pbtotal) end
@@ -151,20 +138,27 @@ if CLIENT then
 			net.WriteFloat(totaltime)
 		net.SendToServer()
 
+		if Beatrun_SubmitCourseRecord then Beatrun_SubmitCourseRecord(totaltime) end
+
 		timealpha = 1000
 	end)
 end
 
 if SERVER then
 	net.Receive("Checkpoint_Finish", function(len, ply)
-		local pb = net.ReadFloat() or 0
-		local svtime = CurTime() - ply.Course_StartTime
+		local svtime = ply.Course_FinishTime
+		if not svtime then return end
 
-		if math.abs(svtime - pb) > 5 then
-			pb = svtime
-		end
+		ply.Course_FinishTime = nil
 
-		if ply:GetNW2Int("CPNum", 1) == -1 and (ply:GetNW2Float("PBTime") == 0 or pb < ply:GetNW2Float("PBTime")) then
+		local tolerance = 0.1 + ply:Ping() / 1000
+		local pb = net.ReadFloat()
+
+		if pb ~= pb then pb = svtime end
+
+		pb = math.Clamp(pb, svtime - tolerance, svtime + tolerance)
+
+		if ply:GetNW2Float("PBTime") == 0 or pb < ply:GetNW2Float("PBTime") then
 			ply:SetNW2Float("PBTime", pb)
 		end
 	end)
@@ -173,6 +167,8 @@ end
 local finishcolor = Color(45, 45, 175, 100)
 
 function FinishCourse(ply)
+	ply.Course_FinishTime = CurTime() - (ply.Course_StartTime or CurTime())
+
 	ply:ScreenFade(SCREENFADE.IN, finishcolor, 0, 4)
 	ply:DrawViewModel(false)
 
@@ -182,7 +178,7 @@ function FinishCourse(ply)
 	ply:SetNW2Int("CPNum", -1)
 
 	timer.Simple(4, function()
-		ply:DrawViewModel(true)
+		if IsValid(ply) then ply:DrawViewModel(true) end
 	end)
 end
 
@@ -204,11 +200,11 @@ local function StartCountdown()
 		countdown = countdown + 1
 
 		if countdown >= 3 then
-			LocalPlayer():EmitSound("A_TT_CD_02.wav")
+			LocalPlayer():EmitSound("a_tt_cd_02.ogg")
 			hook.Remove("Think", "StartCountdown")
 			hook.Remove("StartCommand", "StartFreeze")
 		else
-			LocalPlayer():EmitSound("A_TT_CD_01.wav")
+			LocalPlayer():EmitSound("a_tt_cd_01.ogg")
 		end
 	end
 end
@@ -234,8 +230,10 @@ local function StartCountdownHUD()
 end
 
 function CourseHUD()
+	if BeatrunUI.IsLargeWindowOpen() then return end
+
 	local ply = LocalPlayer()
-	local vp = ply:GetViewPunchAngles()
+	local vp = ply:GetSmoothViewPunchAngles()
 	local vpx = vp.x
 	local vpz = vp.z
 	local incourse = Course_Name ~= ""
@@ -253,14 +251,15 @@ function CourseHUD()
 		surface.DrawText(text)
 	end
 
-	if GetConVar("Beatrun_ShowSpeedometer"):GetBool() and GetConVar("Beatrun_HUDHidden"):GetInt() ~= 2 then
+	hudhidden = hudhidden or GetConVar("Beatrun_HUDHidden")
+
+	if showspeedometer:GetBool() and hudhidden:GetInt() ~= 2 then
 		local speed = 0
 
-		local mode = GetConVar("Beatrun_SpeedometerMode"):GetInt()
+		local mode = speedometermode:GetInt()
 
 		-- NOTE: Calculations that I found on Valve's wiki, under "Source Engine Scale Calculations"
 		-- https://developer.valvesoftware.com/wiki/Dimensions_(Half-Life_2_and_Counter-Strike:_Source)#Source_Engine_Scale_Calculations
-
 		if mode == 1 then -- km/h
 			speed = math.Round(ply:GetVelocity():Length() * 0.068573863636364) -- 12069/176000
 		elseif mode == 2 then -- mph
@@ -279,14 +278,19 @@ function CourseHUD()
 		local w, _ = surface.GetTextSize(text)
 		w = w or 0
 
-		local r, g, b, a = string.ToColor(GetConVar("Beatrun_HUDTextColor"):GetString())
+		hudtextcolor = hudtextcolor or GetConVar("Beatrun_HUDTextColor")
+
+		if hudtextcolor:GetString() ~= textcolorstring then
+			textcolorstring = hudtextcolor:GetString()
+			textcolor = string.ToColor(textcolorstring)
+		end
 
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetTextColor(r, g, b, a)
+		surface.SetTextColor(textcolor)
 		surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.85 + vpz)
 		surface.DrawText(text)
 
-		if GetConVar("Beatrun_HUDStats"):GetBool() then
+		if hudstats:GetBool() then
 			local ang1 = ply:GetAimVector()
 			ang1 = math.Round(ang1:Angle()[2] % 90, 0)
 			surface.SetTextPos(ScrW() * 0.85 - w * 0.5 + vpx, ScrH() * 0.88 + vpz)
@@ -417,11 +421,8 @@ end
 
 net.Receive("BeatrunSpawn", function()
 	local spawntime = net.ReadFloat()
-	local replay = net.ReadBool()
 
 	hook.Run("BeatrunSpawn")
-
-	LocalPlayer().InReplay = replay
 
 	if LocalPlayer().GetInfoNum then
 		StartCourse(spawntime)

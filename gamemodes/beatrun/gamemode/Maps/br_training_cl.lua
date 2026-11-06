@@ -139,7 +139,6 @@ local function TutorialLogic()
 	local ply = LocalPlayer()
 
 	if not IsValid(ply) then return end
-	if ply.InReplay then return end
 
 	local endpos = tutorialendpos[curtutorial]
 
@@ -182,10 +181,6 @@ local function TutorialEvents(event, ply)
 end
 
 hook.Add("OnParkour", "TutorialEvents", TutorialEvents)
-
-function TutorialClearEvents()
-	table.Empty(curevent)
-end
 
 local markerup = Vector()
 local markercol = Color(255, 25, 25)

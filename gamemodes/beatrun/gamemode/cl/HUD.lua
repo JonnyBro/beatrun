@@ -25,9 +25,9 @@ cvars.AddChangeCallback("Beatrun_HUDFloatingXPColor", function(convar_name, valu
 	HUDXPColor =  string.ToColor(value_new)
 end)
 
-local packetloss = Material("vgui/packetloss.png")
+local packetlossicon = Material("vgui/packetloss.png")
 local lastloss = 0
-local MELogo = Material("vgui/MELogo.png", "mips smooth")
+local MELogo = Material("vgui/melogo.png", "mips smooth")
 
 local hide = {
 	CHudBattery = true,
@@ -59,7 +59,7 @@ hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function()
 
 	local ply = LocalPlayer()
 	local inp = color ~= 1
-	local noclipping = ply:GetMoveType() == MOVETYPE_NOCLIP and not BuildMode and ply:GetMantle() == 0 and ply:GetClimbing() == 0 and not IsValid(ply:GetLadder()) and not ply:InVehicle()
+	local noclipping = not disableColorModify:GetBool() and ply:GetMoveType() == MOVETYPE_NOCLIP and not BuildMode and ply:GetMantle() == 0 and ply:GetClimbing() == 0 and not IsValid(ply:GetLadder()) and not ply:InVehicle()
 
 	if noclipping or inp then
 		tab["$pp_colour_colour"] = color
@@ -72,47 +72,29 @@ hook.Add("RenderScreenspaceEffects", "BeatrunNoclipBW", function()
 		color = math.Approach(color, 1, RealFrameTime() * 2)
 	end
 
-	if ply:Health() < 100 then
+	if ply:Health() < ply:GetMaxHealth() then
 		tab["$pp_colour_colour"] = math.max(ply:Health() / ply:GetMaxHealth(), 0)
 		DrawColorModify(tab)
 	end
 end)
 
-surface.CreateFont("BeatrunHUD", {
-	font = "x14y24pxHeadUpDaisy",
-	shadow = true,
-	blursize = 0,
-	underline = false,
-	rotary = false,
-	strikeout = false,
-	additive = false,
-	antialias = false,
-	extended = false,
-	scanlines = 2,
-	italic = false,
-	outline = false,
-	symbol = false,
-	weight = 500,
-	size = ScreenScale(7)
-})
+local function CreateHUDFonts()
+	for name, size in pairs({ BeatrunHUD = 7, BeatrunHUDSmall = 6 }) do
+		surface.CreateFont(name, {
+			font = "x14y24pxHeadUpDaisy",
+			shadow = true,
+			antialias = false,
+			extended = true,
+			scanlines = 2,
+			weight = 500,
+			size = ScreenScale(size)
+		})
+	end
+end
 
-surface.CreateFont("BeatrunHUDSmall", {
-	font = "x14y24pxHeadUpDaisy",
-	shadow = true,
-	blursize = 0,
-	underline = false,
-	rotary = false,
-	strikeout = false,
-	additive = false,
-	antialias = false,
-	extended = false,
-	scanlines = 2,
-	italic = false,
-	outline = false,
-	symbol = false,
-	weight = 500,
-	size = ScreenScale(6)
-})
+CreateHUDFonts()
+
+hook.Add("OnScreenSizeChanged", "BeatrunHUD_Fonts", CreateHUDFonts)
 
 local blur = Material("pp/blurscreen")
 
@@ -141,26 +123,28 @@ end
 local hidealpha = 0
 
 local function BeatrunHUD()
+	if BeatrunUI.IsLargeWindowOpen() then return end
+
 	local ply = LocalPlayer()
 	local scrw = ScrW()
 	local scrh = ScrH()
 
 	surface.SetFont("DebugFixedSmall")
 
-	local pl = ply:GetNW2Int("PLoss")
+	local packetloss = ply:GetNW2Int("PLoss")
 	local CT = CurTime()
 
-	if pl > 10 or CT < lastloss then
+	if packetloss > 10 or CT < lastloss then
 		local alpha = math.Clamp(math.abs(math.sin(CurTime() * 4) * 255), 25, 255)
 
 		surface.SetDrawColor(255, 255, 255, alpha)
-		surface.SetMaterial(packetloss)
+		surface.SetMaterial(packetlossicon)
 		surface.DrawTexturedRect(5, 5, 58.75, 41.75)
 		surface.SetTextPos(65, 20)
 		surface.SetTextColor(255, 195, 90, alpha)
-		surface.DrawText(pl)
+		surface.DrawText(packetloss)
 
-		if pl > 10 then
+		if packetloss > 10 then
 			lastloss = CT + 4
 		end
 	end
@@ -172,7 +156,7 @@ local function BeatrunHUD()
 
 	if shoulddraw == false then return end
 
-	local vp = ply:GetViewPunchAngles()
+	local vp = ply:GetSmoothViewPunchAngles()
 
 	if not sway:GetBool() then
 		vp.x = 0
@@ -214,12 +198,12 @@ local function BeatrunHUD()
 		end
 
 		surface.SetDrawColor(HUDCornerColor.r, HUDCornerColor.g, HUDCornerColor.b, dynamic:GetBool() and math.max(150 - hidealpha, 50) or math.Clamp(HUDCornerColor.a + 50, 0, 255))
-		surface.DrawRect(-20 + vp.z, scrh * 0.895 + vp.x, 40, SScaleY(85))
+		surface.DrawRect(-20 + vp.z, scrh * 0.895 + vp.x, 40, BeatrunUI.S(85))
 
-		DrawBlurRect(20 + vp.z, scrh * 0.895 + vp.x, SScaleX(bgpadding), SScaleY(85), math.max(255 - hidealpha, 2))
+		DrawBlurRect(20 + vp.z, scrh * 0.895 + vp.x, BeatrunUI.S(bgpadding), BeatrunUI.S(85), math.max(255 - hidealpha, 2))
 
 		surface.SetDrawColor(HUDCornerColor.r, HUDCornerColor.g, HUDCornerColor.b, dynamic:GetBool() and math.max(100 - hidealpha, 50) or HUDCornerColor.a)
-		surface.DrawOutlinedRect(20 + vp.z, scrh * 0.895 + vp.x, SScaleX(bgpadding), SScaleY(85))
+		surface.DrawOutlinedRect(20 + vp.z, scrh * 0.895 + vp.x, BeatrunUI.S(bgpadding), BeatrunUI.S(85))
 
 		surface.SetFont("BeatrunHUD")
 		surface.SetTextColor(HUDTextColor.r , HUDTextColor.g , HUDTextColor.b , dynamic:GetBool() and math.max(255 - hidealpha, 2) or HUDTextColor.a)
@@ -253,7 +237,7 @@ local function BeatrunHUD()
 		if tobool(ply:GetInfo("Beatrun_PuristMode")) or GetConVar("Beatrun_PuristModeForce"):GetBool() then
 			surface.SetDrawColor(230, 230, 230)
 			surface.SetMaterial(MELogo)
-			surface.DrawTexturedRect(scrw * 0.00125 + vp.z, scrh * 0.9 + vp.x + SScaleY(16) * 0.25, SScaleX(16), SScaleY(16))
+			surface.DrawTexturedRect(scrw * 0.00125 + vp.z, scrh * 0.9 + vp.x + BeatrunUI.S(16) * 0.25, BeatrunUI.S(16), BeatrunUI.S(16))
 		else
 			surface.SetTextPos(scrw * 0.002 + vp.z, scrh * 0.9 + vp.x)
 			surface.DrawText("★")
@@ -264,10 +248,10 @@ local function BeatrunHUD()
 		surface.DrawText(nicktext)
 
 		surface.SetDrawColor(25, 25, 25, math.max(255 - hidealpha, 2))
-		surface.DrawRect(scrw * 0.015 + vp.z, scrh * 0.94 + 1 + vp.x, SScaleX(150), SScaleY(4))
+		surface.DrawRect(scrw * 0.015 + vp.z, scrh * 0.94 + 1 + vp.x, BeatrunUI.S(150), BeatrunUI.S(4))
 
 		surface.SetDrawColor(HUDTextColor.r , HUDTextColor.g , HUDTextColor.b, math.max(255 - hidealpha, 2))
-		surface.DrawRect(scrw * 0.015 + vp.z, scrh * 0.94 + vp.x, SScaleX(150 * math.min(ply:GetLevelRatio(), 1)), SScaleY(5))
+		surface.DrawRect(scrw * 0.015 + vp.z, scrh * 0.94 + vp.x, BeatrunUI.S(150 * math.min(ply:GetLevelRatio(), 1)), BeatrunUI.S(5))
 
 		for k, v in pairs(XP_floatingxp) do
 			surface.SetFont("BeatrunHUD")
@@ -351,6 +335,7 @@ local function sortleaderboard(a, b)
 end
 
 function BeatrunLeaderboard(forced)
+	if not forced and BeatrunUI.IsLargeWindowOpen() then return end
 	if not forced and Course_Name == "" and not GetGlobalBool("GM_INFECTION") and not GetGlobalBool("GM_DATATHEFT") and not GetGlobalBool("GM_DEATHMATCH") and not GetGlobalBool("GM_EVENTMODE") then return end
 
 	local isinfection = GetGlobalBool("GM_INFECTION")
@@ -359,7 +344,7 @@ function BeatrunLeaderboard(forced)
 	local iseventmode = GetGlobalBool("GM_EVENTMODE")
 
 	local ply = LocalPlayer()
-	local vp = ply:GetViewPunchAngles()
+	local vp = ply:GetSmoothViewPunchAngles()
 	local scrh = ScrH()
 
 	if not sway:GetBool() then
@@ -375,19 +360,6 @@ function BeatrunLeaderboard(forced)
 		table.sort(allply, sortleaderboard)
 	end
 
-	local allplycount = #allply + 1
-
-	surface.SetDrawColor(20, 20, 20, math.max(150 - hidealpha, 50))
-	surface.DrawRect(-20 + vp.z, scrh * 0.2 + vp.x, 40, SScaleY(30 * allplycount))
-
-	DrawBlurRect(20 + vp.z, scrh * 0.2 + vp.x, SScaleX(400), SScaleY(30 * allplycount), math.max(255 - hidealpha, 2))
-
-	surface.SetDrawColor(20, 20, 20, math.max(100 - hidealpha, 50))
-	surface.DrawOutlinedRect(20 + vp.z, scrh * 0.2 + vp.x, SScaleX(400), SScaleY(30 * allplycount))
-	surface.SetFont("BeatrunHUD")
-	surface.SetTextColor(255, 255, 255, math.max(255 - hidealpha, 2))
-
-	local i = 0
 	local displayPlayers = {}
 
 	for _, p in ipairs(allply) do
@@ -418,56 +390,80 @@ function BeatrunLeaderboard(forced)
 		end)
 	end
 
+	if #displayPlayers == 0 then return end
+
+	local S = BeatrunUI.S
+	local rowH = S(30)
+	local pad = S(8)
+	local w = S(420)
+	local h = rowH * #displayPlayers + pad * 2
+	local x = 20 + vp.z
+	local y = scrh * 0.2 + vp.x
+	local alpha = math.max(255 - hidealpha, 2)
+
+	surface.SetDrawColor(20, 20, 20, math.max(150 - hidealpha, 50))
+	surface.DrawRect(-20 + vp.z, y, 40, h)
+
+	DrawBlurRect(x, y, w, h, alpha)
+
+	surface.SetDrawColor(20, 20, 20, math.max(100 - hidealpha, 50))
+	surface.DrawOutlinedRect(x, y, w, h)
+
+	surface.SetFont("BeatrunHUD")
+
+	local starW = surface.GetTextSize("★")
+	local starX = x + w - pad - starW
+	local valueRight = starX - S(10)
+	local valueW = surface.GetTextSize("00:00:00")
+	local nameRight = valueRight - valueW - S(16)
+
 	for k, v in ipairs(displayPlayers) do
-		if IsValid(v) then
-			i = i + 1
+		local rowY = y + pad + (k - 1) * rowH + rowH / 2
+		local pbtimenum = v:GetNW2Float("PBTime")
+		local value = niltime
+		local valueColor
 
-			local pbtimenum = v:GetNW2Float("PBTime")
-			local pbtime = niltime
+		if isdatatheft then
+			pbtimenum = v:GetNW2Int("DataBanked", 0)
+			value = tostring(pbtimenum)
+		elseif isdeathmatch then
+			pbtimenum = v:GetNW2Int("DeathmatchKills", 0)
+			value = tostring(pbtimenum)
+		elseif pbtimenum ~= 0 then
+			value = string.FormattedTime(pbtimenum, "%02i:%02i:%02i")
+		end
 
-			if isdatatheft then
-				pbtimenum = v:GetNW2Int("DataBanked", 0)
-				pbtime = pbtimenum
+		local color = pbtimenum ~= 0 and placecolors[k] or color_white
 
-				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
-			elseif isdeathmatch then
-				pbtimenum = v:GetNW2Int("DeathmatchKills", 0)
-				pbtime = pbtimenum
+		if isinfection and pbtimenum == 0 and v:GetNW2Bool("Infected") then
+			value = language.GetPhrase("beatrun.hud.infector")
+			valueColor = infectorcolor
+		elseif iseventmode then
+			local sdata = GetStatusData(v:GetNW2String("EPlayerStatus", "Member"))
 
-				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
-			else
-				surface.SetTextColor(pbtimenum ~= 0 and placecolors[k] or color_white)
+			value = language.GetPhrase(sdata.label_key)
+			valueColor = sdata.color or color_white
+		end
 
-				if pbtimenum ~= 0 then
-					pbtime = string.FormattedTime(v:GetNW2Float("PBTime"), "%02i:%02i:%02i")
-				end
+		valueColor = valueColor or color
+
+		local name = k .. ". " .. v:Nick()
+
+		if surface.GetTextSize(name) > nameRight - (x + pad) then
+			while #name > 4 and surface.GetTextSize(name .. "...") > nameRight - (x + pad) do
+				local last = utf8.offset(name, -1) or #name
+
+				name = name:sub(1, last - 1)
 			end
 
-			surface.SetTextPos(30 + vp.z, scrh * 0.2 + vp.x + 25 * k)
-			surface.DrawText(k .. ". " .. v:Nick():Left(14))
-			surface.SetTextPos(SScaleX(220 + vp.z), scrh * 0.2 + vp.x + 25 * k)
+			name = name .. "..."
+		end
 
-			if isinfection and pbtimenum == 0 and v:GetNW2Bool("Infected") then
-				surface.SetTextColor(infectorcolor)
-				surface.DrawText(" | " .. language.GetPhrase("beatrun.hud.infector"))
-			elseif iseventmode then
-				local statusKey = v:GetNW2String("EPlayerStatus", "Member")
-				local sdata = GetStatusData(statusKey)
+		draw.SimpleText(name, "BeatrunHUD", x + pad, rowY, ColorAlpha(color, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(value, "BeatrunHUD", valueRight, rowY, ColorAlpha(valueColor, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-				if sdata.key == "Manager" then
-					i = i - 1
-				else
-					surface.SetTextColor(sdata.color or Color(255, 255, 255))
-					surface.DrawText(" | " .. language.GetPhrase(sdata.label_key))
-				end
-			else
-				surface.DrawText(" | " .. pbtime)
-			end
-
-			if k < 4 and pbtimenum ~= 0 then
-				surface.SetTextPos(SScaleX(380 + vp.z), scrh * 0.2 + vp.x + 25 * k)
-				surface.DrawText("★")
-			end
+		if k < 4 and pbtimenum ~= 0 then
+			draw.SimpleText("★", "BeatrunHUD", starX, rowY, ColorAlpha(color, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 	end
 end
@@ -503,93 +499,3 @@ hook.Add("RenderScreenspaceEffects", "FilterPP", function()
 		DrawColorModify(pp)
 	end
 end)
-
-local maxentries = SScaleX(375)
-speedrecord = {}
--- local lastx = 0
--- local lasty = 0
-local sgoffsetx = 0.75
-local sgoffsety = 0.75
-
-local function DrawSpeedGraph()
-	if not speedrecord or not LocalPlayer().InReplay then return end
-
-	local offsetx = ScrW() * sgoffsetx
-	local offsety = ScrH() * sgoffsety
-	local boxscaledx = SScaleX(400)
-	local boxscaledy = SScaleY(200)
-
-	render.SetScissorRect(offsetx, offsety, offsetx + boxscaledx, offsety + boxscaledy, true)
-
-	surface.SetDrawColor(25, 25, 25, 100)
-	surface.DrawRect(offsetx, offsety, boxscaledx, boxscaledy)
-	surface.SetFont("DebugFixedSmall")
-
-	render.PushFilterMag(TEXFILTER.POINT)
-	render.PushFilterMin(TEXFILTER.POINT)
-
-	for i = 1, #speedrecord do
-		local speed = speedrecord[i]
-		speedcol = speed * 2
-
-		surface.SetDrawColor(speedcol * 0.1, speedcol * 0.5, speedcol * 0.25, speedcol * 2)
-		surface.DrawLine(offsetx + i - 1, offsety + boxscaledy, offsetx + i, offsety + boxscaledy - speed)
-
-		lasty = speed
-	end
-
-	local entrycount = #speedrecord
-	local lastrecord = speedrecord[entrycount]
-
-	if lastrecord then
-		surface.SetTextColor(255, 255, 255)
-		surface.SetTextPos(offsetx + entrycount, offsety + boxscaledy - lastrecord)
-		surface.DrawText(math.Round(lastrecord))
-	end
-
-	render.SetScissorRect(0, 0, 0, 0, false)
-	render.PopFilterMag()
-	render.PopFilterMin()
-	surface.SetDrawColor(45, 45, 45, 145)
-	surface.DrawOutlinedRect(offsetx - 1, offsety - 1, boxscaledx + 1, boxscaledy + 1)
-end
-
-hook.Add("HUDPaint", "SpeedGraph", DrawSpeedGraph)
-
-local smoothvel = true
-local lastvel = 0
-
-local function RecordSpeedGraph()
-	if not LocalPlayer().InReplay then return end
-
-	local lenrecord = #speedrecord
-	local vel = LocalPlayer():GetVelocity()
-	local oldrecord = false
-
-	if LocalPlayer():GetClimbing() ~= 0 then
-		oldrecord = speedrecord[lenrecord] or 0
-	end
-
-	if maxentries <= lenrecord then
-		table.remove(speedrecord, 1)
-	end
-
-	if not oldrecord then
-		vel.z = math.max(vel.z, 0)
-		local power = nil
-
-		if smoothvel then
-			power = math.pow(Lerp(0, lastvel, vel:Length()), 2)
-		else
-			power = math.pow(vel:Length(), 2)
-		end
-
-		table.insert(speedrecord, SScaleY(power * 0.001 * power * 5e-06))
-	else
-		table.insert(speedrecord, oldrecord)
-	end
-
-	lastvel = Lerp(0.1, lastvel, vel:Length())
-end
-
-hook.Add("Tick", "SpeedGraph", RecordSpeedGraph)

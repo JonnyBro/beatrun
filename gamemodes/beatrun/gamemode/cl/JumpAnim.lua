@@ -7,12 +7,15 @@ local requiresArms = {
 	hang = true,
 	hanghardstartvertical = true,
 	hangheaveup = true,
+	hangjumpup = true,
 	hangfoldedstart = true,
 	hanghardstart2 = true,
 	hangfoldedendhang = true,
 	hangfoldedheaveup = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	hanghardstart = true
 }
 
@@ -53,10 +56,12 @@ fbanims = {
 	jumpcoilendcrouch = true,
 	jumpcoilcatalyst = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	hangfoldedstart = true,
 	jumpslow = true,
 	jumpcrouch = true,
 	hangheaveup = true,
+	hangjumpup = true,
 	jumpwrright = true,
 	meleeairhit = true,
 	jumpstill = true,
@@ -68,6 +73,7 @@ fbanims = {
 	jumpturnlandidle = true,
 	hanghardstart = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	walkfwd = true,
 	walkback = true,
 	jumpfast = true,
@@ -192,7 +198,9 @@ local events = {
 	jumpwallrun = true,
 	ziplinestart = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	climbhard = true,
 	walkbalancefwd = true,
 	hangfoldedheaveup = true,
@@ -236,6 +244,7 @@ local events = {
 	diveslidestart = true,
 	bargedoor = true,
 	hangjump = true,
+	hangjumpup = true,
 	diveslideend = true,
 	landcoil = true,
 	ladderexittoprighthand = true,
@@ -258,6 +267,7 @@ local eventslut = {
 	hangfoldedheaveup = "hangfoldedheaveup",
 	jumpwallrun = "jumpfast",
 	hangstrafeleft = "hangstrafeleft",
+	hangcornerleft = "hangcornerleft",
 	ziplinestart = "ziplinestart",
 	climbhard2 = "hanghardstart2",
 	vaultonto = "vaultonto",
@@ -270,6 +280,7 @@ local eventslut = {
 	sidestepleft = "dodgejumpleft",
 	vaulthigh = "vaultoverhigh",
 	hangstraferight = "hangstraferight",
+	hangcornerright = "hangcornerright",
 	hangfoldedstart = "hangfoldedstart",
 	ladderexittoprighthand = "ladderexittoprighthand",
 	swingpipeleft = "stand",
@@ -306,6 +317,7 @@ local eventslut = {
 	slide = "meslidestart",
 	bargedoor = "bargein",
 	hangjump = "jumpfast",
+	hangjumpup = "hangjumpup",
 	diveslidestart = "diveslidestart",
 	landcoil = "jumpcoilend",
 	diveslideend = "diveslideend",
@@ -350,6 +362,7 @@ local armlock = {
 	ladderclimbuplefthandstill = true,
 	ladderclimbuprighthandstill = true,
 	wallrunvertical = true,
+	hangjumpup = true,
 	ladderclimbdownfast = true,
 	ladderclimbuprighthand = true,
 	ladderclimbhangstart = true,
@@ -404,6 +417,7 @@ local ignorePitch = {
 }
 
 local transitionanims = {
+	hangjumpup = "jumpair",
 	hanghardstart = "hang",
 	divestart = "diveidle",
 	diveslideendcrouch = "crouchfwd",
@@ -411,6 +425,7 @@ local transitionanims = {
 	walktostandleft = "stand",
 	fallinguncontrolled = "runfwd",
 	hangstrafeleft = "hang",
+	hangcornerleft = "hang",
 	ladderclimbhangstart = "ladderclimbuprighthandstill",
 	hanghardstart2 = "hang",
 	meslideend = "runfwd",
@@ -420,6 +435,7 @@ local transitionanims = {
 	springboardleftleg = "runfwd",
 	hanghardstartvertical = "hang",
 	hangstraferight = "hang",
+	hangcornerright = "hang",
 	zipline = "jumpzipline",
 	ladderenterbottom = "ladderclimbuplefthandstill",
 	hangheaveup = "runfwd",
@@ -479,6 +495,7 @@ local nospinebend = {
 	ziplinestart = true,
 	hangfoldedendhang = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	zipline = true,
 	hanghardstart2 = true,
 	snatchsniper = true,
@@ -488,6 +505,7 @@ local nospinebend = {
 	diveidle = true,
 	hanghardstartvertical = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	hangfoldedstart = true,
 	ladderenterbottom = true,
 	hangheaveup = true,
@@ -518,6 +536,7 @@ local worldarm = {
 	snatchsniper = true,
 	hangfoldedendhang = true,
 	hangstrafeleft = true,
+	hangcornerleft = true,
 	bargein = true,
 	hanghardstart2 = true,
 	grapplecenter = true,
@@ -528,6 +547,7 @@ local worldarm = {
 	diveslideendcrouch = true,
 	hanghardstartvertical = true,
 	hangstraferight = true,
+	hangcornerright = true,
 	hangfoldedstart = true,
 	ladderenterbottom = true,
 	hangheaveup = true,
@@ -622,10 +642,10 @@ local customarmoffset = {
 	ladderclimbhangstart = Vector(-5, 0, 0),
 	ladderenterbottom = Vector(-7.5, 0, 0),
 	jumpcrouch = Vector(-4, 0, -2),
-	crouchstill = Vector(-4, 0, -2),
-	crouchtostandleft = Vector(-4, 0, -2),
-	crouchfwd = Vector(-4, 0, -2),
-	crouchbwd = Vector(-4, 0, -2),
+	crouchstill = Vector(0, 0, -2),
+	crouchtostandleft = Vector(0, 0, -2),
+	crouchfwd = Vector(0, 0, -2),
+	crouchbwd = Vector(0, 0, -2),
 	walkfwd = Vector(10, 0, -10),
 	walkback = Vector(10, 0, -10),
 	runbwd = Vector(0, 0, 3),
@@ -649,15 +669,23 @@ local customcamoffset = {
 	ladderexittoprighthand = Vector(-5, 0, 0),
 	ladderenterbottom = Vector(-5, 0, 0),
 	hangstrafeleft = Vector(-2.5, 0, 0),
+	hangcornerleft = Vector(-2.5, 0, 0),
 	hangstraferight = Vector(-2.5, 0, 0),
+	hangcornerright = Vector(-2.5, 0, 0),
 	snatchscar = snatchscarcam1,
-	crouchstill = Vector(2, 0, 2.5),
-	crouchtostandleft = Vector(2, 0, 2.5),
-	crouchfwd = Vector(2, 0, 2.5),
-	crouchbwd = Vector(2, 0, 2.5)
+	crouchstill = Vector(2, 0, -3),
+	crouchtostandleft = Vector(2, 0, -3),
+	crouchfwd = Vector(2, 0, -3),
+	crouchbwd = Vector(2, 0, -3)
 }
 
+local function HangStrafeDone(ply)
+	return BodyAnimCycle >= 0.95 and ply:GetClimbing() == 1 and not ply:KeyDown(IN_MOVELEFT) and not ply:KeyDown(IN_MOVERIGHT)
+end
+
 local transitionchecks = {
+	hangstrafeleft = HangStrafeDone,
+	hangstraferight = HangStrafeDone,
 	meleeair = function(ply)
 		if BodyAnimCycle >= 1 or ply:OnGround() then return true end
 	end,
@@ -917,6 +945,35 @@ local function HangAngleSoundCheck(ply)
 	ply.hangLookingAway = lookingAway
 end
 
+-- Turns the body and the view with it from the old wall to the new one as the corner goes on. The camera isn't
+-- locked to the head, the animation turns the head away from where the body ends up
+local function HangCornerTurn(ply)
+	local from = ply.CornerFromAng or ply:GetClimbingAngle()
+	-- Finishes a bit early, the animation hands over to hang at 0.9 and this stops running there
+	local t = math.Clamp(ply:GetClimbing() == 7 and ply:GetClimbingTime() / 0.85 or 1, 0, 1)
+	local ang = LerpAngle(t * t * (3 - 2 * t), from, ply:GetClimbingAngle())
+
+	ang.x = 0
+	ang.z = 0
+
+	CamIgnoreAng = false
+	BodyLimitY = 40
+
+	BodyAnim:SetAngles(ang)
+	ply.OrigEyeAng = ang
+
+	if ply.CornerLastYaw then
+		local eyeang = ply:EyeAngles()
+
+		eyeang.y = eyeang.y + math.AngleDifference(ang.y, ply.CornerLastYaw)
+		ply:SetEyeAngles(eyeang)
+	end
+
+	ply.CornerLastYaw = ang.y
+
+	return true
+end
+
 fbfunctions = {
 	vaultontohigh = function(ply) return true end,
 	swing = function(ply)
@@ -1011,6 +1068,8 @@ fbfunctions = {
 
 		return true
 	end,
+	hangcornerleft = HangCornerTurn,
+	hangcornerright = HangCornerTurn,
 	hanghardstartvertical = function(ply)
 		BodyLimitX = 30
 		BodyLimitY = 120
@@ -1159,6 +1218,14 @@ eventsounds = {
 		[0.5] = "Cloth.MovementSneak"
 	},
 	hangstraferight = {
+		[0.1] = "Cloth.MovementSneak",
+		[0.5] = "Cloth.MovementSneak"
+	},
+	hangcornerleft = {
+		[0.1] = "Cloth.MovementSneak",
+		[0.5] = "Cloth.MovementSneak"
+	},
+	hangcornerright = {
 		[0.1] = "Cloth.MovementSneak",
 		[0.5] = "Cloth.MovementSneak"
 	},
@@ -1366,11 +1433,8 @@ local function BodyEventSounds(anim)
 	end
 end
 
-camint = 1
 campos = Vector()
 camang = Angle()
--- local customoffset = Vector()
--- local movedback = false
 local customoffsetlerp = Vector()
 
 local function JumpCalcView(view)
@@ -1382,25 +1446,6 @@ local function JumpCalcView(view)
 		if IsValid(BodyAnimArmCopy) then
 			BodyAnimArmCopy:Remove()
 		end
-	end
-
-	-- local eyepos = LocalPlayer():EyePos()
-	-- local vieworigin = view.origin
-
-	BodyAnim:SetupBones()
-
-	local m = BodyAnim:GetBoneMatrix(68)
-	local ang = nil -- local pos, ang = nil
-
-	if m then
-		ang = m:GetAngles()
-		pos = m:GetTranslation()
-	end
-
-	if IsValid(ang) then
-		ang:Sub(view.angles)
-		ang:Mul(camint)
-		view.angles:Add(ang)
 	end
 
 	customoffsetlerp = LerpVector(math.min(10 * FrameTime(), 1), customoffsetlerp, customcamoffset[BodyAnimString] or defaultcamoffset)
@@ -1472,8 +1517,71 @@ local armoffset = Vector()
 local armoffsetlerp = Vector()
 local manipulate_fingerAng = Angle(0, 30, 0)
 local bac_pos = Vector(0, 0, -64)
--- local drawnorigin = false
---local drawnskytime = 0
+
+-- How close the head may get to a wall when bending down
+local spinemargin = 10
+local spinetr = {
+	mask = MASK_PLAYERSOLID,
+	collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+}
+
+-- Set by JumpArmDraw. Other body anims (rolls) lock the camera to the head, which the bend would feed back into
+local spinebendframe = -1
+
+local function SpineBend(ent)
+	local ply = LocalPlayer()
+	if FrameNumber() - spinebendframe > 1 or nospinebend[BodyAnimString] or ply:ShouldDrawLocalPlayer() then return end
+
+	local eyeang = ply:EyeAngles()
+	local bend = math.rad(math.max(eyeang.x * 0.4, 0))
+	if bend <= 0 then return end
+
+	if not ent.spinebones then
+		local spine = ent:LookupBone("ValveBiped.Bip01_Spine")
+
+		ent.spine = spine
+		ent.spinehead = ent:LookupBone("ValveBiped.Bip01_Head1")
+		ent.spinebones = spine and BeatrunIK.GetSubtree(ent, spine) or {}
+	end
+
+	local px, py, pz = BeatrunIK.GetBonePos(ent, ent.spine)
+	if not px then return end
+
+	-- The body's own yaw, not the view's: standing, the body lags behind the view and would bend sideways
+	local yaw = Angle(0, ent:GetAngles().y, 0)
+
+	-- The head (and the camera on it) swings forward past the player's hull, against a wall it would go inside it
+	local hx, hy, hz = BeatrunIK.GetBonePos(ent, ent.spinehead or ent.spine)
+	local length = math.sqrt((hx - px) ^ 2 + (hy - py) ^ 2 + (hz - pz) ^ 2)
+
+	if length > 1 then
+		local head = Vector(hx, hy, hz)
+
+		spinetr.start = head
+		spinetr.endpos = head + yaw:Forward() * (length + spinemargin)
+		spinetr.filter = ply
+
+		local tr = util.TraceLine(spinetr)
+		local room = math.max(tr.Fraction * (length + spinemargin) - spinemargin, 0)
+
+		bend = math.min(bend, math.asin(math.min(room / length, 1)))
+
+		if bend <= 0 then return end
+	end
+
+	local left = -yaw:Right()
+	local r11, r12, r13, r21, r22, r23, r31, r32, r33 = BeatrunIK.AxisAngle(left.x, left.y, left.z, bend)
+
+	BeatrunIK.MoveBones(ent, ent.spinebones, r11, r12, r13, r21, r22, r23, r31, r32, r33, px, py, pz, px, py, pz)
+end
+
+hook.Add("BodyAnimStart", "BeatrunSpineBend", function()
+	spinebendframe = -1
+
+	if IsValid(BodyAnim) then
+		BodyAnim:AddCallback("BuildBonePositions", SpineBend)
+	end
+end)
 
 local function JumpArmDraw() --(a, b, c)
 	local bac = CreateBodyAnimArmCopy()
@@ -1485,18 +1593,12 @@ local function JumpArmDraw() --(a, b, c)
 	if not ply:ShouldDrawLocalPlayer() then --and not c
 		render.SetColorModulation(1, 1, 1) -- fix: some maps turn viewmodel red (wow)
 
-		local eyeang = ply:EyeAngles()
-		--ang.z = 0
+		spinebendframe = FrameNumber()
 
-		if not nospinebend[BodyAnimString] then
-			BodyAnim:ManipulateBoneAngles(1, Angle(0, math.max(eyeang.x * 0.5, 0), 0))
-		else
-			BodyAnim:ManipulateBoneAngles(1, angle_zero)
-		end
+		local eyeang = ply:EyeAngles()
 
 		cam.IgnoreZ(true)
 
-		-- local camposoff = campos - ply:EyePos()
 		local attachId = bac:LookupAttachment("eyes")
 		local offset = bac:GetAttachment(attachId)
 
@@ -1550,6 +1652,7 @@ local function JumpArmDraw() --(a, b, c)
 
 		pos:Add(armoffset)
 		pos:Add(customoffsetlerp)
+
 		ang:Add(ViewTiltAngle)
 
 		if CamShake then
@@ -1560,10 +1663,15 @@ local function JumpArmDraw() --(a, b, c)
 
 		if ply:UsingRH() then
 			if not worldarm[BodyAnimString] then
+				local viewpos, viewang = EyePos(), EyeAngles()
+
 				cam.Start3D(pos, ang)
 					cam.IgnoreZ(ignorezarm[bac_seq] or false)
 
 					BodyAnimMDLarm:SetPos(pos)
+
+					HandIKBeginArms(bac, viewpos, viewang, pos, ang)
+
 					bac:SetupBones()
 					BodyAnimMDLarm:DrawModel()
 				cam.End3D()
@@ -1576,6 +1684,9 @@ local function JumpArmDraw() --(a, b, c)
 				bac:SetRenderOrigin(nil)
 
 				BodyAnimMDLarm:SetPos(BodyAnim:GetPos() + armoff)
+
+				HandIKBeginArms(bac)
+
 				bac:SetupBones()
 				BodyAnimMDLarm:DrawModel()
 			end
@@ -1619,18 +1730,6 @@ local function JumpArmDraw() --(a, b, c)
 	end
 end
 
---[[
-hook.Add("PreRender", "JumpArmOriginVar", function()
-	drawnorigin = false
-end)
-
-
-hook.Add("PostDrawSkyBox", "JumpArm3DSky", function()
-	skybox3d = true
-
-	hook.Remove("PostDrawSkyBox", "JumpArm3DSky")
-end) --]]
-
 hook.Add("CalcViewModelView", "lol", function(wep, vm, oldpos, oldang, pos, ang)
 	if has_tool_equipped then return end
 
@@ -1661,20 +1760,10 @@ local function JumpAnim(event, ply)
 		eventslut.coil = "jumpcoil"
 	end
 
-	--local isInCrawlspace = PlayerCannotStand(ply)
-	--local isHoldingCrouch = ply:KeyDown(IN_DUCK)
-
 	-- Jump Coil End
 	if event == "landcoil" then
 		eventslut[event] = (PlayerCannotStand(ply) or ply:KeyDown(IN_DUCK)) and "jumpcoilendcrouch" or "jumpcoilend"
 	end
-
-	--[[
-	-- Jump Crouch
-	if event == "jumpstill" and (isInCrawlspace or ply:Crouching()) then
-		eventslut[event] = "jumpcrouch"
-	end
-	-]]
 
 	if events[event] then
 		local customAnimForEvent = CustomAnims[eventslut[event]]
@@ -1805,22 +1894,6 @@ function ArmInterrupt(anim)
 				end
 			end
 
-			--[[ TODO: make work good
-			if string.match(anim, "standhandwall") then
-				local ply = LocalPlayer()
-				local trace = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 30, ply)
-				local x = trace.Normal.x < 0.6 and trace.Normal.x or trace.Normal.y
-				local y = trace.Normal.y > -0.8 and trace.Normal.y or -trace.Normal.x
-
-				local newAng = Angle(x * (5 * trace.Fraction * x), 0, x * (10 * trace.Fraction * y))
-
-				ply:ChatPrint("Fraction: " .. tostring(trace.Fraction))
-				ply:ChatPrint("Normal: " .. tostring(trace.Normal))
-
-				arm:SetAngles(newAng)
-			end
-			--]]
-
 			arm:SetSequence(anim)
 			arm:SetCycle(0)
 		end
@@ -1855,6 +1928,41 @@ end)
 local animtr, animtr_result = nil, nil
 local oldnewang = Angle()
 
+local movex, movey = 1, 0
+
+local function SetMoveDirection(vel, ang)
+	local len = vel:Length2D()
+	local x, y = movex, movey
+
+	if len > 1 then
+		local fwd, right = ang:Forward(), ang:Right()
+
+		x = (vel.x * fwd.x + vel.y * fwd.y) / len
+		y = (vel.x * right.x + vel.y * right.y) / len
+	end
+
+	local k = 1 - math.exp(-FrameTime() * 10)
+
+	movex, movey = Lerp(k, movex, x), Lerp(k, movey, y)
+
+	local px, py = movex, movey
+	local m = math.max(math.abs(px), math.abs(py))
+
+	if m > 1e-3 then
+		local s = math.sqrt(px * px + py * py) / m
+
+		px, py = px * s, py * s
+	end
+
+	BodyAnim:SetPoseParameter("move_x", px)
+	BodyAnim:SetPoseParameter("move_y", py)
+
+	if IsValid(BodyAnimArmCopy) then
+		BodyAnimArmCopy:SetPoseParameter("move_x", px)
+		BodyAnimArmCopy:SetPoseParameter("move_y", py)
+	end
+end
+
 local usingHands = false
 local lastWeapon
 
@@ -1870,7 +1978,7 @@ local function JumpThink()
 			usingHands = true
 
 			if IsValid(BodyAnim) then
-				if ply:GetWallrun() == 1 then -- 1 = verticaL
+				if ply:GetWallrun() == 1 then -- 1 = vertical
 					BodyLimitX = 25
 					BodyLimitY = 70
 
@@ -1942,70 +2050,23 @@ local function JumpThink()
 				end
 				vel.z = 0
 
-				if back and vel_l > 10 then
-					ang = vel:Angle()
-
-					if ang:Forward():Dot(angold:Forward()) < 0 then
-						ang:RotateAroundAxis(Vector(0, 0, 1), 180)
-					end
-
-					BodyAnimSpeed = math.Clamp(vel_l / 150, 0.1, 0.8)
-					lerpspeed = 300
-					moveback = true
-
-					if not ply:Crouching() then
-						if ply:KeyDown(IN_WALK) or vel:Length() < 150 then
-							BodyAnim:SetSequence(BodyAnim:LookupSequence("walkback"))
-						else
-							BodyAnim:SetSequence(BodyAnim:LookupSequence("runbwd"))
-						end
-					else
-						BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchbwd"))
-					end
-				elseif vel_l > 0 and moving and ply:GetWallrun() == 0 and ply:GetMantle() == 0 then
-					ang = vel:Angle()
-
-					if moveback then
-						ang:RotateAroundAxis(Vector(0, 0, 1), -180)
-
-						if ply:KeyDown(IN_FORWARD) then
-							moveback = false
-						elseif ply:Crouching() and moveback then
-							BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchbwd"))
-						else
-							BodyAnim:SetSequence(BodyAnim:LookupSequence("runbwd"))
-						end
-					end
+				if (moving or back) and vel_l > 0 and ply:GetWallrun() == 0 and ply:GetMantle() == 0 then
+					ang = angold
+					lerpspeed = 30
 
 					if ply:InOverdrive() then
 						BodyAnimSpeed = math.Clamp(vel_l / 320, 0.85, 1.5)
+					elseif vel_l > 295 then
+						BodyAnimSpeed = math.Clamp(vel_l / 300, 0.85, 1)
 					else
-						local dot = ang:Forward():Dot(angold:Forward())
-
-						if dot < 0 then
-							ang:RotateAroundAxis(Vector(0, 0, 1), 180 * math.abs(dot))
-						end
-
-						if vel_l > 295 then
-							BodyAnimSpeed = math.Clamp(vel_l / 300, 0.85, 1)
-						elseif moveback then
-							BodyAnimSpeed = math.Clamp(vel_l / 150, 0.1, 0.8)
-						else
-							BodyAnimSpeed = math.Clamp(vel_l / 255, 0.85, 1.15)
-						end
+						BodyAnimSpeed = math.Clamp(vel_l / 255, 0.85, 1.15)
 					end
 
-					lerpspeed = 30
-
-					if vel:Length() > 300 and ply:OnGround() then
-						-- if ply:InOverdrive() and BodyAnimString ~= "sprintfwd" and vel:Length() < 300 then
-						-- 	ply:EmitSound("CyborgRun")
-						-- end
-
+					if vel:Length() > 240 and ply:OnGround() then
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("sprintfwd"))
-					elseif ply:OnGround() and not moveback then
+					elseif ply:OnGround() then
 						if not ply:Crouching() then
-							if ply:KeyDown(IN_WALK) or vel:Length() < 150 then
+							if ply:KeyDown(IN_WALK) or vel:Length() < 110 then
 								BodyAnim:SetSequence(BodyAnim:LookupSequence("walkfwd"))
 							else
 								BodyAnim:SetSequence(BodyAnim:LookupSequence("runfwd"))
@@ -2014,7 +2075,11 @@ local function JumpThink()
 							BodyAnim:SetSequence(BodyAnim:LookupSequence("crouchfwd"))
 						end
 					end
+
+					SetMoveDirection(vel, angold)
 				else
+					BodyAnimSpeed = 1
+
 					if not ply:Crouching() and BodyAnimString:Left(6) == "crouch" or BodyAnimString == "walkfwd" or BodyAnimString == "runfwd" or BodyAnimString == "sprintfwd" or BodyAnimString == "runbwd" or BodyAnimString == "walkback" then
 						BodyAnimCycle = 0
 

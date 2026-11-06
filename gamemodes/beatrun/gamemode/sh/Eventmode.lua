@@ -29,7 +29,6 @@ if SERVER then
 	util.AddNetworkString("Eventmode_Start")
 	util.AddNetworkString("Eventmode_Sync")
 	util.AddNetworkString("Eventmode_UpdatePlayerStatus")
-	util.AddNetworkString("Eventmode_GlobalSettings")
 	util.AddNetworkString("Eventmode_SetGoal")
 
 	util.AddNetworkString("Eventmode_Suspend")
@@ -148,7 +147,7 @@ if SERVER then
 		SetGlobalBool("EM_NewPlayersSuspended", false)
 		SetGlobalBool("EM_AllowProps", false)
 		SetGlobalBool("EM_AllowWeapons", false)
-		SetGlobalBool("EM_AllowEntites", false)
+		SetGlobalBool("EM_AllowEntities", false)
 		SetGlobalBool("EM_AllowVehicles", false)
 		SetGlobalBool("EM_HideNametags", false)
 		SetGlobalBool("EM_NoMeleeDamage", false)
@@ -253,7 +252,7 @@ if CLIENT then
 	net.Receive("Eventmode_Start", function()
 		hook.Add("BeatrunHUDCourse", "EventmodeHUDName", EventmodeHUDName)
 
-		LocalPlayer():EmitSound("mirrorsedge/ui/ME_UI_hud_select.wav")
+		LocalPlayer():EmitSound("mirrorsedge/ui/me_ui_hud_select.ogg")
 
 		chat.AddText(Color(95, 245, 130), language.GetPhrase("beatrun.eventmode.start"))
 	end)
@@ -283,7 +282,7 @@ if CLIENT then
 		local lp = LocalPlayer()
 
 		if st ~= "" then
-			lp:EmitSound("mirrorsedge/ui/ME_UI_hud_select.wav")
+			lp:EmitSound("mirrorsedge/ui/me_ui_hud_select.ogg")
 			goal = st
 		else
 			goal = nil

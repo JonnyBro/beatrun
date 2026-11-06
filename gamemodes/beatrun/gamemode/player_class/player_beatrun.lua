@@ -87,9 +87,6 @@ function PLAYER:SetupDataTables()
 
 	self.Player:NetworkVar("Entity", 2, "Swingpipe")
 
-	--self.Player:NetworkVar("Entity", 3, "Rabbit")
-	--self.Player:NetworkVar("Int", 3, "RabbitSeat")
-
 	self.Player:NetworkVar("Float", 15, "OverdriveCharge")
 	self.Player:NetworkVar("Float", 16, "OverdriveMult")
 
@@ -138,8 +135,6 @@ function PLAYER:Loadout()
 	self.Player:SetJumpPower(230)
 	self.Player:SetCrouchedWalkSpeed(0.5)
 
-	-- self.Player:SetFOV(self.Player:GetInfoNum("Beatrun_FOV", 100))
-
 	self.Player:SetCanZoom(false)
 end
 
@@ -165,7 +160,75 @@ function PLAYER:SetModel()
 	end
 end
 
-if SERVER then util.AddNetworkString("BeatrunSpawn") end
+if SERVER then
+	util.AddNetworkString("BeatrunUpdateModel")
+	util.AddNetworkString("BeatrunSpawn")
+
+	net.Receive("BeatrunUpdateModel", function(_, ply)
+		local delay = math.max((ply.NextModelUpdate or 0) - CurTime(), 0)
+
+		timer.Create("BeatrunUpdateModel" .. ply:EntIndex(), delay, 1, function()
+			if not IsValid(ply) or not ply:Alive() then return end
+
+			ply.NextModelUpdate = CurTime() + 0.5
+
+			hook.Call("PlayerSetModel", GAMEMODE, ply)
+			ply:SetPlayerColor(Vector(ply:GetInfo("cl_playercolor")))
+			ply:SetupHands()
+		end)
+	end)
+else
+	local function RequestModelUpdate()
+		timer.Create("BeatrunUpdateModel", 0.1, 1, function()
+			net.Start("BeatrunUpdateModel")
+			net.SendToServer()
+		end)
+	end
+
+	for _, name in ipairs({ "cl_playermodel", "cl_playerskin", "cl_playerbodygroups", "cl_playercolor" }) do
+		cvars.AddChangeCallback(name, RequestModelUpdate, "BeatrunUpdateModel")
+	end
+end
+
+local function RestoreCheckpointVehicle(ply)
+	local save = ply.CPSaveVehicle
+	local vehicle = save.ent
+
+	if not IsValid(vehicle) or IsValid(vehicle:GetDriver()) then
+		if not save.id or not BuildModeSpawnSpawnable then return end
+
+		SafeRemoveEntity(ply.CPVehicleCopy)
+
+		vehicle = BuildModeSpawnSpawnable(save.id, save.pos, save.ang)
+		if not IsValid(vehicle) then return end
+
+		vehicle:SetNW2String("BRSpawnable", "")
+
+		ply.CPVehicleCopy = vehicle
+		save.ent = vehicle
+	end
+
+	vehicle:SetPos(save.pos)
+	vehicle:SetAngles(save.ang)
+
+	timer.Simple(0, function()
+		if not IsValid(ply) or not IsValid(vehicle) or not ply:Alive() or ply:InVehicle() then return end
+
+		ply:EnterVehicle(vehicle)
+
+		local phys = vehicle:GetPhysicsObject()
+
+		if IsValid(phys) then
+			phys:Wake()
+			phys:SetVelocityInstantaneous(save.vel)
+			phys:AddAngleVelocity(-phys:GetAngleVelocity())
+		end
+	end)
+end
+
+hook.Add("PlayerDisconnected", "CheckpointVehicleCleanup", function(ply)
+	SafeRemoveEntity(ply.CPVehicleCopy)
+end)
 
 function PLAYER:Spawn()
 	BaseClass.Spawn(self)
@@ -192,13 +255,16 @@ function PLAYER:Spawn()
 
 			ply:LoadParkourState()
 
-			-- ply:SetNW2Float("RetryCount", ply:GetNW2Float("RetryCount", 0) + 1)
+			if ply.CPSaveVehicle then RestoreCheckpointVehicle(ply) end
 
 			CPSave = true
 		else
 			ply.CPSavePos = nil
 			ply.CPsaveAng = nil
 			ply.CPsaveVel = nil
+			ply.CPSaveVehicle = nil
+
+			SafeRemoveEntity(ply.CPVehicleCopy)
 
 			ply:SetPos(Course_StartPos)
 			ply:SetEyeAngles(Angle(0, Course_StartAng, 0))
@@ -209,15 +275,11 @@ function PLAYER:Spawn()
 				ply:SetLocalVelocity(vector_origin)
 				ply:SetPos(Course_StartPos)
 			end)
-
-			-- ReplayStop(ply)
-			-- ReplayStart(ply)
 		end
 	end
 
-	if not ply.InReplay and not CPSave then
+	if not CPSave then
 		ply:SetNW2Float("CPNum", 1)
-		-- ply:SetNW2Float("RetryCount", 0)
 	end
 
 	if not CPSave then
@@ -225,7 +287,6 @@ function PLAYER:Spawn()
 
 		net.Start("BeatrunSpawn")
 			net.WriteFloat(CurTime())
-			net.WriteBool(ply.InReplay)
 		net.Send(ply)
 
 		ply.SpawnFreezeTime = CurTime() + 1.75 * faststartmult
@@ -286,9 +347,6 @@ function PLAYER:CreateMove(cmd)
 end
 
 function PLAYER:CalcView(view)
-	-- local mult = (self.Player:InOverdrive() and 1.1) or 1
-	-- local fov = GetConVar("Beatrun_FOV"):GetInt()
-	-- view.fov = fov * mult
 	if self.TauntCam:CalcView(view, self.Player, self.Player:IsPlayingTaunt()) then return true end
 end
 
@@ -343,7 +401,6 @@ function meta:ResetParkourState()
 	self:SetViewOffsetDucked(Vector(0, 0, 32))
 
 	self.Swingrope = nil
-	--self.DiveSliding = false
 
 	ParkourEvent("jump", self)
 
@@ -413,45 +470,12 @@ hook.Add("PlayerSpawn", "ResetStateTransition", function(ply, transition)
 			ply:ResetParkourTimes()
 			ply:SetJumpPower(230)
 
-			-- ply:SetFOV(ply:GetInfoNum("Beatrun_FOV", 100))
-
 			ply:SetCanZoom(false)
 
 			ply.ClimbingTrace = nil
 		end
 	end)
 end)
-
---[[ from my testing whole section does nothing??? feel free to uncomment if im wrong
-if SERVER then
-	local LastModels = {}
-
-	hook.Add("Think", "BeatrunCheckPlayerModelChange", function()
-		for _, ply in ipairs(player.GetAll()) do
-			if not IsValid(ply) then continue end
-
-			local mdl = ply:GetModel() or ""
-
-			if LastModels[ply] == nil then
-				LastModels[ply] = mdl
-				continue
-			end
-
-			if mdl ~= LastModels[ply] then
-				LastModels[ply] = mdl
-
-				timer.Simple(0, function()
-					if not IsValid(ply) then return end
-
-					player_manager.RunClass(ply, "SetModel")
-
-					ply:SetupHands()
-				end)
-			end
-		end
-	end)
-end
---]]
 
 if CLIENT then
 local lastCheckedModel = ""
@@ -481,7 +505,7 @@ local function ApplyBodygroups(src, dst)
 	end
 end
 
-hook.Add("Tick", "Beatrun_InstantModelUpdate", function() --TODO: properly optimzize ts
+hook.Add("Tick", "Beatrun_InstantModelUpdate", function()
 	if not IsValid(BodyAnim) then return end
 	if not IsValid(BodyAnimMDL) then return end
 
@@ -517,6 +541,13 @@ hook.Add("Tick", "Beatrun_InstantModelUpdate", function() --TODO: properly optim
 	if modelChanged and BodyAnimMDL:GetModel() ~= mdl then
 		BodyAnimMDL:SetModel(mdl)
 		BodyAnimMDL:SnatchModelInstance(ply)
+
+		-- First person arms come from the arm copy, the body's own arms stay hidden
+		for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
+			if armbones[BodyAnimMDL:GetBoneName(i)] then
+				BodyAnimMDL:ManipulateBoneScale(i, vector_origin)
+			end
+		end
 	end
 
 	if skinChanged or modelChanged then
@@ -527,7 +558,9 @@ hook.Add("Tick", "Beatrun_InstantModelUpdate", function() --TODO: properly optim
 		ApplyBodygroups(ply, BodyAnimMDL)
 	end
 
-	if hands ~= "" then
+	local armValid = IsValid(BodyAnimMDLarm)
+
+	if armValid and hands ~= "" then
 		if handsChanged and BodyAnimMDLarm:GetModel() ~= hands then
 			BodyAnimMDLarm:SetModel(hands)
 		end
@@ -541,13 +574,6 @@ hook.Add("Tick", "Beatrun_InstantModelUpdate", function() --TODO: properly optim
 		end
 	end
 
-	if modelChanged and playermodelbones then
-		for _, v in ipairs(playermodelbones) do
-			local b = BodyAnimMDL:LookupBone(v)
-			if b then BodyAnimMDL:ManipulateBoneScale(b, vector_origin) end
-		end
-	end
-
 	local bs = GetConVar("Beatrun_BodyScale"):GetFloat()
 	local av = Vector(bs, bs, bs)
 
@@ -558,15 +584,20 @@ hook.Add("Tick", "Beatrun_InstantModelUpdate", function() --TODO: properly optim
 		end
 	end
 
-	local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
-	local aav = Vector(as, as, as)
-
-	for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
-		BodyAnimMDLarm:ManipulateBoneScale(i, aav)
-	end
+	BodyAnimHideHead()
 
 	BodyAnimMDL:InvalidateBoneCache()
-	BodyAnimMDLarm:InvalidateBoneCache()
+
+	if armValid then
+		local as = GetConVar("Beatrun_ArmBodyScale"):GetFloat()
+		local aav = Vector(as, as, as)
+
+		for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
+			BodyAnimMDLarm:ManipulateBoneScale(i, aav)
+		end
+
+		BodyAnimMDLarm:InvalidateBoneCache()
+	end
 end)
 end
 

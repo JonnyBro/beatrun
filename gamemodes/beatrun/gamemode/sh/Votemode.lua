@@ -368,11 +368,11 @@ if SERVER then
 		if not IsValid(ply) then return end
 
 		local steamID = ply:SteamID()
-		if voted[steamID] then return end
-
-		voted[steamID] = true
+		if voted[steamID] ~= nil then return end
 
 		local yes = net.ReadBool()
+
+		voted[steamID] = yes
 
 		if yes then
 			yesCount = yesCount + 1
@@ -385,7 +385,13 @@ if SERVER then
 
 	hook.Add("PlayerDisconnected", "VoteMenu_HandleDisconnect", function(ply)
 		if not voteStarted then return end
-		local steamID = ply:SteamID()
-		if voted[steamID] then voted[steamID] = nil end
+		if not voted[ply:SteamID()] then return end
+
+		voted[ply:SteamID()] = false
+		yesCount = yesCount - 1
+
+		net.Start("VoteMenu_Sync")
+			net.WriteString(gamemode .. " (" .. yesCount .. "/" .. playersNeeded .. ")")
+		net.Broadcast()
 	end)
 end

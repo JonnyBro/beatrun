@@ -26,7 +26,7 @@ hook.Add("PlayerFootstepME", "Balance", function(ply, pos, foot, sound, volume, 
 		ply:SetBalanceEntity(trout.Entity)
 
 		timer.Simple(0, function()
-			ParkourEvent("walkbalancefwd", ply)
+			if IsValid(ply) then ParkourEvent("walkbalancefwd", ply) end
 		end)
 
 		if CLIENT then

@@ -1,28 +1,64 @@
 local playermodelbones = { "ValveBiped.Bip01_R_Clavicle", "ValveBiped.Bip01_R_UpperArm", "ValveBiped.Bip01_R_Forearm", "ValveBiped.Bip01_R_Hand", "ValveBiped.Bip01_L_Clavicle", "ValveBiped.Bip01_L_UpperArm", "ValveBiped.Bip01_L_Forearm", "ValveBiped.Bip01_L_Hand", "ValveBiped.Bip01_L_Wrist", "ValveBiped.Bip01_R_Wrist", "ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger42", "ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger32", "ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger22", "ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_L_Finger12", "ValveBiped.Bip01_L_Finger0", "ValveBiped.Bip01_L_Finger01", "ValveBiped.Bip01_L_Finger02", "ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger42", "ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger32", "ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger22", "ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11", "ValveBiped.Bip01_R_Finger12", "ValveBiped.Bip01_R_Finger0", "ValveBiped.Bip01_R_Finger01", "ValveBiped.Bip01_R_Finger02" }
 
--- Beatrun BodyAnim with Live Body Scale Support
 CreateClientConVar("Beatrun_ModelScale", "1", true, true, "Global model scale for Beatrun body animation models")
 CreateClientConVar("Beatrun_BodyScale", "1", true, false, "Body scale for Beatrun body animations")
 CreateClientConVar("Beatrun_ArmBodyScale", "1", true, false, "Arm scale for Beatrun body animations")
-CreateClientConVar("Beatrun_ModelScaleViewOffsetEnable", "0", true, true, "Automatically adjusts some internal stuff to make addons work properly. Disable if you're using a dynamic height addon.")
 
--- Apply full model scaling using SetModelScale
 timer.Simple(0.05, function()
 	if not IsValid(BodyAnimMDL) then return end
 
 	local modelscale = GetConVar("Beatrun_ModelScale"):GetFloat()
 
-	-- Scale the full models (body + arm)
 	BodyAnimMDL:SetModelScale(modelscale, 0)
 
 	if IsValid(BodyAnimMDLarm) then BodyAnimMDLarm:SetModelScale(modelscale, 0) end
-
-	-- Optional: slightly raise model to prevent clipping with ground
-	-- if modelscale < 1 then
-	-- 	local offset = Vector(0, 0, (1 - modelscale) * 40)
-	-- 	BodyAnim:SetPos(BodyAnim:GetPos() + offset)
-	-- end
 end)
+
+-- Called right before drawing, after the bones (jiggle ones included) are set up for the frame. Jiggle bones
+-- (hair) don't shrink with ManipulateBoneScale and a BuildBonePositions callback doesn't reach them on a bonemerged model
+local function HideHeadBones(ent)
+	if not ent.hiddenheadbones then return end
+
+	ent:SetupBones()
+
+	for _, bone in ipairs(ent.hiddenheadbones) do
+		local m = ent:GetBoneMatrix(bone)
+
+		if m then
+			m:SetScale(vector_origin)
+			ent:SetBoneMatrix(bone, m)
+		end
+	end
+end
+
+-- Hair, hats and other bones parented to the head (or the neck, on some models) aren't on the animation rig,
+-- so the whole subtree is hidden. Has to be reapplied after anything that rescales the body
+function BodyAnimHideHead()
+	if not IsValid(BodyAnimMDL) then return end
+
+	local root = BodyAnimMDL:LookupBone("ValveBiped.Bip01_Neck1") or BodyAnimMDL:LookupBone("ValveBiped.Bip01_Head1")
+	if not root then return end
+
+	local bones = {}
+
+	for i = 0, BodyAnimMDL:GetBoneCount() - 1 do
+		local bone = BodyAnimMDL:GetBoneParent(i)
+
+		while bone and bone >= 0 do
+			if bone == root then
+				bones[#bones + 1] = i
+
+				BodyAnimMDL:ManipulateBoneScale(i, vector_origin)
+
+				break
+			end
+
+			bone = BodyAnimMDL:GetBoneParent(bone)
+		end
+	end
+
+	BodyAnimMDL.hiddenheadbones = bones
+end
 
 local function ApplyBodyScale()
 	if not IsValid(BodyAnimMDL) then return end
@@ -41,6 +77,8 @@ local function ApplyBodyScale()
 		if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, bodyscalevec) end
 	end
 
+	BodyAnimHideHead()
+
 	-- scale arm model (if exists)
 	if IsValid(BodyAnimMDLarm) then
 		for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
@@ -49,10 +87,8 @@ local function ApplyBodyScale()
 	end
 end
 
--- Apply body scale when animation starts
 ApplyBodyScale()
 
--- Live update when the convar changes
 cvars.AddChangeCallback("Beatrun_BodyScale", function(_, _, value_new)
 	local scale = tonumber(value_new)
 	if not scale or not IsValid(BodyAnimMDL) then return end
@@ -61,6 +97,8 @@ cvars.AddChangeCallback("Beatrun_BodyScale", function(_, _, value_new)
 		local bonename = BodyAnimMDL:GetBoneName(i)
 		if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, scalevec) end
 	end
+
+	BodyAnimHideHead()
 end, "BeatrunBodyScaleUpdate")
 
 cvars.AddChangeCallback("Beatrun_ArmBodyScale", function(_, _, value_new)
@@ -133,6 +171,7 @@ camjoint = "eyes"
 
 BodyAnimCrouchLerp = 1
 BodyAnimCrouchLerpZ = 0
+BodyAnimFootDrop = 0
 BodyAnimLimitEase = false
 
 CamShake = false
@@ -154,6 +193,8 @@ function BaDisableReflectionsAndShadows(self)
 	if name == "_rt_waterreflection" or name == "_rt_shadowdummy" then -- _rt_waterreflection is basically every reflection
 		return
 	end
+
+	HideHeadBones(self)
 
 	self:DrawModel()
 end
@@ -382,8 +423,6 @@ function StartBodyAnim(animtable)
 	justremoved = false
 	local ply = LocalPlayer()
 
-	-- if ply:InVehicle() then return end
-
 	updatethirdperson = true
 
 	animmodelstring = animtable.animmodelstring
@@ -521,15 +560,11 @@ function StartBodyAnim(animtable)
 			if (bone ~= nil and bone > 0) then
 				BodyAnimWEPMDL:ManipulateBoneAngles(bone, wpn.WorldModelOffsets.Angles)
 				BodyAnimWEPMDL:ManipulateBonePosition(bone, wpn.WorldModelOffsets.Pos)
-				--BodyAnimWEPMDL:ManipulateBoneAngles(bone, angle_zero)
-				--BodyAnimWEPMDL:ManipulateBonePosition(bone, angle_origin)
 			end
 		end
 	end
 
-	if BodyAnimMDL:LookupBone("ValveBiped.Bip01_Head1") ~= nil and not ply:ShouldDrawLocalPlayer() then
-		BodyAnimMDL:ManipulateBoneScale(BodyAnimMDL:LookupBone("ValveBiped.Bip01_Head1"), Vector(0, 0, 0))
-	end
+	BodyAnimHideHead()
 
 	if not showvm then
 		ply:DrawViewModel(false)
@@ -555,6 +590,8 @@ function StartBodyAnim(animtable)
 			if not armbones[bonename] then BodyAnimMDL:ManipulateBoneScale(i, bodyvec) end
 		end
 
+		BodyAnimHideHead()
+
 		if IsValid(BodyAnimMDLarm) then
 			for i = 0, BodyAnimMDLarm:GetBoneCount() - 1 do
 				BodyAnimMDLarm:ManipulateBoneScale(i, armvec)
@@ -563,13 +600,7 @@ function StartBodyAnim(animtable)
 
 		-- Apply SetModelScale to BodyAnim (root entity)
 		if IsValid(BodyAnim) then
-			-- The worst math I've ever written
 			BodyAnim:SetModelScale(modelscale, 0.001)
-
-			if modelscale < 1 then
-				local offset = Vector(0, 0, (1 - modelscale) * 40)
-				BodyAnim:SetPos(BodyAnim:GetPos() + offset)
-			end
 		end
 	end)
 
@@ -615,10 +646,46 @@ local lasteyeang = Angle()
 
 local calcviewrunning = false
 
-local manip_headBone = Vector(-1000, 0, 0)
+local fovdesired = GetConVar("fov_desired")
+local beatrunfov = GetConVar("Beatrun_FOV")
+
+local smoothposfrom = Vector()
+local smoothposto = Vector()
+local smoothpostime = 0
+
+-- With client prediction the local player's position only moves when a command is predicted, not every frame,
+-- so the body (and the camera on its head) would step at high framerates. Eases to each new position over one tick.
+-- Singleplayer doesn't predict and already interpolates the player
+local function GetSmoothPlayerPos(ply)
+	local raw = ply:GetPos()
+
+	if game.SinglePlayer() then return raw end
+
+	local frac = math.min((RealTime() - smoothpostime) / engine.TickInterval(), 1)
+
+	if raw ~= smoothposto then
+		if raw:DistToSqr(smoothposto) > 4096 then
+			smoothposfrom:Set(raw)
+		else
+			smoothposfrom:Set(LerpVector(frac, smoothposfrom, smoothposto))
+		end
+
+		smoothposto:Set(raw)
+		smoothpostime = RealTime()
+		frac = 0
+	end
+
+	return LerpVector(frac, smoothposfrom, smoothposto)
+end
+
 
 function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 	if calcviewrunning then return end
+
+	-- util.ScreenShake modifies the incoming view origin. Preserve that offset
+	-- when replacing the normal player view with the BodyAnim attachment.
+	local screenShakeOffset = pos - ply:EyePos()
+
 	local IsValidBa = IsValid(BodyAnim)
 	local ShouldDrawPly = ply:ShouldDrawLocalPlayer()
 
@@ -636,11 +703,11 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		calcviewrunning = false
 
 		if not view then
-			fov = math.Remap(fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+			fov = math.Remap(fov, 0, fovdesired:GetInt(), 0, beatrunfov:GetInt())
 
 			return
 		else
-			view.fov = math.Remap(view.fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+			view.fov = math.Remap(view.fov, 0, fovdesired:GetInt(), 0, beatrunfov:GetInt())
 
 			return view
 		end
@@ -654,7 +721,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 			updatethirdperson = false
 		end
 
-		--return
 	else
 		updatethirdperson = true
 	end
@@ -662,7 +728,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 	if IsValidBa or attach ~= nil then
 		if IsValidBa then
 			if followplayer and not ShouldDrawPly then
-				local pos = ply:GetPos()
+				local pos = GetSmoothPlayerPos(ply)
 
 				if BodyAnimCrouchLerp < 1 and (BodyAnimCrouchLerp ~= 0 or math.abs(BodyAnimCrouchLerpZ - pos.z) > 16 or math.abs(ply:GetNW2Float("BodyAnimCrouchLerpZ") - pos.z) > 16) then
 					if ply:OnGround() then BodyAnimCrouchLerp = 1 end
@@ -677,6 +743,8 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 						BodyAnimCrouchLerp = math.Approach(BodyAnimCrouchLerp, 1, FrameTime() * 5)
 					end
 				end
+
+				pos.z = pos.z - BodyAnimFootDrop
 
 				if BodyAnimPosEaseLerp < 1 then
 					local easedpos = LerpVector(BodyAnimPosEaseLerp, BodyAnimPosEase, pos)
@@ -709,9 +777,6 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				lerpchangeatt = 0
 			end
 
-			local head = BodyAnim:LookupBone("ValveBiped.Bip01_Head1")
-			if head then BodyAnim:ManipulateBonePosition(head, vector_origin) end
-
 			attachId = BodyAnim:LookupAttachment(camjoint)
 			attach = not BodyAnim:IsMarkedForDeletion() and BodyAnim:GetAttachment(attachId) or attach --IsMarkedForDeletion is here to fix a bug with the roll camera
 
@@ -723,15 +788,12 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				lerpchangeatt = math.Approach(lerpchangeatt, 1, FrameTime() * 5)
 			end
 
-			if not ShouldDrawPly then
-				--local head = BodyAnim:LookupBone("ValveBiped.Bip01_Head1")
-				if head then BodyAnim:ManipulateBonePosition(head, manip_headBone) end
-			end
-
 			BodyAnim:SetAngles(oldang)
 		end
 
 		if attach ~= nil then
+			-- Keep the native ScreenShake offset for rotational shake only.
+			-- The camera remains anchored to the BodyAnim attachment.
 			view.origin = has_tool_equipped and pos or attach.Pos
 
 			if savedeyeangb == angle_zero then savedeyeangb = Angle(0, attach.Ang.y, 0) end
@@ -787,7 +849,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 			if not IsValidBa and endlerp < 1 then
 				endlerp = math.Approach(endlerp, 1, RealFrameTime() * 6)
 				attach.Pos = LerpVector(endlerp, attach.Pos, ply:EyePos())
-				attach.Ang = LerpAngle(endlerp * 2, attach.Ang, ply:EyeAngles() + ply:GetViewPunchAngles() + ply:GetCLViewPunchAngles())
+				attach.Ang = LerpAngle(endlerp * 2, attach.Ang, ply:EyeAngles() + ply:GetSmoothViewPunchAngles() + ply:GetCLViewPunchAngles())
 
 				if IsValid(vm) then vm:SetNoDraw(false) end
 			elseif not IsValidBa and endlerp == 1 then
@@ -818,9 +880,16 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 
 				ply:SetNoDraw(false)
 
-				view.angles:Add(ply:GetViewPunchAngles() + ply:GetCLViewPunchAngles())
+				view.angles:Add(ply:GetSmoothViewPunchAngles() + ply:GetCLViewPunchAngles())
 
 				hook.Run("BodyAnimCalcView", view)
+
+				-- Convert native util.ScreenShake displacement into camera roll.
+				-- This deliberately avoids translating the camera position.
+				if not has_tool_equipped and screenShakeOffset:LengthSqr() > 0 then
+					local shakeRoll = math.Clamp(screenShakeOffset:Dot(view.angles:Right()) * 0.5, -4, 4)
+					view.angles.r = view.angles.r + shakeRoll
+				end
 
 				pos:Set(view.origin)
 
@@ -832,7 +901,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				lastatt = camjoint
 
 				if CamShake then
-					CamShakeAng:Set(AngleRand() * 0.005 * CamShakeMult)
+					CamShakeAng:Set(Angle(0, 0, math.Rand(-0.9, 0.9) * CamShakeMult))
 					angles:Add(CamShakeAng)
 				end
 
@@ -847,11 +916,11 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 				calcviewrunning = false
 
 				if view and view.fov then
-					view.fov = math.Remap(view.fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+					view.fov = math.Remap(view.fov, 0, fovdesired:GetInt(), 0, beatrunfov:GetInt())
 
 					return view
 				else
-					fov = math.Remap(fov, 0, GetConVar("fov_desired"):GetInt(), 0, GetConVar("beatrun_fov"):GetInt())
+					fov = math.Remap(fov, 0, fovdesired:GetInt(), 0, beatrunfov:GetInt())
 
 					return
 				end
@@ -863,7 +932,7 @@ function BodyAnimCalcView2(ply, pos, angles, fov, ...)
 		if attach == nil or CurTime() < (mantletimer or 0) then
 			view.origin = has_tool_equipped and pos or lastattachpos
 
-			pos:Set(lastattachpos)
+			pos:Set(view.origin)
 
 			return
 		end
@@ -883,6 +952,7 @@ hook.Add("PostDrawOpaqueRenderables", "IgnoreZBodyAnim", function() -- (depth, s
 
 		if ignorez then
 			cam.IgnoreZ(true)
+			HideHeadBones(BodyAnimMDL)
 			BodyAnimMDL:DrawModel()
 			local customarmdraw = hook.Run("BodyAnimDrawArm")
 
@@ -895,7 +965,6 @@ hook.Add("PostDrawOpaqueRenderables", "IgnoreZBodyAnim", function() -- (depth, s
 	end
 end)
 
--- local lasteyeang = Angle()
 local lastlimitx = 0
 local lastlimity = 0
 local pastlimitx = false

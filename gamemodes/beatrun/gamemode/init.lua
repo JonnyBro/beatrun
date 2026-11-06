@@ -14,5 +14,3 @@ end
 for _, v in ipairs(file.Find("gamemodes/beatrun/gamemode/sv/*.lua", "GAME")) do
 	include("sv/" .. v)
 end
-
-print("Beatrun gamemode loaded!")

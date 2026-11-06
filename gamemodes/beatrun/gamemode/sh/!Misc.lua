@@ -17,6 +17,11 @@ if SERVER then
 	local function CanPlayerSpawnProps(ply)
 		if not IsValid(ply) then return false end
 
+		if ply.BuildMode then
+			logSpawnDecision(ply, "Prop", true, "Build mode")
+			return true
+		end
+
 		if ply:IsAdmin() then
 			logSpawnDecision(ply, "Prop", true, "Admin")
 			return true

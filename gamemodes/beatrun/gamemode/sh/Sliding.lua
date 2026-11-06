@@ -227,9 +227,13 @@ if game.SinglePlayer() then
 end
 
 local slidepunch = Angle(2.5, 0, -0.5)
+local slidejumplift = Vector(0, 0, 33)
+local slidejumptr = {
+	mask = MASK_PLAYERSOLID,
+	collisiongroup = COLLISION_GROUP_PLAYER_MOVEMENT
+}
 local trace_down = Vector(0, 0, 32)
 local trace_tbl = {}
-local loopmat_trace_tbl = {}
 
 local function SlideSurfaceSound(ply, pos)
 	trace_tbl.start = pos
@@ -529,6 +533,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		ply:SetViewOffsetDucked(Vector(0, 0, 28) + eyeang * -25)
 		local slidedelta = (ply:GetSlidingTime() - CT) / slidetime
+		local slidejumped = false
 
 		local speed = ply:GetSlidingVel() * math.min(1.75, (ply:GetSlidingTime() - CT + 0.5) / slidetime) * qslide_speedmult
 		mv:SetVelocity(ply:GetSlidingAngle():Forward() * speed)
@@ -558,34 +563,71 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			end
 
 			mv:SetVelocity(mv:GetVelocity() - ply:GetSlidingAngle():Right() * ply:GetSlidingStrafe())
+		end
 
-			if mv:KeyPressed(IN_JUMP) then
+		if mv:KeyPressed(IN_JUMP) then
+			local mins, maxs = ply:GetHullDuck()
+			local origin = mv:GetOrigin()
+
+			slidejumptr.start = origin
+			slidejumptr.endpos = origin + slidejumplift
+			slidejumptr.mins = mins
+			slidejumptr.maxs = maxs
+			slidejumptr.filter = ply
+
+			-- Normal slides go under things, the jump lifts the player and would put them into the ceiling
+			if util.TraceHull(slidejumptr).Hit then
+				mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
+			else
 				local vel = mv:GetVelocity()
 				vel:Mul(math.min(math.max(speed, 300) / 300, 1))
 				vel.z = 175
 
 				ply:SetSliding(false)
 				ply:SetSlidingTime(0)
+				ply:SetSlidingDelay(CT + 0.1)
+				ply:SetDiveSliding(false)
+
+				if SERVER and ply.SlideLoopSound then
+					ply.SlideLoopSound:FadeOut(0.15)
+				end
+
+				-- Ended like a slippery slide, which puts the camera back on the eyes without playing a slide end animation
+				if CLIENT and IsFirstTimePredicted() then
+					SlidingAnimEnd(true)
+				elseif SERVER and game.SinglePlayer() then
+					net.Start("sliding_spend")
+						net.WriteBool(false)
+						net.WriteBool(true)
+						net.WriteBool(false)
+					net.Send(ply)
+				end
 
 				if CLIENT then
-					BodyAnimSetEase(mv:GetOrigin())
+					BodyAnimSetEase(origin)
 				elseif game.SinglePlayer() then
-					ply:SetNW2Vector("SPBAEase", mv:GetOrigin())
+					ply:SetNW2Vector("SPBAEase", origin)
 					ply:SendLua("BodyAnimSetEase(LocalPlayer():GetNW2Vector('SPBAEase'))")
 				end
 
-				mv:SetOrigin(mv:GetOrigin() + Vector(0, 0, 33))
+				mv:SetOrigin(origin + slidejumplift)
 
 				ply:SetGroundEntity(nil)
 				ply:SetSlidingSlippery(false)
 
+				-- Otherwise holding crouch and sprint starts a new slide on landing, which can be jumped out of again
+				mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_DUCK)))
+				ply:ConCommand("-duck")
+
 				mv:SetVelocity(vel)
 
 				ParkourEvent("jumpslide", ply)
+
+				slidejumped = true
 			end
 		end
 
-		if not slippery then -- TODO: Find a way to make proper slide jump. It works on slippery because you are not holding Crouch for slippery objects
+		if not slippery then
 			if mv:KeyDown(IN_MOVELEFT) then
 				local ang = ply:GetSlidingAngle()
 				ang.y = ang.y + 0.5
@@ -636,7 +678,8 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			ply:SetSlidingTime(math.max(ply:GetSlidingTime(), CurTime() + 0.1))
 		end
 
-		if ply:GetSlidingTime() < CT and ply:GetMelee() == 0 then
+		-- A slide jump has already ended the slide on its own
+		if not slidejumped and ply:GetSlidingTime() < CT and ply:GetMelee() == 0 then
 			ply:SetSliding(false)
 			ply:SetSlidingTime(0)
 			ply:ViewPunch(Angle(0.85, 0, 0.15))
@@ -698,10 +741,6 @@ hook.Add("StartCommand", "qslidespeed", function(ply, cmd)
 		ActuallyHoldingCrouch = cmd:KeyDown(IN_DUCK) -- this is kinda a hack to get slide crouch end anims to work properly
 
 		cmd:RemoveKey(IN_SPEED)
-
-		if not ply:GetSlidingSlippery() then
-			cmd:RemoveKey(IN_JUMP)
-		end
 
 		cmd:ClearMovement()
 
