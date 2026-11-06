@@ -1170,7 +1170,7 @@ local fingerscustom = {
 
 eventsounds = {
 	hangfoldedendhang = {
-		[0.01] = "Cloth.MovementWalk",
+		[0] = "Cloth.MovementWalk",
 		[0.1] = "Cloth.MovementRun",
 		[0.15] = "Handsteps.ConcreteRelease",
 		[0.25] = "Handsteps.ConcreteRelease",
@@ -1203,7 +1203,7 @@ eventsounds = {
 		[0.2] = "Cloth.MovementSneak"
 	},
 	hanghardstart2 = {
-		[0.01] = "Cloth.MovementRun",
+		[0] = "Cloth.MovementRun",
 		[0.2] = "Cloth.MovementSneak",
 		[0.45] = "Cloth.MovementWalk",
 		[0.7] = "Cloth.MovementSneak"
@@ -1236,7 +1236,7 @@ eventsounds = {
 		[0.5] = "Cloth.MovementRun"
 	},
 	vaultoverhigh = {
-		[0] = "Cloth.MovementRun",
+		[0] = "Cloth.MovementSneak",
 		[0.1] = "Vault",
 		[0.15] = "Faith.StrainMedium",
 		[0.2] = "Cloth.VaultSwish",
@@ -1244,7 +1244,7 @@ eventsounds = {
 		[0.5] = "Cloth.MovementSneak"
 	},
 	vaultonto = {
-		[0.01] = "Vault",
+		[0] = "Vault",
 		[0.05] = "Cloth.MovementRun",
 		[0.075] = "Faith.StrainSoft"
 	},
@@ -1254,7 +1254,7 @@ eventsounds = {
 		[0.055] = "Cloth.VaultSwish"
 	},
 	snatchscar = {
-		[0.01] = "Cloth.MovementRun",
+		[0] = "Cloth.MovementRun",
 		[0.05] = "Melee.ArmSwoosh",
 		[0.075] = "Cloth.MovementRun",
 		[0.1] = "Melee.LegSwoosh",
@@ -1280,10 +1280,10 @@ eventsounds = {
 	meleeairhit = {
 		[0.01] = "Melee.LegSwoosh",
 		[0.005] = "Cloth.MovementRun",
-		[0] = "Faith.StrainHard",
+		[0] = "Faith.StrainHard"
 	},
 	meleeair = {
-		[0.01] = "Cloth.MovementRun",
+		[0] = "Cloth.MovementRun"
 	},
 	meleeairstill = {
 		[0.015] = "Cloth.MovementRun",
@@ -1313,7 +1313,7 @@ eventsounds = {
 		[0.25] = "Handsteps.Ladder",
 		[0.3] = "Footsteps.LadderMedium",
 		[0.35] = "Cloth.MovementSneak",
-		[0.4] = "Footsteps.LadderMedium",
+		[0.4] = "Footsteps.LadderMedium"
 	},
 	ladderclimbhangstart = {
 		[0] = "Cloth.MovementRun",
@@ -2062,7 +2062,7 @@ local function JumpThink()
 						BodyAnimSpeed = math.Clamp(vel_l / 255, 0.85, 1.15)
 					end
 
-					if vel:Length() > 240 and ply:OnGround() then
+					if vel:Length() > 300 and ply:OnGround() then
 						BodyAnim:SetSequence(BodyAnim:LookupSequence("sprintfwd"))
 					elseif ply:OnGround() then
 						if not ply:Crouching() then

@@ -81,10 +81,10 @@ sound.Add({
 
 sound.Add({
 	name = "Slide.Concrete",
-	volume = 1,
+	volume = 0.5,
 	level = 60,
 	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
+	pitch = { 90, 100 },
 	sound = { "mirrorsedge/slide/concrete/me_concrete_slide1.ogg", "mirrorsedge/slide/concrete/me_concrete_slide2.ogg", "mirrorsedge/slide/concrete/me_concrete_slide3.ogg", "mirrorsedge/slide/concrete/me_concrete_slide4.ogg", "mirrorsedge/slide/concrete/me_concrete_slide5.ogg", "mirrorsedge/slide/concrete/me_concrete_slide6.ogg", "mirrorsedge/slide/concrete/me_concrete_slide7.ogg" }
 })
 
@@ -190,10 +190,10 @@ sound.Add({
 
 sound.Add({
 	name = "Slide.Marble",
-	volume = 1,
+	volume = 0.5,
 	level = 60,
 	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
+	pitch = { 90, 100 },
 	sound = { "mirrorsedge/slide/marble/me_slide_marble1.ogg", "mirrorsedge/slide/marble/me_slide_marble2.ogg", "mirrorsedge/slide/marble/me_slide_marble3.ogg", "mirrorsedge/slide/marble/me_slide_marble4.ogg", "mirrorsedge/slide/marble/me_slide_marble5.ogg", "mirrorsedge/slide/marble/me_slide_marble6.ogg", "mirrorsedge/slide/marble/me_slide_marble7.ogg", "mirrorsedge/slide/marble/me_slide_marble8.ogg", "mirrorsedge/slide/marble/me_slide_marble9.ogg", "mirrorsedge/slide/marble/me_slide_marble10.ogg", "mirrorsedge/slide/marble/me_slide_marble11.ogg", "mirrorsedge/slide/marble/me_slide_marble12.ogg", "mirrorsedge/slide/marble/me_slide_marble13.ogg", "mirrorsedge/slide/marble/me_slide_marble14.ogg", "mirrorsedge/slide/marble/me_slide_marble15.ogg", "mirrorsedge/slide/marble/me_slide_marble16.ogg", "mirrorsedge/slide/marble/me_slide_marble17.ogg", "mirrorsedge/slide/marble/me_slide_marble18.ogg", "mirrorsedge/slide/marble/me_slide_marble19.ogg", "mirrorsedge/slide/marble/me_slide_marble20.ogg", "mirrorsedge/slide/marble/me_slide_marble21.ogg" }
 })
 
@@ -262,7 +262,7 @@ sound.Add({
 
 sound.Add({
 	name = "Slide.Glass",
-	volume = 1,
+	volume = 0.5,
 	sound = "mirrorsedge/slide/glass/me_slide_glass.ogg",
 	pitch = 100,
 	level = 60,
@@ -308,8 +308,8 @@ sound.Add({
 
 sound.Add({
 	name = "Sneak.Metal",
-	volume = 1,
-	level = 35,
+	volume = 0.5,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk1.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk2.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk3.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk4.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk5.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk6.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk7.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk8.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk9.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk10.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk11.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk12.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk13.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk14.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk15.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk16.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk17.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk18.ogg", "mirrorsedge/footsteps/metal/me_footsteps_metal_polished_walk19.ogg" }
@@ -353,10 +353,10 @@ sound.Add({
 
 sound.Add({
 	name = "Slide.Metal",
-	volume = 1,
+	volume = 0.5,
 	level = 60,
 	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
+	pitch = { 90, 100 },
 	sound = { "mirrorsedge/slide/metal/me_slide_metal1.ogg", "mirrorsedge/slide/metal/me_slide_metal2.ogg", "mirrorsedge/slide/metal/me_slide_metal3.ogg", "mirrorsedge/slide/metal/me_slide_metal4.ogg" }
 })
 
@@ -462,10 +462,10 @@ sound.Add({
 
 sound.Add({
 	name = "Slide.Duct",
-	volume = 1,
+	volume = 0.5,
 	level = 60,
 	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
+	pitch = { 90, 100 },
 	sound = { "mirrorsedge/slide/metal/me_slide_duct1.ogg", "mirrorsedge/slide/metal/me_slide_duct2.ogg", "mirrorsedge/slide/metal/me_slide_duct3.ogg", "mirrorsedge/slide/metal/me_slide_duct4.ogg" }
 })
 
@@ -525,10 +525,10 @@ sound.Add({
 
 sound.Add({
 	name = "Slide.Gantry",
-	volume = 1,
+	volume = 0.5,
 	level = 60,
 	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
+	pitch = { 90, 100 },
 	sound = { "mirrorsedge/slide/metal/me_slide_gantry1.ogg", "mirrorsedge/slide/metal/me_slide_gantry2.ogg", "mirrorsedge/slide/metal/me_slide_gantry3.ogg", "mirrorsedge/slide/metal/me_slide_gantry4.ogg" }
 })
 
@@ -607,7 +607,7 @@ sound.Add({
 sound.Add({
 	name = "Walk.Wood",
 	volume = 0.75,
-	level = 42,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant10.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant11.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant12.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant13.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant14.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant15.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant9.ogg" }
@@ -616,7 +616,7 @@ sound.Add({
 sound.Add({
 	name = "Sneak.Wood",
 	volume = 0.5,
-	level = 42,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant1.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant10.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant11.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant12.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant13.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant14.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant15.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant2.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant3.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant4.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant5.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant6.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant7.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant8.ogg", "mirrorsedge/footsteps/wood/me_footstep_woodgeneric_runfootplant9.ogg" }
@@ -651,10 +651,10 @@ sound.Add({
 
 sound.Add({
 	name = "Slide.Wood",
-	volume = 1,
+	volume = 0.5,
 	level = 60,
 	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
+	pitch = { 90, 100 },
 	sound = { "mirrorsedge/slide/wood/me_slide_wood1.ogg", "mirrorsedge/slide/wood/me_slide_wood2.ogg", "mirrorsedge/slide/wood/me_slide_wood3.ogg", "mirrorsedge/slide/wood/me_slide_wood4.ogg" }
 })
 
@@ -732,7 +732,7 @@ sound.Add({
 
 sound.Add({
 	name = "Footsteps.Water",
-	volume = 0.25,
+	volume = 0.5,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
@@ -816,7 +816,7 @@ sound.Add({
 	volume = 1,
 	level = 42,
 	channel = CHAN_STATIC,
-	pitch = { 90, 110 },
+	pitch = { 90, 100 },
 	sound = { "mirrorsedge/slide/gravel/me_gravel_slide1.ogg", "mirrorsedge/slide/gravel/me_gravel_slide2.ogg", "mirrorsedge/slide/gravel/me_gravel_slide3.ogg", "mirrorsedge/slide/gravel/me_gravel_slide4.ogg", "mirrorsedge/slide/gravel/me_gravel_slide5.ogg", "mirrorsedge/slide/gravel/me_gravel_slide6.ogg", "mirrorsedge/slide/gravel/me_gravel_slide7.ogg", "mirrorsedge/slide/gravel/me_gravel_slide8.ogg", "mirrorsedge/slide/gravel/me_gravel_slide9.ogg", "mirrorsedge/slide/gravel/me_gravel_slide10.ogg" }
 })
 
@@ -868,7 +868,7 @@ sound.Add({
 sound.Add({
 	name = "Footsteps.Tarp",
 	volume = 1,
-	level = 42,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint1.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint2.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint3.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint4.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint5.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint6.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint7.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint8.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint9.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint10.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint11.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint12.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint13.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint14.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint15.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint16.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint17.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint18.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint19.ogg", "mirrorsedge/footsteps/tarp/me_footsteps_tarp_sprint20.ogg" }
@@ -876,7 +876,7 @@ sound.Add({
 
 sound.Add({
 	name = "Walk.Tarp",
-	volume = 1,
+	volume = 0.75,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
@@ -885,7 +885,7 @@ sound.Add({
 
 sound.Add({
 	name = "Sneak.Tarp",
-	volume = 0.75,
+	volume = 0.5,
 	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
@@ -912,10 +912,10 @@ sound.Add({
 
 sound.Add({
 	name = "Slide.Tarp",
-	volume = 1,
+	volume = 0.5,
 	sound = "mirrorsedge/slide/tarp/me_footsteps_tarpslide.ogg",
-	pitch = 100,
-	level = 75,
+	pitch = { 90, 100 },
+	level = 60,
 	channel = CHAN_STATIC
 })
 
@@ -968,7 +968,7 @@ FOOTSTEPS_LUT = {
 	["player/footsteps/woodpanel"] = "WoodPanel",
 	["player/footsteps/gravel"] = "Gravel",
 	["player/footsteps/sand"] = "Gravel",
-	["player/footsteps/snow"] = "Gravel",
+	["player/footsteps/snow"] = "Carpet",
 	["player/footsteps/mud"] = "Water",
 	["player/footsteps/grass"] = "Carpet",
 	["player/footsteps/dirt"] = "Carpet",
@@ -1004,7 +1004,7 @@ FOOTSTEPS_WALK_LUT = {
 	["player/footsteps/chainlink"] = "MetalCrane",
 	["player/footsteps/snow"] = "Carpet",
 	["player/footsteps/tile"] = "Marble",
-	["player/footsteps/mud"] = "Water",
+	["player/footsteps/mud"] = "Carpet",
 	["player/footsteps/dirt"] = "Carpet",
 	["player/footsteps/grass"] = "Carpet",
 	["player/footsteps/wade"] = "Water"
@@ -1058,6 +1058,7 @@ FOOTSTEPS_LAND_LUT = {
 	["physics/plastic/plastic_box_impact_soft"] = "Tarp",
 	["player/footsteps/concrete"] = "Concrete",
 	["player/footsteps/duct"] = "Duct",
+	["player/footsteps/grass"] = "Carpet",
 	["player/footsteps/metal"] = "Metal",
 	["physics/metal/metal_box_footstep"] = "Metal",
 	["player/footsteps/chainlink"] = "MetalCrane",
@@ -1093,3 +1094,4 @@ FOOTSTEPS_MAT_TYPE_LUT = {
 	[MAT_TILE] = "Marble",
 	[MAT_WOOD] = "Wood",
 }
+
