@@ -338,6 +338,14 @@ end
 hook.Add("SetupMove", "SpawnFreeze", function(ply, mv, cmd) if ply.SpawnFreezeTime and Course_Name ~= "" and Course_StartPos ~= vector_origin and Course_StartPos and ply.SpawnFreezeTime > CurTime() then mv:SetOrigin(Course_StartPos) end end)
 hook.Add("ShouldCollide", "Beatrun_NoPlayerCollisions", function(ent1, ent2) if ent1:IsPlayer() and ent2.NoPlayerCollisions then return false end end)
 
+if SERVER then
+	hook.Add("PlayerLeaveVehicle", "Beatrun_NoPlayerCollisions", function(ply)
+		timer.Simple(0, function()
+			if IsValid(ply) and not ply:InVehicle() then ply:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR) end
+		end)
+	end)
+end
+
 function PLAYER:ShouldDrawLocal()
 	if self.TauntCam:ShouldDrawLocalPlayer(self.Player, self.Player:IsPlayingTaunt()) then return true end
 end
