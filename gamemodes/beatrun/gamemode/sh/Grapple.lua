@@ -66,6 +66,7 @@ hook.Add("SetupMove", "Grapple", function(ply, mv, cmd)
 	if ply:GetInfoNum("Beatrun_DisableGrapple", 0) == 1 and Course_Name == "" and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
 	if IsValid(ply:GetSwingbar()) then return end
 	if not ply:Alive() and ply:GetNW2Int("CPNum", 1) ~= -1 and not ply:GetNW2Entity("Swingrope"):IsValid() then return end
+
 	local in_grapple_blocked_gamemode = GetGlobalBool("GM_INFECTION") or GetGlobalBool("GM_DATATHEFT") or GetGlobalBool("GM_DEATHMATCH") or GetGlobalBool("GM_EVENTMODE")
 	if (in_grapple_blocked_gamemode and not ply:GetNW2Entity("Swingrope"):IsValid()) and not ply:GetGrappling() then return end -- we dont return if the player is grappling so we can "ungrapple"
 
