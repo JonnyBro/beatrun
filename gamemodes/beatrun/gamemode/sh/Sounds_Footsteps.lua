@@ -1005,7 +1005,7 @@ FOOTSTEPS_WALK_LUT = {
 	["player/footsteps/snow"] = "Carpet",
 	["player/footsteps/tile"] = "Marble",
 	["player/footsteps/mud"] = "Carpet",
-	["player/footsteps/dirt"] = "Carpet",
+	["player/footsteps/dirt"] = "ConcreteDirt",
 	["player/footsteps/grass"] = "Carpet",
 	["player/footsteps/wade"] = "Water"
 }
@@ -1058,7 +1058,6 @@ FOOTSTEPS_LAND_LUT = {
 	["physics/plastic/plastic_box_impact_soft"] = "Tarp",
 	["player/footsteps/concrete"] = "Concrete",
 	["player/footsteps/duct"] = "Duct",
-	["player/footsteps/grass"] = "Carpet",
 	["player/footsteps/metal"] = "Metal",
 	["physics/metal/metal_box_footstep"] = "Metal",
 	["player/footsteps/chainlink"] = "MetalCrane",
@@ -1092,6 +1091,6 @@ FOOTSTEPS_MAT_TYPE_LUT = {
 	[MAT_VENT] = "Duct",
 	[MAT_PLASTIC] = "Tarp",
 	[MAT_TILE] = "Marble",
-	[MAT_WOOD] = "Wood",
+	[MAT_WOOD] = "Wood"
 }
 

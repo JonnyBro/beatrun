@@ -84,7 +84,7 @@ hook.Add("PlayerStepSoundTime", "MEStepTime", function(ply, step, walking)
 	end
 
 	if ply:KeyDown(IN_WALK) and not ply:Crouching() then
-		steptime = steptime * 1.4
+		steptime = steptime * 1.5
 	end
 
 	if ply:InOverdrive() then
@@ -132,7 +132,6 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 	if ply:GetMEMoveLimit() < 100 and ply:KeyDown(IN_FORWARD) and not ply.FootstepLand then return true end
 
 	local mat = sound:sub(0, -6)
-
 	local newsound = FOOTSTEPS_LUT[mat] or "Concrete"
 
 	if mat == "player/footsteps/ladder" then return end
@@ -167,8 +166,6 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 
 				ply:EmitSound("Walk." .. walksound)
 				ply:EmitSound("Cloth.MovementWalk")
-				
-				if math.random() > 0.9 then ParkourEvent("step") end
 			else
 				ply:EmitSound("Footsteps." .. newsound)
 				ply:EmitSound("Cloth.MovementRun")
@@ -197,8 +194,7 @@ hook.Add("PlayerFootstep", "MEStepSound", function(ply, pos, foot, sound, volume
 			if ply:WaterLevel() > 0 then
 				ply:EmitSound("Sneak.Water")
 			end
-			
-			if math.random() > 0.9 then ParkourEvent("step") end
+
 		end
 
 		if isBalancing and IsFirstTimePredicted() then

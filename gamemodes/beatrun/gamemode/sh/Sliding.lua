@@ -31,6 +31,7 @@ local slideloop_sounds = {
 
 slide_sounds[MAT_SNOW] = slide_sounds[MAT_PLASTIC]
 slide_sounds[MAT_GRASS] = slide_sounds[MAT_SAND]
+slide_sounds[MAT_DIRT] = slide_sounds[MAT_SAND]
 slide_sounds[0] = slide_sounds[MAT_CONCRETE]
 
 slideloop_sounds[MAT_DIRT] = slideloop_sounds[MAT_SAND]
@@ -317,9 +318,7 @@ local function SlideMaterialCheck(ply, pos, speed)
 
 	if not tr.Hit or tr.StartSolid then return end
 
-	-- Ignore floors that sit further below/above than a slope could reach over this distance;
-	-- those are a later surface (straight section, next slope), not what we're about to touch.
-	-- Slippery slopes are at most ~45 degrees, so the drop is capped at roughly the lookahead distance.
+	-- ignore floors that sit further below/above than a slope could reach over this distance
 	local dz = tr.HitPos.z - pos.z
 
 	if dz < -(dist * 1.5 + 8)	 then return end
@@ -622,13 +621,10 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			SlideMaterialCheck(ply, mv:GetOrigin(), speed)
 		end
 
-		-- Fade the slide loop's pitch and volume as the slide loses speed
 		if SERVER and ply.SlideLoopSound then
 			local speedfrac = math.Clamp(speed / 300, 0, 1)
-
 			local pitch = Lerp(speedfrac, 50, 100)
 
-			-- Above 300 speed the pitch keeps rising, reaching 150 at 600
 			if speed > 300 then
 				pitch = Lerp(math.Clamp((speed - 300) / 450, 0, 1), 100, 150)
 			end
