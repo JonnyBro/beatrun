@@ -16,6 +16,13 @@ Beatrun_MapImageCache = Beatrun_MapImageCache or {}
 local CACHE_LIFETIME = 120
 local UploadCourseFile, OpenConfirmPopup
 local databaseCourseCode, localCourseFile
+-- Database courses with the same content (one file uploaded twice) share a CRC, so the record also gets the code it was downloaded with
+local courseCodes = {}
+
+local function RememberCourseCode(code, raw)
+	local json = raw and (util.Decompress(raw) or raw)
+	if code and json then courseCodes[util.CRC(json)] = code end
+end
 local Frame, List, OnlinePager, LocalPanel, CodePanel, BrowsePanel, ProfilePanel, SettingsPanel, PopupFrame
 
 local function SanitizeString(str)
@@ -525,7 +532,10 @@ local function FetchAndSaveCourse(course)
 			return
 		end
 
-		local path = SaveCourseToFile(course.mapName, course.code, util.Base64Decode(body))
+		local data = util.Base64Decode(body)
+		local path = SaveCourseToFile(course.mapName, course.code, data)
+
+		RememberCourseCode(course.code, data)
 		if not path then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.save.failed", NOTIFY_ERROR, 4)
 
@@ -563,7 +573,10 @@ local function FetchAndStartCourse(code)
 		databaseCourseCode = code
 		localCourseFile = nil
 
-		LoadCourseRaw(util.Base64Decode(body))
+		local data = util.Base64Decode(body)
+
+		RememberCourseCode(code, data)
+		LoadCourseRaw(data)
 		notification.AddLegacy(language.GetPhrase("#beatrun.coursesmenu.notification.startingcourse"):format(code), NOTIFY_GENERIC, 4)
 	end, function(err)
 		notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
@@ -598,6 +611,18 @@ function UploadCourseFile(course, updateCode)
 	http.Post("https://" .. databaseDomain:GetString() .. endpoint, {
 		data = encoded
 	}, function(body, _, _, code)
+		if code == 409 then
+			local res = util.JSONToTable(body or "")
+			local duplicate = res and istable(res.data) and res.data.duplicate
+
+			if isstring(duplicate) then
+				notification.AddLegacy(L("beatrun.coursesmenu.notification.upload.duplicate"):format(duplicate), NOTIFY_ERROR, 8)
+				print("> " .. tostring(res.message))
+
+				return
+			end
+		end
+
 		if code ~= 200 then
 			local banReason = GetBanReason(body)
 
@@ -723,7 +748,8 @@ function Beatrun_SubmitCourseRecord(time, splits)
 
 	local headers = {
 		authorization = key,
-		hash = Course_ID
+		hash = Course_ID,
+		code = courseCodes[Course_ID]
 	}
 
 	http.Post("https://" .. databaseDomain:GetString() .. "/api/courses/records", {
@@ -1014,6 +1040,10 @@ function BuildLocalPage()
 		local loadBtn = MakeRowButton(row, "#beatrun.coursesmenu.start", "primary", function()
 			databaseCourseCode = nil
 			localCourseFile = filename
+
+			-- Files saved from the database are named after the course code
+			local code = string.upper(string.StripExtension(filename))
+			if string.match(code, "^%w+%-[%w%-]*%w$") then RememberCourseCode(code, raw) end
 
 			LoadCourse(filename)
 
