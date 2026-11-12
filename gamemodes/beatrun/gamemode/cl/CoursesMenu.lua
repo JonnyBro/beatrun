@@ -711,10 +711,10 @@ local function UrlEncode(str)
 	return string.gsub(str, "[^%w%-_%.~]", function(c) return string.format("%%%02X", string.byte(c)) end)
 end
 
-function Beatrun_SubmitCourseRecord(time)
+function Beatrun_SubmitCourseRecord(time, splits)
 	if not submitRecords:GetBool() then return end
 	if Course_Name == "" or not Course_ID or Course_ID == "" then return end
-	if not time or time <= 0 then return end
+	if not time or time <= 0 or not splits then return end
 
 	local key = databaseApiKey:GetString()
 	if not key or key == "" or key == "0" then return end
@@ -727,9 +727,16 @@ function Beatrun_SubmitCourseRecord(time)
 	}
 
 	http.Post("https://" .. databaseDomain:GetString() .. "/api/courses/records", {
-		time = tostring(time)
+		time = tostring(time),
+		splits = util.TableToJSON(splits)
 	}, function(body, _, _, code)
 		if code == 404 then return end -- Course is not in the database
+
+		if code == 202 then
+			notification.AddLegacy("#beatrun.coursesmenu.notification.record.pending", NOTIFY_HINT, 6)
+
+			return
+		end
 
 		local banReason = GetBanReason(body)
 
@@ -743,6 +750,8 @@ function Beatrun_SubmitCourseRecord(time)
 		local res = util.JSONToTable(body or "")
 
 		if code ~= 200 or not res or not res.data then
+			if code == 400 then notification.AddLegacy("#beatrun.coursesmenu.notification.record.rejected", NOTIFY_ERROR, 5) end
+
 			LogApiError("/api/courses/records", code, body, res)
 			return
 		end
