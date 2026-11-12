@@ -996,10 +996,161 @@ if SERVER then
 		Course_StartAng = ang
 	end)
 
+	local COURSE_MAX_SIZE = 16 * 1024 * 1024
+	local COURSE_MAX_ELEMENTS = 4096
+	local COURSE_MAX_CHECKPOINTS = 512
+	local COURSE_MAX_SPAWNABLES = 256
+	local COURSE_MAX_COORD = 65536
+
+	local function IsCourseCoords(v)
+		for i = 1, 3 do
+			local c = v[i]
+			if c ~= c or math.abs(c) > COURSE_MAX_COORD then return false end
+		end
+
+		return true
+	end
+
+	local function IsCoursePos(v)
+		return isvector(v) and IsCourseCoords(v)
+	end
+
+	local function IsCourseAng(v)
+		return isangle(v) and IsCourseCoords(v)
+	end
+
+	local function CourseList(v, max, what)
+		if v == nil then return {} end
+		if not istable(v) then return nil, what .. " is not a list" end
+		if #v > max then return nil, string.format("too many %s (%d, max %d)", what, #v, max) end
+
+		return v
+	end
+
+	local function ValidateCourseProp(v)
+		if not istable(v) or not IsCoursePos(v.pos) or not IsCourseAng(v.ang) then return end
+
+		local model = v.model
+
+		if tonumber(model) then
+			model = buildmode_props[tonumber(model)]
+		elseif isstring(model) then
+			model = string.lower(model)
+
+			if not buildmode_props_index[model] and not BuildModeIsValidModelPath(model) then return end
+		else
+			return
+		end
+
+		if not model then return end
+
+		return { model = model, pos = v.pos, ang = v.ang, hr = v.hr == true }
+	end
+
+	-- Fields the entreadfunc of each class relies on, on top of pos and ang
+	local courseentfields = {
+		br_zipline = { StartPos = IsCoursePos, EndPos = IsCoursePos },
+		br_swingrope = { StartPos = IsCoursePos, EndPos = IsCoursePos },
+		br_ladder = { LadderHeight = isnumber },
+		br_balance = { BalanceLength = isnumber }
+	}
+
+	local function ValidateCourseEntity(v)
+		if not istable(v) or not isstring(v.ent) or not buildmode_ents[v.ent] then return end
+		if not IsCoursePos(v.pos) or not IsCourseAng(v.ang) then return end
+
+		local ent = { ent = v.ent, pos = v.pos, ang = v.ang, TwoWay = v.TwoWay == true }
+
+		for field, check in pairs(courseentfields[v.ent] or {}) do
+			if not check(v[field]) then return end
+
+			ent[field] = v[field]
+		end
+
+		return ent
+	end
+
+	local function ValidateCourseSpawnable(v)
+		if not istable(v) or not BuildModeSpawnable(v.id) then return end
+		if not IsCoursePos(v.pos) or not IsCourseAng(v.ang) then return end
+
+		local weapon = v.weapon
+		if weapon ~= nil and not (isstring(weapon) and string.match(weapon, "^[%w_]*$")) then weapon = nil end
+
+		return { id = v.id, pos = v.pos, ang = v.ang, weapon = weapon, noai = v.noai == true }
+	end
+
+	local function ValidateCourseList(src, validate, course)
+		local out = {}
+
+		for _, v in ipairs(src) do
+			local valid = validate(v)
+
+			if valid then
+				table.insert(out, valid)
+			else
+				course.dropped = course.dropped + 1
+			end
+		end
+
+		return out
+	end
+
+	-- Courses come from other players through the database, so nothing in them is trusted:
+	-- everything is checked before the map is cleaned up, unknown elements are dropped
+	function Beatrun_ValidateCourse(courseData)
+		if not istable(courseData) then return nil, "not a course" end
+
+		local props, err = CourseList(courseData[1], COURSE_MAX_ELEMENTS, "props")
+		if not props then return nil, err end
+
+		local cps
+		cps, err = CourseList(courseData[2], COURSE_MAX_CHECKPOINTS, "checkpoints")
+		if not cps then return nil, err end
+
+		local entities
+		entities, err = CourseList(courseData[6], COURSE_MAX_ELEMENTS, "entities")
+		if not entities then return nil, err end
+
+		local spawnables
+		spawnables, err = CourseList(courseData[8], COURSE_MAX_SPAWNABLES, "spawnables")
+		if not spawnables then return nil, err end
+
+		if #props + #entities + #spawnables > COURSE_MAX_ELEMENTS then return nil, "too many elements" end
+		if not IsCoursePos(courseData[3]) then return nil, "invalid start position" end
+
+		for _, v in ipairs(cps) do
+			if not IsCoursePos(v) then return nil, "invalid checkpoint" end
+		end
+
+		local ang = tonumber(courseData[4])
+		if not ang or ang ~= ang then ang = 0 end
+
+		-- 0 means no speed limit. It goes into ConCommand and an 11 bit net int, so it has to be a plain number
+		local speed = tonumber(courseData[7]) or 325
+		if speed ~= speed then speed = 325 end
+		speed = speed > 0 and math.Clamp(math.floor(speed), 325, 1000) or 0
+
+		local course = {
+			pos = courseData[3],
+			ang = math.NormalizeAngle(ang),
+			name = isstring(courseData[5]) and string.sub(courseData[5], 1, 128) or "",
+			speed = speed,
+			cps = cps,
+			dropped = 0
+		}
+
+		course.props = ValidateCourseList(props, ValidateCourseProp, course)
+		course.entities = ValidateCourseList(entities, ValidateCourseEntity, course)
+		course.spawnables = ValidateCourseList(spawnables, ValidateCourseSpawnable, course)
+
+		return course
+	end
+
 	function Beatrun_ReadCourseNet(len, ply)
 		if not ply:IsSuperAdmin() then return end
 
-		local data = util.Decompress(net.ReadData(len))
+		local data = util.Decompress(net.ReadData(len), COURSE_MAX_SIZE)
 
 		if not data then return print("[BR] Error while loading a course") end
 
@@ -1007,25 +1158,23 @@ if SERVER then
 	end
 
 	function Beatrun_ReadCourse(data, id)
+		local decompress = util.Decompress(data, COURSE_MAX_SIZE) or data
+		id = id or util.CRC(decompress)
+
+		local course, err = Beatrun_ValidateCourse(util.JSONToTable(decompress))
+		if not course then return print("[BR] Course rejected: " .. err) end
+
+		if course.dropped > 0 then print(string.format("[BR] Course %s: skipped %d invalid elements", id, course.dropped)) end
+
 		game.CleanUpMap()
 
-		local decompress = util.Decompress(data) or data
-		id = id or util.CRC(decompress)
-		local courseData = util.JSONToTable(decompress)
+		local cp, pos, ang, name, entities, speed, spawnables = course.cps, course.pos, course.ang, course.name, course.entities, course.speed, course.spawnables
 
-		local props, cp, pos, ang, name, entities, speed, spawnables = unpack(courseData)
-		speed = speed or 325
-
-		for _, v in pairs(props) do
+		for _, v in ipairs(course.props) do
 			local a = ents.Create("prop_physics")
 			a.hr = v.hr
 
-			local is_model_an_index = tonumber(v.model)
-			if is_model_an_index then
-				a:SetModel(buildmode_props[v.model])
-			else
-				a:SetModel(v.model)
-			end
+			a:SetModel(v.model)
 
 			CustomPropMat(a)
 
@@ -1058,6 +1207,8 @@ if SERVER then
 		if entities then
 			for _, v in ipairs(entities) do
 				local a = ents.Create(v.ent)
+				if not IsValid(a) then continue end
+
 				local dontsetpos = nil
 
 				if entreadfunc[v.ent] then
@@ -1073,7 +1224,7 @@ if SERVER then
 			end
 		end
 
-		for _, v in ipairs(spawnables or {}) do
+		for _, v in ipairs(spawnables) do
 			SpawnSpawnable(v.id, v.pos, v.ang, v.weapon, v.noai)
 		end
 
