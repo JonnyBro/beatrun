@@ -1,6 +1,13 @@
+-- TODO: API key is deprecated, will be removed in later releases
 local databaseApiKey = CreateClientConVar("Beatrun_Apikey", "0", true, false, language.GetPhrase("beatrun.convars.apikey"))
 local databaseDomain = CreateClientConVar("Beatrun_Domain", "courses.jbro.top", true, false, language.GetPhrase("beatrun.convars.domain"))
 local submitRecords = CreateClientConVar("Beatrun_SubmitRecords", "1", true, false, language.GetPhrase("beatrun.convars.submitrecords"), 0, 1)
+
+local function SiteUrl(domain)
+	domain = domain or databaseDomain:GetString()
+
+	return string.find(domain, "^https?://") and domain or "https://" .. domain
+end
 
 local UI = BeatrunUI
 local S, L = UI.S, UI.L
@@ -24,32 +31,37 @@ local function RememberCourseCode(code, raw)
 	if code and json then courseCodes[util.CRC(json)] = code end
 end
 
-local TRUSTED_DOMAINS_FILE = "beatrun/trusted_domains.txt"
-local trustedDomains = util.JSONToTable(file.Read(TRUSTED_DOMAINS_FILE, "DATA") or "") or {}
+-- One token per domain, so pointing Beatrun_Domain somewhere else never sends the token of the real database there
+local TOKENS_FILE = "beatrun/tokens.txt"
+local tokens = util.JSONToTable(file.Read(TOKENS_FILE, "DATA") or "") or {}
 
-local function TrustDomain(domain)
-	trustedDomains[string.lower(domain)] = true
-
+local function SaveTokens()
 	file.CreateDir("beatrun")
-	file.Write(TRUSTED_DOMAINS_FILE, util.TableToJSON(trustedDomains))
+	file.Write(TOKENS_FILE, util.TableToJSON(tokens))
 end
 
-local function IsDomainTrusted()
-	local domain = string.lower(databaseDomain:GetString())
+local function GetToken()
+	local token = tokens[string.lower(databaseDomain:GetString())]
 
-	return domain == string.lower(databaseDomain:GetDefault()) or trustedDomains[domain] == true
+	return isstring(token) and token ~= "" and token or nil
 end
 
-local function WithTrustedDomain(callback)
-	if IsDomainTrusted() then return callback() end
-
-	local domain = databaseDomain:GetString()
-
-	OpenConfirmPopup("#beatrun.coursesmenu.domain.title", L("beatrun.coursesmenu.domain.confirm"):format(domain), function()
-		TrustDomain(domain)
-		callback()
-	end, true, 240)
+local function SetToken(domain, token)
+	tokens[string.lower(domain)] = token
+	SaveTokens()
 end
+
+do
+	local legacyKey = databaseApiKey:GetString()
+
+	if legacyKey ~= "" and legacyKey ~= "0" then
+		local default = string.lower(databaseDomain:GetDefault())
+		if not tokens[default] then SetToken(default, legacyKey) end
+
+		databaseApiKey:SetString("")
+	end
+end
+
 local Frame, List, OnlinePager, LocalPanel, CodePanel, BrowsePanel, ProfilePanel, SettingsPanel, PopupFrame
 
 local function SanitizeString(str)
@@ -211,7 +223,7 @@ local function GetBanReason(body)
 end
 
 local function OpenDatabaseSite()
-	gui.OpenURL("https://" .. databaseDomain:GetString() .. "/profile")
+	gui.OpenURL(SiteUrl() .. "/profile")
 end
 
 local function ShowBannedPopup(reason)
@@ -256,7 +268,7 @@ end
 local function OpenCourseSaveMenu()
 	local frame = CreatePopup("#beatrun.coursesmenu.localpage.savecourse", 460, 400)
 	local data = CourseData()
-	local hasKey = databaseApiKey:GetString() ~= "" and databaseApiKey:GetString() ~= "0"
+	local hasKey = GetToken() ~= nil
 	local padL, padT, padR, padB = frame:GetDockPadding()
 	local width = frame:GetWide() - padL - padR
 	local items = {}
@@ -508,36 +520,6 @@ function OpenConfirmPopup(title, message, onConfirm, danger, height)
 	MakePopupMessage(frame, message)
 end
 
-local function OpenApiKeyPopup()
-	local frame = CreatePopup("#beatrun.coursesmenu.profilepage.changekey", 480, 170)
-
-	local entry = MakeTextEntry(frame, "#beatrun.coursesmenu.profilepage.changekey.placeholder")
-	entry:Dock(TOP)
-
-	local function save()
-		local newKey = string.Trim(entry:GetValue())
-		if newKey == "" then return entry:RequestFocus() end
-
-		databaseApiKey:SetString(newKey)
-
-		ClosePopup()
-
-		timer.Simple(0, function() if IsValid(ProfilePanel) then BuildProfilePage() end end)
-	end
-
-	entry.OnEnter = save
-
-	MakePopupButtons(frame, {
-		{
-			text = "#beatrun.coursesmenu.save",
-			style = "primary",
-			onClick = save
-		}
-	})
-
-	entry:RequestFocus()
-end
-
 local function SaveCourseToFile(mapName, code, data)
 	local path, dir = CourseFilePath(mapName, code)
 	if not path then return end
@@ -554,7 +536,7 @@ local function FetchAndSaveCourse(course)
 		code = course.code
 	}
 
-	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, code)
+	http.Fetch(SiteUrl() .. "/api/courses/download", function(body, _, _, code)
 		if code ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 			LogApiError("/api/courses/download", code, body)
@@ -601,7 +583,7 @@ local function FetchAndStartCourse(code)
 		code = code
 	}
 
-	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/download", function(body, _, _, status)
+	http.Fetch(SiteUrl() .. "/api/courses/download", function(body, _, _, status)
 		if status ~= 200 then
 			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
 			LogApiError("/api/courses/download", status, body)
@@ -632,13 +614,13 @@ local function FetchAndStartCourse(code)
 end
 
 function UploadCourseFile(course, updateCode)
-	if not databaseApiKey:GetString() or databaseApiKey:GetString() == "0" or databaseApiKey:GetString() == "" then
+	local token = GetToken()
+
+	if not token then
 		notification.AddLegacy("#beatrun.coursesmenu.notification.nokey", NOTIFY_ERROR, 4)
 
 		return
 	end
-
-	if not IsDomainTrusted() then return WithTrustedDomain(function() UploadCourseFile(course, updateCode) end) end
 
 	local raw = file.Read(course, "DATA")
 	if not raw then
@@ -649,7 +631,7 @@ function UploadCourseFile(course, updateCode)
 
 	local encoded = util.Base64Encode(raw, true)
 	local headers = {
-		authorization = databaseApiKey:GetString(),
+		authorization = token,
 		mapName = currentMap,
 		workshopId = GetCurrentMapWorkshopID(),
 		code = updateCode
@@ -657,7 +639,7 @@ function UploadCourseFile(course, updateCode)
 
 	local endpoint = updateCode and "/api/courses/update" or "/api/courses/upload"
 
-	http.Post("https://" .. databaseDomain:GetString() .. endpoint, {
+	http.Post(SiteUrl() .. endpoint, {
 		data = encoded
 	}, function(body, _, _, code)
 		if code == 409 then
@@ -792,21 +774,18 @@ function Beatrun_SubmitCourseRecord(time, splits)
 	if Course_Name == "" or not Course_ID or Course_ID == "" then return end
 	if not time or time <= 0 or not splits then return end
 
-	local key = databaseApiKey:GetString()
-	if not key or key == "" or key == "0" then return end
+	local token = GetToken()
+	if not token then return end
 
 	if GetConVar("sv_cheats"):GetBool() then return end
 
-	-- Finishing a course isn't the moment for a popup, the profile tab asks about the domain instead
-	if not IsDomainTrusted() then return print("[BR] Run not submitted: " .. databaseDomain:GetString() .. " isn't allowed to get your key") end
-
 	local headers = {
-		authorization = key,
+		authorization = token,
 		hash = Course_ID,
 		code = courseCodes[Course_ID]
 	}
 
-	http.Post("https://" .. databaseDomain:GetString() .. "/api/courses/records", {
+	http.Post(SiteUrl() .. "/api/courses/records", {
 		time = tostring(time),
 		splits = util.TableToJSON(splits)
 	}, function(body, _, _, code)
@@ -893,7 +872,7 @@ local function LookupCourseByCode(text)
 
 	BuildCodePage()
 
-	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/info/" .. code, function(body, _, _, status)
+	http.Fetch(SiteUrl() .. "/api/courses/info/" .. code, function(body, _, _, status)
 		if codeLookup.code ~= code then return end
 
 		local res = util.JSONToTable(body or "")
@@ -1166,7 +1145,7 @@ local function BuildCodeCourseCard(parent, v)
 
 	local siteBtn = MakeButton(buttons, "#beatrun.coursesmenu.codepage.website", "secondary")
 	siteBtn:Dock(LEFT)
-	siteBtn.DoClick = function() gui.OpenURL("https://" .. databaseDomain:GetString() .. "/course/" .. v.code) end
+	siteBtn.DoClick = function() gui.OpenURL(SiteUrl() .. "/course/" .. v.code) end
 
 	local name = MakeLabel(card, v.name or v.code, "BeatrunUILarge")
 	name:Dock(TOP)
@@ -1269,7 +1248,7 @@ local function FetchOnlinePage()
 
 	BuildOnlinePage()
 
-	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/search?" .. table.concat(params, "&"), function(body, _, _, code)
+	http.Fetch(SiteUrl() .. "/api/courses/search?" .. table.concat(params, "&"), function(body, _, _, code)
 		if request ~= onlineState.request then return end
 
 		local res = util.JSONToTable(body or "")
@@ -1437,13 +1416,14 @@ local function BuildProfileCourses(scroll, myCourses)
 
 		MakeRowButton(row, "#beatrun.coursesmenu.delete", "danger", function()
 			OpenConfirmPopup("#beatrun.coursesmenu.delete", "#beatrun.coursesmenu.delete.confirm", function()
-				if not IsDomainTrusted() then return BuildProfilePage() end
+				local token = GetToken()
+				if not token then return BuildProfilePage() end
 
 				HTTP({
 					method = "DELETE",
-					url = "https://" .. databaseDomain:GetString() .. "/api/courses/delete",
+					url = SiteUrl() .. "/api/courses/delete",
 					headers = {
-						authorization = databaseApiKey:GetString(),
+						authorization = token,
 						code = v.code,
 					},
 					success = function(code, body)
@@ -1470,7 +1450,153 @@ local function BuildProfileCourses(scroll, myCourses)
 	end
 end
 
-local function BuildProfileCard(body, apiKey)
+local linkState
+
+local function StopLink()
+	timer.Remove("Beatrun_LinkPoll")
+	linkState = nil
+end
+
+local function LinkUrl(state)
+	return SiteUrl(state.domain) .. "/link?code=" .. state.code
+end
+
+local function RefreshProfile()
+	if IsValid(ProfilePanel) then BuildProfilePage() end
+end
+
+local function PollLink()
+	local state = linkState
+	if not state then return end
+
+	if SysTime() > state.expires then
+		StopLink()
+		return RefreshProfile()
+	end
+
+	HTTP({
+		method = "POST",
+		url = SiteUrl(state.domain) .. "/api/link/poll",
+		headers = {
+			poll = state.poll
+		},
+		success = function(code, body)
+			-- 202 is "not confirmed yet", 429 is a poll too early
+			if linkState ~= state or code == 202 or code == 429 then return end
+
+			StopLink()
+
+			local res = util.JSONToTable(body or "")
+			local token = code == 200 and res and istable(res.data) and res.data.token
+
+			if isstring(token) and token ~= "" then
+				local oldToken = tokens[string.lower(state.domain)]
+
+				SetToken(state.domain, token)
+
+				if isstring(oldToken) and oldToken ~= token then
+					HTTP({
+						method = "DELETE",
+						url = SiteUrl(state.domain) .. "/api/devices/current",
+						headers = {
+							authorization = oldToken
+						},
+						failed = function(err) print("> /api/devices/current\nError: ", err) end
+					})
+				end
+
+				notification.AddLegacy("#beatrun.coursesmenu.signin.done", NOTIFY_GENERIC, 4)
+			else
+				notification.AddLegacy("#beatrun.coursesmenu.signin.expired", NOTIFY_ERROR, 4)
+				LogApiError("/api/link/poll", code, body, res)
+			end
+
+			RefreshProfile()
+		end,
+		failed = function(err) print("> /api/link/poll\nError: ", err) end
+	})
+end
+
+local function StartLink()
+	local domain = databaseDomain:GetString()
+
+	HTTP({
+		method = "POST",
+		url = SiteUrl(domain) .. "/api/link/start",
+		headers = {
+			os = system.IsWindows() and "windows" or system.IsLinux() and "linux" or system.IsOSX() and "osx" or "",
+			branch = BRANCH or ""
+		},
+		success = function(code, body)
+			local res = util.JSONToTable(body or "")
+			local data = res and res.data
+
+			if code ~= 200 or not istable(data) or not isstring(data.poll) or not isstring(data.code) or not string.match(data.code, "^%w%w%w%w%-%w%w%w%w$") then
+				notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+				LogApiError("/api/link/start", code, body, res)
+
+				return
+			end
+
+			StopLink()
+
+			linkState = {
+				domain = domain,
+				code = data.code,
+				poll = data.poll,
+				expires = SysTime() + (tonumber(data.expiresIn) or 600)
+			}
+
+			timer.Create("Beatrun_LinkPoll", math.max(tonumber(data.interval) or 5, 2), 0, PollLink)
+			gui.OpenURL(LinkUrl(linkState))
+
+			RefreshProfile()
+		end,
+		failed = function(err)
+			notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
+			print("> /api/link/start\nError: ", err)
+		end
+	})
+end
+
+local function SignOut()
+	local domain = databaseDomain:GetString()
+	local token = GetToken()
+
+	SetToken(domain, nil)
+
+	if token then
+		HTTP({
+			method = "DELETE",
+			url = SiteUrl(domain) .. "/api/devices/current",
+			headers = {
+				authorization = token
+			},
+			failed = function(err) print("> /api/devices/current\nError: ", err) end
+		})
+	end
+
+	RefreshProfile()
+end
+
+hook.Add("InitPostEntity", "Beatrun_LegacyKeyReminder", function()
+	timer.Simple(10, function()
+		local token = GetToken()
+		if not token then return end
+
+		http.Fetch(SiteUrl() .. "/api/key/validate", function(body, _, _, code)
+			local res = code == 200 and util.JSONToTable(body or "")
+			if not res or not res.legacy then return end
+
+			notification.AddLegacy("#beatrun.coursesmenu.signin.legacy.short", NOTIFY_HINT, 10)
+			print("[BR] " .. L("beatrun.coursesmenu.signin.legacy"))
+		end, nil, {
+			key = token
+		})
+	end)
+end)
+
+local function BuildProfileCard(body)
 	local steamId = LocalPlayer():SteamID64()
 	local pad = S(16)
 	local avatarSize = S(84)
@@ -1509,21 +1635,16 @@ local function BuildProfileCard(body, apiKey)
 	keyRow:Dock(BOTTOM)
 	keyRow.Paint = nil
 
-	local masked = string.rep("*", math.max(#apiKey - 4, 0)) .. string.sub(apiKey, -4)
-	local keyLabel = MakeLabel(keyRow, L("beatrun.coursesmenu.profilepage.key"):format(masked), "BeatrunUISmall", CurrentTheme().text.muted)
-	keyLabel:Dock(LEFT)
-	keyLabel:DockMargin(0, 0, S(12), 0)
-
-	local changeBtn = MakeButton(keyRow, "#beatrun.coursesmenu.profilepage.changekey", "secondary")
-	changeBtn:Dock(LEFT)
-	changeBtn:DockMargin(0, 0, S(8), 0)
-	changeBtn.DoClick = function() OpenApiKeyPopup() end
+	local signOutBtn = MakeButton(keyRow, "#beatrun.coursesmenu.profilepage.signout", "secondary")
+	signOutBtn:Dock(LEFT)
+	signOutBtn:DockMargin(0, 0, S(8), 0)
+	signOutBtn.DoClick = function() OpenConfirmPopup("#beatrun.coursesmenu.profilepage.signout", "#beatrun.coursesmenu.profilepage.signout.confirm", SignOut, true) end
 
 	local siteBtn = MakeButton(keyRow, "#beatrun.coursesmenu.profilepage.website", "secondary")
 	siteBtn:Dock(LEFT)
-	siteBtn.DoClick = function() gui.OpenURL("https://" .. databaseDomain:GetString() .. "/user/" .. steamId) end
+	siteBtn.DoClick = function() gui.OpenURL(SiteUrl() .. "/user/" .. steamId) end
 
-	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/users/profile/" .. steamId, function(statsBody, _, _, statsCode)
+	http.Fetch(SiteUrl() .. "/api/users/profile/" .. steamId, function(statsBody, _, _, statsCode)
 		if not IsValid(card) then return end
 
 		local statsRes = util.JSONToTable(statsBody or "")
@@ -1549,8 +1670,8 @@ local function BuildProfileCard(body, apiKey)
 end
 
 local function BuildProfileSignIn(body)
-	local authUrl = string.format("https://%s/auth?redirect=/profile", databaseDomain:GetString())
 	local pad = S(20)
+	local waiting = linkState and linkState.domain == databaseDomain:GetString() and linkState
 
 	local card = vgui.Create("DPanel", body)
 	card:Dock(TOP)
@@ -1561,7 +1682,13 @@ local function BuildProfileSignIn(body)
 	title:Dock(TOP)
 	title:DockMargin(0, 0, 0, S(10))
 
-	local msg = MakeLabel(card, "#beatrun.coursesmenu.profilepage.message", "AEUIDefault", CurrentTheme().text.muted)
+	if waiting then
+		local code = MakeLabel(card, waiting.code, "BeatrunUILarge")
+		code:Dock(TOP)
+		code:DockMargin(0, 0, 0, S(10))
+	end
+
+	local msg = MakeLabel(card, waiting and "#beatrun.coursesmenu.signin.waiting" or "#beatrun.coursesmenu.profilepage.message", "AEUIDefault", CurrentTheme().text.muted)
 	msg:Dock(TOP)
 	msg:SetWrap(true)
 	msg:SetAutoStretchVertical(true)
@@ -1572,26 +1699,31 @@ local function BuildProfileSignIn(body)
 	buttons:DockMargin(0, S(16), 0, 0)
 	buttons.Paint = nil
 
-	local registerBtn = MakeButton(buttons, "#beatrun.coursesmenu.profilepage.register", "primary")
-	registerBtn:Dock(LEFT)
-	registerBtn:DockMargin(0, 0, S(8), 0)
-	registerBtn.DoClick = function()
-		gui.OpenURL(authUrl)
-		timer.Simple(.5, OpenApiKeyPopup)
+	local function Button(text, style, onClick)
+		local btn = MakeButton(buttons, text, style)
+		btn:Dock(LEFT)
+		btn:DockMargin(0, 0, S(8), 0)
+		btn.DoClick = onClick
+
+		return btn
 	end
 
-	local copyBtn = MakeButton(buttons, "#beatrun.coursesmenu.profilepage.copylink", "secondary")
-	copyBtn:Dock(LEFT)
-	copyBtn:DockMargin(0, 0, S(8), 0)
-	copyBtn.DoClick = function(self)
-		SetClipboardText(authUrl)
-		self:SetText("#beatrun.coursesmenu.copied")
-		timer.Simple(2, function() if IsValid(self) then self:SetText("#beatrun.coursesmenu.profilepage.copylink") end end)
-	end
+	if not waiting then
+		Button("#beatrun.coursesmenu.profilepage.signin", "primary", StartLink)
+	else
+		Button("#beatrun.coursesmenu.signin.reopen", "primary", function() gui.OpenURL(LinkUrl(waiting)) end)
 
-	local keyBtn = MakeButton(buttons, "#beatrun.coursesmenu.profilepage.changekey", "secondary")
-	keyBtn:Dock(LEFT)
-	keyBtn.DoClick = function() OpenApiKeyPopup() end
+		Button("#beatrun.coursesmenu.profilepage.copylink", "secondary", function(self)
+			SetClipboardText(LinkUrl(waiting))
+			self:SetText("#beatrun.coursesmenu.copied")
+			timer.Simple(2, function() if IsValid(self) then self:SetText("#beatrun.coursesmenu.profilepage.copylink") end end)
+		end)
+
+		Button("#beatrun.misc.cancel", "secondary", function()
+			StopLink()
+			RefreshProfile()
+		end)
+	end
 
 	card.PerformLayout = function(self)
 		self:SizeToChildren(false, true)
@@ -1605,27 +1737,17 @@ function BuildProfilePage()
 	ProfilePanel:Clear()
 
 	local body = MakeBody(ProfilePanel)
-	local apiKey = databaseApiKey:GetString()
+	local domain = databaseDomain:GetString()
+	local token = GetToken()
 
-	if apiKey ~= "" and apiKey ~= "0" and not IsDomainTrusted() then
-		local domain = databaseDomain:GetString()
-
-		local warning = MakeMessage(body, L("beatrun.coursesmenu.domain.blocked"):format(domain), CurrentTheme().buttons.danger.t)
-		warning:DockMargin(0, 0, 0, S(6))
-
-		local allow = MakeButton(body, "#beatrun.coursesmenu.domain.allow", "danger")
-		allow:Dock(TOP)
-		allow.DoClick = function() WithTrustedDomain(BuildProfilePage) end
-
-		return
-	end
+	if not token then return BuildProfileSignIn(body) end
 
 	local loading = MakeMessage(body, "#beatrun.coursesmenu.loading")
 	local headers = {
-		key = apiKey ~= "" and apiKey or "0"
+		key = token
 	}
 
-	http.Fetch("https://" .. databaseDomain:GetString() .. "/api/key/validate", function(validateBody, _, _, code)
+	http.Fetch(SiteUrl(domain) .. "/api/key/validate", function(validateBody, _, _, code)
 		if not IsValid(body) then return end
 
 		loading:Remove()
@@ -1637,9 +1759,27 @@ function BuildProfilePage()
 			return
 		end
 
-		if not res.data then return BuildProfileSignIn(body) end
+		if not res.data then
+			if tokens[string.lower(domain)] == token then SetToken(domain, nil) end
 
-		BuildProfileCard(body, apiKey)
+			return BuildProfileSignIn(body)
+		end
+
+		BuildProfileCard(body)
+
+		if res.legacy then
+			local warning = MakeMessage(body, "#beatrun.coursesmenu.signin.legacy", CurrentTheme().buttons.danger.t)
+			warning:DockMargin(0, 0, 0, S(6))
+
+			if linkState and linkState.domain == domain then
+				BuildProfileSignIn(body)
+			else
+				local resign = MakeButton(body, "#beatrun.coursesmenu.signin.again", "primary")
+				resign:Dock(TOP)
+				resign:DockMargin(0, 0, 0, S(14))
+				resign.DoClick = StartLink
+			end
+		end
 
 		if istable(res.ban) then
 			local banned = MakeMessage(body, L("beatrun.coursesmenu.banned.text"):format(tostring(res.ban.reason or "?")), CurrentTheme().buttons.danger.t)
@@ -1659,7 +1799,7 @@ function BuildProfilePage()
 
 		local steamId = LocalPlayer():SteamID64()
 
-		http.Fetch("https://" .. databaseDomain:GetString() .. "/api/courses/search?limit=100&author=" .. steamId, function(listBody, _, _, listCode)
+		http.Fetch(SiteUrl() .. "/api/courses/search?limit=100&author=" .. steamId, function(listBody, _, _, listCode)
 			if not IsValid(scroll) then return end
 
 			local listRes = util.JSONToTable(listBody or "")
@@ -1760,20 +1900,16 @@ function BuildSettingsPage()
 		local val = string.Trim(value or "")
 		if val == "" then val = databaseDomain:GetDefault() end
 
-		val = string.gsub(val, "^https?://", "")
+		val = string.gsub(val, "^https://", "")
 		val = string.gsub(val, "/+$", "")
-
-		if domainEntry.edited then TrustDomain(val) end
 
 		databaseDomain:SetString(val)
 		domainEntry:SetText(val)
-		domainEntry.edited = false
 
 		onlineState.status = "idle"
 		onlineState.items = nil
 	end
 
-	domainEntry.OnChange = function(self) self.edited = true end
 	domainEntry.OnLoseFocus = function(self) saveDomain(self:GetValue()) end
 	domainEntry.OnEnter = function(self, value) saveDomain(value) end
 end
