@@ -33,11 +33,11 @@ end
 
 -- One token per domain, so pointing Beatrun_Domain somewhere else never sends the token of the real database there
 local TOKENS_FILE = "beatrun/tokens.txt"
-local tokens = util.JSONToTable(file.Read(TOKENS_FILE, "DATA") or "") or {}
+local tokens = util.JSONToTable(util.Decompress(file.Read(TOKENS_FILE, "DATA") or "") or "") or {}
 
 local function SaveTokens()
 	file.CreateDir("beatrun")
-	file.Write(TOKENS_FILE, util.TableToJSON(tokens))
+	file.Write(TOKENS_FILE, util.Compress(util.TableToJSON(tokens)))
 end
 
 local function GetToken()
