@@ -1414,34 +1414,6 @@ local function BuildProfileCourses(scroll, myCourses)
 			StartOnlineCourse(v)
 		end)
 
-		MakeRowButton(row, "#beatrun.coursesmenu.delete", "danger", function()
-			OpenConfirmPopup("#beatrun.coursesmenu.delete", "#beatrun.coursesmenu.delete.confirm", function()
-				local token = GetToken()
-				if not token then return BuildProfilePage() end
-
-				HTTP({
-					method = "DELETE",
-					url = SiteUrl() .. "/api/courses/delete",
-					headers = {
-						authorization = token,
-						code = v.code,
-					},
-					success = function(code, body)
-						local res = util.JSONToTable(body or "")
-						if code ~= 200 or res and res.code and res.code ~= 200 then
-							notification.AddLegacy("#beatrun.coursesmenu.notification.fetch.failed", NOTIFY_ERROR, 4)
-							LogApiError("/api/courses/delete", code, body, res)
-							return
-						end
-
-						onlineState.status = "idle"
-						BuildProfilePage()
-					end,
-					failed = function(err) print("> /api/courses/delete\nError: ", err) end
-				})
-			end, true)
-		end)
-
 		local name = MakeLabel(row, v.name, "BeatrunUI")
 		name:Dock(TOP)
 
