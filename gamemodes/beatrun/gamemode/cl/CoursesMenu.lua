@@ -544,6 +544,15 @@ local function FetchAndSaveCourse(course)
 		end
 
 		local data = util.Base64Decode(body)
+
+		local valid, err = Beatrun_CheckCourseData(data)
+		if not valid then
+			notification.AddLegacy(language.GetPhrase("beatrun.coursesmenu.notification.invalid"):format(err), NOTIFY_ERROR, 6)
+			print("[BR] Course " .. course.code .. " rejected: " .. err)
+
+			return
+		end
+
 		local path = SaveCourseToFile(course.mapName, course.code, data)
 
 		RememberCourseCode(course.code, data)
@@ -581,13 +590,13 @@ local function FetchAndStartCourse(code)
 			return
 		end
 
+		local data = util.Base64Decode(body)
+		if not LoadCourseRaw(data) then return end
+
 		databaseCourseCode = code
 		localCourseFile = nil
 
-		local data = util.Base64Decode(body)
-
 		RememberCourseCode(code, data)
-		LoadCourseRaw(data)
 		notification.AddLegacy(language.GetPhrase("#beatrun.coursesmenu.notification.startingcourse"):format(code), NOTIFY_GENERIC, 4)
 	end, function(err)
 		notification.AddLegacy("#beatrun.coursesmenu.notification.openconsole", NOTIFY_ERROR, 4)
