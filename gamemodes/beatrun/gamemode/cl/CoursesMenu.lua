@@ -23,6 +23,33 @@ local function RememberCourseCode(code, raw)
 	local json = raw and (util.Decompress(raw) or raw)
 	if code and json then courseCodes[util.CRC(json)] = code end
 end
+
+local TRUSTED_DOMAINS_FILE = "beatrun/trusted_domains.txt"
+local trustedDomains = util.JSONToTable(file.Read(TRUSTED_DOMAINS_FILE, "DATA") or "") or {}
+
+local function TrustDomain(domain)
+	trustedDomains[string.lower(domain)] = true
+
+	file.CreateDir("beatrun")
+	file.Write(TRUSTED_DOMAINS_FILE, util.TableToJSON(trustedDomains))
+end
+
+local function IsDomainTrusted()
+	local domain = string.lower(databaseDomain:GetString())
+
+	return domain == string.lower(databaseDomain:GetDefault()) or trustedDomains[domain] == true
+end
+
+local function WithTrustedDomain(callback)
+	if IsDomainTrusted() then return callback() end
+
+	local domain = databaseDomain:GetString()
+
+	OpenConfirmPopup("#beatrun.coursesmenu.domain.title", L("beatrun.coursesmenu.domain.confirm"):format(domain), function()
+		TrustDomain(domain)
+		callback()
+	end, true, 240)
+end
 local Frame, List, OnlinePager, LocalPanel, CodePanel, BrowsePanel, ProfilePanel, SettingsPanel, PopupFrame
 
 local function SanitizeString(str)
@@ -611,6 +638,8 @@ function UploadCourseFile(course, updateCode)
 		return
 	end
 
+	if not IsDomainTrusted() then return WithTrustedDomain(function() UploadCourseFile(course, updateCode) end) end
+
 	local raw = file.Read(course, "DATA")
 	if not raw then
 		notification.AddLegacy("#beatrun.coursesmenu.notification.read.failed", NOTIFY_ERROR, 4)
@@ -767,6 +796,9 @@ function Beatrun_SubmitCourseRecord(time, splits)
 	if not key or key == "" or key == "0" then return end
 
 	if GetConVar("sv_cheats"):GetBool() then return end
+
+	-- Finishing a course isn't the moment for a popup, the profile tab asks about the domain instead
+	if not IsDomainTrusted() then return print("[BR] Run not submitted: " .. databaseDomain:GetString() .. " isn't allowed to get your key") end
 
 	local headers = {
 		authorization = key,
@@ -1405,6 +1437,8 @@ local function BuildProfileCourses(scroll, myCourses)
 
 		MakeRowButton(row, "#beatrun.coursesmenu.delete", "danger", function()
 			OpenConfirmPopup("#beatrun.coursesmenu.delete", "#beatrun.coursesmenu.delete.confirm", function()
+				if not IsDomainTrusted() then return BuildProfilePage() end
+
 				HTTP({
 					method = "DELETE",
 					url = "https://" .. databaseDomain:GetString() .. "/api/courses/delete",
@@ -1571,8 +1605,22 @@ function BuildProfilePage()
 	ProfilePanel:Clear()
 
 	local body = MakeBody(ProfilePanel)
-	local loading = MakeMessage(body, "#beatrun.coursesmenu.loading")
 	local apiKey = databaseApiKey:GetString()
+
+	if apiKey ~= "" and apiKey ~= "0" and not IsDomainTrusted() then
+		local domain = databaseDomain:GetString()
+
+		local warning = MakeMessage(body, L("beatrun.coursesmenu.domain.blocked"):format(domain), CurrentTheme().buttons.danger.t)
+		warning:DockMargin(0, 0, 0, S(6))
+
+		local allow = MakeButton(body, "#beatrun.coursesmenu.domain.allow", "danger")
+		allow:Dock(TOP)
+		allow.DoClick = function() WithTrustedDomain(BuildProfilePage) end
+
+		return
+	end
+
+	local loading = MakeMessage(body, "#beatrun.coursesmenu.loading")
 	local headers = {
 		key = apiKey ~= "" and apiKey or "0"
 	}
@@ -1715,13 +1763,17 @@ function BuildSettingsPage()
 		val = string.gsub(val, "^https?://", "")
 		val = string.gsub(val, "/+$", "")
 
+		if domainEntry.edited then TrustDomain(val) end
+
 		databaseDomain:SetString(val)
 		domainEntry:SetText(val)
+		domainEntry.edited = false
 
 		onlineState.status = "idle"
 		onlineState.items = nil
 	end
 
+	domainEntry.OnChange = function(self) self.edited = true end
 	domainEntry.OnLoseFocus = function(self) saveDomain(self:GetValue()) end
 	domainEntry.OnEnter = function(self, value) saveDomain(value) end
 end
