@@ -32,6 +32,17 @@ local function SanitizeString(str)
 	return str
 end
 
+local function CourseFilePath(mapName, code)
+	if not isstring(mapName) or not isstring(code) then return end
+
+	local folder = string.gsub(mapName, "[%c/\\:*?\"<>|]", "_")
+	if folder == "" or #folder > 64 or string.find(folder, "..", 1, true) then return end
+
+	local dir = "beatrun/courses/" .. folder
+
+	return dir .. "/" .. SanitizeString(code) .. ".txt", dir
+end
+
 local function LogApiError(endpoint, code, body, res)
 	print(string.format("> %s\n> Code: %s\n> Reply: %s", endpoint, tostring(res and res.code or code), tostring(res and res.message or body)))
 
@@ -501,11 +512,11 @@ local function OpenApiKeyPopup()
 end
 
 local function SaveCourseToFile(mapName, code, data)
-	code = SanitizeString(code)
+	local path, dir = CourseFilePath(mapName, code)
+	if not path then return end
 
-	file.CreateDir(string.format("beatrun/courses/%s", mapName))
+	file.CreateDir(dir)
 
-	local path = string.format("beatrun/courses/%s/%s.txt", mapName, code)
 	local success = file.Write(path, data)
 
 	return success and path or nil
@@ -697,7 +708,9 @@ local function StartOnlineCourse(v)
 end
 
 local function IsCourseDownloaded(v)
-	return file.Exists(string.format("beatrun/courses/%s/%s.txt", v.mapName, string.lower(v.code)), "DATA")
+	local path = CourseFilePath(v.mapName, v.code)
+
+	return path ~= nil and file.Exists(path, "DATA")
 end
 
 local function DownloadOnlineCourse(v)
