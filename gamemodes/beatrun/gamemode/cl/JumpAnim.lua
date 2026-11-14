@@ -1527,14 +1527,14 @@ local spinetr = {
 
 -- Set by JumpArmDraw. Other body anims (rolls) lock the camera to the head, which the bend would feed back into
 local spinebendframe = -1
+local spinebend = 0
+local spinehead = Vector()
+local spinelength = 0
+local spineyaw = Angle()
 
 local function SpineBend(ent)
 	local ply = LocalPlayer()
 	if FrameNumber() - spinebendframe > 1 or nospinebend[BodyAnimString] or ply:ShouldDrawLocalPlayer() then return end
-
-	local eyeang = ply:EyeAngles()
-	local bend = math.rad(math.max(eyeang.x * 0.4, 0))
-	if bend <= 0 then return end
 
 	if not ent.spinebones then
 		local spine = ent:LookupBone("ValveBiped.Bip01_Spine")
@@ -1550,36 +1550,43 @@ local function SpineBend(ent)
 	-- The body's own yaw, not the view's: standing, the body lags behind the view and would bend sideways
 	local yaw = Angle(0, ent:GetAngles().y, 0)
 
-	-- The head (and the camera on it) swings forward past the player's hull, against a wall it would go inside it
 	local hx, hy, hz = BeatrunIK.GetBonePos(ent, ent.spinehead or ent.spine)
-	local length = math.sqrt((hx - px) ^ 2 + (hy - py) ^ 2 + (hz - pz) ^ 2)
 
-	if length > 1 then
-		local head = Vector(hx, hy, hz)
+	spinehead:SetUnpacked(hx, hy, hz)
+	spinelength = math.sqrt((hx - px) ^ 2 + (hy - py) ^ 2 + (hz - pz) ^ 2)
+	spineyaw:Set(yaw)
 
-		spinetr.start = head
-		spinetr.endpos = head + yaw:Forward() * (length + spinemargin)
-		spinetr.filter = ply
-
-		local tr = util.TraceLine(spinetr)
-		local room = math.max(tr.Fraction * (length + spinemargin) - spinemargin, 0)
-
-		bend = math.min(bend, math.asin(math.min(room / length, 1)))
-
-		if bend <= 0 then return end
-	end
+	if spinebend <= 0 then return end
 
 	local left = -yaw:Right()
-	local r11, r12, r13, r21, r22, r23, r31, r32, r33 = BeatrunIK.AxisAngle(left.x, left.y, left.z, bend)
+	local r11, r12, r13, r21, r22, r23, r31, r32, r33 = BeatrunIK.AxisAngle(left.x, left.y, left.z, spinebend)
 
 	BeatrunIK.MoveBones(ent, ent.spinebones, r11, r12, r13, r21, r22, r23, r31, r32, r33, px, py, pz, px, py, pz)
 end
 
+hook.Add("Think", "BeatrunSpineBend", function()
+	local ply = LocalPlayer()
+
+	spinebend = math.rad(math.max(ply:EyeAngles().x * 0.4, 0))
+
+	if spinebend <= 0 or spinelength <= 1 then return end
+
+	spinetr.start = spinehead
+	spinetr.endpos = spinehead + spineyaw:Forward() * (spinelength + spinemargin)
+	spinetr.filter = ply
+
+	local tr = util.TraceLine(spinetr)
+	local room = math.max(tr.Fraction * (spinelength + spinemargin) - spinemargin, 0)
+
+	spinebend = math.min(spinebend, math.asin(math.min(room / spinelength, 1)))
+end)
+
 hook.Add("BodyAnimStart", "BeatrunSpineBend", function()
 	spinebendframe = -1
+	spinelength = 0
 
 	if IsValid(BodyAnim) then
-		BodyAnim:AddCallback("BuildBonePositions", SpineBend)
+		BeatrunIK.AddBoneCallback(BodyAnim, SpineBend)
 	end
 end)
 

@@ -109,7 +109,7 @@ end
 
 hook.Add("BodyAnimStart", "BeatrunFootIK", function()
 	if IsValid(BodyAnim) then
-		BodyAnim:AddCallback("BuildBonePositions", FootIK)
+		IK.AddBoneCallback(BodyAnim, FootIK)
 	end
 end)
 

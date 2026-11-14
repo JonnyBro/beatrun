@@ -72,10 +72,66 @@ function BeatrunIK.MinArc(ax, ay, az, bx, by, bz, fraction, maxangle)
 		t * cx * cz - s * cy, t * cy * cz + s * cx, t * cz * cz + c
 end
 
+-- Big wall of text because sorse jank
+-- BuildBonePositions can run more than once a frame: a bonemerged model with attachments makes the engine set up
+-- the parent's bones again with another bone mask. Bones outside that mask aren't rebuilt and still hold what we wrote
+-- last time, moving them again would apply the IK twice. So every pass first puts those bones back to the animation's
+-- pose, and the IK always starts from the same input
+local function BeginPass(ent)
+	local saved = ent.BeatrunIKSaved
+
+	if not saved then
+		saved = {}
+		ent.BeatrunIKSaved = saved
+	end
+
+	for bone, state in pairs(saved) do
+		state.touched = false
+
+		local m = ent:GetBoneMatrix(bone)
+		if m and m == state.after then ent:SetBoneMatrix(bone, state.before) end
+	end
+
+	return saved
+end
+
+-- Use this instead of AddCallback("BuildBonePositions") for anything that moves bones with BeatrunIK
+function BeatrunIK.AddBoneCallback(ent, func)
+	local callbacks = ent.BeatrunIKCallbacks
+
+	if not callbacks then
+		callbacks = {}
+		ent.BeatrunIKCallbacks = callbacks
+
+		ent:AddCallback("BuildBonePositions", function(e, numbones)
+			BeginPass(e)
+
+			for _, f in ipairs(callbacks) do
+				f(e, numbones)
+			end
+		end)
+	end
+
+	callbacks[#callbacks + 1] = func
+end
+
 -- Moves a bone by x -> q + R(x - p), rotating its orientation by R as well
 function BeatrunIK.MoveBone(ent, bone, r11, r12, r13, r21, r22, r23, r31, r32, r33, px, py, pz, qx, qy, qz)
 	local m = ent:GetBoneMatrix(bone)
 	if not m then return end
+
+	local saved = ent.BeatrunIKSaved or BeginPass(ent)
+	local state = saved[bone]
+
+	if not state then
+		state = { before = Matrix(), after = Matrix() }
+		saved[bone] = state
+	end
+
+	if not state.touched then
+		state.before:Set(m)
+		state.touched = true
+	end
 
 	local m11, m12, m13, tx, m21, m22, m23, ty, m31, m32, m33, tz = m:Unpack()
 
@@ -89,6 +145,7 @@ function BeatrunIK.MoveBone(ent, bone, r11, r12, r13, r21, r22, r23, r31, r32, r
 	)
 
 	ent:SetBoneMatrix(bone, m)
+	state.after:Set(m)
 end
 
 function BeatrunIK.MoveBones(ent, bones, r11, r12, r13, r21, r22, r23, r31, r32, r33, px, py, pz, qx, qy, qz)

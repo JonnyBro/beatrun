@@ -176,7 +176,8 @@ function HandIKBeginArms(bac, viewpos, viewang, drawpos, drawang)
 	viewframe = FrameNumber()
 
 	if not bac.handikcallback then
-		bac.handikcallback = bac:AddCallback("BuildBonePositions", HandIK)
+		bac.handikcallback = true
+		IK.AddBoneCallback(bac, HandIK)
 	end
 
 	bac:InvalidateBoneCache()
