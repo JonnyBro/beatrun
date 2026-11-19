@@ -523,7 +523,7 @@ local function MakeWindow(title, w, h)
 		draw.SimpleText(string.upper(L(title)), "BeatrunUI", S(12), headerH / 2, theme.text.primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	local close = MakeButton(frame, "✕", "close")
+	local close = MakeButton(frame, "X", "close")
 	close:SetSize(headerH, headerH)
 	close:SetPos(frame:GetWide() - headerH, 0)
 	close.DoClick = function() if IsValid(frame) then frame:Close() end end
@@ -630,7 +630,7 @@ local function MakeComboBox(parent)
 		draw.RoundedBox(S(theme.radius), 0, 0, w, h, theme.panels.primary)
 		surface.SetDrawColor((self:IsHovered() or self:IsMenuOpen()) and theme.accent or theme.border)
 		surface.DrawOutlinedRect(0, 0, w, h, 1)
-		draw.SimpleText(self:IsMenuOpen() and "▴" or "▾", "AEUIDefault", w - S(14), h / 2, theme.text.muted, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(self:IsMenuOpen() and "^" or "v", "AEUIDefault", w - S(14), h / 2, theme.text.muted, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	function combo:OpenMenu()

@@ -50,8 +50,8 @@ Beatrun is an **infamous parkour gamemode for Garry's Mod**, now fully open-sour
 
 ### New UI
 
-- The whole interface was rewritten to Beatrun's style, with 3 themes to choose from in F4 → Settings.
-- **Settings menu** with every Beatrun setting, both client and server. Open it from the context menu (`C`), from F4 → Settings or with `beatrun_settings`.\
+- The whole interface was rewritten to Beatrun's style, with 3 themes to choose from in F4 -> Settings.
+- **Settings menu** with every Beatrun setting, both client and server. Open it from the context menu (`C`), from F4 -> Settings or with `beatrun_settings`.\
   The Tools menu category is gone.
 - HUD and keystrokes hide when a big window is open.
 - Keystrokes show the real key state and have a walk key now.
@@ -62,7 +62,7 @@ Beatrun is an **infamous parkour gamemode for Garry's Mod**, now fully open-sour
 
 - **[courses.jbro.top](https://courses.jbro.top)** - website with every uploaded course, previews, leaderboards and player profiles (**[source code](https://github.com/JonnyBro/beatrun-courses-server)**).
 - Press F4 in game to browse courses, load them by code or upload yours.
-- Your times are sent to the leaderboards automatically when you finish a course, just set your key in F4 → Profile.
+- Your times are sent to the leaderboards automatically when you finish a course, just set your key in F4 -> Profile.
 - You can update your course without changing its code, from the game or from the website. Its leaderboard gets wiped though.
 - Saving a course over an old local file of it, so you don't end up with 20 copies.
 
@@ -135,7 +135,7 @@ You can change animations in the **Settings menu** under Gameplay.
 
 ## Credits
 
-- **[All contributors](https://github.com/JonnyBro/beatrun/graphs/contributors)** ❤️
+- **[All contributors](https://github.com/JonnyBro/beatrun/graphs/contributors)** <3
 - [EarthyKiller127/datae](https://www.youtube.com/channel/UCiFqPwGo4x0J65xafIaECDQ) - Original creator of Beatrun.
 - relaxtakenotes - Made this project possible.
 - [MTB](https://www.youtube.com/@MTB396) - Beatrun Reanimated Project.

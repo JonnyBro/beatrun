@@ -168,7 +168,7 @@ hook.Add("Tick", "HandStandWall", function()
 		if leftHand_trace.Hit then HandIKSetContact(1, true, leftHand_trace.HitPos, leftHand_trace.HitNormal) end
 		if rightHand_trace.Hit then HandIKSetContact(2, true, rightHand_trace.HitPos, rightHand_trace.HitNormal) end
 
-		if not ply:ShouldDrawLocalPlayer() then BodyLimitX = 30 end -- no point in locking the view in thirdperson ¯\_(ツ)_/¯
+		if not ply:ShouldDrawLocalPlayer() then BodyLimitX = 30 end -- no point in locking the view in thirdperson
 
 		if leftHand_trace.Hit and rightHand_trace.Hit then
 			ArmInterrupt("standhandwallboth")

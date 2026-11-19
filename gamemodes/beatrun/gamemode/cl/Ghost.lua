@@ -95,7 +95,7 @@ local function GhostEntInit()
 	playerGhost:SetSequence("idle_all_01") -- avoid tpose on spawn
 
 	playerGhost.GetPlayerColor = function()
-		-- creating this function changes the models clothes color, yeah ¯\_(ツ)_/¯
+		-- creating this function changes the models clothes color, yeah
 		return ply:GetPlayerColor()
 	end
 

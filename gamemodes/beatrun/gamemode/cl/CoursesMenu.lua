@@ -2003,7 +2003,7 @@ function OpenCoursesMenu(startPage)
 		end
 	end
 
-	local close = MakeButton(Frame, "✕", "close")
+	local close = MakeButton(Frame, "X", "close")
 	close:SetSize(headerH, headerH)
 	close:SetPos(Frame:GetWide() - headerH, 0)
 	close.DoClick = function() if IsValid(Frame) then Frame:Close() end end

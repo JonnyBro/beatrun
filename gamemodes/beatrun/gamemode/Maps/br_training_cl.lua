@@ -203,7 +203,7 @@ local function TutorialMarker()
 			surface.SetFont("BeatrunHUD")
 			surface.SetTextPos(0, 0)
 			surface.SetTextColor(markercol)
-			surface.DrawText("←")
+			surface.DrawText("<")
 		cam.End3D2D()
 	end
 end
