@@ -85,6 +85,7 @@ local PAGES = {
 			{ type = "check", convar = "Beatrun_TotsugekiAudio", label = "#beatrun.toolsmenu.moves.totsugekiaudio", desc = "#beatrun.toolsmenu.moves.totsugekiaudiodesc" },
 			{ type = "check", convar = "Beatrun_Wind", label = "#beatrun.toolsmenu.gameplay.wind", desc = "#beatrun.toolsmenu.gameplay.winddesc" },
 			{ type = "check", convar = "Beatrun_FaithVO", label = "#beatrun.toolsmenu.gameplay.faithvo", desc = "#beatrun.toolsmenu.gameplay.faithvodesc" },
+			{ type = "check", convar = "Beatrun_DeathBlackScreen", label = "#beatrun.toolsmenu.gameplay.deathblackscreen", desc = "#beatrun.toolsmenu.gameplay.deathblackscreendesc" },
 			{ type = "title", label = "#beatrun.toolsmenu.extra.name" },
 			{ type = "help", label = "#beatrun.toolsmenu.extra.desc" },
 			{ type = "check", convar = "Beatrun_HUDStats", label = "#beatrun.toolsmenu.extra.stats", desc = "#beatrun.toolsmenu.extra.statsdesc" },

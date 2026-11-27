@@ -15,6 +15,8 @@ hook.Add("EntityTakeDamage", "MEHitSounds", function(ply, dmginfo)
 
 		timer.Simple(0.01, function() if IsValid(ply) then ply:EmitSound("DeathFall") end end)
 
-		ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 255), 0.05, 5)
+		if ply:GetInfoNum("Beatrun_DeathBlackScreen", 1) ~= 0 then
+			ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 255), 0.05, 5)
+		end
 	end
 end)
