@@ -10,7 +10,7 @@ sound.Add({
 sound.Add({
 	name = "Cloth.MovementRun",
 	volume = 1,
-	level = 32,
+	level = 30,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/cloth/me_cloth_movement_run1.ogg", "mirrorsedge/cloth/me_cloth_movement_run2.ogg", "mirrorsedge/cloth/me_cloth_movement_run3.ogg", "mirrorsedge/cloth/me_cloth_movement_run4.ogg", "mirrorsedge/cloth/me_cloth_movement_run5.ogg", "mirrorsedge/cloth/me_cloth_movement_run6.ogg", "mirrorsedge/cloth/me_cloth_movement_run7.ogg", "mirrorsedge/cloth/me_cloth_movement_run8.ogg" }
@@ -19,7 +19,7 @@ sound.Add({
 sound.Add({
 	name = "Cloth.MovementWalk",
 	volume = 1,
-	level = 45,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/cloth/cloth_movement_walk_01.ogg", "mirrorsedge/cloth/cloth_movement_walk_02.ogg", "mirrorsedge/cloth/cloth_movement_walk_03.ogg", "mirrorsedge/cloth/cloth_movement_walk_04.ogg", "mirrorsedge/cloth/cloth_movement_walk_05.ogg", "mirrorsedge/cloth/cloth_movement_walk_06.ogg", "mirrorsedge/cloth/cloth_movement_walk_07.ogg", "mirrorsedge/cloth/cloth_movement_walk_08.ogg" }
@@ -28,7 +28,7 @@ sound.Add({
 sound.Add({
 	name = "Cloth.MovementSneak",
 	volume = 1,
-	level = 45,
+	level = 40,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/cloth/cloth_movement_sneak_01.ogg", "mirrorsedge/cloth/cloth_movement_sneak_02.ogg", "mirrorsedge/cloth/cloth_movement_sneak_03.ogg", "mirrorsedge/cloth/cloth_movement_sneak_04.ogg", "mirrorsedge/cloth/cloth_movement_sneak_05.ogg", "mirrorsedge/cloth/cloth_movement_sneak_06.ogg", "mirrorsedge/cloth/cloth_movement_sneak_07.ogg", "mirrorsedge/cloth/cloth_movement_sneak_08.ogg" }
@@ -108,8 +108,8 @@ sound.Add({
 
 sound.Add({
 	name = "Cloth.Fall",
-	volume = 0.75,
-	level = 42,
+	volume = 1,
+	level = 45,
 	channel = CHAN_STATIC,
 	pitch = { 90, 110 },
 	sound = { "mirrorsedge/cloth/body_fall_cloth1.ogg", "mirrorsedge/cloth/body_fall_cloth2.ogg", "mirrorsedge/cloth/body_fall_cloth3.ogg", "mirrorsedge/cloth/body_fall_cloth4.ogg" }

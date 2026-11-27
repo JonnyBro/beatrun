@@ -29,12 +29,27 @@ local slideloop_sounds = {
 	[MAT_VENT] = "Slide.DuctLoop"
 }
 
-slide_sounds[MAT_SNOW] = slide_sounds[MAT_SAND]
+slide_sounds[MAT_SNOW] = slide_sounds[MAT_PLASTIC]
 slide_sounds[MAT_GRASS] = slide_sounds[MAT_SAND]
+slide_sounds[MAT_DIRT] = slide_sounds[MAT_SAND]
 slide_sounds[0] = slide_sounds[MAT_CONCRETE]
 
 slideloop_sounds[MAT_DIRT] = slideloop_sounds[MAT_SAND]
 slideloop_sounds[MAT_GRASS] = slideloop_sounds[MAT_SAND]
+slideloop_sounds[MAT_SNOW] = slideloop_sounds[MAT_PLASTIC]
+local slide_prop_overrides = {
+	["gravel"] = MAT_SAND,
+	["carpet"] = MAT_PLASTIC,
+	["mud"] = MAT_SLOSH,
+	["rubber"] = MAT_PLASTIC,
+	["plaster"] = MAT_TILE
+}
+
+local function SlideMatType(tr)
+	local prop = util.GetSurfacePropName(tr.SurfaceProps)
+
+	return slide_prop_overrides[prop] or tr.MatType
+end
 
 --[[
 local animtable = {
@@ -241,7 +256,8 @@ local function SlideSurfaceSound(ply, pos)
 	trace_tbl.filter = ply
 
 	local tr = util.TraceLine(trace_tbl)
-	local sndtable = slide_sounds[tr.MatType] or slide_sounds[0]
+	local mat = SlideMatType(tr)
+	local sndtable = slide_sounds[mat] or slide_sounds[0]
 	local handstep = HANDSTEPS_SOFT_LUT[tr.MatType] or "ConcreteSoft"
 
 	ply:EmitSound("Cloth.FallShortMedium")
@@ -250,19 +266,83 @@ local function SlideSurfaceSound(ply, pos)
 	end
 	ply:EmitSound(sndtable[math.random(#sndtable)], 75, 100 + math.random(-20, -15), 0.5)
 
-	return tr.MatType
+	return mat
+end
+
+local function GetSlideLoopName(ply, mat)
+	if ply:WaterLevel() > 0 then
+		return slideloop_sounds[MAT_SLOSH]
+	end
+
+	return slideloop_sounds[mat] or slideloop_sounds[0]
 end
 
 local function SlideLoopSound(ply, pos, mat)
-	local sndtable
-	if ply:WaterLevel() > 0 then
-		sndtable = slideloop_sounds[MAT_SLOSH]
-	else
-		sndtable = slideloop_sounds[mat] or slideloop_sounds[0]
-	end
+	local sndtable = GetSlideLoopName(ply, mat)
 
+	ply.SlideLoopName = sndtable
 	ply.SlideLoopSound = CreateSound(ply, sndtable)
 	ply.SlideLoopSound:PlayEx(0.15, 100)
+end
+
+local aheadtrace_time = 0.06   -- how many seconds ahead to sample the floor
+local aheadtrace_min = 16
+local aheadtrace_max = 32
+local aheadtrace_up = Vector(0, 0, 32)
+local aheadtrace_down = Vector(0, 0, 64)
+local aheadtrace_tbl = {}
+local aheadblock_tbl = {}
+
+local function SlideMaterialCheck(ply, pos, speed)
+	local CT = CurTime()
+
+	if ply.SlideLoopMatNextCheck and ply.SlideLoopMatNextCheck > CT then return end
+
+	ply.SlideLoopMatNextCheck = CT + 0.1
+
+	local dist = math.Clamp(speed * aheadtrace_time, aheadtrace_min, aheadtrace_max)
+	local ahead = pos + ply:GetSlidingAngle():Forward() * dist
+
+	-- Path must be clear (thin walls etc.)
+	aheadblock_tbl.start = pos + aheadtrace_up
+	aheadblock_tbl.endpos = ahead + aheadtrace_up
+	aheadblock_tbl.filter = ply
+	aheadblock_tbl.mask = MASK_PLAYERSOLID
+
+	if util.TraceLine(aheadblock_tbl).Hit then return end
+
+	aheadtrace_tbl.start = ahead + aheadtrace_up
+	aheadtrace_tbl.endpos = ahead - aheadtrace_down
+	aheadtrace_tbl.filter = ply
+
+	local tr = util.TraceLine(aheadtrace_tbl)
+
+	if not tr.Hit or tr.StartSolid then return end
+
+	-- ignore floors that sit further below/above than a slope could reach over this distance
+	local dz = tr.HitPos.z - pos.z
+
+	if dz < -(dist * 1.5 + 8)	 then return end
+
+	local mat = SlideMatType(tr)
+	local loopname = GetSlideLoopName(ply, mat)
+
+	if loopname == ply.SlideLoopName then return end
+
+	if ply.SlideLoopSound then
+		ply.SlideLoopSound:FadeOut(0.25)
+	end
+ 
+	SlideLoopSound(ply, pos, mat)
+ 
+	local sndtable = slide_sounds[mat] or slide_sounds[0]
+	if ply.SlideTransitionSound then
+		ply.SlideTransitionSound:Stop()
+		ply.SlideTransitionSound = nil
+	end
+
+	ply.SlideTransitionSound = CreateSound(ply, sndtable[math.random(#sndtable)])
+	ply.SlideTransitionSound:PlayEx(0.4, 100 + math.random(-20, -15))
 end
 
 local metaent = FindMetaTable("Entity")
@@ -515,7 +595,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 		ply:SetSlidingDelay(CT + 0.1)
 
 		if SERVER and ply.SlideLoopSound then
-			ply.SlideLoopSound:FadeOut(0.15)
+			ply.SlideLoopSound:FadeOut(0.25)
 		end
 
 		ply:ConCommand("-duck")
@@ -537,6 +617,22 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 
 		local speed = ply:GetSlidingVel() * math.min(1.75, (ply:GetSlidingTime() - CT + 0.5) / slidetime) * qslide_speedmult
 		mv:SetVelocity(ply:GetSlidingAngle():Forward() * speed)
+
+		if SERVER and ply.SlideLoopSound then
+			SlideMaterialCheck(ply, mv:GetOrigin(), speed)
+		end
+
+		if SERVER and ply.SlideLoopSound then
+			local speedfrac = math.Clamp(speed / 300, 0, 1)
+			local pitch = Lerp(speedfrac, 50, 100)
+
+			if speed > 300 then
+				pitch = Lerp(math.Clamp((speed - 300) / 450, 0, 1), 100, 150)
+			end
+
+			ply.SlideLoopSound:ChangePitch(pitch, 0.1)
+			ply.SlideLoopSound:ChangeVolume(Lerp(speedfrac, 0, 0.15), 0.1)
+		end
 
 		local pos = mv:GetOrigin()
 
@@ -589,7 +685,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 				ply:SetDiveSliding(false)
 
 				if SERVER and ply.SlideLoopSound then
-					ply.SlideLoopSound:FadeOut(0.15)
+					ply.SlideLoopSound:FadeOut(0.25)
 				end
 
 				-- Ended like a slippery slide, which puts the camera back on the eyes without playing a slide end animation
@@ -687,7 +783,7 @@ hook.Add("SetupMove", "qslide", function(ply, mv, cmd)
 			ply:SetSlidingDelay(CT + 0.1)
 
 			if SERVER then
-				ply.SlideLoopSound:FadeOut(0.15)
+				ply.SlideLoopSound:FadeOut(0.25)
 				ply.SlideLoopMatNextCheck = nil
 			end
 
